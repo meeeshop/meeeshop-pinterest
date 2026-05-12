@@ -18,6 +18,7 @@ from urllib.parse import urljoin
 from pinterest_client import PinterestClient
 from shopify_products import ShopifyClient, format_product_for_pinterest, select_board_for_product
 from content_generator import generate_content_package
+from video_picker import VideoPicker, EnvLoader
 
 logger = logging.getLogger(__name__)
 
@@ -162,13 +163,20 @@ def post_pin(
     return success
 
 
-def run_daily_posting():
-    """Main daily posting orchestrator"""
+def run_daily_posting(use_video: bool = False):
+    """Main daily posting orchestrator
+
+    Args:
+        use_video: If True, prioritize videos from meeeshop-youtube repo or YouTube channel
+    """
 
     logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s [%(levelname)s] %(message)s",
     )
+
+    # Load credentials from meeeshop-youtube/.env if available
+    EnvLoader.load_youtube_env()
 
     # Load credentials
     pinterest_email = os.getenv("PINTEREST_EMAIL")
@@ -240,7 +248,22 @@ def run_daily_posting():
         logger.info(f"Generating content for: {formatted['title']}")
         content = generate_content_package(formatted, board)
 
-        # Post pin
+        # Try to add video if enabled
+        video_file = None
+        if use_video:
+            logger.info("Looking for video to include...")
+            video_picker = VideoPicker(use_youtube=True)
+            video = video_picker.pick_video()
+            if video:
+                if video["type"] == "local":
+                    video_file = video["path"]
+                    logger.info(f"✓ Using local video: {video['filename']}")
+                else:
+                    # YouTube video - would need download logic
+                    logger.info(f"Found YouTube video: {video['title']} (would need download)")
+
+        # Post pin (with video if available)
+        media_path = video_file or formatted["image_url"]
         if post_pin(pinterest, formatted, board, content):
             history["posts"].append({
                 "product_id": product["id"],
