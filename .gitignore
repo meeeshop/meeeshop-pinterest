@@ -1,0 +1,64 @@
+# Environment & Secrets
+.env
+.env.local
+.env.*.local
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+logs/
+
+# Data
+posting_history.json
+*.pkl
+*.pickle
+.cache/
+
+# Artifacts
+*.jpg
+*.png
+*.gif
+*.mp4
+*.webm
+/tmp/
+/temp/
+
+# OS
+.DS_Store
+Thumbs.db
+*.lock
+
+# Chrome/Selenium
+chromedriver
+.wdm/
