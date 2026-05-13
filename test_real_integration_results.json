@@ -1,0 +1,83 @@
+{
+  "test_name": "Real Integration Test",
+  "start_time": "2026-05-13T09:08:41.174822",
+  "steps": [
+    {
+      "step": 1,
+      "title": "Verify Credentials",
+      "status": "OK",
+      "details": "All credentials loaded:\nPINTEREST_EMAIL: meeeshop17***\nSHOPIFY_STORE_URL: https://us***\nSHOPIFY_ACCESS_TOKEN: shpat_647d***\nSTORE_BASE_URL: https://us***\nGEMINI_API_KEY: AIzaSyA_Xy***\nYOUTUBE_CHANNEL_ID: UCfdD0XW9W***\n",
+      "timestamp": "2026-05-13T09:08:41.182822"
+    },
+    {
+      "step": 2,
+      "title": "Fetch Shopify Product",
+      "status": "OK",
+      "details": "Product: 3/4 Puff Slv Texture Vneck Button Down Midi Dress\nType: Dresses\nPrice: $97.99\nImage: https://cdn.shopify.com/s/files/1/0605/3992/8747/f...\nURL: https://us.meeeshop.com/products/3-4-puff-slv-texture-vneck-button-down-midi-dress",
+      "timestamp": "2026-05-13T09:08:42.642393"
+    },
+    {
+      "step": 3,
+      "title": "Fetch YouTube Video",
+      "status": "OK",
+      "details": "Video: Summer Vibes #Shorts\nID: IKexuZq1KdQ\nPublished: 2026-05-13\nURL: https://www.youtube.com/watch?v=IKexuZq1KdQ\nThumbnail: https://i.ytimg.com/vi/IKexuZq1KdQ/hqdefault.jpg...",
+      "timestamp": "2026-05-13T09:08:44.755508"
+    },
+    {
+      "step": 4,
+      "title": "Generate Pinterest Content",
+      "status": "OK",
+      "details": "Title: Comfy Chic Midi Dress\nDescription: Elevate your casual style with our textured button down midi dress, Shop Now\nBoard: Dresses\nTags: Button Down,  Casual Dresses,  Contemporary",
+      "timestamp": "2026-05-13T09:08:49.276801"
+    },
+    {
+      "step": 5,
+      "title": "Validate Product Image",
+      "status": "OK",
+      "details": "URL: https://cdn.shopify.com/s/files/1/0605/3992/8747/files/21227...\nStatus Code: 200\nContent-Type: image/jpeg",
+      "timestamp": "2026-05-13T09:08:50.503299"
+    },
+    {
+      "step": 6,
+      "title": "Check Pinterest Boards",
+      "status": "OK",
+      "details": "Total boards: 88\nHigh-traffic boards: 4\n\nSample high-traffic boards:\n  - Trends\n  - New\n  - Best selling products\n  - New Trendy Woman...\n",
+      "timestamp": "2026-05-13T09:08:50.503299"
+    },
+    {
+      "step": 7,
+      "title": "Verify Pinterest Cookies",
+      "status": "OK",
+      "details": "Cookies file: .pinterest_cookies\nSize: 1902 bytes\nLast updated: 0 days ago\nStatus: VALID",
+      "timestamp": "2026-05-13T09:08:50.518927"
+    }
+  ],
+  "success": true,
+  "product_data": {
+    "id": 8748855001259,
+    "title": "3/4 Puff Slv Texture Vneck Button Down Midi Dress",
+    "handle": "3-4-puff-slv-texture-vneck-button-down-midi-dress",
+    "type": "Dresses",
+    "vendor": "Jade By Jane",
+    "description": "Elevate your style with the 3/4 Puff Sleeve Texture V-Neck Button Down Midi Dress, a staple in every woman's wardrobe. This chic dress offers the perfect blend of comfort and sophistication, making it",
+    "tags": [
+      "Button Down",
+      " Casual Dresses",
+      " Contemporary"
+    ],
+    "price": "97.99",
+    "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/21227870_2edf0d56-6cf8-463f-a444-5cf972a19627.jpg?v=1777375441",
+    "image_alt": "3/4 Puff Slv Texture Vneck Button Down Midi Dress (women's dresses) - shop at us.meeeshop",
+    "product_url": "https://us.meeeshop.com/products/3-4-puff-slv-texture-vneck-button-down-midi-dress"
+  },
+  "video_data": {
+    "id": "IKexuZq1KdQ",
+    "title": "Summer Vibes #Shorts",
+    "description": "Shop now at ...",
+    "thumbnail": "https://i.ytimg.com/vi/IKexuZq1KdQ/hqdefault.jpg",
+    "published_at": "2026-05-13T02:00:10Z",
+    "url": "https://www.youtube.com/watch?v=IKexuZq1KdQ"
+  },
+  "errors": [],
+  "end_time": "2026-05-13T09:08:50.518927"
+}

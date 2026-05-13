@@ -124,25 +124,56 @@ class LocalVideoPicker:
 
 
 class YouTubeChannelPicker:
-    """Pick videos from YouTube channel"""
+    """Pick videos from YouTube channel using OAuth refresh token"""
 
-    def __init__(self, channel_id: str, api_key: str):
+    def __init__(self, channel_id: str, client_id: str, client_secret: str, refresh_token: str):
         self.channel_id = channel_id
-        self.api_key = api_key
+        self.client_id = client_id
+        self.client_secret = client_secret
+        self.refresh_token = refresh_token
         self.base_url = "https://www.googleapis.com/youtube/v3"
+        self.access_token = None
+
+    def get_access_token(self) -> Optional[str]:
+        """Get access token from refresh token"""
+        if self.access_token:
+            return self.access_token
+
+        try:
+            token_url = "https://oauth2.googleapis.com/token"
+            data = {
+                "client_id": self.client_id,
+                "client_secret": self.client_secret,
+                "refresh_token": self.refresh_token,
+                "grant_type": "refresh_token",
+            }
+            response = requests.post(token_url, data=data, timeout=10)
+            response.raise_for_status()
+            self.access_token = response.json().get("access_token")
+            return self.access_token
+        except Exception as e:
+            logger.error(f"Failed to get access token: {e}")
+            return None
 
     def get_latest_videos(self, max_results: int = 10, days_old: int = 30) -> List[Dict[str, Any]]:
-        """Get latest videos from channel"""
+        """Get latest videos from channel using OAuth"""
         try:
+            # Get access token
+            access_token = self.get_access_token()
+            if not access_token:
+                logger.error("Could not obtain YouTube access token")
+                return []
+
+            headers = {"Authorization": f"Bearer {access_token}"}
+
             # First get uploads playlist ID
             channel_url = f"{self.base_url}/channels"
             channel_params = {
                 "part": "contentDetails",
                 "id": self.channel_id,
-                "key": self.api_key,
             }
 
-            resp = requests.get(channel_url, params=channel_params, timeout=10)
+            resp = requests.get(channel_url, params=channel_params, headers=headers, timeout=10)
             resp.raise_for_status()
 
             upload_playlist_id = resp.json()["items"][0]["contentDetails"]["relatedPlaylists"]["uploads"]
@@ -153,10 +184,9 @@ class YouTubeChannelPicker:
                 "part": "snippet",
                 "playlistId": upload_playlist_id,
                 "maxResults": min(max_results, 50),
-                "key": self.api_key,
             }
 
-            resp = requests.get(playlist_url, params=playlist_params, timeout=10)
+            resp = requests.get(playlist_url, params=playlist_params, headers=headers, timeout=10)
             resp.raise_for_status()
 
             videos = []
@@ -185,9 +215,9 @@ class YouTubeChannelPicker:
             return []
 
     @staticmethod
-    def pick_random_from_channel(channel_id: str, api_key: str) -> Optional[Dict[str, Any]]:
+    def pick_random_from_channel(channel_id: str, client_id: str, client_secret: str, refresh_token: str) -> Optional[Dict[str, Any]]:
         """Pick random video from YouTube channel"""
-        picker = YouTubeChannelPicker(channel_id, api_key)
+        picker = YouTubeChannelPicker(channel_id, client_id, client_secret, refresh_token)
         videos = picker.get_latest_videos(max_results=20)
         if videos:
             video = random.choice(videos)
@@ -220,11 +250,15 @@ class VideoPicker:
         if self.use_youtube:
             logger.info("Checking YouTube channel...")
             channel_id = self._get_channel_id()
-            api_key = self.api_keys.get("GEMINI_API_KEY") or self.api_keys.get("OPENROUTER_API_KEY")
+            client_id = self.api_keys.get("YOUTUBE_CLIENT_ID")
+            client_secret = self.api_keys.get("YOUTUBE_CLIENT_SECRET")
+            refresh_token = self.api_keys.get("YOUTUBE_REFRESH_TOKEN")
 
-            if channel_id and api_key:
+            if channel_id and client_id and client_secret and refresh_token:
                 try:
-                    yt_video = YouTubeChannelPicker.pick_random_from_channel(channel_id, api_key)
+                    yt_video = YouTubeChannelPicker.pick_random_from_channel(
+                        channel_id, client_id, client_secret, refresh_token
+                    )
                     if yt_video:
                         return yt_video
                 except Exception as e:
@@ -244,11 +278,13 @@ class VideoPicker:
         # If not enough, try YouTube
         if len(videos) < count and self.use_youtube:
             channel_id = self._get_channel_id()
-            api_key = self.api_keys.get("GEMINI_API_KEY")
+            client_id = self.api_keys.get("YOUTUBE_CLIENT_ID")
+            client_secret = self.api_keys.get("YOUTUBE_CLIENT_SECRET")
+            refresh_token = self.api_keys.get("YOUTUBE_REFRESH_TOKEN")
 
-            if channel_id and api_key:
+            if channel_id and client_id and client_secret and refresh_token:
                 try:
-                    yt_picker = YouTubeChannelPicker(channel_id, api_key)
+                    yt_picker = YouTubeChannelPicker(channel_id, client_id, client_secret, refresh_token)
                     yt_videos = yt_picker.get_latest_videos(max_results=count - len(videos))
                     videos.extend(yt_videos)
                 except Exception:

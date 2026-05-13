@@ -14,7 +14,7 @@ import pickle
 
 logger = logging.getLogger(__name__)
 
-COOKIES_FILE = Path(__file__).parent / ".pinterest_cookies"
+COOKIES_FILE = Path(__file__).parent / ".pinterest_cookies.pkl"
 SESSION_FILE = Path(__file__).parent / ".pinterest_session"
 
 

@@ -1,239 +1,251 @@
 """
-pinterest_client.py — Web automation for Pinterest pin posting
-Uses Selenium + Chrome headless for reliable, bot-detection-safe posting
-Handles: login, board discovery, pin creation, video upload, scheduling
+Pinterest client using py3-pinterest library for direct API communication.
+Replaces Selenium WebDriver automation with HTTP-based API calls.
 """
 
 import os
 import time
-import json
-import logging
+from typing import Optional, List, Dict, Tuple
 from pathlib import Path
-from typing import Optional, List, Dict, Any
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.action_chains import ActionChains
-from selenium.webdriver.common.keys import Keys
+import logging
 
+from py3pin.Pinterest import Pinterest
+from dotenv import load_dotenv
+
+from content_generator import generate_content_package
+from credentials_manager import CredentialsManager
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
 logger = logging.getLogger(__name__)
+
+load_dotenv()
 
 
 class PinterestClient:
-    """Pinterest web automation client (no API, browser-based)"""
+    """
+    Pinterest API client using py3-pinterest for direct HTTP communication.
+    Eliminates Selenium WebDriver dependency for more reliable automation.
+    """
 
-    def __init__(self, email: str, password: str, headless: bool = False, debug: bool = False):
-        self.email = email
-        self.password = password
-        self.debug = debug
+    def __init__(self):
+        """Initialize Pinterest client with credentials from environment/credentials_manager."""
+        self.client = None
+        self.email = None
+        self.password = None
+        self.username = None
+        self.authenticated = False
+        self.rate_limit_delay = 2  # seconds between API calls
+        self.last_request_time = 0
 
-        options = webdriver.ChromeOptions()
-        options.add_argument("--disable-blink-features=AutomationControlled")
-        options.add_argument("--start-maximized")
-        options.add_argument("--disable-dev-shm-usage")
+    def _rate_limit(self):
+        """Enforce rate limiting between API calls."""
+        elapsed = time.time() - self.last_request_time
+        if elapsed < self.rate_limit_delay:
+            time.sleep(self.rate_limit_delay - elapsed)
+        self.last_request_time = time.time()
 
-        if headless:
-            options.add_argument("--headless=new")
+    def login(self) -> bool:
+        """
+        Authenticate with Pinterest using credentials.
+        py3-pinterest handles session management internally.
 
-        options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36")
-
+        Returns:
+            bool: True if authentication successful, False otherwise
+        """
         try:
-            self.driver = webdriver.Chrome(options=options)
-        except Exception as e:
-            raise RuntimeError(f"ChromeDriver not found. Install: pip install webdriver-manager && python -m webdriver_manager.chrome") from e
+            # Load credentials from environment or credentials_manager
+            creds = CredentialsManager.get_from_env()
+            if not creds:
+                logger.error("No credentials found in environment")
+                return False
 
-        self.logged_in = False
-        self.boards = {}
+            self.email = creds.get('email')
+            self.password = creds.get('password')
+            self.username = os.getenv('PINTEREST_USERNAME')
 
-    def login(self, max_attempts: int = 3) -> bool:
-        """Login to Pinterest with email/password"""
-        for attempt in range(max_attempts):
-            try:
-                logger.info(f"Login attempt {attempt + 1}/{max_attempts}")
-                self.driver.get("https://pinterest.com/login/")
-                time.sleep(2)
+            if not (self.email and self.password):
+                logger.error("Pinterest credentials (email/password) not found")
+                return False
 
-                email_input = WebDriverWait(self.driver, 10).until(
-                    EC.presence_of_element_located((By.NAME, "email"))
-                )
-                email_input.clear()
-                email_input.send_keys(self.email)
-
-                password_input = self.driver.find_element(By.NAME, "password")
-                password_input.clear()
-                password_input.send_keys(self.password)
-
-                submit_btn = self.driver.find_element(By.CSS_SELECTOR, "button[type='submit']")
-                submit_btn.click()
-
-                time.sleep(3)
-
-                # Check if login successful (home feed loads)
-                try:
-                    WebDriverWait(self.driver, 10).until(
-                        EC.presence_of_element_located((By.CSS_SELECTOR, "[data-test-id='homefeed']"))
-                    )
-                    self.logged_in = True
-                    logger.info("Login successful")
-                    return True
-                except Exception:
-                    logger.warning("Homefeed not detected, retrying...")
-                    continue
-
-            except Exception as e:
-                logger.warning(f"Login attempt failed: {e}")
-                time.sleep(2)
-
-        logger.error("Login failed after max attempts")
-        return False
-
-    def fetch_boards(self) -> Dict[str, str]:
-        """Fetch user's Pinterest boards (name -> board_id mapping)"""
-        if not self.logged_in:
-            raise RuntimeError("Not logged in")
-
-        try:
-            self.driver.get("https://pinterest.com/me/boards/")
-            time.sleep(2)
-
-            boards = {}
-            board_elements = WebDriverWait(self.driver, 10).until(
-                EC.presence_of_all_elements_located((By.CSS_SELECTOR, "a[href*='/board/']"))
+            # Initialize py3-pinterest client with credentials
+            self.client = Pinterest(
+                email=self.email,
+                password=self.password,
+                username=self.username
             )
 
-            for elem in board_elements:
-                board_name = elem.get_attribute("aria-label")
-                board_url = elem.get_attribute("href")
+            # Test authentication by attempting to fetch boards
+            try:
+                self._rate_limit()
+                boards = self.client.boards()
+                if boards:
+                    logger.info(f"Successfully authenticated. Found {len(boards)} boards.")
+                    self.authenticated = True
+                    return True
+                else:
+                    logger.warning("Authentication succeeded but no boards found")
+                    self.authenticated = True
+                    return True
+            except Exception as e:
+                logger.error(f"Authentication test failed: {e}")
+                return False
 
-                if board_name and board_url and "/board/" in board_url:
-                    board_id = board_url.split("/board/")[-1].split("/")[0]
-                    boards[board_name] = board_id
+        except Exception as e:
+            logger.error(f"Login failed: {e}")
+            return False
 
-            self.boards = boards
-            logger.info(f"Found {len(boards)} boards")
-            return boards
+    def fetch_boards(self) -> List[Dict[str, str]]:
+        """
+        Fetch user's Pinterest boards using API.
+
+        Returns:
+            List[Dict]: List of board info dicts with 'id', 'name', 'url' keys
+        """
+        if not self.authenticated:
+            logger.error("Not authenticated. Call login() first.")
+            return []
+
+        try:
+            self._rate_limit()
+            boards = self.client.boards()
+
+            board_list = []
+            for board in boards:
+                # py3-pinterest board object has attributes: name, url, board_id
+                board_info = {
+                    'id': board.get('id') or board.get('board_id'),
+                    'name': board.get('name'),
+                    'url': board.get('url')
+                }
+                board_list.append(board_info)
+                logger.info(f"Board: {board_info['name']} (ID: {board_info['id']})")
+
+            return board_list
 
         except Exception as e:
             logger.error(f"Failed to fetch boards: {e}")
-            return {}
+            return []
 
     def create_pin(
         self,
-        image_or_video_path: str,
+        image_path: str,
         title: str,
         description: str,
-        board_name: str,
+        board_id: str,
         url: Optional[str] = None,
         alt_text: Optional[str] = None,
-    ) -> bool:
-        """Create a new pin on specified board"""
-        if not self.logged_in:
-            raise RuntimeError("Not logged in")
+        section_id: Optional[str] = None,
+    ) -> Tuple[bool, Optional[str]]:
+        """
+        Create a pin on Pinterest using direct API call.
 
-        if board_name not in self.boards:
-            logger.error(f"Board '{board_name}' not found. Available: {list(self.boards.keys())}")
-            return False
+        Args:
+            image_path: Path to image file
+            title: Pin title
+            description: Pin description
+            board_id: Target board ID
+            url: Optional URL for pin (clickthrough)
+            alt_text: Optional alt text for accessibility
+            section_id: Optional section within board
+
+        Returns:
+            Tuple[bool, Optional[str]]: (success, pin_id or error_message)
+        """
+        if not self.authenticated:
+            logger.error("Not authenticated. Call login() first.")
+            return False, "Not authenticated"
 
         try:
-            # Click create/upload button
-            self.driver.get("https://pinterest.com/pin/create/")
-            time.sleep(2)
+            # Validate image file exists
+            image_file = Path(image_path)
+            if not image_file.exists():
+                error_msg = f"Image file not found: {image_path}"
+                logger.error(error_msg)
+                return False, error_msg
 
-            # Wait for and click file upload input
-            file_input = WebDriverWait(self.driver, 10).until(
-                EC.presence_of_element_located((By.CSS_SELECTOR, "input[type='file']"))
-            )
+            # Rate limit before API call
+            self._rate_limit()
 
-            file_path = Path(image_or_video_path).resolve()
-            file_input.send_keys(str(file_path))
-            time.sleep(3)
+            # Build pin metadata
+            pin_data = {
+                'description': description,
+                'title': title,
+            }
 
-            # Fill title
-            title_input = WebDriverWait(self.driver, 10).until(
-                EC.presence_of_element_located((By.CSS_SELECTOR, "textarea[placeholder*='title' i]"))
-            )
-            title_input.clear()
-            title_input.send_keys(title)
-
-            # Fill description
-            desc_inputs = self.driver.find_elements(By.CSS_SELECTOR, "textarea")
-            if len(desc_inputs) >= 2:
-                desc_inputs[1].clear()
-                desc_inputs[1].send_keys(description[:500])
-
-            # Add destination URL if provided
             if url:
-                url_input = WebDriverWait(self.driver, 5).until(
-                    EC.presence_of_element_located((By.CSS_SELECTOR, "input[placeholder*='link' i]"))
-                )
-                url_input.clear()
-                url_input.send_keys(url)
+                pin_data['link'] = url
 
-            # Add alt text if provided
+            # Note: py3-pinterest may not support alt_text directly in upload_pin()
+            # If needed, alt_text should be included in description or handled separately
             if alt_text:
-                try:
-                    alt_btn = self.driver.find_element(By.CSS_SELECTOR, "button[aria-label*='alt' i]")
-                    alt_btn.click()
-                    time.sleep(1)
-                    alt_input = self.driver.find_element(By.CSS_SELECTOR, "input[placeholder*='alt' i]")
-                    alt_input.send_keys(alt_text[:125])
-                except Exception:
-                    pass
+                pin_data['alt_text'] = alt_text
 
-            # Select board
-            board_selector = WebDriverWait(self.driver, 10).until(
-                EC.presence_of_element_located((By.CSS_SELECTOR, "button[aria-label*='board' i]"))
+            # Create pin via API
+            logger.info(f"Creating pin: {title}")
+            pin_result = self.client.upload_pin(
+                board_id=board_id,
+                image_file=str(image_file),
+                description=description,
+                title=title,
+                link=url,
+                section_id=section_id
             )
-            board_selector.click()
-            time.sleep(1)
 
-            board_option = WebDriverWait(self.driver, 5).until(
-                EC.presence_of_element_located((By.XPATH, f"//div[contains(text(), '{board_name}')]"))
-            )
-            board_option.click()
-            time.sleep(1)
-
-            # Click Save/Publish
-            save_btn = WebDriverWait(self.driver, 10).until(
-                EC.presence_of_element_located((By.CSS_SELECTOR, "button[aria-label='Save']"))
-            )
-            save_btn.click()
-
-            logger.info(f"Pin created: '{title}' on '{board_name}'")
-            time.sleep(2)
-            return True
+            if pin_result:
+                pin_id = pin_result.get('id') or pin_result
+                logger.info(f"Pin created successfully. ID: {pin_id}")
+                return True, str(pin_id)
+            else:
+                error_msg = f"Pin creation returned empty or unsuccessful result: {pin_result}"
+                logger.warning(error_msg)
+                return False, error_msg
 
         except Exception as e:
-            logger.error(f"Failed to create pin: {e}")
-            if self.debug:
-                self.driver.save_screenshot("pin_creation_error.png")
-            return False
+            error_msg = f"Failed to create pin: {str(e)}"
+            logger.error(error_msg)
+            return False, error_msg
 
-    def close(self):
-        """Close browser"""
-        if self.driver:
-            self.driver.quit()
+    def get_board_by_name(self, board_name: str) -> Optional[Dict[str, str]]:
+        """
+        Find a board by name.
+
+        Args:
+            board_name: Name of the board to find
+
+        Returns:
+            Dict with board info or None if not found
+        """
+        boards = self.fetch_boards()
+        for board in boards:
+            if board['name'].lower() == board_name.lower():
+                return board
+
+        logger.warning(f"Board not found: {board_name}")
+        return None
 
 
 def main():
-    """Test Pinterest client"""
-    logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
+    """Example usage of PinterestClient."""
+    client = PinterestClient()
 
-    email = os.getenv("PINTEREST_EMAIL")
-    password = os.getenv("PINTEREST_PASSWORD")
+    # Login
+    if not client.login():
+        print("Login failed")
+        return
 
-    if not email or not password:
-        raise ValueError("Set PINTEREST_EMAIL and PINTEREST_PASSWORD in .env")
+    # Fetch boards
+    boards = client.fetch_boards()
+    if not boards:
+        print("No boards found")
+        return
 
-    client = PinterestClient(email, password, headless=False, debug=True)
-
-    try:
-        if client.login():
-            boards = client.fetch_boards()
-            print(f"Boards: {boards}")
-    finally:
-        client.close()
+    print(f"\nFound {len(boards)} boards:")
+    for board in boards:
+        print(f"  - {board['name']} (ID: {board['id']})")
 
 
 if __name__ == "__main__":

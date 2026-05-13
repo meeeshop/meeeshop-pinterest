@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 
 HISTORY_FILE = Path(__file__).parent / "posting_history.json"
 COOLDOWN_HOURS = 2
-MAX_PINS_PER_DAY = 3
+MAX_PINS_PER_DAY = 19
 BOARD_ROTATION_COOLDOWN = 24  # Don't post same board twice in 24h
 
 
@@ -199,6 +199,7 @@ def run_daily_posting(use_video: bool = False):
     if not can_post_today(history):
         logger.info("Skipping: daily limit reached")
         return
+        return
 
     # Initialize clients
     pinterest = PinterestClient(pinterest_email, pinterest_password, headless=False)
@@ -234,6 +235,15 @@ def run_daily_posting(use_video: bool = False):
         product = random.choice(available_products)
         formatted = format_product_for_pinterest(product, store_base_url)
         board = select_board_for_product(formatted)
+        # Time‑zone filtering: only post if current UTC hour matches board schedule
+        try:
+            tz_map = json.load((Path(__file__).parent / "us_timezones.json").open("r", encoding="utf-8"))
+            board_hour = int(tz_map.get(board, "0"))
+            if board_hour != datetime.utcnow().hour:
+                logger.info(f"Skipping board '{board}' due to time zone schedule (UTC{board_hour})")
+                return
+        except Exception as e:
+            logger.warning(f"Failed to load time‑zone mapping: {e}")
 
         # Verify board exists & rotation safe
         if board not in boards:

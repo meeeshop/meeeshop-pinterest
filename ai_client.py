@@ -174,19 +174,49 @@ _PROVIDERS = [
     ("OpenRouter", lambda p, m, t: _call_openrouter(p, m, t, "seo")),
 ]
 
+_PROVIDER_BLACKLIST: set = set()
+_MAX_RETRIES = 2
+
+
+def reset_provider_state():
+    _PROVIDER_BLACKLIST.clear()
+
 
 def generate(prompt: str, max_tokens: int = 400, temperature: float = 0.8) -> str | None:
-    """Try Gemini → Groq → OpenRouter. Returns text on success, None if all fail."""
-    for name, fn in _PROVIDERS:
+    """Try providers in order, skipping ones already known to be failing in this run.
+    If every provider fails, retry the full set up to _MAX_RETRIES times before
+    returning None (caller then uses standard product fallback)."""
+    active = [(n, f) for n, f in _PROVIDERS if n not in _PROVIDER_BLACKLIST]
+    if not active:
+        active = list(_PROVIDERS)
+        _PROVIDER_BLACKLIST.clear()
+
+    for name, fn in active:
         try:
             text = fn(prompt, max_tokens, temperature)
             if text:
                 print(f"  [AI:{name}] OK")
                 return text
         except Exception as e:
-            print(f"  [AI:{name}] {e} - trying next...")
-            time.sleep(0.5)
-    print("  [AI] all providers failed — using fallback")
+            print(f"  [AI:{name}] {e} - blacklisted for session")
+            _PROVIDER_BLACKLIST.add(name)
+            time.sleep(0.3)
+
+    for attempt in range(1, _MAX_RETRIES + 1):
+        print(f"  [AI] all providers failed — retry {attempt}/{_MAX_RETRIES}")
+        time.sleep(1.0 * attempt)
+        for name, fn in _PROVIDERS:
+            try:
+                text = fn(prompt, max_tokens, temperature)
+                if text:
+                    print(f"  [AI:{name}] OK (recovered)")
+                    _PROVIDER_BLACKLIST.discard(name)
+                    return text
+            except Exception as e:
+                print(f"  [AI:{name}] {e}")
+                continue
+
+    print("  [AI] all providers failed after retries — using standard fallback")
     return None
 
 

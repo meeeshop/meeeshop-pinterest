@@ -6,79 +6,121 @@ Follows Pinterest guidelines & SEO best practices for women shoppers
 
 import logging
 from typing import Dict, Any, Optional, List
+from pathlib import Path
+from dotenv import load_dotenv
 from ai_client import generate
 
 logger = logging.getLogger(__name__)
 
+# Load .env file
+env_file = Path(__file__).parent / ".env"
+if env_file.exists():
+    load_dotenv(env_file)
+
 
 def generate_pinterest_title(product_data: Dict[str, Any]) -> str:
-    """Generate Pinterest-optimized title (max 100 chars, engaging)"""
+    """Generate Pinterest-optimized title (max 100 chars, recommend 40)"""
 
     title = product_data.get("title", "")
     product_type = product_data.get("product_type", "")
 
-    if len(title) <= 100:
+    if len(title) <= 40:
         return title
 
-    prompt = f"""Generate a catchy Pinterest pin title (max 100 chars) for this women's fashion product:
+    prompt = f"""Generate a catchy Pinterest pin title (max 40 chars) for this women's fashion product:
 Title: {title}
 Type: {product_type}
 
 Requirements:
 - Include 1-2 power keywords (style, occasion, material)
 - Be engaging & benefit-focused (e.g., "Comfy", "Flattering", "Versatile")
-- End with emoji or power word that drives clicks
 - NO hashtags in title
-- Include size/fit info if applicable
+- NO emojis
+- Concise and compelling
 
-Reply ONLY with the title, no explanation."""
+Reply ONLY with the title (under 40 chars), no explanation."""
+
+    result = generate(prompt, max_tokens=30, temperature=0.7)
+
+    if result:
+        trimmed = result[:40].strip()
+        return trimmed if trimmed else title[:40]
+
+    # Fallback template
+    power_words = ["Chic", "Comfy", "Versatile", "Elegant"]
+    for word in power_words:
+        if word.lower() not in title.lower():
+            short_title = f"{word} {title[:30]}"
+            return short_title[:40]
+
+    return title[:40]
+
+
+def generate_pinterest_description(product_data: Dict[str, Any], board_name: str) -> str:
+    """Generate Pinterest description (max 100 chars)"""
+
+    title = product_data.get("title", "")
+    product_type = product_data.get("product_type", "")
+    tags = ", ".join(product_data.get("tags", [])[:2])
+
+    prompt = f"""Create a Pinterest pin description (max 100 chars):
+Product: {title}
+Type: {product_type}
+Tags: {tags}
+
+Requirements:
+- Brief & engaging
+- Include 1-2 keywords naturally
+- Mention quality/style benefit
+- Call-to-action: "Shop Now" or "Discover"
+- NO hashtags
+
+Reply ONLY with description (under 100 chars), no explanation."""
 
     result = generate(prompt, max_tokens=50, temperature=0.7)
 
     if result:
-        return result[:100].strip()
+        desc = result.strip()
+        return desc[:100]
 
     # Fallback template
-    power_words = ["Chic", "Stunning", "Comfy", "Versatile", "Elegant"]
-    for word in power_words:
-        if word.lower() not in title.lower():
-            return f"{word} {title[:80]}"
-
-    return title[:100]
+    return f"Discover this {product_type.lower() or 'item'} today!"[:100]
 
 
-def generate_pinterest_description(product_data: Dict[str, Any], board_name: str) -> str:
-    """Generate Pinterest description (max 300 chars for desc field)"""
+def generate_alt_text(product_data: Dict[str, Any]) -> str:
+    """Generate accessibility alt text for pin image (max 125 chars)"""
 
     title = product_data.get("title", "")
     product_type = product_data.get("product_type", "")
-    description = product_data.get("description", "")
-    tags = ", ".join(product_data.get("tags", [])[:3])
+    color = product_data.get("color", "")
 
-    prompt = f"""Create a Pinterest pin description for women shoppers (max 250 chars):
+    prompt = f"""Generate concise alt text for an image of this product (max 125 chars):
 Product: {title}
 Type: {product_type}
-Board: {board_name}
-Tags: {tags}
+Color: {color if color else "various"}
 
 Requirements:
-- Include lifestyle benefit (comfort, style, quality)
-- Add 2-3 relevant keywords naturally
-- Include a call-to-action phrase
-- Mention if made in USA
-- Keep it natural & conversational
-- NO hashtags
+- Describe what's in the image (not "image of" or "picture of")
+- Include product type and main features
+- Helpful for screen readers
+- Be concise but descriptive
+- NO marketing language
+- Format: "Product type, style details, key features"
 
-Reply ONLY with description."""
+Example: "Blue denim jacket with button front and chest pockets"
 
-    result = generate(prompt, max_tokens=100, temperature=0.7)
+Reply ONLY with alt text (under 125 chars), no explanation."""
+
+    result = generate(prompt, max_tokens=60, temperature=0.5)
 
     if result:
-        desc = result.strip()
-        return desc[:300]
+        alt = result.strip()
+        return alt[:125]
 
-    # Fallback template
-    return f"Discover this {product_type.lower() or 'item'}. Perfect for {board_name.lower()}. Shop now!"[:300]
+    # Fallback: Simple descriptive alt text
+    if color:
+        return f"{color} {product_type or 'item'} from MeeeShop"[:125]
+    return f"{product_type or 'Fashion item'} from MeeeShop"[:125]
 
 
 def generate_hashtags(product_data: Dict[str, Any], board_name: str) -> List[str]:
@@ -154,13 +196,14 @@ Reply ONLY with keywords separated by commas."""
 
 
 def generate_content_package(product_data: Dict[str, Any], board_name: str) -> Dict[str, Any]:
-    """Generate complete Pinterest content package"""
+    """Generate complete Pinterest content package (including alt text for accessibility)"""
 
     logger.info(f"Generating content for: {product_data.get('title', 'Unknown')}")
 
     return {
         "pin_title": generate_pinterest_title(product_data),
         "pin_description": generate_pinterest_description(product_data, board_name),
+        "pin_alt_text": generate_alt_text(product_data),
         "hashtags": generate_hashtags(product_data, board_name),
         "keywords": generate_keywords_for_seo(product_data),
     }

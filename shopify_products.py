@@ -8,9 +8,16 @@ import json
 import logging
 from typing import List, Dict, Any, Optional
 from datetime import datetime, timedelta
+from pathlib import Path
 import requests
+from dotenv import load_dotenv
 
 logger = logging.getLogger(__name__)
+
+# Load .env file
+env_file = Path(__file__).parent / ".env"
+if env_file.exists():
+    load_dotenv(env_file)
 
 
 class ShopifyClient:
