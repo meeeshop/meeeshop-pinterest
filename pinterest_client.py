@@ -330,51 +330,106 @@ class PinterestClient:
             raise
 
     def _register_upload(self, media_type: str = "image-story-pin") -> Dict:
-        """Register media upload with Pinterest API using py3-pinterest approach."""
+        """Register media upload with Pinterest API using py3-pinterest exact approach.
+
+        Matches proven working code from https://github.com/bstoilov/py3-pinterest
+        """
         upload_id = str(uuid.uuid4())
-        media_info = {"id": upload_id, "media_type": media_type}
+
+        # Build media_info with minimal required fields (id, media_type)
+        media_info = {
+            "id": upload_id,
+            "media_type": media_type
+        }
+
+        logger.info(f"[REGISTER_UPLOAD] Starting media registration")
+        logger.info(f"[REGISTER_UPLOAD] Upload ID: {upload_id}")
+        logger.info(f"[REGISTER_UPLOAD] Media type: {media_type}")
+        logger.debug(f"[REGISTER_UPLOAD] Media info structure: {json.dumps(media_info)}")
 
         url = "https://www.pinterest.com/resource/ApiResource/create/"
 
         try:
-            # Pinterest batch endpoint expects list of items with 'fields' dict
-            media_info_with_fields = {
-                'id': upload_id,
-                'type': media_type,
-                'fields': ['id', 'media_type', 's3_upload_data', 'upload_parameters']
-            }
-
-            options = {
-                'url': '/v3/media/uploads/register/batch/',
-                'data': json.dumps([media_info_with_fields])
-            }
-
+            # Use media_info_list wrapper (from py3-pinterest)
+            # The batch endpoint expects: media_info_list as JSON-encoded array
             post_data = {
                 'source_url': '/pin-creation-tool/',
                 'data': json.dumps({
-                    'options': options,
+                    'options': {
+                        'url': '/v3/media/uploads/register/batch/',
+                        'data': json.dumps([media_info])  # Array of media info objects
+                    },
                     'context': None
                 }),
                 '_': str(int(time.time() * 1000))
             }
 
+            logger.debug(f"[REGISTER_UPLOAD] Request structure:")
+            logger.debug(f"[REGISTER_UPLOAD]   - source_url: /pin-creation-tool/")
+            logger.debug(f"[REGISTER_UPLOAD]   - options.url: /v3/media/uploads/register/batch/")
+            logger.debug(f"[REGISTER_UPLOAD]   - options.data (media_info_list): {post_data['data']}")
+
             self._rate_limit()
-            logger.debug(f"Registering upload: {upload_id}")
+            logger.info(f"[REGISTER_UPLOAD] Sending API request to {url}")
+
             resp = self._api_post(url, post_data)
             result = resp.json()
 
-            if 'resource_response' in result and 'data' in result['resource_response']:
-                upload_data = result['resource_response']['data']
-                for key, value in upload_data.items():
-                    if isinstance(value, dict) and ('s3_upload_data' in value or 'upload_parameters' in value):
-                        logger.info(f"✓ Upload registered: {upload_id}")
-                        return {'upload_id': upload_id, 'entry': value}
+            logger.debug(f"[REGISTER_UPLOAD] Raw response: {json.dumps(result, indent=2)}")
 
-            logger.error(f"Invalid response from upload registration: {result}")
-            raise RuntimeError(f"Upload registration failed: no S3 data in response")
+            # Extract upload data from response
+            if 'resource_response' not in result:
+                logger.error(f"[REGISTER_UPLOAD] Missing 'resource_response' in response")
+                logger.error(f"[REGISTER_UPLOAD] Response keys: {list(result.keys())}")
+                raise RuntimeError("No resource_response in registration response")
+
+            resource_resp = result['resource_response']
+
+            if 'error' in resource_resp:
+                error_info = resource_resp['error']
+                logger.error(f"[REGISTER_UPLOAD] Pinterest returned error:")
+                logger.error(f"[REGISTER_UPLOAD]   - Status: {error_info.get('status')}")
+                logger.error(f"[REGISTER_UPLOAD]   - Code: {error_info.get('code')}")
+                logger.error(f"[REGISTER_UPLOAD]   - Message: {error_info.get('message')}")
+                raise RuntimeError(f"Pinterest API error: {error_info.get('message')}")
+
+            if 'data' not in resource_resp:
+                logger.error(f"[REGISTER_UPLOAD] Missing 'data' in resource_response")
+                logger.error(f"[REGISTER_UPLOAD] Response keys: {list(resource_resp.keys())}")
+                raise RuntimeError("No data in registration response")
+
+            upload_data = resource_resp['data']
+            logger.info(f"[REGISTER_UPLOAD] Received upload response with {len(upload_data)} entries")
+            logger.debug(f"[REGISTER_UPLOAD] Upload data keys: {list(upload_data.keys())}")
+
+            # Find entry with S3 upload parameters
+            for key, value in upload_data.items():
+                if not isinstance(value, dict):
+                    logger.debug(f"[REGISTER_UPLOAD] Entry '{key}' is not a dict, skipping")
+                    continue
+
+                entry_keys = list(value.keys())
+                logger.debug(f"[REGISTER_UPLOAD] Entry '{key}' keys: {entry_keys}")
+
+                # Check for S3 upload data fields
+                if 's3_upload_data' in value or 'upload_parameters' in value:
+                    logger.info(f"[REGISTER_UPLOAD] ✓ Found S3 upload data in entry '{key}'")
+                    logger.debug(f"[REGISTER_UPLOAD] S3 data fields: {list(value.get('s3_upload_data', {}).keys()) if 's3_upload_data' in value else 'N/A'}")
+                    logger.debug(f"[REGISTER_UPLOAD] Upload parameters fields: {list(value.get('upload_parameters', {}).keys()) if 'upload_parameters' in value else 'N/A'}")
+
+                    result_data = {
+                        'upload_id': upload_id,
+                        'entry': value
+                    }
+                    logger.info(f"[REGISTER_UPLOAD] ✓ Upload registered successfully")
+                    return result_data
+
+            logger.error(f"[REGISTER_UPLOAD] No S3 upload data found in any entry")
+            logger.error(f"[REGISTER_UPLOAD] Available entries: {list(upload_data.keys())}")
+            raise RuntimeError("No S3 upload parameters in response")
 
         except Exception as e:
-            logger.error(f"Upload registration failed: {e}")
+            logger.error(f"[REGISTER_UPLOAD] Registration failed: {type(e).__name__}: {e}")
             raise RuntimeError(f"Failed to register upload: {e}")
 
     def _upload_to_s3(self, upload_url: str, upload_params: Dict, image_file: str) -> bool:
