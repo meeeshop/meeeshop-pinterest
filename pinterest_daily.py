@@ -15,7 +15,7 @@ from typing import List, Dict, Any, Optional
 import requests
 
 from pinterest_client import PinterestClient
-from shopify_products import ShopifyClient, format_product_for_pinterest, select_board_for_product
+from shopify_products import ShopifyClient, format_product_for_pinterest
 from content_generator import generate_content_package
 from video_picker import EnvLoader
 from image_overlay import add_text_overlay
@@ -183,7 +183,9 @@ def pick_board(
     used_boards: set,
     formatted: Dict[str, Any],
 ) -> Optional[Dict]:
-    """Pick the next board from the rotation, falling back to category match then random."""
+    """Pick board: category-specific boards first, then rotation for generic products."""
+    from board_mapping import CATEGORY_TO_BOARDS
+
     boards_by_name = {b["name"].lower(): b for b in boards}
 
     def find(name: str) -> Optional[Dict]:
@@ -195,6 +197,30 @@ def pick_board(
                 return board
         return None
 
+    def category_key(text: str) -> str:
+        for key in ["dress", "top", "blouse", "tank", "shirt", "jeans", "jacket",
+                    "coat", "pants", "legging", "skirt", "sweater", "cardigan",
+                    "bag", "backpack", "shoe", "boot", "flat", "jumpsuit", "romper"]:
+            if key in text:
+                if key in ("blouse", "tank", "shirt"): return "top"
+                if key in ("coat",): return "jacket"
+                if key in ("legging",): return "pants"
+                if key in ("boot", "flat"): return "shoe"
+                if key in ("backpack",): return "bag"
+                if key in ("romper",): return "jumpsuit"
+                return key
+        return "default"
+
+    search = f"{formatted.get('title','').lower()} {formatted.get('product_type','').lower()}"
+    cat = category_key(search)
+
+    # For non-generic products, try category-specific boards first
+    if cat != "default":
+        for board_name in CATEGORY_TO_BOARDS.get(cat, []):
+            b = find(board_name)
+            if b and b["name"] not in used_boards:
+                return b
+
     # Walk the rotation list starting at index, skip already-used boards
     rotation = DAILY_BOARD_ROTATION
     for i in range(len(rotation)):
@@ -202,12 +228,6 @@ def pick_board(
         b = find(candidate)
         if b and b["name"] not in used_boards:
             return b
-
-    # Category match
-    ideal = select_board_for_product(formatted)
-    b = find(ideal)
-    if b and b["name"] not in used_boards:
-        return b
 
     # Anything unused
     available = [b for b in boards if b["name"] not in used_boards]
