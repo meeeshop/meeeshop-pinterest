@@ -303,9 +303,16 @@ class PinterestClient:
             response.raise_for_status()
             return response
         except requests.exceptions.HTTPError as e:
+            # Log response body for debugging
+            try:
+                error_body = e.response.text[:500]
+            except:
+                error_body = "No response body"
+
             # 401/403: Session expired, try fresh login
             if e.response.status_code in (401, 403) and not session_retry:
-                logger.warning(f"Session invalid (HTTP {e.response.status_code}), attempting fresh authentication...")
+                logger.warning(f"Session invalid (HTTP {e.response.status_code}), response: {error_body}")
+                logger.info("Attempting fresh authentication...")
                 if self.login(force_fresh=True):
                     logger.info("Fresh authentication successful, retrying API call...")
                     return self._api_post(url, data, retry_count=0, session_retry=True)
@@ -315,58 +322,53 @@ class PinterestClient:
             # 500: Transient error, retry with backoff
             elif e.response.status_code == 500 and retry_count < MAX_RETRIES:
                 wait_time = (RETRY_BACKOFF ** retry_count)
-                logger.warning(f"Pinterest 500 error, retrying in {wait_time}s (attempt {retry_count + 1}/{MAX_RETRIES})")
+                logger.warning(f"Pinterest 500 error (attempt {retry_count + 1}/{MAX_RETRIES}), response: {error_body}, retrying in {wait_time}s...")
                 time.sleep(wait_time)
                 return self._api_post(url, data, retry_count + 1, session_retry=session_retry)
+            else:
+                logger.error(f"API call failed (HTTP {e.response.status_code}), response: {error_body}")
             raise
 
     def _register_upload(self, media_type: str = "image-story-pin") -> Dict:
-        """Register media upload with Pinterest API. Includes fallback for endpoint changes."""
+        """Register media upload with Pinterest API using py3-pinterest approach."""
         upload_id = str(uuid.uuid4())
         media_info = {"id": upload_id, "media_type": media_type}
 
-        # Primary endpoint
-        endpoints = [
-            "https://www.pinterest.com/resource/ApiResource/create/",
-            "https://www.pinterest.com/resource/PinResource/create/",  # fallback endpoint
-        ]
+        url = "https://www.pinterest.com/resource/ApiResource/create/"
 
-        for endpoint_idx, url in enumerate(endpoints):
-            try:
-                data = {
-                    'source_url': '/pin-creation-tool/',
-                    'data': json.dumps({
-                        'options': {
-                            'url': '/v3/media/uploads/register/batch/',
-                            'data': json.dumps([media_info])
-                        },
-                        'context': None
-                    }),
-                    '_': str(int(time.time() * 1000))
-                }
+        try:
+            options = {
+                'url': '/v3/media/uploads/register/batch/',
+                'data': json.dumps([media_info])
+            }
 
-                self._rate_limit()
-                logger.debug(f"Attempting upload registration on endpoint {endpoint_idx + 1}/{len(endpoints)}")
-                resp = self._api_post(url, data)
-                result = resp.json()
+            post_data = {
+                'source_url': '/pin-creation-tool/',
+                'data': json.dumps({
+                    'options': options,
+                    'context': None
+                }),
+                '_': str(int(time.time() * 1000))
+            }
 
-                if 'resource_response' in result and 'data' in result['resource_response']:
-                    upload_data = result['resource_response']['data']
-                    for key, value in upload_data.items():
-                        if isinstance(value, dict) and ('s3_upload_data' in value or 'upload_parameters' in value):
-                            logger.info(f"Upload registered on endpoint {endpoint_idx + 1}: {upload_id}")
-                            return {'upload_id': upload_id, 'entry': value}
+            self._rate_limit()
+            logger.debug(f"Registering upload: {upload_id}")
+            resp = self._api_post(url, post_data)
+            result = resp.json()
 
-                logger.warning(f"Endpoint {endpoint_idx + 1} returned invalid response: {result}")
+            if 'resource_response' in result and 'data' in result['resource_response']:
+                upload_data = result['resource_response']['data']
+                for key, value in upload_data.items():
+                    if isinstance(value, dict) and ('s3_upload_data' in value or 'upload_parameters' in value):
+                        logger.info(f"✓ Upload registered: {upload_id}")
+                        return {'upload_id': upload_id, 'entry': value}
 
-            except Exception as e:
-                logger.warning(f"Endpoint {endpoint_idx + 1} failed: {e}")
-                if endpoint_idx < len(endpoints) - 1:
-                    logger.info(f"Trying fallback endpoint...")
-                    continue
-                else:
-                    logger.error(f"All upload registration endpoints failed")
-                    raise RuntimeError(f"Failed to register upload on all endpoints: {e}")
+            logger.error(f"Invalid response from upload registration: {result}")
+            raise RuntimeError(f"Upload registration failed: no S3 data in response")
+
+        except Exception as e:
+            logger.error(f"Upload registration failed: {e}")
+            raise RuntimeError(f"Failed to register upload: {e}")
 
     def _upload_to_s3(self, upload_url: str, upload_params: Dict, image_file: str) -> bool:
         """Upload image to S3."""
