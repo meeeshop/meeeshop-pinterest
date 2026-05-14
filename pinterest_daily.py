@@ -23,29 +23,50 @@ from image_overlay import add_text_overlay
 logger = logging.getLogger(__name__)
 
 HISTORY_FILE = Path(__file__).parent / "posting_history.json"
-MAX_PINS_PER_DAY = 17     # all posted in one daily run
+MAX_PINS_PER_DAY = 16    # 4 runs × 4 pins across peak USA times
+PINS_PER_RUN = 4
 
-# Ordered board rotation: covers every major audience segment across the day's batch.
-# First boards are highest-traffic; order ensures variety across the 17-pin sequence.
+# 16 boards split into 4 time-slot windows (slot 0-3).
+# Each run posts to its own 4 boards — no overlap across the day.
+# Slot assigned by UTC hour: 12→0, 17→1, 21→2, 1→3
 DAILY_BOARD_ROTATION = [
-    "Trends",                    # 1 — highest traffic
-    "Dresses",                   # 2 — top category
-    "Best selling products",     # 3 — social proof
-    "Outfit Ideas",              # 4 — discovery
-    "Shirts & Tops",             # 5 — category
-    "Style Ideas",               # 6 — lifestyle
-    "Jeans",                     # 7 — category
-    "Everyday Style",            # 8 — lifestyle
-    "Sweaters",                  # 9 — category
-    "Simple Outfits",            # 10 — discovery
-    "Coats & Jackets",           # 11 — category
-    "Chic & Effortless Styles",  # 12 — lifestyle
-    "Pants & Leggings",          # 13 — category
-    "Ootd #ootd",                # 14 — hashtag discovery
-    "New",                       # 15 — recency traffic
-    "Wardrobe Must Haves",       # 16 — lifestyle
-    "Woman Fashion!",            # 17 — broad audience
+    # Slot 0 — 8 AM ET (morning scroll, ET/CT peak)
+    "Trends",                    # highest traffic
+    "Dresses",                   # top category
+    "Best selling products",     # social proof
+    "Outfit Ideas",              # discovery
+
+    # Slot 1 — 1 PM ET (lunch break, all zones warming up)
+    "Shirts & Tops",             # category
+    "Style Ideas",               # lifestyle
+    "Jeans",                     # category
+    "Everyday Style",            # lifestyle
+
+    # Slot 2 — 5 PM ET (after work/school, PT lunch)
+    "Sweaters",                  # category
+    "Simple Outfits",            # discovery
+    "Coats & Jackets",           # category
+    "Chic & Effortless Styles",  # lifestyle
+
+    # Slot 3 — 9 PM ET (prime time, all zones)
+    "Pants & Leggings",          # category
+    "Ootd #ootd",                # hashtag discovery
+    "New",                       # recency traffic
+    "Wardrobe Must Haves",       # lifestyle
 ]
+
+
+def _time_slot() -> int:
+    """Map current UTC hour to slot 0-3 matching the 4 daily run times."""
+    hour = datetime.utcnow().hour
+    if hour == 12:
+        return 0
+    elif hour == 17:
+        return 1
+    elif hour == 21:
+        return 2
+    else:
+        return 3  # 01 UTC or manual dispatch
 
 
 def load_history() -> Dict[str, Any]:
@@ -221,15 +242,25 @@ def pick_board(
             if b and b["name"] not in used_boards:
                 return b
 
-    # Walk the rotation list starting at index, skip already-used boards
-    rotation = DAILY_BOARD_ROTATION
-    for i in range(len(rotation)):
-        candidate = rotation[(index + i) % len(rotation)]
+    # Walk this run's 4-board slot window first, then fall back to full rotation
+    slot = _time_slot()
+    slot_start = slot * PINS_PER_RUN
+    slot_boards = DAILY_BOARD_ROTATION[slot_start: slot_start + PINS_PER_RUN]
+
+    for i in range(len(slot_boards)):
+        candidate = slot_boards[(index + i) % len(slot_boards)]
         b = find(candidate)
         if b and b["name"] not in used_boards:
             return b
 
-    # Anything unused
+    # Fallback: any board in the full rotation not yet used
+    for i in range(len(DAILY_BOARD_ROTATION)):
+        candidate = DAILY_BOARD_ROTATION[(slot_start + index + i) % len(DAILY_BOARD_ROTATION)]
+        b = find(candidate)
+        if b and b["name"] not in used_boards:
+            return b
+
+    # Last resort: anything unused
     available = [b for b in boards if b["name"] not in used_boards]
     return random.choice(available) if available else random.choice(boards)
 
@@ -256,8 +287,9 @@ def run_daily_posting(use_video: bool = False):
     if not all([pinterest_email, pinterest_password, shopify_url, shopify_token]):
         raise ValueError("Missing required credentials in .env")
 
-    target = int(os.getenv("PINS_TO_POST", str(MAX_PINS_PER_DAY)))
-    logger.info(f"Daily run starting — target: {target} pins")
+    target = int(os.getenv("PINS_TO_POST", str(PINS_PER_RUN)))
+    slot = _time_slot()
+    logger.info(f"Daily run starting — slot {slot}/3, target: {target} pins")
 
     history = load_history()
     reset_daily_count()

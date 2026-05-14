@@ -1,23 +1,31 @@
 name: Daily Pinterest Posting
 
-# Runs once per day — posts all 17 pins in one job (~20 min total).
-# Pins go to 17 different boards in sequence with 30-60s gaps between each.
-# Trigger: 12:00 UTC = 8 AM ET / 7 AM CT (pre-peak warm-up, finishes by 8:20 AM ET)
+# 4 runs/day × 4 pins = 16 pins spread across peak USA women's shopping times.
+# Each run takes ~3 min (4 pins × 40s + overhead) = ~12 min/day total.
+#
+# Schedule (UTC → US times):
+#   12:00 UTC = 8 AM ET / 7 AM CT   — morning scroll (slot 0: Trends, Dresses, Best selling, Outfit Ideas)
+#   17:00 UTC = 1 PM ET / 12 PM CT  — lunch break   (slot 1: Shirts & Tops, Style Ideas, Jeans, Everyday Style)
+#   21:00 UTC = 5 PM ET / 4 PM CT   — after work    (slot 2: Sweaters, Simple Outfits, Coats, Chic Styles)
+#   01:00 UTC = 9 PM ET / 8 PM CT   — prime time    (slot 3: Pants, Ootd, New, Wardrobe Must Haves)
 
 on:
   schedule:
-    - cron: '0 12 * * *'
+    - cron: '0 12 * * *'   # 8 AM ET — morning scroll
+    - cron: '0 17 * * *'   # 1 PM ET — lunch break
+    - cron: '0 21 * * *'   # 5 PM ET — after work
+    - cron: '0 1 * * *'    # 9 PM ET — prime time
   workflow_dispatch:
     inputs:
       pins_count:
-        description: 'Number of pins to post (default: 17)'
+        description: 'Number of pins to post (default: 4)'
         required: false
-        default: '17'
+        default: '4'
 
 jobs:
   post-to-pinterest:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 15
 
     steps:
       - uses: actions/checkout@v4
@@ -32,7 +40,16 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Post all daily pins
+      - name: Download posting history artifact
+        uses: dawidd6/action-download-artifact@v3
+        with:
+          name: posting-history-*
+          name_is_regexp: true
+          workflow: daily-pinterest-posting.yml
+          if_no_artifact_found: warn
+        continue-on-error: true
+
+      - name: Post daily pins
         env:
           PINTEREST_COOKIES_B64: ${{ secrets.PINTEREST_COOKIES_B64 }}
           PINTEREST_EMAIL: ${{ secrets.PINTEREST_EMAIL }}
@@ -44,7 +61,7 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
-          PINS_TO_POST: ${{ github.event.inputs.pins_count || '17' }}
+          PINS_TO_POST: ${{ github.event.inputs.pins_count || '4' }}
         run: |
           python pinterest_daily.py
 

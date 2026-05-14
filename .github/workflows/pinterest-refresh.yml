@@ -1,27 +1,29 @@
 name: Pinterest Refresh Pins
 
-# Runs twice a day to catch products due for their 48h or 96h refresh.
+# Runs 30 min after each daily posting run to catch any products due for 48h/96h refresh.
 # Creates a BRAND NEW pin (different image template) to a different board.
 # Pinterest sees it as fresh content — not a repin/duplicate.
 #
-# Schedule logic:
-#   Each product gets up to 2 refreshes after its original post:
-#     Refresh 1 → 48h after original  (different template, different board)
-#     Refresh 2 → 96h after original  (yet another template, yet another board)
+# Schedule (UTC → US times, 30 min after daily posting):
+#   12:30 UTC = 8:30 AM ET   — after morning run
+#   17:30 UTC = 1:30 PM ET   — after lunch run
+#   21:30 UTC = 5:30 PM ET   — after after-work run
+#   01:30 UTC = 9:30 PM ET   — after prime-time run
 #
-# Running twice/day (noon + midnight UTC) means no product waits more than
-# 12h past its refresh window. ~2-5 min per run = minimal workflow minutes used.
+# Each run: ~2-3 min (posts up to 10 refresh pins max, typically 2-5).
 
 on:
   schedule:
-    - cron: '0 0 * * *'   # midnight UTC
-    - cron: '0 12 * * *'  # noon UTC (offset from daily posting at same time — runs after)
+    - cron: '30 12 * * *'   # 8:30 AM ET
+    - cron: '30 17 * * *'   # 1:30 PM ET
+    - cron: '30 21 * * *'   # 5:30 PM ET
+    - cron: '30 1 * * *'    # 9:30 PM ET
   workflow_dispatch: {}
 
 jobs:
   refresh-pins:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 15
 
     steps:
       - uses: actions/checkout@v4
@@ -42,6 +44,15 @@ jobs:
           name: posting-history-*
           name_is_regexp: true
           workflow: daily-pinterest-posting.yml
+          if_no_artifact_found: warn
+        continue-on-error: true
+
+      - name: Download refresh history artifact
+        uses: dawidd6/action-download-artifact@v3
+        with:
+          name: refresh-history-*
+          name_is_regexp: true
+          workflow: pinterest-refresh.yml
           if_no_artifact_found: warn
         continue-on-error: true
 
