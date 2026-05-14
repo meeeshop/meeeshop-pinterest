@@ -21,11 +21,6 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          python -m webdriver_manager chrome
-
-      - name: Download ChromeDriver
-        run: |
-          python -c "from webdriver_manager.chrome import ChromeDriverManager; ChromeDriverManager().install()"
 
       - name: Run daily posting
         env:
@@ -46,24 +41,3 @@ jobs:
           name: posting-history
           path: posting_history.json
           retention-days: 30
-
-      - name: Notify Slack on failure
-        if: failure()
-        uses: slackapi/slack-github-action@v1
-        with:
-          payload: |
-            {
-              "text": "❌ Pinterest daily posting failed",
-              "blocks": [
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "*Pinterest Posting Error*\nRun: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-                  }
-                }
-              ]
-            }
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
