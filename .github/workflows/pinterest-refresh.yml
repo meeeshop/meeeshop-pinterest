@@ -1,29 +1,27 @@
-name: Daily Pinterest Posting
+name: Pinterest Refresh Pins
 
-# 4 runs/day × 4 pins = 16 pins spread across peak USA women's shopping times.
-# Each run takes ~3 min (4 pins × 40s + overhead) = ~12 min/day total.
+# Runs 30 min after each daily posting run to catch any products due for 48h/96h refresh.
+# Creates a BRAND NEW pin (different image template) to a different board.
+# Pinterest sees it as fresh content — not a repin/duplicate.
 #
-# Schedule (UTC → US times):
-#   12:00 UTC = 8 AM ET / 7 AM CT   — morning scroll (slot 0: Trends, Dresses, Best selling, Outfit Ideas)
-#   17:00 UTC = 1 PM ET / 12 PM CT  — lunch break   (slot 1: Shirts & Tops, Style Ideas, Jeans, Everyday Style)
-#   21:00 UTC = 5 PM ET / 4 PM CT   — after work    (slot 2: Sweaters, Simple Outfits, Coats, Chic Styles)
-#   01:00 UTC = 9 PM ET / 8 PM CT   — prime time    (slot 3: Pants, Ootd, New, Wardrobe Must Haves)
+# Schedule (UTC → US times, 30 min after daily posting):
+#   12:30 UTC = 8:30 AM ET   — after morning run
+#   17:30 UTC = 1:30 PM ET   — after lunch run
+#   21:30 UTC = 5:30 PM ET   — after after-work run
+#   01:30 UTC = 9:30 PM ET   — after prime-time run
+#
+# Each run: ~2-3 min (posts up to 10 refresh pins max, typically 2-5).
 
 on:
   schedule:
-    - cron: '0 12 * * *'   # 8 AM ET — morning scroll
-    - cron: '0 17 * * *'   # 1 PM ET — lunch break
-    - cron: '0 21 * * *'   # 5 PM ET — after work
-    - cron: '0 1 * * *'    # 9 PM ET — prime time
-  workflow_dispatch:
-    inputs:
-      pins_count:
-        description: 'Number of pins to post (default: 4)'
-        required: false
-        default: '4'
+    - cron: '30 12 * * *'   # 8:30 AM ET
+    - cron: '30 17 * * *'   # 1:30 PM ET
+    - cron: '30 21 * * *'   # 5:30 PM ET
+    - cron: '30 1 * * *'    # 9:30 PM ET
+  workflow_dispatch: {}
 
 jobs:
-  post-to-pinterest:
+  refresh-pins:
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
@@ -49,7 +47,16 @@ jobs:
           if_no_artifact_found: warn
         continue-on-error: true
 
-      - name: Post daily pins
+      - name: Download refresh history artifact
+        uses: dawidd6/action-download-artifact@v3
+        with:
+          name: refresh-history-*
+          name_is_regexp: true
+          workflow: pinterest-refresh.yml
+          if_no_artifact_found: warn
+        continue-on-error: true
+
+      - name: Run refresh posting
         env:
           PINTEREST_COOKIES_B64: ${{ secrets.PINTEREST_COOKIES_B64 }}
           PINTEREST_EMAIL: ${{ secrets.PINTEREST_EMAIL }}
@@ -61,14 +68,15 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
-          PINS_TO_POST: ${{ github.event.inputs.pins_count || '4' }}
         run: |
-          python pinterest_daily.py
+          python pinterest_refresh.py
 
-      - name: Upload posting history
+      - name: Upload refresh history
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: posting-history-${{ github.run_number }}
-          path: posting_history.json
+          name: refresh-history-${{ github.run_number }}
+          path: |
+            refresh_history.json
+            posting_history.json
           retention-days: 30

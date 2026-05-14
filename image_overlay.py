@@ -464,6 +464,7 @@ def add_text_overlay(
     cta: str = "Shop Now",
     price: Optional[str] = None,
     output_path: Optional[str] = None,
+    template_index: Optional[int] = None,
 ) -> Optional[str]:
     """Called by pinterest_daily.py — derives category label then delegates."""
     tl = title.lower()
@@ -490,6 +491,7 @@ def add_text_overlay(
         category=category,
         price=price,
         output_path=output_path,
+        template_index=template_index,
     )
 
 
