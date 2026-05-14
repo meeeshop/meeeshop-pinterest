@@ -351,13 +351,13 @@ class PinterestClient:
 
         try:
             # Use media_info_list wrapper (from py3-pinterest)
-            # The batch endpoint expects: media_info_list as JSON-encoded array
+            # The batch endpoint expects: fields key with array of media info
             post_data = {
                 'source_url': '/pin-creation-tool/',
                 'data': json.dumps({
                     'options': {
                         'url': '/v3/media/uploads/register/batch/',
-                        'data': json.dumps([media_info])  # Array of media info objects
+                        'data': json.dumps({"fields": [media_info]})  # Object with fields array
                     },
                     'context': None
                 }),
@@ -367,7 +367,7 @@ class PinterestClient:
             logger.debug(f"[REGISTER_UPLOAD] Request structure:")
             logger.debug(f"[REGISTER_UPLOAD]   - source_url: /pin-creation-tool/")
             logger.debug(f"[REGISTER_UPLOAD]   - options.url: /v3/media/uploads/register/batch/")
-            logger.debug(f"[REGISTER_UPLOAD]   - options.data (media_info_list): {post_data['data']}")
+            logger.debug(f"[REGISTER_UPLOAD]   - options.data (fields wrapper): {post_data['data']}")
 
             self._rate_limit()
             logger.info(f"[REGISTER_UPLOAD] Sending API request to {url}")
