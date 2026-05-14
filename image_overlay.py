@@ -248,7 +248,7 @@ def add_text_overlay(
         title=title,
         category=category,
         price=price,
-        cta=f"{cta} at MeeeShop.com",
+        cta=f"{cta} at us.MeeeShop.com",
         output_path=output_path,
     )
 
