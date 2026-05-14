@@ -22,6 +22,10 @@ on:
         required: false
         default: '4'
 
+permissions:
+  actions: read
+  contents: read
+
 jobs:
   post-to-pinterest:
     runs-on: ubuntu-latest
