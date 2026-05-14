@@ -95,9 +95,10 @@ class PinterestClient:
                 logger.debug(f"Injected {len(cookies_dict)} cookies into session")
 
             # Test if session is valid
+            username = os.getenv('PINTEREST_USERNAME', 'meeeshop')
             self._rate_limit()
             try:
-                boards = self.client.boards()
+                boards = self.client.boards(username=username)
                 if boards:
                     logger.info(f"✓ Authenticated via GitHub secret. Found {len(boards)} boards.")
                     self.authenticated = True
@@ -152,9 +153,10 @@ class PinterestClient:
                 logger.debug(f"Injected {len(cookies_dict)} cookies into session")
 
             # Test if session is valid
+            username = os.getenv('PINTEREST_USERNAME', 'meeeshop')
             self._rate_limit()
             try:
-                boards = self.client.boards()
+                boards = self.client.boards(username=username)
                 if boards:
                     logger.info(f"✓ Authenticated via saved cookies. Found {len(boards)} boards.")
                     self.authenticated = True
@@ -173,6 +175,79 @@ class PinterestClient:
             return False
         except Exception as e:
             logger.warning(f"Failed to load cookies from file: {e}")
+            return False
+
+    def _http_login(self, email: str, password: str) -> bool:
+        """
+        Authenticate via Pinterest's HTTP API (no Selenium required).
+        Gets csrftoken from login page, then POSTs credentials to UserSessionResource.
+        Injects resulting cookies into the py3-pinterest client session so POST operations work.
+        """
+        try:
+            session = self.client.http
+
+            # Step 1: GET login page to obtain initial csrftoken cookie
+            logger.info("Fetching Pinterest login page for csrftoken...")
+            login_page_url = "https://www.pinterest.com/login/?referrer=home_page"
+            resp = session.get(
+                login_page_url,
+                headers={
+                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+                    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+                    "Accept-Language": "en-US,en;q=0.5",
+                },
+                timeout=30
+            )
+            resp.raise_for_status()
+
+            csrftoken = session.cookies.get("csrftoken")
+            if not csrftoken:
+                logger.error("No csrftoken in login page response cookies")
+                return False
+            logger.debug(f"Got csrftoken: {csrftoken[:8]}...")
+
+            # Step 2: POST credentials to UserSessionResource/create/
+            from py3pin.RequestBuilder import RequestBuilder
+            req_builder = RequestBuilder()
+            options = {
+                "username_or_email": email,
+                "password": password,
+            }
+            data = req_builder.buildPost(options=options, source_url="/login/")
+
+            create_session_url = "https://www.pinterest.com/resource/UserSessionResource/create/"
+            headers = {
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+                "Referer": login_page_url,
+                "X-Requested-With": "XMLHttpRequest",
+                "X-CSRFToken": csrftoken,
+                "Accept": "application/json",
+                "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+            }
+
+            login_resp = session.post(
+                create_session_url,
+                data=data,
+                headers=headers,
+                timeout=30
+            )
+            login_resp.raise_for_status()
+
+            result = login_resp.json()
+            resource_resp = result.get("resource_response", {})
+            if resource_resp.get("status") == "failure":
+                message = resource_resp.get("message", "Unknown login failure")
+                logger.error(f"Pinterest login API rejected credentials: {message}")
+                return False
+
+            # Verify we now have a proper authenticated csrftoken
+            new_csrftoken = session.cookies.get("csrftoken")
+            logger.info(f"✓ HTTP login successful. csrftoken present: {bool(new_csrftoken)}")
+            logger.debug(f"Session cookies after login: {list(session.cookies.keys())}")
+            return True
+
+        except Exception as e:
+            logger.error(f"HTTP login failed: {type(e).__name__}: {e}")
             return False
 
     def login(self, force_fresh: bool = False) -> bool:
@@ -222,9 +297,17 @@ class PinterestClient:
                 username=self.username
             )
 
+            # Perform HTTP-based login to get valid session cookies for POST operations.
+            # Pinterest(email, password) constructor only loads saved registry cookies —
+            # it does NOT authenticate. Without calling .login() (Selenium), POSTs to
+            # ApiResource/create/ will fail with 401. We use the HTTP login flow instead.
+            if not self._http_login(self.email, self.password):
+                logger.error("HTTP login failed — cannot post pins without valid session")
+                return False
+
             # Test authentication by attempting to fetch boards
             self._rate_limit()
-            boards = self.client.boards()
+            boards = self.client.boards(username=self.username)
             if boards:
                 logger.info(f"✓ Successfully authenticated. Found {len(boards)} boards.")
                 self.authenticated = True
