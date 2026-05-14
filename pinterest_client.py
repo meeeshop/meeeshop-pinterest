@@ -58,6 +58,24 @@ class PinterestClient:
             time.sleep(self.rate_limit_delay - elapsed)
         self.last_request_time = time.time()
 
+    def _inject_cookies(self, cookies_dict: Dict[str, str]) -> None:
+        """Inject cookies into all known py3-pinterest session attributes.
+
+        py3-pinterest uses self.client.http for uploads but boards() may use a
+        different attribute depending on version. Set on both to be safe.
+        """
+        if not cookies_dict:
+            return
+        targets = []
+        for attr in ('http', 'session'):
+            sess = getattr(self.client, attr, None)
+            if sess is not None and hasattr(sess, 'cookies'):
+                targets.append((attr, sess))
+        for attr, sess in targets:
+            for key, value in cookies_dict.items():
+                sess.cookies.set(key, value, domain='.pinterest.com')
+        logger.debug(f"Injected {len(cookies_dict)} cookies into: {[a for a, _ in targets]}")
+
     def _try_load_cookies_from_github_secret(self, force_fresh: bool = False) -> bool:
         """
         Try to load Pinterest cookies from GitHub Actions secret (base64 encoded).
@@ -89,10 +107,7 @@ class PinterestClient:
 
             # Create Pinterest client and inject cookies into session
             self.client = Pinterest()
-            if hasattr(self.client, 'session') and cookies_dict:
-                for key, value in cookies_dict.items():
-                    self.client.session.cookies.set(key, value)
-                logger.debug(f"Injected {len(cookies_dict)} cookies into session")
+            self._inject_cookies(cookies_dict)
 
             # Test if session is valid
             username = os.getenv('PINTEREST_USERNAME', 'meeeshop')
@@ -101,6 +116,7 @@ class PinterestClient:
                 boards = self.client.boards(username=username)
                 if boards:
                     logger.info(f"✓ Authenticated via GitHub secret. Found {len(boards)} boards.")
+                    self.username = username
                     self.authenticated = True
                     return True
             except Exception as board_error:
@@ -147,10 +163,7 @@ class PinterestClient:
 
             # Create Pinterest client and inject cookies into session
             self.client = Pinterest()
-            if hasattr(self.client, 'session') and cookies_dict:
-                for key, value in cookies_dict.items():
-                    self.client.session.cookies.set(key, value)
-                logger.debug(f"Injected {len(cookies_dict)} cookies into session")
+            self._inject_cookies(cookies_dict)
 
             # Test if session is valid
             username = os.getenv('PINTEREST_USERNAME', 'meeeshop')
@@ -159,6 +172,7 @@ class PinterestClient:
                 boards = self.client.boards(username=username)
                 if boards:
                     logger.info(f"✓ Authenticated via saved cookies. Found {len(boards)} boards.")
+                    self.username = username
                     self.authenticated = True
                     return True
             except Exception as board_error:
@@ -456,6 +470,20 @@ class PinterestClient:
         except Exception as e:
             error_msg = f"Failed to create pin: {str(e)}"
             logger.error(error_msg)
+
+            # On 401, the GitHub-secret cookies are stale. Force a fresh HTTP login
+            # (email/password) so subsequent retries use a valid csrftoken/session.
+            if '401' in str(e) and retry_count == 0:
+                logger.warning("401 on pin creation — cookies are stale. Forcing fresh HTTP login...")
+                creds = CredentialsManager.get_from_env()
+                if creds and creds.get('email') and creds.get('password'):
+                    if self._http_login(creds['email'], creds['password']):
+                        logger.info("✓ Re-authenticated via HTTP login. Retrying pin creation.")
+                    else:
+                        logger.error("HTTP re-login failed")
+                else:
+                    logger.error("No email/password creds available for re-login")
+
             if retry_count < MAX_RETRIES:
                 wait_time = (RETRY_BACKOFF ** retry_count)
                 logger.warning(f"Retrying pin creation in {wait_time}s (attempt {retry_count + 1}/{MAX_RETRIES})")
