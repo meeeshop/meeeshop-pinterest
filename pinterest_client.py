@@ -334,7 +334,7 @@ class PinterestClient:
 
         try:
             self._rate_limit()
-            boards = self.client.boards()
+            boards = self.client.boards(username=self.username)
 
             board_list = []
             for board in boards:
