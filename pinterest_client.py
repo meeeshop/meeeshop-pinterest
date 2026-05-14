@@ -61,14 +61,22 @@ class PinterestClient:
             time.sleep(self.rate_limit_delay - elapsed)
         self.last_request_time = time.time()
 
-    def _try_load_cookies_from_github_secret(self) -> bool:
+    def _try_load_cookies_from_github_secret(self, force_fresh: bool = False) -> bool:
         """
         Try to load Pinterest cookies from GitHub Actions secret (base64 encoded).
         This is the most reliable authentication method for CI/CD.
+        Falls back to email/password if cookies are stale.
+
+        Args:
+            force_fresh: If True, skip cookies and force email/password auth
 
         Returns:
             bool: True if cookies loaded and session valid, False otherwise
         """
+        if force_fresh:
+            logger.info("Forcing fresh authentication (skipping stale cookies)")
+            return False
+
         cookies_b64 = os.getenv('PINTEREST_COOKIES_B64')
         if not cookies_b64:
             logger.debug("No PINTEREST_COOKIES_B64 secret found")
@@ -170,12 +178,15 @@ class PinterestClient:
             logger.warning(f"Failed to load cookies from file: {e}")
             return False
 
-    def login(self) -> bool:
+    def login(self, force_fresh: bool = False) -> bool:
         """
         Authenticate with Pinterest using multiple fallback methods:
         1. GitHub Actions secret with saved cookies (most reliable for CI)
         2. Local saved cookies file (for testing/development)
         3. Email/password login (fallback, less reliable in CI)
+
+        Args:
+            force_fresh: If True, skip cookies and force email/password authentication
 
         Returns:
             bool: True if authentication successful, False otherwise
@@ -183,16 +194,17 @@ class PinterestClient:
         try:
             self.username = os.getenv('PINTEREST_USERNAME', 'meeeshop')
 
-            # Method 1: Try GitHub Actions secret (saved cookies)
-            if self._try_load_cookies_from_github_secret():
-                return True
+            if not force_fresh:
+                # Method 1: Try GitHub Actions secret (saved cookies)
+                if self._try_load_cookies_from_github_secret():
+                    return True
 
-            # Method 2: Try local cookies file
-            if self._try_load_cookies_from_file():
-                return True
+                # Method 2: Try local cookies file
+                if self._try_load_cookies_from_file():
+                    return True
 
             # Method 3: Fall back to email/password login
-            logger.info("No saved cookies available. Attempting email/password login...")
+            logger.info("Attempting email/password login...")
 
             creds = CredentialsManager.get_from_env()
             if not creds:
@@ -269,7 +281,7 @@ class PinterestClient:
             return self.client.session
         raise RuntimeError("Cannot access authenticated session from Pinterest client")
 
-    def _api_post(self, url: str, data: Dict, retry_count: int = 0) -> requests.Response:
+    def _api_post(self, url: str, data: Dict, retry_count: int = 0, session_retry: bool = False) -> requests.Response:
         """Make authenticated POST request to Pinterest API with retry logic."""
         session = self._get_raw_session()
         headers = {
@@ -291,11 +303,21 @@ class PinterestClient:
             response.raise_for_status()
             return response
         except requests.exceptions.HTTPError as e:
-            if e.response.status_code == 500 and retry_count < MAX_RETRIES:
+            # 401/403: Session expired, try fresh login
+            if e.response.status_code in (401, 403) and not session_retry:
+                logger.warning(f"Session invalid (HTTP {e.response.status_code}), attempting fresh authentication...")
+                if self.login(force_fresh=True):
+                    logger.info("Fresh authentication successful, retrying API call...")
+                    return self._api_post(url, data, retry_count=0, session_retry=True)
+                else:
+                    logger.error("Fresh authentication failed")
+                    raise
+            # 500: Transient error, retry with backoff
+            elif e.response.status_code == 500 and retry_count < MAX_RETRIES:
                 wait_time = (RETRY_BACKOFF ** retry_count)
                 logger.warning(f"Pinterest 500 error, retrying in {wait_time}s (attempt {retry_count + 1}/{MAX_RETRIES})")
                 time.sleep(wait_time)
-                return self._api_post(url, data, retry_count + 1)
+                return self._api_post(url, data, retry_count + 1, session_retry=session_retry)
             raise
 
     def _register_upload(self, media_type: str = "image-story-pin") -> Dict:
