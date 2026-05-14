@@ -19,6 +19,7 @@ from pinterest_client import PinterestClient
 from shopify_products import ShopifyClient, format_product_for_pinterest, select_board_for_product
 from content_generator import generate_content_package
 from video_picker import VideoPicker, EnvLoader
+from image_overlay import add_text_overlay, create_video_pin_thumbnail
 
 logger = logging.getLogger(__name__)
 
@@ -134,33 +135,59 @@ def get_video_from_youtube_repo() -> Optional[str]:
 def post_pin(
     client: PinterestClient,
     product_data: Dict[str, Any],
-    board_name: str,
+    board_id: str,
     content: Dict[str, Any],
 ) -> bool:
-    """Post pin to Pinterest"""
+    """Post pin to Pinterest with image overlay"""
 
     # Download image
     image_file = Path("/tmp") / f"pin_{product_data['product_id']}.jpg"
     if not download_image(product_data["image_url"], image_file):
+        logger.error(f"Failed to download image for pin: {content['pin_title']}")
         return False
 
-    # Create pin
-    success = client.create_pin(
-        image_or_video_path=str(image_file),
-        title=content["pin_title"],
-        description=content["pin_description"],
-        board_name=board_name,
-        url=product_data["url"],
-        alt_text=product_data["image_alt"],
-    )
+    try:
+        # Add text overlay (title + CTA) to image
+        overlay_file = Path("/tmp") / f"pin_overlay_{product_data['product_id']}.jpg"
+        overlay_image = add_text_overlay(
+            str(image_file),
+            title=content["pin_title"],
+            cta="Shop Now",
+            price=product_data.get("price"),
+            output_path=str(overlay_file),
+        )
 
-    if success:
+        if not overlay_image:
+            logger.warning("Image overlay failed, posting without overlay")
+            overlay_image = str(image_file)
+
+        logger.info(f"Creating pin: {content['pin_title']}")
+
+        # Add delay to allow Pinterest to process upload before creating pin
+        time.sleep(2)
+
+        success, pin_id = client.create_pin(
+            image_path=overlay_image,
+            title=content["pin_title"],
+            description=content["pin_description"],
+            board_id=board_id,
+            url=product_data["url"],
+            alt_text=product_data["image_alt"],
+        )
+
+        if success:
+            image_file.unlink(missing_ok=True)
+            Path(overlay_image).unlink(missing_ok=True)
+            logger.info(f"✓ Posted successfully: {content['pin_title']} (ID: {pin_id})")
+            return True
+        else:
+            logger.error(f"✗ Failed to post: {content['pin_title']} - {pin_id}")
+            return False
+
+    except Exception as e:
+        logger.error(f"Exception creating pin: {e}", exc_info=True)
         image_file.unlink(missing_ok=True)
-        logger.info(f"✓ Posted to '{board_name}': {content['pin_title']}")
-    else:
-        logger.error(f"✗ Failed to post: {content['pin_title']}")
-
-    return success
+        return False
 
 
 def run_daily_posting(use_video: bool = False):
@@ -199,29 +226,30 @@ def run_daily_posting(use_video: bool = False):
     if not can_post_today(history):
         logger.info("Skipping: daily limit reached")
         return
-        return
 
     # Initialize clients
-    pinterest = PinterestClient(pinterest_email, pinterest_password, headless=False)
+    pinterest = PinterestClient()
     shopify = ShopifyClient(shopify_url, shopify_token)
 
     try:
         # Login to Pinterest
         if not pinterest.login():
-            logger.error("Pinterest login failed")
-            return
+            raise RuntimeError("Pinterest login failed")
 
         # Fetch boards
         boards = pinterest.fetch_boards()
         if not boards:
-            logger.error("No boards found")
-            return
+            raise RuntimeError("No boards found - check Pinterest authentication")
+        logger.info(f"Fetched {len(boards)} boards from Pinterest")
+        board_names = [b['name'] for b in boards]
+        logger.debug(f"Available boards: {board_names[:5]}...")
 
         # Fetch products
+        logger.info(f"Fetching products from Shopify: {shopify_url}")
         products = shopify.get_products(limit=20)
+        logger.info(f"Fetched {len(products)} products from Shopify")
         if not products:
-            logger.error("No products found")
-            return
+            raise RuntimeError("No products found - check Shopify API token and store connectivity")
 
         # Filter out recently posted products
         posted_ids = {post["product_id"] for post in history.get("posts", [])}
@@ -234,21 +262,47 @@ def run_daily_posting(use_video: bool = False):
         # Select random product
         product = random.choice(available_products)
         formatted = format_product_for_pinterest(product, store_base_url)
-        board = select_board_for_product(formatted)
-        # Time‑zone filtering: only post if current UTC hour matches board schedule
-        try:
-            tz_map = json.load((Path(__file__).parent / "us_timezones.json").open("r", encoding="utf-8"))
-            board_hour = int(tz_map.get(board, "0"))
-            if board_hour != datetime.utcnow().hour:
-                logger.info(f"Skipping board '{board}' due to time zone schedule (UTC{board_hour})")
-                return
-        except Exception as e:
-            logger.warning(f"Failed to load time‑zone mapping: {e}")
 
-        # Verify board exists & rotation safe
-        if board not in boards:
-            logger.warning(f"Board '{board}' not found, using random")
-            board = random.choice(list(boards.keys()))
+        # Select board - prefer matching category, fall back to random
+        ideal_board = select_board_for_product(formatted)
+        logger.info(f"Ideal board for product: {ideal_board}")
+
+        # Try to find matching board in user's actual boards (exact then partial match)
+        board_info = None
+        for b in boards:
+            if b['name'].lower() == ideal_board.lower():
+                board_info = b
+                break
+        if not board_info:
+            for b in boards:
+                if ideal_board.lower() in b['name'].lower() or b['name'].lower() in ideal_board.lower():
+                    board_info = b
+                    break
+
+        # If still not found, pick from preferred boards, else random
+        if not board_info:
+            logger.info(f"Board '{ideal_board}' not found in user's boards, selecting preferred")
+            preferred = ["Style Ideas", "New Trendy Women Apparel, Shoes, Handbags & more",
+                         "Spring Outfits", "Simple Outfits", "Edgy fashion"]
+            for pref in preferred:
+                for b in boards:
+                    if b['name'].lower() == pref.lower():
+                        board_info = b
+                        break
+                if board_info:
+                    break
+        if not board_info:
+            board_info = random.choice(boards)
+
+        board = board_info['name']
+
+        # TODO: Implement proper timezone-based scheduling
+        # For now, post immediately. Production will use us_timezones.json
+        # to schedule pins at peak hours for different US timezones
+        logger.info(f"Posting to board: {board} (timezone scheduling pending)")
+
+        # Extract board ID (already validated above)
+        board_id = board_info['id']
 
         if not should_post_to_board(board, history):
             logger.info(f"Skipping board '{board}' (rotation cooldown)")
@@ -274,26 +328,26 @@ def run_daily_posting(use_video: bool = False):
 
         # Post pin (with video if available)
         media_path = video_file or formatted["image_url"]
-        if post_pin(pinterest, formatted, board, content):
-            history["posts"].append({
-                "product_id": product["id"],
-                "title": formatted["title"],
-                "board": board,
-                "timestamp": datetime.now().isoformat(),
-            })
-            history["board_last_used"][board] = datetime.now().isoformat()
-            history["daily_count"] += 1
-            history["last_post_time"] = datetime.now().isoformat()
-            save_history(history)
+        logger.info(f"Posting pin to board: {board} (ID: {board_id})")
+        if not post_pin(pinterest, formatted, board_id, content):
+            raise RuntimeError("Pin posting failed")
 
-            logger.info(f"✓ Daily posting complete. Count: {history['daily_count']}/{MAX_PINS_PER_DAY}")
-        else:
-            logger.error("Pin posting failed")
+        history["posts"].append({
+            "product_id": product["id"],
+            "title": formatted["title"],
+            "board": board,
+            "timestamp": datetime.now().isoformat(),
+        })
+        history["board_last_used"][board] = datetime.now().isoformat()
+        history["daily_count"] += 1
+        history["last_post_time"] = datetime.now().isoformat()
+        save_history(history)
+
+        logger.info(f"✓ Daily posting complete. Count: {history['daily_count']}/{MAX_PINS_PER_DAY}")
 
     except Exception as e:
         logger.error(f"Posting error: {e}", exc_info=True)
-    finally:
-        pinterest.close()
+        raise
 
 
 if __name__ == "__main__":
