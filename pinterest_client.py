@@ -337,9 +337,16 @@ class PinterestClient:
         url = "https://www.pinterest.com/resource/ApiResource/create/"
 
         try:
+            # Pinterest batch endpoint expects list of items with 'fields' dict
+            media_info_with_fields = {
+                'id': upload_id,
+                'type': media_type,
+                'fields': ['id', 'media_type', 's3_upload_data', 'upload_parameters']
+            }
+
             options = {
                 'url': '/v3/media/uploads/register/batch/',
-                'data': json.dumps(media_info)
+                'data': json.dumps([media_info_with_fields])
             }
 
             post_data = {
