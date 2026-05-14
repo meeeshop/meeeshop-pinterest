@@ -339,7 +339,7 @@ class PinterestClient:
         try:
             options = {
                 'url': '/v3/media/uploads/register/batch/',
-                'data': json.dumps([media_info])
+                'data': json.dumps(media_info)
             }
 
             post_data = {
