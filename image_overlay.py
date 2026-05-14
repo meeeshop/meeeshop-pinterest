@@ -193,8 +193,18 @@ def create_pin_image(
 
         # ── CTA footer bar ────────────────────────────────────────────────
         draw.rectangle([(0, CTA_Y), (PIN_W, PIN_H)], fill=COLOR_CTA_BAR)
-        cta_font = _get_font(int(CTA_H * 0.42), bold=True)
         cta_text = cta.upper()
+        cta_margin = int(PIN_W * 0.04)
+        max_cta_w = PIN_W - 2 * cta_margin
+        cta_size = int(CTA_H * 0.28)
+        cta_font = _get_font(cta_size, bold=True)
+        # Auto-shrink until text fits
+        while cta_size > 12:
+            cb = cta_font.getbbox(cta_text)
+            if (cb[2] - cb[0]) <= max_cta_w:
+                break
+            cta_size -= 2
+            cta_font = _get_font(cta_size, bold=True)
         cb = cta_font.getbbox(cta_text)
         cta_x = (PIN_W - (cb[2] - cb[0])) // 2
         cta_y_pos = CTA_Y + (CTA_H - (cb[3] - cb[1])) // 2
