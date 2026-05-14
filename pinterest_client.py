@@ -50,14 +50,31 @@ class PinterestClient:
 
     def login(self) -> bool:
         """
-        Authenticate with Pinterest using credentials.
-        py3-pinterest handles session management internally.
+        Authenticate with Pinterest using saved session data or credentials.
+        Tries stored session first (faster, more reliable), falls back to email/password.
 
         Returns:
             bool: True if authentication successful, False otherwise
         """
         try:
-            # Load credentials from environment or credentials_manager
+            self.username = os.getenv('PINTEREST_USERNAME', 'meeeshop')
+
+            # Try to create client with stored session data first
+            try:
+                logger.info(f"Attempting to load stored session for user: {self.username}")
+                self.client = Pinterest(username=self.username)
+
+                # Test if session is valid
+                self._rate_limit()
+                boards = self.client.boards()
+                if boards:
+                    logger.info(f"✓ Loaded existing session. Found {len(boards)} boards.")
+                    self.authenticated = True
+                    return True
+            except Exception as e:
+                logger.warning(f"Stored session not available or invalid: {e}")
+
+            # Fall back to email/password login
             creds = CredentialsManager.get_from_env()
             if not creds:
                 logger.error("No credentials found in environment")
@@ -65,13 +82,12 @@ class PinterestClient:
 
             self.email = creds.get('email')
             self.password = creds.get('password')
-            self.username = os.getenv('PINTEREST_USERNAME')
 
             if not (self.email and self.password):
                 logger.error("Pinterest credentials (email/password) not found")
                 return False
 
-            # Initialize py3-pinterest client with credentials
+            logger.info(f"Using email/password login for: {self.email}")
             self.client = Pinterest(
                 email=self.email,
                 password=self.password,
@@ -79,23 +95,19 @@ class PinterestClient:
             )
 
             # Test authentication by attempting to fetch boards
-            try:
-                self._rate_limit()
-                boards = self.client.boards()
-                if boards:
-                    logger.info(f"Successfully authenticated. Found {len(boards)} boards.")
-                    self.authenticated = True
-                    return True
-                else:
-                    logger.warning("Authentication succeeded but no boards found")
-                    self.authenticated = True
-                    return True
-            except Exception as e:
-                logger.error(f"Authentication test failed: {e}")
-                return False
+            self._rate_limit()
+            boards = self.client.boards()
+            if boards:
+                logger.info(f"✓ Successfully authenticated. Found {len(boards)} boards.")
+                self.authenticated = True
+                return True
+            else:
+                logger.warning("Authentication succeeded but no boards found")
+                self.authenticated = True
+                return True
 
         except Exception as e:
-            logger.error(f"Login failed: {e}")
+            logger.error(f"Login failed: {type(e).__name__}: {e}")
             return False
 
     def fetch_boards(self) -> List[Dict[str, str]]:

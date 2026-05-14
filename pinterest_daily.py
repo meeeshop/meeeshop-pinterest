@@ -208,20 +208,17 @@ def run_daily_posting(use_video: bool = False):
     try:
         # Login to Pinterest
         if not pinterest.login():
-            logger.error("Pinterest login failed")
-            return
+            raise RuntimeError("Pinterest login failed")
 
         # Fetch boards
         boards = pinterest.fetch_boards()
         if not boards:
-            logger.error("No boards found")
-            return
+            raise RuntimeError("No boards found")
 
         # Fetch products
         products = shopify.get_products(limit=20)
         if not products:
-            logger.error("No products found")
-            return
+            raise RuntimeError("No products found")
 
         # Filter out recently posted products
         posted_ids = {post["product_id"] for post in history.get("posts", [])}
@@ -235,6 +232,7 @@ def run_daily_posting(use_video: bool = False):
         product = random.choice(available_products)
         formatted = format_product_for_pinterest(product, store_base_url)
         board = select_board_for_product(formatted)
+
         # Time‑zone filtering: only post if current UTC hour matches board schedule
         try:
             tz_map = json.load((Path(__file__).parent / "us_timezones.json").open("r", encoding="utf-8"))
@@ -274,24 +272,25 @@ def run_daily_posting(use_video: bool = False):
 
         # Post pin (with video if available)
         media_path = video_file or formatted["image_url"]
-        if post_pin(pinterest, formatted, board, content):
-            history["posts"].append({
-                "product_id": product["id"],
-                "title": formatted["title"],
-                "board": board,
-                "timestamp": datetime.now().isoformat(),
-            })
-            history["board_last_used"][board] = datetime.now().isoformat()
-            history["daily_count"] += 1
-            history["last_post_time"] = datetime.now().isoformat()
-            save_history(history)
+        if not post_pin(pinterest, formatted, board, content):
+            raise RuntimeError("Pin posting failed")
 
-            logger.info(f"✓ Daily posting complete. Count: {history['daily_count']}/{MAX_PINS_PER_DAY}")
-        else:
-            logger.error("Pin posting failed")
+        history["posts"].append({
+            "product_id": product["id"],
+            "title": formatted["title"],
+            "board": board,
+            "timestamp": datetime.now().isoformat(),
+        })
+        history["board_last_used"][board] = datetime.now().isoformat()
+        history["daily_count"] += 1
+        history["last_post_time"] = datetime.now().isoformat()
+        save_history(history)
+
+        logger.info(f"✓ Daily posting complete. Count: {history['daily_count']}/{MAX_PINS_PER_DAY}")
 
     except Exception as e:
         logger.error(f"Posting error: {e}", exc_info=True)
+        raise
 
 
 if __name__ == "__main__":
