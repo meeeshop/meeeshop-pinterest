@@ -7,14 +7,11 @@ import os
 import time
 import json
 import base64
-import uuid
-import mimetypes
 from typing import Optional, List, Dict, Tuple
 from pathlib import Path
 import logging
 
 import requests
-from requests_toolbelt import MultipartEncoder
 from py3pin.Pinterest import Pinterest
 from dotenv import load_dotenv
 
@@ -329,163 +326,6 @@ class PinterestClient:
                 logger.error(f"API call failed (HTTP {e.response.status_code}), response: {error_body}")
             raise
 
-    def _register_upload(self, media_type: str = "image-story-pin") -> Dict:
-        """Register media upload with Pinterest API using py3-pinterest exact approach.
-
-        Matches proven working code from https://github.com/bstoilov/py3-pinterest
-        """
-        upload_id = str(uuid.uuid4())
-
-        # Build media_info with minimal required fields (id, media_type)
-        media_info = {
-            "id": upload_id,
-            "media_type": media_type
-        }
-
-        logger.info(f"[REGISTER_UPLOAD] Starting media registration")
-        logger.info(f"[REGISTER_UPLOAD] Upload ID: {upload_id}")
-        logger.info(f"[REGISTER_UPLOAD] Media type: {media_type}")
-        logger.debug(f"[REGISTER_UPLOAD] Media info structure: {json.dumps(media_info)}")
-
-        url = "https://www.pinterest.com/resource/ApiResource/create/"
-
-        try:
-            # Use media_info_list wrapper (from py3-pinterest)
-            # The batch endpoint expects: fields key with array of media info
-            post_data = {
-                'source_url': '/pin-creation-tool/',
-                'data': json.dumps({
-                    'options': {
-                        'url': '/v3/media/uploads/register/batch/',
-                        'data': json.dumps({"fields": [media_info]})  # Object with fields array
-                    },
-                    'context': None
-                }),
-                '_': str(int(time.time() * 1000))
-            }
-
-            logger.debug(f"[REGISTER_UPLOAD] Request structure:")
-            logger.debug(f"[REGISTER_UPLOAD]   - source_url: /pin-creation-tool/")
-            logger.debug(f"[REGISTER_UPLOAD]   - options.url: /v3/media/uploads/register/batch/")
-            logger.debug(f"[REGISTER_UPLOAD]   - options.data (fields wrapper): {post_data['data']}")
-
-            self._rate_limit()
-            logger.info(f"[REGISTER_UPLOAD] Sending API request to {url}")
-
-            resp = self._api_post(url, post_data)
-            result = resp.json()
-
-            logger.debug(f"[REGISTER_UPLOAD] Raw response: {json.dumps(result, indent=2)}")
-
-            # Extract upload data from response
-            if 'resource_response' not in result:
-                logger.error(f"[REGISTER_UPLOAD] Missing 'resource_response' in response")
-                logger.error(f"[REGISTER_UPLOAD] Response keys: {list(result.keys())}")
-                raise RuntimeError("No resource_response in registration response")
-
-            resource_resp = result['resource_response']
-
-            if 'error' in resource_resp:
-                error_info = resource_resp['error']
-                logger.error(f"[REGISTER_UPLOAD] Pinterest returned error:")
-                logger.error(f"[REGISTER_UPLOAD]   - Status: {error_info.get('status')}")
-                logger.error(f"[REGISTER_UPLOAD]   - Code: {error_info.get('code')}")
-                logger.error(f"[REGISTER_UPLOAD]   - Message: {error_info.get('message')}")
-                raise RuntimeError(f"Pinterest API error: {error_info.get('message')}")
-
-            if 'data' not in resource_resp:
-                logger.error(f"[REGISTER_UPLOAD] Missing 'data' in resource_response")
-                logger.error(f"[REGISTER_UPLOAD] Response keys: {list(resource_resp.keys())}")
-                raise RuntimeError("No data in registration response")
-
-            upload_data = resource_resp['data']
-            logger.info(f"[REGISTER_UPLOAD] Received upload response with {len(upload_data)} entries")
-            logger.debug(f"[REGISTER_UPLOAD] Upload data keys: {list(upload_data.keys())}")
-
-            # Find entry with S3 upload parameters
-            for key, value in upload_data.items():
-                if not isinstance(value, dict):
-                    logger.debug(f"[REGISTER_UPLOAD] Entry '{key}' is not a dict, skipping")
-                    continue
-
-                entry_keys = list(value.keys())
-                logger.debug(f"[REGISTER_UPLOAD] Entry '{key}' keys: {entry_keys}")
-
-                # Check for S3 upload data fields
-                if 's3_upload_data' in value or 'upload_parameters' in value:
-                    logger.info(f"[REGISTER_UPLOAD] ✓ Found S3 upload data in entry '{key}'")
-                    logger.debug(f"[REGISTER_UPLOAD] S3 data fields: {list(value.get('s3_upload_data', {}).keys()) if 's3_upload_data' in value else 'N/A'}")
-                    logger.debug(f"[REGISTER_UPLOAD] Upload parameters fields: {list(value.get('upload_parameters', {}).keys()) if 'upload_parameters' in value else 'N/A'}")
-
-                    result_data = {
-                        'upload_id': upload_id,
-                        'entry': value
-                    }
-                    logger.info(f"[REGISTER_UPLOAD] ✓ Upload registered successfully")
-                    return result_data
-
-            logger.error(f"[REGISTER_UPLOAD] No S3 upload data found in any entry")
-            logger.error(f"[REGISTER_UPLOAD] Available entries: {list(upload_data.keys())}")
-            raise RuntimeError("No S3 upload parameters in response")
-
-        except Exception as e:
-            logger.error(f"[REGISTER_UPLOAD] Registration failed: {type(e).__name__}: {e}")
-            raise RuntimeError(f"Failed to register upload: {e}")
-
-    def _upload_to_s3(self, upload_url: str, upload_params: Dict, image_file: str) -> bool:
-        """Upload image to S3."""
-        file_name = os.path.basename(image_file)
-        mime_type = mimetypes.guess_type(image_file)[0] or 'application/octet-stream'
-
-        fields = {}
-        for key, value in upload_params.items():
-            if key != 'file':
-                fields[key] = str(value)
-
-        with open(image_file, 'rb') as f:
-            fields['file'] = (file_name, f, mime_type)
-            form_data = MultipartEncoder(fields=fields)
-
-            headers = {
-                'Content-Type': form_data.content_type,
-                'Content-Length': str(form_data.len),
-                'Origin': 'https://www.pinterest.com',
-                'Referer': 'https://www.pinterest.com/',
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-            }
-
-            self._rate_limit()
-            response = requests.post(upload_url, data=form_data, headers=headers, timeout=30)
-            response.raise_for_status()
-            return response.status_code in (200, 201, 204)
-
-    def _poll_upload_status(self, upload_id: str, max_retries: int = 30) -> Dict:
-        """Poll upload status until complete."""
-        url = "https://www.pinterest.com/resource/VIPResource/get/"
-
-        for attempt in range(max_retries):
-            data = {
-                'source_url': '/pin-creation-tool/',
-                'data': json.dumps({
-                    'options': {'upload_ids': [str(upload_id)]},
-                    'context': None
-                }),
-                '_': str(int(time.time() * 1000))
-            }
-
-            self._rate_limit()
-            resp = self._api_post(url, data)
-            result = resp.json()
-
-            upload_info = result.get('resource_response', {}).get('data', {}).get(str(upload_id), {})
-            if isinstance(upload_info, dict):
-                if upload_info.get('signature') or upload_info.get('video_signature') or upload_info.get('image_url'):
-                    return upload_info
-
-            time.sleep(2)
-
-        raise RuntimeError(f"Upload processing timed out: {upload_id}")
-
     def create_pin(
         self,
         image_path: str,
@@ -497,111 +337,39 @@ class PinterestClient:
         section_id: Optional[str] = None,
         retry_count: int = 0,
     ) -> Tuple[bool, Optional[str]]:
-        """
-        Create a pin using direct API calls with comprehensive retry logic.
-
-        Args:
-            image_path: Path to image file
-            title: Pin title
-            description: Pin description
-            board_id: Target board ID
-            url: Optional URL for pin (clickthrough)
-            alt_text: Optional alt text for accessibility
-            section_id: Optional section within board
-            retry_count: Internal retry counter
-
-        Returns:
-            Tuple[bool, Optional[str]]: (success, pin_id or error_message)
-        """
+        """Create a pin using py3-pinterest's built-in upload_pin method."""
         if not self.authenticated:
             logger.error("Not authenticated. Call login() first.")
             return False, "Not authenticated"
 
+        image_file = Path(image_path)
+        if not image_file.exists():
+            error_msg = f"Image file not found: {image_path}"
+            logger.error(error_msg)
+            return False, error_msg
+
+        logger.info(f"Creating pin: {title} (attempt {retry_count + 1})")
+
         try:
-            image_file = Path(image_path)
-            if not image_file.exists():
-                error_msg = f"Image file not found: {image_path}"
-                logger.error(error_msg)
-                return False, error_msg
-
-            logger.info(f"Creating pin: {title} (attempt {retry_count + 1})")
-
-            # Step 1: Register media upload
-            upload_info = self._register_upload("image-story-pin")
-            upload_id = upload_info['upload_id']
-            upload_entry = upload_info['entry']
-
-            upload_params = upload_entry.get('upload_parameters') or upload_entry.get('s3_upload_data', {})
-            upload_url = upload_entry.get('upload_url', 'https://pinterest-media-upload.s3-accelerate.amazonaws.com/')
-
-            logger.debug(f"Upload registered: {upload_id}")
-
-            # Step 2: Upload image to S3
-            self._upload_to_s3(upload_url, upload_params, str(image_file))
-            logger.debug(f"Image uploaded to S3")
-
-            # Step 3: Poll upload status
-            upload_status = self._poll_upload_status(upload_id)
-            image_signature = upload_status.get('signature')
-            if not image_signature:
-                return False, "No image signature from upload"
-
-            logger.debug(f"Image signature obtained: {image_signature[:20]}...")
-
-            # Step 4: Create pin with signature
-            pin_url = "https://www.pinterest.com/resource/PinResource/create/"
-            pin_data = {
-                'source_url': '/pin-creation-tool/',
-                'data': json.dumps({
-                    'options': {
-                        'board_id': board_id,
-                        'description': description,
-                        'title': title,
-                        'link': url or '',
-                        'alt_text': alt_text or '',
-                        'section': section_id,
-                        'upload_id': int(upload_id.replace('-', '0')[:15]),
-                        'image_signature': image_signature,
-                        'method': 'uploaded',
-                        'scrape_metric': {'source': 'www_url_scrape'}
-                    },
-                    'context': None
-                }),
-                '_': str(int(time.time() * 1000))
-            }
-
             self._rate_limit()
-            pin_resp = self._api_post(pin_url, pin_data)
-            pin_result = pin_resp.json()
+            result = self.client.upload_pin(
+                image_file=str(image_file),
+                board_id=board_id,
+                description=description,
+                title=title,
+                link=url or '',
+                alt_text=alt_text or '',
+            )
 
-            pin_id = pin_result.get('resource_response', {}).get('data', {}).get('id')
-            if pin_id:
+            if result:
+                pin_id = result.get('id') if isinstance(result, dict) else str(result)
                 logger.info(f"Pin created successfully. ID: {pin_id}")
-                return True, str(pin_id)
+                return True, pin_id
             else:
-                error_msg = f"No pin ID in response: {pin_result}"
+                error_msg = "upload_pin returned None/False"
                 logger.error(error_msg)
                 return False, error_msg
 
-        except requests.exceptions.HTTPError as e:
-            if e.response.status_code == 500 and retry_count < MAX_RETRIES:
-                wait_time = (RETRY_BACKOFF ** retry_count)
-                logger.warning(f"Pinterest 500 error during pin creation, retrying in {wait_time}s (attempt {retry_count + 1}/{MAX_RETRIES})")
-                time.sleep(wait_time)
-                return self.create_pin(
-                    image_path=image_path,
-                    title=title,
-                    description=description,
-                    board_id=board_id,
-                    url=url,
-                    alt_text=alt_text,
-                    section_id=section_id,
-                    retry_count=retry_count + 1
-                )
-            else:
-                error_msg = f"Failed to create pin (HTTP {e.response.status_code}): {str(e)}"
-                logger.error(error_msg)
-                return False, error_msg
         except Exception as e:
             error_msg = f"Failed to create pin: {str(e)}"
             logger.error(error_msg)
