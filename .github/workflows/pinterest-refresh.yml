@@ -20,6 +20,10 @@ on:
     - cron: '30 1 * * *'    # 9:30 PM ET
   workflow_dispatch: {}
 
+permissions:
+  actions: read
+  contents: read
+
 jobs:
   refresh-pins:
     runs-on: ubuntu-latest
