@@ -7,10 +7,14 @@ import os
 import time
 import json
 import base64
+import uuid
+import mimetypes
 from typing import Optional, List, Dict, Tuple
 from pathlib import Path
 import logging
 
+import requests
+from requests_toolbelt import MultipartEncoder
 from py3pin.Pinterest import Pinterest
 from dotenv import load_dotenv
 
@@ -227,6 +231,118 @@ class PinterestClient:
             logger.error(f"Failed to fetch boards: {e}")
             return []
 
+    def _get_raw_session(self) -> requests.Session:
+        """Return the underlying requests session from py3-pinterest client."""
+        if hasattr(self.client, 'http') and isinstance(self.client.http, requests.Session):
+            return self.client.http
+        if hasattr(self.client, 'session') and isinstance(self.client.session, requests.Session):
+            return self.client.session
+        raise RuntimeError("Cannot access authenticated session from Pinterest client")
+
+    def _api_post(self, url: str, data: Dict) -> requests.Response:
+        """Make authenticated POST request to Pinterest API."""
+        session = self._get_raw_session()
+        headers = {
+            'Referer': 'https://www.pinterest.com/',
+            'X-Requested-With': 'XMLHttpRequest',
+            'Accept': 'application/json',
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+        }
+        csrftoken = session.cookies.get('csrftoken')
+        if csrftoken:
+            headers['X-CSRFToken'] = csrftoken
+
+        from urllib.parse import urlencode
+        post_data = urlencode(data)
+        response = session.post(url, data=post_data, headers=headers)
+        response.raise_for_status()
+        return response
+
+    def _register_upload(self, media_type: str = "image-story-pin") -> Dict:
+        """Register media upload with Pinterest API."""
+        upload_id = str(uuid.uuid4())
+        media_info = {"id": upload_id, "media_type": media_type}
+
+        url = "https://www.pinterest.com/resource/ApiResource/create/"
+        data = {
+            'source_url': '/pin-creation-tool/',
+            'data': json.dumps({
+                'options': {
+                    'url': '/v3/media/uploads/register/batch/',
+                    'data': json.dumps([media_info])
+                },
+                'context': None
+            }),
+            '_': str(int(time.time() * 1000))
+        }
+
+        self._rate_limit()
+        resp = self._api_post(url, data)
+        result = resp.json()
+
+        if 'resource_response' in result and 'data' in result['resource_response']:
+            upload_data = result['resource_response']['data']
+            for key, value in upload_data.items():
+                if isinstance(value, dict) and ('s3_upload_data' in value or 'upload_parameters' in value):
+                    return {'upload_id': upload_id, 'entry': value}
+
+        raise RuntimeError(f"Failed to register upload: {result}")
+
+    def _upload_to_s3(self, upload_url: str, upload_params: Dict, image_file: str) -> bool:
+        """Upload image to S3."""
+        file_name = os.path.basename(image_file)
+        mime_type = mimetypes.guess_type(image_file)[0] or 'application/octet-stream'
+
+        fields = {}
+        for key, value in upload_params.items():
+            if key != 'file':
+                fields[key] = str(value)
+
+        with open(image_file, 'rb') as f:
+            fields['file'] = (file_name, f, mime_type)
+            form_data = MultipartEncoder(fields=fields)
+
+            headers = {
+                'Content-Type': form_data.content_type,
+                'Content-Length': str(form_data.len),
+                'Origin': 'https://www.pinterest.com',
+                'Referer': 'https://www.pinterest.com/',
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+            }
+
+            self._rate_limit()
+            response = requests.post(upload_url, data=form_data, headers=headers, timeout=30)
+            response.raise_for_status()
+            return response.status_code in (200, 201, 204)
+
+    def _poll_upload_status(self, upload_id: str, max_retries: int = 30) -> Dict:
+        """Poll upload status until complete."""
+        url = "https://www.pinterest.com/resource/VIPResource/get/"
+
+        for attempt in range(max_retries):
+            data = {
+                'source_url': '/pin-creation-tool/',
+                'data': json.dumps({
+                    'options': {'upload_ids': [str(upload_id)]},
+                    'context': None
+                }),
+                '_': str(int(time.time() * 1000))
+            }
+
+            self._rate_limit()
+            resp = self._api_post(url, data)
+            result = resp.json()
+
+            upload_info = result.get('resource_response', {}).get('data', {}).get(str(upload_id), {})
+            if isinstance(upload_info, dict):
+                if upload_info.get('signature') or upload_info.get('video_signature') or upload_info.get('image_url'):
+                    return upload_info
+
+            time.sleep(2)
+
+        raise RuntimeError(f"Upload processing timed out: {upload_id}")
+
     def create_pin(
         self,
         image_path: str,
@@ -238,7 +354,7 @@ class PinterestClient:
         section_id: Optional[str] = None,
     ) -> Tuple[bool, Optional[str]]:
         """
-        Create a pin on Pinterest using direct API call.
+        Create a pin using direct API calls with explicit session management.
 
         Args:
             image_path: Path to image file
@@ -256,60 +372,69 @@ class PinterestClient:
             logger.error("Not authenticated. Call login() first.")
             return False, "Not authenticated"
 
-        # Validate session before pin creation
         try:
-            self._rate_limit()
-            self.client.boards()
-            logger.debug("Session still valid before pin creation")
-        except Exception as e:
-            logger.warning(f"Session lost before pin creation: {e}. Re-authenticating...")
-            if not self.login():
-                return False, "Failed to re-authenticate"
-
-        try:
-            # Validate image file exists
             image_file = Path(image_path)
             if not image_file.exists():
                 error_msg = f"Image file not found: {image_path}"
                 logger.error(error_msg)
                 return False, error_msg
 
-            # Rate limit before API call
-            self._rate_limit()
+            logger.info(f"Creating pin: {title}")
 
-            # Build pin metadata
+            # Step 1: Register media upload
+            upload_info = self._register_upload("image-story-pin")
+            upload_id = upload_info['upload_id']
+            upload_entry = upload_info['entry']
+
+            upload_params = upload_entry.get('upload_parameters') or upload_entry.get('s3_upload_data', {})
+            upload_url = upload_entry.get('upload_url', 'https://pinterest-media-upload.s3-accelerate.amazonaws.com/')
+
+            logger.debug(f"Upload registered: {upload_id}")
+
+            # Step 2: Upload image to S3
+            self._upload_to_s3(upload_url, upload_params, str(image_file))
+            logger.debug(f"Image uploaded to S3")
+
+            # Step 3: Poll upload status
+            upload_status = self._poll_upload_status(upload_id)
+            image_signature = upload_status.get('signature')
+            if not image_signature:
+                return False, "No image signature from upload"
+
+            logger.debug(f"Image signature: {image_signature[:20]}...")
+
+            # Step 4: Create pin with signature
+            pin_url = "https://www.pinterest.com/resource/PinResource/create/"
             pin_data = {
-                'description': description,
-                'title': title,
+                'source_url': '/pin-creation-tool/',
+                'data': json.dumps({
+                    'options': {
+                        'board_id': board_id,
+                        'description': description,
+                        'title': title,
+                        'link': url or '',
+                        'alt_text': alt_text or '',
+                        'section': section_id,
+                        'upload_id': int(upload_id.replace('-', '0')[:15]),
+                        'image_signature': image_signature,
+                        'method': 'uploaded',
+                        'scrape_metric': {'source': 'www_url_scrape'}
+                    },
+                    'context': None
+                }),
+                '_': str(int(time.time() * 1000))
             }
 
-            if url:
-                pin_data['link'] = url
+            self._rate_limit()
+            pin_resp = self._api_post(pin_url, pin_data)
+            pin_result = pin_resp.json()
 
-            # Note: py3-pinterest may not support alt_text directly in upload_pin()
-            # If needed, alt_text should be included in description or handled separately
-            if alt_text:
-                pin_data['alt_text'] = alt_text
-
-            # Create pin via API
-            logger.info(f"Creating pin: {title}")
-            pin_result = self.client.upload_pin(
-                board_id=board_id,
-                image_file=str(image_file),
-                description=description,
-                title=title,
-                link=url,
-                section_id=section_id
-            )
-
-            if pin_result:
-                pin_id = pin_result.get('id') or pin_result
+            pin_id = pin_result.get('resource_response', {}).get('data', {}).get('id')
+            if pin_id:
                 logger.info(f"Pin created successfully. ID: {pin_id}")
                 return True, str(pin_id)
             else:
-                error_msg = f"Pin creation returned empty or unsuccessful result: {pin_result}"
-                logger.warning(error_msg)
-                return False, error_msg
+                return False, f"No pin ID in response: {pin_result}"
 
         except Exception as e:
             error_msg = f"Failed to create pin: {str(e)}"
