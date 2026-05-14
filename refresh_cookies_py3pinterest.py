@@ -84,7 +84,7 @@ def login_and_get_fresh_cookies():
         traceback.print_exc()
         return None
 
-def extract_cookies_from_client(client):
+def extract_cookies_from_client(client, username='meeeshop'):
     """Extract session cookies from py3-pinterest client"""
     try:
         # py3-pinterest stores session in the client object
@@ -104,7 +104,7 @@ def extract_cookies_from_client(client):
             return pinterest_cookies if pinterest_cookies else session_cookies
 
         # Alternative: check if cookies stored in data directory
-        data_dir = Path(__file__).parent / "data" / creds.get('username', 'meeeshop')
+        data_dir = Path(__file__).parent / "data" / username
         if data_dir.exists():
             logger.info(f"Checking data directory: {data_dir}")
             for f in data_dir.glob("*"):
@@ -173,7 +173,7 @@ def main():
     creds = load_credentials()
 
     # Step 3: Extract cookies from session
-    cookies = extract_cookies_from_client(client)
+    cookies = extract_cookies_from_client(client, creds['username'])
     if not cookies:
         logger.warning("⚠ Could not extract cookies directly from client")
         logger.info("\nNote: py3-pinterest may store cookies automatically in data/<username>/")
