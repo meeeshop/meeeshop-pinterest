@@ -134,7 +134,7 @@ def get_video_from_youtube_repo() -> Optional[str]:
 def post_pin(
     client: PinterestClient,
     product_data: Dict[str, Any],
-    board_name: str,
+    board_id: str,
     content: Dict[str, Any],
 ) -> bool:
     """Post pin to Pinterest"""
@@ -142,25 +142,33 @@ def post_pin(
     # Download image
     image_file = Path("/tmp") / f"pin_{product_data['product_id']}.jpg"
     if not download_image(product_data["image_url"], image_file):
+        logger.error(f"Failed to download image for pin: {content['pin_title']}")
         return False
 
-    # Create pin
-    success = client.create_pin(
-        image_or_video_path=str(image_file),
-        title=content["pin_title"],
-        description=content["pin_description"],
-        board_name=board_name,
-        url=product_data["url"],
-        alt_text=product_data["image_alt"],
-    )
+    try:
+        logger.info(f"Creating pin: {content['pin_title']}")
 
-    if success:
+        success, pin_id = client.create_pin(
+            image_path=str(image_file),
+            title=content["pin_title"],
+            description=content["pin_description"],
+            board_id=board_id,
+            url=product_data["url"],
+            alt_text=product_data["image_alt"],
+        )
+
+        if success:
+            image_file.unlink(missing_ok=True)
+            logger.info(f"✓ Posted successfully: {content['pin_title']} (ID: {pin_id})")
+            return True
+        else:
+            logger.error(f"✗ Failed to post: {content['pin_title']} - {pin_id}")
+            return False
+
+    except Exception as e:
+        logger.error(f"Exception creating pin: {e}", exc_info=True)
         image_file.unlink(missing_ok=True)
-        logger.info(f"✓ Posted to '{board_name}': {content['pin_title']}")
-    else:
-        logger.error(f"✗ Failed to post: {content['pin_title']}")
-
-    return success
+        return False
 
 
 def run_daily_posting(use_video: bool = False):
@@ -213,12 +221,17 @@ def run_daily_posting(use_video: bool = False):
         # Fetch boards
         boards = pinterest.fetch_boards()
         if not boards:
-            raise RuntimeError("No boards found")
+            raise RuntimeError("No boards found - check Pinterest authentication")
+        logger.info(f"Fetched {len(boards)} boards from Pinterest")
+        board_names = [b['name'] for b in boards]
+        logger.debug(f"Available boards: {board_names[:5]}...")
 
         # Fetch products
+        logger.info(f"Fetching products from Shopify: {shopify_url}")
         products = shopify.get_products(limit=20)
+        logger.info(f"Fetched {len(products)} products from Shopify")
         if not products:
-            raise RuntimeError("No products found")
+            raise RuntimeError("No products found - check Shopify API token and store connectivity")
 
         # Filter out recently posted products
         posted_ids = {post["product_id"] for post in history.get("posts", [])}
@@ -235,18 +248,34 @@ def run_daily_posting(use_video: bool = False):
 
         # Time‑zone filtering: only post if current UTC hour matches board schedule
         try:
-            tz_map = json.load((Path(__file__).parent / "us_timezones.json").open("r", encoding="utf-8"))
-            board_hour = int(tz_map.get(board, "0"))
-            if board_hour != datetime.utcnow().hour:
-                logger.info(f"Skipping board '{board}' due to time zone schedule (UTC{board_hour})")
-                return
+            tz_file = Path(__file__).parent / "us_timezones.json"
+            if tz_file.exists():
+                tz_map = json.load(tz_file.open("r", encoding="utf-8"))
+                board_hour = int(tz_map.get(board, "0"))
+                current_hour = datetime.utcnow().hour
+                logger.info(f"Board '{board}': scheduled UTC{board_hour}, current UTC{current_hour}")
+                if board_hour != current_hour:
+                    logger.info(f"Skipping board '{board}' - not scheduled for this hour")
+                    return
+            else:
+                logger.warning("us_timezones.json not found, skipping timezone check")
         except Exception as e:
             logger.warning(f"Failed to load time‑zone mapping: {e}")
 
-        # Verify board exists & rotation safe
-        if board not in boards:
-            logger.warning(f"Board '{board}' not found, using random")
-            board = random.choice(list(boards.keys()))
+        # Verify board exists & get board ID
+        board_info = None
+        for b in boards:
+            if b['name'] == board:
+                board_info = b
+                break
+
+        if not board_info:
+            logger.warning(f"Board '{board}' not found in user's boards, using random")
+            board_info = random.choice(boards)
+            board = board_info['name']
+            logger.info(f"Selected random board: {board}")
+
+        board_id = board_info['id']
 
         if not should_post_to_board(board, history):
             logger.info(f"Skipping board '{board}' (rotation cooldown)")
@@ -272,7 +301,8 @@ def run_daily_posting(use_video: bool = False):
 
         # Post pin (with video if available)
         media_path = video_file or formatted["image_url"]
-        if not post_pin(pinterest, formatted, board, content):
+        logger.info(f"Posting pin to board: {board} (ID: {board_id})")
+        if not post_pin(pinterest, formatted, board_id, content):
             raise RuntimeError("Pin posting failed")
 
         history["posts"].append({

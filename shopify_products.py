@@ -52,11 +52,18 @@ class ShopifyClient:
             params["published_status"] = "published"
 
         try:
+            logger.debug(f"Fetching products from: {url}")
+            logger.debug(f"Params: {params}")
             resp = requests.get(url, headers=self.headers, params=params, timeout=30)
             resp.raise_for_status()
-            return resp.json().get("products", [])
+            products = resp.json().get("products", [])
+            logger.debug(f"Received {len(products)} products")
+            return products
+        except requests.exceptions.HTTPError as e:
+            logger.error(f"HTTP error fetching products: {e.response.status_code} - {e.response.text}")
+            return []
         except Exception as e:
-            logger.error(f"Failed to fetch products: {e}")
+            logger.error(f"Failed to fetch products: {type(e).__name__}: {e}")
             return []
 
     def get_collections(self) -> List[Dict[str, str]]:
