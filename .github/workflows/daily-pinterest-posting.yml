@@ -41,7 +41,7 @@ jobs:
           python pinterest_daily.py
 
       - name: Upload posting history
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: posting-history
           path: posting_history.json
