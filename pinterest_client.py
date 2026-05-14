@@ -256,6 +256,16 @@ class PinterestClient:
             logger.error("Not authenticated. Call login() first.")
             return False, "Not authenticated"
 
+        # Validate session before pin creation
+        try:
+            self._rate_limit()
+            self.client.boards()
+            logger.debug("Session still valid before pin creation")
+        except Exception as e:
+            logger.warning(f"Session lost before pin creation: {e}. Re-authenticating...")
+            if not self.login():
+                return False, "Failed to re-authenticate"
+
         try:
             # Validate image file exists
             image_file = Path(image_path)
