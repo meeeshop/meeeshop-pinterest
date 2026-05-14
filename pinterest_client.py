@@ -74,9 +74,12 @@ class PinterestClient:
 
             logger.debug(f"Loaded {len(cookies_dict)} cookies from secret")
 
-            # Create Pinterest client with stored cookies
-            # py3-pinterest will use these cookies for authentication
-            self.client = Pinterest(username=self.username, cookies=cookies_dict)
+            # Create Pinterest client and inject cookies into session
+            self.client = Pinterest()
+            if hasattr(self.client, 'session') and cookies_dict:
+                for key, value in cookies_dict.items():
+                    self.client.session.cookies.set(key, value)
+                logger.debug(f"Injected {len(cookies_dict)} cookies into session")
 
             # Test if session is valid
             self._rate_limit()
@@ -111,8 +114,12 @@ class PinterestClient:
 
             logger.debug(f"Loaded {len(cookies_dict)} cookies from file")
 
-            # Create Pinterest client with stored cookies
-            self.client = Pinterest(username=self.username, cookies=cookies_dict)
+            # Create Pinterest client and inject cookies into session
+            self.client = Pinterest()
+            if hasattr(self.client, 'session') and cookies_dict:
+                for key, value in cookies_dict.items():
+                    self.client.session.cookies.set(key, value)
+                logger.debug(f"Injected {len(cookies_dict)} cookies into session")
 
             # Test if session is valid
             self._rate_limit()

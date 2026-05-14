@@ -164,7 +164,7 @@ def select_board_for_product(product_data: Dict[str, Any]) -> str:
 
     # Check tags
     for board, keywords in board_map.items():
-        if any(tag in t for kw in keywords for t in tags):
+        if any(kw.lower() in t.lower() for kw in keywords for t in tags):
             return board
 
     # Check vendor/source
