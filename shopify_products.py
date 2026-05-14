@@ -133,46 +133,48 @@ def format_product_for_pinterest(product: Dict[str, Any], base_url: str) -> Dict
 
 
 def get_pinterest_board_mapping() -> Dict[str, List[str]]:
-    """Map Shopify product types to Pinterest boards
-    Returns: {board_name: [product_types/tags to match]}
+    """Map keywords to actual MeeeShop Pinterest board names (as returned by the API).
+    Keys are real board names; values are keywords to match in product title/type/tags.
     """
     return {
-        "Dresses & Gowns": ["dress", "gown", "maxi"],
-        "Tops & Shirts": ["shirt", "top", "blouse", "sweater"],
-        "Pants & Jeans": ["pants", "jeans", "trousers", "leggings"],
-        "Coats & Jackets": ["coat", "jacket", "blazer"],
-        "Handbags & Accessories": ["bag", "purse", "handbag", "accessory"],
-        "Made in USA": ["made in usa", "domestic"],
-        "Women's Fashion": ["women"],
-        "Curvy & Plus Size": ["plus", "curvy", "extended"],
+        "Cocktail Dresses": ["dress", "gown", "maxi", "midi", "mini"],
+        "Puff Sleeve Tops": ["top", "blouse", "shirt", "cami", "tank", "puff"],
+        "Kancan USA Jeans": ["jeans", "denim"],
+        "Pants & Leggings": ["pants", "leggings", "trousers"],
+        "Coats & Jackets": ["coat", "jacket", "blazer", "shacket"],
+        "Women's shacket": ["shacket", "shirt jacket"],
+        "Loungewear": ["lounge", "pyjama", "pajama", "sweat"],
+        "Skirts": ["skirt"],
+        "Sweaters": ["sweater", "knit", "cardigan", "pullover"],
+        "Womens Cardigans": ["cardigan"],
+        "Trendy Backpacks": ["backpack", "bag", "purse", "tote", "handbag"],
+        "Spring Outfits": ["spring", "floral", "light"],
+        "Winter Outfits": ["winter", "warm", "wool", "fleece"],
+        "Edgy fashion": ["edgy", "leather", "moto", "biker"],
+        "Luxe Clothing": ["luxe", "luxury", "silk", "satin"],
+        "Simple Outfits": ["casual", "simple", "basic", "everyday"],
+        "Style Ideas": ["style", "outfit", "ootd"],
+        "New Trendy Women Apparel, Shoes, Handbags & more": ["new", "trend"],
     }
 
 
 def select_board_for_product(product_data: Dict[str, Any]) -> str:
-    """Select Pinterest board based on product type/tags"""
+    """Select Pinterest board based on product type/tags. Returns an actual board name."""
 
     board_map = get_pinterest_board_mapping()
 
+    title = (product_data.get("title") or "").lower()
     product_type = (product_data.get("product_type") or "").lower()
     tags = [t.lower() for t in product_data.get("tags", [])]
-    vendor = (product_data.get("vendor") or "").lower()
+    search_text = f"{title} {product_type} {' '.join(tags)}"
 
-    # Check product type first
+    # Check all keywords against combined text
     for board, keywords in board_map.items():
-        if any(kw.lower() in product_type for kw in keywords):
+        if any(kw in search_text for kw in keywords):
             return board
 
-    # Check tags
-    for board, keywords in board_map.items():
-        if any(kw.lower() in t.lower() for kw in keywords for t in tags):
-            return board
-
-    # Check vendor/source
-    if "made" in vendor or "usa" in vendor:
-        return "Made in USA"
-
-    # Default board
-    return "Women's Fashion"
+    # Default to a high-visibility board that exists in the account
+    return "Style Ideas"
 
 
 def main():

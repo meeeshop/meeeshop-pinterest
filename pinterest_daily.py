@@ -267,16 +267,31 @@ def run_daily_posting(use_video: bool = False):
         ideal_board = select_board_for_product(formatted)
         logger.info(f"Ideal board for product: {ideal_board}")
 
-        # Try to find matching board in user's actual boards
+        # Try to find matching board in user's actual boards (exact then partial match)
         board_info = None
         for b in boards:
             if b['name'].lower() == ideal_board.lower():
                 board_info = b
                 break
-
-        # If ideal board not found, select random board from user's boards
         if not board_info:
-            logger.info(f"Board '{ideal_board}' not found in user's boards, selecting random")
+            for b in boards:
+                if ideal_board.lower() in b['name'].lower() or b['name'].lower() in ideal_board.lower():
+                    board_info = b
+                    break
+
+        # If still not found, pick from preferred boards, else random
+        if not board_info:
+            logger.info(f"Board '{ideal_board}' not found in user's boards, selecting preferred")
+            preferred = ["Style Ideas", "New Trendy Women Apparel, Shoes, Handbags & more",
+                         "Spring Outfits", "Simple Outfits", "Edgy fashion"]
+            for pref in preferred:
+                for b in boards:
+                    if b['name'].lower() == pref.lower():
+                        board_info = b
+                        break
+                if board_info:
+                    break
+        if not board_info:
             board_info = random.choice(boards)
 
         board = board_info['name']
