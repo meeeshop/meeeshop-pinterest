@@ -23,11 +23,12 @@ PIN_QUALITY = 95
 # ── Brand palette ────────────────────────────────────────────────────────────
 COLOR_BG        = (250, 248, 246)   # warm off-white
 COLOR_TOP_BAR   = (30,  30,  30)    # near-black header bar
-COLOR_CTA_BAR   = (30,  30,  30)    # matching CTA footer bar
+COLOR_INFO_BAR  = (30,  30,  30)    # dark info bar (title + price)
+COLOR_CTA_BAR   = (220, 53,  69)    # red CTA bar — stands out from dark info bar
 COLOR_LABEL_TXT = (255, 255, 255)   # white on dark bars
-COLOR_TITLE_TXT = (30,  30,  30)    # dark text on light bg
-COLOR_PRICE_BG  = (220, 53,  69)    # red badge
-COLOR_PRICE_TXT = (255, 255, 255)
+COLOR_TITLE_TXT = (255, 255, 255)   # white on dark info bar
+COLOR_PRICE_BG  = (255, 255, 255)   # white price badge on dark bar
+COLOR_PRICE_TXT = (30,  30,  30)    # dark price text on white badge
 
 # ── Layout proportions ───────────────────────────────────────────────────────
 TOP_BAR_H   = int(PIN_H * 0.10)   # category label band
@@ -167,8 +168,8 @@ def create_pin_image(
             draw.rectangle([(0, PHOTO_Y), (PIN_W, PHOTO_Y + PHOTO_H)], fill=(200, 200, 200))
             logger.warning(f"Product image not found: {product_image_path}")
 
-        # ── Info area (title + price badge) ───────────────────────────────
-        draw.rectangle([(0, INFO_Y), (PIN_W, INFO_Y + INFO_H)], fill=COLOR_BG)
+        # ── Info area (title + price badge) — dark bar ───────────────────
+        draw.rectangle([(0, INFO_Y), (PIN_W, INFO_Y + INFO_H)], fill=COLOR_INFO_BAR)
 
         margin = int(PIN_W * 0.05)
         title_font = _get_font(int(INFO_H * 0.30), bold=True)
