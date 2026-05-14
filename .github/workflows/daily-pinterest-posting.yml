@@ -1,13 +1,23 @@
 name: Daily Pinterest Posting
 
+# Runs once per day — posts all 17 pins in one job (~20 min total).
+# Pins go to 17 different boards in sequence with 30-60s gaps between each.
+# Trigger: 12:00 UTC = 8 AM ET / 7 AM CT (pre-peak warm-up, finishes by 8:20 AM ET)
+
 on:
   schedule:
-    - cron: '0 14 * * *'  # 2 PM UTC (10 AM EST, peak women's activity)
-  workflow_dispatch:  # Allow manual trigger
+    - cron: '0 12 * * *'
+  workflow_dispatch:
+    inputs:
+      pins_count:
+        description: 'Number of pins to post (default: 17)'
+        required: false
+        default: '17'
 
 jobs:
   post-to-pinterest:
     runs-on: ubuntu-latest
+    timeout-minutes: 45
 
     steps:
       - uses: actions/checkout@v4
@@ -22,7 +32,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run daily posting
+      - name: Post all daily pins
         env:
           PINTEREST_COOKIES_B64: ${{ secrets.PINTEREST_COOKIES_B64 }}
           PINTEREST_EMAIL: ${{ secrets.PINTEREST_EMAIL }}
@@ -34,12 +44,14 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          PINS_TO_POST: ${{ github.event.inputs.pins_count || '17' }}
         run: |
           python pinterest_daily.py
 
       - name: Upload posting history
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: posting-history
+          name: posting-history-${{ github.run_number }}
           path: posting_history.json
           retention-days: 30

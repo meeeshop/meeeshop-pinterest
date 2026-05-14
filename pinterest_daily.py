@@ -13,20 +13,39 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from typing import List, Dict, Any, Optional
 import requests
-from urllib.parse import urljoin
 
 from pinterest_client import PinterestClient
 from shopify_products import ShopifyClient, format_product_for_pinterest, select_board_for_product
 from content_generator import generate_content_package
-from video_picker import VideoPicker, EnvLoader
-from image_overlay import add_text_overlay, create_video_pin_thumbnail
+from video_picker import EnvLoader
+from image_overlay import add_text_overlay
 
 logger = logging.getLogger(__name__)
 
 HISTORY_FILE = Path(__file__).parent / "posting_history.json"
-COOLDOWN_HOURS = 2
-MAX_PINS_PER_DAY = 19
-BOARD_ROTATION_COOLDOWN = 24  # Don't post same board twice in 24h
+MAX_PINS_PER_DAY = 17     # all posted in one daily run
+
+# Ordered board rotation: covers every major audience segment across the day's batch.
+# First boards are highest-traffic; order ensures variety across the 17-pin sequence.
+DAILY_BOARD_ROTATION = [
+    "Trends",                    # 1 — highest traffic
+    "Dresses",                   # 2 — top category
+    "Best selling products",     # 3 — social proof
+    "Outfit Ideas",              # 4 — discovery
+    "Shirts & Tops",             # 5 — category
+    "Style Ideas",               # 6 — lifestyle
+    "Jeans",                     # 7 — category
+    "Everyday Style",            # 8 — lifestyle
+    "Sweaters",                  # 9 — category
+    "Simple Outfits",            # 10 — discovery
+    "Coats & Jackets",           # 11 — category
+    "Chic & Effortless Styles",  # 12 — lifestyle
+    "Pants & Leggings",          # 13 — category
+    "Ootd #ootd",                # 14 — hashtag discovery
+    "New",                       # 15 — recency traffic
+    "Wardrobe Must Haves",       # 16 — lifestyle
+    "Woman Fashion!",            # 17 — broad audience
+]
 
 
 def load_history() -> Dict[str, Any]:
@@ -40,22 +59,6 @@ def save_history(history: Dict[str, Any]):
     """Save posting history"""
     HISTORY_FILE.write_text(json.dumps(history, indent=2, default=str), encoding="utf-8")
 
-
-def should_post_to_board(board_name: str, history: Dict[str, Any]) -> bool:
-    """Check if safe to post to board (avoid algorithm blocks)"""
-
-    last_used = history["board_last_used"].get(board_name)
-    if not last_used:
-        return True
-
-    last_used_time = datetime.fromisoformat(last_used)
-    hours_since = (datetime.now() - last_used_time).total_seconds() / 3600
-
-    if hours_since < BOARD_ROTATION_COOLDOWN:
-        logger.warning(f"Board '{board_name}' posted {hours_since:.1f}h ago, skipping")
-        return False
-
-    return True
 
 
 def reset_daily_count():
@@ -80,22 +83,6 @@ def can_post_today(history: Dict[str, Any]) -> bool:
         return False
     return True
 
-
-def should_cooldown(history: Dict[str, Any]) -> bool:
-    """Enforce posting cooldown between pins"""
-    last_post = history.get("last_post_time")
-    if not last_post:
-        return False
-
-    last_post_time = datetime.fromisoformat(last_post)
-    hours_since = (datetime.now() - last_post_time).total_seconds() / 3600
-
-    if hours_since < COOLDOWN_HOURS:
-        wait_mins = int((COOLDOWN_HOURS - hours_since) * 60)
-        logger.info(f"Cooldown active: wait {wait_mins} min until next post")
-        return True
-
-    return False
 
 
 def download_image(url: str, save_path: Path) -> bool:
@@ -190,11 +177,47 @@ def post_pin(
         return False
 
 
-def run_daily_posting(use_video: bool = False):
-    """Main daily posting orchestrator
+def pick_board(
+    index: int,
+    boards: List[Dict],
+    used_boards: set,
+    formatted: Dict[str, Any],
+) -> Optional[Dict]:
+    """Pick the next board from the rotation, falling back to category match then random."""
+    boards_by_name = {b["name"].lower(): b for b in boards}
 
-    Args:
-        use_video: If True, prioritize videos from meeeshop-youtube repo or YouTube channel
+    def find(name: str) -> Optional[Dict]:
+        b = boards_by_name.get(name.lower())
+        if b:
+            return b
+        for board in boards:
+            if name.lower() in board["name"].lower():
+                return board
+        return None
+
+    # Walk the rotation list starting at index, skip already-used boards
+    rotation = DAILY_BOARD_ROTATION
+    for i in range(len(rotation)):
+        candidate = rotation[(index + i) % len(rotation)]
+        b = find(candidate)
+        if b and b["name"] not in used_boards:
+            return b
+
+    # Category match
+    ideal = select_board_for_product(formatted)
+    b = find(ideal)
+    if b and b["name"] not in used_boards:
+        return b
+
+    # Anything unused
+    available = [b for b in boards if b["name"] not in used_boards]
+    return random.choice(available) if available else random.choice(boards)
+
+
+def run_daily_posting(use_video: bool = False):
+    """Post all MAX_PINS_PER_DAY pins in a single run with short delays between each.
+
+    One workflow trigger per day — logs in once, posts all pins, done in ~20 min.
     """
 
     logging.basicConfig(
@@ -202,10 +225,8 @@ def run_daily_posting(use_video: bool = False):
         format="%(asctime)s [%(levelname)s] %(message)s",
     )
 
-    # Load credentials from meeeshop-youtube/.env if available
     EnvLoader.load_youtube_env()
 
-    # Load credentials
     pinterest_email = os.getenv("PINTEREST_EMAIL")
     pinterest_password = os.getenv("PINTEREST_PASSWORD")
     shopify_url = os.getenv("SHOPIFY_STORE_URL")
@@ -215,138 +236,93 @@ def run_daily_posting(use_video: bool = False):
     if not all([pinterest_email, pinterest_password, shopify_url, shopify_token]):
         raise ValueError("Missing required credentials in .env")
 
-    # Load history & check limits
+    target = int(os.getenv("PINS_TO_POST", str(MAX_PINS_PER_DAY)))
+    logger.info(f"Daily run starting — target: {target} pins")
+
     history = load_history()
     reset_daily_count()
 
-    if should_cooldown(history):
-        logger.info("Skipping: in cooldown period")
+    already_today = history["daily_count"]
+    if already_today >= MAX_PINS_PER_DAY:
+        logger.info(f"Daily cap already reached ({already_today}), skipping")
         return
 
-    if not can_post_today(history):
-        logger.info("Skipping: daily limit reached")
-        return
+    target = min(target, MAX_PINS_PER_DAY - already_today)
 
-    # Initialize clients
     pinterest = PinterestClient()
     shopify = ShopifyClient(shopify_url, shopify_token)
 
     try:
-        # Login to Pinterest
         if not pinterest.login():
             raise RuntimeError("Pinterest login failed")
 
-        # Fetch boards
         boards = pinterest.fetch_boards()
         if not boards:
-            raise RuntimeError("No boards found - check Pinterest authentication")
-        logger.info(f"Fetched {len(boards)} boards from Pinterest")
-        board_names = [b['name'] for b in boards]
-        logger.debug(f"Available boards: {board_names[:5]}...")
+            raise RuntimeError("No boards found — check Pinterest authentication")
+        logger.info(f"Fetched {len(boards)} boards")
 
-        # Fetch products
-        logger.info(f"Fetching products from Shopify: {shopify_url}")
-        products = shopify.get_products(limit=20)
-        logger.info(f"Fetched {len(products)} products from Shopify")
+        products = shopify.get_products(limit=50)
         if not products:
-            raise RuntimeError("No products found - check Shopify API token and store connectivity")
+            raise RuntimeError("No products found — check Shopify credentials")
+        logger.info(f"Fetched {len(products)} products")
 
-        # Filter out recently posted products
-        posted_ids = {post["product_id"] for post in history.get("posts", [])}
-        available_products = [p for p in products if p["id"] not in posted_ids]
+        # Exclude products posted in the last 7 days
+        week_ago = datetime.now() - timedelta(days=7)
+        recent_ids = {
+            p["product_id"]
+            for p in history.get("posts", [])
+            if datetime.fromisoformat(p["timestamp"]) > week_ago
+        }
+        pool = [p for p in products if p["id"] not in recent_ids] or products
+        random.shuffle(pool)
 
-        if not available_products:
-            logger.info("All products already posted this week")
-            return
+        posted = 0
+        used_boards: set = set()
+        product_index = 0
 
-        # Select random product
-        product = random.choice(available_products)
-        formatted = format_product_for_pinterest(product, store_base_url)
+        while posted < target and product_index < len(pool):
+            product = pool[product_index]
+            product_index += 1
 
-        # Select board - prefer matching category, fall back to random
-        ideal_board = select_board_for_product(formatted)
-        logger.info(f"Ideal board for product: {ideal_board}")
+            formatted = format_product_for_pinterest(product, store_base_url)
+            board_info = pick_board(posted, boards, used_boards, formatted)
+            if not board_info:
+                logger.warning("No board available, skipping product")
+                continue
 
-        # Try to find matching board in user's actual boards (exact then partial match)
-        board_info = None
-        for b in boards:
-            if b['name'].lower() == ideal_board.lower():
-                board_info = b
-                break
-        if not board_info:
-            for b in boards:
-                if ideal_board.lower() in b['name'].lower() or b['name'].lower() in ideal_board.lower():
-                    board_info = b
-                    break
+            board = board_info["name"]
+            board_id = board_info["id"]
+            logger.info(f"Pin {posted + 1}/{target} → {board}")
 
-        # If still not found, pick from preferred boards, else random
-        if not board_info:
-            logger.info(f"Board '{ideal_board}' not found in user's boards, selecting preferred")
-            preferred = ["Style Ideas", "New Trendy Women Apparel, Shoes, Handbags & more",
-                         "Spring Outfits", "Simple Outfits", "Edgy fashion"]
-            for pref in preferred:
-                for b in boards:
-                    if b['name'].lower() == pref.lower():
-                        board_info = b
-                        break
-                if board_info:
-                    break
-        if not board_info:
-            board_info = random.choice(boards)
+            content = generate_content_package(formatted, board)
 
-        board = board_info['name']
+            if not post_pin(pinterest, formatted, board_id, content):
+                logger.warning(f"Post failed for '{formatted['title']}', trying next")
+                continue
 
-        # TODO: Implement proper timezone-based scheduling
-        # For now, post immediately. Production will use us_timezones.json
-        # to schedule pins at peak hours for different US timezones
-        logger.info(f"Posting to board: {board} (timezone scheduling pending)")
+            history["posts"].append({
+                "product_id": product["id"],
+                "title": formatted["title"],
+                "board": board,
+                "timestamp": datetime.now().isoformat(),
+            })
+            history["board_last_used"][board] = datetime.now().isoformat()
+            history["daily_count"] += 1
+            history["last_post_time"] = datetime.now().isoformat()
+            save_history(history)
 
-        # Extract board ID (already validated above)
-        board_id = board_info['id']
+            used_boards.add(board)
+            posted += 1
 
-        if not should_post_to_board(board, history):
-            logger.info(f"Skipping board '{board}' (rotation cooldown)")
-            return
+            if posted < target:
+                delay = random.randint(30, 60)
+                logger.info(f"Waiting {delay}s...")
+                time.sleep(delay)
 
-        # Generate content
-        logger.info(f"Generating content for: {formatted['title']}")
-        content = generate_content_package(formatted, board)
-
-        # Try to add video if enabled
-        video_file = None
-        if use_video:
-            logger.info("Looking for video to include...")
-            video_picker = VideoPicker(use_youtube=True)
-            video = video_picker.pick_video()
-            if video:
-                if video["type"] == "local":
-                    video_file = video["path"]
-                    logger.info(f"✓ Using local video: {video['filename']}")
-                else:
-                    # YouTube video - would need download logic
-                    logger.info(f"Found YouTube video: {video['title']} (would need download)")
-
-        # Post pin (with video if available)
-        media_path = video_file or formatted["image_url"]
-        logger.info(f"Posting pin to board: {board} (ID: {board_id})")
-        if not post_pin(pinterest, formatted, board_id, content):
-            raise RuntimeError("Pin posting failed")
-
-        history["posts"].append({
-            "product_id": product["id"],
-            "title": formatted["title"],
-            "board": board,
-            "timestamp": datetime.now().isoformat(),
-        })
-        history["board_last_used"][board] = datetime.now().isoformat()
-        history["daily_count"] += 1
-        history["last_post_time"] = datetime.now().isoformat()
-        save_history(history)
-
-        logger.info(f"✓ Daily posting complete. Count: {history['daily_count']}/{MAX_PINS_PER_DAY}")
+        logger.info(f"✓ Done: {posted}/{target} pins posted today")
 
     except Exception as e:
-        logger.error(f"Posting error: {e}", exc_info=True)
+        logger.error(f"Daily posting error: {e}", exc_info=True)
         raise
 
 
