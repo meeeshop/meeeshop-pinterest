@@ -202,7 +202,7 @@ def run_daily_posting(use_video: bool = False):
         return
 
     # Initialize clients
-    pinterest = PinterestClient(pinterest_email, pinterest_password, headless=False)
+    pinterest = PinterestClient()
     shopify = ShopifyClient(shopify_url, shopify_token)
 
     try:
@@ -292,8 +292,6 @@ def run_daily_posting(use_video: bool = False):
 
     except Exception as e:
         logger.error(f"Posting error: {e}", exc_info=True)
-    finally:
-        pinterest.close()
 
 
 if __name__ == "__main__":
