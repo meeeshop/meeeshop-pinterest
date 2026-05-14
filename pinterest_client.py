@@ -68,7 +68,8 @@ class PinterestClient:
 
         try:
             logger.info("Loading Pinterest session from GitHub secret...")
-            cookies_json = base64.b64decode(cookies_b64).decode('utf-8')
+            cookies_b64 = cookies_b64.strip()
+            cookies_json = base64.b64decode(cookies_b64).decode('utf-8-sig')
             cookies_dict = json.loads(cookies_json)
 
             logger.debug(f"Loaded {len(cookies_dict)} cookies from secret")
@@ -105,7 +106,7 @@ class PinterestClient:
 
         try:
             logger.info(f"Loading Pinterest session from file: {COOKIES_FILE}")
-            cookies_json = COOKIES_FILE.read_text(encoding='utf-8')
+            cookies_json = COOKIES_FILE.read_text(encoding='utf-8-sig').strip()
             cookies_dict = json.loads(cookies_json)
 
             logger.debug(f"Loaded {len(cookies_dict)} cookies from file")
