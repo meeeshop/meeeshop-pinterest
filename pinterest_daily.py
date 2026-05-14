@@ -19,6 +19,7 @@ from pinterest_client import PinterestClient
 from shopify_products import ShopifyClient, format_product_for_pinterest, select_board_for_product
 from content_generator import generate_content_package
 from video_picker import VideoPicker, EnvLoader
+from image_overlay import add_text_overlay, create_video_pin_thumbnail
 
 logger = logging.getLogger(__name__)
 
@@ -137,7 +138,7 @@ def post_pin(
     board_id: str,
     content: Dict[str, Any],
 ) -> bool:
-    """Post pin to Pinterest"""
+    """Post pin to Pinterest with image overlay"""
 
     # Download image
     image_file = Path("/tmp") / f"pin_{product_data['product_id']}.jpg"
@@ -146,10 +147,24 @@ def post_pin(
         return False
 
     try:
+        # Add text overlay (title + CTA) to image
+        overlay_file = Path("/tmp") / f"pin_overlay_{product_data['product_id']}.jpg"
+        overlay_image = add_text_overlay(
+            str(image_file),
+            title=content["pin_title"],
+            cta="Shop Now",
+            price=product_data.get("price"),
+            output_path=str(overlay_file),
+        )
+
+        if not overlay_image:
+            logger.warning("Image overlay failed, posting without overlay")
+            overlay_image = str(image_file)
+
         logger.info(f"Creating pin: {content['pin_title']}")
 
         success, pin_id = client.create_pin(
-            image_path=str(image_file),
+            image_path=overlay_image,
             title=content["pin_title"],
             description=content["pin_description"],
             board_id=board_id,
@@ -159,6 +174,7 @@ def post_pin(
 
         if success:
             image_file.unlink(missing_ok=True)
+            Path(overlay_image).unlink(missing_ok=True)
             logger.info(f"✓ Posted successfully: {content['pin_title']} (ID: {pin_id})")
             return True
         else:
@@ -244,37 +260,31 @@ def run_daily_posting(use_video: bool = False):
         # Select random product
         product = random.choice(available_products)
         formatted = format_product_for_pinterest(product, store_base_url)
-        board = select_board_for_product(formatted)
 
-        # Time‑zone filtering: only post if current UTC hour matches board schedule
-        try:
-            tz_file = Path(__file__).parent / "us_timezones.json"
-            if tz_file.exists():
-                tz_map = json.load(tz_file.open("r", encoding="utf-8"))
-                board_hour = int(tz_map.get(board, "0"))
-                current_hour = datetime.utcnow().hour
-                logger.info(f"Board '{board}': scheduled UTC{board_hour}, current UTC{current_hour}")
-                if board_hour != current_hour:
-                    logger.info(f"Skipping board '{board}' - not scheduled for this hour")
-                    return
-            else:
-                logger.warning("us_timezones.json not found, skipping timezone check")
-        except Exception as e:
-            logger.warning(f"Failed to load time‑zone mapping: {e}")
+        # Select board - prefer matching category, fall back to random
+        ideal_board = select_board_for_product(formatted)
+        logger.info(f"Ideal board for product: {ideal_board}")
 
-        # Verify board exists & get board ID
+        # Try to find matching board in user's actual boards
         board_info = None
         for b in boards:
-            if b['name'] == board:
+            if b['name'].lower() == ideal_board.lower():
                 board_info = b
                 break
 
+        # If ideal board not found, select random board from user's boards
         if not board_info:
-            logger.warning(f"Board '{board}' not found in user's boards, using random")
+            logger.info(f"Board '{ideal_board}' not found in user's boards, selecting random")
             board_info = random.choice(boards)
-            board = board_info['name']
-            logger.info(f"Selected random board: {board}")
 
+        board = board_info['name']
+
+        # TODO: Implement proper timezone-based scheduling
+        # For now, post immediately. Production will use us_timezones.json
+        # to schedule pins at peak hours for different US timezones
+        logger.info(f"Posting to board: {board} (timezone scheduling pending)")
+
+        # Extract board ID (already validated above)
         board_id = board_info['id']
 
         if not should_post_to_board(board, history):
