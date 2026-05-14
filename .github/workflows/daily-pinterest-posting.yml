@@ -24,8 +24,10 @@ jobs:
 
       - name: Run daily posting
         env:
+          PINTEREST_COOKIES_B64: ${{ secrets.PINTEREST_COOKIES_B64 }}
           PINTEREST_EMAIL: ${{ secrets.PINTEREST_EMAIL }}
           PINTEREST_PASSWORD: ${{ secrets.PINTEREST_PASSWORD }}
+          PINTEREST_USERNAME: ${{ secrets.PINTEREST_USERNAME }}
           SHOPIFY_STORE_URL: ${{ secrets.SHOPIFY_STORE_URL }}
           SHOPIFY_ACCESS_TOKEN: ${{ secrets.SHOPIFY_ACCESS_TOKEN }}
           STORE_BASE_URL: ${{ secrets.STORE_BASE_URL }}

@@ -5,6 +5,8 @@ Replaces Selenium WebDriver automation with HTTP-based API calls.
 
 import os
 import time
+import json
+import base64
 from typing import Optional, List, Dict, Tuple
 from pathlib import Path
 import logging
@@ -24,11 +26,14 @@ logger = logging.getLogger(__name__)
 
 load_dotenv()
 
+COOKIES_FILE = Path(__file__).parent / ".pinterest_cookies_b64"
+
 
 class PinterestClient:
     """
     Pinterest API client using py3-pinterest for direct HTTP communication.
     Eliminates Selenium WebDriver dependency for more reliable automation.
+    Prioritizes saved session cookies over email/password auth (more reliable in CI).
     """
 
     def __init__(self):
@@ -48,10 +53,87 @@ class PinterestClient:
             time.sleep(self.rate_limit_delay - elapsed)
         self.last_request_time = time.time()
 
+    def _try_load_cookies_from_github_secret(self) -> bool:
+        """
+        Try to load Pinterest cookies from GitHub Actions secret (base64 encoded).
+        This is the most reliable authentication method for CI/CD.
+
+        Returns:
+            bool: True if cookies loaded and session valid, False otherwise
+        """
+        cookies_b64 = os.getenv('PINTEREST_COOKIES_B64')
+        if not cookies_b64:
+            logger.debug("No PINTEREST_COOKIES_B64 secret found")
+            return False
+
+        try:
+            logger.info("Loading Pinterest session from GitHub secret...")
+            cookies_json = base64.b64decode(cookies_b64).decode('utf-8')
+            cookies_dict = json.loads(cookies_json)
+
+            logger.debug(f"Loaded {len(cookies_dict)} cookies from secret")
+
+            # Create Pinterest client with stored cookies
+            # py3-pinterest will use these cookies for authentication
+            self.client = Pinterest(username=self.username, cookies=cookies_dict)
+
+            # Test if session is valid
+            self._rate_limit()
+            boards = self.client.boards()
+            if boards:
+                logger.info(f"✓ Authenticated via GitHub secret. Found {len(boards)} boards.")
+                self.authenticated = True
+                return True
+            else:
+                logger.warning("Cookies loaded but no boards returned. Session may be invalid.")
+                return False
+
+        except Exception as e:
+            logger.warning(f"Failed to load cookies from GitHub secret: {e}")
+            return False
+
+    def _try_load_cookies_from_file(self) -> bool:
+        """
+        Try to load Pinterest cookies from local file (for testing).
+
+        Returns:
+            bool: True if cookies loaded and session valid, False otherwise
+        """
+        if not COOKIES_FILE.exists():
+            logger.debug(f"Cookies file not found: {COOKIES_FILE}")
+            return False
+
+        try:
+            logger.info(f"Loading Pinterest session from file: {COOKIES_FILE}")
+            cookies_json = COOKIES_FILE.read_text(encoding='utf-8')
+            cookies_dict = json.loads(cookies_json)
+
+            logger.debug(f"Loaded {len(cookies_dict)} cookies from file")
+
+            # Create Pinterest client with stored cookies
+            self.client = Pinterest(username=self.username, cookies=cookies_dict)
+
+            # Test if session is valid
+            self._rate_limit()
+            boards = self.client.boards()
+            if boards:
+                logger.info(f"✓ Authenticated via saved cookies. Found {len(boards)} boards.")
+                self.authenticated = True
+                return True
+            else:
+                logger.warning("Cookies loaded but no boards returned. Session may be invalid.")
+                return False
+
+        except Exception as e:
+            logger.warning(f"Failed to load cookies from file: {e}")
+            return False
+
     def login(self) -> bool:
         """
-        Authenticate with Pinterest using saved session data or credentials.
-        Tries stored session first (faster, more reliable), falls back to email/password.
+        Authenticate with Pinterest using multiple fallback methods:
+        1. GitHub Actions secret with saved cookies (most reliable for CI)
+        2. Local saved cookies file (for testing/development)
+        3. Email/password login (fallback, less reliable in CI)
 
         Returns:
             bool: True if authentication successful, False otherwise
@@ -59,22 +141,17 @@ class PinterestClient:
         try:
             self.username = os.getenv('PINTEREST_USERNAME', 'meeeshop')
 
-            # Try to create client with stored session data first
-            try:
-                logger.info(f"Attempting to load stored session for user: {self.username}")
-                self.client = Pinterest(username=self.username)
+            # Method 1: Try GitHub Actions secret (saved cookies)
+            if self._try_load_cookies_from_github_secret():
+                return True
 
-                # Test if session is valid
-                self._rate_limit()
-                boards = self.client.boards()
-                if boards:
-                    logger.info(f"✓ Loaded existing session. Found {len(boards)} boards.")
-                    self.authenticated = True
-                    return True
-            except Exception as e:
-                logger.warning(f"Stored session not available or invalid: {e}")
+            # Method 2: Try local cookies file
+            if self._try_load_cookies_from_file():
+                return True
 
-            # Fall back to email/password login
+            # Method 3: Fall back to email/password login
+            logger.info("No saved cookies available. Attempting email/password login...")
+
             creds = CredentialsManager.get_from_env()
             if not creds:
                 logger.error("No credentials found in environment")
@@ -87,7 +164,7 @@ class PinterestClient:
                 logger.error("Pinterest credentials (email/password) not found")
                 return False
 
-            logger.info(f"Using email/password login for: {self.email}")
+            logger.info(f"Logging in with email: {self.email}")
             self.client = Pinterest(
                 email=self.email,
                 password=self.password,
