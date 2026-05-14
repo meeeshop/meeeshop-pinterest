@@ -163,6 +163,9 @@ def post_pin(
 
         logger.info(f"Creating pin: {content['pin_title']}")
 
+        # Add delay to allow Pinterest to process upload before creating pin
+        time.sleep(2)
+
         success, pin_id = client.create_pin(
             image_path=overlay_image,
             title=content["pin_title"],
@@ -222,7 +225,6 @@ def run_daily_posting(use_video: bool = False):
 
     if not can_post_today(history):
         logger.info("Skipping: daily limit reached")
-        return
         return
 
     # Initialize clients

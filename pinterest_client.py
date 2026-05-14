@@ -32,6 +32,10 @@ load_dotenv()
 
 COOKIES_FILE = Path(__file__).parent / ".pinterest_cookies_b64"
 
+# Retry configuration
+MAX_RETRIES = 3
+RETRY_BACKOFF = 2  # exponential backoff multiplier
+
 
 class PinterestClient:
     """
@@ -87,14 +91,18 @@ class PinterestClient:
 
             # Test if session is valid
             self._rate_limit()
-            boards = self.client.boards()
-            if boards:
-                logger.info(f"✓ Authenticated via GitHub secret. Found {len(boards)} boards.")
-                self.authenticated = True
-                return True
-            else:
-                logger.warning("Cookies loaded but no boards returned. Session may be invalid.")
+            try:
+                boards = self.client.boards()
+                if boards:
+                    logger.info(f"✓ Authenticated via GitHub secret. Found {len(boards)} boards.")
+                    self.authenticated = True
+                    return True
+            except Exception as board_error:
+                logger.warning(f"Boards test failed with GitHub secret: {board_error}")
                 return False
+
+            logger.warning("Cookies loaded but no boards returned. Session may be invalid.")
+            return False
 
         except Exception as e:
             logger.warning(f"Failed to load cookies from GitHub secret: {e}")
@@ -103,6 +111,7 @@ class PinterestClient:
     def _try_load_cookies_from_file(self) -> bool:
         """
         Try to load Pinterest cookies from local file (for testing).
+        Clears stale cookies before attempting to load fresh ones.
 
         Returns:
             bool: True if cookies loaded and session valid, False otherwise
@@ -112,8 +121,20 @@ class PinterestClient:
             return False
 
         try:
+            cookies_size = COOKIES_FILE.stat().st_size
+            if cookies_size == 0:
+                logger.warning(f"Cookies file is empty, clearing stale session data")
+                COOKIES_FILE.unlink(missing_ok=True)
+                return False
+
             logger.info(f"Loading Pinterest session from file: {COOKIES_FILE}")
             cookies_json = COOKIES_FILE.read_text(encoding='utf-8-sig').strip()
+
+            if not cookies_json:
+                logger.warning("Cookies file is empty, clearing")
+                COOKIES_FILE.unlink(missing_ok=True)
+                return False
+
             cookies_dict = json.loads(cookies_json)
 
             logger.debug(f"Loaded {len(cookies_dict)} cookies from file")
@@ -127,15 +148,24 @@ class PinterestClient:
 
             # Test if session is valid
             self._rate_limit()
-            boards = self.client.boards()
-            if boards:
-                logger.info(f"✓ Authenticated via saved cookies. Found {len(boards)} boards.")
-                self.authenticated = True
-                return True
-            else:
-                logger.warning("Cookies loaded but no boards returned. Session may be invalid.")
+            try:
+                boards = self.client.boards()
+                if boards:
+                    logger.info(f"✓ Authenticated via saved cookies. Found {len(boards)} boards.")
+                    self.authenticated = True
+                    return True
+            except Exception as board_error:
+                logger.warning(f"Boards test failed with saved cookies: {board_error}")
                 return False
 
+            logger.warning("Cookies loaded but no boards returned. Session may be invalid.")
+            return False
+
+        except json.JSONDecodeError as e:
+            logger.warning(f"Failed to parse cookies file (corrupted): {e}")
+            logger.info("Clearing corrupted cookies file")
+            COOKIES_FILE.unlink(missing_ok=True)
+            return False
         except Exception as e:
             logger.warning(f"Failed to load cookies from file: {e}")
             return False
@@ -239,8 +269,8 @@ class PinterestClient:
             return self.client.session
         raise RuntimeError("Cannot access authenticated session from Pinterest client")
 
-    def _api_post(self, url: str, data: Dict) -> requests.Response:
-        """Make authenticated POST request to Pinterest API."""
+    def _api_post(self, url: str, data: Dict, retry_count: int = 0) -> requests.Response:
+        """Make authenticated POST request to Pinterest API with retry logic."""
         session = self._get_raw_session()
         headers = {
             'Referer': 'https://www.pinterest.com/',
@@ -255,39 +285,66 @@ class PinterestClient:
 
         from urllib.parse import urlencode
         post_data = urlencode(data)
-        response = session.post(url, data=post_data, headers=headers)
-        response.raise_for_status()
-        return response
+
+        try:
+            response = session.post(url, data=post_data, headers=headers, timeout=30)
+            response.raise_for_status()
+            return response
+        except requests.exceptions.HTTPError as e:
+            if e.response.status_code == 500 and retry_count < MAX_RETRIES:
+                wait_time = (RETRY_BACKOFF ** retry_count)
+                logger.warning(f"Pinterest 500 error, retrying in {wait_time}s (attempt {retry_count + 1}/{MAX_RETRIES})")
+                time.sleep(wait_time)
+                return self._api_post(url, data, retry_count + 1)
+            raise
 
     def _register_upload(self, media_type: str = "image-story-pin") -> Dict:
-        """Register media upload with Pinterest API."""
+        """Register media upload with Pinterest API. Includes fallback for endpoint changes."""
         upload_id = str(uuid.uuid4())
         media_info = {"id": upload_id, "media_type": media_type}
 
-        url = "https://www.pinterest.com/resource/ApiResource/create/"
-        data = {
-            'source_url': '/pin-creation-tool/',
-            'data': json.dumps({
-                'options': {
-                    'url': '/v3/media/uploads/register/batch/',
-                    'data': json.dumps([media_info])
-                },
-                'context': None
-            }),
-            '_': str(int(time.time() * 1000))
-        }
+        # Primary endpoint
+        endpoints = [
+            "https://www.pinterest.com/resource/ApiResource/create/",
+            "https://www.pinterest.com/resource/PinResource/create/",  # fallback endpoint
+        ]
 
-        self._rate_limit()
-        resp = self._api_post(url, data)
-        result = resp.json()
+        for endpoint_idx, url in enumerate(endpoints):
+            try:
+                data = {
+                    'source_url': '/pin-creation-tool/',
+                    'data': json.dumps({
+                        'options': {
+                            'url': '/v3/media/uploads/register/batch/',
+                            'data': json.dumps([media_info])
+                        },
+                        'context': None
+                    }),
+                    '_': str(int(time.time() * 1000))
+                }
 
-        if 'resource_response' in result and 'data' in result['resource_response']:
-            upload_data = result['resource_response']['data']
-            for key, value in upload_data.items():
-                if isinstance(value, dict) and ('s3_upload_data' in value or 'upload_parameters' in value):
-                    return {'upload_id': upload_id, 'entry': value}
+                self._rate_limit()
+                logger.debug(f"Attempting upload registration on endpoint {endpoint_idx + 1}/{len(endpoints)}")
+                resp = self._api_post(url, data)
+                result = resp.json()
 
-        raise RuntimeError(f"Failed to register upload: {result}")
+                if 'resource_response' in result and 'data' in result['resource_response']:
+                    upload_data = result['resource_response']['data']
+                    for key, value in upload_data.items():
+                        if isinstance(value, dict) and ('s3_upload_data' in value or 'upload_parameters' in value):
+                            logger.info(f"Upload registered on endpoint {endpoint_idx + 1}: {upload_id}")
+                            return {'upload_id': upload_id, 'entry': value}
+
+                logger.warning(f"Endpoint {endpoint_idx + 1} returned invalid response: {result}")
+
+            except Exception as e:
+                logger.warning(f"Endpoint {endpoint_idx + 1} failed: {e}")
+                if endpoint_idx < len(endpoints) - 1:
+                    logger.info(f"Trying fallback endpoint...")
+                    continue
+                else:
+                    logger.error(f"All upload registration endpoints failed")
+                    raise RuntimeError(f"Failed to register upload on all endpoints: {e}")
 
     def _upload_to_s3(self, upload_url: str, upload_params: Dict, image_file: str) -> bool:
         """Upload image to S3."""
@@ -352,9 +409,10 @@ class PinterestClient:
         url: Optional[str] = None,
         alt_text: Optional[str] = None,
         section_id: Optional[str] = None,
+        retry_count: int = 0,
     ) -> Tuple[bool, Optional[str]]:
         """
-        Create a pin using direct API calls with explicit session management.
+        Create a pin using direct API calls with comprehensive retry logic.
 
         Args:
             image_path: Path to image file
@@ -364,6 +422,7 @@ class PinterestClient:
             url: Optional URL for pin (clickthrough)
             alt_text: Optional alt text for accessibility
             section_id: Optional section within board
+            retry_count: Internal retry counter
 
         Returns:
             Tuple[bool, Optional[str]]: (success, pin_id or error_message)
@@ -379,7 +438,7 @@ class PinterestClient:
                 logger.error(error_msg)
                 return False, error_msg
 
-            logger.info(f"Creating pin: {title}")
+            logger.info(f"Creating pin: {title} (attempt {retry_count + 1})")
 
             # Step 1: Register media upload
             upload_info = self._register_upload("image-story-pin")
@@ -401,7 +460,7 @@ class PinterestClient:
             if not image_signature:
                 return False, "No image signature from upload"
 
-            logger.debug(f"Image signature: {image_signature[:20]}...")
+            logger.debug(f"Image signature obtained: {image_signature[:20]}...")
 
             # Step 4: Create pin with signature
             pin_url = "https://www.pinterest.com/resource/PinResource/create/"
@@ -434,11 +493,46 @@ class PinterestClient:
                 logger.info(f"Pin created successfully. ID: {pin_id}")
                 return True, str(pin_id)
             else:
-                return False, f"No pin ID in response: {pin_result}"
+                error_msg = f"No pin ID in response: {pin_result}"
+                logger.error(error_msg)
+                return False, error_msg
 
+        except requests.exceptions.HTTPError as e:
+            if e.response.status_code == 500 and retry_count < MAX_RETRIES:
+                wait_time = (RETRY_BACKOFF ** retry_count)
+                logger.warning(f"Pinterest 500 error during pin creation, retrying in {wait_time}s (attempt {retry_count + 1}/{MAX_RETRIES})")
+                time.sleep(wait_time)
+                return self.create_pin(
+                    image_path=image_path,
+                    title=title,
+                    description=description,
+                    board_id=board_id,
+                    url=url,
+                    alt_text=alt_text,
+                    section_id=section_id,
+                    retry_count=retry_count + 1
+                )
+            else:
+                error_msg = f"Failed to create pin (HTTP {e.response.status_code}): {str(e)}"
+                logger.error(error_msg)
+                return False, error_msg
         except Exception as e:
             error_msg = f"Failed to create pin: {str(e)}"
             logger.error(error_msg)
+            if retry_count < MAX_RETRIES:
+                wait_time = (RETRY_BACKOFF ** retry_count)
+                logger.warning(f"Retrying pin creation in {wait_time}s (attempt {retry_count + 1}/{MAX_RETRIES})")
+                time.sleep(wait_time)
+                return self.create_pin(
+                    image_path=image_path,
+                    title=title,
+                    description=description,
+                    board_id=board_id,
+                    url=url,
+                    alt_text=alt_text,
+                    section_id=section_id,
+                    retry_count=retry_count + 1
+                )
             return False, error_msg
 
     def get_board_by_name(self, board_name: str) -> Optional[Dict[str, str]]:
