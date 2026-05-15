@@ -1,9 +1,7 @@
 """
 ai_client.py — Free AI provider with intelligent fallback for Pinterest content
-Copied from meeeshop-youtube for consistency across projects.
-Primary   : Gemini 2.0 Flash  (Google AI Studio — 1M tokens/day, free)
-Secondary : Groq Llama-3.3-70B (groq.com — ~500K tokens/day, free)
-Tertiary  : OpenRouter free models with auto-fallback
+Primary   : Groq Llama-3.3-70B (groq.com — ~500K tokens/day, free)
+Secondary : OpenRouter free models with auto-fallback
 Fallback  : returns None → caller uses hardcoded template
 """
 
@@ -23,11 +21,9 @@ def _load_env():
 
 _load_env()
 
-GEMINI_KEY     = os.getenv("GEMINI_API_KEY", "")
 GROQ_KEY       = os.getenv("GROQ_API_KEY", "")
 OPENROUTER_KEY = os.getenv("OPENROUTER_API_KEY", "")
 
-_GEMINI_URL      = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent"
 _GROQ_URL        = "https://api.groq.com/openai/v1/chat/completions"
 _OPENROUTER_URL  = "https://openrouter.ai/api/v1/chat/completions"
 
@@ -74,24 +70,6 @@ def _get_openrouter_models(category: Optional[str] = None) -> List[str]:
     if category and category in _OPENROUTER_MODEL_CATEGORIES:
         return _OPENROUTER_MODEL_CATEGORIES[category]
     return _OPENROUTER_FREE_MODELS
-
-
-def _call_gemini(prompt: str, max_tokens: int, temperature: float) -> str:
-    if not GEMINI_KEY:
-        raise RuntimeError("GEMINI_API_KEY not set")
-    r = requests.post(
-        _GEMINI_URL,
-        params={"key": GEMINI_KEY},
-        json={
-            "contents": [{"parts": [{"text": prompt}]}],
-            "generationConfig": {"maxOutputTokens": max_tokens, "temperature": temperature},
-        },
-        timeout=30,
-    )
-    if r.status_code == 429:
-        raise RuntimeError("rate-limited")
-    r.raise_for_status()
-    return r.json()["candidates"][0]["content"]["parts"][0]["text"].strip()
 
 
 def _call_groq(prompt: str, max_tokens: int, temperature: float) -> str:
@@ -169,7 +147,6 @@ def _call_openrouter(prompt: str, max_tokens: int, temperature: float, category:
 
 
 _PROVIDERS = [
-    ("Gemini",     _call_gemini),
     ("Groq",       _call_groq),
     ("OpenRouter", lambda p, m, t: _call_openrouter(p, m, t, "seo")),
 ]

@@ -119,23 +119,88 @@ def _was_recently_posted(video_id: str, history: Dict[str, Any]) -> bool:
 # YouTube Shorts discovery — no API key, pure yt-dlp
 # ---------------------------------------------------------------------------
 
+# Errors that mean the request is permanently blocked — no point retrying.
+_YTDLP_FATAL_PATTERNS = (
+    "sign in to confirm",
+    "bot detection",
+    "this video is not available",
+    "video unavailable",
+    "private video",
+    "has been removed",
+)
+
+
+def _ytdlp_cookies_file() -> Optional[str]:
+    """
+    Write YOUTUBE_COOKIES_B64 (Netscape-format cookies, base64-encoded) to a
+    temp file and return its path.  Returns None if the env var is not set.
+
+    How to create: export cookies from a logged-in YouTube session using the
+    browser extension "Get cookies.txt LOCALLY", base64-encode the file, and
+    store it as the YOUTUBE_COOKIES_B64 GitHub secret.
+    """
+    import base64, tempfile
+    cookies_b64 = os.getenv("YOUTUBE_COOKIES_B64", "").strip()
+    if not cookies_b64:
+        return None
+    try:
+        cookies_txt = base64.b64decode(cookies_b64).decode("utf-8")
+        tmp = tempfile.NamedTemporaryFile(
+            mode="w", suffix=".txt", delete=False, encoding="utf-8"
+        )
+        tmp.write(cookies_txt)
+        tmp.flush()
+        tmp.close()
+        logger.info("YouTube cookies loaded from YOUTUBE_COOKIES_B64")
+        return tmp.name
+    except Exception as e:
+        logger.warning(f"Could not decode YOUTUBE_COOKIES_B64: {e}")
+        return None
+
+
+# Cached cookies file path for this process run
+_YTDLP_COOKIES_FILE: Optional[str] = None
+
+
+def _get_cookies_args() -> List[str]:
+    """Return ['--cookies', '/tmp/...'] if cookies are available, else []."""
+    global _YTDLP_COOKIES_FILE
+    if _YTDLP_COOKIES_FILE is None:
+        _YTDLP_COOKIES_FILE = _ytdlp_cookies_file() or ""
+    return ["--cookies", _YTDLP_COOKIES_FILE] if _YTDLP_COOKIES_FILE else []
+
+
 def _run_ytdlp(args: List[str], timeout: int = 60) -> Optional[str]:
-    """Run yt-dlp and return stdout, or None on failure."""
-    cmd = ["yt-dlp"] + args
+    """
+    Run yt-dlp and return stdout, or None on failure.
+    Raises RuntimeError immediately on fatal YouTube errors (bot detection,
+    unavailable video) that will not be resolved by retrying.
+    """
+    cmd = ["yt-dlp"] + _get_cookies_args() + args
     try:
         result = subprocess.run(
             cmd, capture_output=True, text=True, timeout=timeout, encoding="utf-8"
         )
         if result.returncode != 0:
-            logger.warning(f"yt-dlp stderr: {result.stderr[:300]}")
+            stderr = result.stderr[:500]
+            stderr_lower = stderr.lower()
+            for pattern in _YTDLP_FATAL_PATTERNS:
+                if pattern in stderr_lower:
+                    raise RuntimeError(
+                        f"yt-dlp fatal error ({pattern!r}) — "
+                        "set YOUTUBE_COOKIES_B64 secret to bypass bot detection. "
+                        f"Details: {stderr[:200]}"
+                    )
+            logger.warning(f"yt-dlp stderr: {stderr[:300]}")
             return None
         return result.stdout.strip()
+    except RuntimeError:
+        raise  # re-raise fatal errors to bubble up and fail the workflow
     except subprocess.TimeoutExpired:
         logger.error(f"yt-dlp timed out ({timeout}s): {' '.join(args[:4])}")
         return None
     except FileNotFoundError:
-        logger.error("yt-dlp not found — install with: pip install yt-dlp")
-        return None
+        raise RuntimeError("yt-dlp not found — add 'pip install yt-dlp' to workflow")
     except Exception as e:
         logger.error(f"yt-dlp error: {e}")
         return None
@@ -704,8 +769,10 @@ def run_video_posting() -> None:
                 logger.warning("Retrying download with /shorts/ URL…")
                 video_file = download_video(video["shorts_url"], tmp_path)
             if not video_file:
-                logger.error(f"Video download failed: {video['url']} — skipping")
+                # Non-fatal transient failure (size limit, format issue) — skip this video
+                logger.error(f"Video download failed after retries: {video['url']} — skipping")
                 continue
+            # (RuntimeError from bot detection propagates up and fails the workflow)
 
             # Human-paced delay before upload (longer between multiple pins)
             pause = random.uniform(5, 12) if idx == 0 else random.uniform(90, 180)

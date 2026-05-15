@@ -81,6 +81,9 @@ jobs:
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
           YOUTUBE_CHANNEL_URL: https://www.youtube.com/@MeeeShop
+          # Netscape-format YouTube cookies (base64) — bypasses yt-dlp bot detection on CI IPs.
+          # Export from logged-in browser using "Get cookies.txt LOCALLY" extension, base64-encode, store as secret.
+          YOUTUBE_COOKIES_B64: ${{ secrets.YOUTUBE_COOKIES_B64 }}
           # Scheduled runs: 2 pins/day. Manual dispatch uses the input value.
           MAX_PINS_PER_RUN: ${{ github.event.inputs.pins_per_run || '2' }}
           # Scheduled runs never dry-run. Manual dispatch defaults to dry_run=true for safety.
