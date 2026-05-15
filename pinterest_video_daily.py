@@ -321,15 +321,23 @@ def get_recent_shorts(channel_url: str, max_results: int = 20) -> List[Dict[str,
 
 def download_video(youtube_url: str, output_dir: Path) -> Optional[str]:
     """
-    Download an MP4 ≤ MAX_VIDEO_SIZE_MB using yt-dlp.
-    Returns absolute path to the downloaded file, or None on failure.
+    Download a video ≤ MAX_VIDEO_SIZE_MB using yt-dlp, then convert to MP4.
+    YouTube Shorts often only have a single combined stream (mp4/webm) — the
+    bestvideo+bestaudio merge selector raises "Requested format is not available"
+    for those.  We request the best single-file format first, then fall back to
+    explicit merge, then accept any format and re-encode via ffmpeg postprocessor.
+    Returns absolute path to the downloaded .mp4 file, or None on failure.
     """
     output_template = str(output_dir / "%(id)s.%(ext)s")
+    # Priority:
+    #  1. Best single-file mp4 (most Shorts — no merge needed)
+    #  2. Best single-file any container (webm Shorts) — remuxed to mp4 below
+    #  3. Explicit bestvideo+bestaudio merge (regular videos with separate streams)
+    #  4. Absolute fallback
     fmt = (
-        f"bestvideo[ext=mp4][filesize<{MAX_VIDEO_SIZE_MB}M]+bestaudio[ext=m4a]"
-        f"/best[ext=mp4][filesize<{MAX_VIDEO_SIZE_MB}M]"
+        f"best[ext=mp4][filesize<{MAX_VIDEO_SIZE_MB}M]"
         f"/best[filesize<{MAX_VIDEO_SIZE_MB}M]"
-        f"/best"
+        f"/bestvideo[ext=mp4]+bestaudio[ext=m4a]/best"
     )
     args = [
         "--format", fmt,
@@ -341,20 +349,50 @@ def download_video(youtube_url: str, output_dir: Path) -> Optional[str]:
         youtube_url,
     ]
     logger.info(f"Downloading video: {youtube_url}")
-    result = _run_ytdlp(args, timeout=180)
+    _run_ytdlp(args, timeout=180)
 
-    # Find the downloaded file (most recently modified .mp4)
-    mp4_files = sorted(output_dir.glob("*.mp4"), key=lambda f: f.stat().st_mtime, reverse=True)
-    if mp4_files:
-        size_mb = mp4_files[0].stat().st_size / 1_048_576
-        logger.info(f"Downloaded: {mp4_files[0].name} ({size_mb:.1f} MB)")
-        if size_mb > MAX_VIDEO_SIZE_MB:
-            logger.error(f"File too large ({size_mb:.1f} MB > {MAX_VIDEO_SIZE_MB} MB)")
-            return None
-        return str(mp4_files[0])
+    # Accept any video file — convert webm/mkv to mp4 if needed
+    video_files = sorted(
+        [f for f in output_dir.iterdir() if f.suffix.lower() in (".mp4", ".webm", ".mkv")],
+        key=lambda f: f.stat().st_mtime, reverse=True,
+    )
+    if not video_files:
+        logger.error("yt-dlp ran but no video file found in output dir")
+        return None
 
-    logger.error("yt-dlp ran but no .mp4 file found in output dir")
-    return None
+    video_file = video_files[0]
+    size_mb = video_file.stat().st_size / 1_048_576
+    logger.info(f"Downloaded: {video_file.name} ({size_mb:.1f} MB)")
+    if size_mb > MAX_VIDEO_SIZE_MB:
+        logger.error(f"File too large ({size_mb:.1f} MB > {MAX_VIDEO_SIZE_MB} MB)")
+        return None
+
+    # Convert non-mp4 to mp4 via ffmpeg (yt-dlp ships ffmpeg on CI)
+    if video_file.suffix.lower() != ".mp4":
+        mp4_path = video_file.with_suffix(".mp4")
+        logger.info(f"Converting {video_file.suffix} → .mp4")
+        try:
+            subprocess.run(
+                ["ffmpeg", "-i", str(video_file), "-c", "copy", str(mp4_path), "-y"],
+                capture_output=True, timeout=120, check=True,
+            )
+            video_file.unlink(missing_ok=True)
+            video_file = mp4_path
+        except Exception as e:
+            logger.warning(f"ffmpeg convert failed ({e}), trying re-encode")
+            try:
+                subprocess.run(
+                    ["ffmpeg", "-i", str(video_file), "-vcodec", "libx264", "-acodec", "aac",
+                     str(mp4_path), "-y"],
+                    capture_output=True, timeout=180, check=True,
+                )
+                video_file.unlink(missing_ok=True)
+                video_file = mp4_path
+            except Exception as e2:
+                logger.error(f"ffmpeg re-encode also failed: {e2}")
+                return None
+
+    return str(video_file)
 
 
 # ---------------------------------------------------------------------------
