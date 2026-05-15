@@ -13,6 +13,7 @@ DRY_RUN=true  → full pipeline (product pick, video build, content) but skips P
 MAX_PINS_PER_RUN (env, default 1) → set to 2 for scheduled production runs.
 """
 
+import glob
 import io
 import json
 import logging
@@ -26,7 +27,7 @@ import textwrap
 import time
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
 import requests
@@ -56,6 +57,7 @@ logger = logging.getLogger(__name__)
 
 VIDEO_HISTORY_FILE = Path(__file__).parent / "video_posting_history.json"
 VIDEO_REPOST_COOLDOWN_DAYS = 10
+_AUDIO_DIR = Path(__file__).parent / "audio"
 
 MAX_PINS_PER_RUN = int(os.getenv("MAX_PINS_PER_RUN", "1"))
 DRY_RUN = os.getenv("DRY_RUN", "false").lower() in ("1", "true", "yes")
@@ -254,6 +256,25 @@ def _compose_frame(
     return img
 
 
+def _save_thumbnail(frame_img: Image.Image, handle: str) -> str:
+    """Save first composed frame as a JPEG thumbnail. Returns path."""
+    thumb_path = str(OUT_DIR / f"{handle[:30]}_thumb.jpg")
+    frame_img.convert("RGB").save(thumb_path, "JPEG", quality=92)
+    logger.info(f"Thumbnail saved: {thumb_path}")
+    return thumb_path
+
+
+def _pick_music_track() -> Optional[str]:
+    """Pick a random MP3 from audio folder. Returns path or None."""
+    if not _AUDIO_DIR.exists():
+        return None
+    tracks = [f for f in glob.glob(str(_AUDIO_DIR / "*.mp3"))
+              if os.path.getsize(f) > 50_000]
+    if tracks:
+        return random.choice(tracks)
+    return None
+
+
 def _slide_clip(
     bg: Image.Image,
     product_img: Image.Image,
@@ -304,10 +325,10 @@ def _slide_clip(
     return VideoClip(make_frame, duration=CLIP_DURATION).set_fps(FPS)
 
 
-def build_video(product: Dict, fmt: Dict, bg_colors: List[tuple], store_base_url: str) -> Optional[str]:
+def build_video(product: Dict, fmt: Dict, bg_colors: List[tuple], store_base_url: str) -> Optional[Tuple[str, str]]:
     """
     Build a 30s product slideshow mp4 from Shopify product images.
-    Returns the path to the rendered mp4, or None on failure.
+    Returns tuple (video_path, thumbnail_path) or None on failure.
     """
     title  = product["title"]
     price  = product.get("variants", [{}])[0].get("price", "0")
@@ -326,6 +347,7 @@ def build_video(product: Dict, fmt: Dict, bg_colors: List[tuple], store_base_url
 
     effects = ["slide-left", "slide-right", "zoom-in", "slide-up", "zoom-out", "slide-out"]
     clips   = []
+    thumb_path = None
 
     for i, img_data in enumerate(images):
         bg       = _solid_bg(bg_colors[i % len(bg_colors)])
@@ -338,6 +360,11 @@ def build_video(product: Dict, fmt: Dict, bg_colors: List[tuple], store_base_url
         clip     = clip.fadein(0.1).fadeout(0.1)
         clips.append(clip)
 
+        # Capture first frame for thumbnail
+        if thumb_path is None:
+            first_frame_img = _compose_frame(bg, prod_img, title, price, url, fmt, product_scale=1.0, show_url=False)
+            thumb_path = _save_thumbnail(first_frame_img, handle)
+
     if not clips:
         logger.error("No clips built — all product images failed to load")
         return None
@@ -346,7 +373,18 @@ def build_video(product: Dict, fmt: Dict, bg_colors: List[tuple], store_base_url
     total_secs  = video.duration
     audio_clips = []
 
-    # Voiceover (gTTS) — overlaid at mid-video
+    # Background music
+    music_path = _pick_music_track()
+    if music_path:
+        bg_aud = AudioFileClip(music_path).volumex(0.35)
+        if bg_aud.duration < total_secs:
+            bg_aud = bg_aud.audio_loop(duration=total_secs)
+        else:
+            bg_aud = bg_aud.subclip(0, total_secs)
+        audio_clips.append(bg_aud)
+        logger.info(f"Background music: {os.path.basename(music_path)}")
+
+    # Voiceover (gTTS) — overlaid at end as CTA
     vo_text = (
         f"Discover the {title} at MeeeShop — only ${price}! "
         f"Shop the link in description now!"
@@ -373,9 +411,9 @@ def build_video(product: Dict, fmt: Dict, bg_colors: List[tuple], store_base_url
             vo = AudioFileClip(vo_path)
             if vo.duration > VOICEOVER_DURATION:
                 vo = vo.subclip(0, VOICEOVER_DURATION)
-            vo_start = max(0, (total_secs / 2) - (vo.duration / 2))
+            vo_start = max(0, total_secs - vo.duration - 1.0)
             audio_clips.append(vo.set_start(vo_start).volumex(1.1))
-            logger.info(f"Voiceover: {vo.duration:.1f}s starting at {vo_start:.1f}s")
+            logger.info(f"Voiceover: {vo.duration:.1f}s starting at {vo_start:.1f}s (end CTA)")
         except Exception as e:
             logger.warning(f"gTTS voiceover failed: {e}")
 
@@ -397,9 +435,11 @@ def build_video(product: Dict, fmt: Dict, bg_colors: List[tuple], store_base_url
     if size_mb > MAX_VIDEO_SIZE_MB:
         logger.error(f"Video too large ({size_mb:.1f} MB > {MAX_VIDEO_SIZE_MB} MB) — skipping")
         os.unlink(out_path)
+        if thumb_path and os.path.exists(thumb_path):
+            os.unlink(thumb_path)
         return None
 
-    return out_path
+    return (out_path, thumb_path)
 
 
 # ---------------------------------------------------------------------------
@@ -434,18 +474,27 @@ def _post_video_pin(
     description: str,
     link: str,
     alt_text: str,
+    thumb_path: Optional[str] = None,
 ) -> Optional[str]:
     """Upload MP4 as a real Pinterest video pin. Returns pin_id or None."""
     time.sleep(random.uniform(3, 7))
     try:
-        resp = py3.upload_video_pin(
-            video_file=video_path,
-            title=title,
-            description=description,
-            link=link,
-            board_id=board_id,
-            alt_text=alt_text,
-        )
+        kwargs = {
+            "video_file": video_path,
+            "title": title,
+            "description": description,
+            "link": link,
+            "board_id": board_id,
+            "alt_text": alt_text,
+        }
+        # Try to include thumbnail if provided
+        if thumb_path:
+            try:
+                kwargs["cover_image"] = thumb_path
+            except Exception:
+                pass
+
+        resp = py3.upload_video_pin(**kwargs)
         # upload_video_pin returns a requests.Response object; parse JSON
         if hasattr(resp, 'json'):
             resp_data = resp.json()
@@ -588,11 +637,12 @@ def run_video_posting() -> None:
             continue
 
         # Build video (generates high-quality composed frames as MP4)
-        video_path = build_video(product, fmt, bg_colors, store_base_url)
-        if not video_path:
+        result = build_video(product, fmt, bg_colors, store_base_url)
+        if not result:
             logger.error(f"Video build failed for '{product['title']}' — skipping")
             post_failures += 1
             continue
+        video_path, thumb_path = result
 
         # Human-paced delay before posting
         pause = random.uniform(5, 12) if idx == 0 else random.uniform(90, 180)
@@ -607,15 +657,31 @@ def run_video_posting() -> None:
             description=content["description"],
             link=product_url,
             alt_text=content["alt_text"],
+            thumb_path=thumb_path,
         )
         if not pin_id:
             logger.error("Pinterest video pin creation failed — skipping")
             post_failures += 1
+            # Cleanup on failure
+            try:
+                os.unlink(video_path)
+            except Exception:
+                pass
+            try:
+                if thumb_path and os.path.exists(thumb_path):
+                    os.unlink(thumb_path)
+            except Exception:
+                pass
             continue
 
-        # Cleanup local video file to save disk
+        # Cleanup local video and thumbnail files to save disk
         try:
             os.unlink(video_path)
+        except Exception:
+            pass
+        try:
+            if thumb_path and os.path.exists(thumb_path):
+                os.unlink(thumb_path)
         except Exception:
             pass
 
