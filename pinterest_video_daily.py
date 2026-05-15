@@ -446,15 +446,21 @@ def _post_video_pin(
             board_id=board_id,
             alt_text=alt_text,
         )
-        # Response is a dict; pin id lives at resource_response.data.id or data.id
+        # upload_video_pin returns a requests.Response object; parse JSON
+        if hasattr(resp, 'json'):
+            resp_data = resp.json()
+        else:
+            resp_data = resp
+
+        # Pin ID lives at resource_response.data.id or data.id
         pin_id = (
-            (resp or {}).get("resource_response", {}).get("data", {}).get("id")
-            or (resp or {}).get("data", {}).get("id")
+            (resp_data or {}).get("resource_response", {}).get("data", {}).get("id")
+            or (resp_data or {}).get("data", {}).get("id")
         )
         if pin_id:
             logger.info(f"Video pin created — pin_id: {pin_id}")
             return str(pin_id)
-        logger.error(f"upload_video_pin returned unexpected response: {str(resp)[:300]}")
+        logger.error(f"upload_video_pin returned unexpected response: {str(resp_data)[:300]}")
         return None
     except Exception as e:
         logger.error(f"upload_video_pin error: {e}")
