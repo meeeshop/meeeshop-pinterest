@@ -33,7 +33,10 @@ import requests
 from dotenv import load_dotenv
 from gtts import gTTS
 from PIL import Image, ImageDraw, ImageEnhance, ImageFont
-from moviepy.editor import AudioFileClip, CompositeAudioClip, VideoClip, concatenate_videoclips
+try:
+    from moviepy.editor import AudioFileClip, CompositeAudioClip, VideoClip, concatenate_videoclips
+except ImportError:
+    from moviepy import AudioFileClip, CompositeAudioClip, VideoClip, concatenate_videoclips
 
 from pinterest_client import PinterestClient
 from shopify_products import ShopifyClient, format_product_for_pinterest, select_board_for_product
