@@ -61,9 +61,8 @@ MAX_PINS_PER_RUN = int(os.getenv("MAX_PINS_PER_RUN", "1"))
 DRY_RUN = os.getenv("DRY_RUN", "false").lower() in ("1", "true", "yes")
 MAX_VIDEO_SIZE_MB = 100
 
-# Pinterest internal video-pin upload endpoints (web-UI flow — no OAuth app needed)
-_PINTEREST_UPLOAD_URL = "https://www.pinterest.com/resource/VideoResource/create/"
-_PINTEREST_PIN_URL    = "https://www.pinterest.com/resource/PinResource/create/"
+# Pinterest pin creation endpoint (web-UI flow — no OAuth app needed)
+_PINTEREST_PIN_URL = "https://www.pinterest.com/resource/PinResource/create/"
 
 # Boards preferred for video content
 VIDEO_PREFERRED_BOARDS = [
@@ -421,111 +420,62 @@ def _pick_board(boards: List[Dict], formatted_product: Dict) -> Dict:
 
 
 # ---------------------------------------------------------------------------
-# Pinterest video upload via internal web API
+# Pinterest image pin from video frame
+# Pinterest's internal VideoResource/create/ endpoint was retired.
+# Strategy: extract the best frame from the built MP4 and post it as an image
+# pin using the proven upload_pin path (same as pinterest_daily.py).
 # ---------------------------------------------------------------------------
 
-def _upload_video_internal(session: requests.Session, mp4_path: str) -> Optional[str]:
-    csrftoken = session.cookies.get("csrftoken", "")
-    headers = {
-        "User-Agent": (
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-            "AppleWebKit/537.36 (KHTML, like Gecko) "
-            "Chrome/124.0.0.0 Safari/537.36"
-        ),
-        "Referer":          "https://www.pinterest.com/pin-builder/",
-        "Origin":           "https://www.pinterest.com",
-        "X-Requested-With": "XMLHttpRequest",
-        "X-CSRFToken":      csrftoken,
-        "Accept":           "application/json, text/javascript, */*; q=0.01",
-    }
-    video_bytes = Path(mp4_path).read_bytes()
-    logger.info(f"Uploading {len(video_bytes) / 1_048_576:.1f} MB to Pinterest…")
+def _extract_video_frame(mp4_path: str, timestamp: float = 2.5) -> Optional[str]:
+    """Extract a single frame from the video at `timestamp` seconds as a PNG."""
+    out_path = mp4_path.replace(".mp4", "_cover.png")
     try:
-        resp = session.post(
-            _PINTEREST_UPLOAD_URL,
-            files={"video": ("video.mp4", video_bytes, "video/mp4")},
-            headers=headers,
-            timeout=300,
+        result = subprocess.run(
+            [
+                "ffmpeg", "-y",
+                "-ss", str(timestamp),
+                "-i", mp4_path,
+                "-vframes", "1",
+                "-q:v", "2",
+                out_path,
+            ],
+            capture_output=True,
+            timeout=30,
         )
-        resp.raise_for_status()
-        data     = resp.json()
-        video_id = (
-            data.get("resource_response", {}).get("data", {}).get("id")
-            or data.get("data", {}).get("id")
-        )
-        if video_id:
-            logger.info(f"Pinterest video uploaded — video_id: {video_id}")
-            return str(video_id)
-        logger.error(f"Unexpected upload response: {str(data)[:300]}")
-        return None
-    except requests.exceptions.HTTPError as e:
-        logger.error(f"Video upload HTTP {e.response.status_code}: {getattr(e.response, 'text', '')[:400]}")
+        if result.returncode == 0 and Path(out_path).exists():
+            logger.info(f"Extracted cover frame: {out_path}")
+            return out_path
+        logger.error(f"ffmpeg frame extract failed: {result.stderr.decode()[:200]}")
         return None
     except Exception as e:
-        logger.error(f"Video upload error: {e}")
+        logger.error(f"Frame extraction error: {e}")
         return None
 
 
-def _create_video_pin_internal(
-    session: requests.Session,
-    video_id: str,
+def _post_image_pin(
+    pinterest: "PinterestClient",
+    image_path: str,
     board_id: str,
     title: str,
     description: str,
     link: str,
     alt_text: str,
-    cover_image_url: str,
 ) -> Optional[str]:
-    csrftoken = session.cookies.get("csrftoken", "")
-    headers = {
-        "User-Agent": (
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-            "AppleWebKit/537.36 (KHTML, like Gecko) "
-            "Chrome/124.0.0.0 Safari/537.36"
-        ),
-        "Referer":          "https://www.pinterest.com/pin-builder/",
-        "Origin":           "https://www.pinterest.com",
-        "X-Requested-With": "XMLHttpRequest",
-        "X-CSRFToken":      csrftoken,
-        "Accept":           "application/json, text/javascript, */*; q=0.01",
-        "Content-Type":     "application/x-www-form-urlencoded; charset=UTF-8",
-    }
-    from py3pin.RequestBuilder import RequestBuilder
-    req_builder = RequestBuilder()
-    options = {
-        "board_id":          board_id,
-        "description":       description[:500],
-        "title":             title[:100],
-        "link":              link,
-        "alt_text":          alt_text[:500],
-        "video_id":          video_id,
-        "story_pin_data_id": None,
-        "carousel_data_json": None,
-    }
-    if cover_image_url:
-        options["cover_image_url"] = cover_image_url
-
-    post_data = req_builder.buildPost(options=options, source_url="/pin-builder/")
-    try:
-        time.sleep(random.uniform(3, 7))
-        resp = session.post(_PINTEREST_PIN_URL, data=post_data, headers=headers, timeout=30)
-        resp.raise_for_status()
-        data   = resp.json()
-        pin_id = (
-            data.get("resource_response", {}).get("data", {}).get("id")
-            or data.get("data", {}).get("id")
-        )
-        if pin_id:
-            logger.info(f"Video pin created — pin_id: {pin_id}")
-            return str(pin_id)
-        logger.error(f"Pin creation unexpected response: {str(data)[:300]}")
-        return None
-    except requests.exceptions.HTTPError as e:
-        logger.error(f"Pin creation HTTP {e.response.status_code}: {getattr(e.response, 'text', '')[:400]}")
-        return None
-    except Exception as e:
-        logger.error(f"Pin creation error: {e}")
-        return None
+    """Post an image pin via the proven upload_pin path. Returns pin_id or None."""
+    time.sleep(random.uniform(3, 7))
+    success, pin_id_or_err = pinterest.create_pin(
+        image_path=image_path,
+        title=title,
+        description=description,
+        board_id=board_id,
+        url=link,
+        alt_text=alt_text,
+    )
+    if success:
+        logger.info(f"Image pin created — pin_id: {pin_id_or_err}")
+        return str(pin_id_or_err)
+    logger.error(f"Image pin creation failed: {pin_id_or_err}")
+    return None
 
 
 # ---------------------------------------------------------------------------
@@ -602,9 +552,8 @@ def run_video_posting() -> None:
     to_post = random.sample(available, min(MAX_PINS_PER_RUN, len(available)))
     logger.info(f"Will post {len(to_post)} video pin(s) (MAX_PINS_PER_RUN={MAX_PINS_PER_RUN})")
 
-    session      = pinterest._get_raw_session()
-    posted_count = 0
-    build_failures = 0
+    posted_count   = 0
+    post_failures  = 0
 
     for idx, product in enumerate(to_post):
         logger.info(f"\n--- Pin {idx+1}/{len(to_post)}: '{product['title']}' ---")
@@ -630,55 +579,50 @@ def run_video_posting() -> None:
 
         if DRY_RUN:
             logger.info("  [DRY RUN] Would build video here — skipped")
-            logger.info("  [DRY RUN] Would upload to Pinterest here — skipped")
+            logger.info("  [DRY RUN] Would post image pin here — skipped")
             logger.info("  ✓ Dry-run validation passed for this product")
             posted_count += 1
             continue
 
-        # Build video
+        # Build video (generates high-quality composed frames as MP4)
         video_path = build_video(product, fmt, bg_colors, store_base_url)
         if not video_path:
             logger.error(f"Video build failed for '{product['title']}' — skipping")
-            build_failures += 1
+            post_failures += 1
             continue
 
-        # Human-paced delay before upload
+        # Extract cover frame from the video to use as the pin image
+        cover_path = _extract_video_frame(video_path, timestamp=2.5)
+        if not cover_path:
+            logger.error("Frame extraction failed — skipping")
+            post_failures += 1
+            continue
+
+        # Human-paced delay before posting
         pause = random.uniform(5, 12) if idx == 0 else random.uniform(90, 180)
-        logger.info(f"  Pausing {pause:.0f}s before upload…")
+        logger.info(f"  Pausing {pause:.0f}s before posting…")
         time.sleep(pause)
 
-        video_id = _upload_video_internal(session, video_path)
-        if not video_id:
-            logger.error("Pinterest video upload failed — skipping")
-            build_failures += 1
-            continue
-
-        # Wait for Pinterest to finish processing
-        wait_secs = random.uniform(20, 35)
-        logger.info(f"  Waiting {wait_secs:.0f}s for Pinterest video processing…")
-        time.sleep(wait_secs)
-
-        cover_image_url = (product.get("images") or [{}])[0].get("src", "")
-        pin_id = _create_video_pin_internal(
-            session=session,
-            video_id=video_id,
+        pin_id = _post_image_pin(
+            pinterest=pinterest,
+            image_path=cover_path,
             board_id=board["id"],
             title=content["title"],
             description=content["description"],
             link=product_url,
             alt_text=content["alt_text"],
-            cover_image_url=cover_image_url,
         )
         if not pin_id:
             logger.error("Pinterest pin creation failed — skipping")
-            build_failures += 1
+            post_failures += 1
             continue
 
-        # Cleanup local video file to save disk
-        try:
-            os.unlink(video_path)
-        except Exception:
-            pass
+        # Cleanup local files to save disk
+        for path in (video_path, cover_path):
+            try:
+                os.unlink(path)
+            except Exception:
+                pass
 
         history["posts"].append({
             "product_handle":  product.get("handle", ""),
@@ -692,7 +636,7 @@ def run_video_posting() -> None:
         posted_count += 1
 
         logger.info(
-            f"  ✓ Video pin posted!\n"
+            f"  ✓ Pin posted!\n"
             f"    Product : {product['title']}\n"
             f"    Board   : {board['name']}\n"
             f"    URL     : {product_url}\n"
@@ -707,12 +651,12 @@ def run_video_posting() -> None:
             f"{'=' * 60}"
         )
     else:
-        logger.info(f"\nRun complete — {posted_count}/{len(to_post)} video pin(s) posted.")
+        logger.info(f"\nRun complete — {posted_count}/{len(to_post)} pin(s) posted.")
 
-    if posted_count == 0 and build_failures > 0:
+    if posted_count == 0 and post_failures > 0:
         raise RuntimeError(
-            f"All {build_failures} video build(s) failed. "
-            "Check product images, ffmpeg, and MoviePy installation."
+            f"All {post_failures} pin(s) failed to post. "
+            "Check Pinterest auth, product images, ffmpeg, and MoviePy."
         )
 
 
