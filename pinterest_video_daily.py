@@ -64,6 +64,9 @@ MAX_VIDEO_SIZE_MB = 100
 # Pinterest pin creation endpoint (web-UI flow — no OAuth app needed)
 _PINTEREST_PIN_URL = "https://www.pinterest.com/resource/PinResource/create/"
 
+# py3-pinterest raw client (for upload_video_pin — available in v2.0.0+)
+from py3pin.Pinterest import Pinterest as _Py3Pinterest
+
 # Boards preferred for video content
 VIDEO_PREFERRED_BOARDS = [
     "Trends",
@@ -420,62 +423,42 @@ def _pick_board(boards: List[Dict], formatted_product: Dict) -> Dict:
 
 
 # ---------------------------------------------------------------------------
-# Pinterest image pin from video frame
-# Pinterest's internal VideoResource/create/ endpoint was retired.
-# Strategy: extract the best frame from the built MP4 and post it as an image
-# pin using the proven upload_pin path (same as pinterest_daily.py).
+# Pinterest video pin via py3-pinterest v2.0.0+ upload_video_pin()
 # ---------------------------------------------------------------------------
 
-def _extract_video_frame(mp4_path: str, timestamp: float = 2.5) -> Optional[str]:
-    """Extract a single frame from the video at `timestamp` seconds as a PNG."""
-    out_path = mp4_path.replace(".mp4", "_cover.png")
-    try:
-        result = subprocess.run(
-            [
-                "ffmpeg", "-y",
-                "-ss", str(timestamp),
-                "-i", mp4_path,
-                "-vframes", "1",
-                "-q:v", "2",
-                out_path,
-            ],
-            capture_output=True,
-            timeout=30,
-        )
-        if result.returncode == 0 and Path(out_path).exists():
-            logger.info(f"Extracted cover frame: {out_path}")
-            return out_path
-        logger.error(f"ffmpeg frame extract failed: {result.stderr.decode()[:200]}")
-        return None
-    except Exception as e:
-        logger.error(f"Frame extraction error: {e}")
-        return None
-
-
-def _post_image_pin(
-    pinterest: "PinterestClient",
-    image_path: str,
+def _post_video_pin(
+    py3: "_Py3Pinterest",
+    video_path: str,
     board_id: str,
     title: str,
     description: str,
     link: str,
     alt_text: str,
 ) -> Optional[str]:
-    """Post an image pin via the proven upload_pin path. Returns pin_id or None."""
+    """Upload MP4 as a real Pinterest video pin. Returns pin_id or None."""
     time.sleep(random.uniform(3, 7))
-    success, pin_id_or_err = pinterest.create_pin(
-        image_path=image_path,
-        title=title,
-        description=description,
-        board_id=board_id,
-        url=link,
-        alt_text=alt_text,
-    )
-    if success:
-        logger.info(f"Image pin created — pin_id: {pin_id_or_err}")
-        return str(pin_id_or_err)
-    logger.error(f"Image pin creation failed: {pin_id_or_err}")
-    return None
+    try:
+        resp = py3.upload_video_pin(
+            video_file=video_path,
+            title=title,
+            description=description,
+            link=link,
+            board_id=board_id,
+            alt_text=alt_text,
+        )
+        # Response is a dict; pin id lives at resource_response.data.id or data.id
+        pin_id = (
+            (resp or {}).get("resource_response", {}).get("data", {}).get("id")
+            or (resp or {}).get("data", {}).get("id")
+        )
+        if pin_id:
+            logger.info(f"Video pin created — pin_id: {pin_id}")
+            return str(pin_id)
+        logger.error(f"upload_video_pin returned unexpected response: {str(resp)[:300]}")
+        return None
+    except Exception as e:
+        logger.error(f"upload_video_pin error: {e}")
+        return None
 
 
 # ---------------------------------------------------------------------------
@@ -529,6 +512,13 @@ def run_video_posting() -> None:
         raise RuntimeError("Pinterest authentication failed")
     logger.info("✓ Pinterest authentication OK")
 
+    # Raw py3-pinterest client for upload_video_pin (v2.0.0+)
+    email    = os.getenv("PINTEREST_EMAIL", "")
+    password = os.getenv("PINTEREST_PASSWORD", "")
+    username = os.getenv("PINTEREST_USERNAME", "")
+    py3 = _Py3Pinterest(email=email, password=password, username=username)
+    py3.login()
+
     boards = pinterest.fetch_boards()
     if not boards:
         raise RuntimeError("No Pinterest boards returned after login")
@@ -579,7 +569,7 @@ def run_video_posting() -> None:
 
         if DRY_RUN:
             logger.info("  [DRY RUN] Would build video here — skipped")
-            logger.info("  [DRY RUN] Would post image pin here — skipped")
+            logger.info("  [DRY RUN] Would post video pin here — skipped")
             logger.info("  ✓ Dry-run validation passed for this product")
             posted_count += 1
             continue
@@ -591,21 +581,14 @@ def run_video_posting() -> None:
             post_failures += 1
             continue
 
-        # Extract cover frame from the video to use as the pin image
-        cover_path = _extract_video_frame(video_path, timestamp=2.5)
-        if not cover_path:
-            logger.error("Frame extraction failed — skipping")
-            post_failures += 1
-            continue
-
         # Human-paced delay before posting
         pause = random.uniform(5, 12) if idx == 0 else random.uniform(90, 180)
         logger.info(f"  Pausing {pause:.0f}s before posting…")
         time.sleep(pause)
 
-        pin_id = _post_image_pin(
-            pinterest=pinterest,
-            image_path=cover_path,
+        pin_id = _post_video_pin(
+            py3=py3,
+            video_path=video_path,
             board_id=board["id"],
             title=content["title"],
             description=content["description"],
@@ -613,16 +596,15 @@ def run_video_posting() -> None:
             alt_text=content["alt_text"],
         )
         if not pin_id:
-            logger.error("Pinterest pin creation failed — skipping")
+            logger.error("Pinterest video pin creation failed — skipping")
             post_failures += 1
             continue
 
-        # Cleanup local files to save disk
-        for path in (video_path, cover_path):
-            try:
-                os.unlink(path)
-            except Exception:
-                pass
+        # Cleanup local video file to save disk
+        try:
+            os.unlink(video_path)
+        except Exception:
+            pass
 
         history["posts"].append({
             "product_handle":  product.get("handle", ""),
@@ -656,7 +638,7 @@ def run_video_posting() -> None:
     if posted_count == 0 and post_failures > 0:
         raise RuntimeError(
             f"All {post_failures} pin(s) failed to post. "
-            "Check Pinterest auth, product images, ffmpeg, and MoviePy."
+            "Check Pinterest auth, product images, ffmpeg, MoviePy, and py3-pinterest v2."
         )
 
 
