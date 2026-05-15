@@ -275,6 +275,15 @@ def _pick_music_track() -> Optional[str]:
     return None
 
 
+def _static_frame_clip(
+    frame_img: Image.Image,
+    duration: float,
+) -> VideoClip:
+    """Create a static video clip from a single PIL image."""
+    frame_array = np.array(frame_img)
+    return VideoClip(lambda t: frame_array, duration=duration).set_fps(FPS)
+
+
 def _slide_clip(
     bg: Image.Image,
     product_img: Image.Image,
@@ -348,6 +357,7 @@ def build_video(product: Dict, fmt: Dict, bg_colors: List[tuple], store_base_url
     effects = ["slide-left", "slide-right", "zoom-in", "slide-up", "zoom-out", "slide-out"]
     clips   = []
     thumb_path = None
+    intro_clip = None
 
     for i, img_data in enumerate(images):
         bg       = _solid_bg(bg_colors[i % len(bg_colors)])
@@ -360,14 +370,19 @@ def build_video(product: Dict, fmt: Dict, bg_colors: List[tuple], store_base_url
         clip     = clip.fadein(0.1).fadeout(0.1)
         clips.append(clip)
 
-        # Capture first frame for thumbnail
-        if thumb_path is None:
-            first_frame_img = _compose_frame(bg, prod_img, title, price, url, fmt, product_scale=1.0, show_url=False)
-            thumb_path = _save_thumbnail(first_frame_img, handle)
+        # Create intro frame (static 2s full product) from first image
+        if intro_clip is None:
+            intro_frame_img = _compose_frame(bg, prod_img, title, price, url, fmt, product_scale=1.0, show_url=False)
+            intro_clip = _static_frame_clip(intro_frame_img, duration=2.0).fadeout(0.3)
+            thumb_path = _save_thumbnail(intro_frame_img, handle)
 
     if not clips:
         logger.error("No clips built — all product images failed to load")
         return None
+
+    # Prepend intro (2s static full product) + animated clips
+    if intro_clip:
+        clips = [intro_clip] + clips
 
     video       = concatenate_videoclips(clips, method="compose")
     total_secs  = video.duration
@@ -479,22 +494,14 @@ def _post_video_pin(
     """Upload MP4 as a real Pinterest video pin. Returns pin_id or None."""
     time.sleep(random.uniform(3, 7))
     try:
-        kwargs = {
-            "video_file": video_path,
-            "title": title,
-            "description": description,
-            "link": link,
-            "board_id": board_id,
-            "alt_text": alt_text,
-        }
-        # Try to include thumbnail if provided
-        if thumb_path:
-            try:
-                kwargs["cover_image"] = thumb_path
-            except Exception:
-                pass
-
-        resp = py3.upload_video_pin(**kwargs)
+        resp = py3.upload_video_pin(
+            video_file=video_path,
+            title=title,
+            description=description,
+            link=link,
+            board_id=board_id,
+            alt_text=alt_text,
+        )
         # upload_video_pin returns a requests.Response object; parse JSON
         if hasattr(resp, 'json'):
             resp_data = resp.json()
