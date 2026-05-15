@@ -1,42 +1,39 @@
 """
-pinterest_video_daily.py — Post YouTube Shorts as Pinterest video pins.
+pinterest_video_daily.py — Generate product videos from Shopify images and post as Pinterest video pins.
 
-Auth:  Same cookie/email-password flow as pinterest_daily.py (PinterestClient).
-       No Pinterest OAuth app or YouTube Data API key required.
+No YouTube dependency. Videos are built locally using the same PIL/MoviePy pipeline
+as youtube_shorts.py: product images → animated slideshow → gTTS voiceover → mp4.
 
-YouTube: yt-dlp channel scrape for Shorts published in the last 48h.
-Video upload: Pinterest internal multipart upload endpoint used by the web UI,
-              called with the same authenticated session that creates image pins.
+Auth:    Same cookie/email-password flow as pinterest_daily.py (PinterestClient).
 Content: content_generator.py for Pinterest-optimised title / description / alt text.
-Board routing: extracts the product URL embedded in the YouTube description by the
-               Shorts script (https://us.meeeshop.com/products/{handle}), resolves the
-               exact Shopify product, then maps its type/tags to the correct Pinterest
-               board via board_mapping.py.  Falls back to keyword matching if no URL found.
-Algorithm safety: human-paced delays, 10-day repost cooldown, 1–2 video pins per run.
+Boards:  product type/tags → board_mapping.py → correct Pinterest board.
+Safety:  human-paced delays, 10-day product repost cooldown, 1–2 pins per run.
 
-DRY_RUN mode (set DRY_RUN=true in env):
-  Runs the full pipeline — auth, YouTube scrape, video download, content generation —
-  but stops before uploading to Pinterest. Use this to validate the setup first.
-
-MAX_PINS_PER_RUN (env var, default 1):
-  Set to 2 for the scheduled production runs. Each video gets a different board.
+DRY_RUN=true  → full pipeline (product pick, video build, content) but skips Pinterest upload.
+MAX_PINS_PER_RUN (env, default 1) → set to 2 for scheduled production runs.
 """
 
+import io
 import json
 import logging
 import os
 import random
 import re
 import subprocess
+import sys
 import tempfile
+import textwrap
 import time
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
-from urllib.parse import urlencode
+from typing import Any, Dict, List, Optional
 
+import numpy as np
 import requests
 from dotenv import load_dotenv
+from gtts import gTTS
+from PIL import Image, ImageDraw, ImageEnhance, ImageFont
+from moviepy.editor import AudioFileClip, CompositeAudioClip, VideoClip, concatenate_videoclips
 
 from pinterest_client import PinterestClient
 from shopify_products import ShopifyClient, format_product_for_pinterest, select_board_for_product
@@ -50,27 +47,22 @@ load_dotenv(Path(__file__).parent / ".env")
 
 logging.basicConfig(
     level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(message)s",
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
 )
 logger = logging.getLogger(__name__)
 
 VIDEO_HISTORY_FILE = Path(__file__).parent / "video_posting_history.json"
 VIDEO_REPOST_COOLDOWN_DAYS = 10
-MAX_VIDEO_DURATION_SECS = 90       # include 60–90s Shorts/Reels
-FETCH_WINDOW_HOURS = 48
 
-# Override via env: MAX_PINS_PER_RUN=2 for production, default 1 for validation
 MAX_PINS_PER_RUN = int(os.getenv("MAX_PINS_PER_RUN", "1"))
-
-# DRY_RUN=true → full pipeline except Pinterest upload/pin creation
 DRY_RUN = os.getenv("DRY_RUN", "false").lower() in ("1", "true", "yes")
 MAX_VIDEO_SIZE_MB = 100
 
 # Pinterest internal video-pin upload endpoints (web-UI flow — no OAuth app needed)
 _PINTEREST_UPLOAD_URL = "https://www.pinterest.com/resource/VideoResource/create/"
-_PINTEREST_PIN_URL = "https://www.pinterest.com/resource/PinResource/create/"
+_PINTEREST_PIN_URL    = "https://www.pinterest.com/resource/PinResource/create/"
 
-# Boards preferred for video content (lifestyle/discovery boards perform best)
+# Boards preferred for video content
 VIDEO_PREFERRED_BOARDS = [
     "Trends",
     "Outfit Ideas",
@@ -81,6 +73,54 @@ VIDEO_PREFERRED_BOARDS = [
     "Simple Outfits",
     "Ootd #ootd",
 ]
+
+# ---------------------------------------------------------------------------
+# Video build config (mirrors youtube_shorts.py)
+# ---------------------------------------------------------------------------
+
+VIDEO_W, VIDEO_H  = 1080, 1920
+FPS               = 30
+CLIP_DURATION     = 5      # seconds per product image slide
+VOICEOVER_DURATION = 4     # max voiceover length in seconds
+OUT_DIR           = Path(__file__).parent / "generated_videos"
+OUT_DIR.mkdir(exist_ok=True)
+
+FORMATS = [
+    {"badge": "OOTD",          "cta": "Shop The Look",        "badge_color": (255, 200, 50)},
+    {"badge": "TRENDING",      "cta": "Get It Now",            "badge_color": (255, 50, 100)},
+    {"badge": "NEW DROP",      "cta": "Shop Before It's Gone", "badge_color": (50, 200, 100)},
+    {"badge": "STYLE TIPS",    "cta": "See All Styles",        "badge_color": (80, 160, 255)},
+    {"badge": "FASHION STEAL", "cta": "Grab This Deal",        "badge_color": (255, 130, 50)},
+    {"badge": "STYLE INSPO",   "cta": "Get The Look",          "badge_color": (180, 80, 255)},
+]
+
+SOLID_BG_COLORS = [
+    (248, 240, 235),  # warm cream
+    (240, 235, 248),  # soft lavender
+    (235, 248, 240),  # mint green
+    (248, 235, 240),  # blush pink
+    (235, 245, 250),  # sky blue
+    (250, 245, 235),  # peach
+    (240, 240, 248),  # periwinkle
+    (245, 238, 230),  # linen
+]
+
+# Font paths (CI = Linux, local = Windows)
+import platform
+if platform.system() == "Windows":
+    _FONT_BOLD = "C:/Windows/Fonts/arialbd.ttf"
+    _FONT_REG  = "C:/Windows/Fonts/arial.ttf"
+else:
+    _FONT_BOLD = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
+    _FONT_REG  = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
+
+
+def _font(size: int, bold: bool = True) -> ImageFont.FreeTypeFont:
+    try:
+        return ImageFont.truetype(_FONT_BOLD if bold else _FONT_REG, size)
+    except Exception:
+        return ImageFont.load_default()
+
 
 # ---------------------------------------------------------------------------
 # History helpers
@@ -101,395 +141,260 @@ def _save_history(history: Dict[str, Any]) -> None:
     )
 
 
-def _was_recently_posted(video_id: str, history: Dict[str, Any]) -> bool:
+def _was_recently_posted(product_handle: str, history: Dict[str, Any]) -> bool:
     cutoff = datetime.now(timezone.utc) - timedelta(days=VIDEO_REPOST_COOLDOWN_DAYS)
     for post in history.get("posts", []):
-        if post.get("video_id") == video_id:
-            posted_at = datetime.fromisoformat(post["posted_at"])
-            if posted_at.tzinfo is None:
-                posted_at = posted_at.replace(tzinfo=timezone.utc)
-            if posted_at > cutoff:
-                days_ago = (datetime.now(timezone.utc) - posted_at).days
-                logger.info(f"Video {video_id} posted {days_ago}d ago — skipping (cooldown {VIDEO_REPOST_COOLDOWN_DAYS}d)")
-                return True
+        if post.get("product_handle") == product_handle:
+            try:
+                posted_at = datetime.fromisoformat(post["posted_at"])
+                if posted_at > cutoff:
+                    return True
+            except Exception:
+                pass
     return False
 
 
 # ---------------------------------------------------------------------------
-# YouTube Shorts discovery — no API key, pure yt-dlp
+# Frame / video building (adapted from youtube_shorts.py)
 # ---------------------------------------------------------------------------
 
-# Errors that mean the request is permanently blocked — no point retrying.
-_YTDLP_FATAL_PATTERNS = (
-    "sign in to confirm",
-    "bot detection",
-    "this video is not available",
-    "video unavailable",
-    "private video",
-    "has been removed",
-)
+def _solid_bg(color: tuple, w: int = VIDEO_W, h: int = VIDEO_H) -> Image.Image:
+    img = Image.new("RGB", (w, h))
+    dr  = ImageDraw.Draw(img)
+    r0, g0, b0 = color
+    for y in range(h):
+        t = y / h
+        dr.line([(0, y), (w, y)], fill=(int(r0 - 15*t), int(g0 - 15*t), int(b0 - 15*t)))
+    return img
 
 
-def _ytdlp_cookies_file() -> Optional[str]:
-    """
-    Write YOUTUBE_COOKIES_B64 (Netscape-format cookies, base64-encoded) to a
-    temp file and return its path.  Returns None if the env var is not set.
-
-    How to create: export cookies from a logged-in YouTube session using the
-    browser extension "Get cookies.txt LOCALLY", base64-encode the file, and
-    store it as the YOUTUBE_COOKIES_B64 GitHub secret.
-    """
-    import base64, tempfile
-    cookies_b64 = os.getenv("YOUTUBE_COOKIES_B64", "").strip()
-    if not cookies_b64:
-        return None
+def _load_product_image(url: str) -> Optional[Image.Image]:
     try:
-        cookies_txt = base64.b64decode(cookies_b64).decode("utf-8")
-        tmp = tempfile.NamedTemporaryFile(
-            mode="w", suffix=".txt", delete=False, encoding="utf-8"
-        )
-        tmp.write(cookies_txt)
-        tmp.flush()
-        tmp.close()
-        logger.info("YouTube cookies loaded from YOUTUBE_COOKIES_B64")
-        return tmp.name
+        r = requests.get(url, timeout=30)
+        r.raise_for_status()
+        img = Image.open(io.BytesIO(r.content)).convert("RGB")
+        img = ImageEnhance.Color(img).enhance(1.22)
+        img = ImageEnhance.Contrast(img).enhance(1.08)
+        img = ImageEnhance.Sharpness(img).enhance(1.15)
+        img = ImageEnhance.Brightness(img).enhance(1.04)
+        return img
     except Exception as e:
-        logger.warning(f"Could not decode YOUTUBE_COOKIES_B64: {e}")
+        logger.warning(f"Could not load product image {url[:60]}: {e}")
         return None
 
 
-# Cached cookies file path for this process run
-_YTDLP_COOKIES_FILE: Optional[str] = None
+def _compose_frame(
+    bg: Image.Image,
+    product_img: Image.Image,
+    title: str,
+    price: str,
+    url: str,
+    fmt: Dict,
+    product_scale: float = 1.0,
+    show_url: bool = False,
+) -> Image.Image:
+    w, h   = VIDEO_W, VIDEO_H
+    canvas = bg.resize((w, h), Image.LANCZOS).convert("RGB")
+
+    pw, ph  = product_img.size
+    max_h   = h - 600
+    max_w   = int(w * 0.92)
+    base_sc = min(max_h / ph, max_w / pw)
+    cur_sc  = base_sc * product_scale
+    nw, nh  = max(1, int(pw * cur_sc)), max(1, int(ph * cur_sc))
+    fg      = product_img.resize((nw, nh), Image.LANCZOS)
+    x_off   = (w - nw) // 2
+    y_off   = max(10, (max_h - nh) // 2)
+    canvas.paste(fg, (x_off, y_off))
+
+    # Dark gradient at bottom
+    grad_h = 600
+    grad   = Image.new("RGBA", (w, grad_h), (0, 0, 0, 0))
+    gd     = ImageDraw.Draw(grad)
+    for y in range(grad_h):
+        gd.line([(0, y), (w, y)], fill=(0, 0, 0, int((y/grad_h)**1.3*215)))
+    cvs = canvas.convert("RGBA")
+    cvs.alpha_composite(grad, dest=(0, h - grad_h))
+    img  = cvs.convert("RGB")
+    draw = ImageDraw.Draw(img)
+
+    # MeeeShop badge
+    draw.rounded_rectangle([(24, 36), (268, 88)], radius=20, fill="white")
+    draw.text((146, 62), "MeeeShop", font=_font(33), fill="black", anchor="mm")
+
+    # Format badge
+    bc = fmt["badge_color"]
+    draw.rounded_rectangle([(w-242, 36), (w-26, 88)], radius=20, fill=bc)
+    draw.text((w-134, 62), fmt["badge"], font=_font(25), fill="white", anchor="mm")
+
+    # Product title
+    for i, line in enumerate(textwrap.wrap(title, 28)[:2]):
+        draw.text((w//2, h-440+i*62), line, font=_font(50), fill="white",
+                  anchor="mm", stroke_width=3, stroke_fill=(0, 0, 0, 170))
+
+    # Price
+    draw.text((w//2, h-222), f"${price}", font=_font(72),
+              fill=(255, 215, 0), anchor="mm", stroke_width=3, stroke_fill=(0, 0, 0))
+
+    # CTA button
+    draw.rounded_rectangle([(w//2-215, h-154), (w//2+215, h-81)], radius=30, fill="white")
+    draw.text((w//2, h-117), fmt["cta"] + " →", font=_font(40), fill="black", anchor="mm")
+
+    # URL bar (last frame only)
+    if show_url:
+        short = url.replace("https://", "").split("?")[0][:44]
+        draw.rounded_rectangle([(35, h-62), (w-35, h-14)], radius=14, fill=(255, 255, 255, 190))
+        draw.text((w//2, h-38), short, font=_font(22, bold=False), fill=(0, 70, 180), anchor="mm")
+
+    return img
 
 
-def _get_cookies_args() -> List[str]:
-    """Return ['--cookies', '/tmp/...'] if cookies are available, else []."""
-    global _YTDLP_COOKIES_FILE
-    if _YTDLP_COOKIES_FILE is None:
-        _YTDLP_COOKIES_FILE = _ytdlp_cookies_file() or ""
-    return ["--cookies", _YTDLP_COOKIES_FILE] if _YTDLP_COOKIES_FILE else []
+def _slide_clip(
+    bg: Image.Image,
+    product_img: Image.Image,
+    title: str,
+    price: str,
+    url: str,
+    fmt: Dict,
+    effect: str,
+    show_url: bool = False,
+) -> VideoClip:
+    ENTRANCE = 1.5
+    HOLD     = CLIP_DURATION - ENTRANCE - 0.5
+    EXIT     = 0.5
+
+    bg_r = bg.resize((VIDEO_W, VIDEO_H), Image.LANCZOS)
+    pw, ph   = product_img.size
+    max_h    = VIDEO_H - 600
+    max_w    = int(VIDEO_W * 0.92)
+    base_sc  = min(max_h / ph, max_w / pw)
+
+    def _params(t_norm: float):
+        if effect == "zoom-in":
+            return 0.5 + 0.5 * t_norm, 0, 0
+        elif effect == "zoom-out":
+            return 1.2 - 0.2 * t_norm, 0, 0
+        elif effect.startswith("slide-"):
+            direction = effect.split("-")[1]
+            scale = 0.85 + 0.15 * t_norm
+            if direction == "left":  return scale, int(-VIDEO_W * (1 - t_norm)), 0
+            if direction == "right": return scale, int(VIDEO_W * (1 - t_norm)), 0
+            if direction == "up":    return scale, 0, int(-VIDEO_H * (1 - t_norm))
+            return scale, 0, int(VIDEO_H * (1 - t_norm))
+        return 1.0, 0, 0
+
+    def make_frame(t: float):
+        if t < ENTRANCE:
+            t_norm = t / ENTRANCE
+        elif t < ENTRANCE + HOLD:
+            t_norm = 1.0
+        else:
+            t_norm = min(1.0, (t - ENTRANCE - HOLD) / EXIT)
+        scale, ox, oy = _params(t_norm)
+        frame = _compose_frame(bg_r, product_img, title, price, url, fmt,
+                               product_scale=scale,
+                               show_url=(show_url and t > CLIP_DURATION - 0.5))
+        return np.array(frame)
+
+    return VideoClip(make_frame, duration=CLIP_DURATION).set_fps(FPS)
 
 
-def _run_ytdlp(args: List[str], timeout: int = 60) -> Optional[str]:
+def build_video(product: Dict, fmt: Dict, bg_colors: List[tuple], store_base_url: str) -> Optional[str]:
     """
-    Run yt-dlp and return stdout, or None on failure.
-    Raises RuntimeError immediately on fatal YouTube errors (bot detection,
-    unavailable video) that will not be resolved by retrying.
+    Build a 30s product slideshow mp4 from Shopify product images.
+    Returns the path to the rendered mp4, or None on failure.
     """
-    cmd = ["yt-dlp"] + _get_cookies_args() + args
-    try:
-        result = subprocess.run(
-            cmd, capture_output=True, text=True, timeout=timeout, encoding="utf-8"
-        )
-        if result.returncode != 0:
-            stderr = result.stderr[:500]
-            stderr_lower = stderr.lower()
-            for pattern in _YTDLP_FATAL_PATTERNS:
-                if pattern in stderr_lower:
-                    raise RuntimeError(
-                        f"yt-dlp fatal error ({pattern!r}) — "
-                        "set YOUTUBE_COOKIES_B64 secret to bypass bot detection. "
-                        f"Details: {stderr[:200]}"
-                    )
-            logger.warning(f"yt-dlp stderr: {stderr[:300]}")
-            return None
-        return result.stdout.strip()
-    except RuntimeError:
-        raise  # re-raise fatal errors to bubble up and fail the workflow
-    except subprocess.TimeoutExpired:
-        logger.error(f"yt-dlp timed out ({timeout}s): {' '.join(args[:4])}")
+    title  = product["title"]
+    price  = product.get("variants", [{}])[0].get("price", "0")
+    handle = product.get("handle", "")
+    url    = f"{store_base_url.rstrip('/')}/products/{handle}?utm_source=pinterest&utm_medium=video&utm_campaign=meeeshop"
+
+    images = product.get("images", [])[:6]
+    if not images:
+        logger.error(f"No images for product {title}")
         return None
-    except FileNotFoundError:
-        raise RuntimeError("yt-dlp not found — add 'pip install yt-dlp' to workflow")
-    except Exception as e:
-        logger.error(f"yt-dlp error: {e}")
+    # Pad to 6 if fewer images available
+    while len(images) < 6:
+        images = (images * 2)[:6]
+
+    logger.info(f"Building video: {title[:50]} ({len(images)} slides)")
+
+    effects = ["slide-left", "slide-right", "zoom-in", "slide-up", "zoom-out", "slide-out"]
+    clips   = []
+
+    for i, img_data in enumerate(images):
+        bg       = _solid_bg(bg_colors[i % len(bg_colors)])
+        prod_img = _load_product_image(img_data["src"])
+        if prod_img is None:
+            continue
+        effect   = effects[i % len(effects)]
+        show_url = (i == len(images) - 1)
+        clip     = _slide_clip(bg, prod_img, title, price, url, fmt, effect, show_url)
+        clip     = clip.fadein(0.1).fadeout(0.1)
+        clips.append(clip)
+
+    if not clips:
+        logger.error("No clips built — all product images failed to load")
         return None
 
+    video       = concatenate_videoclips(clips, method="compose")
+    total_secs  = video.duration
+    audio_clips = []
 
-def _parse_iso_duration(duration: str) -> int:
-    """'PT1M30S' → 90  (seconds).  Returns 9999 on parse failure."""
-    match = re.match(r"PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?", duration or "")
-    if not match:
-        return 9999
-    h = int(match.group(1) or 0)
-    m = int(match.group(2) or 0)
-    s = int(match.group(3) or 0)
-    return h * 3600 + m * 60 + s
-
-
-def get_recent_shorts(channel_url: str, max_results: int = 20) -> List[Dict[str, Any]]:
-    """
-    Discover YouTube Shorts uploaded in the last FETCH_WINDOW_HOURS hours.
-
-    Strategy: ask yt-dlp to dump flat JSON for the channel's /shorts page.
-    We use --playlist-end to limit scraping then filter by upload_date.
-    Falls back to the main channel URL if the /shorts URL returns nothing.
-    """
-    cutoff_dt = datetime.now(timezone.utc) - timedelta(hours=FETCH_WINDOW_HOURS)
-    cutoff_str = cutoff_dt.strftime("%Y%m%d")  # yt-dlp upload_date format: YYYYMMDD
-
-    targets = [
-        channel_url.rstrip("/") + "/shorts",
-        channel_url,
-    ]
-
-    for target in targets:
-        logger.info(f"Scraping shorts from: {target}")
-        raw = _run_ytdlp(
-            [
-                "--flat-playlist",
-                "--dump-single-json",
-                "--playlist-end", str(max_results),
-                "--dateafter", cutoff_str,
-                "--no-warnings",
-                "--quiet",
-                target,
-            ],
-            timeout=90,
-        )
-        if not raw:
-            continue
-
-        try:
-            playlist = json.loads(raw)
-        except json.JSONDecodeError:
-            logger.warning(f"Could not parse yt-dlp JSON from {target}")
-            continue
-
-        entries = playlist.get("entries") or []
-        if not entries:
-            logger.info(f"No entries returned from {target}")
-            continue
-
-        shorts: List[Dict[str, Any]] = []
-        for entry in entries:
-            vid_id = entry.get("id") or entry.get("video_id")
-            if not vid_id:
-                continue
-
-            # Duration filtering: entry may already have duration
-            duration = entry.get("duration") or 0
-            if duration and duration > MAX_VIDEO_DURATION_SECS:
-                logger.debug(f"Skip {vid_id}: {duration}s > {MAX_VIDEO_DURATION_SECS}s")
-                continue
-
-            # Upload date filter
-            upload_date = entry.get("upload_date", "")  # YYYYMMDD
-            if upload_date and upload_date < cutoff_str:
-                continue
-
-            title = entry.get("title") or entry.get("fulltitle") or ""
-            description = entry.get("description") or ""
-            thumbnail = (
-                entry.get("thumbnail")
-                or (entry.get("thumbnails") or [{}])[-1].get("url", "")
-            )
-            published_at = ""
-            if upload_date:
-                try:
-                    d = datetime.strptime(upload_date, "%Y%m%d").replace(tzinfo=timezone.utc)
-                    published_at = d.isoformat()
-                except ValueError:
-                    published_at = upload_date
-
-            shorts.append(
-                {
-                    "video_id": vid_id,
-                    "title": title,
-                    "description": description,
-                    "thumbnail": thumbnail,
-                    "published_at": published_at,
-                    "duration_secs": duration,
-                    "url": f"https://www.youtube.com/watch?v={vid_id}",
-                    "shorts_url": f"https://www.youtube.com/shorts/{vid_id}",
-                }
-            )
-
-        if shorts:
-            logger.info(f"Found {len(shorts)} eligible Shorts at {target}")
-            return shorts
-
-        logger.info(f"No eligible Shorts at {target} (within {FETCH_WINDOW_HOURS}h window)")
-
-    logger.info(f"No Shorts found in last {FETCH_WINDOW_HOURS}h across all targets")
-    return []
-
-
-# ---------------------------------------------------------------------------
-# Video download
-# ---------------------------------------------------------------------------
-
-def download_video(youtube_url: str, output_dir: Path) -> Optional[str]:
-    """
-    Download a video ≤ MAX_VIDEO_SIZE_MB using yt-dlp, then convert to MP4.
-    YouTube Shorts only expose a single combined stream — filesize filters and
-    bestvideo+bestaudio merge both fail because format metadata doesn't include
-    sizes or separate streams.  Use bare 'best' selectors (no filesize filter)
-    and check the actual file size after download.
-    Returns absolute path to the downloaded .mp4 file, or None on failure.
-    """
-    output_template = str(output_dir / "%(id)s.%(ext)s")
-    # Priority (NO filesize filter — Shorts don't expose sizes in format metadata):
-    #  1. Best single-file mp4 (most Shorts)
-    #  2. Best single-file any container (webm Shorts) — remuxed to mp4 below
-    #  3. Absolute fallback
-    fmt = "best[ext=mp4]/best[ext=webm]/best"
-    args = [
-        "--format", fmt,
-        "--merge-output-format", "mp4",
-        "--output", output_template,
-        "--no-playlist",
-        "--quiet",
-        "--no-warnings",
-        youtube_url,
-    ]
-    logger.info(f"Downloading video: {youtube_url}")
-    _run_ytdlp(args, timeout=180)
-
-    # Accept any video file — convert webm/mkv to mp4 if needed
-    video_files = sorted(
-        [f for f in output_dir.iterdir() if f.suffix.lower() in (".mp4", ".webm", ".mkv")],
-        key=lambda f: f.stat().st_mtime, reverse=True,
+    # Voiceover (gTTS) — overlaid at mid-video
+    vo_text = (
+        f"Discover the {title} at MeeeShop — only ${price}! "
+        f"Shop the link in description now!"
     )
-    if not video_files:
-        logger.error("yt-dlp ran but no video file found in output dir")
-        return None
+    try:
+        from ai_client import generate as ai_generate
+        ai_result = ai_generate(
+            f"Write a 2-sentence Pinterest video voiceover for USA women shoppers.\n"
+            f"Product: '{title}' — ${price} at MeeeShop\n"
+            f"Rules: energetic fashion-influencer tone, mention price, say 'MeeeShop', "
+            f"end with 'shop the link', max 35 words, no hashtags.\n"
+            f"Output ONLY the voiceover text, nothing else.",
+            max_tokens=80, temperature=0.9,
+        )
+        if ai_result and len(ai_result.strip()) > 10:
+            vo_text = ai_result.strip()
+    except Exception:
+        pass
 
-    video_file = video_files[0]
-    size_mb = video_file.stat().st_size / 1_048_576
-    logger.info(f"Downloaded: {video_file.name} ({size_mb:.1f} MB)")
-    if size_mb > MAX_VIDEO_SIZE_MB:
-        logger.error(f"File too large ({size_mb:.1f} MB > {MAX_VIDEO_SIZE_MB} MB)")
-        return None
-
-    # Convert non-mp4 to mp4 via ffmpeg (yt-dlp ships ffmpeg on CI)
-    if video_file.suffix.lower() != ".mp4":
-        mp4_path = video_file.with_suffix(".mp4")
-        logger.info(f"Converting {video_file.suffix} → .mp4")
+    with tempfile.TemporaryDirectory() as tmp:
+        vo_path = os.path.join(tmp, "vo.mp3")
         try:
-            subprocess.run(
-                ["ffmpeg", "-i", str(video_file), "-c", "copy", str(mp4_path), "-y"],
-                capture_output=True, timeout=120, check=True,
-            )
-            video_file.unlink(missing_ok=True)
-            video_file = mp4_path
+            gTTS(text=vo_text, lang="en", tld="us").save(vo_path)
+            vo = AudioFileClip(vo_path)
+            if vo.duration > VOICEOVER_DURATION:
+                vo = vo.subclip(0, VOICEOVER_DURATION)
+            vo_start = max(0, (total_secs / 2) - (vo.duration / 2))
+            audio_clips.append(vo.set_start(vo_start).volumex(1.1))
+            logger.info(f"Voiceover: {vo.duration:.1f}s starting at {vo_start:.1f}s")
         except Exception as e:
-            logger.warning(f"ffmpeg convert failed ({e}), trying re-encode")
-            try:
-                subprocess.run(
-                    ["ffmpeg", "-i", str(video_file), "-vcodec", "libx264", "-acodec", "aac",
-                     str(mp4_path), "-y"],
-                    capture_output=True, timeout=180, check=True,
-                )
-                video_file.unlink(missing_ok=True)
-                video_file = mp4_path
-            except Exception as e2:
-                logger.error(f"ffmpeg re-encode also failed: {e2}")
-                return None
+            logger.warning(f"gTTS voiceover failed: {e}")
 
-    return str(video_file)
+        if audio_clips:
+            video = video.set_audio(CompositeAudioClip(audio_clips))
 
+        out_path = str(OUT_DIR / f"{handle[:30]}_{int(time.time())}.mp4")
+        logger.info(f"Rendering → {out_path}")
+        video.write_videofile(
+            out_path, fps=FPS, codec="libx264", audio_codec="aac",
+            temp_audiofile=os.path.join(tmp, "tmp_audio.m4a"),
+            remove_temp=True, verbose=False, logger=None,
+            ffmpeg_params=["-crf", "18", "-preset", "fast", "-b:a", "192k"],
+        )
 
-# ---------------------------------------------------------------------------
-# Product URL extraction from YouTube description
-# ---------------------------------------------------------------------------
+    video.close()
+    size_mb = os.path.getsize(out_path) / 1_048_576
+    logger.info(f"Rendered: {os.path.basename(out_path)} ({size_mb:.1f} MB)")
+    if size_mb > MAX_VIDEO_SIZE_MB:
+        logger.error(f"Video too large ({size_mb:.1f} MB > {MAX_VIDEO_SIZE_MB} MB) — skipping")
+        os.unlink(out_path)
+        return None
 
-# Matches both us.meeeshop.com/products/handle and meeeshop.myshopify.com/products/handle
-_PRODUCT_URL_RE = re.compile(
-    r"https?://(?:us\.meeeshop\.com|meeeshop\.myshopify\.com)/products/([\w-]+)",
-    re.IGNORECASE,
-)
-
-
-def _extract_product_handle(text: str) -> Optional[str]:
-    """Pull the first meeeshop product handle out of a string (video description, title, etc.)."""
-    m = _PRODUCT_URL_RE.search(text or "")
-    return m.group(1) if m else None
-
-
-def _fetch_full_description(video_id: str) -> str:
-    """
-    Fetch the full video description for a single video via yt-dlp --dump-json.
-    The flat-playlist scrape often returns truncated or empty descriptions;
-    this fills the gap for the videos we actually intend to post.
-    """
-    raw = _run_ytdlp(
-        [
-            "--dump-json",
-            "--no-playlist",
-            "--skip-download",
-            "--quiet",
-            "--no-warnings",
-            f"https://www.youtube.com/watch?v={video_id}",
-        ],
-        timeout=30,
-    )
-    if not raw:
-        return ""
-    try:
-        data = json.loads(raw)
-        return data.get("description") or ""
-    except json.JSONDecodeError:
-        return ""
-
-
-# ---------------------------------------------------------------------------
-# Product matching — URL-first, keyword fallback
-# ---------------------------------------------------------------------------
-
-def _resolve_product_from_video(
-    video: Dict[str, Any],
-    products: List[Dict[str, Any]],
-) -> Optional[Dict[str, Any]]:
-    """
-    1. Try to extract the meeeshop product URL from the video description.
-       The YouTube Shorts script embeds it as:
-         https://us.meeeshop.com/products/{handle}
-    2. If found, find the exact product in the Shopify list by handle.
-    3. If not found (no URL or handle not in current product list),
-       fall back to keyword overlap between video title and product title/tags.
-    """
-    # --- Step 1: description from flat-playlist (may be empty) ---
-    description = video.get("description", "")
-
-    # --- Step 2: if empty, fetch full description for this video ---
-    if not description.strip():
-        logger.info(f"  Fetching full description for {video['video_id']}…")
-        description = _fetch_full_description(video["video_id"])
-        video["description"] = description  # cache for content generation
-
-    # --- Step 3: extract product handle from description ---
-    handle = _extract_product_handle(description)
-    if not handle:
-        # Also try the video title (some Shorts encode the handle there)
-        handle = _extract_product_handle(video.get("title", ""))
-
-    if handle:
-        logger.info(f"  Extracted product handle from description: {handle}")
-        for p in products:
-            if p.get("handle", "").lower() == handle.lower():
-                logger.info(f"  Exact product match: '{p['title']}'")
-                return p
-        logger.warning(f"  Handle '{handle}' not found in current product list — falling back to keyword match")
-
-    # --- Step 4: keyword overlap fallback ---
-    words = set(re.sub(r"[^\w\s]", "", video.get("title", "").lower()).split())
-    best, best_score = None, -1
-    for p in products:
-        candidate = (
-            (p.get("title") or "") + " " + " ".join(p.get("tags") or [])
-        ).lower()
-        candidate_words = set(re.sub(r"[^\w\s]", "", candidate).split())
-        score = len(words & candidate_words)
-        if score > best_score:
-            best_score, best = score, p
-
-    if best_score == 0 and products:
-        best = random.choice(products)
-        logger.info("  No keyword overlap — using random product as fallback")
-    else:
-        logger.info(f"  Keyword-matched product: '{best['title']}' (score={best_score})")
-    return best
+    return out_path
 
 
 # ---------------------------------------------------------------------------
@@ -497,38 +402,26 @@ def _resolve_product_from_video(
 # ---------------------------------------------------------------------------
 
 def _pick_board(boards: List[Dict], formatted_product: Dict) -> Dict:
-    """Pick a video-friendly board for the product."""
-    ideal = select_board_for_product(formatted_product)
+    ideal      = select_board_for_product(formatted_product)
+    board_map  = {b["name"].lower(): b for b in boards}
 
-    # Exact match
     for b in boards:
         if b["name"].lower() == ideal.lower():
             return b
-    # Partial match
     for b in boards:
         if ideal.lower() in b["name"].lower() or b["name"].lower() in ideal.lower():
             return b
-    # Preferred video boards
-    board_by_name = {b["name"].lower(): b for b in boards}
     for pref in VIDEO_PREFERRED_BOARDS:
-        if pref.lower() in board_by_name:
-            return board_by_name[pref.lower()]
-    # Fallback: random
+        if pref.lower() in board_map:
+            return board_map[pref.lower()]
     return random.choice(boards)
 
 
 # ---------------------------------------------------------------------------
-# Pinterest video upload via internal web API (uses same cookie session)
+# Pinterest video upload via internal web API
 # ---------------------------------------------------------------------------
 
 def _upload_video_internal(session: requests.Session, mp4_path: str) -> Optional[str]:
-    """
-    Upload an MP4 to Pinterest using the same internal multipart endpoint the
-    web UI calls.  Requires a valid authenticated requests.Session (from
-    PinterestClient._get_raw_session()).
-
-    Returns the Pinterest video_id string, or None on failure.
-    """
     csrftoken = session.cookies.get("csrftoken", "")
     headers = {
         "User-Agent": (
@@ -536,16 +429,14 @@ def _upload_video_internal(session: requests.Session, mp4_path: str) -> Optional
             "AppleWebKit/537.36 (KHTML, like Gecko) "
             "Chrome/124.0.0.0 Safari/537.36"
         ),
-        "Referer": "https://www.pinterest.com/pin-builder/",
-        "Origin": "https://www.pinterest.com",
+        "Referer":          "https://www.pinterest.com/pin-builder/",
+        "Origin":           "https://www.pinterest.com",
         "X-Requested-With": "XMLHttpRequest",
-        "X-CSRFToken": csrftoken,
-        "Accept": "application/json, text/javascript, */*; q=0.01",
+        "X-CSRFToken":      csrftoken,
+        "Accept":           "application/json, text/javascript, */*; q=0.01",
     }
-
     video_bytes = Path(mp4_path).read_bytes()
     logger.info(f"Uploading {len(video_bytes) / 1_048_576:.1f} MB to Pinterest…")
-
     try:
         resp = session.post(
             _PINTEREST_UPLOAD_URL,
@@ -554,8 +445,7 @@ def _upload_video_internal(session: requests.Session, mp4_path: str) -> Optional
             timeout=300,
         )
         resp.raise_for_status()
-        data = resp.json()
-        # Response shape: {"resource_response": {"data": {"id": "...", ...}}}
+        data     = resp.json()
         video_id = (
             data.get("resource_response", {}).get("data", {}).get("id")
             or data.get("data", {}).get("id")
@@ -563,11 +453,10 @@ def _upload_video_internal(session: requests.Session, mp4_path: str) -> Optional
         if video_id:
             logger.info(f"Pinterest video uploaded — video_id: {video_id}")
             return str(video_id)
-        logger.error(f"Unexpected upload response (no id): {str(data)[:300]}")
+        logger.error(f"Unexpected upload response: {str(data)[:300]}")
         return None
     except requests.exceptions.HTTPError as e:
-        body = getattr(e.response, "text", "")[:400]
-        logger.error(f"Video upload HTTP {e.response.status_code}: {body}")
+        logger.error(f"Video upload HTTP {e.response.status_code}: {getattr(e.response, 'text', '')[:400]}")
         return None
     except Exception as e:
         logger.error(f"Video upload error: {e}")
@@ -584,12 +473,6 @@ def _create_video_pin_internal(
     alt_text: str,
     cover_image_url: str,
 ) -> Optional[str]:
-    """
-    Create a video pin using Pinterest's internal PinResource/create/ endpoint.
-    Mirrors the payload the web pin-builder POSTs after video upload.
-
-    Returns the pin_id string on success, None on failure.
-    """
     csrftoken = session.cookies.get("csrftoken", "")
     headers = {
         "User-Agent": (
@@ -597,24 +480,22 @@ def _create_video_pin_internal(
             "AppleWebKit/537.36 (KHTML, like Gecko) "
             "Chrome/124.0.0.0 Safari/537.36"
         ),
-        "Referer": "https://www.pinterest.com/pin-builder/",
-        "Origin": "https://www.pinterest.com",
+        "Referer":          "https://www.pinterest.com/pin-builder/",
+        "Origin":           "https://www.pinterest.com",
         "X-Requested-With": "XMLHttpRequest",
-        "X-CSRFToken": csrftoken,
-        "Accept": "application/json, text/javascript, */*; q=0.01",
-        "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+        "X-CSRFToken":      csrftoken,
+        "Accept":           "application/json, text/javascript, */*; q=0.01",
+        "Content-Type":     "application/x-www-form-urlencoded; charset=UTF-8",
     }
-
-    # Pinterest internal pin creation payload for video pins
     from py3pin.RequestBuilder import RequestBuilder
     req_builder = RequestBuilder()
     options = {
-        "board_id": board_id,
-        "description": description[:500],
-        "title": title[:100],
-        "link": link,
-        "alt_text": alt_text[:500],
-        "video_id": video_id,
+        "board_id":          board_id,
+        "description":       description[:500],
+        "title":             title[:100],
+        "link":              link,
+        "alt_text":          alt_text[:500],
+        "video_id":          video_id,
         "story_pin_data_id": None,
         "carousel_data_json": None,
     }
@@ -622,17 +503,11 @@ def _create_video_pin_internal(
         options["cover_image_url"] = cover_image_url
 
     post_data = req_builder.buildPost(options=options, source_url="/pin-builder/")
-
     try:
-        time.sleep(random.uniform(3, 7))  # human pacing before pin creation
-        resp = session.post(
-            _PINTEREST_PIN_URL,
-            data=post_data,
-            headers=headers,
-            timeout=30,
-        )
+        time.sleep(random.uniform(3, 7))
+        resp = session.post(_PINTEREST_PIN_URL, data=post_data, headers=headers, timeout=30)
         resp.raise_for_status()
-        data = resp.json()
+        data   = resp.json()
         pin_id = (
             data.get("resource_response", {}).get("data", {}).get("id")
             or data.get("data", {}).get("id")
@@ -640,11 +515,10 @@ def _create_video_pin_internal(
         if pin_id:
             logger.info(f"Video pin created — pin_id: {pin_id}")
             return str(pin_id)
-        logger.error(f"Pin creation unexpected response (no id): {str(data)[:300]}")
+        logger.error(f"Pin creation unexpected response: {str(data)[:300]}")
         return None
     except requests.exceptions.HTTPError as e:
-        body = getattr(e.response, "text", "")[:400]
-        logger.error(f"Pin creation HTTP {e.response.status_code}: {body}")
+        logger.error(f"Pin creation HTTP {e.response.status_code}: {getattr(e.response, 'text', '')[:400]}")
         return None
     except Exception as e:
         logger.error(f"Pin creation error: {e}")
@@ -652,52 +526,31 @@ def _create_video_pin_internal(
 
 
 # ---------------------------------------------------------------------------
-# Content optimisation for Pinterest algorithm
+# Pinterest content optimisation
 # ---------------------------------------------------------------------------
 
-def _build_video_content(video: Dict, product: Dict, board_name: str) -> Dict[str, str]:
-    """
-    Generate Pinterest-optimised title, description, and alt_text for a video pin.
-
-    Pinterest algorithm signals we target:
-    - Title: keyword-rich, benefit-led, ≤100 chars (40 ideal)
-    - Description: natural keyword integration + strong CTA, ≤500 chars
-    - Alt text: descriptive, accessibility-friendly, ≤500 chars
-    - Hashtags embedded in description (8–12, not in title)
-    """
-    base = generate_content_package(product, board_name)
-
-    pin_title = base["pin_title"]
+def _build_pin_content(product: Dict, board_name: str) -> Dict[str, str]:
+    base         = generate_content_package(product, board_name)
+    pin_title    = base["pin_title"]
     hashtags_str = " ".join(base.get("hashtags", [])[:12])
-
-    # Enrich description with video context so it reads naturally in feed
-    video_title_clean = re.sub(r"#\S+", "", video["title"]).strip()
-    cta_phrases = [
+    base_desc    = base["pin_description"]
+    cta          = random.choice([
         "Watch the styling video + Shop the look →",
-        "See it styled in our video — tap to shop →",
-        "Styled in our latest Short — shop the look →",
+        "See it styled — tap to shop →",
+        "Style inspiration + shop the look →",
         "Watch & shop this look →",
-    ]
-    cta = random.choice(cta_phrases)
-
-    base_desc = base["pin_description"]
+    ])
     pin_description = f"{base_desc}\n\n{cta}\n\n{hashtags_str}".strip()
     if len(pin_description) > 500:
-        # Trim hashtags to fit
         pin_description = f"{base_desc}\n\n{cta}".strip()[:500]
 
-    # Alt text: describe the video content, not just the product
     alt_text = base.get("pin_alt_text") or base.get("alt_text") or ""
-    if not alt_text:
-        alt_text = f"Styling video: {video_title_clean[:100]}"
-    else:
+    if alt_text:
         alt_text = f"Styling video — {alt_text}"[:500]
+    else:
+        alt_text = f"Styling video for {product.get('title', '')[:80]}"
 
-    return {
-        "title": pin_title,
-        "description": pin_description,
-        "alt_text": alt_text,
-    }
+    return {"title": pin_title, "description": pin_description, "alt_text": alt_text}
 
 
 # ---------------------------------------------------------------------------
@@ -705,20 +558,19 @@ def _build_video_content(video: Dict, product: Dict, board_name: str) -> Dict[st
 # ---------------------------------------------------------------------------
 
 def run_video_posting() -> None:
-    channel_url = os.getenv("YOUTUBE_CHANNEL_URL", "https://www.youtube.com/@MeeeShop")
-    shopify_url = os.getenv("SHOPIFY_STORE_URL")
-    shopify_token = os.getenv("SHOPIFY_ACCESS_TOKEN")
+    shopify_url    = os.getenv("SHOPIFY_STORE_URL")
+    shopify_token  = os.getenv("SHOPIFY_ACCESS_TOKEN")
     store_base_url = os.getenv("STORE_BASE_URL", "https://us.meeeshop.com")
 
     if not shopify_url or not shopify_token or shopify_token == "placeholder":
-        raise ValueError("SHOPIFY_STORE_URL / SHOPIFY_ACCESS_TOKEN not set in .env")
+        raise ValueError("SHOPIFY_STORE_URL / SHOPIFY_ACCESS_TOKEN not set")
 
     if DRY_RUN:
         logger.info("=" * 60)
         logger.info("DRY RUN MODE — no pins will be posted to Pinterest")
         logger.info("=" * 60)
 
-    # ---------- Pinterest auth (same as pinterest_daily.py) ----------
+    # Pinterest auth
     pinterest = PinterestClient()
     if not pinterest.login():
         raise RuntimeError("Pinterest authentication failed")
@@ -729,134 +581,117 @@ def run_video_posting() -> None:
         raise RuntimeError("No Pinterest boards returned after login")
     logger.info(f"✓ Loaded {len(boards)} Pinterest boards")
 
-    # ---------- Shopify products (load once, reuse for all pins) ----------
-    shopify = ShopifyClient(shopify_url, shopify_token)
+    # Shopify products
+    shopify  = ShopifyClient(shopify_url, shopify_token)
     products = shopify.get_products(limit=50)
     if not products:
         raise RuntimeError("No Shopify products returned")
     logger.info(f"✓ Loaded {len(products)} Shopify products")
 
-    # ---------- History ----------
-    history = _load_history()
-
-    # ---------- Discover recent Shorts ----------
-    logger.info(f"Fetching Shorts from {channel_url} (last {FETCH_WINDOW_HOURS}h)…")
-    shorts = get_recent_shorts(channel_url, max_results=20)
-    if not shorts:
-        logger.info("No recent Shorts found — nothing to post today")
-        return
-
-    available = [v for v in shorts if not _was_recently_posted(v["video_id"], history)]
+    # History / cooldown
+    history   = _load_history()
+    available = [p for p in products if not _was_recently_posted(p.get("handle", ""), history)]
     if not available:
-        logger.info("All recent Shorts already posted within cooldown window — done")
-        return
+        logger.info("All products are within the repost cooldown window — resetting for this run")
+        available = products
 
-    # Sort newest-first; take up to MAX_PINS_PER_RUN
-    available.sort(key=lambda v: v.get("published_at", ""), reverse=True)
-    to_post = available[:MAX_PINS_PER_RUN]
-    logger.info(f"Will post {len(to_post)} video pin(s) this run (MAX_PINS_PER_RUN={MAX_PINS_PER_RUN})")
+    # Pick products for this run (one per pin)
+    to_post = random.sample(available, min(MAX_PINS_PER_RUN, len(available)))
+    logger.info(f"Will post {len(to_post)} video pin(s) (MAX_PINS_PER_RUN={MAX_PINS_PER_RUN})")
 
-    session = pinterest._get_raw_session()
+    session      = pinterest._get_raw_session()
     posted_count = 0
-    download_failures = 0
+    build_failures = 0
 
-    for idx, video in enumerate(to_post):
-        logger.info(f"\n--- Pin {idx + 1}/{len(to_post)}: '{video['title']}' ---")
+    for idx, product in enumerate(to_post):
+        logger.info(f"\n--- Pin {idx+1}/{len(to_post)}: '{product['title']}' ---")
 
-        # ---------- Resolve product from video description URL (or keyword fallback) ----------
-        matched_product = _resolve_product_from_video(video, products)
-        if not matched_product:
-            logger.warning("Product matching failed — skipping this video")
-            continue
-
-        formatted = format_product_for_pinterest(matched_product, store_base_url)
+        formatted   = format_product_for_pinterest(product, store_base_url)
         product_url = formatted["url"]
         logger.info(f"  Destination : {product_url}")
 
-        # ---------- Board — rotate between pins so they land on different boards ----------
-        # Shift the board preference list for each subsequent pin in this run
-        rotated_boards = boards[idx:] + boards[:idx] if idx > 0 else boards
-        board = _pick_board(rotated_boards, formatted)
+        # Board selection — rotate per pin so they land on different boards
+        rotated = boards[idx:] + boards[:idx] if idx > 0 else boards
+        board   = _pick_board(rotated, formatted)
         logger.info(f"  Board       : '{board['name']}' (id={board['id']})")
 
-        # ---------- Content ----------
-        content = _build_video_content(video, formatted, board["name"])
+        # Content
+        content = _build_pin_content(product, board["name"])
         logger.info(f"  Title       : {content['title']}")
         logger.info(f"  Description : {content['description'][:80]}…")
         logger.info(f"  Alt text    : {content['alt_text'][:80]}")
 
-        # ---------- Cover image ----------
-        cover_image_url = video.get("thumbnail") or formatted.get("image_url", "")
+        # Pick a random format and bg colors for this pin
+        fmt       = random.choice(FORMATS)
+        bg_colors = random.sample(SOLID_BG_COLORS, min(6, len(SOLID_BG_COLORS)))
 
         if DRY_RUN:
-            logger.info("  [DRY RUN] Would download + upload video here — skipped")
-            logger.info("  [DRY RUN] Would create pin here — skipped")
-            logger.info("  ✓ Dry-run validation passed for this video")
+            logger.info("  [DRY RUN] Would build video here — skipped")
+            logger.info("  [DRY RUN] Would upload to Pinterest here — skipped")
+            logger.info("  ✓ Dry-run validation passed for this product")
             posted_count += 1
             continue
 
-        # ---------- Download ----------
-        with tempfile.TemporaryDirectory() as tmpdir:
-            tmp_path = Path(tmpdir)
-            video_file = download_video(video["url"], tmp_path)
-            if not video_file:
-                logger.warning("Retrying download with /shorts/ URL…")
-                video_file = download_video(video["shorts_url"], tmp_path)
-            if not video_file:
-                logger.error(f"Video download failed after retries: {video['url']} — skipping")
-                download_failures += 1
-                continue
-            # (RuntimeError from bot detection propagates up and fails the workflow)
+        # Build video
+        video_path = build_video(product, fmt, bg_colors, store_base_url)
+        if not video_path:
+            logger.error(f"Video build failed for '{product['title']}' — skipping")
+            build_failures += 1
+            continue
 
-            # Human-paced delay before upload (longer between multiple pins)
-            pause = random.uniform(5, 12) if idx == 0 else random.uniform(90, 180)
-            logger.info(f"  Pausing {pause:.0f}s before upload…")
-            time.sleep(pause)
+        # Human-paced delay before upload
+        pause = random.uniform(5, 12) if idx == 0 else random.uniform(90, 180)
+        logger.info(f"  Pausing {pause:.0f}s before upload…")
+        time.sleep(pause)
 
-            video_id = _upload_video_internal(session, video_file)
-            if not video_id:
-                logger.error("Pinterest video upload failed — skipping")
-                continue
+        video_id = _upload_video_internal(session, video_path)
+        if not video_id:
+            logger.error("Pinterest video upload failed — skipping")
+            build_failures += 1
+            continue
 
-            # Wait for Pinterest to finish processing the video (≈15–40s observed)
-            wait_secs = random.uniform(20, 35)
-            logger.info(f"  Waiting {wait_secs:.0f}s for Pinterest video processing…")
-            time.sleep(wait_secs)
+        # Wait for Pinterest to finish processing
+        wait_secs = random.uniform(20, 35)
+        logger.info(f"  Waiting {wait_secs:.0f}s for Pinterest video processing…")
+        time.sleep(wait_secs)
 
-            pin_id = _create_video_pin_internal(
-                session=session,
-                video_id=video_id,
-                board_id=board["id"],
-                title=content["title"],
-                description=content["description"],
-                link=product_url,
-                alt_text=content["alt_text"],
-                cover_image_url=cover_image_url,
-            )
-            if not pin_id:
-                logger.error("Pinterest pin creation failed — skipping")
-                continue
-
-        # ---------- Record ----------
-        history["posts"].append(
-            {
-                "video_id": video["video_id"],
-                "youtube_title": video["title"],
-                "pin_id": pin_id,
-                "board": board["name"],
-                "product_title": formatted["title"],
-                "product_url": product_url,
-                "posted_at": datetime.now(timezone.utc).isoformat(),
-            }
+        cover_image_url = (product.get("images") or [{}])[0].get("src", "")
+        pin_id = _create_video_pin_internal(
+            session=session,
+            video_id=video_id,
+            board_id=board["id"],
+            title=content["title"],
+            description=content["description"],
+            link=product_url,
+            alt_text=content["alt_text"],
+            cover_image_url=cover_image_url,
         )
+        if not pin_id:
+            logger.error("Pinterest pin creation failed — skipping")
+            build_failures += 1
+            continue
+
+        # Cleanup local video file to save disk
+        try:
+            os.unlink(video_path)
+        except Exception:
+            pass
+
+        history["posts"].append({
+            "product_handle":  product.get("handle", ""),
+            "product_title":   product["title"],
+            "pin_id":          pin_id,
+            "board":           board["name"],
+            "product_url":     product_url,
+            "posted_at":       datetime.now(timezone.utc).isoformat(),
+        })
         _save_history(history)
         posted_count += 1
 
         logger.info(
             f"  ✓ Video pin posted!\n"
-            f"    YouTube : {video['title']}\n"
+            f"    Product : {product['title']}\n"
             f"    Board   : {board['name']}\n"
-            f"    Product : {formatted['title']}\n"
             f"    URL     : {product_url}\n"
             f"    Pin ID  : {pin_id}"
         )
@@ -864,19 +699,17 @@ def run_video_posting() -> None:
     if DRY_RUN:
         logger.info(
             f"\n{'=' * 60}\n"
-            f"DRY RUN COMPLETE — {posted_count}/{len(to_post)} video(s) validated.\n"
+            f"DRY RUN COMPLETE — {posted_count}/{len(to_post)} product(s) validated.\n"
             f"All systems OK. Remove DRY_RUN=true to go live.\n"
             f"{'=' * 60}"
         )
     else:
         logger.info(f"\nRun complete — {posted_count}/{len(to_post)} video pin(s) posted.")
 
-    # Fail the workflow when every video failed to download — this is a real error
-    # (e.g. yt-dlp format issue), not a normal "nothing to post" run.
-    if posted_count == 0 and download_failures > 0:
+    if posted_count == 0 and build_failures > 0:
         raise RuntimeError(
-            f"All {download_failures} video download(s) failed. "
-            "Check yt-dlp format availability and YOUTUBE_COOKIES_B64."
+            f"All {build_failures} video build(s) failed. "
+            "Check product images, ffmpeg, and MoviePy installation."
         )
 
 
