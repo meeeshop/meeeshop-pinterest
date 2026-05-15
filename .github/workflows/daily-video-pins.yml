@@ -10,7 +10,8 @@ name: Daily Video Pins (Product Slideshow → Pinterest)
 #   12:00 UTC = 8 AM ET  — morning browse (commute / coffee scroll)
 #   01:00 UTC = 9 PM ET  — prime time (highest engagement for USA women)
 #
-# Each run posts up to 2 video pins (MAX_PINS_PER_RUN=2).
+# Each run posts 1 video pin (MAX_PINS_PER_RUN=1).
+# Daily total: 2 video pins + 16 rich product pins = 18 pins/day (safe limit, no blocking).
 # Videos are generated locally from Shopify product images — no YouTube dependency.
 # Products have a 10-day repost cooldown.
 
@@ -29,13 +30,12 @@ on:
           - 'true'
           - 'false'
       pins_per_run:
-        description: 'Max video pins to post per run (1 or 2)'
+        description: 'Max video pins to post per run (1 only, to avoid Pinterest blocking)'
         required: false
         default: '1'
         type: choice
         options:
           - '1'
-          - '2'
 
 permissions:
   actions: read
@@ -74,8 +74,8 @@ jobs:
           STORE_BASE_URL: ${{ secrets.STORE_BASE_URL }}
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
-          # Scheduled runs: 2 pins/day. Manual dispatch uses the input value.
-          MAX_PINS_PER_RUN: ${{ github.event.inputs.pins_per_run || '2' }}
+          # Scheduled runs: 1 pin/run × 2 runs = 2 video pins/day (+ 16 rich product pins = 18 total/day).
+          MAX_PINS_PER_RUN: ${{ github.event.inputs.pins_per_run || '1' }}
           # Scheduled runs never dry-run. Manual dispatch defaults to dry_run=true for safety.
           DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
         run: |
