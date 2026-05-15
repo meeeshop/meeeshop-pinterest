@@ -512,12 +512,19 @@ def run_video_posting() -> None:
         raise RuntimeError("Pinterest authentication failed")
     logger.info("✓ Pinterest authentication OK")
 
-    # Raw py3-pinterest client for upload_video_pin (v2.0.0+)
+    # Raw py3-pinterest client for upload_video_pin (v2.0.0+).
+    # Do NOT call py3.login() — it uses Selenium which is unavailable in CI.
+    # Instead, share the already-authenticated requests.Session from PinterestClient
+    # so upload_video_pin() uses the same valid csrftoken/cookies.
     email    = os.getenv("PINTEREST_EMAIL", "")
-    password = os.getenv("PINTEREST_PASSWORD", "")
     username = os.getenv("PINTEREST_USERNAME", "")
-    py3 = _Py3Pinterest(email=email, password=password, username=username)
-    py3.login()
+    py3 = _Py3Pinterest(email=email, password="", username=username)
+    try:
+        authenticated_session = pinterest._get_raw_session()
+        py3.http = authenticated_session
+        logger.info("✓ py3-pinterest session shared from PinterestClient (no second login)")
+    except Exception as e:
+        logger.warning(f"Could not share session with py3-pinterest: {e} — video pins may fail")
 
     boards = pinterest.fetch_boards()
     if not boards:
