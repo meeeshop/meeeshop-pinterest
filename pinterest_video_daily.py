@@ -322,23 +322,18 @@ def get_recent_shorts(channel_url: str, max_results: int = 20) -> List[Dict[str,
 def download_video(youtube_url: str, output_dir: Path) -> Optional[str]:
     """
     Download a video ≤ MAX_VIDEO_SIZE_MB using yt-dlp, then convert to MP4.
-    YouTube Shorts often only have a single combined stream (mp4/webm) — the
-    bestvideo+bestaudio merge selector raises "Requested format is not available"
-    for those.  We request the best single-file format first, then fall back to
-    explicit merge, then accept any format and re-encode via ffmpeg postprocessor.
+    YouTube Shorts only expose a single combined stream — filesize filters and
+    bestvideo+bestaudio merge both fail because format metadata doesn't include
+    sizes or separate streams.  Use bare 'best' selectors (no filesize filter)
+    and check the actual file size after download.
     Returns absolute path to the downloaded .mp4 file, or None on failure.
     """
     output_template = str(output_dir / "%(id)s.%(ext)s")
-    # Priority:
-    #  1. Best single-file mp4 (most Shorts — no merge needed)
+    # Priority (NO filesize filter — Shorts don't expose sizes in format metadata):
+    #  1. Best single-file mp4 (most Shorts)
     #  2. Best single-file any container (webm Shorts) — remuxed to mp4 below
-    #  3. Explicit bestvideo+bestaudio merge (regular videos with separate streams)
-    #  4. Absolute fallback
-    fmt = (
-        f"best[ext=mp4][filesize<{MAX_VIDEO_SIZE_MB}M]"
-        f"/best[filesize<{MAX_VIDEO_SIZE_MB}M]"
-        f"/bestvideo[ext=mp4]+bestaudio[ext=m4a]/best"
-    )
+    #  3. Absolute fallback
+    fmt = "best[ext=mp4]/best[ext=webm]/best"
     args = [
         "--format", fmt,
         "--merge-output-format", "mp4",
@@ -763,6 +758,7 @@ def run_video_posting() -> None:
 
     session = pinterest._get_raw_session()
     posted_count = 0
+    download_failures = 0
 
     for idx, video in enumerate(to_post):
         logger.info(f"\n--- Pin {idx + 1}/{len(to_post)}: '{video['title']}' ---")
@@ -807,8 +803,8 @@ def run_video_posting() -> None:
                 logger.warning("Retrying download with /shorts/ URL…")
                 video_file = download_video(video["shorts_url"], tmp_path)
             if not video_file:
-                # Non-fatal transient failure (size limit, format issue) — skip this video
                 logger.error(f"Video download failed after retries: {video['url']} — skipping")
+                download_failures += 1
                 continue
             # (RuntimeError from bot detection propagates up and fails the workflow)
 
@@ -874,6 +870,14 @@ def run_video_posting() -> None:
         )
     else:
         logger.info(f"\nRun complete — {posted_count}/{len(to_post)} video pin(s) posted.")
+
+    # Fail the workflow when every video failed to download — this is a real error
+    # (e.g. yt-dlp format issue), not a normal "nothing to post" run.
+    if posted_count == 0 and download_failures > 0:
+        raise RuntimeError(
+            f"All {download_failures} video download(s) failed. "
+            "Check yt-dlp format availability and YOUTUBE_COOKIES_B64."
+        )
 
 
 if __name__ == "__main__":
