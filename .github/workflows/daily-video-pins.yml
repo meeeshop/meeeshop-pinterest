@@ -1,0 +1,90 @@
+name: Daily Video Pins (Product Slideshow → Pinterest)
+
+# STEP 1 — VALIDATE FIRST:
+#   Go to Actions → "Daily Video Pins" → Run workflow → set dry_run = true
+#   This runs the full pipeline (auth, product pick, video build, content) but
+#   skips the actual Pinterest upload. Check the logs. If everything is green,
+#   run again with dry_run = false to post the first real video pin.
+#
+# STEP 2 — PRODUCTION SCHEDULE (2 pins/day at peak USA women's shopping times):
+#   12:00 UTC = 8 AM ET  — morning browse (commute / coffee scroll)
+#   01:00 UTC = 9 PM ET  — prime time (highest engagement for USA women)
+#
+# Each run posts 1 video pin (MAX_PINS_PER_RUN=1).
+# Daily total: 2 video pins + 16 rich product pins = 18 pins/day (safe limit, no blocking).
+# Videos are generated locally from Shopify product images — no YouTube dependency.
+# Products have a 10-day repost cooldown.
+
+on:
+  schedule:
+    - cron: '0 12 * * *'   # 8 AM ET  — morning scroll
+    - cron: '0 1  * * *'   # 9 PM ET  — prime time
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run (validate only, do not post)'
+        required: false
+        default: 'true'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
+      pins_per_run:
+        description: 'Max video pins to post per run (1 only, to avoid Pinterest blocking)'
+        required: false
+        default: '1'
+        type: choice
+        options:
+          - '1'
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  post-video-pins:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get install -y ffmpeg fonts-dejavu-core
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Post video pins
+        env:
+          PINTEREST_COOKIES_B64: ${{ secrets.PINTEREST_COOKIES_B64 }}
+          PINTEREST_EMAIL: ${{ secrets.PINTEREST_EMAIL }}
+          PINTEREST_PASSWORD: ${{ secrets.PINTEREST_PASSWORD }}
+          PINTEREST_USERNAME: ${{ secrets.PINTEREST_USERNAME }}
+          SHOPIFY_STORE_URL: ${{ secrets.SHOPIFY_STORE_URL }}
+          SHOPIFY_ACCESS_TOKEN: ${{ secrets.SHOPIFY_ACCESS_TOKEN }}
+          STORE_BASE_URL: ${{ secrets.STORE_BASE_URL }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          # Scheduled runs: 1 pin/run × 2 runs = 2 video pins/day (+ 16 rich product pins = 18 total/day).
+          MAX_PINS_PER_RUN: ${{ github.event.inputs.pins_per_run || '1' }}
+          # Scheduled runs never dry-run. Manual dispatch defaults to dry_run=true for safety.
+          DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
+        run: |
+          python pinterest_video_daily.py
+
+      - name: Upload video posting history
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: video-posting-history-${{ github.run_number }}
+          path: video_posting_history.json
+          retention-days: 30
