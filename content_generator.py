@@ -5,17 +5,15 @@ Follows Pinterest guidelines & SEO best practices for women shoppers
 """
 
 import logging
+import sys
 from typing import Dict, Any, Optional, List
 from pathlib import Path
-from dotenv import load_dotenv
 from ai_client import generate
 
 logger = logging.getLogger(__name__)
 
-# Load .env file
-env_file = Path(__file__).parent / ".env"
-if env_file.exists():
-    load_dotenv(env_file)
+# Secrets are loaded by the entry-point (pinterest_client.py / pinterest_daily.py)
+# via inject_to_env() before this module is imported. No action needed here.
 
 
 def generate_pinterest_title(product_data: Dict[str, Any]) -> str:

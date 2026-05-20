@@ -9,8 +9,18 @@ it will be skipped to avoid excessive duplication.
 
 import json
 import logging
+import os
 from datetime import datetime, timedelta
 from pathlib import Path
+
+_log = logging.getLogger(__name__)
+try:
+    from secrets_manager import inject_to_env
+    inject_to_env()
+    _log.info("[secrets] inject_to_env() succeeded")
+except Exception as _e:
+    _log.critical("[secrets] inject_to_env() FAILED: %s", _e, exc_info=True)
+    raise
 
 from pinterest_client import PinterestClient
 from board_mapping import SECONDARY_BOARDS, MEEESHOP_BOARDS

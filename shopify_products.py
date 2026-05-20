@@ -4,20 +4,20 @@ Integrates with meeeshop-invt GraphQL API or REST API
 """
 
 import os
+import sys
 import json
 import logging
 from typing import List, Dict, Any, Optional
 from datetime import datetime, timedelta
 from pathlib import Path
 import requests
-from dotenv import load_dotenv
 
 logger = logging.getLogger(__name__)
 
-# Load .env file
-env_file = Path(__file__).parent / ".env"
-if env_file.exists():
-    load_dotenv(env_file)
+# Load secrets
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from secrets_manager import inject_to_env, get_secret
+inject_to_env()
 
 
 class ShopifyClient:
@@ -181,11 +181,16 @@ def main():
     """Test Shopify client"""
     logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 
-    store_url = os.getenv("SHOPIFY_STORE_URL")
-    access_token = os.getenv("SHOPIFY_ACCESS_TOKEN")
+    try:
+        from secrets_manager import get_secret
+        store_url = get_secret("SHOPIFY_STORE_URL")
+        access_token = get_secret("SHOPIFY_ACCESS_TOKEN")
+    except Exception as _e:
+        logger.critical("[secrets] Failed to load Shopify credentials: %s", _e, exc_info=True)
+        raise
 
     if not store_url or not access_token:
-        raise ValueError("Set SHOPIFY_STORE_URL and SHOPIFY_ACCESS_TOKEN in .env")
+        raise ValueError("Set SHOPIFY_STORE_URL and SHOPIFY_ACCESS_TOKEN in secrets.enc")
 
     client = ShopifyClient(store_url, access_token)
 
