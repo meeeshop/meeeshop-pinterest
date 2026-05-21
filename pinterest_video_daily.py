@@ -487,24 +487,30 @@ from py3pin.Pinterest import Pinterest as _Py3Pinterest
 
 def _make_py3_client(pinterest: "PinterestClient") -> Optional["_Py3Pinterest"]:
     """
-    Create a _Py3Pinterest instance with its http session replaced by the
-    already-authenticated session from PinterestClient, including all cookies.
-    This avoids a second Selenium login (unavailable in CI).
+    Create a _Py3Pinterest instance using the SAME authenticated session object
+    as PinterestClient. This avoids any cookie-jar divergence.
     """
     email    = get_secret("PINTEREST_EMAIL") or ""
     username = get_secret("PINTEREST_USERNAME") or ""
     py3 = _Py3Pinterest(email=email, password="", username=username)
     try:
         auth_session = pinterest._get_raw_session()
-        # Copy all cookies into py3's own http session so csrftoken is present
-        for cookie in auth_session.cookies:
-            py3.http.cookies.set(cookie.name, cookie.value, domain=cookie.domain or ".pinterest.com")
-        logger.info(
-            f"✓ Cookies injected into py3-pinterest (csrftoken present: "
-            f"{bool(py3.http.cookies.get('csrftoken'))})"
-        )
+        # Direct session swap (shared object — same cookie jar)
+        py3.http = auth_session
+
+        # Verbose diagnostics so we can see what's actually present
+        cookie_names = sorted(auth_session.cookies.keys())
+        csrftoken    = auth_session.cookies.get("csrftoken", "")
+        sess_cookie  = auth_session.cookies.get("_pinterest_sess", "")
+        auth_b_token = auth_session.cookies.get("_auth", "") or auth_session.cookies.get("_b", "")
+        logger.info(f"[py3-auth] cookie names ({len(cookie_names)}): {cookie_names}")
+        logger.info(f"[py3-auth] csrftoken len: {len(csrftoken)}  _pinterest_sess len: {len(sess_cookie)}  _auth/_b len: {len(auth_b_token)}")
+        if not csrftoken:
+            logger.error("[py3-auth] csrftoken is EMPTY — Pinterest will return 401")
+        if not sess_cookie:
+            logger.error("[py3-auth] _pinterest_sess is EMPTY — session not authenticated")
     except Exception as e:
-        logger.warning(f"Could not inject cookies into py3-pinterest: {e}")
+        logger.warning(f"Could not share session with py3-pinterest: {e}")
     return py3
 
 
@@ -541,8 +547,27 @@ def _post_video_pin(
             return str(pin_id)
         logger.error(f"upload_video_pin unexpected response: {str(resp_data)[:300]}")
         return None
+    except requests.exceptions.HTTPError as e:
+        # Capture Pinterest's actual error body so we can see the failure reason
+        try:
+            err_body = e.response.text[:1000] if e.response is not None else "(no response)"
+            err_headers = dict(e.response.headers) if e.response is not None else {}
+            logger.error(f"upload_video_pin HTTPError: {e}")
+            logger.error(f"[401-debug] response body: {err_body}")
+            logger.error(f"[401-debug] response headers: {err_headers}")
+            logger.error(f"[401-debug] request URL: {e.response.request.url if e.response is not None else 'n/a'}")
+            req_headers = dict(e.response.request.headers) if e.response is not None else {}
+            # Redact cookie/csrf values, just show keys + lengths
+            safe_req_headers = {
+                k: (f"<len={len(v)}>" if k.lower() in ("cookie", "x-csrftoken") else v)
+                for k, v in req_headers.items()
+            }
+            logger.error(f"[401-debug] request headers: {safe_req_headers}")
+        except Exception as inner:
+            logger.error(f"upload_video_pin error (and failed to dump details: {inner}): {e}")
+        return None
     except Exception as e:
-        logger.error(f"upload_video_pin error: {e}")
+        logger.error(f"upload_video_pin error: {e}", exc_info=True)
         return None
 
 
