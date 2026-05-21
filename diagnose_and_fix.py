@@ -10,13 +10,19 @@ import json
 import logging
 import base64
 from pathlib import Path
-from dotenv import load_dotenv
 
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(message)s",
 )
 logger = logging.getLogger(__name__)
+
+try:
+    from secrets_manager import inject_to_env
+    inject_to_env()
+    logger.info("[secrets] inject_to_env() succeeded")
+except Exception as _e:
+    logger.critical("[secrets] inject_to_env() FAILED — diagnostics will run with incomplete secrets: %s", _e, exc_info=True)
 
 COOKIES_FILE = Path(__file__).parent / ".pinterest_cookies_b64"
 HISTORY_FILE = Path(__file__).parent / "posting_history.json"
@@ -28,13 +34,7 @@ def check_credentials():
     logger.info("🔐 CHECKING CREDENTIALS")
     logger.info("="*70)
 
-    env_file = Path(__file__).parent / ".env"
-    if env_file.exists():
-        load_dotenv(env_file)
-        logger.info(f"✓ .env file found: {env_file}")
-    else:
-        logger.warning(f"✗ .env file not found: {env_file}")
-
+    # Secrets already loaded by inject_to_env() at module level
     pinterest_email = os.getenv("PINTEREST_EMAIL")
     pinterest_password = os.getenv("PINTEREST_PASSWORD")
     shopify_url = os.getenv("SHOPIFY_STORE_URL")

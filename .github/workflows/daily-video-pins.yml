@@ -65,18 +65,9 @@ jobs:
 
       - name: Post video pins
         env:
-          PINTEREST_COOKIES_B64: ${{ secrets.PINTEREST_COOKIES_B64 }}
-          PINTEREST_EMAIL: ${{ secrets.PINTEREST_EMAIL }}
-          PINTEREST_PASSWORD: ${{ secrets.PINTEREST_PASSWORD }}
-          PINTEREST_USERNAME: ${{ secrets.PINTEREST_USERNAME }}
-          SHOPIFY_STORE_URL: ${{ secrets.SHOPIFY_STORE_URL }}
-          SHOPIFY_ACCESS_TOKEN: ${{ secrets.SHOPIFY_ACCESS_TOKEN }}
-          STORE_BASE_URL: ${{ secrets.STORE_BASE_URL }}
-          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
-          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
-          # Scheduled runs: 1 pin/run × 2 runs = 2 video pins/day (+ 16 rich product pins = 18 total/day).
+          ENCRYPTION_KEY_PRIMARY: ${{ secrets.ENCRYPTION_KEY_PRIMARY }}
+          ENCRYPTION_KEY_FALLBACK: ${{ secrets.ENCRYPTION_KEY_FALLBACK }}
           MAX_PINS_PER_RUN: ${{ github.event.inputs.pins_per_run || '1' }}
-          # Scheduled runs never dry-run. Manual dispatch defaults to dry_run=true for safety.
           DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
         run: |
           python pinterest_video_daily.py

@@ -5,6 +5,7 @@ Rotates boards, spacing, timestamps to mimic organic behavior
 """
 
 import os
+import sys
 import json
 import logging
 import random
@@ -13,6 +14,10 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from typing import List, Dict, Any, Optional
 import requests
+
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from secrets_manager import inject_to_env, get_secret
+inject_to_env()
 
 from pinterest_client import PinterestClient
 from shopify_products import ShopifyClient, format_product_for_pinterest
@@ -278,11 +283,11 @@ def run_daily_posting(use_video: bool = False):
 
     EnvLoader.load_youtube_env()
 
-    pinterest_email = os.getenv("PINTEREST_EMAIL")
-    pinterest_password = os.getenv("PINTEREST_PASSWORD")
-    shopify_url = os.getenv("SHOPIFY_STORE_URL")
-    shopify_token = os.getenv("SHOPIFY_ACCESS_TOKEN")
-    store_base_url = os.getenv("STORE_BASE_URL", "https://us.meeeshop.com")
+    pinterest_email = get_secret("PINTEREST_EMAIL")
+    pinterest_password = get_secret("PINTEREST_PASSWORD")
+    shopify_url = get_secret("SHOPIFY_STORE_URL")
+    shopify_token = get_secret("SHOPIFY_ACCESS_TOKEN")
+    store_base_url = get_secret("STORE_BASE_URL")
 
     if not all([pinterest_email, pinterest_password, shopify_url, shopify_token]):
         raise ValueError("Missing required credentials in .env")

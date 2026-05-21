@@ -10,19 +10,12 @@ from pathlib import Path
 from typing import List, Optional
 
 
-def _load_env():
-    for candidate in [Path(__file__).with_name(".env"), Path(".env")]:
-        if candidate.exists():
-            for line in candidate.read_text(encoding="utf-8").splitlines():
-                if "=" in line and not line.startswith("#"):
-                    k, v = line.split("=", 1)
-                    os.environ.setdefault(k.strip(), v.strip().strip('"'))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from secrets_manager import inject_to_env, get_secret
+inject_to_env()
 
-
-_load_env()
-
-GROQ_KEY       = os.getenv("GROQ_API_KEY", "")
-OPENROUTER_KEY = os.getenv("OPENROUTER_API_KEY", "")
+GROQ_KEY       = get_secret("GROQ_API_KEY")
+OPENROUTER_KEY = get_secret("OPENROUTER_API_KEY")
 
 _GROQ_URL        = "https://api.groq.com/openai/v1/chat/completions"
 _OPENROUTER_URL  = "https://openrouter.ai/api/v1/chat/completions"

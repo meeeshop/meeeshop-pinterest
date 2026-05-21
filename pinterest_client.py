@@ -4,6 +4,7 @@ Replaces Selenium WebDriver automation with HTTP-based API calls.
 """
 
 import os
+import sys
 import time
 import json
 import base64
@@ -13,7 +14,18 @@ import logging
 
 import requests
 from py3pin.Pinterest import Pinterest
-from dotenv import load_dotenv
+
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+import logging as _log
+_slog = _log.getLogger(__name__)
+try:
+    from secrets_manager import inject_to_env, get_secret
+    inject_to_env()
+    _slog.info("[secrets] inject_to_env() succeeded")
+except Exception as _e:
+    _slog.critical("[secrets] inject_to_env() FAILED — secrets unavailable: %s", _e, exc_info=True)
+    raise
 
 from content_generator import generate_content_package
 from credentials_manager import CredentialsManager
@@ -24,8 +36,6 @@ logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
-
-load_dotenv()
 
 COOKIES_FILE = Path(__file__).parent / ".pinterest_cookies_b64"
 
@@ -92,7 +102,11 @@ class PinterestClient:
             logger.info("Forcing fresh authentication (skipping stale cookies)")
             return False
 
-        cookies_b64 = os.getenv('PINTEREST_COOKIES_B64')
+        try:
+            cookies_b64 = get_secret('PINTEREST_COOKIES_B64')
+        except Exception as _e:
+            logger.error("[secrets] Failed to load PINTEREST_COOKIES_B64: %s", _e)
+            return False
         if not cookies_b64:
             logger.debug("No PINTEREST_COOKIES_B64 secret found")
             return False
@@ -110,7 +124,7 @@ class PinterestClient:
             self._inject_cookies(cookies_dict)
 
             # Test if session is valid
-            username = os.getenv('PINTEREST_USERNAME', 'meeeshop')
+            username = os.getenv('PINTEREST_USERNAME', 'meeeshop')  # non-secret default
             self._rate_limit()
             try:
                 boards = self.client.boards(username=username)
@@ -166,7 +180,7 @@ class PinterestClient:
             self._inject_cookies(cookies_dict)
 
             # Test if session is valid
-            username = os.getenv('PINTEREST_USERNAME', 'meeeshop')
+            username = os.getenv('PINTEREST_USERNAME', 'meeeshop')  # non-secret default
             self._rate_limit()
             try:
                 boards = self.client.boards(username=username)
