@@ -31,13 +31,16 @@ from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
 import requests
-from dotenv import load_dotenv
 from gtts import gTTS
 from PIL import Image, ImageDraw, ImageEnhance, ImageFont
 try:
     from moviepy.editor import AudioFileClip, CompositeAudioClip, VideoClip, concatenate_videoclips
 except ImportError:
     from moviepy import AudioFileClip, CompositeAudioClip, VideoClip, concatenate_videoclips
+
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from secrets_manager import inject_to_env, get_secret
+inject_to_env()
 
 from pinterest_client import PinterestClient
 from shopify_products import ShopifyClient, format_product_for_pinterest, select_board_for_product
@@ -46,8 +49,6 @@ from content_generator import generate_content_package
 # ---------------------------------------------------------------------------
 # Config
 # ---------------------------------------------------------------------------
-
-load_dotenv(Path(__file__).parent / ".env")
 
 logging.basicConfig(
     level=logging.INFO,
@@ -556,9 +557,9 @@ def _build_pin_content(product: Dict, board_name: str) -> Dict[str, str]:
 # ---------------------------------------------------------------------------
 
 def run_video_posting() -> None:
-    shopify_url    = os.getenv("SHOPIFY_STORE_URL")
-    shopify_token  = os.getenv("SHOPIFY_ACCESS_TOKEN")
-    store_base_url = os.getenv("STORE_BASE_URL", "https://us.meeeshop.com")
+    shopify_url    = get_secret("SHOPIFY_STORE_URL")
+    shopify_token  = get_secret("SHOPIFY_ACCESS_TOKEN")
+    store_base_url = get_secret("STORE_BASE_URL")
 
     if not shopify_url or not shopify_token or shopify_token == "placeholder":
         raise ValueError("SHOPIFY_STORE_URL / SHOPIFY_ACCESS_TOKEN not set")
@@ -578,8 +579,8 @@ def run_video_posting() -> None:
     # Do NOT call py3.login() — it uses Selenium which is unavailable in CI.
     # Instead, share the already-authenticated requests.Session from PinterestClient
     # so upload_video_pin() uses the same valid csrftoken/cookies.
-    email    = os.getenv("PINTEREST_EMAIL", "")
-    username = os.getenv("PINTEREST_USERNAME", "")
+    email    = get_secret("PINTEREST_EMAIL")
+    username = get_secret("PINTEREST_USERNAME")
     py3 = _Py3Pinterest(email=email, password="", username=username)
     try:
         authenticated_session = pinterest._get_raw_session()

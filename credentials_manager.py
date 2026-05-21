@@ -4,6 +4,7 @@ Supports: env vars, .env file, Chrome cookies, stored tokens
 """
 
 import os
+import sys
 import json
 import logging
 from pathlib import Path
@@ -17,27 +18,20 @@ logger = logging.getLogger(__name__)
 COOKIES_FILE = Path(__file__).parent / ".pinterest_cookies.pkl"
 SESSION_FILE = Path(__file__).parent / ".pinterest_session"
 
+# Load secrets at module level
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from secrets_manager import inject_to_env, get_secret
+inject_to_env()
+
 
 class CredentialsManager:
     """Manage Pinterest credentials securely"""
 
     @staticmethod
-    def load_env():
-        """Load .env file into environment"""
-        env_file = Path(__file__).parent / ".env"
-        if env_file.exists():
-            for line in env_file.read_text(encoding="utf-8").splitlines():
-                if "=" in line and not line.startswith("#"):
-                    k, v = line.split("=", 1)
-                    os.environ.setdefault(k.strip(), v.strip().strip('"'))
-
-    @staticmethod
     def get_from_env() -> Optional[Dict[str, str]]:
         """Get credentials from environment variables"""
-        CredentialsManager.load_env()
-
-        email = os.getenv("PINTEREST_EMAIL")
-        password = os.getenv("PINTEREST_PASSWORD")
+        email = get_secret("PINTEREST_EMAIL")
+        password = get_secret("PINTEREST_PASSWORD")
 
         if email and password:
             logger.info("✓ Credentials loaded from .env")
