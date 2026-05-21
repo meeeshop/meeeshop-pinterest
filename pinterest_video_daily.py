@@ -67,9 +67,6 @@ MAX_VIDEO_SIZE_MB = 100
 # Pinterest pin creation endpoint (web-UI flow — no OAuth app needed)
 _PINTEREST_PIN_URL = "https://www.pinterest.com/resource/PinResource/create/"
 
-# py3-pinterest raw client (for upload_video_pin — available in v2.0.0+)
-from py3pin.Pinterest import Pinterest as _Py3Pinterest
-
 # Boards preferred for video content
 VIDEO_PREFERRED_BOARDS = [
     "Trends",
@@ -479,11 +476,68 @@ def _pick_board(boards: List[Dict], formatted_product: Dict) -> Dict:
 
 
 # ---------------------------------------------------------------------------
-# Pinterest video pin via py3-pinterest v2.0.0+ upload_video_pin()
+# Pinterest video pin via direct authenticated session (CSRF-safe)
 # ---------------------------------------------------------------------------
 
+_PINTEREST_VIDEO_UPLOAD_URL = "https://www.pinterest.com/resource/VideoUploadResource/create/"
+_PINTEREST_VIDEO_PIN_URL    = "https://www.pinterest.com/resource/PinResource/create/"
+
+_UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+
+
+def _auth_headers(session: requests.Session) -> Dict:
+    csrf = session.cookies.get("csrftoken", "")
+    return {
+        "User-Agent": _UA,
+        "Referer": "https://www.pinterest.com/",
+        "X-Requested-With": "XMLHttpRequest",
+        "Accept": "application/json, text/javascript, */*; q=0.01",
+        "X-CSRFToken": csrf,
+        "X-APP-VERSION": "7f4fc28",
+        "X-Pinterest-AppState": "active",
+    }
+
+
+def _upload_video(session: requests.Session, video_path: str) -> Optional[str]:
+    """Upload video file to Pinterest, return video_id string or None."""
+    with open(video_path, "rb") as fh:
+        video_bytes = fh.read()
+
+    headers = _auth_headers(session)
+    # Remove Content-Type so requests sets multipart boundary automatically
+    headers.pop("Content-Type", None)
+
+    files = {"video": (Path(video_path).name, video_bytes, "video/mp4")}
+    data = {
+        "source_url": "/pin-builder/",
+        "data": '{"options":{},"context":{}}',
+    }
+    try:
+        resp = session.post(
+            _PINTEREST_VIDEO_UPLOAD_URL,
+            files=files,
+            data=data,
+            headers=headers,
+            timeout=120,
+        )
+        resp.raise_for_status()
+        body = resp.json()
+        video_id = (
+            (body or {}).get("resource_response", {}).get("data", {}).get("id")
+            or (body or {}).get("data", {}).get("id")
+        )
+        if video_id:
+            logger.info(f"Video uploaded — video_id: {video_id}")
+            return str(video_id)
+        logger.error(f"Video upload unexpected response: {str(body)[:300]}")
+        return None
+    except Exception as e:
+        logger.error(f"Video upload failed: {e}")
+        return None
+
+
 def _post_video_pin(
-    py3: "_Py3Pinterest",
+    pinterest: "PinterestClient",
     video_path: str,
     board_id: str,
     title: str,
@@ -492,35 +546,58 @@ def _post_video_pin(
     alt_text: str,
     thumb_path: Optional[str] = None,
 ) -> Optional[str]:
-    """Upload MP4 as a real Pinterest video pin. Returns pin_id or None."""
+    """Upload MP4 as a Pinterest video pin using the authenticated session. Returns pin_id or None."""
     time.sleep(random.uniform(3, 7))
     try:
-        resp = py3.upload_video_pin(
-            video_file=video_path,
-            title=title,
-            description=description,
-            link=link,
-            board_id=board_id,
-            alt_text=alt_text,
-        )
-        # upload_video_pin returns a requests.Response object; parse JSON
-        if hasattr(resp, 'json'):
-            resp_data = resp.json()
-        else:
-            resp_data = resp
+        session = pinterest._get_raw_session()
+    except Exception as e:
+        logger.error(f"Cannot get authenticated session: {e}")
+        return None
 
-        # Pin ID lives at resource_response.data.id or data.id
+    # Step 1: upload video file
+    video_id = _upload_video(session, video_path)
+    if not video_id:
+        return None
+
+    # Step 2: create pin referencing the uploaded video_id
+    from urllib.parse import urlencode
+    import json as _json
+    options = {
+        "board_id": board_id,
+        "description": description,
+        "title": title,
+        "link": link,
+        "alt_text": alt_text,
+        "video_id": video_id,
+        "dominant_color": "#ffffff",
+    }
+    post_data = urlencode({
+        "source_url": "/pin-builder/",
+        "data": _json.dumps({"options": options, "context": {}}),
+    })
+    headers = _auth_headers(session)
+    headers["Content-Type"] = "application/x-www-form-urlencoded; charset=UTF-8"
+
+    try:
+        resp = session.post(
+            _PINTEREST_VIDEO_PIN_URL,
+            data=post_data,
+            headers=headers,
+            timeout=60,
+        )
+        resp.raise_for_status()
+        body = resp.json()
         pin_id = (
-            (resp_data or {}).get("resource_response", {}).get("data", {}).get("id")
-            or (resp_data or {}).get("data", {}).get("id")
+            (body or {}).get("resource_response", {}).get("data", {}).get("id")
+            or (body or {}).get("data", {}).get("id")
         )
         if pin_id:
             logger.info(f"Video pin created — pin_id: {pin_id}")
             return str(pin_id)
-        logger.error(f"upload_video_pin returned unexpected response: {str(resp_data)[:300]}")
+        logger.error(f"Video pin create unexpected response: {str(body)[:300]}")
         return None
     except Exception as e:
-        logger.error(f"upload_video_pin error: {e}")
+        logger.error(f"Video pin create failed: {e}")
         return None
 
 
@@ -574,20 +651,6 @@ def run_video_posting() -> None:
     if not pinterest.login():
         raise RuntimeError("Pinterest authentication failed")
     logger.info("✓ Pinterest authentication OK")
-
-    # Raw py3-pinterest client for upload_video_pin (v2.0.0+).
-    # Do NOT call py3.login() — it uses Selenium which is unavailable in CI.
-    # Instead, share the already-authenticated requests.Session from PinterestClient
-    # so upload_video_pin() uses the same valid csrftoken/cookies.
-    email    = get_secret("PINTEREST_EMAIL")
-    username = get_secret("PINTEREST_USERNAME")
-    py3 = _Py3Pinterest(email=email, password="", username=username)
-    try:
-        authenticated_session = pinterest._get_raw_session()
-        py3.http = authenticated_session
-        logger.info("✓ py3-pinterest session shared from PinterestClient (no second login)")
-    except Exception as e:
-        logger.warning(f"Could not share session with py3-pinterest: {e} — video pins may fail")
 
     boards = pinterest.fetch_boards()
     if not boards:
@@ -658,7 +721,7 @@ def run_video_posting() -> None:
         time.sleep(pause)
 
         pin_id = _post_video_pin(
-            py3=py3,
+            pinterest=pinterest,
             video_path=video_path,
             board_id=board["id"],
             title=content["title"],
