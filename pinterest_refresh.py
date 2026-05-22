@@ -253,14 +253,17 @@ def _is_eligible(
 
 def fetch_posting_history_from_github() -> Optional[Dict[str, Any]]:
     """
-    PRIMARY source: download the latest posting_history.json directly from the
-    daily-pinterest-posting workflow artifact via GitHub Actions API.
+    PRIMARY source: merge posting_history.json from ALL successful daily posting
+    runs in the last 7 days via GitHub Actions API.
+
+    Each run saves only its own 4 pins — we need to merge across runs to get
+    the full week's worth of posts for the 48h–7day refresh window.
 
     Requires GITHUB_TOKEN and GITHUB_REPOSITORY env vars (auto-set in Actions).
-    Returns parsed history dict, or None if unavailable.
+    Returns merged history dict, or None if unavailable.
     """
     token = os.environ.get("GITHUB_TOKEN")
-    repo = os.environ.get("GITHUB_REPOSITORY")  # e.g. "meeeshop/meeeshop-pinterest"
+    repo = os.environ.get("GITHUB_REPOSITORY")
 
     if not token or not repo:
         logger.warning("GITHUB_TOKEN or GITHUB_REPOSITORY not set — cannot fetch artifact")
@@ -272,64 +275,100 @@ def fetch_posting_history_from_github() -> Optional[Dict[str, Any]]:
         "X-GitHub-Api-Version": "2022-11-28",
     }
     base_api = f"https://api.github.com/repos/{repo}"
+    seven_days_ago = datetime.now() - timedelta(days=7)
 
     try:
-        # Find the most recent successful run of the daily posting workflow
+        # Fetch up to 50 recent runs — enough to cover 4 runs/day × 7 days = 28 runs
         resp = requests.get(
             f"{base_api}/actions/workflows/daily-pinterest-posting.yml/runs",
             headers=headers,
-            params={"status": "success", "per_page": 10},
+            params={"status": "success", "per_page": 50},
             timeout=15,
         )
         resp.raise_for_status()
         runs = resp.json().get("workflow_runs", [])
+
         if not runs:
             logger.warning("No successful daily posting runs found")
             return None
 
-        # Runs are newest-first; find the most recent with a posting-history artifact
+        # Filter to runs within the last 7 days
+        recent_runs = []
         for run in runs:
-            run_id = run["id"]
-            art_resp = requests.get(
-                f"{base_api}/actions/runs/{run_id}/artifacts",
-                headers=headers,
-                timeout=15,
-            )
-            art_resp.raise_for_status()
-            artifacts = art_resp.json().get("artifacts", [])
-
-            posting_artifact = next(
-                (a for a in artifacts if a["name"].startswith("posting-history")),
-                None,
-            )
-            if not posting_artifact:
+            created = run.get("created_at", "")
+            try:
+                run_time = datetime.fromisoformat(created.replace("Z", ""))
+                if run_time >= seven_days_ago:
+                    recent_runs.append(run)
+            except ValueError:
                 continue
 
-            # Download the artifact ZIP
-            dl_resp = requests.get(
-                posting_artifact["archive_download_url"],
-                headers=headers,
-                timeout=30,
-                allow_redirects=True,
-            )
-            dl_resp.raise_for_status()
+        logger.info(f"Found {len(recent_runs)} successful posting runs in the last 7 days")
+        if not recent_runs:
+            return None
 
-            # Extract posting_history.json from the ZIP in memory
-            with zipfile.ZipFile(io.BytesIO(dl_resp.content)) as zf:
-                names = zf.namelist()
-                json_name = next((n for n in names if n.endswith("posting_history.json")), None)
-                if not json_name:
-                    logger.warning(f"posting_history.json not found in artifact ZIP ({names})")
-                    continue
-                data = json.loads(zf.read(json_name).decode("utf-8"))
-                logger.info(
-                    f"Loaded posting history from GitHub artifact "
-                    f"(run #{run['run_number']}, {len(data.get('posts', []))} posts)"
+        # Merge posts from all runs — deduplicate by product_id keeping earliest timestamp
+        merged_posts: Dict[str, Dict] = {}  # product_id → post entry
+
+        for run in recent_runs:
+            run_id = run["id"]
+            try:
+                art_resp = requests.get(
+                    f"{base_api}/actions/runs/{run_id}/artifacts",
+                    headers=headers,
+                    timeout=15,
                 )
-                return data
+                art_resp.raise_for_status()
+                artifacts = art_resp.json().get("artifacts", [])
 
-        logger.warning("No posting-history artifact found in recent runs")
-        return None
+                artifact = next(
+                    (a for a in artifacts if a["name"].startswith("posting-history")),
+                    None,
+                )
+                if not artifact:
+                    continue
+
+                dl_resp = requests.get(
+                    artifact["archive_download_url"],
+                    headers=headers,
+                    timeout=30,
+                    allow_redirects=True,
+                )
+                dl_resp.raise_for_status()
+
+                with zipfile.ZipFile(io.BytesIO(dl_resp.content)) as zf:
+                    json_name = next(
+                        (n for n in zf.namelist() if n.endswith("posting_history.json")),
+                        None,
+                    )
+                    if not json_name:
+                        continue
+                    data = json.loads(zf.read(json_name).decode("utf-8"))
+
+                for post in data.get("posts", []):
+                    pid = str(post.get("product_id", ""))
+                    if not pid or post.get("is_refresh"):
+                        continue
+                    # Keep earliest post per product (original pin time)
+                    if pid not in merged_posts:
+                        merged_posts[pid] = post
+                    else:
+                        existing_ts = merged_posts[pid].get("timestamp", "")
+                        if post.get("timestamp", "") < existing_ts:
+                            merged_posts[pid] = post
+
+                logger.info(f"  Run #{run['run_number']}: merged, {len(merged_posts)} unique products so far")
+
+            except Exception as run_err:
+                logger.warning(f"  Run #{run['run_number']} skipped: {run_err}")
+                continue
+
+        if not merged_posts:
+            logger.warning("No posts found across recent runs")
+            return None
+
+        logger.info(f"Merged {len(merged_posts)} unique original posts from last 7 days of runs")
+        return {"posts": list(merged_posts.values()), "board_last_used": {}, "daily_count": 0, "last_post_time": None}
 
     except Exception as e:
         logger.warning(f"GitHub artifact fetch failed: {e}")
