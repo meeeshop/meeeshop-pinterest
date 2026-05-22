@@ -249,107 +249,140 @@ def _is_eligible(
     return True
 
 
+def _our_posting_board_ids(boards: List[Dict]) -> List[Dict]:
+    """
+    Return board dicts for boards we actually post to (CATEGORY_TO_BOARDS + HIGH_TRAFFIC).
+    These are the only boards where our products can appear — no need to scan all 40 boards.
+    """
+    from board_mapping import CATEGORY_TO_BOARDS, HIGH_TRAFFIC_BOARDS
+
+    # Collect unique board names we post to
+    posting_board_names: set = set(HIGH_TRAFFIC_BOARDS)
+    for names in CATEGORY_TO_BOARDS.values():
+        posting_board_names.update(names)
+
+    boards_by_name = {b["name"].lower(): b for b in boards}
+    result = []
+    for name in posting_board_names:
+        b = boards_by_name.get(name.lower())
+        if b:
+            result.append(b)
+    return result
+
+
+def _parse_pin_timestamp(pin: Dict) -> Optional[datetime]:
+    """Extract created_at datetime from a pin dict, trying multiple field names."""
+    for field in ("created_at", "created_local_time", "created"):
+        raw = pin.get(field, "")
+        if raw:
+            try:
+                return datetime.fromisoformat(str(raw).replace("Z", "").split("+")[0])
+            except ValueError:
+                continue
+    return None
+
+
 def fetch_candidates_from_pinterest(
     pinterest: "PinterestClient",
     store_base_url: str,
     refresh_history: Dict[str, Any],
+    boards: List[Dict],
 ) -> List[Dict[str, Any]]:
     """
-    PRIMARY source: fetch our own pins live from Pinterest, filter to the 48h–7day
-    refresh window, and return candidates in the same shape get_candidates() would.
+    PRIMARY source: scan only our posting boards for pins linking to our store,
+    created within the last 7 days. Much faster than scanning the full profile.
 
-    Pin link URL is used to extract the Shopify product ID, e.g.:
-      https://store.com/products/some-handle  →  looked up via Shopify by handle
-    We store product_id as the handle when coming from Pinterest (no numeric ID
-    available without a Shopify lookup), so the caller must resolve it.
+    Strategy:
+      1. Identify boards we actually post to (CATEGORY_TO_BOARDS + HIGH_TRAFFIC)
+      2. Fetch each board's feed (board_feed), stop per-board once pins go past 7 days
+      3. Match pins whose link starts with our store URL → extract product handle
+      4. Apply same 48h–7day eligibility rules as the history-based path
 
-    Returns list of dicts with keys: product_id (handle), board, timestamp, _refresh_number
-    Raises on unrecoverable error so caller can fall back to history.
+    Returns list of dicts with: product_id (handle), board, timestamp, _refresh_number
+    Raises on unrecoverable error so caller falls back to history.
     """
     refresh_counts, last_refresh_time = _build_refresh_counts(refresh_history)
-
-    # Normalise store base URL for URL matching
     base = store_base_url.rstrip("/")
+    seven_days_ago = datetime.now() - timedelta(days=7)
 
-    all_pins: List[Dict] = []
-    MAX_PAGES = 5  # 5 × 250 = 1250 pins max; 7-day window will break earlier
-    # Reset bookmark so we always start from the top
-    pinterest.client.bookmark_manager.reset_bookmark(primary="pins", secondary=pinterest.username)
+    # Only scan boards we post to — skip the other 30+ generic boards
+    target_boards = _our_posting_board_ids(boards)
+    logger.info(f"Scanning {len(target_boards)} posting boards for recent pins")
 
-    for page in range(MAX_PAGES):
-        batch = pinterest.client.get_user_pins(username=pinterest.username)
-        if not batch:
-            break
-        all_pins.extend(batch)
-        logger.info(f"  Pinterest page {page + 1}: {len(batch)} pins fetched ({len(all_pins)} total)")
-        # Stop once we've gone past the 7-day window (pins are newest-first)
-        oldest_in_batch = batch[-1]
-        created_raw = oldest_in_batch.get("created_at") or oldest_in_batch.get("created_local_time", "")
-        if created_raw:
-            try:
-                oldest_ts = datetime.fromisoformat(created_raw.replace("Z", ""))
-                if (datetime.now() - oldest_ts).total_seconds() / 3600 > 7 * 24:
-                    logger.info("  Reached 7-day boundary — stopping pagination")
-                    break
-            except ValueError:
-                pass
+    # Collect all our store pins seen across boards, keyed by handle
+    # handle → {post_time, board_name, pin_id} — keep the earliest (original) post
+    pin_by_handle: Dict[str, Dict] = {}
+    refreshed_pin_ids = {str(r.get("pin_id", "")) for r in refresh_history.get("refreshes", [])}
 
-    logger.info(f"Fetched {len(all_pins)} pins from Pinterest profile")
+    for board in target_boards:
+        board_id = board["id"]
+        board_name = board["name"]
 
+        # Reset per-board bookmark
+        pinterest.client.bookmark_manager.reset_bookmark(primary="board_feed", secondary=board_id)
+
+        page = 0
+        while page < 3:  # max 3 pages × 250 = 750 pins per board
+            batch = pinterest.client.board_feed(board_id=board_id)
+            if not batch:
+                break
+            page += 1
+
+            past_window = False
+            for pin in batch:
+                pin_id = str(pin.get("id", ""))
+
+                # Skip pins we already created as refreshes
+                if pin_id in refreshed_pin_ids:
+                    continue
+
+                link = pin.get("link") or ""
+                if not link.startswith(base):
+                    continue
+
+                parts = link.rstrip("/").split("/products/")
+                if len(parts) < 2:
+                    continue
+                handle = parts[1].split("?")[0].split("/")[0]
+                if not handle:
+                    continue
+
+                post_time = _parse_pin_timestamp(pin)
+                if not post_time:
+                    continue
+
+                if post_time < seven_days_ago:
+                    past_window = True
+                    continue
+
+                # Keep earliest occurrence of this handle (the original post)
+                if handle not in pin_by_handle or post_time < datetime.fromisoformat(pin_by_handle[handle]["timestamp"]):
+                    pin_by_handle[handle] = {
+                        "product_id": handle,
+                        "product_id_is_handle": True,
+                        "board": board_name,
+                        "timestamp": post_time.isoformat(),
+                        "pin_id": pin_id,
+                    }
+
+            if past_window:
+                break  # older pins in this board are beyond our window
+
+        logger.info(f"  Board '{board_name}': scanned {page} page(s)")
+
+    logger.info(f"Found {len(pin_by_handle)} unique products from our store in board feeds")
+
+    # Apply eligibility rules
     candidates = []
-    seen_pids: set = set()
-
-    for pin in all_pins:
-        link = pin.get("link") or ""
-        if not link.startswith(base):
-            continue  # not our store
-
-        # Extract product handle from URL: .../products/<handle>
-        parts = link.rstrip("/").split("/products/")
-        if len(parts) < 2:
-            continue
-        handle = parts[1].split("?")[0].split("/")[0]
-        if not handle or handle in seen_pids:
-            continue
-
-        # Skip pins we ourselves already marked as refreshes in refresh_history
-        # (they'll appear in the live feed too but we don't want to re-refresh them)
-        is_our_refresh = any(
-            r.get("pin_id") == str(pin.get("id", ""))
-            for r in refresh_history.get("refreshes", [])
-        )
-        if is_our_refresh:
-            continue
-
-        created_raw = pin.get("created_at") or pin.get("created_local_time", "")
-        if not created_raw:
-            continue
-        try:
-            post_time = datetime.fromisoformat(created_raw.replace("Z", ""))
-        except ValueError:
-            continue
-
+    for handle, post in pin_by_handle.items():
+        post_time = datetime.fromisoformat(post["timestamp"])
         if not _is_eligible(handle, post_time, refresh_counts, last_refresh_time):
             continue
-
-        seen_pids.add(handle)
-        board_name = ""
-        board_obj = pin.get("board") or {}
-        if isinstance(board_obj, dict):
-            board_name = board_obj.get("name", "")
-
         count = refresh_counts.get(handle, 0)
-        candidates.append({
-            "product_id": handle,        # handle — caller resolves to Shopify product
-            "product_id_is_handle": True,
-            "board": board_name,
-            "timestamp": post_time.isoformat(),
-            "pin_id": str(pin.get("id", "")),
-            "_refresh_number": count + 1,
-        })
+        candidates.append({**post, "_refresh_number": count + 1})
 
     candidates.sort(key=lambda p: p["timestamp"])
-    logger.info(f"{len(candidates)} candidates from live Pinterest feed")
+    logger.info(f"{len(candidates)} candidates from live Pinterest board feeds")
     return candidates
 
 
@@ -429,7 +462,7 @@ def run_refresh_posting():
         candidates = []
         using_live = False
         try:
-            candidates = fetch_candidates_from_pinterest(pinterest, store_base_url, refresh_history)
+            candidates = fetch_candidates_from_pinterest(pinterest, store_base_url, refresh_history, boards)
             using_live = True
         except Exception as e:
             logger.warning(f"Pinterest live fetch failed ({e}) — falling back to posting history")
