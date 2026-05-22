@@ -207,22 +207,157 @@ def make_refresh_pin_image(
     return result if result else None
 
 
-def get_candidates(
-    history: Dict[str, Any],
-    refresh_history: Dict[str, Any],
-) -> List[Dict[str, Any]]:
-    """Find original posts eligible for refresh (48h+ old, refreshes remaining)."""
-
-    now = datetime.now()
+def _build_refresh_counts(refresh_history: Dict[str, Any]) -> Tuple[Dict[str, int], Dict[str, datetime]]:
+    """Parse refresh_history into per-product counts and last-refresh timestamps."""
     refresh_counts: Dict[str, int] = {}
     last_refresh_time: Dict[str, datetime] = {}
-
     for r in refresh_history.get("refreshes", []):
         pid = r["product_id"]
         refresh_counts[pid] = refresh_counts.get(pid, 0) + 1
         ts = datetime.fromisoformat(r["timestamp"])
         if pid not in last_refresh_time or ts > last_refresh_time[pid]:
             last_refresh_time[pid] = ts
+    return refresh_counts, last_refresh_time
+
+
+def _is_eligible(
+    pid: str,
+    post_time: datetime,
+    refresh_counts: Dict[str, int],
+    last_refresh_time: Dict[str, datetime],
+) -> bool:
+    """Return True if this product/pin is within the 48h–7day refresh window."""
+    now = datetime.now()
+    count = refresh_counts.get(pid, 0)
+
+    if count >= MAX_REFRESHES_PER_PRODUCT:
+        return False
+
+    age_hours = (now - post_time).total_seconds() / 3600
+
+    if age_hours > 7 * 24:
+        return False
+
+    if count == 0 and age_hours < FIRST_REFRESH_HOURS:
+        return False
+
+    if count == 1:
+        last = last_refresh_time.get(pid)
+        if last and (now - last).total_seconds() / 3600 < SECOND_REFRESH_HOURS:
+            return False
+
+    return True
+
+
+def fetch_candidates_from_pinterest(
+    pinterest: "PinterestClient",
+    store_base_url: str,
+    refresh_history: Dict[str, Any],
+) -> List[Dict[str, Any]]:
+    """
+    PRIMARY source: fetch our own pins live from Pinterest, filter to the 48h–7day
+    refresh window, and return candidates in the same shape get_candidates() would.
+
+    Pin link URL is used to extract the Shopify product ID, e.g.:
+      https://store.com/products/some-handle  →  looked up via Shopify by handle
+    We store product_id as the handle when coming from Pinterest (no numeric ID
+    available without a Shopify lookup), so the caller must resolve it.
+
+    Returns list of dicts with keys: product_id (handle), board, timestamp, _refresh_number
+    Raises on unrecoverable error so caller can fall back to history.
+    """
+    refresh_counts, last_refresh_time = _build_refresh_counts(refresh_history)
+
+    # Normalise store base URL for URL matching
+    base = store_base_url.rstrip("/")
+
+    all_pins: List[Dict] = []
+    # Reset bookmark so we always start from the top
+    pinterest.client.bookmark_manager.reset_bookmark(primary="pins", secondary=pinterest.username)
+
+    while True:
+        batch = pinterest.client.get_user_pins(username=pinterest.username)
+        if not batch:
+            break
+        all_pins.extend(batch)
+        # Stop once we've gone past the 7-day window (pins are newest-first)
+        # created_at format: "2024-05-20T12:34:56"
+        oldest_in_batch = batch[-1]
+        created_raw = oldest_in_batch.get("created_at") or oldest_in_batch.get("created_local_time", "")
+        if created_raw:
+            try:
+                oldest_ts = datetime.fromisoformat(created_raw.replace("Z", ""))
+                if (datetime.now() - oldest_ts).total_seconds() / 3600 > 7 * 24:
+                    break
+            except ValueError:
+                pass
+
+    logger.info(f"Fetched {len(all_pins)} pins from Pinterest profile")
+
+    candidates = []
+    seen_pids: set = set()
+
+    for pin in all_pins:
+        link = pin.get("link") or ""
+        if not link.startswith(base):
+            continue  # not our store
+
+        # Extract product handle from URL: .../products/<handle>
+        parts = link.rstrip("/").split("/products/")
+        if len(parts) < 2:
+            continue
+        handle = parts[1].split("?")[0].split("/")[0]
+        if not handle or handle in seen_pids:
+            continue
+
+        # Skip pins we ourselves already marked as refreshes in refresh_history
+        # (they'll appear in the live feed too but we don't want to re-refresh them)
+        is_our_refresh = any(
+            r.get("pin_id") == str(pin.get("id", ""))
+            for r in refresh_history.get("refreshes", [])
+        )
+        if is_our_refresh:
+            continue
+
+        created_raw = pin.get("created_at") or pin.get("created_local_time", "")
+        if not created_raw:
+            continue
+        try:
+            post_time = datetime.fromisoformat(created_raw.replace("Z", ""))
+        except ValueError:
+            continue
+
+        if not _is_eligible(handle, post_time, refresh_counts, last_refresh_time):
+            continue
+
+        seen_pids.add(handle)
+        board_name = ""
+        board_obj = pin.get("board") or {}
+        if isinstance(board_obj, dict):
+            board_name = board_obj.get("name", "")
+
+        count = refresh_counts.get(handle, 0)
+        candidates.append({
+            "product_id": handle,        # handle — caller resolves to Shopify product
+            "product_id_is_handle": True,
+            "board": board_name,
+            "timestamp": post_time.isoformat(),
+            "pin_id": str(pin.get("id", "")),
+            "_refresh_number": count + 1,
+        })
+
+    candidates.sort(key=lambda p: p["timestamp"])
+    logger.info(f"{len(candidates)} candidates from live Pinterest feed")
+    return candidates
+
+
+def get_candidates(
+    history: Dict[str, Any],
+    refresh_history: Dict[str, Any],
+) -> List[Dict[str, Any]]:
+    """FALLBACK source: history file — same logic, used when Pinterest API is unavailable."""
+
+    refresh_counts, last_refresh_time = _build_refresh_counts(refresh_history)
 
     candidates = []
     seen_product_ids = set()
@@ -231,32 +366,23 @@ def get_candidates(
         pid = post.get("product_id")
         if not pid or pid in seen_product_ids:
             continue
-        # Only original posts (no original_id field means it was a first post)
         if post.get("is_refresh"):
             continue
         seen_product_ids.add(pid)
 
+        try:
+            post_time = datetime.fromisoformat(post["timestamp"])
+        except (KeyError, ValueError):
+            continue
+
+        if not _is_eligible(pid, post_time, refresh_counts, last_refresh_time):
+            continue
+
         count = refresh_counts.get(pid, 0)
-        if count >= MAX_REFRESHES_PER_PRODUCT:
-            continue
-
-        post_time = datetime.fromisoformat(post["timestamp"])
-        age_hours = (now - post_time).total_seconds() / 3600
-
-        # First refresh: must be 48h+ since original post
-        if count == 0 and age_hours < FIRST_REFRESH_HOURS:
-            continue
-
-        # Second refresh: must be 48h+ since last refresh
-        if count == 1:
-            last = last_refresh_time.get(pid)
-            if last and (now - last).total_seconds() / 3600 < SECOND_REFRESH_HOURS:
-                continue
-
         candidates.append({**post, "_refresh_number": count + 1})
 
-    # Prioritise oldest posts first (most overdue for refresh)
     candidates.sort(key=lambda p: p["timestamp"])
+    logger.info(f"{len(candidates)} candidates from posting history (fallback)")
     return candidates
 
 
@@ -270,24 +396,15 @@ def run_refresh_posting():
 
     EnvLoader.load_youtube_env()
 
-    pinterest_email = get_secret("PINTEREST_EMAIL")
-    pinterest_password = get_secret("PINTEREST_PASSWORD")
     shopify_url = get_secret("SHOPIFY_STORE_URL")
     shopify_token = get_secret("SHOPIFY_ACCESS_TOKEN")
     store_base_url = get_secret("STORE_BASE_URL")
 
-    if not all([pinterest_email, pinterest_password, shopify_url, shopify_token]):
-        raise ValueError("Missing required credentials in .env")
+    if not all([shopify_url, shopify_token]):
+        raise ValueError("Missing required Shopify credentials in .env")
 
     history = load_history()
     refresh_history = load_refresh_history()
-
-    candidates = get_candidates(history, refresh_history)
-    if not candidates:
-        logger.info("No products due for refresh today")
-        return
-
-    logger.info(f"{len(candidates)} products eligible for refresh")
 
     pinterest = PinterestClient()
     shopify = ShopifyClient(shopify_url, shopify_token)
@@ -301,9 +418,31 @@ def run_refresh_posting():
             raise RuntimeError("No boards found")
         logger.info(f"Fetched {len(boards)} boards")
 
-        # Build full product map from Shopify for image URLs etc.
-        products = shopify.get_products(limit=50)
-        product_map = {str(p["id"]): p for p in products}
+        # Build full product map from Shopify (by numeric ID and by handle)
+        products = shopify.get_products(limit=250)
+        product_map_by_id = {str(p["id"]): p for p in products}
+        product_map_by_handle = {p["handle"]: p for p in products}
+
+        # --- PRIMARY: fetch candidates from live Pinterest profile ---
+        candidates = []
+        using_live = False
+        try:
+            candidates = fetch_candidates_from_pinterest(pinterest, store_base_url, refresh_history)
+            using_live = True
+        except Exception as e:
+            logger.warning(f"Pinterest live fetch failed ({e}) — falling back to posting history")
+
+        # --- FALLBACK: use local posting_history.json ---
+        if not candidates:
+            if using_live:
+                logger.info("Live Pinterest feed returned 0 candidates — checking posting history as fallback")
+            candidates = get_candidates(history, refresh_history)
+
+        if not candidates:
+            logger.info("No products due for refresh")
+            return
+
+        logger.info(f"{len(candidates)} products eligible for refresh (source: {'Pinterest API' if using_live and candidates else 'posting history'})")
 
         used_boards_today: set = set()
         refreshed = 0
@@ -312,15 +451,20 @@ def run_refresh_posting():
             if refreshed >= MAX_REFRESHES_PER_RUN:
                 break
 
-            pid = str(post["product_id"])
             refresh_num = post["_refresh_number"]
             original_board = post.get("board", "")
 
-            product = product_map.get(pid)
+            # Resolve product: live feed gives handle, history gives numeric ID
+            if post.get("product_id_is_handle"):
+                product = product_map_by_handle.get(post["product_id"])
+            else:
+                product = product_map_by_id.get(str(post["product_id"]))
+
             if not product:
-                logger.warning(f"Product {pid} not found in Shopify — skipping")
+                logger.warning(f"Product '{post['product_id']}' not found in Shopify — skipping")
                 continue
 
+            pid = str(product["id"])
             formatted = format_product_for_pinterest(product, store_base_url)
 
             board_info = pick_refresh_board(
@@ -341,7 +485,6 @@ def run_refresh_posting():
                 f"({original_board} → {board})"
             )
 
-            # Generate fresh image with a different template
             overlay_path = make_refresh_pin_image(
                 formatted["image_url"],
                 formatted["title"],
@@ -349,14 +492,12 @@ def run_refresh_posting():
                 pid,
                 refresh_num,
             )
-
             if not overlay_path:
                 logger.warning(f"Image generation failed for {pid}, skipping")
                 continue
 
             content = generate_content_package(formatted, board)
 
-            # Post as a brand new pin (fresh image = fresh content for Pinterest)
             success, pin_id = pinterest.create_pin(
                 image_path=overlay_path,
                 title=content["pin_title"],
@@ -372,7 +513,6 @@ def run_refresh_posting():
                 logger.warning(f"Refresh pin post failed for {pid}")
                 continue
 
-            # Record in refresh history
             refresh_history["refreshes"].append({
                 "product_id": pid,
                 "title": formatted["title"],
@@ -384,7 +524,6 @@ def run_refresh_posting():
             })
             save_refresh_history(refresh_history)
 
-            # Also record in main history so daily cap and dedup work correctly
             history["posts"].append({
                 "product_id": pid,
                 "title": formatted["title"],

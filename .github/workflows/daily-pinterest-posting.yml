@@ -51,6 +51,16 @@ jobs:
           name_is_regexp: true
           workflow: daily-pinterest-posting.yml
           if_no_artifact_found: warn
+          path: .
+        continue-on-error: true
+
+      - name: Flatten posting history
+        run: |
+          found=$(find . -maxdepth 2 -name "posting_history.json" ! -path "./posting_history.json" | sort | tail -1)
+          if [ -n "$found" ]; then
+            echo "Using posting history from: $found"
+            cp "$found" posting_history.json
+          fi
         continue-on-error: true
 
       - name: Post daily pins
