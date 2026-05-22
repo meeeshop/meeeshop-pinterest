@@ -314,61 +314,80 @@ def fetch_candidates_from_pinterest(
     pin_by_handle: Dict[str, Dict] = {}
     refreshed_pin_ids = {str(r.get("pin_id", "")) for r in refresh_history.get("refreshes", [])}
 
+    store_pins_found = 0
     for board in target_boards:
         board_id = board["id"]
         board_name = board["name"]
 
-        # Reset per-board bookmark
-        pinterest.client.bookmark_manager.reset_bookmark(primary="board_feed", secondary=board_id)
+        try:
+            # Reset per-board bookmark
+            pinterest.client.bookmark_manager.reset_bookmark(primary="board_feed", secondary=board_id)
 
-        page = 0
-        while page < 3:  # max 3 pages × 250 = 750 pins per board
-            batch = pinterest.client.board_feed(board_id=board_id)
-            if not batch:
-                break
-            page += 1
+            page = 0
+            while page < 3:  # max 3 pages × 250 = 750 pins per board
+                try:
+                    batch = pinterest.client.board_feed(board_id=board_id)
+                except Exception as feed_err:
+                    logger.warning(f"  Board '{board_name}' feed error (page {page+1}): {feed_err}")
+                    break
 
-            past_window = False
-            for pin in batch:
-                pin_id = str(pin.get("id", ""))
+                if not batch:
+                    break
+                page += 1
 
-                # Skip pins we already created as refreshes
-                if pin_id in refreshed_pin_ids:
-                    continue
+                # Debug: log first pin fields on first board to verify structure
+                if page == 1 and store_pins_found == 0 and batch:
+                    sample = batch[0]
+                    logger.info(f"  [debug] Sample pin keys: {list(sample.keys())}")
+                    logger.info(f"  [debug] Sample pin link: {sample.get('link') or sample.get('url') or 'N/A'}")
+                    logger.info(f"  [debug] Sample pin created_at: {sample.get('created_at') or sample.get('created_local_time') or 'N/A'}")
 
-                link = pin.get("link") or ""
-                if not link.startswith(base):
-                    continue
+                past_window = False
+                for pin in batch:
+                    pin_id = str(pin.get("id", ""))
 
-                parts = link.rstrip("/").split("/products/")
-                if len(parts) < 2:
-                    continue
-                handle = parts[1].split("?")[0].split("/")[0]
-                if not handle:
-                    continue
+                    if pin_id in refreshed_pin_ids:
+                        continue
 
-                post_time = _parse_pin_timestamp(pin)
-                if not post_time:
-                    continue
+                    # Try both 'link' and 'url' fields
+                    link = pin.get("link") or pin.get("url") or ""
+                    if not link:
+                        continue
+                    if not link.startswith(base):
+                        continue
 
-                if post_time < seven_days_ago:
-                    past_window = True
-                    continue
+                    parts = link.rstrip("/").split("/products/")
+                    if len(parts) < 2:
+                        continue
+                    handle = parts[1].split("?")[0].split("/")[0]
+                    if not handle:
+                        continue
 
-                # Keep earliest occurrence of this handle (the original post)
-                if handle not in pin_by_handle or post_time < datetime.fromisoformat(pin_by_handle[handle]["timestamp"]):
-                    pin_by_handle[handle] = {
-                        "product_id": handle,
-                        "product_id_is_handle": True,
-                        "board": board_name,
-                        "timestamp": post_time.isoformat(),
-                        "pin_id": pin_id,
-                    }
+                    post_time = _parse_pin_timestamp(pin)
+                    if not post_time:
+                        continue
 
-            if past_window:
-                break  # older pins in this board are beyond our window
+                    if post_time < seven_days_ago:
+                        past_window = True
+                        continue
 
-        logger.info(f"  Board '{board_name}': scanned {page} page(s)")
+                    store_pins_found += 1
+                    if handle not in pin_by_handle or post_time < datetime.fromisoformat(pin_by_handle[handle]["timestamp"]):
+                        pin_by_handle[handle] = {
+                            "product_id": handle,
+                            "product_id_is_handle": True,
+                            "board": board_name,
+                            "timestamp": post_time.isoformat(),
+                            "pin_id": pin_id,
+                        }
+
+                if past_window:
+                    break
+
+            logger.info(f"  Board '{board_name}': scanned {page} page(s), {store_pins_found} store pins so far")
+
+        except Exception as board_err:
+            logger.warning(f"  Board '{board_name}' skipped: {board_err}")
 
     logger.info(f"Found {len(pin_by_handle)} unique products from our store in board feeds")
 
