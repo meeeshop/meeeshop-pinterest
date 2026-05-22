@@ -272,22 +272,24 @@ def fetch_candidates_from_pinterest(
     base = store_base_url.rstrip("/")
 
     all_pins: List[Dict] = []
+    MAX_PAGES = 5  # 5 × 250 = 1250 pins max; 7-day window will break earlier
     # Reset bookmark so we always start from the top
     pinterest.client.bookmark_manager.reset_bookmark(primary="pins", secondary=pinterest.username)
 
-    while True:
+    for page in range(MAX_PAGES):
         batch = pinterest.client.get_user_pins(username=pinterest.username)
         if not batch:
             break
         all_pins.extend(batch)
+        logger.info(f"  Pinterest page {page + 1}: {len(batch)} pins fetched ({len(all_pins)} total)")
         # Stop once we've gone past the 7-day window (pins are newest-first)
-        # created_at format: "2024-05-20T12:34:56"
         oldest_in_batch = batch[-1]
         created_raw = oldest_in_batch.get("created_at") or oldest_in_batch.get("created_local_time", "")
         if created_raw:
             try:
                 oldest_ts = datetime.fromisoformat(created_raw.replace("Z", ""))
                 if (datetime.now() - oldest_ts).total_seconds() / 3600 > 7 * 24:
+                    logger.info("  Reached 7-day boundary — stopping pagination")
                     break
             except ValueError:
                 pass
