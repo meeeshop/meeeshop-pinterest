@@ -42,28 +42,12 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Download posting history artifact
-        uses: dawidd6/action-download-artifact@v3
-        with:
-          name: posting-history-*
-          name_is_regexp: true
-          workflow: daily-pinterest-posting.yml
-          if_no_artifact_found: warn
-        continue-on-error: true
-
-      - name: Download refresh history artifact
-        uses: dawidd6/action-download-artifact@v3
-        with:
-          name: refresh-history-*
-          name_is_regexp: true
-          workflow: pinterest-refresh.yml
-          if_no_artifact_found: warn
-        continue-on-error: true
-
       - name: Run refresh posting
         env:
           ENCRYPTION_KEY_PRIMARY: ${{ secrets.ENCRYPTION_KEY_PRIMARY }}
           ENCRYPTION_KEY_FALLBACK: ${{ secrets.ENCRYPTION_KEY_FALLBACK }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
         run: |
           python pinterest_refresh.py
 
