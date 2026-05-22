@@ -42,51 +42,12 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      # refresh_history is still needed to track how many refreshes each product
-      # has already received. posting_history is only used as a fallback if the
-      # live Pinterest fetch fails — both are optional, script handles absence.
-      - name: Download refresh history artifact (fallback data)
-        uses: dawidd6/action-download-artifact@v3
-        with:
-          name: refresh-history-*
-          name_is_regexp: true
-          workflow: pinterest-refresh.yml
-          if_no_artifact_found: warn
-          path: .
-        continue-on-error: true
-
-      - name: Flatten refresh history
-        run: |
-          found=$(find . -maxdepth 2 -name "refresh_history.json" ! -path "./refresh_history.json" | sort | tail -1)
-          if [ -n "$found" ]; then
-            echo "Using refresh history from: $found"
-            cp "$found" refresh_history.json
-          fi
-        continue-on-error: true
-
-      - name: Download posting history artifact (fallback only)
-        uses: dawidd6/action-download-artifact@v3
-        with:
-          name: posting-history-*
-          name_is_regexp: true
-          workflow: daily-pinterest-posting.yml
-          if_no_artifact_found: warn
-          path: .
-        continue-on-error: true
-
-      - name: Flatten posting history
-        run: |
-          found=$(find . -maxdepth 2 -name "posting_history.json" ! -path "./posting_history.json" | sort | tail -1)
-          if [ -n "$found" ]; then
-            echo "Using posting history from: $found"
-            cp "$found" posting_history.json
-          fi
-        continue-on-error: true
-
       - name: Run refresh posting
         env:
           ENCRYPTION_KEY_PRIMARY: ${{ secrets.ENCRYPTION_KEY_PRIMARY }}
           ENCRYPTION_KEY_FALLBACK: ${{ secrets.ENCRYPTION_KEY_FALLBACK }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
         run: |
           python pinterest_refresh.py
 

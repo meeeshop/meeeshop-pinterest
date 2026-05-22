@@ -15,6 +15,7 @@ Why this is safe:
   - Max 3 total pins per product (original + 2 refreshes) over ~4 days
 """
 
+import io
 import os
 import sys
 import json
@@ -22,6 +23,7 @@ import logging
 import random
 import time
 import hashlib
+import zipfile
 import requests
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -249,160 +251,89 @@ def _is_eligible(
     return True
 
 
-def _our_posting_board_ids(boards: List[Dict]) -> List[Dict]:
+def fetch_posting_history_from_github() -> Optional[Dict[str, Any]]:
     """
-    Return board dicts for boards we actually post to (CATEGORY_TO_BOARDS + HIGH_TRAFFIC).
-    These are the only boards where our products can appear — no need to scan all 40 boards.
+    PRIMARY source: download the latest posting_history.json directly from the
+    daily-pinterest-posting workflow artifact via GitHub Actions API.
+
+    Requires GITHUB_TOKEN and GITHUB_REPOSITORY env vars (auto-set in Actions).
+    Returns parsed history dict, or None if unavailable.
     """
-    from board_mapping import CATEGORY_TO_BOARDS, HIGH_TRAFFIC_BOARDS
+    token = os.environ.get("GITHUB_TOKEN")
+    repo = os.environ.get("GITHUB_REPOSITORY")  # e.g. "meeeshop/meeeshop-pinterest"
 
-    # Collect unique board names we post to
-    posting_board_names: set = set(HIGH_TRAFFIC_BOARDS)
-    for names in CATEGORY_TO_BOARDS.values():
-        posting_board_names.update(names)
+    if not token or not repo:
+        logger.warning("GITHUB_TOKEN or GITHUB_REPOSITORY not set — cannot fetch artifact")
+        return None
 
-    boards_by_name = {b["name"].lower(): b for b in boards}
-    result = []
-    for name in posting_board_names:
-        b = boards_by_name.get(name.lower())
-        if b:
-            result.append(b)
-    return result
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "Accept": "application/vnd.github+json",
+        "X-GitHub-Api-Version": "2022-11-28",
+    }
+    base_api = f"https://api.github.com/repos/{repo}"
 
+    try:
+        # Find the most recent successful run of the daily posting workflow
+        resp = requests.get(
+            f"{base_api}/actions/workflows/daily-pinterest-posting.yml/runs",
+            headers=headers,
+            params={"status": "success", "per_page": 10},
+            timeout=15,
+        )
+        resp.raise_for_status()
+        runs = resp.json().get("workflow_runs", [])
+        if not runs:
+            logger.warning("No successful daily posting runs found")
+            return None
 
-def _parse_pin_timestamp(pin: Dict) -> Optional[datetime]:
-    """Extract created_at datetime from a pin dict, trying multiple field names."""
-    for field in ("created_at", "created_local_time", "created"):
-        raw = pin.get(field, "")
-        if raw:
-            try:
-                return datetime.fromisoformat(str(raw).replace("Z", "").split("+")[0])
-            except ValueError:
+        # Runs are newest-first; find the most recent with a posting-history artifact
+        for run in runs:
+            run_id = run["id"]
+            art_resp = requests.get(
+                f"{base_api}/actions/runs/{run_id}/artifacts",
+                headers=headers,
+                timeout=15,
+            )
+            art_resp.raise_for_status()
+            artifacts = art_resp.json().get("artifacts", [])
+
+            posting_artifact = next(
+                (a for a in artifacts if a["name"].startswith("posting-history")),
+                None,
+            )
+            if not posting_artifact:
                 continue
-    return None
 
+            # Download the artifact ZIP
+            dl_resp = requests.get(
+                posting_artifact["archive_download_url"],
+                headers=headers,
+                timeout=30,
+                allow_redirects=True,
+            )
+            dl_resp.raise_for_status()
 
-def fetch_candidates_from_pinterest(
-    pinterest: "PinterestClient",
-    store_base_url: str,
-    refresh_history: Dict[str, Any],
-    boards: List[Dict],
-) -> List[Dict[str, Any]]:
-    """
-    PRIMARY source: scan only our posting boards for pins linking to our store,
-    created within the last 7 days. Much faster than scanning the full profile.
+            # Extract posting_history.json from the ZIP in memory
+            with zipfile.ZipFile(io.BytesIO(dl_resp.content)) as zf:
+                names = zf.namelist()
+                json_name = next((n for n in names if n.endswith("posting_history.json")), None)
+                if not json_name:
+                    logger.warning(f"posting_history.json not found in artifact ZIP ({names})")
+                    continue
+                data = json.loads(zf.read(json_name).decode("utf-8"))
+                logger.info(
+                    f"Loaded posting history from GitHub artifact "
+                    f"(run #{run['run_number']}, {len(data.get('posts', []))} posts)"
+                )
+                return data
 
-    Strategy:
-      1. Identify boards we actually post to (CATEGORY_TO_BOARDS + HIGH_TRAFFIC)
-      2. Fetch each board's feed (board_feed), stop per-board once pins go past 7 days
-      3. Match pins whose link starts with our store URL → extract product handle
-      4. Apply same 48h–7day eligibility rules as the history-based path
+        logger.warning("No posting-history artifact found in recent runs")
+        return None
 
-    Returns list of dicts with: product_id (handle), board, timestamp, _refresh_number
-    Raises on unrecoverable error so caller falls back to history.
-    """
-    refresh_counts, last_refresh_time = _build_refresh_counts(refresh_history)
-    base = store_base_url.rstrip("/")
-    seven_days_ago = datetime.now() - timedelta(days=7)
-
-    # Only scan boards we post to — skip the other 30+ generic boards
-    target_boards = _our_posting_board_ids(boards)
-    logger.info(f"Scanning {len(target_boards)} posting boards for recent pins")
-
-    # Collect all our store pins seen across boards, keyed by handle
-    # handle → {post_time, board_name, pin_id} — keep the earliest (original) post
-    pin_by_handle: Dict[str, Dict] = {}
-    refreshed_pin_ids = {str(r.get("pin_id", "")) for r in refresh_history.get("refreshes", [])}
-
-    store_pins_found = 0
-    for board in target_boards:
-        board_id = board["id"]
-        board_name = board["name"]
-
-        try:
-            # Reset per-board bookmark
-            pinterest.client.bookmark_manager.reset_bookmark(primary="board_feed", secondary=board_id)
-
-            page = 0
-            while page < 3:  # max 3 pages × 250 = 750 pins per board
-                try:
-                    batch = pinterest.client.board_feed(board_id=board_id)
-                except Exception as feed_err:
-                    logger.warning(f"  Board '{board_name}' feed error (page {page+1}): {feed_err}")
-                    break
-
-                if not batch:
-                    break
-                page += 1
-
-                # Debug: log first pin fields on first board to verify structure
-                if page == 1 and store_pins_found == 0 and batch:
-                    sample = batch[0]
-                    logger.info(f"  [debug] Sample pin keys: {list(sample.keys())}")
-                    logger.info(f"  [debug] Sample pin link: {sample.get('link') or sample.get('url') or 'N/A'}")
-                    logger.info(f"  [debug] Sample pin created_at: {sample.get('created_at') or sample.get('created_local_time') or 'N/A'}")
-
-                past_window = False
-                for pin in batch:
-                    pin_id = str(pin.get("id", ""))
-
-                    if pin_id in refreshed_pin_ids:
-                        continue
-
-                    # Try both 'link' and 'url' fields
-                    link = pin.get("link") or pin.get("url") or ""
-                    if not link:
-                        continue
-                    if not link.startswith(base):
-                        continue
-
-                    parts = link.rstrip("/").split("/products/")
-                    if len(parts) < 2:
-                        continue
-                    handle = parts[1].split("?")[0].split("/")[0]
-                    if not handle:
-                        continue
-
-                    post_time = _parse_pin_timestamp(pin)
-                    if not post_time:
-                        continue
-
-                    if post_time < seven_days_ago:
-                        past_window = True
-                        continue
-
-                    store_pins_found += 1
-                    if handle not in pin_by_handle or post_time < datetime.fromisoformat(pin_by_handle[handle]["timestamp"]):
-                        pin_by_handle[handle] = {
-                            "product_id": handle,
-                            "product_id_is_handle": True,
-                            "board": board_name,
-                            "timestamp": post_time.isoformat(),
-                            "pin_id": pin_id,
-                        }
-
-                if past_window:
-                    break
-
-            logger.info(f"  Board '{board_name}': scanned {page} page(s), {store_pins_found} store pins so far")
-
-        except Exception as board_err:
-            logger.warning(f"  Board '{board_name}' skipped: {board_err}")
-
-    logger.info(f"Found {len(pin_by_handle)} unique products from our store in board feeds")
-
-    # Apply eligibility rules
-    candidates = []
-    for handle, post in pin_by_handle.items():
-        post_time = datetime.fromisoformat(post["timestamp"])
-        if not _is_eligible(handle, post_time, refresh_counts, last_refresh_time):
-            continue
-        count = refresh_counts.get(handle, 0)
-        candidates.append({**post, "_refresh_number": count + 1})
-
-    candidates.sort(key=lambda p: p["timestamp"])
-    logger.info(f"{len(candidates)} candidates from live Pinterest board feeds")
-    return candidates
+    except Exception as e:
+        logger.warning(f"GitHub artifact fetch failed: {e}")
+        return None
 
 
 def get_candidates(
@@ -477,26 +408,23 @@ def run_refresh_posting():
         product_map_by_id = {str(p["id"]): p for p in products}
         product_map_by_handle = {p["handle"]: p for p in products}
 
-        # --- PRIMARY: fetch candidates from live Pinterest profile ---
-        candidates = []
-        using_live = False
-        try:
-            candidates = fetch_candidates_from_pinterest(pinterest, store_base_url, refresh_history, boards)
-            using_live = True
-        except Exception as e:
-            logger.warning(f"Pinterest live fetch failed ({e}) — falling back to posting history")
+        # --- PRIMARY: fetch posting history from GitHub Actions artifact ---
+        # This is the most reliable source — the daily workflow saves exactly what it posted.
+        source_label = "local file"
+        live_history = fetch_posting_history_from_github()
+        if live_history:
+            history = live_history
+            source_label = "GitHub artifact"
+        else:
+            logger.info("GitHub artifact unavailable — using local posting_history.json")
 
-        # --- FALLBACK: use local posting_history.json ---
-        if not candidates:
-            if using_live:
-                logger.info("Live Pinterest feed returned 0 candidates — checking posting history as fallback")
-            candidates = get_candidates(history, refresh_history)
+        candidates = get_candidates(history, refresh_history)
 
         if not candidates:
-            logger.info("No products due for refresh")
+            logger.info(f"No products due for refresh (source: {source_label})")
             return
 
-        logger.info(f"{len(candidates)} products eligible for refresh (source: {'Pinterest API' if using_live and candidates else 'posting history'})")
+        logger.info(f"{len(candidates)} products eligible for refresh (source: {source_label})")
 
         used_boards_today: set = set()
         refreshed = 0
@@ -508,11 +436,8 @@ def run_refresh_posting():
             refresh_num = post["_refresh_number"]
             original_board = post.get("board", "")
 
-            # Resolve product: live feed gives handle, history gives numeric ID
-            if post.get("product_id_is_handle"):
-                product = product_map_by_handle.get(post["product_id"])
-            else:
-                product = product_map_by_id.get(str(post["product_id"]))
+            # posting_history always uses numeric Shopify product ID
+            product = product_map_by_id.get(str(post["product_id"]))
 
             if not product:
                 logger.warning(f"Product '{post['product_id']}' not found in Shopify — skipping")
