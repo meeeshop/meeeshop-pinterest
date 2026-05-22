@@ -177,24 +177,64 @@ def download_image(url: str, save_path: Path) -> bool:
         return False
 
 
+def pick_refresh_image_url(product: Dict[str, Any], refresh_number: int) -> str:
+    """
+    Pick a visually distinct product image for each refresh.
+
+    Daily always uses images[0] (front shot). Images[0] and [1] are typically
+    front/back of the same outfit — nearly identical. So refreshes start at
+    index 2 to guarantee a lifestyle or detail shot:
+      refresh 1 → images[2] if available, else images[0]
+      refresh 2 → images[3] if available, else images[0]
+
+    Falls back to images[0] only when the product has fewer than 3 images
+    (template change alone will differentiate the pin in that case).
+    """
+    images = product.get("images", [])
+    if not images:
+        return ""
+
+    # Preferred indices for refresh 1 and 2 — skip 0 and 1 (front/back pair)
+    preferred = [2, 3, 4]
+    target_idx = preferred[min(refresh_number - 1, len(preferred) - 1)]
+
+    if target_idx < len(images):
+        return images[target_idx].get("src", "")
+
+    # Not enough images — use index 0 (template change makes it look different)
+    return images[0].get("src", "")
+
+
 def make_refresh_pin_image(
-    image_url: str,
+    product: Dict[str, Any],
     title: str,
     price: Optional[str],
     product_id: str,
     refresh_number: int,
 ) -> Optional[str]:
-    """Download product image and apply a DIFFERENT template than the original pin.
-
-    Original template = MD5(title) % 5 (create_pin_image default).
-    Refresh 1 = +2 offset, Refresh 2 = +3 offset — guarantees all three differ.
     """
+    Download a DIFFERENT product image and apply a DIFFERENT template.
+
+    - Image: rotates through Shopify product images[] by refresh_number index
+    - Template: uses product_id hash as stable base, offset by refresh_number
+      so refresh 1 and 2 always differ from each other and from the original
+      (which used MD5(title) % 5 with no template_index passed)
+    """
+    image_url = pick_refresh_image_url(product, refresh_number)
+    if not image_url:
+        logger.warning(f"No image URL for product {product_id}")
+        return None
+
     tmp_src = Path("/tmp") / f"refresh_src_{product_id}.jpg"
     if not download_image(image_url, tmp_src):
         return None
 
-    original_idx = int(hashlib.md5(title.encode()).hexdigest(), 16) % 5
-    new_idx = (original_idx + refresh_number + 1) % 5
+    # Base on product_id hash (stable) — daily used MD5(title) % 5
+    # Offset by refresh_number+1 guarantees: original≠refresh1≠refresh2
+    base_idx = int(hashlib.md5(str(product_id).encode()).hexdigest(), 16) % 5
+    new_idx = (base_idx + refresh_number) % 5
+
+    logger.info(f"Refresh image: variant {refresh_number} of {len(product.get('images', []))}, template {new_idx}")
 
     out_path = Path("/tmp") / f"refresh_overlay_{product_id}_r{refresh_number}.jpg"
     result = add_text_overlay(
@@ -504,7 +544,7 @@ def run_refresh_posting():
             )
 
             overlay_path = make_refresh_pin_image(
-                formatted["image_url"],
+                product,
                 formatted["title"],
                 formatted.get("price"),
                 pid,
