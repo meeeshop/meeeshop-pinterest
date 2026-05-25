@@ -56,32 +56,77 @@ MAX_REFRESHES_PER_RUN = 10
 
 
 # Board pools per category — used to find a board DIFFERENT from the original.
-# Ordered by audience reach (highest traffic first within each category).
+# Expanded to include ALL relevant boards so refreshes reach more audiences.
 REFRESH_BOARD_POOLS = {
-    "dress": ["Dressy Outfits", "Cocktail Dresses", "Chic & Effortless Styles",
-              "Woman Fashion!", "Festive Styles", "Short Tall dresses", "Outfit Ideas"],
-    "top":   ["Camis & Tanks", "Puff Sleeves Tops", "Blouse", "Chic Looks",
-              "Cool & Casual Styles", "Effortless Looks", "Ootd #ootd"],
-    "jeans": ["Straight Leg Jeans", "Fitted Jeans", "Casual", "Weekend to Workout",
-              "Everyday Style", "Ootd #ootd"],
-    "jacket": ["Outer wear", "Festive & Flora Fits", "Chic & Cozy Anim...",
-               "Edgy Fashion", "Wardrobe Must Haves"],
-    "pants": ["Casual", "Weekend to Workout", "Everyday Style",
-              "Relaxed Yet Trendy...", "Simple Outfits"],
-    "skirt": ["Dressy Outfits", "Festive Styles", "Chic & Effortless Styles",
-              "Woman Fashion!", "Outfit Ideas"],
-    "sweater": ["Sweaters & Sweater...", "Sweaters for women", "Chic & Cozy Anim...",
-                "comfy fall outfits", "Wardrobe Must Haves"],
-    "cardigan": ["Sweaters", "Sweaters for women", "Chic & Cozy Anim...",
-                 "comfy fall outfits", "Womens shacket"],
-    "bag":   ["Handbag #handsips", "Nylon backpack", "Trendy Backpacks",
-              "Wardrobe Must Haves", "Best selling products"],
-    "shoe":  ["Footwear", "Boat Shoes", "Ankle Strap Flats", "Outfit Ideas"],
-    "jumpsuit": ["Rompers_Jumpsuits &...", "Dressy Outfits", "Casual",
-                 "Woman Fashion!", "Ootd #ootd"],
-    "default": ["Stylish Finds", "Wardrobe Must Haves", "Wardrobe Oozes",
-                "Confidence Ladies", "Chic Looks", "Effortless Looks",
-                "Cool & Casual Styles", "Simple Outfits"],
+    "dress": [
+        "Dressy Outfits", "Cocktail Dresses", "Chic & Effortless Styles",
+        "Woman Fashion!", "Festive Styles", "Short Tall dresses", "Outfit Ideas",
+        "Casual", "Trendy & Trendes...", "Every Peak Clothing", "Festival",
+        "Festive & Flora Fits", "Daris & Desi Womens...", "Dress",
+        "Effortless Looks", "Chic Looks", "Luxe Clothing",
+    ],
+    "top":   [
+        "Camis & Tanks", "Puff Sleeves Tops", "Blouse", "Blouses", "Chic Looks",
+        "Cool & Casual Styles", "Effortless Looks", "Ootd #ootd",
+        "Casual", "Everyday Style", "Simple Outfits", "Spicing Outfits",
+        "Relaxed Yet Trendy...", "Weekend to Workout", "Woman Fashion!",
+    ],
+    "jeans": [
+        "Straight Leg Jeans", "Fitted Jeans", "Casual", "Weekend to Workout",
+        "Everyday Style", "Ootd #ootd", "Kimchi USA Jeans", "Simple Outfits",
+        "Relaxed Yet Trendy...", "Spicing Outfits", "Cool & Casual Styles",
+    ],
+    "jacket": [
+        "Outer wear", "Festive & Flora Fits", "Chic & Cozy Anim...",
+        "Edgy Fashion", "Wardrobe Must Haves", "Winter Outfits",
+        "Thanks giving Outfits", "Fall looks", "comfy fall outfits",
+        "Luxe Clothing", "Meshohn Luxe Styles",
+    ],
+    "pants": [
+        "Casual", "Weekend to Workout", "Everyday Style",
+        "Relaxed Yet Trendy...", "Simple Outfits", "Spicing Outfits",
+        "Cool & Casual Styles", "Ootd #ootd", "Woman Fashion!",
+    ],
+    "skirt": [
+        "Dressy Outfits", "Festive Styles", "Chic & Effortless Styles",
+        "Woman Fashion!", "Outfit Ideas", "Casual", "Effortless Looks",
+        "Spicing Outfits", "Festive & Flora Fits",
+    ],
+    "sweater": [
+        "Sweaters & Sweater...", "Sweaters for women", "Chic & Cozy Anim...",
+        "comfy fall outfits", "Wardrobe Must Haves", "Fall looks",
+        "Winter Outfits", "Thanks giving Outfits", "Everyday Style",
+        "Womens Cardigans", "Casual",
+    ],
+    "cardigan": [
+        "Sweaters", "Sweaters for women", "Chic & Cozy Anim...",
+        "comfy fall outfits", "Womens shacket", "Fall looks",
+        "Winter Outfits", "Everyday Style", "Wardrobe Must Haves",
+    ],
+    "bag":   [
+        "Handbag #handsips", "Nylon backpack", "Trendy Backpacks",
+        "Wardrobe Must Haves", "Best selling products", "Bags",
+        "Stylish Finds", "Luxe Clothing",
+    ],
+    "shoe":  [
+        "Footwear", "Boat Shoes", "Ankle Strap Flats", "Outfit Ideas",
+        "Casual", "Everyday Style", "Simple Outfits",
+    ],
+    "jumpsuit": [
+        "Rompers_Jumpsuits &...", "Dressy Outfits", "Casual",
+        "Woman Fashion!", "Ootd #ootd", "Festival", "Festive & Flora Fits",
+        "Spicing Outfits", "Effortless Looks",
+    ],
+    "default": [
+        "Stylish Finds", "Wardrobe Must Haves", "Wardrobe Oozes",
+        "Confidence Ladies", "Chic Looks", "Effortless Looks",
+        "Cool & Casual Styles", "Simple Outfits", "Woman Fashion!",
+        "Trendy & Trendes...", "Every Peak Clothing", "Spicing Outfits",
+        "Luxe Clothing", "Meshohn Luxe Styles", "Shop For Hotties",
+        "Unique USA", "LE US Womens Cloth...", "Fashion Models",
+        "Fresh Finds New...", "Our Recommended...", "new products",
+        "Social", "Plus Size", "Edgy Fashion", "Festive & Flora Fits",
+    ],
 }
 
 
@@ -134,8 +179,15 @@ def pick_refresh_board(
     product_type: str,
     boards: List[Dict],
     used_boards_today: set,
+    refresh_cursor: int = 0,
 ) -> Optional[Dict]:
-    """Pick a board different from original_board and not used today."""
+    """Pick a board different from original_board and not used today.
+
+    refresh_cursor rotates the fallback starting point through all boards so
+    repeated refreshes don't always land on the same fallback boards.
+    """
+    from board_mapping import MEEESHOP_BOARDS
+
     boards_by_name = {b["name"].lower(): b for b in boards}
 
     def find(name: str) -> Optional[Dict]:
@@ -147,6 +199,11 @@ def pick_refresh_board(
                 return board
         return None
 
+    def eligible(b: Optional[Dict]) -> bool:
+        return (b is not None
+                and b["name"].lower() != original_board.lower()
+                and b["name"] not in used_boards_today)
+
     category = _category_key(title, product_type)
     pool = REFRESH_BOARD_POOLS.get(category, REFRESH_BOARD_POOLS["default"])
 
@@ -154,12 +211,20 @@ def pick_refresh_board(
         if candidate.lower() == original_board.lower():
             continue
         b = find(candidate)
-        if b and b["name"] not in used_boards_today:
+        if eligible(b):
             return b
 
-    # Fallback: any board not original and not used today
-    for b in boards:
-        if b["name"].lower() != original_board.lower() and b["name"] not in used_boards_today:
+    # Cursor-based fallback: rotate through ALL known boards so we don't
+    # always fall back to the same ones when the category pool is exhausted.
+    live_names = {b["name"] for b in boards}
+    ordered = [n for n in MEEESHOP_BOARDS if n in live_names]
+    extras = [b["name"] for b in boards if b["name"] not in set(ordered)]
+    all_names = ordered + extras
+
+    for i in range(len(all_names)):
+        name = all_names[(refresh_cursor + i) % len(all_names)]
+        b = find(name)
+        if eligible(b):
             return b
 
     return None
@@ -507,6 +572,7 @@ def run_refresh_posting():
 
         used_boards_today: set = set()
         refreshed = 0
+        refresh_cursor = 0  # advances per pin to spread fallback boards across all boards
 
         for post in candidates:
             if refreshed >= MAX_REFRESHES_PER_RUN:
@@ -531,7 +597,9 @@ def run_refresh_posting():
                 product.get("product_type", ""),
                 boards,
                 used_boards_today,
+                refresh_cursor=refresh_cursor,
             )
+            refresh_cursor += 1
             if not board_info:
                 logger.warning(f"No eligible refresh board for '{formatted['title']}'")
                 continue

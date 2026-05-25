@@ -31,54 +31,23 @@ HISTORY_FILE = Path(__file__).parent / "posting_history.json"
 MAX_PINS_PER_DAY = 16    # 4 runs × 4 pins across peak USA times
 PINS_PER_RUN = 4
 
-# 16 boards split into 4 time-slot windows (slot 0-3).
-# Each run posts to its own 4 boards — no overlap across the day.
-# Slot assigned by UTC hour: 12→0, 17→1, 21→2, 1→3
-DAILY_BOARD_ROTATION = [
-    # Slot 0 — 8 AM ET (morning scroll, ET/CT peak)
-    "Trends",                    # highest traffic
-    "Dresses",                   # top category
-    "Best selling products",     # social proof
-    "Outfit Ideas",              # discovery
-
-    # Slot 1 — 1 PM ET (lunch break, all zones warming up)
-    "Shirts & Tops",             # category
-    "Style Ideas",               # lifestyle
-    "Jeans",                     # category
-    "Everyday Style",            # lifestyle
-
-    # Slot 2 — 5 PM ET (after work/school, PT lunch)
-    "Sweaters",                  # category
-    "Simple Outfits",            # discovery
-    "Coats & Jackets",           # category
-    "Chic & Effortless Styles",  # lifestyle
-
-    # Slot 3 — 9 PM ET (prime time, all zones)
-    "Pants & Leggings",          # category
-    "Ootd #ootd",                # hashtag discovery
-    "New",                       # recency traffic
-    "Wardrobe Must Haves",       # lifestyle
-]
-
-
-def _time_slot() -> int:
-    """Map current UTC hour to slot 0-3 matching the 4 daily run times."""
-    hour = datetime.utcnow().hour
-    if hour == 12:
-        return 0
-    elif hour == 17:
-        return 1
-    elif hour == 21:
-        return 2
-    else:
-        return 3  # 01 UTC or manual dispatch
 
 
 def load_history() -> Dict[str, Any]:
     """Load posting history"""
     if HISTORY_FILE.exists():
         return json.loads(HISTORY_FILE.read_text(encoding="utf-8"))
-    return {"posts": [], "board_last_used": {}, "daily_count": 0, "last_post_time": None}
+    return {
+        "posts": [], "board_last_used": {}, "daily_count": 0,
+        "last_post_time": None, "board_rotation_cursor": 0,
+    }
+
+
+def advance_board_cursor(history: Dict[str, Any], steps: int, total_boards: int) -> int:
+    """Advance and persist the board rotation cursor, returns the starting position."""
+    cursor = history.get("board_rotation_cursor", 0) % max(total_boards, 1)
+    history["board_rotation_cursor"] = (cursor + steps) % total_boards
+    return cursor
 
 
 def save_history(history: Dict[str, Any]):
@@ -208,8 +177,13 @@ def pick_board(
     boards: List[Dict],
     used_boards: set,
     formatted: Dict[str, Any],
+    run_board_pool: List[str],
 ) -> Optional[Dict]:
-    """Pick board: category-specific boards first, then rotation for generic products."""
+    """Pick board: category-specific first, then cycle through this run's board pool.
+
+    run_board_pool is pre-built per run from the full board list via cursor rotation,
+    so every board gets reached over time — not just the same 16.
+    """
     from board_mapping import CATEGORY_TO_BOARDS
 
     boards_by_name = {b["name"].lower(): b for b in boards}
@@ -240,34 +214,63 @@ def pick_board(
     search = f"{formatted.get('title','').lower()} {formatted.get('product_type','').lower()}"
     cat = category_key(search)
 
-    # For non-generic products, try category-specific boards first
+    # Try category-specific boards first (non-generic products)
     if cat != "default":
         for board_name in CATEGORY_TO_BOARDS.get(cat, []):
             b = find(board_name)
             if b and b["name"] not in used_boards:
                 return b
 
-    # Walk this run's 4-board slot window first, then fall back to full rotation
-    slot = _time_slot()
-    slot_start = slot * PINS_PER_RUN
-    slot_boards = DAILY_BOARD_ROTATION[slot_start: slot_start + PINS_PER_RUN]
-
-    for i in range(len(slot_boards)):
-        candidate = slot_boards[(index + i) % len(slot_boards)]
+    # Cycle through this run's board pool (cursor-based, covers all boards over time)
+    for i in range(len(run_board_pool)):
+        candidate = run_board_pool[(index + i) % len(run_board_pool)]
         b = find(candidate)
         if b and b["name"] not in used_boards:
             return b
 
-    # Fallback: any board in the full rotation not yet used
-    for i in range(len(DAILY_BOARD_ROTATION)):
-        candidate = DAILY_BOARD_ROTATION[(slot_start + index + i) % len(DAILY_BOARD_ROTATION)]
-        b = find(candidate)
-        if b and b["name"] not in used_boards:
-            return b
-
-    # Last resort: anything unused
+    # Last resort: anything unused from full board list
     available = [b for b in boards if b["name"] not in used_boards]
     return random.choice(available) if available else random.choice(boards)
+
+
+def build_run_board_pool(
+    all_boards: List[Dict],
+    history: Dict[str, Any],
+    pins_this_run: int,
+) -> List[str]:
+    """Build the board pool for this run using cursor rotation across all boards.
+
+    Strategy: 1 priority board + (pins_this_run - 1) boards from cursor window.
+    Cursor advances by (pins_this_run - 1) each run, cycling through all boards.
+    This ensures every board gets used over a full rotation cycle.
+    """
+    from board_mapping import MEEESHOP_BOARDS, PRIORITY_BOARDS
+
+    # Build ordered list: live boards sorted by MEEESHOP_BOARDS order, unknowns appended
+    live_names = {b["name"] for b in all_boards}
+    ordered = [n for n in MEEESHOP_BOARDS if n in live_names]
+    extras = [b["name"] for b in all_boards if b["name"] not in set(ordered)]
+    all_names = ordered + extras
+
+    if not all_names:
+        return [b["name"] for b in all_boards]
+
+    # One priority board for guaranteed reach (rotates through PRIORITY_BOARDS list)
+    priority_cursor = history.get("board_rotation_cursor", 0) % len(PRIORITY_BOARDS)
+    priority_pick = PRIORITY_BOARDS[priority_cursor % len(PRIORITY_BOARDS)]
+
+    # Fill remaining slots from cursor window
+    fill_count = max(pins_this_run - 1, 1)
+    cursor = advance_board_cursor(history, fill_count, len(all_names))
+
+    pool = [priority_pick]
+    for i in range(fill_count):
+        name = all_names[(cursor + i) % len(all_names)]
+        if name not in pool:
+            pool.append(name)
+
+    logger.info(f"Board pool for this run ({len(pool)} boards, cursor {cursor}/{len(all_names)}): {pool}")
+    return pool
 
 
 def run_daily_posting(use_video: bool = False):
@@ -293,8 +296,7 @@ def run_daily_posting(use_video: bool = False):
         raise ValueError("Missing required credentials in .env")
 
     target = int(os.getenv("PINS_TO_POST", str(PINS_PER_RUN)))
-    slot = _time_slot()
-    logger.info(f"Daily run starting — slot {slot}/3, target: {target} pins")
+    logger.info(f"Daily run starting — target: {target} pins")
 
     history = load_history()
     reset_daily_count()
@@ -317,6 +319,9 @@ def run_daily_posting(use_video: bool = False):
         if not boards:
             raise RuntimeError("No boards found — check Pinterest authentication")
         logger.info(f"Fetched {len(boards)} boards")
+
+        run_board_pool = build_run_board_pool(boards, history, target)
+        save_history(history)  # persist cursor advance
 
         products = shopify.get_products(limit=50)
         if not products:
@@ -342,7 +347,7 @@ def run_daily_posting(use_video: bool = False):
             product_index += 1
 
             formatted = format_product_for_pinterest(product, store_base_url)
-            board_info = pick_board(posted, boards, used_boards, formatted)
+            board_info = pick_board(posted, boards, used_boards, formatted, run_board_pool)
             if not board_info:
                 logger.warning("No board available, skipping product")
                 continue

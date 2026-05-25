@@ -99,6 +99,22 @@ MEEESHOP_BOARDS = [
 # HIGH-TRAFFIC BOARDS (prioritized for new products)
 HIGH_TRAFFIC_BOARDS = ["Trends", "New", "Best selling products", "New Trendy Woman..."]
 
+# Priority boards rotated into every run's pool to ensure consistent reach
+PRIORITY_BOARDS = [
+    "Trends",
+    "New",
+    "Best selling products",
+    "Outfit Ideas",
+    "Ootd #ootd",
+    "Style Ideas",
+    "Everyday Style",
+    "Wardrobe Must Haves",
+    "Woman Fashion!",
+    "Chic & Effortless Styles",
+    "Stylish Finds",
+    "Confidence Ladies",
+]
+
 # Product category to board mapping
 CATEGORY_TO_BOARDS = {
     "dress": [
