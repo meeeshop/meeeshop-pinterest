@@ -57,7 +57,7 @@ def save_history(history: Dict[str, Any]):
 
 
 def reset_daily_count():
-    """Reset daily post count at midnight"""
+    """Reset daily post count at midnight — returns updated history"""
     history = load_history()
     last_post = history.get("last_post_time")
 
@@ -68,7 +68,7 @@ def reset_daily_count():
             history["daily_count"] = 0
             save_history(history)
 
-    return history["daily_count"]
+    return history
 
 
 def can_post_today(history: Dict[str, Any]) -> bool:
@@ -361,8 +361,7 @@ def run_daily_posting(use_video: bool = False):
     target = int(os.getenv("PINS_TO_POST", str(PINS_PER_RUN)))
     logger.info(f"Daily run starting — target: {target} pins")
 
-    history = load_history()
-    reset_daily_count()
+    history = reset_daily_count()
 
     already_today = history["daily_count"]
     if already_today >= MAX_PINS_PER_DAY:
