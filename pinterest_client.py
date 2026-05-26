@@ -412,12 +412,30 @@ class PinterestClient:
 
         pins = []
         try:
-            # reset_bookmark=True ensures we always get the newest page
-            board_pins = self.client.board_feed(
-                board_id=board_id,
-                page_size=page_size,
-                reset_bookmark=True,
-            )
+            # py3-pinterest stores per-board bookmarks in self.client.bookmarks.
+            # reset_bookmark=True raises KeyError on boards not yet seen, and
+            # without reset the second call returns the next page (not newest).
+            # Clear any stored bookmark for this board, then call without reset.
+            bookmarks = getattr(self.client, 'bookmarks', None)
+            if isinstance(bookmarks, dict):
+                bookmarks.pop(board_id, None)
+
+            try:
+                board_pins = self.client.board_feed(
+                    board_id=board_id,
+                    page_size=page_size,
+                    reset_bookmark=False,
+                )
+            except KeyError:
+                # Some py3-pinterest versions require the bookmark key to exist.
+                # Seed it with '' (empty = newest page) and retry.
+                if isinstance(bookmarks, dict):
+                    bookmarks[board_id] = ''
+                board_pins = self.client.board_feed(
+                    board_id=board_id,
+                    page_size=page_size,
+                    reset_bookmark=False,
+                )
 
             for pin in (board_pins or []):
                 raw_ts = (
