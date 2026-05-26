@@ -384,8 +384,8 @@ def run_daily_posting(use_video: bool = False):
         run_board_pool = build_run_board_pool(boards, history, target)
         save_history(history)  # persist cursor advance
 
-        # Fetch ALL products with stock > 20, paginated, exclude last 10 days
-        pool = fetch_all_eligible_products(shopify, history, min_stock=20)
+        # Fetch ALL products with stock > 15, paginated, exclude last 10 days
+        pool = fetch_all_eligible_products(shopify, history, min_stock=15)
         if not pool:
             logger.warning("No eligible products (try lowering stock threshold or checking 10-day window)")
             return
