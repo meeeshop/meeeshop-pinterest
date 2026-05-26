@@ -356,6 +356,8 @@ def fetch_pins_in_window(
     pins_2day: List[Dict[str, Any]] = []
     pins_4_7day: List[Dict[str, Any]] = []
     staged: List[Dict[str, Any]] = []
+    sample_logged = False
+    no_ts_count = 0
 
     for board in boards:
         board_name = board.get("name", "")
@@ -364,13 +366,24 @@ def fetch_pins_in_window(
         logger.info(f"Scanning board for recent pins: {board_name}")
         pins = pinterest.fetch_board_pins(board_id, board_name)
 
+        # Log a sample pin once so we can see what fields py3-pinterest returns
+        if pins and not sample_logged:
+            sample = pins[0]
+            logger.info(f"[debug] Sample pin keys: {list(sample.keys())}")
+            logger.info(f"[debug] Sample pin id={sample.get('id')} created_at={sample.get('created_at')!r}")
+            sample_logged = True
+
         board_window_count = {"2day": 0, "4-7day": 0}
-        for pin in pins:
+        for idx, pin in enumerate(pins):
             ts = _parse_pin_timestamp(pin)
 
-            # If no timestamp, skip (can't verify age)
+            # Fallback: if timestamp missing, use board position as recency proxy.
+            # Boards are newest-first; assume ~20 pins/day posting rate.
             if ts is None:
-                continue
+                no_ts_count += 1
+                # Estimate age from position: 20 pins/day → idx/20 days old
+                estimated_age_days = idx / 20.0
+                ts = now - timedelta(days=estimated_age_days)
 
             # Stop scanning once pins are older than 7 days
             if ts < cutoff_old:
@@ -403,6 +416,12 @@ def fetch_pins_in_window(
                 f"{board_window_count['2day']} 2-day pins, "
                 f"{board_window_count['4-7day']} 4-7-day pins"
             )
+
+    if no_ts_count:
+        logger.warning(
+            f"[debug] {no_ts_count} pins had no created_at — used board-position fallback "
+            f"(~20 pins/day assumed)"
+        )
 
     logger.info(
         f"Total qualifying pins — 2-day: {len(pins_2day)}, 4-7-day: {len(pins_4_7day)}"
