@@ -96,6 +96,24 @@ class ShopifyClient:
             logger.error(f"Failed to fetch collection products: {e}")
             return []
 
+    def get_product_by_handle(self, handle: str) -> Optional[Dict[str, Any]]:
+        """Fetch a single product by its handle"""
+        url = f"{self.store_url}/admin/api/2024-01/products.json"
+
+        params = {
+            "handle": handle,
+            "fields": "id,title,handle,image,images,body_html,vendor,product_type,tags,published_at,variants",
+        }
+
+        try:
+            resp = requests.get(url, headers=self.headers, params=params, timeout=30)
+            resp.raise_for_status()
+            products = resp.json().get("products", [])
+            return products[0] if products else None
+        except Exception as e:
+            logger.error(f"Failed to fetch product by handle {handle}: {e}")
+            return None
+
 
 def format_product_for_pinterest(product: Dict[str, Any], base_url: str) -> Dict[str, Any]:
     """Format Shopify product for Pinterest pin creation"""

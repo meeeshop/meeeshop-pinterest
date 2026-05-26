@@ -393,6 +393,50 @@ class PinterestClient:
             logger.error(f"Failed to fetch boards: {e}")
             return board_list
 
+    def fetch_board_pins(self, board_id: str, board_name: str, limit: int = 50) -> List[Dict[str, Any]]:
+        """
+        Fetch pins from a specific board.
+        Uses py3-pinterest board_feed() to get pins from a board.
+
+        Args:
+            board_id: Board ID from Pinterest
+            board_name: Board name (for logging)
+            limit: Max pins to fetch per call (pagination handled by py3-pinterest)
+
+        Returns:
+            List of pin dicts with 'id', 'title', 'description', 'link', 'images' keys
+        """
+        if not self.authenticated:
+            logger.error("Not authenticated. Call login() first.")
+            return []
+
+        pins = []
+        try:
+            # py3-pinterest.board_feed() returns paginated pins from board
+            # It handles pagination internally with reset_bookmark parameter
+            board_pins = self.client.board_feed(board_id=board_id)
+
+            if board_pins:
+                for pin in board_pins:
+                    pin_info = {
+                        'id': pin.get('id'),
+                        'title': pin.get('title', ''),
+                        'description': pin.get('description', ''),
+                        'link': pin.get('link') or pin.get('url', ''),
+                        'images': pin.get('images', {}),
+                    }
+                    pins.append(pin_info)
+
+                logger.info(f"Fetched {len(pins)} pins from board '{board_name}' (ID: {board_id})")
+            else:
+                logger.info(f"No pins found in board '{board_name}'")
+
+            return pins
+
+        except Exception as e:
+            logger.error(f"Failed to fetch pins from board {board_name}: {e}")
+            return []
+
     def _get_raw_session(self) -> requests.Session:
         """Return the underlying requests session from py3-pinterest client."""
         if hasattr(self.client, 'http') and isinstance(self.client.http, requests.Session):

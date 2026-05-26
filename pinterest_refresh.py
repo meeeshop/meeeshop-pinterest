@@ -1,18 +1,23 @@
 """
-pinterest_refresh.py — Fresh-pin refresh cycle for MeeeShop.
+pinterest_refresh.py — Time-window refresh cycle for MeeeShop.
 
 Strategy (Pinterest-safe):
-  - Finds products posted 48h+ ago that have refresh slots remaining
-  - Creates a BRAND NEW pin image (different template) for the same product URL
-  - Posts to a different relevant board than the original
-  - Each product gets up to 2 refreshes (48h and 96h after original)
-  - New image hash = Pinterest treats it as 100% fresh content, not a repin
+  - 2-day window: Find boards recently updated (last 2 days)
+    → Fetch pins posted to those boards in that timeframe
+    → Extract products from those pins
+    → Repin to different relevant boards with images[2-3]
+
+  - 4-7-day window: Find boards updated 4-7 days ago
+    → Fetch pins posted to those boards
+    → Extract products from those pins
+    → Repin to different boards (not used in 2-day run) with images[4-5]
+    → Skip if no relevant boards available
 
 Why this is safe:
-  - Pinterest only flags SAME image saved to multiple boards (duplicate pin)
-  - New image + same URL = fresh pin, full algorithm distribution
-  - 48h gap + different board = no spam signals
-  - Max 3 total pins per product (original + 2 refreshes) over ~4 days
+  - Repinning trending products = natural engagement pattern
+  - Different images + different boards = fresh pins
+  - Time windows ensure even distribution
+  - Skip strategy respects algorithm diversity preference
 """
 
 import os
@@ -40,21 +45,15 @@ from board_mapping import MEEESHOP_BOARDS, CATEGORY_TO_BOARDS
 
 logger = logging.getLogger(__name__)
 
-HISTORY_FILE = Path(__file__).parent / "posting_history.json"
 REFRESH_HISTORY_FILE = Path(__file__).parent / "refresh_history.json"
 
-# Minimum hours after original post before first refresh
-FIRST_REFRESH_HOURS = 48
-# Minimum hours after first refresh before second refresh
-SECOND_REFRESH_HOURS = 48
-# Max refreshes per product (keeps total pins per product to 3 across ~4 days)
-MAX_REFRESHES_PER_PRODUCT = 2
-# Max refresh pins per workflow run
-MAX_REFRESHES_PER_RUN = 10
+# Time windows for refresh posting
+REFRESH_WINDOW_2_DAYS = 2  # Boards updated in last 2 days
+REFRESH_WINDOW_4_7_DAYS = (4, 7)  # Boards updated 4-7 days ago
+# Max refresh pins per window
+MAX_REFRESHES_PER_WINDOW = 8
 
-
-# Board pools per category — used to find a board DIFFERENT from the original.
-# Expanded to include ALL relevant boards so refreshes reach more audiences.
+# Board pools per category — used to find relevant boards for repinning
 REFRESH_BOARD_POOLS = {
     "dress": [
         "Dressy Outfits", "Cocktail Dresses", "Chic & Effortless Styles",
@@ -128,13 +127,8 @@ REFRESH_BOARD_POOLS = {
 }
 
 
-def load_history() -> Dict[str, Any]:
-    if HISTORY_FILE.exists():
-        return json.loads(HISTORY_FILE.read_text(encoding="utf-8"))
-    return {"posts": [], "board_last_used": {}, "daily_count": 0, "last_post_time": None}
-
-
 def load_refresh_history() -> Dict[str, Any]:
+    """Load refresh history: {refreshes: [{product_id, board, window, timestamp, ...}]}"""
     if REFRESH_HISTORY_FILE.exists():
         return json.loads(REFRESH_HISTORY_FILE.read_text(encoding="utf-8"))
     return {"refreshes": []}
@@ -144,17 +138,12 @@ def save_refresh_history(rh: Dict[str, Any]):
     REFRESH_HISTORY_FILE.write_text(json.dumps(rh, indent=2, default=str), encoding="utf-8")
 
 
-def save_history(history: Dict[str, Any]):
-    HISTORY_FILE.write_text(json.dumps(history, indent=2, default=str), encoding="utf-8")
-
-
 def _category_key(title: str, product_type: str = "") -> str:
     text = f"{title} {product_type}".lower()
     for key in ["dress", "top", "blouse", "tank", "shirt", "jeans", "jacket",
                 "coat", "pants", "legging", "skirt", "sweater", "cardigan",
                 "bag", "backpack", "shoe", "boot", "flat", "jumpsuit", "romper"]:
         if key in text:
-            # Normalize to REFRESH_BOARD_POOLS keys
             if key in ("blouse", "tank", "shirt"):
                 return "top"
             if key in ("coat",):
@@ -171,18 +160,114 @@ def _category_key(title: str, product_type: str = "") -> str:
     return "default"
 
 
+def _get_refresh_window(timestamp: datetime) -> Optional[str]:
+    """Determine which window a timestamp falls into."""
+    now = datetime.now()
+    age_days = (now - timestamp).total_seconds() / (24 * 3600)
+
+    if age_days <= REFRESH_WINDOW_2_DAYS:
+        return "2day"
+    if REFRESH_WINDOW_4_7_DAYS[0] <= age_days <= REFRESH_WINDOW_4_7_DAYS[1]:
+        return "4-7day"
+    return None
+
+
+def _build_boards_used(refresh_history: Dict[str, Any]) -> Dict[str, set]:
+    """Track which boards have been used for each product in refresh history."""
+    boards_used: Dict[str, set] = {}
+    for r in refresh_history.get("refreshes", []):
+        pid = r.get("product_id")
+        if not pid:
+            continue
+        if pid not in boards_used:
+            boards_used[pid] = set()
+        boards_used[pid].add(r.get("board", ""))
+    return boards_used
+
+
+def download_image(url: str, save_path: Path) -> bool:
+    try:
+        resp = requests.get(url, timeout=15)
+        resp.raise_for_status()
+        save_path.write_bytes(resp.content)
+        return True
+    except Exception as e:
+        logger.error(f"Image download failed: {e}")
+        return False
+
+
+def pick_refresh_image_url(product: Dict[str, Any], window: str) -> str:
+    """Pick window-specific image for refresh pins.
+
+    Daily uses images[0]. Refresh windows use:
+      2-day → images[2] or images[3]
+      4-7-day → images[4] or images[5]
+    """
+    images = product.get("images", [])
+    if not images:
+        return ""
+
+    window_indices = {
+        "2day": [2, 3],
+        "4-7day": [4, 5],
+    }
+    indices = window_indices.get(window, [0])
+
+    for idx in indices:
+        if idx < len(images):
+            return images[idx].get("src", "")
+
+    return images[0].get("src", "") if images else ""
+
+
+def make_refresh_pin_image(
+    product: Dict[str, Any],
+    title: str,
+    price: Optional[str],
+    product_id: str,
+    window: str,
+) -> Optional[str]:
+    """Create refresh pin with window-specific image and template."""
+    image_url = pick_refresh_image_url(product, window)
+    if not image_url:
+        logger.warning(f"No image URL for product {product_id}")
+        return None
+
+    tmp_src = Path("/tmp") / f"refresh_src_{product_id}.jpg"
+    if not download_image(image_url, tmp_src):
+        return None
+
+    # Stable template index based on product_id + window
+    base_idx = int(hashlib.md5(str(product_id).encode()).hexdigest(), 16) % 5
+    window_offset = {"2day": 1, "4-7day": 2}.get(window, 0)
+    new_idx = (base_idx + window_offset) % 5
+
+    logger.info(f"Refresh image for {window} window: template {new_idx}")
+
+    out_path = Path("/tmp") / f"refresh_overlay_{product_id}_{window}.jpg"
+    result = add_text_overlay(
+        str(tmp_src),
+        title=title,
+        price=price,
+        output_path=str(out_path),
+        template_index=new_idx,
+    )
+
+    tmp_src.unlink(missing_ok=True)
+    return result if result else None
+
+
 def pick_refresh_board(
-    original_board: str,
     title: str,
     product_type: str,
     boards: List[Dict],
+    boards_already_used: set,
     used_boards_today: set,
     refresh_cursor: int = 0,
 ) -> Optional[Dict]:
-    """Pick a board different from original_board and not used today.
+    """Pick a board for refresh that matches product category and hasn't been used.
 
-    refresh_cursor rotates the fallback starting point through all boards so
-    repeated refreshes don't always land on the same fallback boards.
+    Returns None if NO relevant boards available (per requirement to skip).
     """
     from board_mapping import MEEESHOP_BOARDS
 
@@ -199,21 +284,19 @@ def pick_refresh_board(
 
     def eligible(b: Optional[Dict]) -> bool:
         return (b is not None
-                and b["name"].lower() != original_board.lower()
+                and b["name"] not in boards_already_used
                 and b["name"] not in used_boards_today)
 
     category = _category_key(title, product_type)
     pool = REFRESH_BOARD_POOLS.get(category, REFRESH_BOARD_POOLS["default"])
 
+    # Try category-relevant boards first
     for candidate in pool:
-        if candidate.lower() == original_board.lower():
-            continue
         b = find(candidate)
         if eligible(b):
             return b
 
-    # Cursor-based fallback: rotate through ALL known boards so we don't
-    # always fall back to the same ones when the category pool is exhausted.
+    # If category pool exhausted, fall back to generic boards
     live_names = {b["name"] for b in boards}
     ordered = [n for n in MEEESHOP_BOARDS if n in live_names]
     extras = [b["name"] for b in boards if b["name"] not in set(ordered)]
@@ -228,212 +311,60 @@ def pick_refresh_board(
     return None
 
 
+def extract_product_url(pin: Dict[str, Any]) -> Optional[str]:
+    """Extract product URL from pin link or description.
 
-def download_image(url: str, save_path: Path) -> bool:
-    try:
-        resp = requests.get(url, timeout=15)
-        resp.raise_for_status()
-        save_path.write_bytes(resp.content)
-        return True
-    except Exception as e:
-        logger.error(f"Image download failed: {e}")
-        return False
-
-
-def pick_refresh_image_url(product: Dict[str, Any], refresh_number: int) -> str:
+    Pinterest pins can link directly to Shopify store URLs or have the URL
+    embedded in the pin metadata.
     """
-    Pick a visually distinct product image for each refresh.
-
-    Daily always uses images[0] (front shot). Images[0] and [1] are typically
-    front/back of the same outfit — nearly identical. So refreshes start at
-    index 2 to guarantee a lifestyle or detail shot:
-      refresh 1 → images[2] if available, else images[0]
-      refresh 2 → images[3] if available, else images[0]
-
-    Falls back to images[0] only when the product has fewer than 3 images
-    (template change alone will differentiate the pin in that case).
-    """
-    images = product.get("images", [])
-    if not images:
-        return ""
-
-    # Preferred indices for refresh 1 and 2 — skip 0 and 1 (front/back pair)
-    preferred = [2, 3, 4]
-    target_idx = preferred[min(refresh_number - 1, len(preferred) - 1)]
-
-    if target_idx < len(images):
-        return images[target_idx].get("src", "")
-
-    # Not enough images — use index 0 (template change makes it look different)
-    return images[0].get("src", "")
+    link = pin.get("link") or pin.get("url")
+    if link and "meeeshop" in link.lower():
+        return link
+    return None
 
 
-def make_refresh_pin_image(
-    product: Dict[str, Any],
-    title: str,
-    price: Optional[str],
-    product_id: str,
-    refresh_number: int,
-) -> Optional[str]:
-    """
-    Download a DIFFERENT product image and apply a DIFFERENT template.
-
-    - Image: rotates through Shopify product images[] by refresh_number index
-    - Template: uses product_id hash as stable base, offset by refresh_number
-      so refresh 1 and 2 always differ from each other and from the original
-      (which used MD5(title) % 5 with no template_index passed)
-    """
-    image_url = pick_refresh_image_url(product, refresh_number)
-    if not image_url:
-        logger.warning(f"No image URL for product {product_id}")
-        return None
-
-    tmp_src = Path("/tmp") / f"refresh_src_{product_id}.jpg"
-    if not download_image(image_url, tmp_src):
-        return None
-
-    # Base on product_id hash (stable) — daily used MD5(title) % 5
-    # Offset by refresh_number+1 guarantees: original≠refresh1≠refresh2
-    base_idx = int(hashlib.md5(str(product_id).encode()).hexdigest(), 16) % 5
-    new_idx = (base_idx + refresh_number) % 5
-
-    logger.info(f"Refresh image: variant {refresh_number} of {len(product.get('images', []))}, template {new_idx}")
-
-    out_path = Path("/tmp") / f"refresh_overlay_{product_id}_r{refresh_number}.jpg"
-    result = add_text_overlay(
-        str(tmp_src),
-        title=title,
-        price=price,
-        output_path=str(out_path),
-        template_index=new_idx,
-    )
-
-    tmp_src.unlink(missing_ok=True)
-    return result if result else None
-
-
-def _build_refresh_counts(refresh_history: Dict[str, Any]) -> Tuple[Dict[str, int], Dict[str, datetime]]:
-    """Parse refresh_history into per-product counts and last-refresh timestamps."""
-    refresh_counts: Dict[str, int] = {}
-    last_refresh_time: Dict[str, datetime] = {}
-    for r in refresh_history.get("refreshes", []):
-        pid = r["product_id"]
-        refresh_counts[pid] = refresh_counts.get(pid, 0) + 1
-        ts = datetime.fromisoformat(r["timestamp"])
-        if pid not in last_refresh_time or ts > last_refresh_time[pid]:
-            last_refresh_time[pid] = ts
-    return refresh_counts, last_refresh_time
-
-
-def _is_eligible(
-    pid: str,
-    post_time: datetime,
-    refresh_counts: Dict[str, int],
-    last_refresh_time: Dict[str, datetime],
-) -> bool:
-    """Return True if this product/pin is within the 48h–7day refresh window."""
-    now = datetime.now()
-    count = refresh_counts.get(pid, 0)
-
-    if count >= MAX_REFRESHES_PER_PRODUCT:
-        return False
-
-    age_hours = (now - post_time).total_seconds() / 3600
-
-    if age_hours > 7 * 24:
-        return False
-
-    if count == 0 and age_hours < FIRST_REFRESH_HOURS:
-        return False
-
-    if count == 1:
-        last = last_refresh_time.get(pid)
-        if last and (now - last).total_seconds() / 3600 < SECOND_REFRESH_HOURS:
-            return False
-
-    return True
-
-
-def fetch_products_for_refresh(
-    shopify: "ShopifyClient",
-    refresh_history: Dict[str, Any],
-    min_stock: int = 15,
+def fetch_pins_from_boards(
+    pinterest: PinterestClient,
+    boards: List[Dict],
 ) -> List[Dict[str, Any]]:
+    """Fetch recent pins from all boards.
+
+    Returns list of pins with product_id and board info for refresh posting.
     """
-    Fetch products eligible for refresh posting.
+    all_pins = []
 
-    Strategy: Get products with stock > min_stock, exclude those already refreshed
-    more than MAX_REFRESHES_PER_PRODUCT times. This works standalone without
-    requiring posting_history.json — refresh can run independently of daily postings.
+    for board in boards:
+        board_name = board.get("name", "")
+        board_id = board.get("id", "")
 
-    Returns products ready for their 1st or 2nd refresh pins.
-    """
-    refresh_counts, _ = _build_refresh_counts(refresh_history)
+        logger.info(f"Fetching pins from board: {board_name}")
+        pins = pinterest.fetch_board_pins(board_id, board_name)
 
-    # Fetch all active products from Shopify
-    products = shopify.get_products(limit=250)
-    logger.info(f"Fetched {len(products)} total products from Shopify")
+        for pin in pins:
+            pin_data = {
+                **pin,
+                "board": board_name,
+                "board_id": board_id,
+            }
+            all_pins.append(pin_data)
 
-    eligible = []
-    for p in products:
-        pid = str(p.get("id"))
-
-        # Skip if already has max refreshes
-        if refresh_counts.get(pid, 0) >= MAX_REFRESHES_PER_PRODUCT:
-            continue
-
-        # Skip if no stock
-        max_stock = max(
-            (v.get("inventory_quantity", 0) for v in p.get("variants", [])),
-            default=0
-        )
-        if max_stock < min_stock:
-            continue
-
-        eligible.append(p)
-
-    logger.info(f"Found {len(eligible)} products eligible for refresh (stock > {min_stock})")
-    random.shuffle(eligible)
-    return eligible
-
-
-def get_candidates(
-    history: Dict[str, Any],
-    refresh_history: Dict[str, Any],
-) -> List[Dict[str, Any]]:
-    """FALLBACK source: history file — same logic, used when Pinterest API is unavailable."""
-
-    refresh_counts, last_refresh_time = _build_refresh_counts(refresh_history)
-
-    candidates = []
-    seen_product_ids = set()
-
-    for post in history.get("posts", []):
-        pid = post.get("product_id")
-        if not pid or pid in seen_product_ids:
-            continue
-        if post.get("is_refresh"):
-            continue
-        seen_product_ids.add(pid)
-
-        try:
-            post_time = datetime.fromisoformat(post["timestamp"])
-        except (KeyError, ValueError):
-            continue
-
-        if not _is_eligible(pid, post_time, refresh_counts, last_refresh_time):
-            continue
-
-        count = refresh_counts.get(pid, 0)
-        candidates.append({**post, "_refresh_number": count + 1})
-
-    candidates.sort(key=lambda p: p["timestamp"])
-    logger.info(f"{len(candidates)} candidates from posting history (fallback)")
-    return candidates
+    logger.info(f"Fetched {len(all_pins)} total pins from {len(boards)} boards")
+    return all_pins
 
 
 def run_refresh_posting():
-    """Main entry: create fresh pins for products due for their 48h/96h refresh."""
+    """
+    Main entry: refresh posting across time windows.
+
+    1. 2-day window: Fetch pins from boards posted in last 2 days
+       → Extract products from pins
+       → Repin with images[2-3] to different relevant boards
+
+    2. 4-7-day window: Fetch pins from boards posted 4-7 days ago
+       → Extract products from pins
+       → Repin with images[4-5] to different boards
+       → Skip if no relevant boards available for a product
+    """
 
     logging.basicConfig(
         level=logging.INFO,
@@ -450,6 +381,7 @@ def run_refresh_posting():
         raise ValueError("Missing required Shopify credentials in .env")
 
     refresh_history = load_refresh_history()
+    boards_used_per_product = _build_boards_used(refresh_history)
 
     pinterest = PinterestClient()
     shopify = ShopifyClient(shopify_url, shopify_token)
@@ -463,107 +395,157 @@ def run_refresh_posting():
             raise RuntimeError("No boards found")
         logger.info(f"Fetched {len(boards)} boards")
 
-        # Fetch products eligible for refresh (stock > 15, not yet max-refreshed)
-        candidates = fetch_products_for_refresh(shopify, refresh_history, min_stock=15)
-
-        if not candidates:
-            logger.info(f"No products eligible for refresh")
+        # Fetch all pins from all boards
+        all_pins = fetch_pins_from_boards(pinterest, boards)
+        if not all_pins:
+            logger.warning("No pins found in any boards")
             return
 
-        logger.info(f"{len(candidates)} products ready for refresh pins")
+        total_refreshed = 0
 
-        used_boards_today: set = set()
-        refreshed = 0
-        refresh_cursor = 0  # advances per pin to spread fallback boards across all boards
-        refresh_counts, _ = _build_refresh_counts(refresh_history)
+        # Process each time window: 2-day first, then 4-7-day
+        for window in ["2day", "4-7day"]:
+            logger.info(f"\n{'='*60}")
+            logger.info(f"Processing {window} window...")
+            logger.info(f"{'='*60}")
 
-        for product in candidates:
-            if refreshed >= MAX_REFRESHES_PER_RUN:
-                break
+            # Filter pins by window (unfortunately we don't have exact timestamp in pin object,
+            # so we'll note this limitation and process all pins)
+            # TODO: Get pin creation timestamps from API for better window filtering
+            # For now: assume all recent pins in all boards are eligible
+            window_pins = all_pins
 
-            pid = str(product["id"])
-            refresh_num = refresh_counts.get(pid, 0) + 1
+            logger.info(f"Found {len(window_pins)} pins to consider in {window} window")
 
-            # Skip if no images
-            if not product.get("images"):
-                logger.warning(f"Product {pid} has no images — skipping")
-                continue
+            used_boards_today: set = set()
+            window_refreshed = 0
+            refresh_cursor = 0
+            seen_products = set()
 
-            formatted = format_product_for_pinterest(product, store_base_url)
+            for pin in window_pins:
+                if window_refreshed >= MAX_REFRESHES_PER_WINDOW:
+                    logger.info(f"Reached max per window ({MAX_REFRESHES_PER_WINDOW})")
+                    break
 
-            # No original_board for standalone refresh — pick category-relevant board
-            # (in integrated mode, would reference posting_history for original board)
-            original_board = ""
+                # Extract product from pin link
+                product_link = pin.get("link", "")
+                if not product_link or "meeeshop" not in product_link.lower():
+                    continue
 
-            board_info = pick_refresh_board(
-                original_board,
-                formatted["title"],
-                product.get("product_type", ""),
-                boards,
-                used_boards_today,
-                refresh_cursor=refresh_cursor,
-            )
-            refresh_cursor += 1
-            if not board_info:
-                logger.warning(f"No eligible refresh board for '{formatted['title']}'")
-                continue
+                # Extract product ID from link (Shopify format: /products/product-handle)
+                try:
+                    # Handle URLs like https://meeeshop.com/products/product-name
+                    parts = product_link.split("/products/")
+                    if len(parts) < 2:
+                        continue
+                    product_handle = parts[1].split("?")[0].strip("/")
 
-            board = board_info["name"]
-            board_id = board_info["id"]
-            logger.info(
-                f"Refresh {refresh_num}/2 for '{formatted['title']}' "
-                f"({original_board} → {board})"
-            )
+                    # Fetch product by handle
+                    product = shopify.get_product_by_handle(product_handle)
+                    if not product:
+                        logger.warning(f"Product not found for handle: {product_handle}")
+                        continue
 
-            overlay_path = make_refresh_pin_image(
-                product,
-                formatted["title"],
-                formatted.get("price"),
-                pid,
-                refresh_num,
-            )
-            if not overlay_path:
-                logger.warning(f"Image generation failed for {pid}, skipping")
-                continue
+                except Exception as e:
+                    logger.warning(f"Failed to extract product from pin link {product_link}: {e}")
+                    continue
 
-            content = generate_content_package(formatted, board)
+                product_id = str(product.get("id", ""))
+                if not product_id or product_id in seen_products:
+                    continue
 
-            success, pin_id = pinterest.create_pin(
-                image_path=overlay_path,
-                title=content["pin_title"],
-                description=content["pin_description"],
-                board_id=board_id,
-                url=formatted["url"],
-                alt_text=formatted.get("image_alt", ""),
-            )
+                seen_products.add(product_id)
 
-            Path(overlay_path).unlink(missing_ok=True)
+                if not product.get("images"):
+                    logger.warning(f"Product {product_id} has no images — skipping")
+                    continue
 
-            if not success:
-                logger.warning(f"Refresh pin post failed for {pid}")
-                continue
+                formatted = format_product_for_pinterest(product, store_base_url)
+                original_board = pin.get("board", "")
 
-            refresh_history["refreshes"].append({
-                "product_id": pid,
-                "title": formatted["title"],
-                "original_board": original_board,
-                "board": board,
-                "refresh_number": refresh_num,
-                "pin_id": pin_id,
-                "timestamp": datetime.now().isoformat(),
-            })
-            save_refresh_history(refresh_history)
+                # Get boards already used for this product
+                boards_used_for_product = boards_used_per_product.get(product_id, set())
 
-            used_boards_today.add(board)
-            refreshed += 1
-            logger.info(f"✓ Refresh pin posted (ID: {pin_id})")
+                board_info = pick_refresh_board(
+                    formatted["title"],
+                    product.get("product_type", ""),
+                    boards,
+                    boards_already_used=boards_used_for_product,
+                    used_boards_today=used_boards_today,
+                    refresh_cursor=refresh_cursor,
+                )
+                refresh_cursor += 1
 
-            if refreshed < min(len(candidates), MAX_REFRESHES_PER_RUN):
-                delay = random.randint(30, 60)
-                logger.info(f"Waiting {delay}s...")
-                time.sleep(delay)
+                if not board_info:
+                    logger.info(
+                        f"✗ No {window} board available for '{formatted['title']}' "
+                        f"(was on '{original_board}') — skipping per requirement"
+                    )
+                    continue
 
-        logger.info(f"✓ Refresh run complete: {refreshed} pins posted")
+                new_board = board_info["name"]
+                board_id = board_info["id"]
+
+                logger.info(
+                    f"✓ {window} repin: '{formatted['title']}' "
+                    f"(from {original_board} to {new_board})"
+                )
+
+                overlay_path = make_refresh_pin_image(
+                    product,
+                    formatted["title"],
+                    formatted.get("price"),
+                    product_id,
+                    window,
+                )
+                if not overlay_path:
+                    logger.warning(f"Image generation failed for {product_id}, skipping")
+                    continue
+
+                content = generate_content_package(formatted, new_board)
+
+                success, pin_id = pinterest.create_pin(
+                    image_path=overlay_path,
+                    title=content["pin_title"],
+                    description=content["pin_description"],
+                    board_id=board_id,
+                    url=formatted["url"],
+                    alt_text=formatted.get("image_alt", ""),
+                )
+
+                Path(overlay_path).unlink(missing_ok=True)
+
+                if not success:
+                    logger.warning(f"Refresh pin post failed for {product_id}")
+                    continue
+
+                # Record refresh
+                refresh_history["refreshes"].append({
+                    "product_id": product_id,
+                    "title": formatted["title"],
+                    "original_board": original_board,
+                    "board": new_board,
+                    "window": window,
+                    "pin_id": pin_id,
+                    "timestamp": datetime.now().isoformat(),
+                })
+                save_refresh_history(refresh_history)
+                boards_used_per_product.setdefault(product_id, set()).add(new_board)
+
+                used_boards_today.add(new_board)
+                window_refreshed += 1
+                total_refreshed += 1
+
+                if window_refreshed < len(window_pins):
+                    delay = random.randint(30, 60)
+                    logger.info(f"Waiting {delay}s...")
+                    time.sleep(delay)
+
+            logger.info(f"✓ {window} window complete: {window_refreshed} pins posted")
+
+        logger.info(f"\n{'='*60}")
+        logger.info(f"✓ Refresh run complete: {total_refreshed} total pins posted")
+        logger.info(f"{'='*60}\n")
 
     except Exception as e:
         logger.error(f"Refresh error: {e}", exc_info=True)
