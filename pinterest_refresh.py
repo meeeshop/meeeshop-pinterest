@@ -362,7 +362,7 @@ def fetch_pins_in_window(
         board_id = board.get("id", "")
 
         logger.info(f"Scanning board for recent pins: {board_name}")
-        pins = pinterest.fetch_board_pins(board_id, board_name, max_age_days=7)
+        pins = pinterest.fetch_board_pins(board_id, board_name)
 
         board_window_count = {"2day": 0, "4-7day": 0}
         for pin in pins:

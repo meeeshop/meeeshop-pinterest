@@ -398,69 +398,43 @@ class PinterestClient:
         self,
         board_id: str,
         board_name: str,
-        limit: int = 50,
-        max_age_days: Optional[int] = None,
+        page_size: int = 25,
     ) -> List[Dict[str, Any]]:
-        """Fetch pins from a specific board, stopping early once pins exceed max_age_days.
+        """Fetch the first page of pins from a board (newest first, one API call).
 
-        Pinterest board feeds are newest-first, so we stop iterating the moment
-        we see a pin older than max_age_days — no need to scan the full board.
-
-        Args:
-            board_id: Board ID from Pinterest
-            board_name: Board name (for logging)
-            limit: Unused (kept for API compatibility); py3-pinterest paginates internally
-            max_age_days: Stop fetching once a pin is older than this many days.
-                          None = fetch everything (original behaviour).
+        page_size=25 covers ~1 day of posting (we post ~20 pins/day).
+        No pagination — boards are newest-first so the first page is all we need
+        for recent-pin refresh logic.
         """
         if not self.authenticated:
             logger.error("Not authenticated. Call login() first.")
             return []
 
-        cutoff = (
-            datetime.now() - timedelta(days=max_age_days)
-            if max_age_days is not None
-            else None
-        )
-
         pins = []
         try:
-            board_pins = self.client.board_feed(board_id=board_id)
+            # reset_bookmark=True ensures we always get the newest page
+            board_pins = self.client.board_feed(
+                board_id=board_id,
+                page_size=page_size,
+                reset_bookmark=True,
+            )
 
-            if board_pins:
-                for pin in board_pins:
-                    raw_ts = (
-                        pin.get('created_at')
-                        or pin.get('created_time')
-                        or (pin.get('pin_join') or {}).get('created_at', '')
-                    )
+            for pin in (board_pins or []):
+                raw_ts = (
+                    pin.get('created_at')
+                    or pin.get('created_time')
+                    or (pin.get('pin_join') or {}).get('created_at', '')
+                )
+                pins.append({
+                    'id': pin.get('id'),
+                    'title': pin.get('title', ''),
+                    'description': pin.get('description', ''),
+                    'link': pin.get('link') or pin.get('url', ''),
+                    'images': pin.get('images', {}),
+                    'created_at': raw_ts,
+                })
 
-                    # Early-exit: board feed is newest-first; once we hit an old pin, stop
-                    if cutoff and raw_ts:
-                        try:
-                            ts = datetime.fromisoformat(raw_ts.replace("Z", "+00:00").split("+")[0])
-                            if ts < cutoff:
-                                logger.debug(
-                                    f"Pin {pin.get('id')} is older than {max_age_days}d "
-                                    f"({raw_ts}), stopping early for board '{board_name}'"
-                                )
-                                break
-                        except Exception:
-                            pass  # Unparseable timestamp — keep the pin, don't stop
-
-                    pins.append({
-                        'id': pin.get('id'),
-                        'title': pin.get('title', ''),
-                        'description': pin.get('description', ''),
-                        'link': pin.get('link') or pin.get('url', ''),
-                        'images': pin.get('images', {}),
-                        'created_at': raw_ts,
-                    })
-
-                logger.info(f"Fetched {len(pins)} pins from board '{board_name}' (ID: {board_id})")
-            else:
-                logger.info(f"No pins found in board '{board_name}'")
-
+            logger.info(f"Fetched {len(pins)} pins from board '{board_name}' (ID: {board_id})")
             return pins
 
         except Exception as e:
