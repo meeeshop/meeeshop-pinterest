@@ -354,21 +354,47 @@ def _is_eligible(
     return True
 
 
-def get_posting_history_local() -> Dict[str, Any]:
+def fetch_products_for_refresh(
+    shopify: "ShopifyClient",
+    refresh_history: Dict[str, Any],
+    min_stock: int = 15,
+) -> List[Dict[str, Any]]:
     """
-    Load posting_history.json from local file system.
+    Fetch products eligible for refresh posting.
 
-    This is a lightweight fallback that doesn't require GitHub API access or PAT.
-    The daily workflow appends each run's posts to this file.
-    Works offline and requires no additional permissions.
+    Strategy: Get products with stock > min_stock, exclude those already refreshed
+    more than MAX_REFRESHES_PER_PRODUCT times. This works standalone without
+    requiring posting_history.json — refresh can run independently of daily postings.
+
+    Returns products ready for their 1st or 2nd refresh pins.
     """
-    try:
-        if HISTORY_FILE.exists():
-            return json.loads(HISTORY_FILE.read_text(encoding="utf-8"))
-    except Exception as e:
-        logger.warning(f"Failed to load local posting_history.json: {e}")
+    refresh_counts, _ = _build_refresh_counts(refresh_history)
 
-    return {"posts": [], "board_last_used": {}, "daily_count": 0, "last_post_time": None}
+    # Fetch all active products from Shopify
+    products = shopify.get_products(limit=250)
+    logger.info(f"Fetched {len(products)} total products from Shopify")
+
+    eligible = []
+    for p in products:
+        pid = str(p.get("id"))
+
+        # Skip if already has max refreshes
+        if refresh_counts.get(pid, 0) >= MAX_REFRESHES_PER_PRODUCT:
+            continue
+
+        # Skip if no stock
+        max_stock = max(
+            (v.get("inventory_quantity", 0) for v in p.get("variants", [])),
+            default=0
+        )
+        if max_stock < min_stock:
+            continue
+
+        eligible.append(p)
+
+    logger.info(f"Found {len(eligible)} products eligible for refresh (stock > {min_stock})")
+    random.shuffle(eligible)
+    return eligible
 
 
 def get_candidates(
@@ -423,7 +449,6 @@ def run_refresh_posting():
     if not all([shopify_url, shopify_token]):
         raise ValueError("Missing required Shopify credentials in .env")
 
-    history = load_history()
     refresh_history = load_refresh_history()
 
     pinterest = PinterestClient()
@@ -438,44 +463,37 @@ def run_refresh_posting():
             raise RuntimeError("No boards found")
         logger.info(f"Fetched {len(boards)} boards")
 
-        # Build full product map from Shopify (by numeric ID and by handle)
-        products = shopify.get_products(limit=250)
-        product_map_by_id = {str(p["id"]): p for p in products}
-        product_map_by_handle = {p["handle"]: p for p in products}
-
-        # Fetch posting history from local file (no GitHub API required)
-        # The daily workflow continuously appends posts to posting_history.json
-        history = get_posting_history_local()
-        logger.info(f"Loaded posting history: {len(history.get('posts', []))} posts from local file")
-
-        candidates = get_candidates(history, refresh_history)
+        # Fetch products eligible for refresh (stock > 15, not yet max-refreshed)
+        candidates = fetch_products_for_refresh(shopify, refresh_history, min_stock=15)
 
         if not candidates:
-            logger.info(f"No products due for refresh (check posting_history.json has recent posts)")
+            logger.info(f"No products eligible for refresh")
             return
 
-        logger.info(f"{len(candidates)} products eligible for refresh")
+        logger.info(f"{len(candidates)} products ready for refresh pins")
 
         used_boards_today: set = set()
         refreshed = 0
         refresh_cursor = 0  # advances per pin to spread fallback boards across all boards
+        refresh_counts, _ = _build_refresh_counts(refresh_history)
 
-        for post in candidates:
+        for product in candidates:
             if refreshed >= MAX_REFRESHES_PER_RUN:
                 break
 
-            refresh_num = post["_refresh_number"]
-            original_board = post.get("board", "")
+            pid = str(product["id"])
+            refresh_num = refresh_counts.get(pid, 0) + 1
 
-            # posting_history always uses numeric Shopify product ID
-            product = product_map_by_id.get(str(post["product_id"]))
-
-            if not product:
-                logger.warning(f"Product '{post['product_id']}' not found in Shopify — skipping")
+            # Skip if no images
+            if not product.get("images"):
+                logger.warning(f"Product {pid} has no images — skipping")
                 continue
 
-            pid = str(product["id"])
             formatted = format_product_for_pinterest(product, store_base_url)
+
+            # No original_board for standalone refresh — pick category-relevant board
+            # (in integrated mode, would reference posting_history for original board)
+            original_board = ""
 
             board_info = pick_refresh_board(
                 original_board,
@@ -535,16 +553,6 @@ def run_refresh_posting():
                 "timestamp": datetime.now().isoformat(),
             })
             save_refresh_history(refresh_history)
-
-            history["posts"].append({
-                "product_id": pid,
-                "title": formatted["title"],
-                "board": board,
-                "is_refresh": True,
-                "refresh_number": refresh_num,
-                "timestamp": datetime.now().isoformat(),
-            })
-            save_history(history)
 
             used_boards_today.add(board)
             refreshed += 1
