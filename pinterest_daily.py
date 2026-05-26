@@ -31,54 +31,23 @@ HISTORY_FILE = Path(__file__).parent / "posting_history.json"
 MAX_PINS_PER_DAY = 16    # 4 runs × 4 pins across peak USA times
 PINS_PER_RUN = 4
 
-# 16 boards split into 4 time-slot windows (slot 0-3).
-# Each run posts to its own 4 boards — no overlap across the day.
-# Slot assigned by UTC hour: 12→0, 17→1, 21→2, 1→3
-DAILY_BOARD_ROTATION = [
-    # Slot 0 — 8 AM ET (morning scroll, ET/CT peak)
-    "Trends",                    # highest traffic
-    "Dresses",                   # top category
-    "Best selling products",     # social proof
-    "Outfit Ideas",              # discovery
-
-    # Slot 1 — 1 PM ET (lunch break, all zones warming up)
-    "Shirts & Tops",             # category
-    "Style Ideas",               # lifestyle
-    "Jeans",                     # category
-    "Everyday Style",            # lifestyle
-
-    # Slot 2 — 5 PM ET (after work/school, PT lunch)
-    "Sweaters",                  # category
-    "Simple Outfits",            # discovery
-    "Coats & Jackets",           # category
-    "Chic & Effortless Styles",  # lifestyle
-
-    # Slot 3 — 9 PM ET (prime time, all zones)
-    "Pants & Leggings",          # category
-    "Ootd #ootd",                # hashtag discovery
-    "New",                       # recency traffic
-    "Wardrobe Must Haves",       # lifestyle
-]
-
-
-def _time_slot() -> int:
-    """Map current UTC hour to slot 0-3 matching the 4 daily run times."""
-    hour = datetime.utcnow().hour
-    if hour == 12:
-        return 0
-    elif hour == 17:
-        return 1
-    elif hour == 21:
-        return 2
-    else:
-        return 3  # 01 UTC or manual dispatch
 
 
 def load_history() -> Dict[str, Any]:
     """Load posting history"""
     if HISTORY_FILE.exists():
         return json.loads(HISTORY_FILE.read_text(encoding="utf-8"))
-    return {"posts": [], "board_last_used": {}, "daily_count": 0, "last_post_time": None}
+    return {
+        "posts": [], "board_last_used": {}, "daily_count": 0,
+        "last_post_time": None, "board_rotation_cursor": 0,
+    }
+
+
+def advance_board_cursor(history: Dict[str, Any], steps: int, total_boards: int) -> int:
+    """Advance and persist the board rotation cursor, returns the starting position."""
+    cursor = history.get("board_rotation_cursor", 0) % max(total_boards, 1)
+    history["board_rotation_cursor"] = (cursor + steps) % total_boards
+    return cursor
 
 
 def save_history(history: Dict[str, Any]):
@@ -88,7 +57,7 @@ def save_history(history: Dict[str, Any]):
 
 
 def reset_daily_count():
-    """Reset daily post count at midnight"""
+    """Reset daily post count at midnight — returns updated history"""
     history = load_history()
     last_post = history.get("last_post_time")
 
@@ -99,7 +68,7 @@ def reset_daily_count():
             history["daily_count"] = 0
             save_history(history)
 
-    return history["daily_count"]
+    return history
 
 
 def can_post_today(history: Dict[str, Any]) -> bool:
@@ -208,8 +177,13 @@ def pick_board(
     boards: List[Dict],
     used_boards: set,
     formatted: Dict[str, Any],
+    run_board_pool: List[str],
 ) -> Optional[Dict]:
-    """Pick board: category-specific boards first, then rotation for generic products."""
+    """Pick board: category-specific first, then cycle through this run's board pool.
+
+    run_board_pool is pre-built per run from the full board list via cursor rotation,
+    so every board gets reached over time — not just the same 16.
+    """
     from board_mapping import CATEGORY_TO_BOARDS
 
     boards_by_name = {b["name"].lower(): b for b in boards}
@@ -240,34 +214,125 @@ def pick_board(
     search = f"{formatted.get('title','').lower()} {formatted.get('product_type','').lower()}"
     cat = category_key(search)
 
-    # For non-generic products, try category-specific boards first
+    # Try category-specific boards first (non-generic products)
     if cat != "default":
         for board_name in CATEGORY_TO_BOARDS.get(cat, []):
             b = find(board_name)
             if b and b["name"] not in used_boards:
                 return b
 
-    # Walk this run's 4-board slot window first, then fall back to full rotation
-    slot = _time_slot()
-    slot_start = slot * PINS_PER_RUN
-    slot_boards = DAILY_BOARD_ROTATION[slot_start: slot_start + PINS_PER_RUN]
-
-    for i in range(len(slot_boards)):
-        candidate = slot_boards[(index + i) % len(slot_boards)]
+    # Cycle through this run's board pool (cursor-based, covers all boards over time)
+    for i in range(len(run_board_pool)):
+        candidate = run_board_pool[(index + i) % len(run_board_pool)]
         b = find(candidate)
         if b and b["name"] not in used_boards:
             return b
 
-    # Fallback: any board in the full rotation not yet used
-    for i in range(len(DAILY_BOARD_ROTATION)):
-        candidate = DAILY_BOARD_ROTATION[(slot_start + index + i) % len(DAILY_BOARD_ROTATION)]
-        b = find(candidate)
-        if b and b["name"] not in used_boards:
-            return b
-
-    # Last resort: anything unused
+    # Last resort: anything unused from full board list
     available = [b for b in boards if b["name"] not in used_boards]
     return random.choice(available) if available else random.choice(boards)
+
+
+def fetch_all_eligible_products(
+    shopify: "ShopifyClient",
+    history: Dict[str, Any],
+    min_stock: int = 20,
+) -> List[Dict[str, Any]]:
+    """Fetch ALL active products with stock > min_stock, paginated.
+
+    Excludes products posted in the last 10 days to ensure diversity.
+    Returns products in random order ready for posting.
+    """
+    products = []
+    limit = 250
+    fields = "id,title,handle,image,images,body_html,vendor,product_type,tags,published_at,variants"
+    url = f"{shopify.store_url}/admin/api/2024-01/products.json?status=active&limit={limit}&fields={fields}"
+
+    # Fetch all pages via Link header pagination
+    while url:
+        try:
+            r = requests.get(url, headers=shopify.headers, timeout=15)
+            r.raise_for_status()
+            batch = r.json().get("products", [])
+            products.extend(batch)
+            logger.debug(f"Fetched {len(batch)} products, total so far: {len(products)}")
+
+            # Extract next page URL from Link header
+            link_header = r.headers.get("Link", "")
+            next_url = None
+            if link_header:
+                for link in link_header.split(","):
+                    if 'rel="next"' in link:
+                        # Extract URL from <url>; rel="next"
+                        next_url = link.split(";")[0].strip().strip("<>")
+                        break
+            url = next_url
+        except Exception as e:
+            logger.warning(f"Product fetch error: {e}, continuing with {len(products)} products so far")
+            break
+
+    logger.info(f"Fetched {len(products)} total products from Shopify")
+
+    # Filter: active, stock >= min_stock, not posted in last 10 days
+    ten_days_ago = datetime.now() - timedelta(days=10)
+    recent_ids = {
+        p.get("id")
+        for p in history.get("posts", [])
+        if datetime.fromisoformat(p["timestamp"]) > ten_days_ago
+    }
+
+    eligible = [
+        p for p in products
+        if p.get("id") not in recent_ids
+        and any(
+            v.get("inventory_quantity", 0) >= min_stock
+            for v in p.get("variants", [])
+        )
+    ]
+
+    logger.info(f"Eligible products (stock>{min_stock}, not in last 10 days): {len(eligible)}")
+    random.shuffle(eligible)
+    return eligible
+
+
+def build_run_board_pool(
+    all_boards: List[Dict],
+    history: Dict[str, Any],
+    pins_this_run: int,
+) -> List[str]:
+    """Build the board pool for this run using cursor rotation across all boards.
+
+    Strategy: 1 priority board + (pins_this_run - 1) boards from cursor window.
+    Cursor advances by (pins_this_run - 1) each run, cycling through all boards.
+    This ensures every board gets used over a full rotation cycle.
+    """
+    from board_mapping import MEEESHOP_BOARDS, PRIORITY_BOARDS
+
+    # Build ordered list: live boards sorted by MEEESHOP_BOARDS order, unknowns appended
+    live_names = {b["name"] for b in all_boards}
+    ordered = [n for n in MEEESHOP_BOARDS if n in live_names]
+    extras = [b["name"] for b in all_boards if b["name"] not in set(ordered)]
+    all_names = ordered + extras
+
+    if not all_names:
+        return [b["name"] for b in all_boards]
+
+    # One priority board for guaranteed reach (rotates through PRIORITY_BOARDS list)
+    priority_cursor = history.get("board_rotation_cursor", 0) % len(PRIORITY_BOARDS)
+    priority_pick = PRIORITY_BOARDS[priority_cursor % len(PRIORITY_BOARDS)]
+
+    # Fill remaining slots from cursor window
+    fill_count = max(pins_this_run - 1, 1)
+    cursor = advance_board_cursor(history, fill_count, len(all_names))
+
+    pool = [priority_pick]
+    for i in range(fill_count):
+        name = all_names[(cursor + i) % len(all_names)]
+        if name not in pool:
+            pool.append(name)
+
+    logger.info(f"Board pool for this run ({len(pool)} boards, cursor {cursor}/{len(all_names)}): {pool}")
+    return pool
 
 
 def run_daily_posting(use_video: bool = False):
@@ -293,11 +358,9 @@ def run_daily_posting(use_video: bool = False):
         raise ValueError("Missing required credentials in .env")
 
     target = int(os.getenv("PINS_TO_POST", str(PINS_PER_RUN)))
-    slot = _time_slot()
-    logger.info(f"Daily run starting — slot {slot}/3, target: {target} pins")
+    logger.info(f"Daily run starting — target: {target} pins")
 
-    history = load_history()
-    reset_daily_count()
+    history = reset_daily_count()
 
     already_today = history["daily_count"]
     if already_today >= MAX_PINS_PER_DAY:
@@ -318,20 +381,14 @@ def run_daily_posting(use_video: bool = False):
             raise RuntimeError("No boards found — check Pinterest authentication")
         logger.info(f"Fetched {len(boards)} boards")
 
-        products = shopify.get_products(limit=50)
-        if not products:
-            raise RuntimeError("No products found — check Shopify credentials")
-        logger.info(f"Fetched {len(products)} products")
+        run_board_pool = build_run_board_pool(boards, history, target)
+        save_history(history)  # persist cursor advance
 
-        # Exclude products posted in the last 7 days
-        week_ago = datetime.now() - timedelta(days=7)
-        recent_ids = {
-            p["product_id"]
-            for p in history.get("posts", [])
-            if datetime.fromisoformat(p["timestamp"]) > week_ago
-        }
-        pool = [p for p in products if p["id"] not in recent_ids] or products
-        random.shuffle(pool)
+        # Fetch ALL products with stock > 15, paginated, exclude last 10 days
+        pool = fetch_all_eligible_products(shopify, history, min_stock=15)
+        if not pool:
+            logger.warning("No eligible products (try lowering stock threshold or checking 10-day window)")
+            return
 
         posted = 0
         used_boards: set = set()
@@ -342,7 +399,7 @@ def run_daily_posting(use_video: bool = False):
             product_index += 1
 
             formatted = format_product_for_pinterest(product, store_base_url)
-            board_info = pick_board(posted, boards, used_boards, formatted)
+            board_info = pick_board(posted, boards, used_boards, formatted, run_board_pool)
             if not board_info:
                 logger.warning("No board available, skipping product")
                 continue

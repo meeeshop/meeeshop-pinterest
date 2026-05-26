@@ -8,7 +8,8 @@ import sys
 import time
 import json
 import base64
-from typing import Optional, List, Dict, Tuple
+from datetime import datetime, timedelta
+from typing import Optional, List, Dict, Tuple, Any
 from pathlib import Path
 import logging
 
@@ -351,7 +352,9 @@ class PinterestClient:
 
     def fetch_boards(self) -> List[Dict[str, str]]:
         """
-        Fetch user's Pinterest boards using API.
+        Fetch ALL user's Pinterest boards using paginated API.
+        py3-pinterest.boards() is paginated and returns ~50 boards per call.
+        Must call repeatedly until empty list returned to get all boards.
 
         Returns:
             List[Dict]: List of board info dicts with 'id', 'name', 'url' keys
@@ -360,25 +363,100 @@ class PinterestClient:
             logger.error("Not authenticated. Call login() first.")
             return []
 
+        board_list = []
+        page = 0
+
         try:
-            self._rate_limit()
-            boards = self.client.boards(username=self.username)
+            while True:
+                self._rate_limit()
+                boards = self.client.boards(username=self.username, reset_bookmark=(page == 0))
 
-            board_list = []
-            for board in boards:
-                # py3-pinterest board object has attributes: name, url, board_id
-                board_info = {
-                    'id': board.get('id') or board.get('board_id'),
-                    'name': board.get('name'),
-                    'url': board.get('url')
-                }
-                board_list.append(board_info)
-                logger.info(f"Board: {board_info['name']} (ID: {board_info['id']})")
+                if not boards:
+                    logger.info(f"Pagination complete after {page} pages")
+                    break
 
+                page += 1
+                for board in boards:
+                    board_info = {
+                        'id': board.get('id') or board.get('board_id'),
+                        'name': board.get('name'),
+                        'url': board.get('url')
+                    }
+                    board_list.append(board_info)
+                    logger.debug(f"Board: {board_info['name']} (ID: {board_info['id']})")
+
+                logger.info(f"Fetched page {page}: {len(boards)} boards (total: {len(board_list)})")
+
+            logger.info(f"✓ Fetched all {len(board_list)} boards across {page} pages")
             return board_list
 
         except Exception as e:
             logger.error(f"Failed to fetch boards: {e}")
+            return board_list
+
+    def fetch_board_pins(
+        self,
+        board_id: str,
+        board_name: str,
+        page_size: int = 25,
+    ) -> List[Dict[str, Any]]:
+        """Fetch the first page of pins from a board (newest first, one API call).
+
+        page_size=25 covers ~1 day of posting (we post ~20 pins/day).
+        No pagination — boards are newest-first so the first page is all we need
+        for recent-pin refresh logic.
+        """
+        if not self.authenticated:
+            logger.error("Not authenticated. Call login() first.")
+            return []
+
+        pins = []
+        try:
+            # py3-pinterest stores per-board bookmarks in self.client.bookmarks.
+            # reset_bookmark=True raises KeyError on boards not yet seen, and
+            # without reset the second call returns the next page (not newest).
+            # Clear any stored bookmark for this board, then call without reset.
+            bookmarks = getattr(self.client, 'bookmarks', None)
+            if isinstance(bookmarks, dict):
+                bookmarks.pop(board_id, None)
+
+            try:
+                board_pins = self.client.board_feed(
+                    board_id=board_id,
+                    page_size=page_size,
+                    reset_bookmark=False,
+                )
+            except KeyError:
+                # Some py3-pinterest versions require the bookmark key to exist.
+                # Seed it with '' (empty = newest page) and retry.
+                if isinstance(bookmarks, dict):
+                    bookmarks[board_id] = ''
+                board_pins = self.client.board_feed(
+                    board_id=board_id,
+                    page_size=page_size,
+                    reset_bookmark=False,
+                )
+
+            for pin in (board_pins or []):
+                raw_ts = (
+                    pin.get('created_at')
+                    or pin.get('created_time')
+                    or (pin.get('pin_join') or {}).get('created_at', '')
+                )
+                pins.append({
+                    'id': pin.get('id'),
+                    'title': pin.get('title', ''),
+                    'description': pin.get('description', ''),
+                    'link': pin.get('link') or pin.get('url', ''),
+                    'images': pin.get('images', {}),
+                    'created_at': raw_ts,
+                })
+
+            logger.info(f"Fetched {len(pins)} pins from board '{board_name}' (ID: {board_id})")
+            return pins
+
+        except Exception as e:
+            logger.error(f"Failed to fetch pins from board {board_name}: {e}")
             return []
 
     def _get_raw_session(self) -> requests.Session:

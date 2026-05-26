@@ -1,21 +1,25 @@
 """
-pinterest_refresh.py — Fresh-pin refresh cycle for MeeeShop.
+pinterest_refresh.py — Time-window refresh cycle for MeeeShop.
 
 Strategy (Pinterest-safe):
-  - Finds products posted 48h+ ago that have refresh slots remaining
-  - Creates a BRAND NEW pin image (different template) for the same product URL
-  - Posts to a different relevant board than the original
-  - Each product gets up to 2 refreshes (48h and 96h after original)
-  - New image hash = Pinterest treats it as 100% fresh content, not a repin
+  - 2-day window: Find boards recently updated (last 2 days)
+    → Fetch pins posted to those boards in that timeframe
+    → Extract products from those pins
+    → Repin to different relevant boards with images[2-3]
+
+  - 4-7-day window: Find boards updated 4-7 days ago
+    → Fetch pins posted to those boards
+    → Extract products from those pins
+    → Repin to different boards (not used in 2-day run) with images[4-5]
+    → Skip if no relevant boards available
 
 Why this is safe:
-  - Pinterest only flags SAME image saved to multiple boards (duplicate pin)
-  - New image + same URL = fresh pin, full algorithm distribution
-  - 48h gap + different board = no spam signals
-  - Max 3 total pins per product (original + 2 refreshes) over ~4 days
+  - Repinning trending products = natural engagement pattern
+  - Different images + different boards = fresh pins
+  - Time windows ensure even distribution
+  - Skip strategy respects algorithm diversity preference
 """
 
-import io
 import os
 import sys
 import json
@@ -23,7 +27,6 @@ import logging
 import random
 import time
 import hashlib
-import zipfile
 import requests
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -42,56 +45,91 @@ from board_mapping import MEEESHOP_BOARDS, CATEGORY_TO_BOARDS
 
 logger = logging.getLogger(__name__)
 
-HISTORY_FILE = Path(__file__).parent / "posting_history.json"
 REFRESH_HISTORY_FILE = Path(__file__).parent / "refresh_history.json"
+REFRESH_STAGING_FILE = Path(__file__).parent / "refresh_staging.json"
 
-# Minimum hours after original post before first refresh
-FIRST_REFRESH_HOURS = 48
-# Minimum hours after first refresh before second refresh
-SECOND_REFRESH_HOURS = 48
-# Max refreshes per product (keeps total pins per product to 3 across ~4 days)
-MAX_REFRESHES_PER_PRODUCT = 2
-# Max refresh pins per workflow run
-MAX_REFRESHES_PER_RUN = 10
+# Time windows for refresh posting
+REFRESH_WINDOW_2_DAYS = 2  # Boards updated in last 2 days
+REFRESH_WINDOW_4_7_DAYS = (4, 7)  # Boards updated 4-7 days ago
+# Max refresh pins per window
+MAX_REFRESHES_PER_WINDOW = 8
 
-
-# Board pools per category — used to find a board DIFFERENT from the original.
-# Ordered by audience reach (highest traffic first within each category).
+# Board pools per category — used to find relevant boards for repinning
 REFRESH_BOARD_POOLS = {
-    "dress": ["Dressy Outfits", "Cocktail Dresses", "Chic & Effortless Styles",
-              "Woman Fashion!", "Festive Styles", "Short Tall dresses", "Outfit Ideas"],
-    "top":   ["Camis & Tanks", "Puff Sleeves Tops", "Blouse", "Chic Looks",
-              "Cool & Casual Styles", "Effortless Looks", "Ootd #ootd"],
-    "jeans": ["Straight Leg Jeans", "Fitted Jeans", "Casual", "Weekend to Workout",
-              "Everyday Style", "Ootd #ootd"],
-    "jacket": ["Outer wear", "Festive & Flora Fits", "Chic & Cozy Anim...",
-               "Edgy Fashion", "Wardrobe Must Haves"],
-    "pants": ["Casual", "Weekend to Workout", "Everyday Style",
-              "Relaxed Yet Trendy...", "Simple Outfits"],
-    "skirt": ["Dressy Outfits", "Festive Styles", "Chic & Effortless Styles",
-              "Woman Fashion!", "Outfit Ideas"],
-    "sweater": ["Sweaters & Sweater...", "Sweaters for women", "Chic & Cozy Anim...",
-                "comfy fall outfits", "Wardrobe Must Haves"],
-    "cardigan": ["Sweaters", "Sweaters for women", "Chic & Cozy Anim...",
-                 "comfy fall outfits", "Womens shacket"],
-    "bag":   ["Handbag #handsips", "Nylon backpack", "Trendy Backpacks",
-              "Wardrobe Must Haves", "Best selling products"],
-    "shoe":  ["Footwear", "Boat Shoes", "Ankle Strap Flats", "Outfit Ideas"],
-    "jumpsuit": ["Rompers_Jumpsuits &...", "Dressy Outfits", "Casual",
-                 "Woman Fashion!", "Ootd #ootd"],
-    "default": ["Stylish Finds", "Wardrobe Must Haves", "Wardrobe Oozes",
-                "Confidence Ladies", "Chic Looks", "Effortless Looks",
-                "Cool & Casual Styles", "Simple Outfits"],
+    "dress": [
+        "Dressy Outfits", "Cocktail Dresses", "Chic & Effortless Styles",
+        "Woman Fashion!", "Festive Styles", "Short Tall dresses", "Outfit Ideas",
+        "Casual", "Trendy & Trendes...", "Every Peak Clothing", "Festival",
+        "Festive & Flora Fits", "Daris & Desi Womens...", "Dress",
+        "Effortless Looks", "Chic Looks", "Luxe Clothing",
+    ],
+    "top":   [
+        "Camis & Tanks", "Puff Sleeves Tops", "Blouse", "Blouses", "Chic Looks",
+        "Cool & Casual Styles", "Effortless Looks", "Ootd #ootd",
+        "Casual", "Everyday Style", "Simple Outfits", "Spicing Outfits",
+        "Relaxed Yet Trendy...", "Weekend to Workout", "Woman Fashion!",
+    ],
+    "jeans": [
+        "Straight Leg Jeans", "Fitted Jeans", "Casual", "Weekend to Workout",
+        "Everyday Style", "Ootd #ootd", "Kimchi USA Jeans", "Simple Outfits",
+        "Relaxed Yet Trendy...", "Spicing Outfits", "Cool & Casual Styles",
+    ],
+    "jacket": [
+        "Outer wear", "Festive & Flora Fits", "Chic & Cozy Anim...",
+        "Edgy Fashion", "Wardrobe Must Haves", "Winter Outfits",
+        "Thanks giving Outfits", "Fall looks", "comfy fall outfits",
+        "Luxe Clothing", "Meshohn Luxe Styles",
+    ],
+    "pants": [
+        "Casual", "Weekend to Workout", "Everyday Style",
+        "Relaxed Yet Trendy...", "Simple Outfits", "Spicing Outfits",
+        "Cool & Casual Styles", "Ootd #ootd", "Woman Fashion!",
+    ],
+    "skirt": [
+        "Dressy Outfits", "Festive Styles", "Chic & Effortless Styles",
+        "Woman Fashion!", "Outfit Ideas", "Casual", "Effortless Looks",
+        "Spicing Outfits", "Festive & Flora Fits",
+    ],
+    "sweater": [
+        "Sweaters & Sweater...", "Sweaters for women", "Chic & Cozy Anim...",
+        "comfy fall outfits", "Wardrobe Must Haves", "Fall looks",
+        "Winter Outfits", "Thanks giving Outfits", "Everyday Style",
+        "Womens Cardigans", "Casual",
+    ],
+    "cardigan": [
+        "Sweaters", "Sweaters for women", "Chic & Cozy Anim...",
+        "comfy fall outfits", "Womens shacket", "Fall looks",
+        "Winter Outfits", "Everyday Style", "Wardrobe Must Haves",
+    ],
+    "bag":   [
+        "Handbag #handsips", "Nylon backpack", "Trendy Backpacks",
+        "Wardrobe Must Haves", "Best selling products", "Bags",
+        "Stylish Finds", "Luxe Clothing",
+    ],
+    "shoe":  [
+        "Footwear", "Boat Shoes", "Ankle Strap Flats", "Outfit Ideas",
+        "Casual", "Everyday Style", "Simple Outfits",
+    ],
+    "jumpsuit": [
+        "Rompers_Jumpsuits &...", "Dressy Outfits", "Casual",
+        "Woman Fashion!", "Ootd #ootd", "Festival", "Festive & Flora Fits",
+        "Spicing Outfits", "Effortless Looks",
+    ],
+    "default": [
+        "Stylish Finds", "Wardrobe Must Haves", "Wardrobe Oozes",
+        "Confidence Ladies", "Chic Looks", "Effortless Looks",
+        "Cool & Casual Styles", "Simple Outfits", "Woman Fashion!",
+        "Trendy & Trendes...", "Every Peak Clothing", "Spicing Outfits",
+        "Luxe Clothing", "Meshohn Luxe Styles", "Shop For Hotties",
+        "Unique USA", "LE US Womens Cloth...", "Fashion Models",
+        "Fresh Finds New...", "Our Recommended...", "new products",
+        "Social", "Plus Size", "Edgy Fashion", "Festive & Flora Fits",
+    ],
 }
 
 
-def load_history() -> Dict[str, Any]:
-    if HISTORY_FILE.exists():
-        return json.loads(HISTORY_FILE.read_text(encoding="utf-8"))
-    return {"posts": [], "board_last_used": {}, "daily_count": 0, "last_post_time": None}
-
-
 def load_refresh_history() -> Dict[str, Any]:
+    """Load refresh history: {refreshes: [{product_id, board, window, timestamp, ...}]}"""
     if REFRESH_HISTORY_FILE.exists():
         return json.loads(REFRESH_HISTORY_FILE.read_text(encoding="utf-8"))
     return {"refreshes": []}
@@ -101,17 +139,12 @@ def save_refresh_history(rh: Dict[str, Any]):
     REFRESH_HISTORY_FILE.write_text(json.dumps(rh, indent=2, default=str), encoding="utf-8")
 
 
-def save_history(history: Dict[str, Any]):
-    HISTORY_FILE.write_text(json.dumps(history, indent=2, default=str), encoding="utf-8")
-
-
 def _category_key(title: str, product_type: str = "") -> str:
     text = f"{title} {product_type}".lower()
     for key in ["dress", "top", "blouse", "tank", "shirt", "jeans", "jacket",
                 "coat", "pants", "legging", "skirt", "sweater", "cardigan",
                 "bag", "backpack", "shoe", "boot", "flat", "jumpsuit", "romper"]:
         if key in text:
-            # Normalize to REFRESH_BOARD_POOLS keys
             if key in ("blouse", "tank", "shirt"):
                 return "top"
             if key in ("coat",):
@@ -128,42 +161,29 @@ def _category_key(title: str, product_type: str = "") -> str:
     return "default"
 
 
-def pick_refresh_board(
-    original_board: str,
-    title: str,
-    product_type: str,
-    boards: List[Dict],
-    used_boards_today: set,
-) -> Optional[Dict]:
-    """Pick a board different from original_board and not used today."""
-    boards_by_name = {b["name"].lower(): b for b in boards}
+def _get_refresh_window(timestamp: datetime) -> Optional[str]:
+    """Determine which window a timestamp falls into."""
+    now = datetime.now()
+    age_days = (now - timestamp).total_seconds() / (24 * 3600)
 
-    def find(name: str) -> Optional[Dict]:
-        b = boards_by_name.get(name.lower())
-        if b:
-            return b
-        for board in boards:
-            if name.lower() in board["name"].lower():
-                return board
-        return None
-
-    category = _category_key(title, product_type)
-    pool = REFRESH_BOARD_POOLS.get(category, REFRESH_BOARD_POOLS["default"])
-
-    for candidate in pool:
-        if candidate.lower() == original_board.lower():
-            continue
-        b = find(candidate)
-        if b and b["name"] not in used_boards_today:
-            return b
-
-    # Fallback: any board not original and not used today
-    for b in boards:
-        if b["name"].lower() != original_board.lower() and b["name"] not in used_boards_today:
-            return b
-
+    if age_days <= REFRESH_WINDOW_2_DAYS:
+        return "2day"
+    if REFRESH_WINDOW_4_7_DAYS[0] <= age_days <= REFRESH_WINDOW_4_7_DAYS[1]:
+        return "4-7day"
     return None
 
+
+def _build_boards_used(refresh_history: Dict[str, Any]) -> Dict[str, set]:
+    """Track which boards have been used for each product in refresh history."""
+    boards_used: Dict[str, set] = {}
+    for r in refresh_history.get("refreshes", []):
+        pid = r.get("product_id")
+        if not pid:
+            continue
+        if pid not in boards_used:
+            boards_used[pid] = set()
+        boards_used[pid].add(r.get("board", ""))
+    return boards_used
 
 
 def download_image(url: str, save_path: Path) -> bool:
@@ -177,32 +197,28 @@ def download_image(url: str, save_path: Path) -> bool:
         return False
 
 
-def pick_refresh_image_url(product: Dict[str, Any], refresh_number: int) -> str:
-    """
-    Pick a visually distinct product image for each refresh.
+def pick_refresh_image_url(product: Dict[str, Any], window: str) -> str:
+    """Pick window-specific image for refresh pins.
 
-    Daily always uses images[0] (front shot). Images[0] and [1] are typically
-    front/back of the same outfit — nearly identical. So refreshes start at
-    index 2 to guarantee a lifestyle or detail shot:
-      refresh 1 → images[2] if available, else images[0]
-      refresh 2 → images[3] if available, else images[0]
-
-    Falls back to images[0] only when the product has fewer than 3 images
-    (template change alone will differentiate the pin in that case).
+    Daily uses images[0]. Refresh windows use:
+      2-day → images[2] or images[3]
+      4-7-day → images[4] or images[5]
     """
     images = product.get("images", [])
     if not images:
         return ""
 
-    # Preferred indices for refresh 1 and 2 — skip 0 and 1 (front/back pair)
-    preferred = [2, 3, 4]
-    target_idx = preferred[min(refresh_number - 1, len(preferred) - 1)]
+    window_indices = {
+        "2day": [2, 3],
+        "4-7day": [4, 5],
+    }
+    indices = window_indices.get(window, [0])
 
-    if target_idx < len(images):
-        return images[target_idx].get("src", "")
+    for idx in indices:
+        if idx < len(images):
+            return images[idx].get("src", "")
 
-    # Not enough images — use index 0 (template change makes it look different)
-    return images[0].get("src", "")
+    return images[0].get("src", "") if images else ""
 
 
 def make_refresh_pin_image(
@@ -210,17 +226,10 @@ def make_refresh_pin_image(
     title: str,
     price: Optional[str],
     product_id: str,
-    refresh_number: int,
+    window: str,
 ) -> Optional[str]:
-    """
-    Download a DIFFERENT product image and apply a DIFFERENT template.
-
-    - Image: rotates through Shopify product images[] by refresh_number index
-    - Template: uses product_id hash as stable base, offset by refresh_number
-      so refresh 1 and 2 always differ from each other and from the original
-      (which used MD5(title) % 5 with no template_index passed)
-    """
-    image_url = pick_refresh_image_url(product, refresh_number)
+    """Create refresh pin with window-specific image and template."""
+    image_url = pick_refresh_image_url(product, window)
     if not image_url:
         logger.warning(f"No image URL for product {product_id}")
         return None
@@ -229,14 +238,14 @@ def make_refresh_pin_image(
     if not download_image(image_url, tmp_src):
         return None
 
-    # Base on product_id hash (stable) — daily used MD5(title) % 5
-    # Offset by refresh_number+1 guarantees: original≠refresh1≠refresh2
+    # Stable template index based on product_id + window
     base_idx = int(hashlib.md5(str(product_id).encode()).hexdigest(), 16) % 5
-    new_idx = (base_idx + refresh_number) % 5
+    window_offset = {"2day": 1, "4-7day": 2}.get(window, 0)
+    new_idx = (base_idx + window_offset) % 5
 
-    logger.info(f"Refresh image: variant {refresh_number} of {len(product.get('images', []))}, template {new_idx}")
+    logger.info(f"Refresh image for {window} window: template {new_idx}")
 
-    out_path = Path("/tmp") / f"refresh_overlay_{product_id}_r{refresh_number}.jpg"
+    out_path = Path("/tmp") / f"refresh_overlay_{product_id}_{window}.jpg"
     result = add_text_overlay(
         str(tmp_src),
         title=title,
@@ -249,209 +258,206 @@ def make_refresh_pin_image(
     return result if result else None
 
 
-def _build_refresh_counts(refresh_history: Dict[str, Any]) -> Tuple[Dict[str, int], Dict[str, datetime]]:
-    """Parse refresh_history into per-product counts and last-refresh timestamps."""
-    refresh_counts: Dict[str, int] = {}
-    last_refresh_time: Dict[str, datetime] = {}
-    for r in refresh_history.get("refreshes", []):
-        pid = r["product_id"]
-        refresh_counts[pid] = refresh_counts.get(pid, 0) + 1
-        ts = datetime.fromisoformat(r["timestamp"])
-        if pid not in last_refresh_time or ts > last_refresh_time[pid]:
-            last_refresh_time[pid] = ts
-    return refresh_counts, last_refresh_time
+def pick_refresh_board(
+    title: str,
+    product_type: str,
+    boards: List[Dict],
+    boards_already_used: set,
+    used_boards_today: set,
+    refresh_cursor: int = 0,
+) -> Optional[Dict]:
+    """Pick a board for refresh that matches product category and hasn't been used.
 
-
-def _is_eligible(
-    pid: str,
-    post_time: datetime,
-    refresh_counts: Dict[str, int],
-    last_refresh_time: Dict[str, datetime],
-) -> bool:
-    """Return True if this product/pin is within the 48h–7day refresh window."""
-    now = datetime.now()
-    count = refresh_counts.get(pid, 0)
-
-    if count >= MAX_REFRESHES_PER_PRODUCT:
-        return False
-
-    age_hours = (now - post_time).total_seconds() / 3600
-
-    if age_hours > 7 * 24:
-        return False
-
-    if count == 0 and age_hours < FIRST_REFRESH_HOURS:
-        return False
-
-    if count == 1:
-        last = last_refresh_time.get(pid)
-        if last and (now - last).total_seconds() / 3600 < SECOND_REFRESH_HOURS:
-            return False
-
-    return True
-
-
-def fetch_posting_history_from_github() -> Optional[Dict[str, Any]]:
+    Returns None if NO relevant boards available (per requirement to skip).
     """
-    PRIMARY source: merge posting_history.json from ALL successful daily posting
-    runs in the last 7 days via GitHub Actions API.
+    from board_mapping import MEEESHOP_BOARDS
 
-    Each run saves only its own 4 pins — we need to merge across runs to get
-    the full week's worth of posts for the 48h–7day refresh window.
+    boards_by_name = {b["name"].lower(): b for b in boards}
 
-    Requires GITHUB_TOKEN and GITHUB_REPOSITORY env vars (auto-set in Actions).
-    Returns merged history dict, or None if unavailable.
-    """
-    token = os.environ.get("GITHUB_TOKEN")
-    repo = os.environ.get("GITHUB_REPOSITORY")
-
-    if not token or not repo:
-        logger.warning("GITHUB_TOKEN or GITHUB_REPOSITORY not set — cannot fetch artifact")
+    def find(name: str) -> Optional[Dict]:
+        b = boards_by_name.get(name.lower())
+        if b:
+            return b
+        for board in boards:
+            if name.lower() in board["name"].lower():
+                return board
         return None
 
-    headers = {
-        "Authorization": f"Bearer {token}",
-        "Accept": "application/vnd.github+json",
-        "X-GitHub-Api-Version": "2022-11-28",
-    }
-    base_api = f"https://api.github.com/repos/{repo}"
-    seven_days_ago = datetime.now() - timedelta(days=7)
+    def eligible(b: Optional[Dict]) -> bool:
+        return (b is not None
+                and b["name"] not in boards_already_used
+                and b["name"] not in used_boards_today)
 
+    category = _category_key(title, product_type)
+    pool = REFRESH_BOARD_POOLS.get(category, REFRESH_BOARD_POOLS["default"])
+
+    # Try category-relevant boards first
+    for candidate in pool:
+        b = find(candidate)
+        if eligible(b):
+            return b
+
+    # If category pool exhausted, fall back to generic boards
+    live_names = {b["name"] for b in boards}
+    ordered = [n for n in MEEESHOP_BOARDS if n in live_names]
+    extras = [b["name"] for b in boards if b["name"] not in set(ordered)]
+    all_names = ordered + extras
+
+    for i in range(len(all_names)):
+        name = all_names[(refresh_cursor + i) % len(all_names)]
+        b = find(name)
+        if eligible(b):
+            return b
+
+    return None
+
+
+def extract_product_url(pin: Dict[str, Any]) -> Optional[str]:
+    """Extract product URL from pin link or description.
+
+    Pinterest pins can link directly to Shopify store URLs or have the URL
+    embedded in the pin metadata.
+    """
+    link = pin.get("link") or pin.get("url")
+    if link and "meeeshop" in link.lower():
+        return link
+    return None
+
+
+def _parse_pin_timestamp(pin: Dict[str, Any]) -> Optional[datetime]:
+    """Parse created_at from pin dict. Returns None if missing or unparseable."""
+    raw = pin.get("created_at", "")
+    if not raw:
+        return None
     try:
-        # Fetch up to 50 recent runs — enough to cover 4 runs/day × 7 days = 28 runs
-        resp = requests.get(
-            f"{base_api}/actions/workflows/daily-pinterest-posting.yml/runs",
-            headers=headers,
-            params={"status": "success", "per_page": 50},
-            timeout=15,
-        )
-        resp.raise_for_status()
-        runs = resp.json().get("workflow_runs", [])
-
-        if not runs:
-            logger.warning("No successful daily posting runs found")
-            return None
-
-        # Filter to runs within the last 7 days
-        recent_runs = []
-        for run in runs:
-            created = run.get("created_at", "")
-            try:
-                run_time = datetime.fromisoformat(created.replace("Z", ""))
-                if run_time >= seven_days_ago:
-                    recent_runs.append(run)
-            except ValueError:
-                continue
-
-        logger.info(f"Found {len(recent_runs)} successful posting runs in the last 7 days")
-        if not recent_runs:
-            return None
-
-        # Merge posts from all runs — deduplicate by product_id keeping earliest timestamp
-        merged_posts: Dict[str, Dict] = {}  # product_id → post entry
-
-        for run in recent_runs:
-            run_id = run["id"]
-            try:
-                art_resp = requests.get(
-                    f"{base_api}/actions/runs/{run_id}/artifacts",
-                    headers=headers,
-                    timeout=15,
-                )
-                art_resp.raise_for_status()
-                artifacts = art_resp.json().get("artifacts", [])
-
-                artifact = next(
-                    (a for a in artifacts if a["name"].startswith("posting-history")),
-                    None,
-                )
-                if not artifact:
-                    continue
-
-                dl_resp = requests.get(
-                    artifact["archive_download_url"],
-                    headers=headers,
-                    timeout=30,
-                    allow_redirects=True,
-                )
-                dl_resp.raise_for_status()
-
-                with zipfile.ZipFile(io.BytesIO(dl_resp.content)) as zf:
-                    json_name = next(
-                        (n for n in zf.namelist() if n.endswith("posting_history.json")),
-                        None,
-                    )
-                    if not json_name:
-                        continue
-                    data = json.loads(zf.read(json_name).decode("utf-8"))
-
-                for post in data.get("posts", []):
-                    pid = str(post.get("product_id", ""))
-                    if not pid or post.get("is_refresh"):
-                        continue
-                    # Keep earliest post per product (original pin time)
-                    if pid not in merged_posts:
-                        merged_posts[pid] = post
-                    else:
-                        existing_ts = merged_posts[pid].get("timestamp", "")
-                        if post.get("timestamp", "") < existing_ts:
-                            merged_posts[pid] = post
-
-                logger.info(f"  Run #{run['run_number']}: merged, {len(merged_posts)} unique products so far")
-
-            except Exception as run_err:
-                logger.warning(f"  Run #{run['run_number']} skipped: {run_err}")
-                continue
-
-        if not merged_posts:
-            logger.warning("No posts found across recent runs")
-            return None
-
-        logger.info(f"Merged {len(merged_posts)} unique original posts from last 7 days of runs")
-        return {"posts": list(merged_posts.values()), "board_last_used": {}, "daily_count": 0, "last_post_time": None}
-
-    except Exception as e:
-        logger.warning(f"GitHub artifact fetch failed: {e}")
+        # Pinterest returns ISO 8601: "2024-01-15T12:34:56"
+        return datetime.fromisoformat(raw.replace("Z", "+00:00").split("+")[0])
+    except Exception:
         return None
 
 
-def get_candidates(
-    history: Dict[str, Any],
-    refresh_history: Dict[str, Any],
-) -> List[Dict[str, Any]]:
-    """FALLBACK source: history file — same logic, used when Pinterest API is unavailable."""
+def fetch_pins_in_window(
+    pinterest: PinterestClient,
+    boards: List[Dict],
+) -> Tuple[List[Dict[str, Any]], List[Dict[str, Any]]]:
+    """Fetch pins from all boards, split by time window (2-day vs 4-7-day).
 
-    refresh_counts, last_refresh_time = _build_refresh_counts(refresh_history)
+    Only fetches pins created within the last 7 days — stops paginating early
+    once board_feed returns pins older than 7 days (boards are newest-first).
 
-    candidates = []
-    seen_product_ids = set()
+    Saves qualifying pins to REFRESH_STAGING_FILE for audit/debugging.
 
-    for post in history.get("posts", []):
-        pid = post.get("product_id")
-        if not pid or pid in seen_product_ids:
-            continue
-        if post.get("is_refresh"):
-            continue
-        seen_product_ids.add(pid)
+    Returns:
+        (pins_2day, pins_4_7day) — filtered by creation timestamp
+    """
+    now = datetime.now()
+    cutoff_old = now - timedelta(days=7)
 
-        try:
-            post_time = datetime.fromisoformat(post["timestamp"])
-        except (KeyError, ValueError):
-            continue
+    pins_2day: List[Dict[str, Any]] = []
+    pins_4_7day: List[Dict[str, Any]] = []
+    staged: List[Dict[str, Any]] = []
+    sample_logged = False
+    no_ts_count = 0
 
-        if not _is_eligible(pid, post_time, refresh_counts, last_refresh_time):
-            continue
+    for board in boards:
+        board_name = board.get("name", "")
+        board_id = board.get("id", "")
 
-        count = refresh_counts.get(pid, 0)
-        candidates.append({**post, "_refresh_number": count + 1})
+        logger.info(f"Scanning board for recent pins: {board_name}")
+        pins = pinterest.fetch_board_pins(board_id, board_name)
 
-    candidates.sort(key=lambda p: p["timestamp"])
-    logger.info(f"{len(candidates)} candidates from posting history (fallback)")
-    return candidates
+        # Log a sample pin once so we can see what fields py3-pinterest returns
+        if pins and not sample_logged:
+            sample = pins[0]
+            logger.info(f"[debug] Sample pin keys: {list(sample.keys())}")
+            logger.info(f"[debug] Sample pin id={sample.get('id')} created_at={sample.get('created_at')!r}")
+            sample_logged = True
+
+        board_window_count = {"2day": 0, "4-7day": 0}
+        for idx, pin in enumerate(pins):
+            ts = _parse_pin_timestamp(pin)
+
+            # Fallback: if timestamp missing, use board position as recency proxy.
+            # Boards are newest-first; assume ~20 pins/day posting rate.
+            if ts is None:
+                no_ts_count += 1
+                # Estimate age from position: 20 pins/day → idx/20 days old
+                estimated_age_days = idx / 20.0
+                ts = now - timedelta(days=estimated_age_days)
+
+            # Stop scanning once pins are older than 7 days
+            if ts < cutoff_old:
+                break
+
+            window = _get_refresh_window(ts)
+            if window is None:
+                continue  # Between 2-4 days — not in any window
+
+            pin_data = {
+                **pin,
+                "board": board_name,
+                "board_id": board_id,
+                "window": window,
+                "age_hours": round((now - ts).total_seconds() / 3600, 1),
+            }
+
+            if window == "2day":
+                pins_2day.append(pin_data)
+                board_window_count["2day"] += 1
+            else:
+                pins_4_7day.append(pin_data)
+                board_window_count["4-7day"] += 1
+
+            staged.append(pin_data)
+
+        if any(board_window_count.values()):
+            logger.info(
+                f"  Board '{board_name}': "
+                f"{board_window_count['2day']} 2-day pins, "
+                f"{board_window_count['4-7day']} 4-7-day pins"
+            )
+
+    if no_ts_count:
+        logger.warning(
+            f"[debug] {no_ts_count} pins had no created_at — used board-position fallback "
+            f"(~20 pins/day assumed)"
+        )
+
+    logger.info(
+        f"Total qualifying pins — 2-day: {len(pins_2day)}, 4-7-day: {len(pins_4_7day)}"
+    )
+
+    # Save staging file for audit
+    REFRESH_STAGING_FILE.write_text(
+        json.dumps(
+            {
+                "scanned_at": now.isoformat(),
+                "pins_2day": pins_2day,
+                "pins_4_7day": pins_4_7day,
+            },
+            indent=2,
+            default=str,
+        ),
+        encoding="utf-8",
+    )
+    logger.info(f"Staging file saved: {REFRESH_STAGING_FILE}")
+
+    return pins_2day, pins_4_7day
 
 
 def run_refresh_posting():
-    """Main entry: create fresh pins for products due for their 48h/96h refresh."""
+    """
+    Main entry: refresh posting across time windows.
+
+    1. 2-day window: Fetch pins from boards posted in last 2 days
+       → Extract products from pins
+       → Repin with images[2-3] to different relevant boards
+
+    2. 4-7-day window: Fetch pins from boards posted 4-7 days ago
+       → Extract products from pins
+       → Repin with images[4-5] to different boards
+       → Skip if no relevant boards available for a product
+    """
 
     logging.basicConfig(
         level=logging.INFO,
@@ -467,8 +473,8 @@ def run_refresh_posting():
     if not all([shopify_url, shopify_token]):
         raise ValueError("Missing required Shopify credentials in .env")
 
-    history = load_history()
     refresh_history = load_refresh_history()
+    boards_used_per_product = _build_boards_used(refresh_history)
 
     pinterest = PinterestClient()
     shopify = ShopifyClient(shopify_url, shopify_token)
@@ -482,126 +488,154 @@ def run_refresh_posting():
             raise RuntimeError("No boards found")
         logger.info(f"Fetched {len(boards)} boards")
 
-        # Build full product map from Shopify (by numeric ID and by handle)
-        products = shopify.get_products(limit=250)
-        product_map_by_id = {str(p["id"]): p for p in products}
-        product_map_by_handle = {p["handle"]: p for p in products}
-
-        # --- PRIMARY: fetch posting history from GitHub Actions artifact ---
-        # This is the most reliable source — the daily workflow saves exactly what it posted.
-        source_label = "local file"
-        live_history = fetch_posting_history_from_github()
-        if live_history:
-            history = live_history
-            source_label = "GitHub artifact"
-        else:
-            logger.info("GitHub artifact unavailable — using local posting_history.json")
-
-        candidates = get_candidates(history, refresh_history)
-
-        if not candidates:
-            logger.info(f"No products due for refresh (source: {source_label})")
+        # Fetch pins created within 2-7 days, split by window
+        pins_2day, pins_4_7day = fetch_pins_in_window(pinterest, boards)
+        if not pins_2day and not pins_4_7day:
+            logger.warning("No pins found in 2-day or 4-7-day windows — nothing to refresh")
             return
 
-        logger.info(f"{len(candidates)} products eligible for refresh (source: {source_label})")
+        total_refreshed = 0
+        window_pin_map = {"2day": pins_2day, "4-7day": pins_4_7day}
 
-        used_boards_today: set = set()
-        refreshed = 0
+        # Process each time window: 2-day first, then 4-7-day
+        for window in ["2day", "4-7day"]:
+            logger.info(f"\n{'='*60}")
+            logger.info(f"Processing {window} window...")
+            logger.info(f"{'='*60}")
 
-        for post in candidates:
-            if refreshed >= MAX_REFRESHES_PER_RUN:
-                break
+            window_pins = window_pin_map[window]
 
-            refresh_num = post["_refresh_number"]
-            original_board = post.get("board", "")
+            logger.info(f"Found {len(window_pins)} pins to consider in {window} window")
 
-            # posting_history always uses numeric Shopify product ID
-            product = product_map_by_id.get(str(post["product_id"]))
+            used_boards_today: set = set()
+            window_refreshed = 0
+            refresh_cursor = 0
+            seen_products = set()
 
-            if not product:
-                logger.warning(f"Product '{post['product_id']}' not found in Shopify — skipping")
-                continue
+            for pin in window_pins:
+                if window_refreshed >= MAX_REFRESHES_PER_WINDOW:
+                    logger.info(f"Reached max per window ({MAX_REFRESHES_PER_WINDOW})")
+                    break
 
-            pid = str(product["id"])
-            formatted = format_product_for_pinterest(product, store_base_url)
+                # Extract product from pin link
+                product_link = pin.get("link", "")
+                if not product_link or "meeeshop" not in product_link.lower():
+                    continue
 
-            board_info = pick_refresh_board(
-                original_board,
-                formatted["title"],
-                product.get("product_type", ""),
-                boards,
-                used_boards_today,
-            )
-            if not board_info:
-                logger.warning(f"No eligible refresh board for '{formatted['title']}'")
-                continue
+                # Extract product ID from link (Shopify format: /products/product-handle)
+                try:
+                    # Handle URLs like https://meeeshop.com/products/product-name
+                    parts = product_link.split("/products/")
+                    if len(parts) < 2:
+                        continue
+                    product_handle = parts[1].split("?")[0].strip("/")
 
-            board = board_info["name"]
-            board_id = board_info["id"]
-            logger.info(
-                f"Refresh {refresh_num}/2 for '{formatted['title']}' "
-                f"({original_board} → {board})"
-            )
+                    # Fetch product by handle
+                    product = shopify.get_product_by_handle(product_handle)
+                    if not product:
+                        logger.warning(f"Product not found for handle: {product_handle}")
+                        continue
 
-            overlay_path = make_refresh_pin_image(
-                product,
-                formatted["title"],
-                formatted.get("price"),
-                pid,
-                refresh_num,
-            )
-            if not overlay_path:
-                logger.warning(f"Image generation failed for {pid}, skipping")
-                continue
+                except Exception as e:
+                    logger.warning(f"Failed to extract product from pin link {product_link}: {e}")
+                    continue
 
-            content = generate_content_package(formatted, board)
+                product_id = str(product.get("id", ""))
+                if not product_id or product_id in seen_products:
+                    continue
 
-            success, pin_id = pinterest.create_pin(
-                image_path=overlay_path,
-                title=content["pin_title"],
-                description=content["pin_description"],
-                board_id=board_id,
-                url=formatted["url"],
-                alt_text=formatted.get("image_alt", ""),
-            )
+                seen_products.add(product_id)
 
-            Path(overlay_path).unlink(missing_ok=True)
+                if not product.get("images"):
+                    logger.warning(f"Product {product_id} has no images — skipping")
+                    continue
 
-            if not success:
-                logger.warning(f"Refresh pin post failed for {pid}")
-                continue
+                formatted = format_product_for_pinterest(product, store_base_url)
+                original_board = pin.get("board", "")
 
-            refresh_history["refreshes"].append({
-                "product_id": pid,
-                "title": formatted["title"],
-                "original_board": original_board,
-                "board": board,
-                "refresh_number": refresh_num,
-                "pin_id": pin_id,
-                "timestamp": datetime.now().isoformat(),
-            })
-            save_refresh_history(refresh_history)
+                # Get boards already used for this product
+                boards_used_for_product = boards_used_per_product.get(product_id, set())
 
-            history["posts"].append({
-                "product_id": pid,
-                "title": formatted["title"],
-                "board": board,
-                "is_refresh": True,
-                "refresh_number": refresh_num,
-                "timestamp": datetime.now().isoformat(),
-            })
-            save_history(history)
+                board_info = pick_refresh_board(
+                    formatted["title"],
+                    product.get("product_type", ""),
+                    boards,
+                    boards_already_used=boards_used_for_product,
+                    used_boards_today=used_boards_today,
+                    refresh_cursor=refresh_cursor,
+                )
+                refresh_cursor += 1
 
-            used_boards_today.add(board)
-            refreshed += 1
-            logger.info(f"✓ Refresh pin posted (ID: {pin_id})")
+                if not board_info:
+                    logger.info(
+                        f"✗ No {window} board available for '{formatted['title']}' "
+                        f"(was on '{original_board}') — skipping per requirement"
+                    )
+                    continue
 
-            if refreshed < min(len(candidates), MAX_REFRESHES_PER_RUN):
-                delay = random.randint(30, 60)
-                logger.info(f"Waiting {delay}s...")
-                time.sleep(delay)
+                new_board = board_info["name"]
+                board_id = board_info["id"]
 
-        logger.info(f"✓ Refresh run complete: {refreshed} pins posted")
+                logger.info(
+                    f"✓ {window} repin: '{formatted['title']}' "
+                    f"(from {original_board} to {new_board})"
+                )
+
+                overlay_path = make_refresh_pin_image(
+                    product,
+                    formatted["title"],
+                    formatted.get("price"),
+                    product_id,
+                    window,
+                )
+                if not overlay_path:
+                    logger.warning(f"Image generation failed for {product_id}, skipping")
+                    continue
+
+                content = generate_content_package(formatted, new_board)
+
+                success, pin_id = pinterest.create_pin(
+                    image_path=overlay_path,
+                    title=content["pin_title"],
+                    description=content["pin_description"],
+                    board_id=board_id,
+                    url=formatted["url"],
+                    alt_text=formatted.get("image_alt", ""),
+                )
+
+                Path(overlay_path).unlink(missing_ok=True)
+
+                if not success:
+                    logger.warning(f"Refresh pin post failed for {product_id}")
+                    continue
+
+                # Record refresh
+                refresh_history["refreshes"].append({
+                    "product_id": product_id,
+                    "title": formatted["title"],
+                    "original_board": original_board,
+                    "board": new_board,
+                    "window": window,
+                    "pin_id": pin_id,
+                    "timestamp": datetime.now().isoformat(),
+                })
+                save_refresh_history(refresh_history)
+                boards_used_per_product.setdefault(product_id, set()).add(new_board)
+
+                used_boards_today.add(new_board)
+                window_refreshed += 1
+                total_refreshed += 1
+
+                if window_refreshed < len(window_pins):
+                    delay = random.randint(30, 60)
+                    logger.info(f"Waiting {delay}s...")
+                    time.sleep(delay)
+
+            logger.info(f"✓ {window} window complete: {window_refreshed} pins posted")
+
+        logger.info(f"\n{'='*60}")
+        logger.info(f"✓ Refresh run complete: {total_refreshed} total pins posted")
+        logger.info(f"{'='*60}\n")
 
     except Exception as e:
         logger.error(f"Refresh error: {e}", exc_info=True)
