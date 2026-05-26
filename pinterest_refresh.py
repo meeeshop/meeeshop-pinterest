@@ -46,6 +46,7 @@ from board_mapping import MEEESHOP_BOARDS, CATEGORY_TO_BOARDS
 logger = logging.getLogger(__name__)
 
 REFRESH_HISTORY_FILE = Path(__file__).parent / "refresh_history.json"
+REFRESH_STAGING_FILE = Path(__file__).parent / "refresh_staging.json"
 
 # Time windows for refresh posting
 REFRESH_WINDOW_2_DAYS = 2  # Boards updated in last 2 days
@@ -323,33 +324,106 @@ def extract_product_url(pin: Dict[str, Any]) -> Optional[str]:
     return None
 
 
-def fetch_pins_from_boards(
+def _parse_pin_timestamp(pin: Dict[str, Any]) -> Optional[datetime]:
+    """Parse created_at from pin dict. Returns None if missing or unparseable."""
+    raw = pin.get("created_at", "")
+    if not raw:
+        return None
+    try:
+        # Pinterest returns ISO 8601: "2024-01-15T12:34:56"
+        return datetime.fromisoformat(raw.replace("Z", "+00:00").split("+")[0])
+    except Exception:
+        return None
+
+
+def fetch_pins_in_window(
     pinterest: PinterestClient,
     boards: List[Dict],
-) -> List[Dict[str, Any]]:
-    """Fetch recent pins from all boards.
+) -> Tuple[List[Dict[str, Any]], List[Dict[str, Any]]]:
+    """Fetch pins from all boards, split by time window (2-day vs 4-7-day).
 
-    Returns list of pins with product_id and board info for refresh posting.
+    Only fetches pins created within the last 7 days — stops paginating early
+    once board_feed returns pins older than 7 days (boards are newest-first).
+
+    Saves qualifying pins to REFRESH_STAGING_FILE for audit/debugging.
+
+    Returns:
+        (pins_2day, pins_4_7day) — filtered by creation timestamp
     """
-    all_pins = []
+    now = datetime.now()
+    cutoff_old = now - timedelta(days=7)
+
+    pins_2day: List[Dict[str, Any]] = []
+    pins_4_7day: List[Dict[str, Any]] = []
+    staged: List[Dict[str, Any]] = []
 
     for board in boards:
         board_name = board.get("name", "")
         board_id = board.get("id", "")
 
-        logger.info(f"Fetching pins from board: {board_name}")
+        logger.info(f"Scanning board for recent pins: {board_name}")
         pins = pinterest.fetch_board_pins(board_id, board_name)
 
+        board_window_count = {"2day": 0, "4-7day": 0}
         for pin in pins:
+            ts = _parse_pin_timestamp(pin)
+
+            # If no timestamp, skip (can't verify age)
+            if ts is None:
+                continue
+
+            # Stop scanning once pins are older than 7 days
+            if ts < cutoff_old:
+                break
+
+            window = _get_refresh_window(ts)
+            if window is None:
+                continue  # Between 2-4 days — not in any window
+
             pin_data = {
                 **pin,
                 "board": board_name,
                 "board_id": board_id,
+                "window": window,
+                "age_hours": round((now - ts).total_seconds() / 3600, 1),
             }
-            all_pins.append(pin_data)
 
-    logger.info(f"Fetched {len(all_pins)} total pins from {len(boards)} boards")
-    return all_pins
+            if window == "2day":
+                pins_2day.append(pin_data)
+                board_window_count["2day"] += 1
+            else:
+                pins_4_7day.append(pin_data)
+                board_window_count["4-7day"] += 1
+
+            staged.append(pin_data)
+
+        if any(board_window_count.values()):
+            logger.info(
+                f"  Board '{board_name}': "
+                f"{board_window_count['2day']} 2-day pins, "
+                f"{board_window_count['4-7day']} 4-7-day pins"
+            )
+
+    logger.info(
+        f"Total qualifying pins — 2-day: {len(pins_2day)}, 4-7-day: {len(pins_4_7day)}"
+    )
+
+    # Save staging file for audit
+    REFRESH_STAGING_FILE.write_text(
+        json.dumps(
+            {
+                "scanned_at": now.isoformat(),
+                "pins_2day": pins_2day,
+                "pins_4_7day": pins_4_7day,
+            },
+            indent=2,
+            default=str,
+        ),
+        encoding="utf-8",
+    )
+    logger.info(f"Staging file saved: {REFRESH_STAGING_FILE}")
+
+    return pins_2day, pins_4_7day
 
 
 def run_refresh_posting():
@@ -395,13 +469,14 @@ def run_refresh_posting():
             raise RuntimeError("No boards found")
         logger.info(f"Fetched {len(boards)} boards")
 
-        # Fetch all pins from all boards
-        all_pins = fetch_pins_from_boards(pinterest, boards)
-        if not all_pins:
-            logger.warning("No pins found in any boards")
+        # Fetch pins created within 2-7 days, split by window
+        pins_2day, pins_4_7day = fetch_pins_in_window(pinterest, boards)
+        if not pins_2day and not pins_4_7day:
+            logger.warning("No pins found in 2-day or 4-7-day windows — nothing to refresh")
             return
 
         total_refreshed = 0
+        window_pin_map = {"2day": pins_2day, "4-7day": pins_4_7day}
 
         # Process each time window: 2-day first, then 4-7-day
         for window in ["2day", "4-7day"]:
@@ -409,11 +484,7 @@ def run_refresh_posting():
             logger.info(f"Processing {window} window...")
             logger.info(f"{'='*60}")
 
-            # Filter pins by window (unfortunately we don't have exact timestamp in pin object,
-            # so we'll note this limitation and process all pins)
-            # TODO: Get pin creation timestamps from API for better window filtering
-            # For now: assume all recent pins in all boards are eligible
-            window_pins = all_pins
+            window_pins = window_pin_map[window]
 
             logger.info(f"Found {len(window_pins)} pins to consider in {window} window")
 

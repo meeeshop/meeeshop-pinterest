@@ -424,6 +424,7 @@ class PinterestClient:
                         'description': pin.get('description', ''),
                         'link': pin.get('link') or pin.get('url', ''),
                         'images': pin.get('images', {}),
+                        'created_at': pin.get('created_at') or pin.get('created_time') or pin.get('pin_join', {}).get('created_at', ''),
                     }
                     pins.append(pin_info)
 
