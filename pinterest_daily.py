@@ -283,8 +283,7 @@ def fetch_all_eligible_products(
 
     eligible = [
         p for p in products
-        if p.get("status") == "active"
-        and p.get("id") not in recent_ids
+        if p.get("id") not in recent_ids
         and any(
             v.get("inventory_quantity", 0) >= min_stock
             for v in p.get("variants", [])
