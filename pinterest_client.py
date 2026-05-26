@@ -8,6 +8,7 @@ import sys
 import time
 import json
 import base64
+from datetime import datetime, timedelta
 from typing import Optional, List, Dict, Tuple, Any
 from pathlib import Path
 import logging
@@ -393,40 +394,68 @@ class PinterestClient:
             logger.error(f"Failed to fetch boards: {e}")
             return board_list
 
-    def fetch_board_pins(self, board_id: str, board_name: str, limit: int = 50) -> List[Dict[str, Any]]:
-        """
-        Fetch pins from a specific board.
-        Uses py3-pinterest board_feed() to get pins from a board.
+    def fetch_board_pins(
+        self,
+        board_id: str,
+        board_name: str,
+        limit: int = 50,
+        max_age_days: Optional[int] = None,
+    ) -> List[Dict[str, Any]]:
+        """Fetch pins from a specific board, stopping early once pins exceed max_age_days.
+
+        Pinterest board feeds are newest-first, so we stop iterating the moment
+        we see a pin older than max_age_days — no need to scan the full board.
 
         Args:
             board_id: Board ID from Pinterest
             board_name: Board name (for logging)
-            limit: Max pins to fetch per call (pagination handled by py3-pinterest)
-
-        Returns:
-            List of pin dicts with 'id', 'title', 'description', 'link', 'images' keys
+            limit: Unused (kept for API compatibility); py3-pinterest paginates internally
+            max_age_days: Stop fetching once a pin is older than this many days.
+                          None = fetch everything (original behaviour).
         """
         if not self.authenticated:
             logger.error("Not authenticated. Call login() first.")
             return []
 
+        cutoff = (
+            datetime.now() - timedelta(days=max_age_days)
+            if max_age_days is not None
+            else None
+        )
+
         pins = []
         try:
-            # py3-pinterest.board_feed() returns paginated pins from board
-            # It handles pagination internally with reset_bookmark parameter
             board_pins = self.client.board_feed(board_id=board_id)
 
             if board_pins:
                 for pin in board_pins:
-                    pin_info = {
+                    raw_ts = (
+                        pin.get('created_at')
+                        or pin.get('created_time')
+                        or (pin.get('pin_join') or {}).get('created_at', '')
+                    )
+
+                    # Early-exit: board feed is newest-first; once we hit an old pin, stop
+                    if cutoff and raw_ts:
+                        try:
+                            ts = datetime.fromisoformat(raw_ts.replace("Z", "+00:00").split("+")[0])
+                            if ts < cutoff:
+                                logger.debug(
+                                    f"Pin {pin.get('id')} is older than {max_age_days}d "
+                                    f"({raw_ts}), stopping early for board '{board_name}'"
+                                )
+                                break
+                        except Exception:
+                            pass  # Unparseable timestamp — keep the pin, don't stop
+
+                    pins.append({
                         'id': pin.get('id'),
                         'title': pin.get('title', ''),
                         'description': pin.get('description', ''),
                         'link': pin.get('link') or pin.get('url', ''),
                         'images': pin.get('images', {}),
-                        'created_at': pin.get('created_at') or pin.get('created_time') or pin.get('pin_join', {}).get('created_at', ''),
-                    }
-                    pins.append(pin_info)
+                        'created_at': raw_ts,
+                    })
 
                 logger.info(f"Fetched {len(pins)} pins from board '{board_name}' (ID: {board_id})")
             else:
