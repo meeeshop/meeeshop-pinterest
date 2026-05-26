@@ -233,6 +233,69 @@ def pick_board(
     return random.choice(available) if available else random.choice(boards)
 
 
+def fetch_all_eligible_products(
+    shopify: "ShopifyClient",
+    history: Dict[str, Any],
+    min_stock: int = 20,
+) -> List[Dict[str, Any]]:
+    """Fetch ALL active products with stock > min_stock, paginated.
+
+    Excludes products posted in the last 10 days to ensure diversity.
+    Returns products in random order ready for posting.
+    """
+    products = []
+    limit = 250
+    fields = "id,title,handle,image,images,body_html,vendor,product_type,tags,published_at,variants"
+    url = f"{shopify.store_url}/admin/api/2024-01/products.json?status=active&limit={limit}&fields={fields}"
+
+    # Fetch all pages via Link header pagination
+    while url:
+        try:
+            r = requests.get(url, headers=shopify.headers, timeout=15)
+            r.raise_for_status()
+            batch = r.json().get("products", [])
+            products.extend(batch)
+            logger.debug(f"Fetched {len(batch)} products, total so far: {len(products)}")
+
+            # Extract next page URL from Link header
+            link_header = r.headers.get("Link", "")
+            next_url = None
+            if link_header:
+                for link in link_header.split(","):
+                    if 'rel="next"' in link:
+                        # Extract URL from <url>; rel="next"
+                        next_url = link.split(";")[0].strip().strip("<>")
+                        break
+            url = next_url
+        except Exception as e:
+            logger.warning(f"Product fetch error: {e}, continuing with {len(products)} products so far")
+            break
+
+    logger.info(f"Fetched {len(products)} total products from Shopify")
+
+    # Filter: active, stock >= min_stock, not posted in last 10 days
+    ten_days_ago = datetime.now() - timedelta(days=10)
+    recent_ids = {
+        p.get("id")
+        for p in history.get("posts", [])
+        if datetime.fromisoformat(p["timestamp"]) > ten_days_ago
+    }
+
+    eligible = [
+        p for p in products
+        if p.get("status") == "active"
+        and p.get("id") not in recent_ids
+        and any(
+            v.get("inventory_quantity", 0) >= min_stock
+            for v in p.get("variants", [])
+        )
+    ]
+
+    logger.info(f"Eligible products (stock>{min_stock}, not in last 10 days): {len(eligible)}")
+    random.shuffle(eligible)
+    return eligible
+
+
 def build_run_board_pool(
     all_boards: List[Dict],
     history: Dict[str, Any],
@@ -323,20 +386,11 @@ def run_daily_posting(use_video: bool = False):
         run_board_pool = build_run_board_pool(boards, history, target)
         save_history(history)  # persist cursor advance
 
-        products = shopify.get_products(limit=50)
-        if not products:
-            raise RuntimeError("No products found — check Shopify credentials")
-        logger.info(f"Fetched {len(products)} products")
-
-        # Exclude products posted in the last 7 days
-        week_ago = datetime.now() - timedelta(days=7)
-        recent_ids = {
-            p["product_id"]
-            for p in history.get("posts", [])
-            if datetime.fromisoformat(p["timestamp"]) > week_ago
-        }
-        pool = [p for p in products if p["id"] not in recent_ids] or products
-        random.shuffle(pool)
+        # Fetch ALL products with stock > 20, paginated, exclude last 10 days
+        pool = fetch_all_eligible_products(shopify, history, min_stock=20)
+        if not pool:
+            logger.warning("No eligible products (try lowering stock threshold or checking 10-day window)")
+            return
 
         posted = 0
         used_boards: set = set()
