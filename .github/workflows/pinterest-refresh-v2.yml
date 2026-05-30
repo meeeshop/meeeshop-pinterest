@@ -1,0 +1,61 @@
+name: Pinterest Refresh Pins V2
+
+# V2 — Phase 2 refresh strategy
+# Max 4 refresh pins per window (was 8) — quality over quantity
+# Runs 30 min after each V2 daily posting run
+# Uses content_generator_v2 for USA-targeted refresh content
+#
+# Schedule (30 min after V2 daily runs):
+#   14:30 UTC = 10:30 AM ET — after mid-morning run
+#   18:30 UTC =  2:30 PM ET — after post-lunch run
+#   23:30 UTC =  7:30 PM ET — after after-work run
+#   02:30 UTC = 10:30 PM ET — after evening prime run
+
+on:
+  schedule:
+    - cron: '30 14 * * *'   # 10:30 AM ET
+    - cron: '30 18 * * *'   #  2:30 PM ET
+    - cron: '30 23 * * *'   #  7:30 PM ET
+    - cron: '30 2  * * *'   # 10:30 PM ET
+  workflow_dispatch: {}
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  refresh-pins-v2:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run refresh posting (V2)
+        env:
+          ENCRYPTION_KEY_PRIMARY: ${{ secrets.ENCRYPTION_KEY_PRIMARY }}
+          ENCRYPTION_KEY_FALLBACK: ${{ secrets.ENCRYPTION_KEY_FALLBACK }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          python pinterest_refresh_v2.py
+
+      - name: Upload V2 refresh history
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: refresh-history-v2-${{ github.run_number }}
+          path: |
+            refresh_history_v2.json
+            posting_history_v2.json
+          retention-days: 30

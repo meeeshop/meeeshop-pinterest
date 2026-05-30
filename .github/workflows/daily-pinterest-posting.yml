@@ -1,20 +1,15 @@
 name: Daily Pinterest Posting
 
-# 4 runs/day × 4 pins = 16 pins spread across peak USA women's shopping times.
-# Each run takes ~3 min (4 pins × 40s + overhead) = ~12 min/day total.
+# V1 — DISABLED (schedule removed). Use daily-pinterest-posting-v2.yml instead.
+# To roll back: re-add the schedule block below and disable V2 workflow.
 #
-# Schedule (UTC → US times):
-#   12:00 UTC = 8 AM ET / 7 AM CT   — morning scroll (slot 0: Trends, Dresses, Best selling, Outfit Ideas)
-#   17:00 UTC = 1 PM ET / 12 PM CT  — lunch break   (slot 1: Shirts & Tops, Style Ideas, Jeans, Everyday Style)
-#   21:00 UTC = 5 PM ET / 4 PM CT   — after work    (slot 2: Sweaters, Simple Outfits, Coats, Chic Styles)
-#   01:00 UTC = 9 PM ET / 8 PM CT   — prime time    (slot 3: Pants, Ootd, New, Wardrobe Must Haves)
+# Original schedule (kept for reference):
+#   12:00 UTC = 8 AM ET — morning scroll
+#   17:00 UTC = 1 PM ET — lunch break
+#   21:00 UTC = 5 PM ET — after work
+#   01:00 UTC = 9 PM ET — prime time
 
 on:
-  schedule:
-    - cron: '0 12 * * *'   # 8 AM ET — morning scroll
-    - cron: '0 17 * * *'   # 1 PM ET — lunch break
-    - cron: '0 21 * * *'   # 5 PM ET — after work
-    - cron: '0 1 * * *'    # 9 PM ET — prime time
   workflow_dispatch:
     inputs:
       pins_count:

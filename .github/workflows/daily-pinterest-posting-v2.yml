@@ -1,0 +1,86 @@
+name: Daily Pinterest Posting V2
+
+# V2 — Phase 2 re-activation strategy
+# 2 pins per run × 4 runs = 8 pins/day (safe limit for dormant account re-activation)
+# Uses content_generator_v2: USA keywords, search-first titles, 150-200 char descriptions
+#
+# USA Women's Pinterest Peak Times (2026 research):
+#   Tue-Thu 10am-1pm is highest engagement window overall.
+#   Saturdays 8am-11am: weekend morning scroll (fashion planning).
+#   Evenings 8pm-10pm ET: second peak (browsing before bed).
+#
+# 4-slot schedule covers all major USA time zones:
+#   14:00 UTC = 10 AM ET / 9 AM CT / 7 AM PT  — mid-morning (top slot, Tue-Thu peak)
+#   18:00 UTC =  2 PM ET / 1 PM CT / 11 AM PT — post-lunch browse
+#   23:00 UTC =  7 PM ET / 6 PM CT / 4 PM PT  — after-work / pre-dinner
+#   02:00 UTC = 10 PM ET / 9 PM CT / 7 PM PT  — evening prime (bed-time scroll)
+
+on:
+  schedule:
+    - cron: '0 14 * * *'   # 10 AM ET — mid-morning peak
+    - cron: '0 18 * * *'   #  2 PM ET — post-lunch browse
+    - cron: '0 23 * * *'   #  7 PM ET — after-work scroll
+    - cron: '0 2  * * *'   # 10 PM ET — evening prime time
+  workflow_dispatch:
+    inputs:
+      pins_count:
+        description: 'Number of pins to post (default: 2)'
+        required: false
+        default: '2'
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  post-to-pinterest-v2:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Download V2 posting history artifact
+        uses: dawidd6/action-download-artifact@v3
+        with:
+          name: posting-history-v2-*
+          name_is_regexp: true
+          workflow: daily-pinterest-posting-v2.yml
+          if_no_artifact_found: warn
+          path: .
+        continue-on-error: true
+
+      - name: Flatten posting history
+        run: |
+          found=$(find . -maxdepth 2 -name "posting_history_v2.json" ! -path "./posting_history_v2.json" | sort | tail -1)
+          if [ -n "$found" ]; then
+            echo "Using V2 posting history from: $found"
+            cp "$found" posting_history_v2.json
+          fi
+        continue-on-error: true
+
+      - name: Post daily pins (V2)
+        env:
+          ENCRYPTION_KEY_PRIMARY: ${{ secrets.ENCRYPTION_KEY_PRIMARY }}
+          ENCRYPTION_KEY_FALLBACK: ${{ secrets.ENCRYPTION_KEY_FALLBACK }}
+          PINS_TO_POST: ${{ github.event.inputs.pins_count || '2' }}
+        run: |
+          python pinterest_daily_v2.py
+
+      - name: Upload V2 posting history
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: posting-history-v2-${{ github.run_number }}
+          path: posting_history_v2.json
+          retention-days: 30

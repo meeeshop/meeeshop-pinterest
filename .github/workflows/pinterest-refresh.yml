@@ -1,23 +1,15 @@
 name: Pinterest Refresh Pins
 
-# Runs 30 min after each daily posting run to catch any products due for 48h/96h refresh.
-# Creates a BRAND NEW pin (different image template) to a different board.
-# Pinterest sees it as fresh content — not a repin/duplicate.
+# V1 — DISABLED (schedule removed). Use pinterest-refresh-v2.yml instead.
+# To roll back: re-add the schedule block below and disable V2 refresh workflow.
 #
-# Schedule (UTC → US times, 30 min after daily posting):
-#   12:30 UTC = 8:30 AM ET   — after morning run
-#   17:30 UTC = 1:30 PM ET   — after lunch run
-#   21:30 UTC = 5:30 PM ET   — after after-work run
-#   01:30 UTC = 9:30 PM ET   — after prime-time run
-#
-# Each run: ~2-3 min (posts up to 10 refresh pins max, typically 2-5).
+# Original schedule (kept for reference):
+#   12:30 UTC = 8:30 AM ET
+#   17:30 UTC = 1:30 PM ET
+#   21:30 UTC = 5:30 PM ET
+#   01:30 UTC = 9:30 PM ET
 
 on:
-  schedule:
-    - cron: '30 12 * * *'   # 8:30 AM ET
-    - cron: '30 17 * * *'   # 1:30 PM ET
-    - cron: '30 21 * * *'   # 5:30 PM ET
-    - cron: '30 1 * * *'    # 9:30 PM ET
   workflow_dispatch: {}
 
 permissions:
