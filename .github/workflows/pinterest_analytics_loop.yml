@@ -33,7 +33,8 @@ jobs:
         working-directory: ./
         env:
           # Keys passed to secrets_manager.py for decryption
-          ENCRYPTION_KEY: ${{ secrets.ENCRYPTION_KEY }}
+          ENCRYPTION_KEY_PRIMARY: ${{ secrets.ENCRYPTION_KEY_PRIMARY }}
+          ENCRYPTION_KEY_FALLBACK: ${{ secrets.ENCRYPTION_KEY_FALLBACK }}
           
           # Standard env fallbacks
           PINTEREST_EMAIL: ${{ secrets.PINTEREST_EMAIL }}
