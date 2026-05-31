@@ -2,11 +2,11 @@
 """
 pinterest_analytics_loop.py — Evergreen Traffic & OOS Hijack Loop
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-1. Loads past pins from posting_history.json
-2. Uses Selenium to navigate to the pin and scrape visible engagement (Saves).
-3. If highly engaged -> Checks Shopify inventory.
-4. IF IN STOCK: Re-pins to a new overlapping board.
-5. IF OUT OF STOCK: Creates a 301 redirect to an in-stock replacement & piggybacks the pin.
+1. Uses py3-pinterest API to fetch your boards and recent pins natively.
+2. Evaluates each pin's API engagement stats (Saves) and extracts the Shopify URL.
+3. If highly engaged -> Checks Shopify inventory for that product handle.
+4. IF IN STOCK: Re-pins to a new overlapping relevant board.
+5. IF OUT OF STOCK: Creates a 301 redirect in Shopify & piggybacks the replacement pin.
 """
 
 import os
@@ -102,26 +102,76 @@ def create_shopify_redirect(old_handle, new_handle):
     print(f"    [Shopify] Creating 301 Redirect: {old_handle} -> {new_handle}")
     return _shopify_post("redirects.json", payload)
 
-# ── Selenium Scraper ──────────────────────────────────────────────────────────
-def scrape_pin_saves(driver, pin_url):
-    """Navigate to an individual pin and read its save/engagement count."""
-    try:
-        driver.get(pin_url)
-        time.sleep(4) # Let DOM render
-        
-        # Look for the 'Saves' metric in the DOM text
-        page_source = driver.page_source.lower()
-        
-        # Simple regex to catch generic numbers next to 'saves' (e.g. "12 saves", "1.5k saves")
-        match = re.search(r'([0-9k\.]+)\s+saves?', page_source)
-        if match:
-            val_str = match.group(1).replace('k', '000').replace('.', '')
-            return int(val_str)
+# ── API Pin Fetcher ───────────────────────────────────────────────────────────
+def get_top_performing_pins(client, limit=5, days=30):
+    """Fetch recent pins natively via py3-pinterest and sort by actual saves."""
+    print(f"   [API] Fetching pins from the last {days} days across boards...")
+    boards = client.fetch_boards()
+    
+    recent_pins = []
+    cutoff_date = datetime.now() - timedelta(days=days)
+    
+    for board in boards:
+        board_id = board.get('id')
+        if not board_id:
+            continue
             
-    except Exception as e:
-        print(f"    [WARN] Failed to scrape {pin_url}: {e}")
+        try:
+            # Use raw py3-pinterest client to get full pin data including stats
+            board_pins = client.client.board_feed(board_id=board_id, page_size=25)
+            for pin in (board_pins or []):
+                # Parse creation date
+                raw_ts = pin.get('created_at') or pin.get('created_time') or (pin.get('pin_join') or {}).get('created_at', '')
+                if not raw_ts:
+                    continue
+                    
+                try:
+                    pin_date = datetime.fromisoformat(raw_ts.replace("Z", "+00:00").split("+")[0])
+                    if pin_date < cutoff_date:
+                        continue # Pin is too old
+                except ValueError:
+                    continue
+                    
+                # Extract engagement (saves/repins) checking all possible Pinterest API keys
+                saves = int(pin.get('repin_count') or pin.get('save_count') or 0)
+                if saves == 0:
+                    saves = int(pin.get('aggregated_pin_data', {}).get('saves') or 0)
+                if saves == 0:
+                    saves = int(pin.get('pin_metrics', {}).get('saves') or 0)
+                    
+                # Extract Shopify handle from the outbound link
+                link = pin.get('link') or pin.get('url') or ''
+                handle = None
+                link_match = re.search(r'meeeshop\.com/products/([a-z0-9\-]+)', link.lower())
+                if link_match:
+                    handle = link_match.group(1)
+                    
+                if handle:
+                    recent_pins.append({
+                        'pin_id': pin.get('id'),
+                        'pin_url': f"https://www.pinterest.com/pin/{pin.get('id')}/",
+                        'saves': saves,
+                        'handle': handle,
+                        'board_name': board.get('name')
+                    })
+        except Exception as e:
+            print(f"   [WARN] Failed to fetch pins for board {board.get('name')}: {e}")
+            
+        time.sleep(1) # Gentle rate limiting between board fetches
         
-    return 0 # Return 0 if not found or no engagement
+    # Sort by saves descending
+    recent_pins.sort(key=lambda x: x['saves'], reverse=True)
+    print(f"   [API] Found {len(recent_pins)} eligible pins from the last {days} days.")
+    
+    # Deduplicate by handle, keeping the one with most saves
+    seen_handles = set()
+    deduped_pins = []
+    for pin in recent_pins:
+        if pin['handle'] not in seen_handles:
+            seen_handles.add(pin['handle'])
+            deduped_pins.append(pin)
+            
+    return deduped_pins[:limit]
 
 def get_new_board(original_board, product_data):
     """Find a new board mapping that wasn't the original one."""
@@ -142,52 +192,33 @@ def get_new_board(original_board, product_data):
 # ── Main Loop Logic ───────────────────────────────────────────────────────────
 def main():
     print("=========================================================")
-    print(" 🚀 Starting Pinterest Analytics & Evergreen Loop")
+    print(" 🚀 Starting Pinterest Analytics & Evergreen Loop (API Mode)")
     print("=========================================================")
     
-    history_file = ROOT / "posting_history.json"
-    if not history_file.exists():
-        print("[INFO] No posting_history.json found. Exiting.")
-        return
-        
-    with open(history_file, 'r') as f:
-        history = json.load(f)
-        
-    # Filter pins posted more than 3 days ago but less than 60 days ago
-    cutoff_recent = datetime.now() - timedelta(days=3)
-    cutoff_old = datetime.now() - timedelta(days=60)
-    
-    eligible_pins = []
-    for post in history.get("posts", []):
-        try:
-            pt = datetime.fromisoformat(post.get("timestamp", ""))
-            if cutoff_old < pt < cutoff_recent and "pin_url" in post: # Assuming pin_url is saved
-                eligible_pins.append(post)
-        except Exception:
-            pass
-            
-    if not eligible_pins:
-        print("[INFO] No eligible mature pins to analyze today.")
-        return
-        
-    # Initialize Pinterest Selenium Client
     client = PinterestClient()
-    if not client.login(PINTEREST_EMAIL, PINTEREST_PASSWORD):
+    
+    if not client.login():
         print("[ERROR] Pinterest login failed.")
-        client.close()
         return
         
-    # Analyze up to 5 random older pins per run to avoid Selenium burn-out
-    pins_to_check = random.sample(eligible_pins, min(5, len(eligible_pins)))
+    top_pins = get_top_performing_pins(client, limit=5, days=30)
     
-    for pin_data in pins_to_check:
-        pin_url = pin_data.get("pin_url")
-        handle = pin_data.get("handle") or pin_data.get("product_id") # Depending on how you stored it
-        original_board = pin_data.get("board")
+    if not top_pins:
+        print("[INFO] No eligible pins found to analyze today.")
+        return
+        
+    for pin_data in top_pins:
+        pin_url = pin_data['pin_url']
+        saves = pin_data['saves']
+        handle = pin_data['handle']
         
         print(f"\n🔍 Analyzing Pin: {pin_url}")
-        saves = scrape_pin_saves(client.driver, pin_url)
         print(f"   => Engagement: {saves} saves detected.")
+        
+        if not handle:
+            print("   [WARN] Could not extract a valid Shopify product handle from this pin. Skipping.")
+            time.sleep(3)
+            continue
         
         if saves >= VIRAL_SAVES_THRESHOLD:
             print("   🔥 Highly engaged pin detected! Validating Shopify Stock...")
@@ -199,7 +230,7 @@ def main():
                 
             if is_in_stock(product):
                 print("   ✅ Product is IN STOCK. Executing Evergreen Re-Pin.")
-                new_board = get_new_board(original_board, product)
+                new_board = get_new_board(None, product)
                 
                 # Generate fresh text for the re-pin
                 title = content_generator.generate_pinterest_title(product)
@@ -231,17 +262,18 @@ def main():
                     
                     # 2. Piggyback Algorithm (Pin replacement to same board)
                     title = content_generator.generate_pinterest_title(replacement)
-                    desc = content_generator.generate_pinterest_description(replacement, original_board)
+                    target_board = get_new_board(None, replacement)
+                    desc = content_generator.generate_pinterest_description(replacement, target_board)
                     
                     img_url = replacement.get("images", [{}])[0].get("src")
                     prod_url = f"{SHOPIFY_STORE}/products/{rep_handle}?utm_source=pinterest&utm_medium=piggyback"
                     
-                    print(f"   📌 Piggybacking new product onto viral board: {original_board}")
+                    print(f"   📌 Piggybacking new product onto relevant board: {target_board}")
                     client.create_pin(
                         image=img_url, 
                         title=title, 
                         desc=desc, 
-                        board=original_board, 
+                        board=target_board, 
                         url=prod_url, 
                         alt_text=f"{replacement.get('title')} fashion"
                     )
@@ -253,7 +285,6 @@ def main():
         time.sleep(random.randint(5, 12)) # Human-like delay between actions
         
     print("\n✅ Analytics Loop Complete.")
-    client.close()
 
 if __name__ == "__main__":
     main()
