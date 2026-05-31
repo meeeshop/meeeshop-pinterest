@@ -18,6 +18,9 @@ import re
 from pathlib import Path
 import requests
 from datetime import datetime, timedelta
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
 
 # ── Local Imports ─────────────────────────────────────────────────────────────
 ROOT = Path(__file__).resolve().parent
@@ -102,6 +105,79 @@ def create_shopify_redirect(old_handle, new_handle):
     print(f"    [Shopify] Creating 301 Redirect: {old_handle} -> {new_handle}")
     return _shopify_post("redirects.json", payload)
 
+def extract_shopify_handle(text):
+    """Extracts meeeshop handle from text/URLs."""
+    match = re.search(r'meeeshop\.com/products/([a-z0-9\-]+)', str(text).lower())
+    if match:
+        return match.group(1)
+    return None
+
+# ── Fallback Selenium Analytics Fetcher ───────────────────────────────────────
+def get_top_performing_pins_analytics(client):
+    """Fallback: Use Selenium to scrape Analytics dashboard for pins getting traffic right now."""
+    print("   [Fallback] Using Selenium to scrape Analytics URL for viral pins...")
+    
+    chrome_options = Options()
+    chrome_options.add_argument("--headless=new")
+    chrome_options.add_argument("--disable-blink-features=AutomationControlled")
+    chrome_options.add_argument("--window-size=1920,1080")
+    
+    driver = webdriver.Chrome(options=chrome_options)
+    
+    try:
+        driver.get("https://www.pinterest.com/login/")
+        time.sleep(2)
+        
+        session = client._get_raw_session()
+        for cookie in session.cookies:
+            driver.add_cookie({
+                "name": cookie.name,
+                "value": cookie.value,
+                "domain": ".pinterest.com"
+            })
+            
+        analytics_url = "https://analytics.pinterest.com/overview/?content_type=organic&aggregation=last30d&age=all&board_metric=IMPRESSION&board_id=&claimed_account_type=all&device_type=all&gender=all&include_curated=created&include_realtime=true&pin_format=all&pin_metric=ENGAGEMENT&primary_metric=IMPRESSION&recent_pins=false&selected_split=NO_SPLIT&source_type=all"
+        
+        print("   [Selenium] Navigating to Analytics dashboard...")
+        driver.get(analytics_url)
+        time.sleep(15) # Wait for heavy JS dashboard to load
+        
+        # Scroll to lazy load the table
+        driver.execute_script("window.scrollBy(0, 1500);")
+        time.sleep(5)
+        
+        pin_links = []
+        elements = driver.find_elements(By.XPATH, "//a[contains(@href, '/pin/')]")
+        for el in elements:
+            href = el.get_attribute("href")
+            if href and "/pin/" in href and href not in pin_links:
+                pin_links.append(href)
+                
+        print(f"   [Selenium] Found {len(pin_links)} top pins from Analytics table.")
+        return pin_links[:20]
+        
+    except Exception as e:
+        print(f"   [WARN] Analytics fallback failed: {e}")
+        return []
+    finally:
+        driver.quit()
+
+def get_pin_details_api(client, pin_url):
+    """Fetch pin details securely using the authenticated session."""
+    pin_id = pin_url.split('/pin/')[-1].strip('/')
+    try:
+        session = client._get_raw_session()
+        url = "https://www.pinterest.com/resource/PinResource/get/"
+        params = {"data": json.dumps({"options": {"id": pin_id, "field_set_key": "detailed"}})}
+        headers = {"Accept": "application/json", "X-Requested-With": "XMLHttpRequest"}
+        
+        resp = session.get(url, params=params, headers=headers, timeout=10)
+        if resp.status_code == 200:
+            return resp.json().get("resource_response", {}).get("data", {})
+    except Exception as e:
+        print(f"   [WARN] Failed to fetch pin details for {pin_id}: {e}")
+    return {}
+
 # ── API Pin Fetcher ───────────────────────────────────────────────────────────
 def get_top_performing_pins(client, limit=5, days=30):
     """Fetch recent pins natively via py3-pinterest and sort by actual saves."""
@@ -111,25 +187,50 @@ def get_top_performing_pins(client, limit=5, days=30):
     recent_pins = []
     cutoff_date = datetime.now() - timedelta(days=days)
     
+    total_scanned = 0
+    total_skipped_date = 0
+    total_skipped_handle = 0
+
     for board in boards:
         board_id = board.get('id')
         if not board_id:
             continue
             
         try:
-            # Use raw py3-pinterest client to get full pin data including stats
-            board_pins = client.client.board_feed(board_id=board_id, page_size=25)
+            # Handle py3-pinterest bookmark quirks safely
+            bookmarks = getattr(client.client, 'bookmarks', None)
+            if isinstance(bookmarks, dict):
+                bookmarks.pop(board_id, None)
+
+            try:
+                board_pins = client.client.board_feed(board_id=board_id, page_size=25, reset_bookmark=False)
+            except KeyError:
+                if isinstance(bookmarks, dict):
+                    bookmarks[board_id] = ''
+                board_pins = client.client.board_feed(board_id=board_id, page_size=25, reset_bookmark=False)
+
             for pin in (board_pins or []):
+                total_scanned += 1
                 # Parse creation date
                 raw_ts = pin.get('created_at') or pin.get('created_time') or (pin.get('pin_join') or {}).get('created_at', '')
-                if not raw_ts:
-                    continue
                     
-                try:
-                    pin_date = datetime.fromisoformat(raw_ts.replace("Z", "+00:00").split("+")[0])
-                    if pin_date < cutoff_date:
-                        continue # Pin is too old
-                except ValueError:
+                is_too_old = False
+                if raw_ts:
+                    try:
+                        # Pinterest API can return RFC2822 ("Wed, 22 May...") or ISO
+                        if "," in raw_ts:
+                            from email.utils import parsedate_to_datetime
+                            pin_date = parsedate_to_datetime(raw_ts).replace(tzinfo=None)
+                        else:
+                            pin_date = datetime.fromisoformat(raw_ts.replace("Z", "+00:00").split("+")[0])
+                        
+                        if pin_date < cutoff_date:
+                            is_too_old = True
+                    except Exception:
+                        pass # Fallback: assume recent if parsing fails
+                
+                if is_too_old:
+                    total_skipped_date += 1
                     continue
                     
                 # Extract engagement (saves/repins) checking all possible Pinterest API keys
@@ -141,24 +242,31 @@ def get_top_performing_pins(client, limit=5, days=30):
                     
                 # Extract Shopify handle from the outbound link
                 link = pin.get('link') or pin.get('url') or ''
-                handle = None
-                link_match = re.search(r'meeeshop\.com/products/([a-z0-9\-]+)', link.lower())
-                if link_match:
-                    handle = link_match.group(1)
+                handle = extract_shopify_handle(link)
+                if not handle:
+                    # Fallback check in description
+                    handle = extract_shopify_handle(pin.get('description', ''))
                     
-                if handle:
-                    recent_pins.append({
-                        'pin_id': pin.get('id'),
-                        'pin_url': f"https://www.pinterest.com/pin/{pin.get('id')}/",
-                        'saves': saves,
-                        'handle': handle,
-                        'board_name': board.get('name')
-                    })
+                if not handle:
+                    total_skipped_handle += 1
+                    continue
+
+                recent_pins.append({
+                    'pin_id': pin.get('id'),
+                    'pin_url': f"https://www.pinterest.com/pin/{pin.get('id')}/",
+                    'saves': saves,
+                    'handle': handle,
+                    'board_name': board.get('name')
+                })
         except Exception as e:
             print(f"   [WARN] Failed to fetch pins for board {board.get('name')}: {e}")
             
-        time.sleep(1) # Gentle rate limiting between board fetches
+        time.sleep(0.3) # Gentle rate limiting between board fetches
         
+    print(f"   [API] Scanned {total_scanned} total pins.")
+    print(f"   [API] Skipped {total_skipped_date} due to age (>30 days).")
+    print(f"   [API] Skipped {total_skipped_handle} due to missing Shopify link.")
+
     # Sort by saves descending
     recent_pins.sort(key=lambda x: x['saves'], reverse=True)
     print(f"   [API] Found {len(recent_pins)} eligible pins from the last {days} days.")
@@ -201,12 +309,46 @@ def main():
         print("[ERROR] Pinterest login failed.")
         return
         
-    top_pins = get_top_performing_pins(client, limit=5, days=30)
+    # 1. Try to fetch from API boards (limits to recent 60 days)
+    top_pins = get_top_performing_pins(client, limit=5, days=60)
     
+    # 2. Fallback to scraping the Analytics URL for actual historical viral pins
     if not top_pins:
-        print("[INFO] No eligible pins found to analyze today.")
-        return
+        print("[INFO] No eligible recent pins found via API. Switching to Analytics Dashboard fallback.")
+        analytics_urls = get_top_performing_pins_analytics(client)
         
+        seen_handles = set()
+        deduped = []
+        for url in analytics_urls:
+            if len(deduped) >= 5:
+                break
+                
+            data = get_pin_details_api(client, url)
+            if not data:
+                continue
+                
+            saves = int(data.get('repin_count') or data.get('save_count') or 0)
+            if saves == 0:
+                saves = int(data.get('aggregated_pin_data', {}).get('saves') or 0)
+            if saves == 0:
+                saves = int(data.get('pin_metrics', {}).get('saves') or 0)
+                
+            link = data.get('link') or data.get('url') or ''
+            handle = extract_shopify_handle(link)
+            if not handle:
+                handle = extract_shopify_handle(data.get('description', ''))
+                
+            if handle and handle not in seen_handles:
+                seen_handles.add(handle)
+                deduped.append({'pin_url': url, 'saves': saves, 'handle': handle})
+                
+        deduped.sort(key=lambda x: x['saves'], reverse=True)
+        top_pins = deduped
+        
+    if not top_pins:
+        print("[INFO] No eligible pins found via API or Analytics. Exiting.")
+        return
+
     for pin_data in top_pins:
         pin_url = pin_data['pin_url']
         saves = pin_data['saves']
