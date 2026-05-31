@@ -17,6 +17,7 @@ import random
 import re
 from pathlib import Path
 import requests
+import tempfile
 from datetime import datetime, timedelta
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -68,7 +69,7 @@ def _shopify_post(endpoint, payload):
 
 def get_product_by_handle(handle):
     """Fetch product details by handle to check stock."""
-    data = _shopify_get("products.json", {"handle": handle})
+    data = _shopify_get("products.json", {"handle": handle, "status": "any"})
     products = data.get("products", [])
     if not products:
         return None
@@ -84,14 +85,32 @@ def is_in_stock(product):
             return True
     return False
 
-def find_in_stock_replacement(out_product):
+def find_in_stock_replacement(out_product, handle_hint=""):
     """Find the best in-stock alternative in the same product type."""
-    ptype = out_product.get("product_type", "")
-    data = _shopify_get("products.json", {"product_type": ptype, "limit": 50})
-    pool = [p for p in data.get("products", []) if is_in_stock(p) and p.get("id") != out_product.get("id")]
+    ptype = out_product.get("product_type", "") if out_product else ""
+    if not ptype and handle_hint:
+        h = handle_hint.lower()
+        if 'dress' in h: ptype = 'Dresses'
+        elif 'top' in h or 'blouse' in h or 'shirt' in h: ptype = 'Tops'
+        elif 'jeans' in h or 'denim' in h: ptype = 'Jeans'
+        elif 'pants' in h or 'legging' in h: ptype = 'Pants & Leggings'
+        elif 'sweater' in h or 'cardigan' in h: ptype = 'Sweaters'
+        elif 'jacket' in h or 'coat' in h: ptype = 'Coats & Jackets'
+
+    params = {"limit": 250, "status": "active"}
+    if ptype:
+        params["product_type"] = ptype
+    data = _shopify_get("products.json", params)
+    pool = [p for p in data.get("products", []) if is_in_stock(p) and (not out_product or p.get("id") != out_product.get("id"))]
     
     if pool:
         return random.choice(pool)
+    if ptype:
+        # Fallback to any product
+        data = _shopify_get("products.json", {"limit": 250, "status": "active"})
+        pool = [p for p in data.get("products", []) if is_in_stock(p) and (not out_product or p.get("id") != out_product.get("id"))]
+        if pool:
+            return random.choice(pool)
     return None
 
 def create_shopify_redirect(old_handle, new_handle):
@@ -111,6 +130,19 @@ def extract_shopify_handle(text):
     if match:
         return match.group(1)
     return None
+
+def download_image_to_temp(url):
+    """Download an image to a temporary file for Pinterest upload."""
+    try:
+        resp = requests.get(url, timeout=15)
+        resp.raise_for_status()
+        tmp = tempfile.NamedTemporaryFile(delete=False, suffix=".jpg")
+        tmp.write(resp.content)
+        tmp.close()
+        return tmp.name
+    except Exception as e:
+        print(f"   [WARN] Failed to download image: {e}")
+        return None
 
 # ── Fallback Selenium Analytics Fetcher ───────────────────────────────────────
 def get_top_performing_pins_analytics(client):
@@ -202,67 +234,70 @@ def get_top_performing_pins(client, limit=5, days=30):
             if isinstance(bookmarks, dict):
                 bookmarks.pop(board_id, None)
 
-            try:
-                board_pins = client.client.board_feed(board_id=board_id, page_size=25, reset_bookmark=False)
-            except KeyError:
-                if isinstance(bookmarks, dict):
-                    bookmarks[board_id] = ''
-                board_pins = client.client.board_feed(board_id=board_id, page_size=25, reset_bookmark=False)
+            page_count = 0
+            while page_count < 3: # Fetch up to 75 pins per board
+                try:
+                    board_pins = client.client.board_feed(board_id=board_id, page_size=25, reset_bookmark=(page_count==0))
+                except KeyError:
+                    if isinstance(bookmarks, dict):
+                        bookmarks[board_id] = ''
+                    board_pins = client.client.board_feed(board_id=board_id, page_size=25, reset_bookmark=(page_count==0))
 
-            for pin in (board_pins or []):
-                total_scanned += 1
-                # Parse creation date
-                raw_ts = pin.get('created_at') or pin.get('created_time') or (pin.get('pin_join') or {}).get('created_at', '')
-                    
-                is_too_old = False
-                if raw_ts:
-                    try:
-                        # Pinterest API can return RFC2822 ("Wed, 22 May...") or ISO
-                        if "," in raw_ts:
-                            from email.utils import parsedate_to_datetime
-                            pin_date = parsedate_to_datetime(raw_ts).replace(tzinfo=None)
-                        else:
-                            pin_date = datetime.fromisoformat(raw_ts.replace("Z", "+00:00").split("+")[0])
+                if not board_pins:
+                    break
+
+                for pin in board_pins:
+                    total_scanned += 1
+                    # Parse creation date
+                    raw_ts = pin.get('created_at') or pin.get('created_time') or (pin.get('pin_join') or {}).get('created_at', '')
                         
-                        if pin_date < cutoff_date:
-                            is_too_old = True
-                    except Exception:
-                        pass # Fallback: assume recent if parsing fails
-                
-                if is_too_old:
-                    total_skipped_date += 1
-                    continue
+                    is_too_old = False
+                    if raw_ts:
+                        try:
+                            if "," in raw_ts:
+                                from email.utils import parsedate_to_datetime
+                                pin_date = parsedate_to_datetime(raw_ts).replace(tzinfo=None)
+                            else:
+                                pin_date = datetime.fromisoformat(raw_ts.replace("Z", "+00:00").split("+")[0])
+                            
+                            if pin_date < cutoff_date:
+                                is_too_old = True
+                        except Exception:
+                            pass 
                     
-                # Extract engagement (saves/repins) checking all possible Pinterest API keys
-                saves = int(pin.get('repin_count') or pin.get('save_count') or 0)
-                if saves == 0:
-                    saves = int(pin.get('aggregated_pin_data', {}).get('saves') or 0)
-                if saves == 0:
-                    saves = int(pin.get('pin_metrics', {}).get('saves') or 0)
-                    
-                # Extract Shopify handle from the outbound link
-                link = pin.get('link') or pin.get('url') or ''
-                handle = extract_shopify_handle(link)
-                if not handle:
-                    # Fallback check in description
-                    handle = extract_shopify_handle(pin.get('description', ''))
-                    
-                if not handle:
-                    total_skipped_handle += 1
-                    continue
+                    if is_too_old:
+                        total_skipped_date += 1
+                        continue
+                        
+                    saves = int(pin.get('repin_count') or pin.get('save_count') or 0)
+                    if saves == 0:
+                        saves = int(pin.get('aggregated_pin_data', {}).get('saves') or 0)
+                    if saves == 0:
+                        saves = int(pin.get('pin_metrics', {}).get('saves') or 0)
+                        
+                    link = pin.get('link') or pin.get('url') or ''
+                    handle = extract_shopify_handle(link)
+                    if not handle:
+                        handle = extract_shopify_handle(pin.get('description', ''))
+                        
+                    if not handle:
+                        total_skipped_handle += 1
+                        continue
 
-                recent_pins.append({
-                    'pin_id': pin.get('id'),
-                    'pin_url': f"https://www.pinterest.com/pin/{pin.get('id')}/",
-                    'saves': saves,
-                    'handle': handle,
-                    'board_name': board.get('name')
-                })
+                    recent_pins.append({
+                        'pin_id': pin.get('id'),
+                        'pin_url': f"https://www.pinterest.com/pin/{pin.get('id')}/",
+                        'saves': saves,
+                        'handle': handle,
+                        'board_name': board.get('name')
+                    })
+                
+                page_count += 1
+                time.sleep(0.3)
+                
         except Exception as e:
             print(f"   [WARN] Failed to fetch pins for board {board.get('name')}: {e}")
             
-        time.sleep(0.3) # Gentle rate limiting between board fetches
-        
     print(f"   [API] Scanned {total_scanned} total pins.")
     print(f"   [API] Skipped {total_skipped_date} due to age (>30 days).")
     print(f"   [API] Skipped {total_skipped_handle} due to missing Shopify link.")
@@ -366,34 +401,51 @@ def main():
             print("   🔥 Highly engaged pin detected! Validating Shopify Stock...")
             
             product = get_product_by_handle(handle)
-            if not product:
-                print(f"   [WARN] Product {handle} not found in Shopify.")
-                continue
                 
-            if is_in_stock(product):
+            if product and is_in_stock(product):
                 print("   ✅ Product is IN STOCK. Executing Evergreen Re-Pin.")
                 new_board = get_new_board(None, product)
+                
+                boards = client.fetch_boards()
+                board_id = next((b['id'] for b in boards if b['name'] == new_board), None)
+                if not board_id and boards:
+                    board_id = boards[0]['id']
+                    new_board = boards[0]['name']
                 
                 # Generate fresh text for the re-pin
                 title = content_generator.generate_pinterest_title(product)
                 desc = content_generator.generate_pinterest_description(product, new_board)
                 
                 img_url = product.get("images", [{}])[0].get("src")
+                if not img_url:
+                    print("   [WARN] Product has no images. Skipping.")
+                    continue
+                local_img = download_image_to_temp(img_url)
+                if not local_img:
+                    continue
+                    
                 prod_url = f"{SHOPIFY_STORE}/products/{handle}?utm_source=pinterest&utm_medium=repin"
                 
                 print(f"   📌 Re-pinning to new board: {new_board}")
                 client.create_pin(
-                    image=img_url, 
+                    image_path=local_img, 
                     title=title, 
-                    desc=desc, 
-                    board=new_board, 
+                    description=desc, 
+                    board_id=board_id, 
                     url=prod_url, 
                     alt_text=f"{product.get('title')} styling"
                 )
                 
+                if os.path.exists(local_img):
+                    os.unlink(local_img)
+                
             else:
-                print("   ❌ Product is OUT OF STOCK. Executing Traffic Hijack Loop.")
-                replacement = find_in_stock_replacement(product)
+                if not product:
+                    print(f"   [WARN] Product {handle} not found in Shopify (likely deleted). Executing Traffic Hijack Loop.")
+                else:
+                    print("   ❌ Product is OUT OF STOCK. Executing Traffic Hijack Loop.")
+                    
+                replacement = find_in_stock_replacement(product, handle)
                 
                 if replacement:
                     rep_handle = replacement.get("handle")
@@ -403,22 +455,41 @@ def main():
                     create_shopify_redirect(handle, rep_handle)
                     
                     # 2. Piggyback Algorithm (Pin replacement to same board)
-                    title = content_generator.generate_pinterest_title(replacement)
                     target_board = get_new_board(None, replacement)
+                    
+                    boards = client.fetch_boards()
+                    board_id = next((b['id'] for b in boards if b['name'] == target_board), None)
+                    if not board_id and boards:
+                        board_id = boards[0]['id']
+                        target_board = boards[0]['name']
+                        
+                    title = content_generator.generate_pinterest_title(replacement)
                     desc = content_generator.generate_pinterest_description(replacement, target_board)
                     
-                    img_url = replacement.get("images", [{}])[0].get("src")
+                    images = replacement.get("images", [])
+                    img_url = images[0].get("src") if images else None
+                    if not img_url:
+                        print("   [WARN] Replacement product has no images. Skipping piggyback.")
+                        continue
+                    
+                    local_img = download_image_to_temp(img_url)
+                    if not local_img:
+                        continue
+                        
                     prod_url = f"{SHOPIFY_STORE}/products/{rep_handle}?utm_source=pinterest&utm_medium=piggyback"
                     
                     print(f"   📌 Piggybacking new product onto relevant board: {target_board}")
                     client.create_pin(
-                        image=img_url, 
+                        image_path=local_img, 
                         title=title, 
-                        desc=desc, 
-                        board=target_board, 
+                        description=desc, 
+                        board_id=board_id, 
                         url=prod_url, 
                         alt_text=f"{replacement.get('title')} fashion"
                     )
+                    
+                    if os.path.exists(local_img):
+                        os.unlink(local_img)
                 else:
                     print("   [WARN] No in-stock replacement found. Skipping.")
         else:
