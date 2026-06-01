@@ -247,7 +247,6 @@ def get_top_performing_pins(client, limit=5, days=30):
                 try:
                     board_pins = client.client.board_feed(board_id=board_id, page_size=25, reset_bookmark=(page_count==0))
                 except KeyError:
-                    # This specific KeyError handling implies py3-pinterest might not have initialized bookmark
                     # for a new board, even if reset_bookmark is True.
                     if isinstance(bookmarks, dict):
                         print(f"       [DEBUG] KeyError on first board_feed for {board.get('name')}. Resetting bookmark and retrying.")
