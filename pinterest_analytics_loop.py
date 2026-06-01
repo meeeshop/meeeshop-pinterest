@@ -49,6 +49,7 @@ SHOPIFY_STORE = get_secret("SHOPIFY_STORE_URL")
 SHOPIFY_TOKEN = get_secret("SHOPIFY_ACCESS_TOKEN")
 PINTEREST_EMAIL = get_secret("PINTEREST_EMAIL")
 PINTEREST_PASSWORD = get_secret("PINTEREST_PASSWORD")
+STORE_BASE_URL = get_secret("STORE_BASE_URL")
 
 API_VER = "2024-10"
 HEADERS = {"X-Shopify-Access-Token": SHOPIFY_TOKEN, "Content-Type": "application/json"}
@@ -135,11 +136,18 @@ def create_shopify_redirect(old_handle, new_handle):
         }
     }
     print(f"    [Shopify] Creating 301 Redirect: {old_handle} -> {new_handle}")
-    return _shopify_post("redirects.json", payload)
+    res = _shopify_post("redirects.json", payload)
+    if "errors" in res:
+        print(f"    [Shopify] Note: Redirect issue (may already exist): {res['errors']}")
+    return res
 
 def extract_shopify_handle(text):
     """Extracts meeeshop handle from text/URLs."""
-    match = re.search(r'meeeshop\.com/products/([a-z0-9\-]+)', str(text).lower())
+    if not STORE_BASE_URL:
+        print("[WARN] STORE_BASE_URL is not set in secrets; cannot extract Shopify handles.")
+        return None
+    domain = STORE_BASE_URL.replace("https://", "").replace("http://", "").strip("/")
+    match = re.search(rf'{re.escape(domain)}/products/([a-z0-9\-]+)', str(text).lower())
     if match:
         return match.group(1)
     return None
@@ -292,9 +300,9 @@ def get_top_performing_pins(client, limit=0, days=30):
                         
                     saves = int(pin.get('repin_count') or pin.get('save_count') or 0)
                     if saves == 0:
-                        saves = int(pin.get('aggregated_pin_data', {}).get('saves') or 0)
+                        saves = int((pin.get('aggregated_pin_data') or {}).get('saves') or 0)
                     if saves == 0:
-                        saves = int(pin.get('pin_metrics', {}).get('saves') or 0)
+                        saves = int((pin.get('pin_metrics') or {}).get('saves') or 0)
                         
                     link = pin.get('link') or pin.get('url') or ''
                     handle = extract_shopify_handle(link)
@@ -392,9 +400,9 @@ def main():
                 
             saves = int(data.get('repin_count') or data.get('save_count') or 0)
             if saves == 0:
-                saves = int(data.get('aggregated_pin_data', {}).get('saves') or 0)
+                saves = int((data.get('aggregated_pin_data') or {}).get('saves') or 0)
             if saves == 0:
-                saves = int(data.get('pin_metrics', {}).get('saves') or 0)
+                saves = int((data.get('pin_metrics') or {}).get('saves') or 0)
                 
             link = data.get('link') or data.get('url') or ''
             handle = extract_shopify_handle(link)
@@ -469,10 +477,10 @@ def main():
             if not local_img:
                 continue
                     
-            prod_url = f"{SHOPIFY_STORE}/products/{handle}?utm_source=pinterest&utm_medium=repin"
+            prod_url = f"{STORE_BASE_URL.rstrip('/')}/products/{handle}?utm_source=pinterest&utm_medium=repin"
                 
             print(f"   📌 Re-pinning to new board: {new_board}")
-            client.create_pin(
+            success, pin_id = client.create_pin(
                 image_path=local_img, 
                 title=title, 
                 description=desc, 
@@ -480,21 +488,25 @@ def main():
                 url=prod_url, 
                 alt_text=f"{product.get('title')} styling"
             )
+            if success and pin_id:
+                print(f"   ✅ Successfully created Evergreen Pin! URL: https://www.pinterest.com/pin/{pin_id}/")
+            else:
+                print(f"   ❌ Failed to create Evergreen Pin.")
                 
             if os.path.exists(local_img):
                 os.unlink(local_img)
                 
         else:
             if not product:
-                print(f"   [WARN] Product {handle} not found in Shopify (likely deleted). Executing Traffic Hijack Loop.")
+                print(f"   [INFO] Original product '{handle}' not found (likely deleted). Hijacking traffic to similar in-stock product.")
             else:
-                print("   ❌ Product is OUT OF STOCK. Executing Traffic Hijack Loop.")
+                print(f"   [INFO] Original product '{handle}' is OUT OF STOCK. Hijacking traffic to similar in-stock product.")
                     
             replacement = find_in_stock_replacement(product, handle)
                 
             if replacement:
                 rep_handle = replacement.get("handle")
-                print(f"   🔄 Found Replacement: {rep_handle}")
+                print(f"   🔄 Found active replacement: {rep_handle}")
                     
                 # 1. 301 Redirect to catch existing click traffic
                 create_shopify_redirect(handle, rep_handle)
@@ -521,10 +533,10 @@ def main():
                 if not local_img:
                     continue
                         
-                prod_url = f"{SHOPIFY_STORE}/products/{rep_handle}?utm_source=pinterest&utm_medium=piggyback"
+                prod_url = f"{STORE_BASE_URL.rstrip('/')}/products/{rep_handle}?utm_source=pinterest&utm_medium=piggyback"
                     
-                print(f"   📌 Piggybacking new product onto relevant board: {target_board}")
-                client.create_pin(
+                print(f"   📌 Piggybacking new product '{rep_handle}' onto relevant board '{target_board}'")
+                success, pin_id = client.create_pin(
                     image_path=local_img, 
                     title=title, 
                     description=desc, 
@@ -532,6 +544,10 @@ def main():
                     url=prod_url, 
                     alt_text=f"{replacement.get('title')} fashion"
                 )
+                if success and pin_id:
+                    print(f"   ✅ Successfully created Piggyback Pin! URL: https://www.pinterest.com/pin/{pin_id}/")
+                else:
+                    print(f"   ❌ Failed to create Piggyback Pin.")
                     
                 if os.path.exists(local_img):
                     os.unlink(local_img)
