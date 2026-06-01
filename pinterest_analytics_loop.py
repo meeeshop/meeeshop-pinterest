@@ -16,12 +16,16 @@ import json
 import random
 import re
 from pathlib import Path
+import traceback # Added for detailed error logging
 import requests
 import tempfile
 from datetime import datetime, timedelta
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException, NoSuchElementException, WebDriverException
 
 # ── Local Imports ─────────────────────────────────────────────────────────────
 ROOT = Path(__file__).resolve().parent
@@ -221,6 +225,7 @@ def get_top_performing_pins(client, limit=5, days=30):
     
     total_scanned = 0
     total_skipped_date = 0
+    total_skipped_api_error = 0 # Added to track API errors within loop
     total_skipped_handle = 0
 
     for board in boards:
@@ -232,14 +237,20 @@ def get_top_performing_pins(client, limit=5, days=30):
             # Handle py3-pinterest bookmark quirks safely
             bookmarks = getattr(client.client, 'bookmarks', None)
             if isinstance(bookmarks, dict):
-                bookmarks.pop(board_id, None)
+                # Ensure bookmark for this board is cleared if starting a new page fetch
+                # Or if py3-pinterest uses it in a way that causes KeyError on first access
+                if page_count == 0:
+                    bookmarks.pop(board_id, None) 
 
             page_count = 0
             while page_count < 3: # Fetch up to 75 pins per board
                 try:
                     board_pins = client.client.board_feed(board_id=board_id, page_size=25, reset_bookmark=(page_count==0))
                 except KeyError:
+                    # This specific KeyError handling implies py3-pinterest might not have initialized bookmark
+                    # for a new board, even if reset_bookmark is True.
                     if isinstance(bookmarks, dict):
+                        print(f"       [DEBUG] KeyError on first board_feed for {board.get('name')}. Resetting bookmark and retrying.")
                         bookmarks[board_id] = ''
                     board_pins = client.client.board_feed(board_id=board_id, page_size=25, reset_bookmark=(page_count==0))
 
@@ -249,6 +260,11 @@ def get_top_performing_pins(client, limit=5, days=30):
                 for pin in board_pins:
                     total_scanned += 1
                     # Parse creation date
+                    
+                    # DEBUG: Print raw pin data for initial investigation
+                    if total_scanned < 5: # Only print for first few pins to avoid excessive output
+                        print(f"       [DEBUG] Raw pin data for {pin.get('id')}: {json.dumps(pin, indent=2)}")
+                        
                     raw_ts = pin.get('created_at') or pin.get('created_time') or (pin.get('pin_join') or {}).get('created_at', '')
                         
                     is_too_old = False
@@ -295,8 +311,10 @@ def get_top_performing_pins(client, limit=5, days=30):
                 page_count += 1
                 time.sleep(0.3)
                 
-        except Exception as e:
-            print(f"   [WARN] Failed to fetch pins for board {board.get('name')}: {e}")
+        except Exception: # Catch broader exceptions during pin fetching
+            total_skipped_api_error += 1
+            print(f"   [ERROR] Failed to fetch pins for board {board.get('name')}. Full traceback:")
+            traceback.print_exc() # Print full traceback for detailed debugging
             
     print(f"   [API] Scanned {total_scanned} total pins.")
     print(f"   [API] Skipped {total_skipped_date} due to age (>30 days).")
