@@ -15,6 +15,7 @@ import time
 import json
 import random
 import re
+import argparse
 from pathlib import Path
 import traceback # Added for detailed error logging
 import requests
@@ -54,6 +55,14 @@ HEADERS = {"X-Shopify-Access-Token": SHOPIFY_TOKEN, "Content-Type": "application
 
 # Threshold for a pin to be considered "Viral" or highly engaged
 VIRAL_SAVES_THRESHOLD = 3 
+
+def parse_args():
+    parser = argparse.ArgumentParser(description="Pinterest Analytics & Evergreen Loop")
+    parser.add_argument("--batch-size", type=int, default=0, help="Number of pins to process per batch (0 = all)")
+    parser.add_argument("--batch-index", type=int, default=0, help="Batch index to process")
+    parser.add_argument("--limit", type=int, default=0, help="Max total pins to select before batching (0 = all)")
+    parser.add_argument("--days", type=int, default=60, help="Number of days to look back for pins")
+    return parser.parse_args()
 
 # ── Shopify API Helpers ───────────────────────────────────────────────────────
 def _shopify_get(endpoint, params=None):
@@ -215,7 +224,7 @@ def get_pin_details_api(client, pin_url):
     return {}
 
 # ── API Pin Fetcher ───────────────────────────────────────────────────────────
-def get_top_performing_pins(client, limit=5, days=30):
+def get_top_performing_pins(client, limit=0, days=30):
     """Fetch recent pins natively via py3-pinterest and sort by actual saves."""
     print(f"   [API] Fetching pins from the last {days} days across boards...")
     boards = client.fetch_boards()
@@ -328,7 +337,9 @@ def get_top_performing_pins(client, limit=5, days=30):
             seen_handles.add(pin['handle'])
             deduped_pins.append(pin)
             
-    return deduped_pins[:limit]
+    if limit and limit > 0:
+        return deduped_pins[:limit]
+    return deduped_pins
 
 def get_new_board(original_board, product_data):
     """Find a new board mapping that wasn't the original one."""
@@ -348,8 +359,11 @@ def get_new_board(original_board, product_data):
 
 # ── Main Loop Logic ───────────────────────────────────────────────────────────
 def main():
+    args = parse_args()
     print("=========================================================")
     print(" 🚀 Starting Pinterest Analytics & Evergreen Loop (API Mode)")
+    if args.batch_size > 0:
+        print(f" 📦 Batch Mode: index={args.batch_index}, size={args.batch_size}")
     print("=========================================================")
     
     client = PinterestClient()
@@ -359,7 +373,7 @@ def main():
         return
         
     # 1. Try to fetch from API boards (limits to recent 60 days)
-    top_pins = get_top_performing_pins(client, limit=5, days=60)
+    top_pins = get_top_performing_pins(client, limit=args.limit, days=args.days)
     
     # 2. Fallback to scraping the Analytics URL for actual historical viral pins
     if not top_pins:
@@ -369,7 +383,7 @@ def main():
         seen_handles = set()
         deduped = []
         for url in analytics_urls:
-            if len(deduped) >= 5:
+            if args.limit and args.limit > 0 and len(deduped) >= args.limit:
                 break
                 
             data = get_pin_details_api(client, url)
@@ -398,7 +412,24 @@ def main():
         print("[INFO] No eligible pins found via API or Analytics. Exiting.")
         return
 
-    for pin_data in top_pins:
+    # Filter for highly engaged pins before batching
+    eligible_pins = [p for p in top_pins if p['saves'] >= VIRAL_SAVES_THRESHOLD]
+    
+    print(f"\n[INFO] Total highly engaged pins fetched (>= {VIRAL_SAVES_THRESHOLD} saves): {len(eligible_pins)}")
+    
+    if args.batch_size > 0:
+        start = args.batch_index * args.batch_size
+        end = start + args.batch_size
+        slice_pins = eligible_pins[start:end]
+        print(f"[Batch] Processing slice [{start}:{end}] — {len(slice_pins)} pins")
+    else:
+        slice_pins = eligible_pins
+
+    if not slice_pins:
+        print("[INFO] No highly engaged pins to process in this batch. Exiting.")
+        return
+
+    for pin_data in slice_pins:
         pin_url = pin_data['pin_url']
         saves = pin_data['saves']
         handle = pin_data['handle']
@@ -411,104 +442,101 @@ def main():
             time.sleep(3)
             continue
         
-        if saves >= VIRAL_SAVES_THRESHOLD:
-            print("   🔥 Highly engaged pin detected! Validating Shopify Stock...")
+        print("   🔥 Highly engaged pin detected! Validating Shopify Stock...")
             
-            product = get_product_by_handle(handle)
+        product = get_product_by_handle(handle)
                 
-            if product and is_in_stock(product):
-                print("   ✅ Product is IN STOCK. Executing Evergreen Re-Pin.")
-                new_board = get_new_board(None, product)
+        if product and is_in_stock(product):
+            print("   ✅ Product is IN STOCK. Executing Evergreen Re-Pin.")
+            new_board = get_new_board(None, product)
                 
+            boards = client.fetch_boards()
+            board_id = next((b['id'] for b in boards if b['name'] == new_board), None)
+            if not board_id and boards:
+                board_id = boards[0]['id']
+                new_board = boards[0]['name']
+                
+            # Generate fresh text for the re-pin
+            title = content_generator.generate_pinterest_title(product)
+            desc = content_generator.generate_pinterest_description(product, new_board)
+                
+            images = product.get("images", [])
+            img_url = images[0].get("src") if images else None
+            if not img_url:
+                print("   [WARN] Product has no images. Skipping.")
+                continue
+            local_img = download_image_to_temp(img_url)
+            if not local_img:
+                continue
+                    
+            prod_url = f"{SHOPIFY_STORE}/products/{handle}?utm_source=pinterest&utm_medium=repin"
+                
+            print(f"   📌 Re-pinning to new board: {new_board}")
+            client.create_pin(
+                image_path=local_img, 
+                title=title, 
+                description=desc, 
+                board_id=board_id, 
+                url=prod_url, 
+                alt_text=f"{product.get('title')} styling"
+            )
+                
+            if os.path.exists(local_img):
+                os.unlink(local_img)
+                
+        else:
+            if not product:
+                print(f"   [WARN] Product {handle} not found in Shopify (likely deleted). Executing Traffic Hijack Loop.")
+            else:
+                print("   ❌ Product is OUT OF STOCK. Executing Traffic Hijack Loop.")
+                    
+            replacement = find_in_stock_replacement(product, handle)
+                
+            if replacement:
+                rep_handle = replacement.get("handle")
+                print(f"   🔄 Found Replacement: {rep_handle}")
+                    
+                # 1. 301 Redirect to catch existing click traffic
+                create_shopify_redirect(handle, rep_handle)
+                    
+                # 2. Piggyback Algorithm (Pin replacement to same board)
+                target_board = get_new_board(None, replacement)
+                    
                 boards = client.fetch_boards()
-                board_id = next((b['id'] for b in boards if b['name'] == new_board), None)
+                board_id = next((b['id'] for b in boards if b['name'] == target_board), None)
                 if not board_id and boards:
                     board_id = boards[0]['id']
-                    new_board = boards[0]['name']
-                
-                # Generate fresh text for the re-pin
-                title = content_generator.generate_pinterest_title(product)
-                desc = content_generator.generate_pinterest_description(product, new_board)
-                
-                images = product.get("images", [])
+                    target_board = boards[0]['name']
+                        
+                title = content_generator.generate_pinterest_title(replacement)
+                desc = content_generator.generate_pinterest_description(replacement, target_board)
+                    
+                images = replacement.get("images", [])
                 img_url = images[0].get("src") if images else None
                 if not img_url:
-                    print("   [WARN] Product has no images. Skipping.")
+                    print("   [WARN] Replacement product has no images. Skipping piggyback.")
                     continue
+                    
                 local_img = download_image_to_temp(img_url)
                 if not local_img:
                     continue
+                        
+                prod_url = f"{SHOPIFY_STORE}/products/{rep_handle}?utm_source=pinterest&utm_medium=piggyback"
                     
-                prod_url = f"{SHOPIFY_STORE}/products/{handle}?utm_source=pinterest&utm_medium=repin"
-                
-                print(f"   📌 Re-pinning to new board: {new_board}")
+                print(f"   📌 Piggybacking new product onto relevant board: {target_board}")
                 client.create_pin(
                     image_path=local_img, 
                     title=title, 
                     description=desc, 
                     board_id=board_id, 
                     url=prod_url, 
-                    alt_text=f"{product.get('title')} styling"
+                    alt_text=f"{replacement.get('title')} fashion"
                 )
-                
+                    
                 if os.path.exists(local_img):
                     os.unlink(local_img)
-                
             else:
-                if not product:
-                    print(f"   [WARN] Product {handle} not found in Shopify (likely deleted). Executing Traffic Hijack Loop.")
-                else:
-                    print("   ❌ Product is OUT OF STOCK. Executing Traffic Hijack Loop.")
-                    
-                replacement = find_in_stock_replacement(product, handle)
-                
-                if replacement:
-                    rep_handle = replacement.get("handle")
-                    print(f"   🔄 Found Replacement: {rep_handle}")
-                    
-                    # 1. 301 Redirect to catch existing click traffic
-                    create_shopify_redirect(handle, rep_handle)
-                    
-                    # 2. Piggyback Algorithm (Pin replacement to same board)
-                    target_board = get_new_board(None, replacement)
-                    
-                    boards = client.fetch_boards()
-                    board_id = next((b['id'] for b in boards if b['name'] == target_board), None)
-                    if not board_id and boards:
-                        board_id = boards[0]['id']
-                        target_board = boards[0]['name']
-                        
-                    title = content_generator.generate_pinterest_title(replacement)
-                    desc = content_generator.generate_pinterest_description(replacement, target_board)
-                    
-                    images = replacement.get("images", [])
-                    img_url = images[0].get("src") if images else None
-                    if not img_url:
-                        print("   [WARN] Replacement product has no images. Skipping piggyback.")
-                        continue
-                    
-                    local_img = download_image_to_temp(img_url)
-                    if not local_img:
-                        continue
-                        
-                    prod_url = f"{SHOPIFY_STORE}/products/{rep_handle}?utm_source=pinterest&utm_medium=piggyback"
-                    
-                    print(f"   📌 Piggybacking new product onto relevant board: {target_board}")
-                    client.create_pin(
-                        image_path=local_img, 
-                        title=title, 
-                        description=desc, 
-                        board_id=board_id, 
-                        url=prod_url, 
-                        alt_text=f"{replacement.get('title')} fashion"
-                    )
-                    
-                    if os.path.exists(local_img):
-                        os.unlink(local_img)
-                else:
-                    print("   [WARN] No in-stock replacement found. Skipping.")
-        else:
-            print("   ❄️ Engagement below threshold. Moving on.")
+                print("   [WARN] No in-stock replacement found. Skipping.")
             
         time.sleep(random.randint(5, 12)) # Human-like delay between actions
         
