@@ -236,22 +236,19 @@ def get_top_performing_pins(client, limit=5, days=30):
         try:
             # Handle py3-pinterest bookmark quirks safely
             bookmarks = getattr(client.client, 'bookmarks', None)
+            
             if isinstance(bookmarks, dict):
-                # Ensure bookmark for this board is cleared if starting a new page fetch
-                # Or if py3-pinterest uses it in a way that causes KeyError on first access
-                if page_count == 0:
-                    bookmarks.pop(board_id, None) 
+                bookmarks.pop(board_id, None) 
 
             page_count = 0
             while page_count < 3: # Fetch up to 75 pins per board
                 try:
-                    board_pins = client.client.board_feed(board_id=board_id, page_size=25, reset_bookmark=(page_count==0))
+                    board_pins = client.client.board_feed(board_id=board_id, page_size=25, reset_bookmark=False)
                 except KeyError:
-                    # for a new board, even if reset_bookmark is True.
                     if isinstance(bookmarks, dict):
                         print(f"       [DEBUG] KeyError on first board_feed for {board.get('name')}. Resetting bookmark and retrying.")
                         bookmarks[board_id] = ''
-                    board_pins = client.client.board_feed(board_id=board_id, page_size=25, reset_bookmark=(page_count==0))
+                    board_pins = client.client.board_feed(board_id=board_id, page_size=25, reset_bookmark=False)
 
                 if not board_pins:
                     break
@@ -433,7 +430,8 @@ def main():
                 title = content_generator.generate_pinterest_title(product)
                 desc = content_generator.generate_pinterest_description(product, new_board)
                 
-                img_url = product.get("images", [{}])[0].get("src")
+                images = product.get("images", [])
+                img_url = images[0].get("src") if images else None
                 if not img_url:
                     print("   [WARN] Product has no images. Skipping.")
                     continue
