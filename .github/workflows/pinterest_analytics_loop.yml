@@ -29,6 +29,13 @@ jobs:
           pip install -r requirements.txt
           pip install webdriver-manager selenium requests
           
+      - name: Download previous repin history (if exists)
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: pinterest-repin-history
+          path: ./
+          
       - name: Decrypt Secrets & Run Analytics Loop
         working-directory: ./
         env:
@@ -46,9 +53,11 @@ jobs:
         run: |
           python pinterest_analytics_loop.py
           
-      - name: Upload Logs (Optional)
+      - name: Upload Logs and History
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: pinterest-analytics-logs
-          path: '*.log'
+          name: pinterest-repin-history
+          path: |
+            *.log
+            repin_history.json
