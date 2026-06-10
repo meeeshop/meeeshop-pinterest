@@ -6,7 +6,15 @@ on:
     # Peak evening traffic for US women shoppers
     - cron: '0 1 * * *'
   workflow_dispatch:
-    # Allows manual trigger for testing
+    inputs:
+      strategy:
+        description: 'Strategy to run (daily or biweekly)'
+        required: false
+        default: 'daily'
+        type: choice
+        options:
+          - daily
+          - biweekly
 
 jobs:
   analytics_and_repin:
@@ -30,11 +38,23 @@ jobs:
           pip install webdriver-manager selenium requests
           
       - name: Download previous repin history (if exists)
-        uses: actions/download-artifact@v4
+        uses: dawidd6/action-download-artifact@v3
         continue-on-error: true
         with:
-          name: pinterest-repin-history
-          path: ./
+          name: pinterest-repin-history-*
+          name_is_regexp: true
+          workflow: pinterest_analytics_loop.yml
+          if_no_artifact_found: warn
+          path: .
+
+      - name: Flatten repin history
+        run: |
+          found=$(find . -maxdepth 2 -name "repin_history.json" ! -path "./repin_history.json" | sort | tail -1)
+          if [ -n "$found" ]; then
+            echo "Using repin history from: $found"
+            cp "$found" repin_history.json
+          fi
+        continue-on-error: true
           
       - name: Decrypt Secrets & Run Analytics Loop
         working-directory: ./
@@ -51,13 +71,30 @@ jobs:
           SHOPIFY_ACCESS_TOKEN: ${{ secrets.SHOPIFY_ACCESS_TOKEN }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
-          python pinterest_analytics_loop.py
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            STRATEGY="${{ github.event.inputs.strategy }}"
+          else
+            DAY=$(date +%d)
+            if [ "$DAY" = "01" ] || [ "$DAY" = "15" ]; then
+              STRATEGY="biweekly"
+            else
+              STRATEGY="daily"
+            fi
+          fi
+          echo "Selected strategy: $STRATEGY"
+          
+          if [ "$STRATEGY" = "biweekly" ]; then
+            python pinterest_analytics_loop.py --strategy biweekly --limit 3 --days 60
+          else
+            python pinterest_analytics_loop.py --strategy daily --limit 1 --days 7
+          fi
           
       - name: Upload Logs and History
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: pinterest-repin-history
+          name: pinterest-repin-history-${{ github.run_number }}
           path: |
             *.log
             repin_history.json
+          retention-days: 30
