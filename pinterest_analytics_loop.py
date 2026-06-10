@@ -85,6 +85,7 @@ def parse_args():
     parser.add_argument("--batch-index", type=int, default=0, help="Batch index to process")
     parser.add_argument("--limit", type=int, default=0, help="Max total pins to select before batching (0 = all)")
     parser.add_argument("--days", type=int, default=60, help="Number of days to look back for pins")
+    parser.add_argument("--strategy", type=str, choices=["daily", "biweekly"], default="daily", help="Strategy to run ('daily' or 'biweekly')")
     return parser.parse_args()
 
 # ── Shopify API Helpers ───────────────────────────────────────────────────────
@@ -426,64 +427,68 @@ def main():
     # 1. Try to fetch from API boards (limits to recent 60 days)
     top_pins = get_top_performing_pins(client, limit=args.limit, days=args.days)
     
-    # 2. Fallback to scraping the Analytics URL for actual historical viral pins
+    # 2. Fallback to scraping the Analytics URL for actual historical viral pins (biweekly strategy only)
     if not top_pins:
-        print("[INFO] No eligible recent pins found via API. Switching to Analytics Dashboard fallback.")
-        analytics_urls = get_top_performing_pins_analytics(client)
-        
-        seen_handles = set()
-        deduped = []
-        for url in analytics_urls:
-            if args.limit and args.limit > 0 and len(deduped) >= args.limit:
-                break
-                
-            data = get_pin_details_api(client, url)
-            if not data:
-                continue
-                
-            saves = int(data.get('repin_count') or data.get('save_count') or 0)
-            if saves == 0:
-                saves = int((data.get('aggregated_pin_data') or {}).get('saves') or 0)
-            if saves == 0:
-                saves = int((data.get('pin_metrics') or {}).get('saves') or 0)
-                
-            pin_metrics = data.get('pin_metrics') or {}
-            aggregated = data.get('aggregated_pin_data') or {}
+        if args.strategy == "biweekly":
+            print("[INFO] No eligible recent pins found via API. Switching to Analytics Dashboard fallback.")
+            analytics_urls = get_top_performing_pins_analytics(client)
             
-            impressions = int(pin_metrics.get('impressions') or aggregated.get('impressions') or 0)
-            engagements = int(pin_metrics.get('engagements') or aggregated.get('engagements') or 0)
-            outbound_clicks = int(pin_metrics.get('outbound_clicks') or aggregated.get('outbound_clicks') or 0)
-            pin_clicks = int(pin_metrics.get('pin_clicks') or aggregated.get('pin_clicks') or 0)
+            seen_handles = set()
+            deduped = []
+            for url in analytics_urls:
+                if args.limit and args.limit > 0 and len(deduped) >= args.limit:
+                    break
+                    
+                data = get_pin_details_api(client, url)
+                if not data:
+                    continue
+                    
+                saves = int(data.get('repin_count') or data.get('save_count') or 0)
+                if saves == 0:
+                    saves = int((data.get('aggregated_pin_data') or {}).get('saves') or 0)
+                if saves == 0:
+                    saves = int((data.get('pin_metrics') or {}).get('saves') or 0)
+                    
+                pin_metrics = data.get('pin_metrics') or {}
+                aggregated = data.get('aggregated_pin_data') or {}
                 
-            link = data.get('link') or data.get('url') or ''
-            handle = extract_shopify_handle(link)
-            if not handle:
-                handle = extract_shopify_handle(data.get('description', ''))
-                
-            if handle and handle not in seen_handles:
-                seen_handles.add(handle)
-                
-                image_url = data.get('image_large_url') or data.get('images', {}).get('orig', {}).get('url')
-                if not image_url and 'images' in data:
-                    for size in ['1200x', '736x', '400x300']:
-                        if size in data['images']:
-                            image_url = data['images'][size].get('url')
-                            break
-                            
-                deduped.append({
-                    'pin_id': data.get('id', url.split('/pin/')[-1].strip('/')),
-                    'pin_url': url,
-                    'saves': saves,
-                    'impressions': impressions,
-                    'engagements': engagements,
-                    'outbound_clicks': outbound_clicks,
-                    'pin_clicks': pin_clicks,
-                    'handle': handle,
-                    'image_url': image_url
-                })
-                
-        deduped.sort(key=lambda x: x['saves'], reverse=True)
-        top_pins = deduped
+                impressions = int(pin_metrics.get('impressions') or aggregated.get('impressions') or 0)
+                engagements = int(pin_metrics.get('engagements') or aggregated.get('engagements') or 0)
+                outbound_clicks = int(pin_metrics.get('outbound_clicks') or aggregated.get('outbound_clicks') or 0)
+                pin_clicks = int(pin_metrics.get('pin_clicks') or aggregated.get('pin_clicks') or 0)
+                    
+                link = data.get('link') or data.get('url') or ''
+                handle = extract_shopify_handle(link)
+                if not handle:
+                    handle = extract_shopify_handle(data.get('description', ''))
+                    
+                if handle and handle not in seen_handles:
+                    seen_handles.add(handle)
+                    
+                    image_url = data.get('image_large_url') or data.get('images', {}).get('orig', {}).get('url')
+                    if not image_url and 'images' in data:
+                        for size in ['1200x', '736x', '400x300']:
+                            if size in data['images']:
+                                image_url = data['images'][size].get('url')
+                                break
+                                
+                    deduped.append({
+                        'pin_id': data.get('id', url.split('/pin/')[-1].strip('/')),
+                        'pin_url': url,
+                        'saves': saves,
+                        'impressions': impressions,
+                        'engagements': engagements,
+                        'outbound_clicks': outbound_clicks,
+                        'pin_clicks': pin_clicks,
+                        'handle': handle,
+                        'image_url': image_url
+                    })
+                    
+            deduped.sort(key=lambda x: x['saves'], reverse=True)
+            top_pins = deduped
+        else:
+            print("[INFO] No eligible recent pins found via API, and fallback is disabled in daily strategy. Exiting.")
+            return
         
     if not top_pins:
         print("[INFO] No eligible pins found via API or Analytics. Exiting.")
@@ -592,6 +597,10 @@ def main():
                 os.unlink(local_img)
                 
         else:
+            if args.strategy == "daily":
+                print(f"   [INFO] Product '{handle}' is OUT OF STOCK or not found. Skipping piggyback hijacking in daily strategy.")
+                continue
+
             if not product:
                 print(f"   [INFO] Original product '{handle}' not found (likely deleted). Hijacking traffic to similar in-stock product.")
             else:
