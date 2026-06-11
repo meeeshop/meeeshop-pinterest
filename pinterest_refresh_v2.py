@@ -39,6 +39,7 @@ REFRESH_STAGING_FILE = Path(__file__).parent / "refresh_staging_v2.json"
 REFRESH_WINDOW_2_DAYS   = 2
 REFRESH_WINDOW_4_7_DAYS = (4, 7)
 MAX_REFRESHES_PER_WINDOW = 4   # V2: 4 (was 8) — fewer, higher-quality repins
+INACTIVE_BOARD_THRESHOLD_DAYS = 14  # Mark boards with no new pins in 14 days as inactive
 
 REFRESH_BOARD_POOLS = {
     "dress": [
@@ -221,6 +222,7 @@ def pick_refresh_board(
     boards_already_used: set,
     used_boards_today: set,
     refresh_cursor: int = 0,
+    inactive_boards: Optional[List[str]] = None,
 ) -> Optional[Dict]:
     boards_by_name = {b["name"].lower(): b for b in boards}
 
@@ -241,16 +243,39 @@ def pick_refresh_board(
     category = _category_key(title, product_type)
     pool = REFRESH_BOARD_POOLS.get(category, REFRESH_BOARD_POOLS["default"])
 
+    inactive_set = {name.lower() for name in (inactive_boards or [])}
+
+    # 1. Prioritize inactive boards from the category-specific pool
+    if inactive_set:
+        for candidate in pool:
+            if candidate.lower() in inactive_set:
+                b = find(candidate)
+                if eligible(b):
+                    logger.info(f"[Inactive Board Priority] Prioritizing inactive pool board: '{b['name']}'")
+                    return b
+
+    # 2. Try normal eligible boards from the pool
     for candidate in pool:
         b = find(candidate)
         if eligible(b):
             return b
 
+    # 3. Fallback rotation candidates
     live_names = {b["name"] for b in boards}
     ordered = [n for n in MEEESHOP_BOARDS if n in live_names]
     extras = [b["name"] for b in boards if b["name"] not in set(ordered)]
     all_names = ordered + extras
 
+    # 4. Try inactive boards from fallback list
+    if inactive_set:
+        for name in all_names:
+            if name.lower() in inactive_set:
+                b = find(name)
+                if eligible(b):
+                    logger.info(f"[Inactive Fallback Priority] Prioritizing inactive fallback board: '{b['name']}'")
+                    return b
+
+    # 5. Normal rotation fallback
     for i in range(len(all_names)):
         name = all_names[(refresh_cursor + i) % len(all_names)]
         b = find(name)
@@ -258,6 +283,7 @@ def pick_refresh_board(
             return b
 
     return None
+
 
 
 def _parse_pin_timestamp(pin: Dict[str, Any]) -> Optional[datetime]:
@@ -273,12 +299,13 @@ def _parse_pin_timestamp(pin: Dict[str, Any]) -> Optional[datetime]:
 def fetch_pins_in_window(
     pinterest: PinterestClient,
     boards: List[Dict],
-) -> Tuple[List[Dict[str, Any]], List[Dict[str, Any]]]:
+) -> Tuple[List[Dict[str, Any]], List[Dict[str, Any]], List[str]]:
     now = datetime.now()
     cutoff_old = now - timedelta(days=7)
 
     pins_2day: List[Dict[str, Any]] = []
     pins_4_7day: List[Dict[str, Any]] = []
+    inactive_boards: List[str] = []
     staged: List[Dict[str, Any]] = []
     sample_logged = False
     no_ts_count = 0
@@ -295,6 +322,25 @@ def fetch_pins_in_window(
             logger.info(f"[debug] Sample pin keys: {list(sample.keys())}")
             logger.info(f"[debug] Sample pin created_at={sample.get('created_at')!r}")
             sample_logged = True
+
+        # Check for board inactivity/few pins
+        is_inactive = False
+        if not pins:
+            is_inactive = True
+            logger.info(f"  Board '{board_name}' is inactive (0 pins)")
+        else:
+            newest_ts = _parse_pin_timestamp(pins[0])
+            if newest_ts is not None:
+                age_days = (now - newest_ts).total_seconds() / (24 * 3600)
+                if age_days >= INACTIVE_BOARD_THRESHOLD_DAYS:
+                    is_inactive = True
+                    logger.info(f"  Board '{board_name}' is inactive (newest pin age: {age_days:.1f} days)")
+            if len(pins) < 5:
+                is_inactive = True
+                logger.info(f"  Board '{board_name}' has few pins ({len(pins)} pins) (marked inactive)")
+
+        if is_inactive:
+            inactive_boards.append(board_name)
 
         board_window_count = {"2day": 0, "4-7day": 0}
         for idx, pin in enumerate(pins):
@@ -339,6 +385,7 @@ def fetch_pins_in_window(
         logger.warning(f"[debug] {no_ts_count} pins had no created_at — used position fallback")
 
     logger.info(f"[V2] Total qualifying pins — 2-day: {len(pins_2day)}, 4-7-day: {len(pins_4_7day)}")
+    logger.info(f"[V2] Total inactive boards identified: {len(inactive_boards)}")
 
     REFRESH_STAGING_FILE.write_text(
         json.dumps(
@@ -348,7 +395,7 @@ def fetch_pins_in_window(
         encoding="utf-8",
     )
 
-    return pins_2day, pins_4_7day
+    return pins_2day, pins_4_7day, inactive_boards
 
 
 def run_refresh_posting():
@@ -383,7 +430,7 @@ def run_refresh_posting():
             raise RuntimeError("No boards found")
         logger.info(f"Fetched {len(boards)} boards")
 
-        pins_2day, pins_4_7day = fetch_pins_in_window(pinterest, boards)
+        pins_2day, pins_4_7day, inactive_boards = fetch_pins_in_window(pinterest, boards)
         if not pins_2day and not pins_4_7day:
             logger.warning("No pins found in windows — nothing to refresh")
             return
@@ -444,6 +491,7 @@ def run_refresh_posting():
                     boards_already_used=boards_used_for_product,
                     used_boards_today=used_boards_today,
                     refresh_cursor=refresh_cursor,
+                    inactive_boards=inactive_boards,
                 )
                 refresh_cursor += 1
 
