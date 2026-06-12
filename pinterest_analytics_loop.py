@@ -33,7 +33,7 @@ ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
 
 from pinterest_client import PinterestClient
-from shopify_products import get_pinterest_board_mapping
+from shopify_products import get_pinterest_board_mapping, ShopifyClient
 import content_generator
 
 # ── Secrets Management ────────────────────────────────────────────────────────
@@ -89,12 +89,13 @@ def parse_args():
     return parser.parse_args()
 
 # ── Shopify API Helpers ───────────────────────────────────────────────────────
-def _shopify_get(endpoint, params=None):
-    base = SHOPIFY_STORE.rstrip('/')
-    url = f"{base}/admin/api/{API_VER}/{endpoint}"
-    response = requests.get(url, headers=HEADERS, params=params)
-    response.raise_for_status()
-    return response.json()
+_shopify_client = None
+
+def get_shopify_client():
+    global _shopify_client
+    if _shopify_client is None:
+        _shopify_client = ShopifyClient(SHOPIFY_STORE, SHOPIFY_TOKEN)
+    return _shopify_client
 
 def _shopify_post(endpoint, payload):
     base = SHOPIFY_STORE.rstrip('/')
@@ -106,11 +107,7 @@ def _shopify_post(endpoint, payload):
 
 def get_product_by_handle(handle):
     """Fetch product details by handle to check stock."""
-    data = _shopify_get("products.json", {"handle": handle, "status": "any"})
-    products = data.get("products", [])
-    if not products:
-        return None
-    return products[0]
+    return get_shopify_client().get_product_by_handle(handle)
 
 def is_in_stock(product):
     """Check if any variant has inventory."""
@@ -134,18 +131,16 @@ def find_in_stock_replacement(out_product, handle_hint=""):
         elif 'sweater' in h or 'cardigan' in h: ptype = 'Sweaters'
         elif 'jacket' in h or 'coat' in h: ptype = 'Coats & Jackets'
 
-    params = {"limit": 250, "status": "active"}
-    if ptype:
-        params["product_type"] = ptype
-    data = _shopify_get("products.json", params)
-    pool = [p for p in data.get("products", []) if is_in_stock(p) and (not out_product or p.get("id") != out_product.get("id"))]
+    client = get_shopify_client()
+    products = client.get_products(limit=250, status="active", product_type=ptype)
+    pool = [p for p in products if is_in_stock(p) and (not out_product or p.get("id") != out_product.get("id"))]
     
     if pool:
         return random.choice(pool)
     if ptype:
         # Fallback to any product
-        data = _shopify_get("products.json", {"limit": 250, "status": "active"})
-        pool = [p for p in data.get("products", []) if is_in_stock(p) and (not out_product or p.get("id") != out_product.get("id"))]
+        products = client.get_products(limit=250, status="active")
+        pool = [p for p in products if is_in_stock(p) and (not out_product or p.get("id") != out_product.get("id"))]
         if pool:
             return random.choice(pool)
     return None
