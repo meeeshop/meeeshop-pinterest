@@ -195,31 +195,12 @@ def fetch_all_eligible_products(
     history: Dict[str, Any],
     min_stock: int = 20,
 ) -> List[Dict[str, Any]]:
-    products = []
-    limit = 250
-    fields = "id,title,handle,image,images,body_html,vendor,product_type,tags,published_at,variants"
-    url = f"{shopify.store_url}/admin/api/2024-01/products.json?status=active&limit={limit}&fields={fields}"
+    """Fetch ALL active products with stock > min_stock, paginated via GraphQL.
 
-    while url:
-        try:
-            r = requests.get(url, headers=shopify.headers, timeout=15)
-            r.raise_for_status()
-            batch = r.json().get("products", [])
-            products.extend(batch)
-            logger.debug(f"Fetched {len(batch)} products, total: {len(products)}")
-
-            link_header = r.headers.get("Link", "")
-            next_url = None
-            if link_header:
-                for link in link_header.split(","):
-                    if 'rel="next"' in link:
-                        next_url = link.split(";")[0].strip().strip("<>")
-                        break
-            url = next_url
-        except Exception as e:
-            logger.warning(f"Product fetch error: {e}, continuing with {len(products)} so far")
-            break
-
+    Excludes products posted in the last 10 days to ensure diversity.
+    Returns products in random order ready for posting.
+    """
+    products = shopify.get_all_products(status="active")
     logger.info(f"Fetched {len(products)} total products from Shopify")
 
     ten_days_ago = datetime.now() - timedelta(days=10)
