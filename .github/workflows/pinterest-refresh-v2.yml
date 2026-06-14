@@ -59,8 +59,8 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add refresh_history_v2.json refresh_history.json posting_history_v2.json posting_history.json || true
           git commit -m "chore: auto-update posting and refresh history [skip ci]" || echo "No changes to commit"
-          git pull origin develop --rebase || true
-          git push origin develop || echo "Failed to push history updates"
+          git pull origin ${{ github.ref_name }} --rebase || true
+          git push origin HEAD || echo "Failed to push history updates"
 
       - name: Upload V2 refresh history
         if: always()
