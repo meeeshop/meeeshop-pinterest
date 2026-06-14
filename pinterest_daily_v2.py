@@ -230,22 +230,35 @@ def fetch_all_eligible_products(
             except Exception:
                 pass
 
-    # Load refresh history as well to avoid duplicates
-    refresh_history_file = Path(__file__).parent / "refresh_history_v2.json"
-    if refresh_history_file.exists():
-        try:
-            refresh_history = json.loads(refresh_history_file.read_text(encoding="utf-8"))
-            for r in refresh_history.get("refreshes", []):
-                ts_str = r.get("timestamp")
-                if ts_str:
-                    try:
-                        ts = datetime.fromisoformat(ts_str)
-                        if ts > ten_days_ago:
-                            recent_ids.add(str(r.get("product_id")))
-                    except Exception:
-                        pass
-        except Exception as e:
-            logger.warning(f"Failed to read refresh history: {e}")
+    # Load other history files to avoid duplicates
+    other_histories = [
+        ("refresh_history_v2.json", "refreshes", "timestamp"),
+        ("video_posting_history.json", "posts", "posted_at"),
+        ("blog_posting_history.json", "posts", "timestamp")
+    ]
+    for filename, list_key, time_key in other_histories:
+        history_path = Path(__file__).parent / filename
+        if history_path.exists():
+            try:
+                hist_data = json.loads(history_path.read_text(encoding="utf-8"))
+                for item in hist_data.get(list_key, []):
+                    ts_str = item.get(time_key)
+                    if ts_str:
+                        try:
+                            # Normalize Z suffix to offset for python fromisoformat
+                            ts_str_clean = ts_str.replace("Z", "+00:00")
+                            ts = datetime.fromisoformat(ts_str_clean)
+                            # Remove timezone info for comparison with local/naive datetime
+                            if ts.tzinfo is not None:
+                                ts = ts.replace(tzinfo=None)
+                            if ts > ten_days_ago:
+                                item_id = item.get("product_id") or item.get("id")
+                                if item_id:
+                                    recent_ids.add(str(item_id))
+                        except Exception:
+                            pass
+            except Exception as e:
+                logger.warning(f"Failed to read {filename}: {e}")
 
     eligible = [
         p for p in products

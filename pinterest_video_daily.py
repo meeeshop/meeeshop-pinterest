@@ -97,6 +97,10 @@ FORMATS = [
     {"badge": "STYLE TIPS",    "cta": "See All Styles",        "badge_color": (80, 160, 255)},
     {"badge": "FASHION STEAL", "cta": "Grab This Deal",        "badge_color": (255, 130, 50)},
     {"badge": "STYLE INSPO",   "cta": "Get The Look",          "badge_color": (180, 80, 255)},
+    {"badge": "MUST HAVE",     "cta": "Add To Cart",           "badge_color": (210, 160, 140)},
+    {"badge": "ROMANTIC ERA",  "cta": "Elevate Your Look",     "badge_color": (115, 30, 70)},
+    {"badge": "VIBE CHECK",    "cta": "Shop The Vibe",         "badge_color": (70, 95, 120)},
+    {"badge": "DAILY RITUAL",  "cta": "Get The Look",          "badge_color": (60, 105, 80)},
 ]
 
 SOLID_BG_COLORS = [
@@ -172,6 +176,7 @@ def _was_recently_posted(product: Dict[str, Any], video_history: Dict[str, Any])
         ("refresh_history_v2.json", "refreshes", "timestamp"),
         ("posting_history.json", "posts", "timestamp"),
         ("refresh_history.json", "refreshes", "timestamp"),
+        ("blog_posting_history.json", "posts", "timestamp"),
     ]
     
     for filename, list_key, time_key in history_files:

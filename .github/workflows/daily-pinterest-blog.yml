@@ -1,0 +1,66 @@
+name: Pinterest Daily Blog Postings
+
+on:
+  schedule:
+    - cron: '30 15 * * *'   # 11:30 AM ET / 15:30 UTC daily
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run (simulate blog posting without actually posting)'
+        type: boolean
+        required: false
+        default: false
+
+permissions:
+  actions: read
+  contents: write
+
+jobs:
+  blog-postings:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python
+         uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run daily blog posting
+        env:
+          ENCRYPTION_KEY_PRIMARY: ${{ secrets.ENCRYPTION_KEY_PRIMARY }}
+          ENCRYPTION_KEY_FALLBACK: ${{ secrets.ENCRYPTION_KEY_FALLBACK }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
+        run: |
+          python pinterest_blog_daily.py
+
+      - name: Commit and push history updates
+        if: always()
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add blog_posting_history.json refresh_history_v2.json posting_history_v2.json || true
+          git commit -m "chore: auto-update blog and posting history [skip ci]" || echo "No changes to commit"
+          git pull origin ${{ github.ref_name }} --rebase || true
+          git push origin HEAD || echo "Failed to push history updates"
+
+      - name: Upload blog history artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: blog-posting-history-${{ github.run_number }}
+          path: |
+            blog_posting_history.json
+            posting_history_v2.json
+          retention-days: 30

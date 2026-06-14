@@ -459,22 +459,34 @@ def run_refresh_posting():
             except Exception:
                 pass
 
-    # Load daily posting history as well to avoid repinning daily posts too quickly
-    posting_history_file = Path(__file__).parent / "posting_history_v2.json"
-    if posting_history_file.exists():
-        try:
-            posting_history = json.loads(posting_history_file.read_text(encoding="utf-8"))
-            for p in posting_history.get("posts", []):
-                ts_str = p.get("timestamp")
-                if ts_str:
-                    try:
-                        ts = datetime.fromisoformat(ts_str)
-                        if ts > four_days_ago:
-                            refreshed_recently.add(str(p.get("product_id")))
-                    except Exception:
-                        pass
-        except Exception as e:
-            logger.warning(f"Failed to read daily posting history: {e}")
+    # Load daily, video, and blog posting histories to avoid repinning too quickly
+    other_histories = [
+        ("posting_history_v2.json", "posts", "timestamp"),
+        ("video_posting_history.json", "posts", "posted_at"),
+        ("blog_posting_history.json", "posts", "timestamp")
+    ]
+    for filename, list_key, time_key in other_histories:
+        history_path = Path(__file__).parent / filename
+        if history_path.exists():
+            try:
+                hist_data = json.loads(history_path.read_text(encoding="utf-8"))
+                for item in hist_data.get(list_key, []):
+                    ts_str = item.get(time_key)
+                    if ts_str:
+                        try:
+                            # Normalize Z suffix to offset
+                            ts_str_clean = ts_str.replace("Z", "+00:00")
+                            ts = datetime.fromisoformat(ts_str_clean)
+                            if ts.tzinfo is not None:
+                                ts = ts.replace(tzinfo=None)
+                            if ts > four_days_ago:
+                                item_id = item.get("product_id") or item.get("id")
+                                if item_id:
+                                    refreshed_recently.add(str(item_id))
+                        except Exception:
+                            pass
+            except Exception as e:
+                logger.warning(f"Failed to read {filename}: {e}")
     boards_used_per_product = _build_boards_used(refresh_history)
 
     pinterest = PinterestClient()
