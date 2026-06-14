@@ -487,6 +487,11 @@ def run_refresh_posting():
     )
 
     EnvLoader.load_youtube_env()
+    dry_run = os.getenv("DRY_RUN", "false").lower() == "true"
+    if dry_run:
+        logger.info("=" * 60)
+        logger.info("[DRY RUN MODE ENABLED] No boards will be created, no pins will be posted, and no history files will be modified.")
+        logger.info("=" * 60)
 
     shopify_url = get_secret("SHOPIFY_STORE_URL")
     shopify_token = get_secret("SHOPIFY_ACCESS_TOKEN")
@@ -636,17 +641,25 @@ def run_refresh_posting():
                     if existing_board:
                         board_info = existing_board
                     else:
-                        success, new_board_data = pinterest.create_board(
-                            name="Meeeshop Shopping",
-                            description="Trending shopping finds from Meeeshop."
-                        )
-                        if success and new_board_data:
-                            board_info = new_board_data
-                            boards.append(new_board_data)
-                            logger.info(f"Dynamically created generic board: '{board_info['name']}'")
+                        if dry_run:
+                            logger.info("  [DRY RUN] Would dynamically create generic board: 'Meeeshop Shopping'")
+                            board_info = {
+                                "id": "MOCK_GENERIC_BOARD_ID",
+                                "name": "Meeeshop Shopping",
+                                "url": ""
+                            }
                         else:
-                            logger.error("Failed to create generic board, skipping")
-                            continue
+                            success, new_board_data = pinterest.create_board(
+                                name="Meeeshop Shopping",
+                                description="Trending shopping finds from Meeeshop."
+                            )
+                            if success and new_board_data:
+                                board_info = new_board_data
+                                boards.append(new_board_data)
+                                logger.info(f"Dynamically created generic board: '{board_info['name']}'")
+                            else:
+                                logger.error("Failed to create generic board, skipping")
+                                continue
 
                 new_board = board_info["name"]
                 board_id = board_info["id"]
@@ -655,6 +668,15 @@ def run_refresh_posting():
                     f"✓ {window} repin: '{formatted['title']}' "
                     f"(from {original_board} to {new_board})"
                 )
+
+                if dry_run:
+                    logger.info(f"  [DRY RUN] Would download and design refresh pin image for product {product_id}")
+                    logger.info(f"  [DRY RUN] Would generate AI title/description for board '{new_board}'")
+                    logger.info(f"  [DRY RUN] Would create pin on board '{new_board}' (ID: {board_id}) with URL '{formatted['url']}'")
+                    used_boards_today.add(new_board)
+                    window_refreshed += 1
+                    total_refreshed += 1
+                    continue
 
                 overlay_path = make_refresh_pin_image(
                     product,

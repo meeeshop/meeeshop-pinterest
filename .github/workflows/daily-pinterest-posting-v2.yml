@@ -27,6 +27,11 @@ on:
         description: 'Number of pins to post (default: 2)'
         required: false
         default: '2'
+      dry_run:
+        description: 'Dry run (simulate daily posting without actually creating pins)'
+        type: boolean
+        required: false
+        default: false
 
 permissions:
   actions: read
@@ -57,6 +62,7 @@ jobs:
           ENCRYPTION_KEY_PRIMARY: ${{ secrets.ENCRYPTION_KEY_PRIMARY }}
           ENCRYPTION_KEY_FALLBACK: ${{ secrets.ENCRYPTION_KEY_FALLBACK }}
           PINS_TO_POST: ${{ github.event.inputs.pins_count || '2' }}
+          DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
         run: |
           python pinterest_daily_v2.py
 

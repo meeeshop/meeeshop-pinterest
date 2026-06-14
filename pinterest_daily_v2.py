@@ -298,6 +298,11 @@ def run_daily_posting(use_video: bool = False):
     )
 
     EnvLoader.load_youtube_env()
+    dry_run = os.getenv("DRY_RUN", "false").lower() == "true"
+    if dry_run:
+        logger.info("=" * 60)
+        logger.info("[DRY RUN MODE ENABLED] No boards will be created, no pins will be posted, and no history files will be modified.")
+        logger.info("=" * 60)
 
     pinterest_email = get_secret("PINTEREST_EMAIL")
     pinterest_password = get_secret("PINTEREST_PASSWORD")
@@ -359,6 +364,14 @@ def run_daily_posting(use_video: bool = False):
             logger.info(f"Pin {posted + 1}/{target} → {board}")
 
             content = generate_content_package(formatted, board)
+
+            if dry_run:
+                logger.info(f"  [DRY RUN] Would download and design pin image for product {product['id']}")
+                logger.info(f"  [DRY RUN] Would generate AI title/description for board '{board}'")
+                logger.info(f"  [DRY RUN] Would create pin on board '{board}' (ID: {board_id}) with URL '{formatted['url']}'")
+                used_boards.add(board)
+                posted += 1
+                continue
 
             if not post_pin(pinterest, formatted, board_id, content):
                 logger.warning(f"Post failed for '{formatted['title']}', trying next")

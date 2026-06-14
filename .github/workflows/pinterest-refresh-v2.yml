@@ -17,7 +17,13 @@ on:
     - cron: '30 18 * * *'   #  2:30 PM ET
     - cron: '30 23 * * *'   #  7:30 PM ET
     - cron: '30 2  * * *'   # 10:30 PM ET
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run (simulate refresh without actually posting)'
+        type: boolean
+        required: false
+        default: false
 
 permissions:
   actions: read
@@ -49,6 +55,7 @@ jobs:
           ENCRYPTION_KEY_FALLBACK: ${{ secrets.ENCRYPTION_KEY_FALLBACK }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
+          DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
         run: |
           python pinterest_refresh_v2.py
 
