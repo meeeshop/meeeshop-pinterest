@@ -123,6 +123,7 @@ def fetch_shopify_articles(shopify: ShopifyClient, limit: int = 15) -> List[Dict
                 "excerpt": node.get("summary") or "",
                 "image_url": img_url,
                 "blog_title": node.get("blog", {}).get("title", "MeeeShop Blog"),
+                "blog_handle": node.get("blog", {}).get("handle", "news"),
                 "published_at": node.get("publishedAt"),
             })
         return articles
@@ -190,7 +191,7 @@ def run_blog_posting() -> None:
         logger.info(f"\n--- Posting Article: '{article['title']}' ---")
         
         # Build description
-        blog_url = f"{store_base_url.rstrip('/')}/blogs/{article['handle']}"
+        blog_url = f"{store_base_url.rstrip('/')}/blogs/{article['blog_handle']}/{article['handle']}"
         desc = f"Read the new article: {article['title']}. {article['excerpt'][:150]}... Read more on MeeeShop!"
         alt_text = f"MeeeShop Blog post: {article['title']}"
 
