@@ -422,20 +422,67 @@ def get_pinterest_board_mapping() -> Dict[str, List[str]]:
 
 def select_board_for_product(product_data: Dict[str, Any]) -> str:
     """Select Pinterest board based on product type/tags. Returns an actual board name."""
-
-    board_map = get_pinterest_board_mapping()
-
+    import re
     title = (product_data.get("title") or "").lower()
     product_type = (product_data.get("product_type") or "").lower()
     tags = [t.lower() for t in product_data.get("tags", [])]
     search_text = f"{title} {product_type} {' '.join(tags)}"
 
-    # Check all keywords against combined text
+    category_mappings = [
+        (["backpack", "bag", "purse", "tote", "handbag", "crossbody", "clutch", "satchel", "wallet", "pouch", "duffel", "hobo"], "bag"),
+        (["dress", "gown", "midi", "maxi", "mini"], "dress"),
+        (["top", "blouse", "tank", "shirt", "cami"], "top"),
+        (["jeans", "denim", "pants", "legging"], "pants"),
+        (["jacket", "coat", "shacket", "blazer"], "jacket"),
+        (["cardigan"], "cardigan"),
+        (["sweater", "knit", "pullover"], "sweater"),
+        (["skirt"], "skirt"),
+        (["shoe", "boot", "flat", "heel", "sandal"], "shoe"),
+        (["jumpsuit", "romper"], "jumpsuit")
+    ]
+    
+    boundary_keys = {"top", "flat"}
+    matched_cat = None
+    
+    for keywords, category_key_val in category_mappings:
+        for kw in keywords:
+            if kw in boundary_keys:
+                if kw == "top":
+                    if re.search(r'\btops?(?!-handle|-loading|-heavy)\b', search_text):
+                        matched_cat = category_key_val
+                        break
+                else:
+                    if re.search(r'\b' + re.escape(kw) + r's?\b', search_text):
+                        matched_cat = category_key_val
+                        break
+            else:
+                if kw in search_text:
+                    matched_cat = category_key_val
+                    break
+        if matched_cat:
+            break
+
+    category_to_board = {
+        "bag": "Trendy Backpacks",
+        "dress": "Cocktail Dresses",
+        "top": "Puff Sleeve Tops",
+        "pants": "Pants & Leggings",
+        "jacket": "Coats & Jackets",
+        "cardigan": "Womens Cardigans",
+        "sweater": "Sweaters",
+        "skirt": "Skirts",
+        "shoe": "Footwear",
+        "jumpsuit": "Style Ideas"
+    }
+
+    if matched_cat and matched_cat in category_to_board:
+        return category_to_board[matched_cat]
+
+    board_map = get_pinterest_board_mapping()
     for board, keywords in board_map.items():
         if any(kw in search_text for kw in keywords):
             return board
 
-    # Default to a high-visibility board that exists in the account
     return "Style Ideas"
 
 
