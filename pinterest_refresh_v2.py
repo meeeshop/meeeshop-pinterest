@@ -274,7 +274,17 @@ def pick_refresh_board(
         if eligible(b):
             return b
 
-    # 3. If no relevant board from the pool is eligible/available, fallback to the generic board: "Meeeshop Shopping"
+    # 3. Fallback to existing generic/default boards before creating a new one
+    if category != "default":
+        logger.info(f"No eligible board in '{category}' pool; checking generic boards from 'default' pool...")
+        default_pool = REFRESH_BOARD_POOLS["default"]
+        for candidate in default_pool:
+            b = find(candidate)
+            if eligible(b):
+                logger.info(f"Using existing generic fallback board: '{b['name']}'")
+                return b
+
+    # 4. If no relevant category or generic board from pools is eligible, fallback to custom generic board "Meeeshop Shopping"
     generic_name = "Meeeshop Shopping"
     b_generic = find(generic_name)
     if b_generic:
