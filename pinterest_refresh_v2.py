@@ -504,6 +504,10 @@ def run_refresh_posting():
             raise RuntimeError("No boards found")
         logger.info(f"Fetched {len(boards)} boards")
 
+        all_products = shopify.get_products()
+        products_by_handle = {p.get("handle"): p for p in all_products if p.get("handle")}
+        logger.info(f"Fetched and cached {len(all_products)} Shopify products")
+
         pins_2day, pins_4_7day, inactive_boards = fetch_pins_in_window(pinterest, boards)
         if not pins_2day and not pins_4_7day:
             logger.warning("No pins found in windows — skipping execution to avoid spam.")
@@ -540,10 +544,13 @@ def run_refresh_posting():
                     if len(parts) < 2:
                         continue
                     product_handle = parts[1].split("?")[0].strip("/")
-                    product = shopify.get_product_by_handle(product_handle)
+                    product = products_by_handle.get(product_handle)
                     if not product:
-                        logger.warning(f"Product not found: {product_handle}")
-                        continue
+                        # Try fallback to live network call just in case it's newly added
+                        product = shopify.get_product_by_handle(product_handle)
+                        if not product:
+                            logger.warning(f"Product not found: {product_handle}")
+                            continue
                 except Exception as e:
                     logger.warning(f"Failed to extract product from {product_link}: {e}")
                     continue
@@ -663,7 +670,7 @@ def run_refresh_posting():
                 total_refreshed += 1
 
                 if window_refreshed < len(window_pins):
-                    delay = random.randint(30, 60)
+                    delay = random.randint(15, 25)
                     logger.info(f"Waiting {delay}s...")
                     time.sleep(delay)
 
