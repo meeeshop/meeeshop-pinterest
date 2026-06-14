@@ -287,8 +287,7 @@ def run_blog_posting() -> None:
         else:
             logger.error(f"✗ Failed to create blog article pin: {pin_id}")
 
-    if not DRY_RUN:
-        pinterest.close()
+
 
 if __name__ == "__main__":
     run_blog_posting()
