@@ -177,10 +177,12 @@ def run_blog_posting() -> None:
 
     # 3. Pinterest Client Login
     pinterest = PinterestClient()
+    boards = []
     if not DRY_RUN:
         if not pinterest.login():
             raise RuntimeError("Pinterest login failed")
         logger.info("✓ Pinterest login succeeded")
+        boards = pinterest.fetch_boards()
 
     temp_dir = Path(tempfile.gettempdir())
 
@@ -229,10 +231,28 @@ def run_blog_posting() -> None:
             continue
 
         board_name = "Style Ideas" # Standard board for blogs
-        logger.info(f"Target Board: {board_name}")
+        board_id = None
+        
+        if not DRY_RUN:
+            for b in boards:
+                if b.get("name", "").lower() == board_name.lower():
+                    board_id = b.get("id")
+                    break
+            if not board_id and boards:
+                board_id = boards[0].get("id")
+                board_name = boards[0].get("name")
+        
+        logger.info(f"Target Board: {board_name} (id={board_id})")
 
         if DRY_RUN:
             logger.info(f"[DRY RUN] Would post article pin: '{article['title']}' to board '{board_name}'")
+            if temp_src != fallback_img:
+                temp_src.unlink(missing_ok=True)
+            temp_final.unlink(missing_ok=True)
+            continue
+
+        if not board_id:
+            logger.error(f"No board ID found for posting. Skipping article.")
             if temp_src != fallback_img:
                 temp_src.unlink(missing_ok=True)
             temp_final.unlink(missing_ok=True)
@@ -243,7 +263,7 @@ def run_blog_posting() -> None:
             image_path=final_image,
             title=article["title"],
             description=desc,
-            board_name=board_name,
+            board_id=board_id,
             url=blog_url,
             alt_text=alt_text
         )
