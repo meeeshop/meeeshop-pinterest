@@ -129,7 +129,7 @@ def _category_key(title: str, product_type: str = "") -> str:
     text = f"{title} {product_type}".lower()
     
     category_mappings = [
-        (["backpack", "bag", "purse", "tote", "handbag"], "bag"),
+        (["backpack", "bag", "purse", "tote", "handbag", "crossbody", "clutch", "satchel", "wallet", "pouch", "duffel", "hobo"], "bag"),
         (["dress", "gown", "midi", "maxi", "mini"], "dress"),
         (["top", "blouse", "tank", "shirt", "cami"], "top"),
         (["jeans", "denim", "pants", "legging"], "pants"),
@@ -146,8 +146,12 @@ def _category_key(title: str, product_type: str = "") -> str:
     for keywords, category_key in category_mappings:
         for kw in keywords:
             if kw in boundary_keys:
-                if re.search(r'\b' + re.escape(kw) + r's?\b', text):
-                    return category_key
+                if kw == "top":
+                    if re.search(r'\btops?(?!-handle|-loading|-heavy)\b', text):
+                        return category_key
+                else:
+                    if re.search(r'\b' + re.escape(kw) + r's?\b', text):
+                        return category_key
             else:
                 if kw in text:
                     return category_key

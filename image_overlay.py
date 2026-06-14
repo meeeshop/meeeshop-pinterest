@@ -473,14 +473,18 @@ def add_text_overlay(
     def match_word_or_sub(keywords, boundary_keys={"top", "flat"}):
         for kw in keywords:
             if kw in boundary_keys:
-                if re.search(r'\b' + re.escape(kw) + r's?\b', tl):
-                    return True
+                if kw == "top":
+                    if re.search(r'\btops?(?!-handle|-loading|-heavy)\b', tl):
+                        return True
+                else:
+                    if re.search(r'\b' + re.escape(kw) + r's?\b', tl):
+                        return True
             else:
                 if kw in tl:
                     return True
         return False
 
-    if match_word_or_sub(("bag", "backpack", "purse", "tote", "handbag")):
+    if match_word_or_sub(("bag", "backpack", "purse", "tote", "handbag", "crossbody", "clutch", "satchel", "wallet", "pouch", "duffel", "hobo")):
         category = "Trending: Bags"
     elif match_word_or_sub(("dress", "gown", "midi", "maxi", "mini")):
         category = "Trending: Dresses"
