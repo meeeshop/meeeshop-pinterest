@@ -680,8 +680,8 @@ def run_video_posting() -> None:
     history   = _load_history()
     available = [p for p in products if not _was_recently_posted(p, history)]
     if not available:
-        logger.info("All products are within the repost cooldown window — resetting for this run")
-        available = products
+        logger.info("All products are within the repost cooldown window — skipping execution to avoid spam.")
+        return
 
     # Pick products for this run (one per pin)
     to_post = random.sample(available, min(MAX_PINS_PER_RUN, len(available)))

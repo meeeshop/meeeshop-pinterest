@@ -453,7 +453,10 @@ def run_refresh_posting():
         ts_str = r.get("timestamp")
         if ts_str:
             try:
-                ts = datetime.fromisoformat(ts_str)
+                ts_str_clean = ts_str.replace("Z", "+00:00")
+                ts = datetime.fromisoformat(ts_str_clean)
+                if ts.tzinfo is not None:
+                    ts = ts.replace(tzinfo=None)
                 if ts > four_days_ago:
                     refreshed_recently.add(str(r.get("product_id")))
             except Exception:
@@ -503,7 +506,7 @@ def run_refresh_posting():
 
         pins_2day, pins_4_7day, inactive_boards = fetch_pins_in_window(pinterest, boards)
         if not pins_2day and not pins_4_7day:
-            logger.warning("No pins found in windows — nothing to refresh")
+            logger.warning("No pins found in windows — skipping execution to avoid spam.")
             return
 
         total_refreshed = 0

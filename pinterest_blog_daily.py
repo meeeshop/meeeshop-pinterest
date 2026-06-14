@@ -167,8 +167,8 @@ def run_blog_posting() -> None:
     history = load_history()
     eligible = [art for art in articles if not was_recently_posted(art["id"], history)]
     if not eligible:
-        logger.info("All articles have been posted recently or within the cooldown period. Resetting available pool.")
-        eligible = articles
+        logger.info("All articles have been posted recently or within the cooldown period. Skipping execution to avoid spam.")
+        return
 
     # Shuffle to vary postings
     random.shuffle(eligible)

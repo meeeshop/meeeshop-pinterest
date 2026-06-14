@@ -224,7 +224,10 @@ def fetch_all_eligible_products(
         ts_str = p.get("timestamp")
         if ts_str:
             try:
-                ts = datetime.fromisoformat(ts_str)
+                ts_str_clean = ts_str.replace("Z", "+00:00")
+                ts = datetime.fromisoformat(ts_str_clean)
+                if ts.tzinfo is not None:
+                    ts = ts.replace(tzinfo=None)
                 if ts > ten_days_ago:
                     recent_ids.add(str(p.get("product_id")))
             except Exception:
@@ -355,7 +358,7 @@ def run_daily_posting(use_video: bool = False):
 
         pool = fetch_all_eligible_products(shopify, history, min_stock=15)
         if not pool:
-            logger.warning("No eligible products")
+            logger.warning("No eligible products — skipping execution to avoid spam.")
             return
 
         posted = 0
