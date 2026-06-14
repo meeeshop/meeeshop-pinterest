@@ -386,7 +386,7 @@ def fetch_pins_in_window(
         board_id = board.get("id", "")
 
         logger.info(f"Scanning board for recent pins: {board_name}")
-        pins = pinterest.fetch_board_pins(board_id, board_name)
+        pins = pinterest.fetch_board_pins(board_id, board_name, page_size=150)
 
         # Log a sample pin once so we can see what fields py3-pinterest returns
         if pins and not sample_logged:

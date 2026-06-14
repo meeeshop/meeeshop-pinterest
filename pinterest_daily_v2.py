@@ -158,17 +158,32 @@ def pick_board(
         return None
 
     def category_key(text: str) -> str:
-        for key in ["dress", "top", "blouse", "tank", "shirt", "jeans", "jacket",
-                    "coat", "pants", "legging", "skirt", "sweater", "cardigan",
-                    "bag", "backpack", "shoe", "boot", "flat", "jumpsuit", "romper"]:
-            if key in text:
-                if key in ("blouse", "tank", "shirt"): return "top"
-                if key in ("coat",): return "jacket"
-                if key in ("legging",): return "pants"
-                if key in ("boot", "flat"): return "shoe"
-                if key in ("backpack",): return "bag"
-                if key in ("romper",): return "jumpsuit"
-                return key
+        import re
+        category_mappings = [
+            (["backpack", "bag", "purse", "tote", "handbag", "crossbody", "clutch", "satchel", "wallet", "pouch", "duffel", "hobo"], "bag"),
+            (["dress", "gown", "midi", "maxi", "mini"], "dress"),
+            (["top", "blouse", "tank", "shirt", "cami"], "top"),
+            (["jeans", "denim", "pants", "legging"], "pants"),
+            (["jacket", "coat", "shacket", "blazer"], "jacket"),
+            (["cardigan"], "cardigan"),
+            (["sweater", "knit", "pullover"], "sweater"),
+            (["skirt"], "skirt"),
+            (["shoe", "boot", "flat", "heel", "sandal"], "shoe"),
+            (["jumpsuit", "romper"], "jumpsuit")
+        ]
+        boundary_keys = {"top", "flat"}
+        for keywords, category_key_val in category_mappings:
+            for kw in keywords:
+                if kw in boundary_keys:
+                    if kw == "top":
+                        if re.search(r'\btops?(?!-handle|-loading|-heavy)\b', text):
+                            return category_key_val
+                    else:
+                        if re.search(r'\b' + re.escape(kw) + r's?\b', text):
+                            return category_key_val
+                else:
+                    if kw in text:
+                        return category_key_val
         return "default"
 
     search = f"{formatted.get('title','').lower()} {formatted.get('product_type','').lower()}"

@@ -340,7 +340,7 @@ def fetch_pins_in_window(
         board_id = board.get("id", "")
 
         logger.info(f"Scanning board: {board_name}")
-        pins = pinterest.fetch_board_pins(board_id, board_name)
+        pins = pinterest.fetch_board_pins(board_id, board_name, page_size=150)
 
         if pins and not sample_logged:
             sample = pins[0]
