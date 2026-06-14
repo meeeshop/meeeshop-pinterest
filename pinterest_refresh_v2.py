@@ -510,6 +510,9 @@ def run_refresh_posting():
             return
 
         total_refreshed = 0
+        import random
+        random.shuffle(pins_2day)
+        random.shuffle(pins_4_7day)
         window_pin_map = {"2day": pins_2day, "4-7day": pins_4_7day}
 
         for window in ["2day", "4-7day"]:
