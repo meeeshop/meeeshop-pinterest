@@ -508,6 +508,23 @@ def run_refresh_posting():
                     refreshed_recently.add(str(r.get("product_id")))
             except Exception:
                 pass
+
+    # Load daily posting history as well to avoid repinning daily posts too quickly
+    posting_history_file = Path(__file__).parent / "posting_history.json"
+    if posting_history_file.exists():
+        try:
+            posting_history = json.loads(posting_history_file.read_text(encoding="utf-8"))
+            for p in posting_history.get("posts", []):
+                ts_str = p.get("timestamp")
+                if ts_str:
+                    try:
+                        ts = datetime.fromisoformat(ts_str)
+                        if ts > four_days_ago:
+                            refreshed_recently.add(str(p.get("product_id")))
+                    except Exception:
+                        pass
+        except Exception as e:
+            logger.warning(f"Failed to read daily posting history: {e}")
     boards_used_per_product = _build_boards_used(refresh_history)
 
     pinterest = PinterestClient()

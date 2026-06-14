@@ -263,22 +263,44 @@ def fetch_all_eligible_products(
 
     # Filter: active, stock >= min_stock, not posted in last 10 days
     ten_days_ago = datetime.now() - timedelta(days=10)
-    recent_ids = {
-        p.get("id")
-        for p in history.get("posts", [])
-        if datetime.fromisoformat(p["timestamp"]) > ten_days_ago
-    }
+    recent_ids = set()
+    for p in history.get("posts", []):
+        ts_str = p.get("timestamp")
+        if ts_str:
+            try:
+                ts = datetime.fromisoformat(ts_str)
+                if ts > ten_days_ago:
+                    recent_ids.add(str(p.get("product_id")))
+            except Exception:
+                pass
+
+    # Load refresh history as well to avoid duplicates
+    refresh_history_file = Path(__file__).parent / "refresh_history.json"
+    if refresh_history_file.exists():
+        try:
+            refresh_history = json.loads(refresh_history_file.read_text(encoding="utf-8"))
+            for r in refresh_history.get("refreshes", []):
+                ts_str = r.get("timestamp")
+                if ts_str:
+                    try:
+                        ts = datetime.fromisoformat(ts_str)
+                        if ts > ten_days_ago:
+                            recent_ids.add(str(r.get("product_id")))
+                    except Exception:
+                        pass
+        except Exception as e:
+            logger.warning(f"Failed to read refresh history: {e}")
 
     eligible = [
         p for p in products
-        if p.get("id") not in recent_ids
+        if str(p.get("id")) not in recent_ids
         and any(
             v.get("inventory_quantity", 0) >= min_stock
             for v in p.get("variants", [])
         )
     ]
 
-    logger.info(f"Eligible products (stock>{min_stock}, not in last 10 days): {len(eligible)}")
+    logger.info(f"Eligible products (stock>{min_stock}, not in last 10 days in posts/refreshes): {len(eligible)}")
     random.shuffle(eligible)
     return eligible
 
