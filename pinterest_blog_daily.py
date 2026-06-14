@@ -91,8 +91,8 @@ def fetch_shopify_articles(shopify: ShopifyClient, limit: int = 15) -> List[Dict
             id
             title
             handle
-            excerpt
-            contentHtml
+            summary
+            body
             image {
               url
             }
@@ -120,7 +120,7 @@ def fetch_shopify_articles(shopify: ShopifyClient, limit: int = 15) -> List[Dict
                 "id": art_id,
                 "title": node.get("title"),
                 "handle": node.get("handle"),
-                "excerpt": node.get("excerpt") or "",
+                "excerpt": node.get("summary") or "",
                 "image_url": img_url,
                 "blog_title": node.get("blog", {}).get("title", "MeeeShop Blog"),
                 "published_at": node.get("publishedAt"),
