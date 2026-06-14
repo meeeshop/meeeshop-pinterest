@@ -158,17 +158,32 @@ def pick_board(
         return None
 
     def category_key(text: str) -> str:
-        for key in ["dress", "top", "blouse", "tank", "shirt", "jeans", "jacket",
-                    "coat", "pants", "legging", "skirt", "sweater", "cardigan",
-                    "bag", "backpack", "shoe", "boot", "flat", "jumpsuit", "romper"]:
-            if key in text:
-                if key in ("blouse", "tank", "shirt"): return "top"
-                if key in ("coat",): return "jacket"
-                if key in ("legging",): return "pants"
-                if key in ("boot", "flat"): return "shoe"
-                if key in ("backpack",): return "bag"
-                if key in ("romper",): return "jumpsuit"
-                return key
+        import re
+        category_mappings = [
+            (["backpack", "bag", "purse", "tote", "handbag", "crossbody", "clutch", "satchel", "wallet", "pouch", "duffel", "hobo"], "bag"),
+            (["dress", "gown", "midi", "maxi", "mini"], "dress"),
+            (["top", "blouse", "tank", "shirt", "cami"], "top"),
+            (["jeans", "denim", "pants", "legging"], "pants"),
+            (["jacket", "coat", "shacket", "blazer"], "jacket"),
+            (["cardigan"], "cardigan"),
+            (["sweater", "knit", "pullover"], "sweater"),
+            (["skirt"], "skirt"),
+            (["shoe", "boot", "flat", "heel", "sandal"], "shoe"),
+            (["jumpsuit", "romper"], "jumpsuit")
+        ]
+        boundary_keys = {"top", "flat"}
+        for keywords, category_key_val in category_mappings:
+            for kw in keywords:
+                if kw in boundary_keys:
+                    if kw == "top":
+                        if re.search(r'\btops?(?!-handle|-loading|-heavy)\b', text):
+                            return category_key_val
+                    else:
+                        if re.search(r'\b' + re.escape(kw) + r's?\b', text):
+                            return category_key_val
+                else:
+                    if kw in text:
+                        return category_key_val
         return "default"
 
     search = f"{formatted.get('title','').lower()} {formatted.get('product_type','').lower()}"
@@ -204,19 +219,57 @@ def fetch_all_eligible_products(
     logger.info(f"Fetched {len(products)} total products from Shopify")
 
     ten_days_ago = datetime.now() - timedelta(days=10)
-    recent_ids = {
-        p.get("id")
-        for p in history.get("posts", [])
-        if datetime.fromisoformat(p["timestamp"]) > ten_days_ago
-    }
+    recent_ids = set()
+    for p in history.get("posts", []):
+        ts_str = p.get("timestamp")
+        if ts_str:
+            try:
+                ts_str_clean = ts_str.replace("Z", "+00:00")
+                ts = datetime.fromisoformat(ts_str_clean)
+                if ts.tzinfo is not None:
+                    ts = ts.replace(tzinfo=None)
+                if ts > ten_days_ago:
+                    recent_ids.add(str(p.get("product_id")))
+            except Exception:
+                pass
+
+    # Load other history files to avoid duplicates
+    other_histories = [
+        ("refresh_history_v2.json", "refreshes", "timestamp"),
+        ("video_posting_history.json", "posts", "posted_at"),
+        ("blog_posting_history.json", "posts", "timestamp")
+    ]
+    for filename, list_key, time_key in other_histories:
+        history_path = Path(__file__).parent / filename
+        if history_path.exists():
+            try:
+                hist_data = json.loads(history_path.read_text(encoding="utf-8"))
+                for item in hist_data.get(list_key, []):
+                    ts_str = item.get(time_key)
+                    if ts_str:
+                        try:
+                            # Normalize Z suffix to offset for python fromisoformat
+                            ts_str_clean = ts_str.replace("Z", "+00:00")
+                            ts = datetime.fromisoformat(ts_str_clean)
+                            # Remove timezone info for comparison with local/naive datetime
+                            if ts.tzinfo is not None:
+                                ts = ts.replace(tzinfo=None)
+                            if ts > ten_days_ago:
+                                item_id = item.get("product_id") or item.get("id")
+                                if item_id:
+                                    recent_ids.add(str(item_id))
+                        except Exception:
+                            pass
+            except Exception as e:
+                logger.warning(f"Failed to read {filename}: {e}")
 
     eligible = [
         p for p in products
-        if p.get("id") not in recent_ids
+        if str(p.get("id")) not in recent_ids
         and any(v.get("inventory_quantity", 0) >= min_stock for v in p.get("variants", []))
     ]
 
-    logger.info(f"Eligible products (stock>{min_stock}, not in last 10 days): {len(eligible)}")
+    logger.info(f"Eligible products (stock>{min_stock}, not in last 10 days in posts/refreshes): {len(eligible)}")
     random.shuffle(eligible)
     return eligible
 
@@ -261,6 +314,11 @@ def run_daily_posting(use_video: bool = False):
     )
 
     EnvLoader.load_youtube_env()
+    dry_run = os.getenv("DRY_RUN", "false").lower() == "true"
+    if dry_run:
+        logger.info("=" * 60)
+        logger.info("[DRY RUN MODE ENABLED] No boards will be created, no pins will be posted, and no history files will be modified.")
+        logger.info("=" * 60)
 
     pinterest_email = get_secret("PINTEREST_EMAIL")
     pinterest_password = get_secret("PINTEREST_PASSWORD")
@@ -300,7 +358,7 @@ def run_daily_posting(use_video: bool = False):
 
         pool = fetch_all_eligible_products(shopify, history, min_stock=15)
         if not pool:
-            logger.warning("No eligible products")
+            logger.warning("No eligible products — skipping execution to avoid spam.")
             return
 
         posted = 0
@@ -322,6 +380,14 @@ def run_daily_posting(use_video: bool = False):
             logger.info(f"Pin {posted + 1}/{target} → {board}")
 
             content = generate_content_package(formatted, board)
+
+            if dry_run:
+                logger.info(f"  [DRY RUN] Would download and design pin image for product {product['id']}")
+                logger.info(f"  [DRY RUN] Would generate AI title/description for board '{board}'")
+                logger.info(f"  [DRY RUN] Would create pin on board '{board}' (ID: {board_id}) with URL '{formatted['url']}'")
+                used_boards.add(board)
+                posted += 1
+                continue
 
             if not post_pin(pinterest, formatted, board_id, content):
                 logger.warning(f"Post failed for '{formatted['title']}', trying next")

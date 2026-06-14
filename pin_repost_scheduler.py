@@ -55,6 +55,13 @@ def should_repin(post: dict, history: dict) -> bool:
 
 def run_repin(use_video: bool = False):
     logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
+    
+    dry_run = os.getenv("DRY_RUN", "false").lower() in ("1", "true", "yes")
+    if dry_run:
+        logger.info("=" * 60)
+        logger.info("DRY RUN MODE — no pins will be re-posted to Pinterest")
+        logger.info("=" * 60)
+
     pinterest_email = os.getenv("PINTEREST_EMAIL")
     pinterest_password = os.getenv("PINTEREST_PASSWORD")
     if not pinterest_email or not pinterest_password:
@@ -76,6 +83,11 @@ def run_repin(use_video: bool = False):
         if not board:
             continue
         target_board = board[0]
+        
+        if dry_run:
+            logger.info(f"[DRY RUN] Would re-pin product {post['product_id']} to {target_board}")
+            continue
+
         # Re‑pin using the same content
         success = pinterest.create_pin(
             image_or_video_path=post.get("image_path"),

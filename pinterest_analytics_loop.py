@@ -518,7 +518,7 @@ def main():
         slice_pins = eligible_pins
 
     if not slice_pins:
-        print("[INFO] No highly engaged pins to process in this batch. Exiting.")
+        print("[INFO] No highly engaged pins to process in this batch — skipping execution to avoid spam.")
         return
 
     for pin_data in slice_pins:
