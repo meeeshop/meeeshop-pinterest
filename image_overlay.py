@@ -467,21 +467,33 @@ def add_text_overlay(
     template_index: Optional[int] = None,
 ) -> Optional[str]:
     """Called by pinterest_daily.py — derives category label then delegates."""
+    import re
     tl = title.lower()
-    if any(w in tl for w in ("dress", "gown", "midi", "maxi", "mini")):
+
+    def match_word_or_sub(keywords, boundary_keys={"top", "flat"}):
+        for kw in keywords:
+            if kw in boundary_keys:
+                if re.search(r'\b' + re.escape(kw) + r's?\b', tl):
+                    return True
+            else:
+                if kw in tl:
+                    return True
+        return False
+
+    if match_word_or_sub(("bag", "backpack", "purse", "tote", "handbag")):
+        category = "Trending: Bags"
+    elif match_word_or_sub(("dress", "gown", "midi", "maxi", "mini")):
         category = "Trending: Dresses"
-    elif any(w in tl for w in ("top", "blouse", "shirt", "cami", "tank")):
+    elif match_word_or_sub(("top", "blouse", "shirt", "cami", "tank")):
         category = "Trending: Tops"
-    elif any(w in tl for w in ("jeans", "denim", "pants", "legging")):
+    elif match_word_or_sub(("jeans", "denim", "pants", "legging")):
         category = "Trending: Bottoms"
-    elif any(w in tl for w in ("jacket", "coat", "shacket", "blazer")):
+    elif match_word_or_sub(("jacket", "coat", "shacket", "blazer")):
         category = "Trending: Outerwear"
-    elif any(w in tl for w in ("sweater", "cardigan", "knit", "pullover")):
+    elif match_word_or_sub(("sweater", "cardigan", "knit", "pullover")):
         category = "Trending: Sweaters"
     elif "skirt" in tl:
         category = "Trending: Skirts"
-    elif any(w in tl for w in ("bag", "backpack", "purse", "tote")):
-        category = "Trending: Bags"
     else:
         category = "New Arrival"
 

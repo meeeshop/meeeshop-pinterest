@@ -592,6 +592,39 @@ class PinterestClient:
                 )
             return False, error_msg
 
+    def create_board(self, name: str, description: str = "") -> Tuple[bool, Optional[Dict[str, str]]]:
+        """Create a new board on Pinterest.
+
+        Args:
+            name: Name of the board to create.
+            description: Optional description of the board.
+
+        Returns:
+            Tuple[bool, Optional[Dict]]: (success, board_info_dict)
+        """
+        if not self.authenticated:
+            logger.error("Not authenticated. Call login() first.")
+            return False, None
+
+        logger.info(f"Creating board: '{name}'")
+        try:
+            self._rate_limit()
+            result = self.client.create_board(name=name, description=description)
+            if result:
+                board_info = {
+                    'id': result.get('id') or result.get('board_id'),
+                    'name': result.get('name'),
+                    'url': result.get('url')
+                }
+                logger.info(f"Board created successfully: '{name}' (ID: {board_info['id']})")
+                return True, board_info
+            else:
+                logger.error(f"Failed to create board '{name}': API returned empty/None")
+                return False, None
+        except Exception as e:
+            logger.error(f"Failed to create board '{name}': {e}")
+            return False, None
+
     def get_board_by_name(self, board_name: str) -> Optional[Dict[str, str]]:
         """
         Find a board by name.
