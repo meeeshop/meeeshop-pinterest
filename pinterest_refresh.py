@@ -140,24 +140,36 @@ def save_refresh_history(rh: Dict[str, Any]):
 
 
 def _category_key(title: str, product_type: str = "") -> str:
+    import re
     text = f"{title} {product_type}".lower()
-    for key in ["dress", "top", "blouse", "tank", "shirt", "jeans", "jacket",
-                "coat", "pants", "legging", "skirt", "sweater", "cardigan",
-                "bag", "backpack", "shoe", "boot", "flat", "jumpsuit", "romper"]:
-        if key in text:
-            if key in ("blouse", "tank", "shirt"):
-                return "top"
-            if key in ("coat",):
-                return "jacket"
-            if key in ("legging",):
-                return "pants"
-            if key in ("boot", "flat"):
-                return "shoe"
-            if key in ("backpack",):
-                return "bag"
-            if key in ("romper",):
-                return "jumpsuit"
-            return key
+    
+    category_mappings = [
+        (["backpack", "bag", "purse", "tote", "handbag", "crossbody", "clutch", "satchel", "wallet", "pouch", "duffel", "hobo"], "bag"),
+        (["dress", "gown", "midi", "maxi", "mini"], "dress"),
+        (["top", "blouse", "tank", "shirt", "cami"], "top"),
+        (["jeans", "denim", "pants", "legging"], "pants"),
+        (["jacket", "coat", "shacket", "blazer"], "jacket"),
+        (["cardigan"], "cardigan"),
+        (["sweater", "knit", "pullover"], "sweater"),
+        (["skirt"], "skirt"),
+        (["shoe", "boot", "flat", "heel", "sandal"], "shoe"),
+        (["jumpsuit", "romper"], "jumpsuit")
+    ]
+    
+    boundary_keys = {"top", "flat"}
+    
+    for keywords, category_key in category_mappings:
+        for kw in keywords:
+            if kw in boundary_keys:
+                if kw == "top":
+                    if re.search(r'\btops?(?!-handle|-loading|-heavy)\b', text):
+                        return category_key
+                else:
+                    if re.search(r'\b' + re.escape(kw) + r's?\b', text):
+                        return category_key
+            else:
+                if kw in text:
+                    return category_key
     return "default"
 
 
@@ -266,12 +278,6 @@ def pick_refresh_board(
     used_boards_today: set,
     refresh_cursor: int = 0,
 ) -> Optional[Dict]:
-    """Pick a board for refresh that matches product category and hasn't been used.
-
-    Returns None if NO relevant boards available (per requirement to skip).
-    """
-    from board_mapping import MEEESHOP_BOARDS
-
     boards_by_name = {b["name"].lower(): b for b in boards}
 
     def find(name: str) -> Optional[Dict]:
@@ -297,19 +303,35 @@ def pick_refresh_board(
         if eligible(b):
             return b
 
-    # If category pool exhausted, fall back to generic boards
-    live_names = {b["name"] for b in boards}
-    ordered = [n for n in MEEESHOP_BOARDS if n in live_names]
-    extras = [b["name"] for b in boards if b["name"] not in set(ordered)]
-    all_names = ordered + extras
+    # Fallback to existing generic/default boards before creating a new one
+    if category != "default":
+        logger.info(f"No eligible board in '{category}' pool; checking generic boards from 'default' pool...")
+        default_pool = REFRESH_BOARD_POOLS["default"]
+        for candidate in default_pool:
+            b = find(candidate)
+            if eligible(b):
+                logger.info(f"Using existing generic fallback board: '{b['name']}'")
+                return b
 
-    for i in range(len(all_names)):
-        name = all_names[(refresh_cursor + i) % len(all_names)]
-        b = find(name)
-        if eligible(b):
-            return b
+    # Fallback to custom generic board "Meeeshop Shopping"
+    generic_name = "Meeeshop Shopping"
+    b_generic = find(generic_name)
+    if b_generic:
+        if eligible(b_generic):
+            logger.info(f"Using existing generic board: '{b_generic['name']}'")
+            return b_generic
+        else:
+            logger.warning(f"Generic board '{generic_name}' already used/ineligible.")
+            if b_generic["name"] not in boards_already_used:
+                logger.info(f"Using generic board '{generic_name}' (ignoring used_boards_today restriction as fallback)")
+                return b_generic
 
-    return None
+    # If the generic board doesn't exist, or exists but is already used for this product, return representing creation is needed
+    return {
+        "id": "CREATE_GENERIC",
+        "name": generic_name,
+        "url": ""
+    }
 
 
 def extract_product_url(pin: Dict[str, Any]) -> Optional[str]:
@@ -474,6 +496,18 @@ def run_refresh_posting():
         raise ValueError("Missing required Shopify credentials in .env")
 
     refresh_history = load_refresh_history()
+    refreshed_recently = set()
+    now = datetime.now()
+    four_days_ago = now - timedelta(days=4)
+    for r in refresh_history.get("refreshes", []):
+        ts_str = r.get("timestamp")
+        if ts_str:
+            try:
+                ts = datetime.fromisoformat(ts_str)
+                if ts > four_days_ago:
+                    refreshed_recently.add(str(r.get("product_id")))
+            except Exception:
+                pass
     boards_used_per_product = _build_boards_used(refresh_history)
 
     pinterest = PinterestClient()
@@ -543,8 +577,12 @@ def run_refresh_posting():
                 product_id = str(product.get("id", ""))
                 if not product_id or product_id in seen_products:
                     continue
-
                 seen_products.add(product_id)
+
+                # Check 4-day block rule
+                if product_id in refreshed_recently:
+                    logger.info(f"Skipping product {product_id} ('{product.get('title', '')}') - already refreshed within last 4 days")
+                    continue
 
                 if not product.get("images"):
                     logger.warning(f"Product {product_id} has no images — skipping")
@@ -553,8 +591,10 @@ def run_refresh_posting():
                 formatted = format_product_for_pinterest(product, store_base_url)
                 original_board = pin.get("board", "")
 
-                # Get boards already used for this product
-                boards_used_for_product = boards_used_per_product.get(product_id, set())
+                # Get boards already used for this product and add original board
+                boards_used_for_product = boards_used_per_product.get(product_id, set()).copy()
+                if original_board:
+                    boards_used_for_product.add(original_board)
 
                 board_info = pick_refresh_board(
                     formatted["title"],
@@ -572,6 +612,24 @@ def run_refresh_posting():
                         f"(was on '{original_board}') — skipping per requirement"
                     )
                     continue
+
+                if board_info.get("id") == "CREATE_GENERIC":
+                    # Dynamically look up or create generic board
+                    existing_board = pinterest.get_board_by_name("Meeeshop Shopping")
+                    if existing_board:
+                        board_info = existing_board
+                    else:
+                        success, new_board_data = pinterest.create_board(
+                            name="Meeeshop Shopping",
+                            description="Trending shopping finds from Meeeshop."
+                        )
+                        if success and new_board_data:
+                            board_info = new_board_data
+                            boards.append(new_board_data)
+                            logger.info(f"Dynamically created generic board: '{board_info['name']}'")
+                        else:
+                            logger.error("Failed to create generic board, skipping")
+                            continue
 
                 new_board = board_info["name"]
                 board_id = board_info["id"]
