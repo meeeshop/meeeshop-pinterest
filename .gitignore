@@ -62,3 +62,10 @@ Thumbs.db
 # Chrome/Selenium
 chromedriver
 .wdm/
+
+# Additional local only files
+*.json
+*.html
+.pinterest_cookies
+.pinterest_creds/
+
