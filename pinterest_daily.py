@@ -198,17 +198,32 @@ def pick_board(
         return None
 
     def category_key(text: str) -> str:
-        for key in ["dress", "top", "blouse", "tank", "shirt", "jeans", "jacket",
-                    "coat", "pants", "legging", "skirt", "sweater", "cardigan",
-                    "bag", "backpack", "shoe", "boot", "flat", "jumpsuit", "romper"]:
-            if key in text:
-                if key in ("blouse", "tank", "shirt"): return "top"
-                if key in ("coat",): return "jacket"
-                if key in ("legging",): return "pants"
-                if key in ("boot", "flat"): return "shoe"
-                if key in ("backpack",): return "bag"
-                if key in ("romper",): return "jumpsuit"
-                return key
+        import re
+        category_mappings = [
+            (["backpack", "bag", "purse", "tote", "handbag", "crossbody", "clutch", "satchel", "wallet", "pouch", "duffel", "hobo"], "bag"),
+            (["dress", "gown", "midi", "maxi", "mini"], "dress"),
+            (["top", "blouse", "tank", "shirt", "cami"], "top"),
+            (["jeans", "denim", "pants", "legging"], "pants"),
+            (["jacket", "coat", "shacket", "blazer"], "jacket"),
+            (["cardigan"], "cardigan"),
+            (["sweater", "knit", "pullover"], "sweater"),
+            (["skirt"], "skirt"),
+            (["shoe", "boot", "flat", "heel", "sandal"], "shoe"),
+            (["jumpsuit", "romper"], "jumpsuit")
+        ]
+        boundary_keys = {"top", "flat"}
+        for keywords, category_key_val in category_mappings:
+            for kw in keywords:
+                if kw in boundary_keys:
+                    if kw == "top":
+                        if re.search(r'\btops?(?!-handle|-loading|-heavy)\b', text):
+                            return category_key_val
+                    else:
+                        if re.search(r'\b' + re.escape(kw) + r's?\b', text):
+                            return category_key_val
+                else:
+                    if kw in text:
+                        return category_key_val
         return "default"
 
     search = f"{formatted.get('title','').lower()} {formatted.get('product_type','').lower()}"
@@ -238,59 +253,54 @@ def fetch_all_eligible_products(
     history: Dict[str, Any],
     min_stock: int = 20,
 ) -> List[Dict[str, Any]]:
-    """Fetch ALL active products with stock > min_stock, paginated.
+    """Fetch ALL active products with stock > min_stock, paginated via GraphQL.
 
     Excludes products posted in the last 10 days to ensure diversity.
     Returns products in random order ready for posting.
     """
-    products = []
-    limit = 250
-    fields = "id,title,handle,image,images,body_html,vendor,product_type,tags,published_at,variants"
-    url = f"{shopify.store_url}/admin/api/2024-01/products.json?status=active&limit={limit}&fields={fields}"
-
-    # Fetch all pages via Link header pagination
-    while url:
-        try:
-            r = requests.get(url, headers=shopify.headers, timeout=15)
-            r.raise_for_status()
-            batch = r.json().get("products", [])
-            products.extend(batch)
-            logger.debug(f"Fetched {len(batch)} products, total so far: {len(products)}")
-
-            # Extract next page URL from Link header
-            link_header = r.headers.get("Link", "")
-            next_url = None
-            if link_header:
-                for link in link_header.split(","):
-                    if 'rel="next"' in link:
-                        # Extract URL from <url>; rel="next"
-                        next_url = link.split(";")[0].strip().strip("<>")
-                        break
-            url = next_url
-        except Exception as e:
-            logger.warning(f"Product fetch error: {e}, continuing with {len(products)} products so far")
-            break
-
+    products = shopify.get_all_products(status="active")
     logger.info(f"Fetched {len(products)} total products from Shopify")
 
     # Filter: active, stock >= min_stock, not posted in last 10 days
     ten_days_ago = datetime.now() - timedelta(days=10)
-    recent_ids = {
-        p.get("id")
-        for p in history.get("posts", [])
-        if datetime.fromisoformat(p["timestamp"]) > ten_days_ago
-    }
+    recent_ids = set()
+    for p in history.get("posts", []):
+        ts_str = p.get("timestamp")
+        if ts_str:
+            try:
+                ts = datetime.fromisoformat(ts_str)
+                if ts > ten_days_ago:
+                    recent_ids.add(str(p.get("product_id")))
+            except Exception:
+                pass
+
+    # Load refresh history as well to avoid duplicates
+    refresh_history_file = Path(__file__).parent / "refresh_history.json"
+    if refresh_history_file.exists():
+        try:
+            refresh_history = json.loads(refresh_history_file.read_text(encoding="utf-8"))
+            for r in refresh_history.get("refreshes", []):
+                ts_str = r.get("timestamp")
+                if ts_str:
+                    try:
+                        ts = datetime.fromisoformat(ts_str)
+                        if ts > ten_days_ago:
+                            recent_ids.add(str(r.get("product_id")))
+                    except Exception:
+                        pass
+        except Exception as e:
+            logger.warning(f"Failed to read refresh history: {e}")
 
     eligible = [
         p for p in products
-        if p.get("id") not in recent_ids
+        if str(p.get("id")) not in recent_ids
         and any(
             v.get("inventory_quantity", 0) >= min_stock
             for v in p.get("variants", [])
         )
     ]
 
-    logger.info(f"Eligible products (stock>{min_stock}, not in last 10 days): {len(eligible)}")
+    logger.info(f"Eligible products (stock>{min_stock}, not in last 10 days in posts/refreshes): {len(eligible)}")
     random.shuffle(eligible)
     return eligible
 
@@ -347,6 +357,11 @@ def run_daily_posting(use_video: bool = False):
     )
 
     EnvLoader.load_youtube_env()
+    dry_run = os.getenv("DRY_RUN", "false").lower() == "true"
+    if dry_run:
+        logger.info("=" * 60)
+        logger.info("[DRY RUN MODE ENABLED] No boards will be created, no pins will be posted, and no history files will be modified.")
+        logger.info("=" * 60)
 
     pinterest_email = get_secret("PINTEREST_EMAIL")
     pinterest_password = get_secret("PINTEREST_PASSWORD")
@@ -409,6 +424,14 @@ def run_daily_posting(use_video: bool = False):
             logger.info(f"Pin {posted + 1}/{target} → {board}")
 
             content = generate_content_package(formatted, board)
+
+            if dry_run:
+                logger.info(f"  [DRY RUN] Would download and design pin image for product {product['id']}")
+                logger.info(f"  [DRY RUN] Would generate AI title/description for board '{board}'")
+                logger.info(f"  [DRY RUN] Would create pin on board '{board}' (ID: {board_id}) with URL '{formatted['url']}'")
+                used_boards.add(board)
+                posted += 1
+                continue
 
             if not post_pin(pinterest, formatted, board_id, content):
                 logger.warning(f"Post failed for '{formatted['title']}', trying next")

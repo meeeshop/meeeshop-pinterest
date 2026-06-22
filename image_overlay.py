@@ -42,22 +42,39 @@ BLUSH      = (230, 185, 175)
 
 # ── Font helpers ─────────────────────────────────────────────────────────────
 
-def _get_font(size: int, bold: bool = False) -> ImageFont.FreeTypeFont:
-    candidates = (
-        [
-            "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
-            "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf",
-            "/usr/share/fonts/truetype/ubuntu/Ubuntu-B.ttf",
-            "C:/Windows/Fonts/arialbd.ttf",
-            "arial.ttf",
-        ] if bold else [
-            "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
-            "/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf",
-            "/usr/share/fonts/truetype/ubuntu/Ubuntu-R.ttf",
-            "C:/Windows/Fonts/arial.ttf",
-            "arial.ttf",
-        ]
-    )
+def _get_font(size: int, bold: bool = False, serif: bool = False) -> ImageFont.FreeTypeFont:
+    if serif:
+        candidates = (
+            [
+                "C:/Windows/Fonts/georgiab.ttf",
+                "C:/Windows/Fonts/timesbd.ttf",
+                "/usr/share/fonts/truetype/liberation/LiberationSerif-Bold.ttf",
+                "/usr/share/fonts/truetype/dejavu/DejaVuSerif-Bold.ttf",
+                "georgiab.ttf",
+            ] if bold else [
+                "C:/Windows/Fonts/georgia.ttf",
+                "C:/Windows/Fonts/times.ttf",
+                "/usr/share/fonts/truetype/liberation/LiberationSerif-Regular.ttf",
+                "/usr/share/fonts/truetype/dejavu/DejaVuSerif.ttf",
+                "georgia.ttf",
+            ]
+        )
+    else:
+        candidates = (
+            [
+                "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
+                "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf",
+                "/usr/share/fonts/truetype/ubuntu/Ubuntu-B.ttf",
+                "C:/Windows/Fonts/arialbd.ttf",
+                "arial.ttf",
+            ] if bold else [
+                "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+                "/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf",
+                "/usr/share/fonts/truetype/ubuntu/Ubuntu-R.ttf",
+                "C:/Windows/Fonts/arial.ttf",
+                "arial.ttf",
+            ]
+        )
     for path in candidates:
         try:
             return ImageFont.truetype(path, size)
@@ -402,6 +419,264 @@ def _template_e(draw, canvas, photo, title, category, price):
 _ACCENTS = [CORAL, NAVY, SAGE, (180, 100, 160), (60, 130, 160)]
 
 
+# ── Template F ───────────────────────────────────────────────────────────────
+# Poetcore Storybook Editorial: linen bg, centered photo with double border,
+# editorial serif typography, typewriter price tag.
+def _template_f(draw, canvas, photo, title, category, price):
+    bg_color = (246, 243, 238)
+    draw.rectangle([(0, 0), (PIN_W, PIN_H)], fill=bg_color)
+
+    HEADER_H = int(PIN_H * 0.16)
+    FOOTER_H = int(PIN_H * 0.18)
+    CTA_H = int(PIN_H * 0.10)
+    PHOTO_H = PIN_H - HEADER_H - FOOTER_H - CTA_H
+    PAD = int(PIN_W * 0.08)
+
+    # Category top center (Georgia / Serif, italic)
+    cf = _get_font(int(HEADER_H * 0.28), bold=False, serif=True)
+    cb = cf.getbbox(category)
+    draw.text(((PIN_W - (cb[2]-cb[0])) // 2, int(HEADER_H * 0.35)), category, fill=DARK_GREY, font=cf)
+
+    # Photo centered with double thin borders
+    photo_w = PIN_W - PAD * 2
+    photo_h = PHOTO_H - PAD
+    p = _boost(_fit_image(photo, photo_w, photo_h))
+    canvas.paste(p, (PAD, HEADER_H + PAD // 2))
+    
+    # Outer thin border
+    draw.rectangle([PAD - 4, HEADER_H + PAD // 2 - 4, PAD + photo_w + 4, HEADER_H + PAD // 2 + photo_h + 4], outline=(150, 140, 130), width=2)
+    # Inner thin border
+    draw.rectangle([PAD - 12, HEADER_H + PAD // 2 - 12, PAD + photo_w + 12, HEADER_H + PAD // 2 + photo_h + 12], outline=(150, 140, 130), width=1)
+    
+    # Title & Price in footer
+    footer_y = HEADER_H + PHOTO_H
+    tf = _get_font(int(FOOTER_H * 0.22), bold=True, serif=True)
+    lines = _wrap_text(title, tf, PIN_W - PAD * 3 - (140 if price else 0))
+    for i, line in enumerate(lines[:2]):
+        draw.text((PAD, footer_y + int(FOOTER_H * 0.15) + i * int(FOOTER_H * 0.28)), line, fill=BLACK, font=tf)
+
+    # Soft typewriter/handwritten price badge
+    if price:
+        pf = _get_font(int(FOOTER_H * 0.24), bold=False, serif=True)
+        ps = f"${price}"
+        pb = pf.getbbox(ps)
+        pw, ph = pb[2]-pb[0]+24, pb[3]-pb[1]+12
+        px = PIN_W - PAD - pw
+        py = footer_y + int(FOOTER_H * 0.15)
+        draw.rectangle([px, py, px+pw, py+ph], fill=(235, 230, 225), outline=(180, 175, 170), width=1)
+        draw.text((px+12, py+6), ps, fill=DARK_GREY, font=pf)
+
+    # Sage/Earth tone CTA footer
+    _draw_cta_bar(canvas, draw, footer_y + FOOTER_H, CTA_H, SAGE, WHITE)
+
+
+# ── Template G ───────────────────────────────────────────────────────────────
+# Glamoratti High-Drama Vogue: deep black/charcoal bg, elegant gold border,
+# serif/sans bold caps.
+def _template_g(draw, canvas, photo, title, category, price):
+    draw.rectangle([(0, 0), (PIN_W, PIN_H)], fill=BLACK)
+
+    HEADER_H = int(PIN_H * 0.12)
+    CTA_H = int(PIN_H * 0.10)
+    FOOTER_H = int(PIN_H * 0.22)
+    PHOTO_H = PIN_H - HEADER_H - FOOTER_H - CTA_H
+    PAD = int(PIN_W * 0.06)
+
+    # Large Photo
+    photo_w = PIN_W - PAD * 2
+    photo_h = PHOTO_H
+    p = _boost(_fit_image(photo, photo_w, photo_h))
+    canvas.paste(p, (PAD, HEADER_H))
+
+    # Champagne gold/coral frame outline around photo
+    draw.rectangle([PAD - 2, HEADER_H - 2, PAD + photo_w + 2, HEADER_H + photo_h + 2], outline=CORAL, width=3)
+
+    # Header category uppercase spaced
+    cf = _get_font(int(HEADER_H * 0.32), bold=True)
+    spaced_cat = "  ".join(list(category.upper()))
+    cb = cf.getbbox(spaced_cat)
+    draw.text(((PIN_W - (cb[2]-cb[0])) // 2, int(HEADER_H * 0.35)), spaced_cat, fill=CORAL, font=cf)
+
+    # Footer
+    footer_y = HEADER_H + PHOTO_H
+    tf = _get_font(int(FOOTER_H * 0.20), bold=True, serif=True)
+    lines = _wrap_text(title.upper(), tf, PIN_W - PAD * 2)
+    for i, line in enumerate(lines[:2]):
+        draw.text((PAD, footer_y + int(FOOTER_H * 0.15) + i * int(FOOTER_H * 0.24)), line, fill=WHITE, font=tf)
+
+    # Gold-colored price tag
+    if price:
+        pf = _get_font(int(FOOTER_H * 0.22), bold=True)
+        ps = f"${price}"
+        pb = pf.getbbox(ps)
+        draw.text((PAD, footer_y + int(FOOTER_H * 0.65)), ps, fill=CORAL, font=pf)
+
+    # Black CTA with gold/coral text
+    _draw_cta_bar(canvas, draw, footer_y + FOOTER_H, CTA_H, BLACK, CORAL)
+
+
+# ── Template H ───────────────────────────────────────────────────────────────
+# Vamp Romantic Cinematic: moody vignettes, high-contrast serif typography.
+def _template_h(draw, canvas, photo, title, category, price):
+    CTA_H = int(PIN_H * 0.10)
+    PHOTO_H = PIN_H - CTA_H
+
+    # Full photo with 1.15x brightness reduction to look moody
+    p = ImageEnhance.Brightness(_fit_image(photo, PIN_W, PHOTO_H)).enhance(0.85)
+    p = ImageEnhance.Contrast(p).enhance(1.15)
+    canvas.paste(p, (0, 0))
+
+    # Deep vignette (dark corners and bottom)
+    overlay = Image.new("RGBA", (PIN_W, PHOTO_H), (0, 0, 0, 0))
+    od = ImageDraw.Draw(overlay)
+    # Bottom gradient (heavy dark)
+    bottom_h = int(PHOTO_H * 0.50)
+    for y in range(bottom_h):
+        alpha = int(230 * (y / bottom_h))
+        od.rectangle([(0, PHOTO_H - bottom_h + y), (PIN_W, PHOTO_H - bottom_h + y)], fill=(12, 5, 15, alpha))
+    # Top gradient (light dark)
+    top_h = int(PHOTO_H * 0.20)
+    for y in range(top_h):
+        alpha = int(120 * (1.0 - (y / top_h)))
+        od.rectangle([(0, y), (PIN_W, y)], fill=(12, 5, 15, alpha))
+
+    canvas.paste(Image.alpha_composite(p.convert("RGBA"), overlay).convert("RGB"), (0, 0))
+    draw = ImageDraw.Draw(canvas)
+
+    margin = int(PIN_W * 0.08)
+    
+    # Category (Spaced white serif uppercase)
+    cf = _get_font(int(PIN_H * 0.026), bold=True, serif=True)
+    draw.text((margin, int(PIN_H * 0.05)), category.upper(), fill=WHITE, font=cf)
+
+    # Title bottom left (Modern elegant serif)
+    tf = _get_font(int(PIN_H * 0.052), bold=True, serif=True)
+    lines = _wrap_text(title, tf, PIN_W - margin * 2)
+    start_y = PHOTO_H - int(PIN_H * 0.25)
+    for i, line in enumerate(lines[:2]):
+        draw.text((margin, start_y + i * int(PIN_H * 0.065)), line, fill=WHITE, font=tf)
+
+    # Price bottom left below title
+    if price:
+        pf = _get_font(int(PIN_H * 0.045), bold=True, serif=True)
+        draw.text((margin, PHOTO_H - int(PIN_H * 0.10)), f"${price}", fill=BLUSH, font=pf)
+
+    # Charcoal CTA bar
+    _draw_cta_bar(canvas, draw, PHOTO_H, CTA_H, (22, 12, 25), WHITE)
+
+
+# ── Template I ───────────────────────────────────────────────────────────────
+# Extra-Celestial Holographic: pastel/lavender gradient bg, floating photo,
+# futuristic minimalist style.
+def _template_i(draw, canvas, photo, title, category, price):
+    # Pastel/mint/lavender gradient background
+    gradient = Image.new("RGB", (PIN_W, PIN_H))
+    gd = ImageDraw.Draw(gradient)
+    for y in range(PIN_H):
+        t = y / PIN_H
+        # Mix from pale pink to soft lavender to mint green
+        r = int(245 * (1-t) + 230 * t)
+        g = int(230 * (1-t) + 242 * t)
+        b = int(245 * (1-t) + 238 * t)
+        gd.line([(0, y), (PIN_W, y)], fill=(r, g, b))
+    canvas.paste(gradient, (0, 0))
+    draw = ImageDraw.Draw(canvas)
+
+    HEADER_H = int(PIN_H * 0.12)
+    CTA_H = int(PIN_H * 0.10)
+    FOOTER_H = int(PIN_H * 0.20)
+    PHOTO_H = PIN_H - HEADER_H - FOOTER_H - CTA_H
+    PAD = int(PIN_W * 0.06)
+
+    # Floating image with rounded corners and shadow
+    photo_w = PIN_W - PAD * 2
+    photo_h = PHOTO_H - PAD
+    p = _boost(_fit_image(photo, photo_w, photo_h))
+    
+    # Shadow rect
+    shadow = Image.new("RGBA", (photo_w, photo_h), (0, 0, 0, 45))
+    canvas.paste(shadow, (PAD + 8, HEADER_H + PAD // 2 + 8))
+    canvas.paste(p, (PAD, HEADER_H + PAD // 2))
+
+    # Category floating in top-left
+    cf = _get_font(int(HEADER_H * 0.30), bold=True)
+    draw.text((PAD + 12, HEADER_H - int(HEADER_H * 0.10)), category.upper(), fill=DARK_GREY, font=cf)
+
+    # Footer Title & Price
+    footer_y = HEADER_H + PHOTO_H
+    tf = _get_font(int(FOOTER_H * 0.20), bold=True)
+    lines = _wrap_text(title, tf, PIN_W - PAD * 3 - (140 if price else 0))
+    for i, line in enumerate(lines[:2]):
+        draw.text((PAD, footer_y + int(FOOTER_H * 0.10) + i * int(FOOTER_H * 0.28)), line, fill=BLACK, font=tf)
+
+    if price:
+        pf = _get_font(int(FOOTER_H * 0.24), bold=True)
+        ps = f"${price}"
+        pb = pf.getbbox(ps)
+        pw, ph = pb[2]-pb[0]+28, pb[3]-pb[1]+14
+        px = PIN_W - PAD - pw
+        py = footer_y + int(FOOTER_H * 0.10)
+        _draw_rounded_rect(draw, (px, py, px+pw, py+ph), 14, BLACK)
+        draw.text((px+14, py+7), ps, fill=WHITE, font=pf)
+
+    # Neon blue/mint CTA footer
+    _draw_cta_bar(canvas, draw, footer_y + FOOTER_H, CTA_H, NAVY, WHITE)
+
+
+# ── Template J ───────────────────────────────────────────────────────────────
+# Blog Article Editorial Template:
+# Soft warm cream, large serif "MeeeShop Blog", thin elegant border, excerpt.
+def _template_j(draw, canvas, photo, title, category, excerpt):
+    bg_color = (250, 248, 245)
+    draw.rectangle([(0, 0), (PIN_W, PIN_H)], fill=bg_color)
+
+    HEADER_H = int(PIN_H * 0.18)
+    CTA_H = int(PIN_H * 0.10)
+    FOOTER_H = int(PIN_H * 0.24)
+    PHOTO_H = PIN_H - HEADER_H - FOOTER_H - CTA_H
+    PAD = int(PIN_W * 0.08)
+
+    # Blog Header Title
+    blog_header = category or "MeeeShop Blog"
+    cf = _get_font(int(HEADER_H * 0.25), bold=True, serif=True)
+    cb = cf.getbbox(blog_header)
+    draw.text(((PIN_W - (cb[2]-cb[0])) // 2, int(HEADER_H * 0.28)), blog_header, fill=BLACK, font=cf)
+    
+    # Elegant divider line
+    draw.line([(PAD, int(HEADER_H * 0.65)), (PIN_W - PAD, int(HEADER_H * 0.65))], fill=MID_GREY, width=1)
+
+    # Photo centered with double thin borders
+    photo_w = PIN_W - PAD * 2
+    photo_h = PHOTO_H - PAD
+    p = _boost(_fit_image(photo, photo_w, photo_h))
+    canvas.paste(p, (PAD, HEADER_H + PAD // 2))
+    
+    # Outer thin border
+    draw.rectangle([PAD - 4, HEADER_H + PAD // 2 - 4, PAD + photo_w + 4, HEADER_H + PAD // 2 + photo_h + 4], outline=MID_GREY, width=1)
+
+    # Footer Title & Excerpt
+    footer_y = HEADER_H + PHOTO_H
+    tf = _get_font(int(FOOTER_H * 0.15), bold=True, serif=True)
+    lines = _wrap_text(title, tf, PIN_W - PAD * 2)
+    for i, line in enumerate(lines[:2]):
+        draw.text((PAD, footer_y + int(FOOTER_H * 0.10) + i * int(FOOTER_H * 0.20)), line, fill=BLACK, font=tf)
+
+    # Blog excerpt/description preview (regular serif, smaller)
+    ef = _get_font(int(FOOTER_H * 0.09), bold=False, serif=True)
+    clean_excerpt = excerpt or "Read our latest article for styling tips, outfits, and fashion trends..."
+    excerpt_lines = _wrap_text(clean_excerpt, ef, PIN_W - PAD * 2)
+    for i, line in enumerate(excerpt_lines[:2]):
+        draw.text((PAD, footer_y + int(FOOTER_H * 0.54) + i * int(FOOTER_H * 0.13)), line, fill=DARK_GREY, font=ef)
+
+    # Elegant Burgundy/Red CTA Footer
+    draw.rectangle([(0, footer_y + FOOTER_H), (PIN_W, footer_y + FOOTER_H + CTA_H)], fill=(115, 30, 70))
+    margin = int(PIN_W * 0.05)
+    font, cta_text = _fit_text("READ THE BLOG POST →", bold=True, max_w=PIN_W - 2 * margin, start_size=int(CTA_H * 0.35))
+    tb = font.getbbox(cta_text)
+    tw, th = tb[2] - tb[0], tb[3] - tb[1]
+    draw.text(((PIN_W - tw) // 2, footer_y + FOOTER_H + (CTA_H - th) // 2), cta_text, fill=WHITE, font=font)
+
+
 # ── Main entry ───────────────────────────────────────────────────────────────
 
 def create_pin_image(
@@ -414,12 +689,12 @@ def create_pin_image(
     template_index: Optional[int] = None,
 ) -> Optional[str]:
     """
-    Create a Pinterest pin using one of 5 rotating Kohl's-style templates.
-    template_index 0-4 selects the template; None picks by hashing the title.
+    Create a Pinterest pin using one of 9 rotating Kohl's-style/aesthetic templates
+    or template 9 for Blog Editorial posts.
     """
     try:
         if template_index is None:
-            template_index = int(hashlib.md5(title.encode()).hexdigest(), 16) % 5
+            template_index = int(hashlib.md5(title.encode()).hexdigest(), 16) % 9
 
         canvas = Image.new("RGB", (PIN_W, PIN_H), WARM_WHITE)
         draw = ImageDraw.Draw(canvas)
@@ -441,6 +716,18 @@ def create_pin_image(
         elif template_index == 3:
             accent = _ACCENTS[int(hashlib.md5(title.encode()).hexdigest(), 16) % len(_ACCENTS)]
             _template_d(draw, canvas, photo, title, category, price, accent=accent)
+        elif template_index == 4:
+            _template_e(draw, canvas, photo, title, category, price)
+        elif template_index == 5:
+            _template_f(draw, canvas, photo, title, category, price)
+        elif template_index == 6:
+            _template_g(draw, canvas, photo, title, category, price)
+        elif template_index == 7:
+            _template_h(draw, canvas, photo, title, category, price)
+        elif template_index == 8:
+            _template_i(draw, canvas, photo, title, category, price)
+        elif template_index == 9:
+            _template_j(draw, canvas, photo, title, category, price)
         else:
             _template_e(draw, canvas, photo, title, category, price)
 
@@ -467,21 +754,37 @@ def add_text_overlay(
     template_index: Optional[int] = None,
 ) -> Optional[str]:
     """Called by pinterest_daily.py — derives category label then delegates."""
+    import re
     tl = title.lower()
-    if any(w in tl for w in ("dress", "gown", "midi", "maxi", "mini")):
+
+    def match_word_or_sub(keywords, boundary_keys={"top", "flat"}):
+        for kw in keywords:
+            if kw in boundary_keys:
+                if kw == "top":
+                    if re.search(r'\btops?(?!-handle|-loading|-heavy)\b', tl):
+                        return True
+                else:
+                    if re.search(r'\b' + re.escape(kw) + r's?\b', tl):
+                        return True
+            else:
+                if kw in tl:
+                    return True
+        return False
+
+    if match_word_or_sub(("bag", "backpack", "purse", "tote", "handbag", "crossbody", "clutch", "satchel", "wallet", "pouch", "duffel", "hobo")):
+        category = "Trending: Bags"
+    elif match_word_or_sub(("dress", "gown", "midi", "maxi", "mini")):
         category = "Trending: Dresses"
-    elif any(w in tl for w in ("top", "blouse", "shirt", "cami", "tank")):
+    elif match_word_or_sub(("top", "blouse", "shirt", "cami", "tank")):
         category = "Trending: Tops"
-    elif any(w in tl for w in ("jeans", "denim", "pants", "legging")):
+    elif match_word_or_sub(("jeans", "denim", "pants", "legging")):
         category = "Trending: Bottoms"
-    elif any(w in tl for w in ("jacket", "coat", "shacket", "blazer")):
+    elif match_word_or_sub(("jacket", "coat", "shacket", "blazer")):
         category = "Trending: Outerwear"
-    elif any(w in tl for w in ("sweater", "cardigan", "knit", "pullover")):
+    elif match_word_or_sub(("sweater", "cardigan", "knit", "pullover")):
         category = "Trending: Sweaters"
     elif "skirt" in tl:
         category = "Trending: Skirts"
-    elif any(w in tl for w in ("bag", "backpack", "purse", "tote")):
-        category = "Trending: Bags"
     else:
         category = "New Arrival"
 

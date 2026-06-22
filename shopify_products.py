@@ -20,99 +20,343 @@ from secrets_manager import inject_to_env, get_secret
 inject_to_env()
 
 
+import re
+import time
+
+def parse_gid(gid: str) -> int:
+    """Extract integer ID from Shopify GID string."""
+    if not gid:
+        return 0
+    match = re.search(r'/(\d+)$', gid)
+    return int(match.group(1)) if match else 0
+
+
+def map_graphql_product(node: Dict[str, Any]) -> Dict[str, Any]:
+    """Map Shopify GraphQL Product node to REST-like dictionary format"""
+    images = [{"src": edge["node"]["url"]} for edge in node.get("images", {}).get("edges", [])]
+    variants = []
+    for edge in node.get("variants", {}).get("edges", []):
+        v = edge["node"]
+        variants.append({
+            "id": parse_gid(v.get("id")),
+            "price": v.get("price"),
+            "inventory_quantity": v.get("inventoryQuantity", 0),
+            "inventory_policy": (v.get("inventoryPolicy") or "").lower(),
+        })
+
+    return {
+        "id": parse_gid(node.get("id")),
+        "title": node.get("title"),
+        "handle": node.get("handle"),
+        "body_html": node.get("bodyHtml") or "",
+        "vendor": node.get("vendor"),
+        "product_type": node.get("productType"),
+        "tags": ", ".join(node.get("tags") or []),
+        "published_at": node.get("publishedAt"),
+        "images": images,
+        "image": images[0] if images else None,
+        "variants": variants,
+    }
+
+
 class ShopifyClient:
-    """Fetch products from Shopify store"""
+    """Fetch products from Shopify store using GraphQL Admin API"""
 
     def __init__(self, store_url: str, access_token: str):
-        self.store_url = store_url.rstrip("/")
+        clean_url = store_url.replace("https://", "").replace("http://", "").rstrip("/")
+        self.store_url = f"https://{clean_url}"
+        self.graphql_url = f"{self.store_url}/admin/api/2024-01/graphql.json"
         self.access_token = access_token
         self.headers = {
             "X-Shopify-Access-Token": access_token,
             "Content-Type": "application/json",
         }
 
+    def run_graphql(self, query: str, variables: Optional[Dict] = None) -> Dict:
+        """Run GraphQL Admin API query with rate-limiting retry."""
+        payload = {"query": query}
+        if variables:
+            payload["variables"] = variables
+
+        for attempt in range(5):
+            try:
+                resp = requests.post(self.graphql_url, headers=self.headers, json=payload, timeout=30)
+                if resp.status_code == 429:
+                    retry_after = float(resp.headers.get("Retry-After", 2.0))
+                    time.sleep(retry_after)
+                    continue
+                resp.raise_for_status()
+                result = resp.json()
+                if "errors" in result:
+                    logger.error(f"[GraphQL] Errors in response: {result['errors']}")
+                return result
+            except requests.exceptions.RequestException as e:
+                if attempt < 4:
+                    time.sleep(2.0 ** attempt)
+                else:
+                    raise e
+        raise RuntimeError("GraphQL request failed after 5 attempts")
     def get_products(
         self,
         collection: Optional[str] = None,
         limit: int = 50,
         status: str = "active",
         published: bool = True,
+        product_type: Optional[str] = None,
     ) -> List[Dict[str, Any]]:
-        """Fetch products from store"""
-
-        url = f"{self.store_url}/admin/api/2024-01/products.json"
-
-        params = {
-            "limit": min(limit, 250),
-            "status": status,
-            "fields": "id,title,handle,image,images,body_html,vendor,product_type,tags,published_at,variants",
-        }
-
+        """Fetch products from store using GraphQL"""
+        query_parts = []
+        if status:
+            query_parts.append(f"status:{status}")
         if published:
-            params["published_status"] = "published"
+            query_parts.append("published_status:published")
+        if product_type:
+            # Escape quotes in product type
+            safe_type = product_type.replace("'", "\\'")
+            query_parts.append(f"product_type:'{safe_type}'")
 
+        query_str = " AND ".join(query_parts) if query_parts else None
+
+        query = """
+        query ($first: Int!, $queryStr: String) {
+          products(first: $first, query: $queryStr) {
+            edges {
+              node {
+                id
+                title
+                handle
+                vendor
+                productType
+                tags
+                publishedAt
+                bodyHtml
+                images(first: 10) {
+                  edges {
+                    node {
+                      url
+                    }
+                  }
+                }
+                variants(first: 50) {
+                  edges {
+                    node {
+                      id
+                      price
+                      inventoryQuantity
+                      inventoryPolicy
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+        """
         try:
-            logger.debug(f"Fetching products from: {url}")
-            logger.debug(f"Params: {params}")
-            resp = requests.get(url, headers=self.headers, params=params, timeout=30)
-            resp.raise_for_status()
-            products = resp.json().get("products", [])
-            logger.debug(f"Received {len(products)} products")
+            variables = {"first": min(limit, 250), "queryStr": query_str}
+            res = self.run_graphql(query, variables)
+            edges = res.get("data", {}).get("products", {}).get("edges", [])
+            products = [map_graphql_product(edge["node"]) for edge in edges]
+            logger.debug(f"Received {len(products)} products via GraphQL")
             return products
-        except requests.exceptions.HTTPError as e:
-            logger.error(f"HTTP error fetching products: {e.response.status_code} - {e.response.text}")
-            return []
         except Exception as e:
-            logger.error(f"Failed to fetch products: {type(e).__name__}: {e}")
+            logger.error(f"Failed to fetch products: {e}")
             return []
+
+    def get_all_products(self, status: str = "active", published: bool = True) -> List[Dict[str, Any]]:
+        """Fetch all active products with pagination using GraphQL"""
+        query_parts = []
+        if status:
+            query_parts.append(f"status:{status}")
+        if published:
+            query_parts.append("published_status:published")
+
+        query_str = " AND ".join(query_parts) if query_parts else None
+
+        query = """
+        query ($first: Int!, $after: String, $queryStr: String) {
+          products(first: $first, after: $after, query: $queryStr) {
+            pageInfo {
+              hasNextPage
+              endCursor
+            }
+            edges {
+              node {
+                id
+                title
+                handle
+                vendor
+                productType
+                tags
+                publishedAt
+                bodyHtml
+                images(first: 10) {
+                  edges {
+                    node {
+                      url
+                    }
+                  }
+                }
+                variants(first: 50) {
+                  edges {
+                    node {
+                      id
+                      price
+                      inventoryQuantity
+                      inventoryPolicy
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+        """
+        products = []
+        has_next = True
+        cursor = None
+
+        while has_next:
+            try:
+                variables = {"first": 250, "after": cursor, "queryStr": query_str}
+                res = self.run_graphql(query, variables)
+                data = res.get("data", {}).get("products", {})
+                edges = data.get("edges", [])
+                for edge in edges:
+                    products.append(map_graphql_product(edge["node"]))
+
+                page_info = data.get("pageInfo", {})
+                has_next = page_info.get("hasNextPage", False)
+                cursor = page_info.get("endCursor")
+            except Exception as e:
+                logger.error(f"Error in paginated product fetch: {e}")
+                break
+
+        return products
 
     def get_collections(self) -> List[Dict[str, str]]:
-        """Get all collections"""
-        url = f"{self.store_url}/admin/api/2024-01/custom_collections.json"
-
+        """Get all collections using GraphQL"""
+        query = """
+        query ($first: Int!) {
+          collections(first: $first) {
+            edges {
+              node {
+                id
+                title
+                handle
+              }
+            }
+          }
+        }
+        """
         try:
-            resp = requests.get(url, headers=self.headers, params={"limit": 250}, timeout=30)
-            resp.raise_for_status()
-            collections = resp.json().get("custom_collections", [])
-            return [{"id": c["id"], "title": c["title"], "handle": c["handle"]} for c in collections]
+            res = self.run_graphql(query, {"first": 250})
+            edges = res.get("data", {}).get("collections", {}).get("edges", [])
+            return [
+                {
+                    "id": str(parse_gid(edge["node"]["id"])),
+                    "title": edge["node"]["title"],
+                    "handle": edge["node"]["handle"],
+                }
+                for edge in edges
+            ]
         except Exception as e:
             logger.error(f"Failed to fetch collections: {e}")
             return []
 
     def get_collection_products(self, collection_id: str, limit: int = 50) -> List[Dict[str, Any]]:
-        """Fetch products from a specific collection"""
-        url = f"{self.store_url}/admin/api/2024-01/collections/{collection_id}/products.json"
-
-        params = {
-            "limit": min(limit, 250),
-            "fields": "id,title,handle,image,images,body_html,vendor,product_type,tags,published_at,variants",
+        """Fetch products from a specific collection using GraphQL"""
+        gql_id = f"gid://shopify/Collection/{collection_id}"
+        query = """
+        query ($id: ID!, $first: Int!) {
+          collection(id: $id) {
+            products(first: $first) {
+              edges {
+                node {
+                  id
+                  title
+                  handle
+                  vendor
+                  productType
+                  tags
+                  publishedAt
+                  bodyHtml
+                  images(first: 10) {
+                    edges {
+                      node {
+                        url
+                      }
+                    }
+                  }
+                  variants(first: 50) {
+                    edges {
+                      node {
+                        id
+                        price
+                        inventoryQuantity
+                        inventoryPolicy
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
-
+        """
         try:
-            resp = requests.get(url, headers=self.headers, params=params, timeout=30)
-            resp.raise_for_status()
-            return resp.json().get("products", [])
+            res = self.run_graphql(query, {"id": gql_id, "first": min(limit, 250)})
+            edges = res.get("data", {}).get("collection", {}).get("products", {}).get("edges", [])
+            return [map_graphql_product(edge["node"]) for edge in edges]
         except Exception as e:
             logger.error(f"Failed to fetch collection products: {e}")
             return []
 
     def get_product_by_handle(self, handle: str) -> Optional[Dict[str, Any]]:
-        """Fetch a single product by its handle"""
-        url = f"{self.store_url}/admin/api/2024-01/products.json"
-
-        params = {
-            "handle": handle,
-            "fields": "id,title,handle,image,images,body_html,vendor,product_type,tags,published_at,variants",
+        """Fetch a single product by its handle using GraphQL"""
+        query = """
+        query ($queryStr: String!) {
+          products(first: 1, query: $queryStr) {
+            edges {
+              node {
+                id
+                title
+                handle
+                vendor
+                productType
+                tags
+                publishedAt
+                bodyHtml
+                images(first: 10) {
+                  edges {
+                    node {
+                      url
+                    }
+                  }
+                }
+                variants(first: 50) {
+                  edges {
+                    node {
+                      id
+                      price
+                      inventoryQuantity
+                      inventoryPolicy
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
-
+        """
         try:
-            resp = requests.get(url, headers=self.headers, params=params, timeout=30)
-            resp.raise_for_status()
-            products = resp.json().get("products", [])
-            return products[0] if products else None
+            res = self.run_graphql(query, {"queryStr": f"handle:{handle}"})
+            edges = res.get("data", {}).get("products", {}).get("edges", [])
+            return map_graphql_product(edges[0]["node"]) if edges else None
         except Exception as e:
             logger.error(f"Failed to fetch product by handle {handle}: {e}")
             return None
+
 
 
 def format_product_for_pinterest(product: Dict[str, Any], base_url: str) -> Dict[str, Any]:
@@ -178,20 +422,67 @@ def get_pinterest_board_mapping() -> Dict[str, List[str]]:
 
 def select_board_for_product(product_data: Dict[str, Any]) -> str:
     """Select Pinterest board based on product type/tags. Returns an actual board name."""
-
-    board_map = get_pinterest_board_mapping()
-
+    import re
     title = (product_data.get("title") or "").lower()
     product_type = (product_data.get("product_type") or "").lower()
     tags = [t.lower() for t in product_data.get("tags", [])]
     search_text = f"{title} {product_type} {' '.join(tags)}"
 
-    # Check all keywords against combined text
+    category_mappings = [
+        (["backpack", "bag", "purse", "tote", "handbag", "crossbody", "clutch", "satchel", "wallet", "pouch", "duffel", "hobo"], "bag"),
+        (["dress", "gown", "midi", "maxi", "mini"], "dress"),
+        (["top", "blouse", "tank", "shirt", "cami"], "top"),
+        (["jeans", "denim", "pants", "legging"], "pants"),
+        (["jacket", "coat", "shacket", "blazer"], "jacket"),
+        (["cardigan"], "cardigan"),
+        (["sweater", "knit", "pullover"], "sweater"),
+        (["skirt"], "skirt"),
+        (["shoe", "boot", "flat", "heel", "sandal"], "shoe"),
+        (["jumpsuit", "romper"], "jumpsuit")
+    ]
+    
+    boundary_keys = {"top", "flat"}
+    matched_cat = None
+    
+    for keywords, category_key_val in category_mappings:
+        for kw in keywords:
+            if kw in boundary_keys:
+                if kw == "top":
+                    if re.search(r'\btops?(?!-handle|-loading|-heavy)\b', search_text):
+                        matched_cat = category_key_val
+                        break
+                else:
+                    if re.search(r'\b' + re.escape(kw) + r's?\b', search_text):
+                        matched_cat = category_key_val
+                        break
+            else:
+                if kw in search_text:
+                    matched_cat = category_key_val
+                    break
+        if matched_cat:
+            break
+
+    category_to_board = {
+        "bag": "Trendy Backpacks",
+        "dress": "Cocktail Dresses",
+        "top": "Puff Sleeve Tops",
+        "pants": "Pants & Leggings",
+        "jacket": "Coats & Jackets",
+        "cardigan": "Womens Cardigans",
+        "sweater": "Sweaters",
+        "skirt": "Skirts",
+        "shoe": "Footwear",
+        "jumpsuit": "Style Ideas"
+    }
+
+    if matched_cat and matched_cat in category_to_board:
+        return category_to_board[matched_cat]
+
+    board_map = get_pinterest_board_mapping()
     for board, keywords in board_map.items():
         if any(kw in search_text for kw in keywords):
             return board
 
-    # Default to a high-visibility board that exists in the account
     return "Style Ideas"
 
 
