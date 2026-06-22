@@ -63,6 +63,7 @@ _AUDIO_DIR = Path(__file__).parent / "audio"
 MAX_PINS_PER_RUN = int(os.getenv("MAX_PINS_PER_RUN", "1"))
 DRY_RUN = os.getenv("DRY_RUN", "false").lower() in ("1", "true", "yes")
 MAX_VIDEO_SIZE_MB = 100
+BRAND_NAME = os.getenv("BRAND_NAME", "your-brand")
 
 # Pinterest pin creation endpoint (web-UI flow — no OAuth app needed)
 _PINTEREST_PIN_URL = "https://www.pinterest.com/resource/PinResource/create/"
@@ -265,9 +266,9 @@ def _compose_frame(
     img  = cvs.convert("RGB")
     draw = ImageDraw.Draw(img)
 
-    # MeeeShop badge
+    # Brand badge
     draw.rounded_rectangle([(24, 36), (268, 88)], radius=20, fill="white")
-    draw.text((146, 62), "MeeeShop", font=_font(33), fill="black", anchor="mm")
+    draw.text((146, 62), BRAND_NAME, font=_font(33), fill="black", anchor="mm")
 
     # Format badge
     bc = fmt["badge_color"]
@@ -382,7 +383,7 @@ def build_video(product: Dict, fmt: Dict, bg_colors: List[tuple], store_base_url
     title  = product["title"]
     price  = product.get("variants", [{}])[0].get("price", "0")
     handle = product.get("handle", "")
-    url    = f"{store_base_url.rstrip('/')}/products/{handle}?utm_source=pinterest&utm_medium=video&utm_campaign=meeeshop"
+    url    = f"{store_base_url.rstrip('/')}/products/{handle}?utm_source=pinterest&utm_medium=video&utm_campaign={BRAND_NAME.lower()}"
 
     images = product.get("images", [])[:6]
     if not images:
@@ -441,15 +442,15 @@ def build_video(product: Dict, fmt: Dict, bg_colors: List[tuple], store_base_url
 
     # Voiceover (gTTS) — overlaid at end as CTA
     vo_text = (
-        f"Discover the {title} at MeeeShop — only ${price}! "
+        f"Discover the {title} at {BRAND_NAME} — only ${price}! "
         f"Shop the link in description now!"
     )
     try:
         from ai_client import generate as ai_generate
         ai_result = ai_generate(
             f"Write a 2-sentence Pinterest video voiceover for USA women shoppers.\n"
-            f"Product: '{title}' — ${price} at MeeeShop\n"
-            f"Rules: energetic fashion-influencer tone, mention price, say 'MeeeShop', "
+            f"Product: '{title}' — ${price} at {BRAND_NAME}\n"
+            f"Rules: energetic fashion-influencer tone, mention price, say '{BRAND_NAME}', "
             f"end with 'shop the link', max 35 words, no hashtags.\n"
             f"Output ONLY the voiceover text, nothing else.",
             max_tokens=80, temperature=0.9,
