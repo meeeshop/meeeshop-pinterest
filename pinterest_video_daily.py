@@ -97,6 +97,10 @@ FORMATS = [
     {"badge": "STYLE TIPS",    "cta": "See All Styles",        "badge_color": (80, 160, 255)},
     {"badge": "FASHION STEAL", "cta": "Grab This Deal",        "badge_color": (255, 130, 50)},
     {"badge": "STYLE INSPO",   "cta": "Get The Look",          "badge_color": (180, 80, 255)},
+    {"badge": "MUST HAVE",     "cta": "Add To Cart",           "badge_color": (210, 160, 140)},
+    {"badge": "ROMANTIC ERA",  "cta": "Elevate Your Look",     "badge_color": (115, 30, 70)},
+    {"badge": "VIBE CHECK",    "cta": "Shop The Vibe",         "badge_color": (70, 95, 120)},
+    {"badge": "DAILY RITUAL",  "cta": "Get The Look",          "badge_color": (60, 105, 80)},
 ]
 
 SOLID_BG_COLORS = [
@@ -146,16 +150,54 @@ def _save_history(history: Dict[str, Any]) -> None:
     )
 
 
-def _was_recently_posted(product_handle: str, history: Dict[str, Any]) -> bool:
+def _was_recently_posted(product: Dict[str, Any], video_history: Dict[str, Any]) -> bool:
+    product_handle = product.get("handle", "")
+    product_id = str(product.get("id", ""))
+    
     cutoff = datetime.now(timezone.utc) - timedelta(days=VIDEO_REPOST_COOLDOWN_DAYS)
-    for post in history.get("posts", []):
-        if post.get("product_handle") == product_handle:
+    
+    # 1. Check video history (by handle or ID)
+    for post in video_history.get("posts", []):
+        post_handle = post.get("product_handle")
+        post_id = str(post.get("product_id", ""))
+        if (post_handle and post_handle == product_handle) or (post_id and post_id == product_id):
             try:
                 posted_at = datetime.fromisoformat(post["posted_at"])
+                if posted_at.tzinfo is None:
+                    posted_at = posted_at.replace(tzinfo=timezone.utc)
                 if posted_at > cutoff:
                     return True
             except Exception:
                 pass
+
+    # 2. Check other history files
+    history_files = [
+        ("posting_history_v2.json", "posts", "timestamp"),
+        ("refresh_history_v2.json", "refreshes", "timestamp"),
+        ("posting_history.json", "posts", "timestamp"),
+        ("refresh_history.json", "refreshes", "timestamp"),
+        ("blog_posting_history.json", "posts", "timestamp"),
+    ]
+    
+    for filename, list_key, time_key in history_files:
+        path = Path(__file__).parent / filename
+        if path.exists():
+            try:
+                data = json.loads(path.read_text(encoding="utf-8"))
+                for item in data.get(list_key, []):
+                    item_id = str(item.get("product_id") or item.get("id") or "")
+                    item_handle = item.get("product_handle") or item.get("handle")
+                    if (item_id and item_id == product_id) or (item_handle and item_handle == product_handle):
+                        ts_str = item.get(time_key) or item.get("posted_at")
+                        if ts_str:
+                            ts = datetime.fromisoformat(ts_str)
+                            if ts.tzinfo is None:
+                                ts = ts.replace(tzinfo=timezone.utc)
+                            if ts > cutoff:
+                                return True
+            except Exception as e:
+                logger.warning(f"Error reading history file {filename}: {e}")
+                
     return False
 
 
@@ -636,10 +678,10 @@ def run_video_posting() -> None:
 
     # History / cooldown
     history   = _load_history()
-    available = [p for p in products if not _was_recently_posted(p.get("handle", ""), history)]
+    available = [p for p in products if not _was_recently_posted(p, history)]
     if not available:
-        logger.info("All products are within the repost cooldown window — resetting for this run")
-        available = products
+        logger.info("All products are within the repost cooldown window — skipping execution to avoid spam.")
+        return
 
     # Pick products for this run (one per pin)
     to_post = random.sample(available, min(MAX_PINS_PER_RUN, len(available)))
@@ -727,6 +769,7 @@ def run_video_posting() -> None:
             pass
 
         history["posts"].append({
+            "product_id":      str(product.get("id", "")),
             "product_handle":  product.get("handle", ""),
             "product_title":   product["title"],
             "pin_id":          pin_id,

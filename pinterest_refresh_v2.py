@@ -39,6 +39,7 @@ REFRESH_STAGING_FILE = Path(__file__).parent / "refresh_staging_v2.json"
 REFRESH_WINDOW_2_DAYS   = 2
 REFRESH_WINDOW_4_7_DAYS = (4, 7)
 MAX_REFRESHES_PER_WINDOW = 4   # V2: 4 (was 8) — fewer, higher-quality repins
+INACTIVE_BOARD_THRESHOLD_DAYS = 14  # Mark boards with no new pins in 14 days as inactive
 
 REFRESH_BOARD_POOLS = {
     "dress": [
@@ -124,18 +125,36 @@ def save_refresh_history(rh: Dict[str, Any]):
 
 
 def _category_key(title: str, product_type: str = "") -> str:
+    import re
     text = f"{title} {product_type}".lower()
-    for key in ["dress", "top", "blouse", "tank", "shirt", "jeans", "jacket",
-                "coat", "pants", "legging", "skirt", "sweater", "cardigan",
-                "bag", "backpack", "shoe", "boot", "flat", "jumpsuit", "romper"]:
-        if key in text:
-            if key in ("blouse", "tank", "shirt"): return "top"
-            if key in ("coat",): return "jacket"
-            if key in ("legging",): return "pants"
-            if key in ("boot", "flat"): return "shoe"
-            if key in ("backpack",): return "bag"
-            if key in ("romper",): return "jumpsuit"
-            return key
+    
+    category_mappings = [
+        (["backpack", "bag", "purse", "tote", "handbag", "crossbody", "clutch", "satchel", "wallet", "pouch", "duffel", "hobo"], "bag"),
+        (["dress", "gown", "midi", "maxi", "mini"], "dress"),
+        (["top", "blouse", "tank", "shirt", "cami"], "top"),
+        (["jeans", "denim", "pants", "legging"], "pants"),
+        (["jacket", "coat", "shacket", "blazer"], "jacket"),
+        (["cardigan"], "cardigan"),
+        (["sweater", "knit", "pullover"], "sweater"),
+        (["skirt"], "skirt"),
+        (["shoe", "boot", "flat", "heel", "sandal"], "shoe"),
+        (["jumpsuit", "romper"], "jumpsuit")
+    ]
+    
+    boundary_keys = {"top", "flat"}
+    
+    for keywords, category_key in category_mappings:
+        for kw in keywords:
+            if kw in boundary_keys:
+                if kw == "top":
+                    if re.search(r'\btops?(?!-handle|-loading|-heavy)\b', text):
+                        return category_key
+                else:
+                    if re.search(r'\b' + re.escape(kw) + r's?\b', text):
+                        return category_key
+            else:
+                if kw in text:
+                    return category_key
     return "default"
 
 
@@ -221,6 +240,7 @@ def pick_refresh_board(
     boards_already_used: set,
     used_boards_today: set,
     refresh_cursor: int = 0,
+    inactive_boards: Optional[List[str]] = None,
 ) -> Optional[Dict]:
     boards_by_name = {b["name"].lower(): b for b in boards}
 
@@ -241,23 +261,54 @@ def pick_refresh_board(
     category = _category_key(title, product_type)
     pool = REFRESH_BOARD_POOLS.get(category, REFRESH_BOARD_POOLS["default"])
 
+    inactive_set = {name.lower() for name in (inactive_boards or [])}
+
+    # 1. Prioritize inactive boards from the category-specific pool
+    if inactive_set:
+        for candidate in pool:
+            if candidate.lower() in inactive_set:
+                b = find(candidate)
+                if eligible(b):
+                    logger.info(f"[Inactive Board Priority] Prioritizing inactive pool board: '{b['name']}'")
+                    return b
+
+    # 2. Try normal eligible boards from the pool
     for candidate in pool:
         b = find(candidate)
         if eligible(b):
             return b
 
-    live_names = {b["name"] for b in boards}
-    ordered = [n for n in MEEESHOP_BOARDS if n in live_names]
-    extras = [b["name"] for b in boards if b["name"] not in set(ordered)]
-    all_names = ordered + extras
+    # 3. Fallback to existing generic/default boards before creating a new one
+    if category != "default":
+        logger.info(f"No eligible board in '{category}' pool; checking generic boards from 'default' pool...")
+        default_pool = REFRESH_BOARD_POOLS["default"]
+        for candidate in default_pool:
+            b = find(candidate)
+            if eligible(b):
+                logger.info(f"Using existing generic fallback board: '{b['name']}'")
+                return b
 
-    for i in range(len(all_names)):
-        name = all_names[(refresh_cursor + i) % len(all_names)]
-        b = find(name)
-        if eligible(b):
-            return b
+    # 4. If no relevant category or generic board from pools is eligible, fallback to custom generic board "Meeeshop Shopping"
+    generic_name = "Meeeshop Shopping"
+    b_generic = find(generic_name)
+    if b_generic:
+        if eligible(b_generic):
+            logger.info(f"Using existing generic board: '{b_generic['name']}'")
+            return b_generic
+        else:
+            # Already used today or already pinned for this product
+            logger.warning(f"Generic board '{generic_name}' already used/ineligible.")
+            if b_generic["name"] not in boards_already_used:
+                logger.info(f"Using generic board '{generic_name}' (ignoring used_boards_today restriction as fallback)")
+                return b_generic
 
-    return None
+    # If the generic board doesn't exist, or exists but is already used for this product, return representing creation is needed
+    return {
+        "id": "CREATE_GENERIC",
+        "name": generic_name,
+        "url": ""
+    }
+
 
 
 def _parse_pin_timestamp(pin: Dict[str, Any]) -> Optional[datetime]:
@@ -273,12 +324,13 @@ def _parse_pin_timestamp(pin: Dict[str, Any]) -> Optional[datetime]:
 def fetch_pins_in_window(
     pinterest: PinterestClient,
     boards: List[Dict],
-) -> Tuple[List[Dict[str, Any]], List[Dict[str, Any]]]:
+) -> Tuple[List[Dict[str, Any]], List[Dict[str, Any]], List[str]]:
     now = datetime.now()
     cutoff_old = now - timedelta(days=7)
 
     pins_2day: List[Dict[str, Any]] = []
     pins_4_7day: List[Dict[str, Any]] = []
+    inactive_boards: List[str] = []
     staged: List[Dict[str, Any]] = []
     sample_logged = False
     no_ts_count = 0
@@ -288,13 +340,32 @@ def fetch_pins_in_window(
         board_id = board.get("id", "")
 
         logger.info(f"Scanning board: {board_name}")
-        pins = pinterest.fetch_board_pins(board_id, board_name)
+        pins = pinterest.fetch_board_pins(board_id, board_name, page_size=150)
 
         if pins and not sample_logged:
             sample = pins[0]
             logger.info(f"[debug] Sample pin keys: {list(sample.keys())}")
             logger.info(f"[debug] Sample pin created_at={sample.get('created_at')!r}")
             sample_logged = True
+
+        # Check for board inactivity/few pins
+        is_inactive = False
+        if not pins:
+            is_inactive = True
+            logger.info(f"  Board '{board_name}' is inactive (0 pins)")
+        else:
+            newest_ts = _parse_pin_timestamp(pins[0])
+            if newest_ts is not None:
+                age_days = (now - newest_ts).total_seconds() / (24 * 3600)
+                if age_days >= INACTIVE_BOARD_THRESHOLD_DAYS:
+                    is_inactive = True
+                    logger.info(f"  Board '{board_name}' is inactive (newest pin age: {age_days:.1f} days)")
+            if len(pins) < 5:
+                is_inactive = True
+                logger.info(f"  Board '{board_name}' has few pins ({len(pins)} pins) (marked inactive)")
+
+        if is_inactive:
+            inactive_boards.append(board_name)
 
         board_window_count = {"2day": 0, "4-7day": 0}
         for idx, pin in enumerate(pins):
@@ -339,6 +410,7 @@ def fetch_pins_in_window(
         logger.warning(f"[debug] {no_ts_count} pins had no created_at — used position fallback")
 
     logger.info(f"[V2] Total qualifying pins — 2-day: {len(pins_2day)}, 4-7-day: {len(pins_4_7day)}")
+    logger.info(f"[V2] Total inactive boards identified: {len(inactive_boards)}")
 
     REFRESH_STAGING_FILE.write_text(
         json.dumps(
@@ -348,7 +420,7 @@ def fetch_pins_in_window(
         encoding="utf-8",
     )
 
-    return pins_2day, pins_4_7day
+    return pins_2day, pins_4_7day, inactive_boards
 
 
 def run_refresh_posting():
@@ -360,6 +432,11 @@ def run_refresh_posting():
     )
 
     EnvLoader.load_youtube_env()
+    dry_run = os.getenv("DRY_RUN", "false").lower() == "true"
+    if dry_run:
+        logger.info("=" * 60)
+        logger.info("[DRY RUN MODE ENABLED] No boards will be created, no pins will be posted, and no history files will be modified.")
+        logger.info("=" * 60)
 
     shopify_url   = get_secret("SHOPIFY_STORE_URL")
     shopify_token = get_secret("SHOPIFY_ACCESS_TOKEN")
@@ -369,6 +446,50 @@ def run_refresh_posting():
         raise ValueError("Missing required Shopify credentials")
 
     refresh_history = load_refresh_history()
+    refreshed_recently = set()
+    now = datetime.now()
+    four_days_ago = now - timedelta(days=4)
+    for r in refresh_history.get("refreshes", []):
+        ts_str = r.get("timestamp")
+        if ts_str:
+            try:
+                ts_str_clean = ts_str.replace("Z", "+00:00")
+                ts = datetime.fromisoformat(ts_str_clean)
+                if ts.tzinfo is not None:
+                    ts = ts.replace(tzinfo=None)
+                if ts > four_days_ago:
+                    refreshed_recently.add(str(r.get("product_id")))
+            except Exception:
+                pass
+
+    # Load daily, video, and blog posting histories to avoid repinning too quickly
+    other_histories = [
+        ("posting_history_v2.json", "posts", "timestamp"),
+        ("video_posting_history.json", "posts", "posted_at"),
+        ("blog_posting_history.json", "posts", "timestamp")
+    ]
+    for filename, list_key, time_key in other_histories:
+        history_path = Path(__file__).parent / filename
+        if history_path.exists():
+            try:
+                hist_data = json.loads(history_path.read_text(encoding="utf-8"))
+                for item in hist_data.get(list_key, []):
+                    ts_str = item.get(time_key)
+                    if ts_str:
+                        try:
+                            # Normalize Z suffix to offset
+                            ts_str_clean = ts_str.replace("Z", "+00:00")
+                            ts = datetime.fromisoformat(ts_str_clean)
+                            if ts.tzinfo is not None:
+                                ts = ts.replace(tzinfo=None)
+                            if ts > four_days_ago:
+                                item_id = item.get("product_id") or item.get("id")
+                                if item_id:
+                                    refreshed_recently.add(str(item_id))
+                        except Exception:
+                            pass
+            except Exception as e:
+                logger.warning(f"Failed to read {filename}: {e}")
     boards_used_per_product = _build_boards_used(refresh_history)
 
     pinterest = PinterestClient()
@@ -383,12 +504,19 @@ def run_refresh_posting():
             raise RuntimeError("No boards found")
         logger.info(f"Fetched {len(boards)} boards")
 
-        pins_2day, pins_4_7day = fetch_pins_in_window(pinterest, boards)
+        all_products = shopify.get_products()
+        products_by_handle = {p.get("handle"): p for p in all_products if p.get("handle")}
+        logger.info(f"Fetched and cached {len(all_products)} Shopify products")
+
+        pins_2day, pins_4_7day, inactive_boards = fetch_pins_in_window(pinterest, boards)
         if not pins_2day and not pins_4_7day:
-            logger.warning("No pins found in windows — nothing to refresh")
+            logger.warning("No pins found in windows — skipping execution to avoid spam.")
             return
 
         total_refreshed = 0
+        import random
+        random.shuffle(pins_2day)
+        random.shuffle(pins_4_7day)
         window_pin_map = {"2day": pins_2day, "4-7day": pins_4_7day}
 
         for window in ["2day", "4-7day"]:
@@ -416,10 +544,13 @@ def run_refresh_posting():
                     if len(parts) < 2:
                         continue
                     product_handle = parts[1].split("?")[0].strip("/")
-                    product = shopify.get_product_by_handle(product_handle)
+                    product = products_by_handle.get(product_handle)
                     if not product:
-                        logger.warning(f"Product not found: {product_handle}")
-                        continue
+                        # Try fallback to live network call just in case it's newly added
+                        product = shopify.get_product_by_handle(product_handle)
+                        if not product:
+                            logger.warning(f"Product not found: {product_handle}")
+                            continue
                 except Exception as e:
                     logger.warning(f"Failed to extract product from {product_link}: {e}")
                     continue
@@ -429,13 +560,20 @@ def run_refresh_posting():
                     continue
                 seen_products.add(product_id)
 
+                # Check 4-day block rule
+                if product_id in refreshed_recently:
+                    logger.info(f"Skipping product {product_id} ('{product.get('title', '')}') - already refreshed within last 4 days")
+                    continue
+
                 if not product.get("images"):
                     logger.warning(f"Product {product_id} has no images — skipping")
                     continue
 
                 formatted = format_product_for_pinterest(product, store_base_url)
                 original_board = pin.get("board", "")
-                boards_used_for_product = boards_used_per_product.get(product_id, set())
+                boards_used_for_product = boards_used_per_product.get(product_id, set()).copy()
+                if original_board:
+                    boards_used_for_product.add(original_board)
 
                 board_info = pick_refresh_board(
                     formatted["title"],
@@ -444,6 +582,7 @@ def run_refresh_posting():
                     boards_already_used=boards_used_for_product,
                     used_boards_today=used_boards_today,
                     refresh_cursor=refresh_cursor,
+                    inactive_boards=inactive_boards,
                 )
                 refresh_cursor += 1
 
@@ -451,9 +590,44 @@ def run_refresh_posting():
                     logger.info(f"✗ No {window} board for '{formatted['title']}' — skipping")
                     continue
 
+                if board_info.get("id") == "CREATE_GENERIC":
+                    # Dynamically look up or create generic board
+                    existing_board = pinterest.get_board_by_name("Meeeshop Shopping")
+                    if existing_board:
+                        board_info = existing_board
+                    else:
+                        if dry_run:
+                            logger.info("  [DRY RUN] Would dynamically create generic board: 'Meeeshop Shopping'")
+                            board_info = {
+                                "id": "MOCK_GENERIC_BOARD_ID",
+                                "name": "Meeeshop Shopping",
+                                "url": ""
+                            }
+                        else:
+                            success, new_board_data = pinterest.create_board(
+                                name="Meeeshop Shopping",
+                                description="Trending shopping finds from Meeeshop."
+                            )
+                            if success and new_board_data:
+                                board_info = new_board_data
+                                boards.append(new_board_data)
+                                logger.info(f"Dynamically created generic board: '{board_info['name']}'")
+                            else:
+                                logger.error("Failed to create generic board, skipping")
+                                continue
+
                 new_board = board_info["name"]
                 board_id  = board_info["id"]
                 logger.info(f"✓ {window} repin: '{formatted['title']}' ({original_board} → {new_board})")
+
+                if dry_run:
+                    logger.info(f"  [DRY RUN] Would download and design refresh pin image for product {product_id}")
+                    logger.info(f"  [DRY RUN] Would generate AI title/description for board '{new_board}'")
+                    logger.info(f"  [DRY RUN] Would create pin on board '{new_board}' (ID: {board_id}) with URL '{formatted['url']}'")
+                    used_boards_today.add(new_board)
+                    window_refreshed += 1
+                    total_refreshed += 1
+                    continue
 
                 overlay_path = make_refresh_pin_image(
                     product, formatted["title"], formatted.get("price"), product_id, window
@@ -496,7 +670,7 @@ def run_refresh_posting():
                 total_refreshed += 1
 
                 if window_refreshed < len(window_pins):
-                    delay = random.randint(30, 60)
+                    delay = random.randint(15, 25)
                     logger.info(f"Waiting {delay}s...")
                     time.sleep(delay)
 

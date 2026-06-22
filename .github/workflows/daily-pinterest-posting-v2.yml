@@ -27,10 +27,15 @@ on:
         description: 'Number of pins to post (default: 2)'
         required: false
         default: '2'
+      dry_run:
+        description: 'Dry run (simulate daily posting without actually creating pins)'
+        type: boolean
+        required: false
+        default: false
 
 permissions:
   actions: read
-  contents: read
+  contents: write
 
 jobs:
   post-to-pinterest-v2:
@@ -39,6 +44,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -50,32 +57,24 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Download V2 posting history artifact
-        uses: dawidd6/action-download-artifact@v3
-        with:
-          name: posting-history-v2-*
-          name_is_regexp: true
-          workflow: daily-pinterest-posting-v2.yml
-          if_no_artifact_found: warn
-          path: .
-        continue-on-error: true
-
-      - name: Flatten posting history
-        run: |
-          found=$(find . -maxdepth 2 -name "posting_history_v2.json" ! -path "./posting_history_v2.json" | sort | tail -1)
-          if [ -n "$found" ]; then
-            echo "Using V2 posting history from: $found"
-            cp "$found" posting_history_v2.json
-          fi
-        continue-on-error: true
-
       - name: Post daily pins (V2)
         env:
           ENCRYPTION_KEY_PRIMARY: ${{ secrets.ENCRYPTION_KEY_PRIMARY }}
           ENCRYPTION_KEY_FALLBACK: ${{ secrets.ENCRYPTION_KEY_FALLBACK }}
           PINS_TO_POST: ${{ github.event.inputs.pins_count || '2' }}
+          DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
         run: |
           python pinterest_daily_v2.py
+
+      - name: Commit and push history updates
+        if: always()
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add refresh_history_v2.json refresh_history.json posting_history_v2.json posting_history.json || true
+          git commit -m "chore: auto-update posting and refresh history [skip ci]" || echo "No changes to commit"
+          git pull origin ${{ github.ref_name }} --rebase || true
+          git push origin HEAD || echo "Failed to push history updates"
 
       - name: Upload V2 posting history
         if: always()

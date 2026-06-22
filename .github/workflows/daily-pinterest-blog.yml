@@ -1,23 +1,12 @@
-name: Pinterest Refresh Pins V2
-
-# V2 — Phase 2 refresh strategy
-# Max 4 refresh pins per window (was 8) — quality over quantity
-# Runs 30 min after each V2 daily posting run
-# Uses content_generator_v2 for USA-targeted refresh content
-#
-# Schedule (30 min after V2 daily runs):
-#   14:30 UTC = 10:30 AM ET — after mid-morning run
-#   18:30 UTC =  2:30 PM ET — after post-lunch run
-#   23:30 UTC =  7:30 PM ET — after after-work run
-#   02:30 UTC = 10:30 PM ET — after evening prime run
+name: Pinterest Daily Blog Postings
 
 on:
   schedule:
-    - cron: '30 14 * * *'   # 10:30 AM ET
+    - cron: '30 15 * * *'   # 11:30 AM ET / 15:30 UTC daily
   workflow_dispatch:
     inputs:
       dry_run:
-        description: 'Dry run (simulate refresh without actually posting)'
+        description: 'Dry run (simulate blog posting without actually posting)'
         type: boolean
         required: false
         default: false
@@ -27,7 +16,7 @@ permissions:
   contents: write
 
 jobs:
-  refresh-pins-v2:
+  blog-postings:
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
@@ -46,7 +35,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run refresh posting (V2)
+      - name: Run daily blog posting
         env:
           ENCRYPTION_KEY_PRIMARY: ${{ secrets.ENCRYPTION_KEY_PRIMARY }}
           ENCRYPTION_KEY_FALLBACK: ${{ secrets.ENCRYPTION_KEY_FALLBACK }}
@@ -54,24 +43,24 @@ jobs:
           GITHUB_REPOSITORY: ${{ github.repository }}
           DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
         run: |
-          python pinterest_refresh_v2.py
+          python pinterest_blog_daily.py
 
       - name: Commit and push history updates
         if: always()
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add refresh_history_v2.json refresh_history.json posting_history_v2.json posting_history.json || true
-          git commit -m "chore: auto-update posting and refresh history [skip ci]" || echo "No changes to commit"
+          git add blog_posting_history.json refresh_history_v2.json posting_history_v2.json || true
+          git commit -m "chore: auto-update blog and posting history [skip ci]" || echo "No changes to commit"
           git pull origin ${{ github.ref_name }} --rebase || true
           git push origin HEAD || echo "Failed to push history updates"
 
-      - name: Upload V2 refresh history
+      - name: Upload blog history artifact
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: refresh-history-v2-${{ github.run_number }}
+          name: blog-posting-history-${{ github.run_number }}
           path: |
-            refresh_history_v2.json
+            blog_posting_history.json
             posting_history_v2.json
           retention-days: 30

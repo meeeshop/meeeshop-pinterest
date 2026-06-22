@@ -33,7 +33,7 @@ ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
 
 from pinterest_client import PinterestClient
-from shopify_products import get_pinterest_board_mapping
+from shopify_products import get_pinterest_board_mapping, ShopifyClient
 import content_generator
 
 # ── Secrets Management ────────────────────────────────────────────────────────
@@ -54,8 +54,30 @@ STORE_BASE_URL = get_secret("STORE_BASE_URL")
 API_VER = "2024-10"
 HEADERS = {"X-Shopify-Access-Token": SHOPIFY_TOKEN, "Content-Type": "application/json"}
 
-# Threshold for a pin to be considered "Viral" or highly engaged
+# Thresholds for a pin to be considered "Viral" or highly engaged
 VIRAL_SAVES_THRESHOLD = 3 
+VIRAL_IMPRESSIONS_THRESHOLD = 500
+VIRAL_ENGAGEMENTS_THRESHOLD = 5
+VIRAL_OUTBOUND_CLICKS_THRESHOLD = 2
+
+# State tracking file to prevent repinning the same pin
+HISTORY_FILE = ROOT / "repin_history.json"
+
+def load_repin_history():
+    if HISTORY_FILE.exists():
+        try:
+            with open(HISTORY_FILE, "r") as f:
+                return set(json.load(f))
+        except Exception as e:
+            print(f"[WARN] Failed to load repin history: {e}")
+    return set()
+
+def save_repin_history(history):
+    try:
+        with open(HISTORY_FILE, "w") as f:
+            json.dump(list(history), f)
+    except Exception as e:
+        print(f"[WARN] Failed to save repin history: {e}")
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Pinterest Analytics & Evergreen Loop")
@@ -63,15 +85,17 @@ def parse_args():
     parser.add_argument("--batch-index", type=int, default=0, help="Batch index to process")
     parser.add_argument("--limit", type=int, default=0, help="Max total pins to select before batching (0 = all)")
     parser.add_argument("--days", type=int, default=60, help="Number of days to look back for pins")
+    parser.add_argument("--strategy", type=str, choices=["daily", "biweekly"], default="daily", help="Strategy to run ('daily' or 'biweekly')")
     return parser.parse_args()
 
 # ── Shopify API Helpers ───────────────────────────────────────────────────────
-def _shopify_get(endpoint, params=None):
-    base = SHOPIFY_STORE.rstrip('/')
-    url = f"{base}/admin/api/{API_VER}/{endpoint}"
-    response = requests.get(url, headers=HEADERS, params=params)
-    response.raise_for_status()
-    return response.json()
+_shopify_client = None
+
+def get_shopify_client():
+    global _shopify_client
+    if _shopify_client is None:
+        _shopify_client = ShopifyClient(SHOPIFY_STORE, SHOPIFY_TOKEN)
+    return _shopify_client
 
 def _shopify_post(endpoint, payload):
     base = SHOPIFY_STORE.rstrip('/')
@@ -83,11 +107,7 @@ def _shopify_post(endpoint, payload):
 
 def get_product_by_handle(handle):
     """Fetch product details by handle to check stock."""
-    data = _shopify_get("products.json", {"handle": handle, "status": "any"})
-    products = data.get("products", [])
-    if not products:
-        return None
-    return products[0]
+    return get_shopify_client().get_product_by_handle(handle)
 
 def is_in_stock(product):
     """Check if any variant has inventory."""
@@ -111,18 +131,16 @@ def find_in_stock_replacement(out_product, handle_hint=""):
         elif 'sweater' in h or 'cardigan' in h: ptype = 'Sweaters'
         elif 'jacket' in h or 'coat' in h: ptype = 'Coats & Jackets'
 
-    params = {"limit": 250, "status": "active"}
-    if ptype:
-        params["product_type"] = ptype
-    data = _shopify_get("products.json", params)
-    pool = [p for p in data.get("products", []) if is_in_stock(p) and (not out_product or p.get("id") != out_product.get("id"))]
+    client = get_shopify_client()
+    products = client.get_products(limit=250, status="active", product_type=ptype)
+    pool = [p for p in products if is_in_stock(p) and (not out_product or p.get("id") != out_product.get("id"))]
     
     if pool:
         return random.choice(pool)
     if ptype:
         # Fallback to any product
-        data = _shopify_get("products.json", {"limit": 250, "status": "active"})
-        pool = [p for p in data.get("products", []) if is_in_stock(p) and (not out_product or p.get("id") != out_product.get("id"))]
+        products = client.get_products(limit=250, status="active")
+        pool = [p for p in products if is_in_stock(p) and (not out_product or p.get("id") != out_product.get("id"))]
         if pool:
             return random.choice(pool)
     return None
@@ -304,6 +322,14 @@ def get_top_performing_pins(client, limit=0, days=30):
                     if saves == 0:
                         saves = int((pin.get('pin_metrics') or {}).get('saves') or 0)
                         
+                    pin_metrics = pin.get('pin_metrics') or {}
+                    aggregated = pin.get('aggregated_pin_data') or {}
+                    
+                    impressions = int(pin_metrics.get('impressions') or aggregated.get('impressions') or 0)
+                    engagements = int(pin_metrics.get('engagements') or aggregated.get('engagements') or 0)
+                    outbound_clicks = int(pin_metrics.get('outbound_clicks') or aggregated.get('outbound_clicks') or 0)
+                    pin_clicks = int(pin_metrics.get('pin_clicks') or aggregated.get('pin_clicks') or 0)
+                        
                     link = pin.get('link') or pin.get('url') or ''
                     handle = extract_shopify_handle(link)
                     if not handle:
@@ -313,12 +339,25 @@ def get_top_performing_pins(client, limit=0, days=30):
                         total_skipped_handle += 1
                         continue
 
+                    image_url = pin.get('image_large_url') or pin.get('images', {}).get('orig', {}).get('url')
+                    if not image_url and 'images' in pin:
+                        # Fallback for other image sizes
+                        for size in ['1200x', '736x', '400x300']:
+                            if size in pin['images']:
+                                image_url = pin['images'][size].get('url')
+                                break
+
                     recent_pins.append({
                         'pin_id': pin.get('id'),
                         'pin_url': f"https://www.pinterest.com/pin/{pin.get('id')}/",
                         'saves': saves,
+                        'impressions': impressions,
+                        'engagements': engagements,
+                        'outbound_clicks': outbound_clicks,
+                        'pin_clicks': pin_clicks,
                         'handle': handle,
-                        'board_name': board.get('name')
+                        'board_name': board.get('name'),
+                        'image_url': image_url
                     })
                 
                 page_count += 1
@@ -383,47 +422,92 @@ def main():
     # 1. Try to fetch from API boards (limits to recent 60 days)
     top_pins = get_top_performing_pins(client, limit=args.limit, days=args.days)
     
-    # 2. Fallback to scraping the Analytics URL for actual historical viral pins
+    # 2. Fallback to scraping the Analytics URL for actual historical viral pins (biweekly strategy only)
     if not top_pins:
-        print("[INFO] No eligible recent pins found via API. Switching to Analytics Dashboard fallback.")
-        analytics_urls = get_top_performing_pins_analytics(client)
-        
-        seen_handles = set()
-        deduped = []
-        for url in analytics_urls:
-            if args.limit and args.limit > 0 and len(deduped) >= args.limit:
-                break
+        if args.strategy == "biweekly":
+            print("[INFO] No eligible recent pins found via API. Switching to Analytics Dashboard fallback.")
+            analytics_urls = get_top_performing_pins_analytics(client)
+            
+            seen_handles = set()
+            deduped = []
+            for url in analytics_urls:
+                if args.limit and args.limit > 0 and len(deduped) >= args.limit:
+                    break
+                    
+                data = get_pin_details_api(client, url)
+                if not data:
+                    continue
+                    
+                saves = int(data.get('repin_count') or data.get('save_count') or 0)
+                if saves == 0:
+                    saves = int((data.get('aggregated_pin_data') or {}).get('saves') or 0)
+                if saves == 0:
+                    saves = int((data.get('pin_metrics') or {}).get('saves') or 0)
+                    
+                pin_metrics = data.get('pin_metrics') or {}
+                aggregated = data.get('aggregated_pin_data') or {}
                 
-            data = get_pin_details_api(client, url)
-            if not data:
-                continue
-                
-            saves = int(data.get('repin_count') or data.get('save_count') or 0)
-            if saves == 0:
-                saves = int((data.get('aggregated_pin_data') or {}).get('saves') or 0)
-            if saves == 0:
-                saves = int((data.get('pin_metrics') or {}).get('saves') or 0)
-                
-            link = data.get('link') or data.get('url') or ''
-            handle = extract_shopify_handle(link)
-            if not handle:
-                handle = extract_shopify_handle(data.get('description', ''))
-                
-            if handle and handle not in seen_handles:
-                seen_handles.add(handle)
-                deduped.append({'pin_url': url, 'saves': saves, 'handle': handle})
-                
-        deduped.sort(key=lambda x: x['saves'], reverse=True)
-        top_pins = deduped
+                impressions = int(pin_metrics.get('impressions') or aggregated.get('impressions') or 0)
+                engagements = int(pin_metrics.get('engagements') or aggregated.get('engagements') or 0)
+                outbound_clicks = int(pin_metrics.get('outbound_clicks') or aggregated.get('outbound_clicks') or 0)
+                pin_clicks = int(pin_metrics.get('pin_clicks') or aggregated.get('pin_clicks') or 0)
+                    
+                link = data.get('link') or data.get('url') or ''
+                handle = extract_shopify_handle(link)
+                if not handle:
+                    handle = extract_shopify_handle(data.get('description', ''))
+                    
+                if handle and handle not in seen_handles:
+                    seen_handles.add(handle)
+                    
+                    image_url = data.get('image_large_url') or data.get('images', {}).get('orig', {}).get('url')
+                    if not image_url and 'images' in data:
+                        for size in ['1200x', '736x', '400x300']:
+                            if size in data['images']:
+                                image_url = data['images'][size].get('url')
+                                break
+                                
+                    deduped.append({
+                        'pin_id': data.get('id', url.split('/pin/')[-1].strip('/')),
+                        'pin_url': url,
+                        'saves': saves,
+                        'impressions': impressions,
+                        'engagements': engagements,
+                        'outbound_clicks': outbound_clicks,
+                        'pin_clicks': pin_clicks,
+                        'handle': handle,
+                        'image_url': image_url
+                    })
+                    
+            deduped.sort(key=lambda x: x['saves'], reverse=True)
+            top_pins = deduped
+        else:
+            print("[INFO] No eligible recent pins found via API, and fallback is disabled in daily strategy. Exiting.")
+            return
         
     if not top_pins:
         print("[INFO] No eligible pins found via API or Analytics. Exiting.")
         return
 
     # Filter for highly engaged pins before batching
-    eligible_pins = [p for p in top_pins if p['saves'] >= VIRAL_SAVES_THRESHOLD]
+    repin_history = load_repin_history()
     
-    print(f"\n[INFO] Total highly engaged pins fetched (>= {VIRAL_SAVES_THRESHOLD} saves): {len(eligible_pins)}")
+    def is_highly_engaged(p):
+        return (p.get('saves', 0) >= VIRAL_SAVES_THRESHOLD or
+                p.get('impressions', 0) >= VIRAL_IMPRESSIONS_THRESHOLD or
+                p.get('engagements', 0) >= VIRAL_ENGAGEMENTS_THRESHOLD or
+                p.get('outbound_clicks', 0) >= VIRAL_OUTBOUND_CLICKS_THRESHOLD)
+                
+    eligible_pins = []
+    for p in top_pins:
+        pin_id = p.get('pin_id')
+        if pin_id and str(pin_id) in repin_history:
+            print(f"   [INFO] Skipping pin {pin_id} as it was already repinned previously.")
+            continue
+        if is_highly_engaged(p):
+            eligible_pins.append(p)
+    
+    print(f"\n[INFO] Total highly engaged, unpinned pins fetched: {len(eligible_pins)}")
     
     if args.batch_size > 0:
         start = args.batch_index * args.batch_size
@@ -434,7 +518,7 @@ def main():
         slice_pins = eligible_pins
 
     if not slice_pins:
-        print("[INFO] No highly engaged pins to process in this batch. Exiting.")
+        print("[INFO] No highly engaged pins to process in this batch — skipping execution to avoid spam.")
         return
 
     for pin_data in slice_pins:
@@ -465,11 +549,21 @@ def main():
                 new_board = boards[0]['name']
                 
             # Generate fresh text for the re-pin
-            title = content_generator.generate_pinterest_title(product)
-            desc = content_generator.generate_pinterest_description(product, new_board)
+            content = content_generator.generate_content_package(product, new_board)
+            title = content["pin_title"]
+            hashtags_str = " ".join(content["hashtags"])
+            desc = f'{content["pin_description"]}\n\n{hashtags_str}'
                 
             images = product.get("images", [])
-            img_url = images[0].get("src") if images else None
+            # Select an alternate image to avoid duplicate penalties (A/B testing)
+            if len(images) > 1:
+                img_obj = random.choice(images[1:]) # Pick from remaining images
+            elif images:
+                img_obj = images[0]
+            else:
+                img_obj = None
+                
+            img_url = img_obj.get("src") if img_obj else None
             if not img_url:
                 print("   [WARN] Product has no images. Skipping.")
                 continue
@@ -477,7 +571,8 @@ def main():
             if not local_img:
                 continue
                     
-            prod_url = f"{STORE_BASE_URL.rstrip('/')}/products/{handle}?utm_source=pinterest&utm_medium=repin"
+            top_keyword = content["keywords"][0].replace(' ', '-') if content.get("keywords") else "fashion"
+            prod_url = f"{STORE_BASE_URL.rstrip('/')}/products/{handle}?utm_source=pinterest&utm_medium=repin&utm_term={top_keyword}"
                 
             print(f"   📌 Re-pinning to new board: {new_board}")
             success, pin_id = client.create_pin(
@@ -486,7 +581,7 @@ def main():
                 description=desc, 
                 board_id=board_id, 
                 url=prod_url, 
-                alt_text=f"{product.get('title')} styling"
+                alt_text=content.get("pin_alt_text", f"{product.get('title')} styling")
             )
             if success and pin_id:
                 print(f"   ✅ Successfully created Evergreen Pin! URL: https://www.pinterest.com/pin/{pin_id}/")
@@ -497,6 +592,10 @@ def main():
                 os.unlink(local_img)
                 
         else:
+            if args.strategy == "daily":
+                print(f"   [INFO] Product '{handle}' is OUT OF STOCK or not found. Skipping piggyback hijacking in daily strategy.")
+                continue
+
             if not product:
                 print(f"   [INFO] Original product '{handle}' not found (likely deleted). Hijacking traffic to similar in-stock product.")
             else:
@@ -520,20 +619,28 @@ def main():
                     board_id = boards[0]['id']
                     target_board = boards[0]['name']
                         
-                title = content_generator.generate_pinterest_title(replacement)
-                desc = content_generator.generate_pinterest_description(replacement, target_board)
+                content = content_generator.generate_content_package(replacement, target_board)
+                title = content["pin_title"]
+                hashtags_str = " ".join(content["hashtags"])
+                desc = f'{content["pin_description"]}\n\n{hashtags_str}'
                     
-                images = replacement.get("images", [])
-                img_url = images[0].get("src") if images else None
+                # Use the original viral pin's image, not the replacement product's image!
+                img_url = pin_data.get('image_url')
                 if not img_url:
-                    print("   [WARN] Replacement product has no images. Skipping piggyback.")
+                    # Fallback to replacement product image
+                    images = replacement.get("images", [])
+                    img_url = images[0].get("src") if images else None
+                    
+                if not img_url:
+                    print("   [WARN] Could not find image for piggyback. Skipping.")
                     continue
                     
                 local_img = download_image_to_temp(img_url)
                 if not local_img:
                     continue
                         
-                prod_url = f"{STORE_BASE_URL.rstrip('/')}/products/{rep_handle}?utm_source=pinterest&utm_medium=piggyback"
+                top_keyword = content["keywords"][0].replace(' ', '-') if content.get("keywords") else "fashion"
+                prod_url = f"{STORE_BASE_URL.rstrip('/')}/products/{rep_handle}?utm_source=pinterest&utm_medium=piggyback&utm_term={top_keyword}"
                     
                 print(f"   📌 Piggybacking new product '{rep_handle}' onto relevant board '{target_board}'")
                 success, pin_id = client.create_pin(
@@ -542,10 +649,12 @@ def main():
                     description=desc, 
                     board_id=board_id, 
                     url=prod_url, 
-                    alt_text=f"{replacement.get('title')} fashion"
+                    alt_text=content.get("pin_alt_text", f"{replacement.get('title')} fashion")
                 )
                 if success and pin_id:
                     print(f"   ✅ Successfully created Piggyback Pin! URL: https://www.pinterest.com/pin/{pin_id}/")
+                    if pin_data.get('pin_id'):
+                        repin_history.add(str(pin_data.get('pin_id')))
                 else:
                     print(f"   ❌ Failed to create Piggyback Pin.")
                     
@@ -553,9 +662,14 @@ def main():
                     os.unlink(local_img)
             else:
                 print("   [WARN] No in-stock replacement found. Skipping.")
+                
+        # Also add to history if successfully repinned evergreen
+        if product and is_in_stock(product) and pin_data.get('pin_id'):
+            repin_history.add(str(pin_data.get('pin_id')))
             
         time.sleep(random.randint(5, 12)) # Human-like delay between actions
         
+    save_repin_history(repin_history)
     print("\n✅ Analytics Loop Complete.")
 
 if __name__ == "__main__":
