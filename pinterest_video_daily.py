@@ -536,6 +536,17 @@ def _make_py3_client(pinterest: "PinterestClient") -> Optional["_Py3Pinterest"]:
     email    = get_secret("PINTEREST_EMAIL") or ""
     username = get_secret("PINTEREST_USERNAME") or ""
     py3 = _Py3Pinterest(email=email, password="", username=username)
+
+    # Monkey-patch _poll_upload_status to increase timeout/retries from 60s (30*2) to 300s (150*2)
+    try:
+        original_poll = py3._poll_upload_status
+        def custom_poll(upload_id, max_retries=150, interval=2):
+            logger.info(f"Polling upload status for {upload_id} (max_retries={max_retries}, interval={interval}s)")
+            return original_poll(upload_id, max_retries=max_retries, interval=interval)
+        py3._poll_upload_status = custom_poll
+    except Exception as e:
+        logger.warning(f"Could not monkey-patch _poll_upload_status: {e}")
+
     try:
         auth_session = pinterest._get_raw_session()
         # Direct session swap (shared object — same cookie jar)
