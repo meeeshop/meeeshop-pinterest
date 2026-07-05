@@ -368,6 +368,7 @@ def format_product_for_pinterest(product: Dict[str, Any], base_url: str) -> Dict
     images = product.get("images", [])
     main_image = images[0] if images else None
     image_url = main_image.get("src", "") if main_image else ""
+    all_image_urls = [img.get("src", "") for img in images if img.get("src")]
 
     # Extract product info
     title = product.get("title", "")
@@ -390,6 +391,7 @@ def format_product_for_pinterest(product: Dict[str, Any], base_url: str) -> Dict
         "price": price,
         "url": product_url,
         "image_url": image_url,
+        "all_image_urls": all_image_urls[:5],
         "image_alt": f"{title} - {product_type}" if product_type else title,
     }
 

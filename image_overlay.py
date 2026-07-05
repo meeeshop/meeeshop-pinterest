@@ -15,7 +15,7 @@ import hashlib
 import logging
 import tempfile
 from pathlib import Path
-from typing import Optional, Tuple
+from typing import Optional, Tuple, List
 
 from PIL import Image, ImageDraw, ImageFont, ImageEnhance
 
@@ -677,6 +677,164 @@ def _template_j(draw, canvas, photo, title, category, excerpt):
     draw.text(((PIN_W - tw) // 2, footer_y + FOOTER_H + (CTA_H - th) // 2), cta_text, fill=WHITE, font=font)
 
 
+# ── Template K ───────────────────────────────────────────────────────────────
+# 2-Image vertical split collage: Left side is photo, right side is photo2.
+# Soft aesthetic linen background, elegant serif title and price tag at the bottom.
+def _template_k(draw, canvas, photo, photo2, title, category, price):
+    bg_color = (248, 245, 240)
+    draw.rectangle([(0, 0), (PIN_W, PIN_H)], fill=bg_color)
+
+    HEADER_H = int(PIN_H * 0.12)
+    CTA_H = int(PIN_H * 0.10)
+    FOOTER_H = int(PIN_H * 0.20)
+    PHOTO_H = PIN_H - HEADER_H - FOOTER_H - CTA_H
+    PAD = int(PIN_W * 0.05)
+
+    # Category top centered (spaced, elegant sans-serif)
+    cf = _get_font(int(HEADER_H * 0.32), bold=True)
+    spaced_cat = "  ".join(list(category.upper()))
+    cb = cf.getbbox(spaced_cat)
+    draw.text(((PIN_W - (cb[2]-cb[0])) // 2, int(HEADER_H * 0.35)), spaced_cat, fill=DARK_GREY, font=cf)
+
+    # Calculate widths for 2 photos
+    photo_w = (PIN_W - PAD * 3) // 2
+    photo_h = PHOTO_H
+
+    # Left Photo
+    p1 = _boost(_fit_image(photo, photo_w, photo_h))
+    canvas.paste(p1, (PAD, HEADER_H))
+
+    # Right Photo (fallback to same photo if photo2 is none)
+    img2 = photo2 if photo2 else photo
+    p2 = _boost(_fit_image(img2, photo_w, photo_h))
+    canvas.paste(p2, (PAD * 2 + photo_w, HEADER_H))
+
+    # Draw thin borders around both
+    draw.rectangle([PAD, HEADER_H, PAD + photo_w, HEADER_H + photo_h], outline=(200, 195, 185), width=2)
+    draw.rectangle([PAD * 2 + photo_w, HEADER_H, PAD * 2 + photo_w * 2, HEADER_H + photo_h], outline=(200, 195, 185), width=2)
+
+    # Footer Title & Price
+    footer_y = HEADER_H + PHOTO_H
+    tf = _get_font(int(FOOTER_H * 0.20), bold=True, serif=True)
+    lines = _wrap_text(title, tf, PIN_W - PAD * 3 - (140 if price else 0))
+    for i, line in enumerate(lines[:2]):
+        draw.text((PAD, footer_y + int(FOOTER_H * 0.15) + i * int(FOOTER_H * 0.28)), line, fill=BLACK, font=tf)
+
+    if price:
+        pf = _get_font(int(FOOTER_H * 0.24), bold=True, serif=True)
+        ps = f"${price}"
+        pb = pf.getbbox(ps)
+        pw, ph = pb[2]-pb[0]+24, pb[3]-pb[1]+12
+        px = PIN_W - PAD - pw
+        py = footer_y + int(FOOTER_H * 0.15)
+        draw.rectangle([px, py, px+pw, py+ph], fill=(235, 230, 225), outline=(180, 175, 170), width=1)
+        draw.text((px+12, py+6), ps, fill=DARK_GREY, font=pf)
+
+    # Soft Rose CTA
+    _draw_cta_bar(canvas, draw, footer_y + FOOTER_H, CTA_H, (188, 108, 37), WHITE)
+
+
+# ── Template L ───────────────────────────────────────────────────────────────
+# 3-Image lifestyle grid: 1 large main image top, 2 smaller images bottom.
+# Dark chic background for high contrast.
+def _template_l(draw, canvas, photo, photo2, photo3, title, category, price):
+    bg_color = (25, 25, 28)
+    draw.rectangle([(0, 0), (PIN_W, PIN_H)], fill=bg_color)
+
+    HEADER_H = int(PIN_H * 0.10)
+    CTA_H = int(PIN_H * 0.10)
+    FOOTER_H = int(PIN_H * 0.20)
+    PHOTO_H = PIN_H - HEADER_H - FOOTER_H - CTA_H
+    PAD = int(PIN_W * 0.04)
+
+    # Category top left
+    cf = _get_font(int(HEADER_H * 0.35), bold=True)
+    draw.text((PAD, int(HEADER_H * 0.35)), category.upper(), fill=CORAL, font=cf)
+
+    # Main Image Top (PHOTO_H * 0.55)
+    top_h = int(PHOTO_H * 0.55)
+    p_top = _boost(_fit_image(photo, PIN_W - PAD * 2, top_h))
+    canvas.paste(p_top, (PAD, HEADER_H))
+
+    # Bottom 2 Images (PHOTO_H * 0.40)
+    bottom_h = PHOTO_H - top_h - PAD
+    sub_w = (PIN_W - PAD * 3) // 2
+
+    img2 = photo2 if photo2 else photo
+    img3 = photo3 if photo3 else (photo2 if photo2 else photo)
+
+    p_bottom_left = _boost(_fit_image(img2, sub_w, bottom_h))
+    p_bottom_right = _boost(_fit_image(img3, sub_w, bottom_h))
+
+    canvas.paste(p_bottom_left, (PAD, HEADER_H + top_h + PAD))
+    canvas.paste(p_bottom_right, (PAD * 2 + sub_w, HEADER_H + top_h + PAD))
+
+    # Footer Info
+    footer_y = HEADER_H + PHOTO_H
+    tf = _get_font(int(FOOTER_H * 0.18), bold=True)
+    lines = _wrap_text(title, tf, PIN_W - PAD * 3 - (140 if price else 0))
+    for i, line in enumerate(lines[:2]):
+        draw.text((PAD, footer_y + int(FOOTER_H * 0.15) + i * int(FOOTER_H * 0.28)), line, fill=WHITE, font=tf)
+
+    if price:
+        pf = _get_font(int(FOOTER_H * 0.24), bold=True)
+        draw.text((PIN_W - PAD - 120, footer_y + int(FOOTER_H * 0.15)), f"${price}", fill=CORAL, font=pf)
+
+    # Coral CTA Bar
+    _draw_cta_bar(canvas, draw, footer_y + FOOTER_H, CTA_H, CORAL, WHITE)
+
+
+# ── Template M ───────────────────────────────────────────────────────────────
+# Clean Polaroid style with negative space and linen background.
+# Minimalist, elegant serif text caption underneath.
+def _template_m(draw, canvas, photo, title, category, price):
+    bg_color = (245, 242, 237)
+    draw.rectangle([(0, 0), (PIN_W, PIN_H)], fill=bg_color)
+
+    HEADER_H = int(PIN_H * 0.08)
+    CTA_H = int(PIN_H * 0.10)
+    FOOTER_H = int(PIN_H * 0.26)
+    PHOTO_H = PIN_H - HEADER_H - FOOTER_H - CTA_H
+    PAD = int(PIN_W * 0.10)
+
+    # Category small and light
+    cf = _get_font(int(HEADER_H * 0.35), bold=False, serif=True)
+    cb = cf.getbbox(category)
+    draw.text(((PIN_W - (cb[2]-cb[0])) // 2, int(HEADER_H * 0.30)), category.upper(), fill=MID_GREY, font=cf)
+
+    # Polaroid style photo frame
+    photo_w = PIN_W - PAD * 2
+    photo_h = PHOTO_H
+    p = _boost(_fit_image(photo, photo_w, photo_h))
+    
+    # White background card
+    draw.rectangle([PAD - 12, HEADER_H - 12, PAD + photo_w + 12, HEADER_H + photo_h + 30], fill=WHITE)
+    # Paste photo
+    canvas.paste(p, (PAD, HEADER_H))
+    # Soft outline around the photo
+    draw.rectangle([PAD, HEADER_H, PAD + photo_w, HEADER_H + photo_h], outline=(230, 225, 220), width=1)
+    
+    # Title & Price in Polaroid footer area
+    footer_y = HEADER_H + PHOTO_H + 40
+    tf = _get_font(int(FOOTER_H * 0.15), bold=False, serif=True)
+    lines = _wrap_text(title, tf, PIN_W - PAD * 3 - (140 if price else 0))
+    for i, line in enumerate(lines[:2]):
+        lb = tf.getbbox(line)
+        lx = (PIN_W - (lb[2]-lb[0])) // 2
+        draw.text((lx, footer_y + i * int(FOOTER_H * 0.20)), line, fill=DARK_GREY, font=tf)
+
+    if price:
+        pf = _get_font(int(FOOTER_H * 0.18), bold=True, serif=True)
+        ps = f"${price}"
+        pb = pf.getbbox(ps)
+        px = (PIN_W - (pb[2]-pb[0])) // 2
+        py = footer_y + len(lines[:2]) * int(FOOTER_H * 0.20) + 10
+        draw.text((px, py), ps, fill=RED, font=pf)
+
+    # Minimalist dark olive/sage CTA footer
+    _draw_cta_bar(canvas, draw, PIN_H - CTA_H, CTA_H, (60, 75, 65), WHITE)
+
+
 # ── Main entry ───────────────────────────────────────────────────────────────
 
 def create_pin_image(
@@ -687,14 +845,16 @@ def create_pin_image(
     cta: str = "Shop Now at us.MeeeShop.com",
     output_path: Optional[str] = None,
     template_index: Optional[int] = None,
+    additional_image_paths: Optional[List[str]] = None,
 ) -> Optional[str]:
     """
-    Create a Pinterest pin using one of 9 rotating Kohl's-style/aesthetic templates
+    Create a Pinterest pin using one of 12 rotating Kohl's-style/aesthetic templates
     or template 9 for Blog Editorial posts.
     """
     try:
+        ecommerce_templates = [0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12]
         if template_index is None:
-            template_index = int(hashlib.md5(title.encode()).hexdigest(), 16) % 9
+            template_index = ecommerce_templates[int(hashlib.md5(title.encode()).hexdigest(), 16) % len(ecommerce_templates)]
 
         canvas = Image.new("RGB", (PIN_W, PIN_H), WARM_WHITE)
         draw = ImageDraw.Draw(canvas)
@@ -704,6 +864,20 @@ def create_pin_image(
         else:
             photo = Image.new("RGB", (PIN_W, PIN_H), (200, 200, 200))
             logger.warning(f"Product image not found: {product_image_path}")
+
+        photo2 = None
+        photo3 = None
+        if additional_image_paths:
+            if len(additional_image_paths) > 0 and Path(additional_image_paths[0]).exists():
+                try:
+                    photo2 = Image.open(additional_image_paths[0]).convert("RGB")
+                except Exception as ex:
+                    logger.warning(f"Failed to load photo2: {ex}")
+            if len(additional_image_paths) > 1 and Path(additional_image_paths[1]).exists():
+                try:
+                    photo3 = Image.open(additional_image_paths[1]).convert("RGB")
+                except Exception as ex:
+                    logger.warning(f"Failed to load photo3: {ex}")
 
         logger.info(f"Using pin template {template_index} for: {title[:40]}")
 
@@ -728,6 +902,12 @@ def create_pin_image(
             _template_i(draw, canvas, photo, title, category, price)
         elif template_index == 9:
             _template_j(draw, canvas, photo, title, category, price)
+        elif template_index == 10:
+            _template_k(draw, canvas, photo, photo2, title, category, price)
+        elif template_index == 11:
+            _template_l(draw, canvas, photo, photo2, photo3, title, category, price)
+        elif template_index == 12:
+            _template_m(draw, canvas, photo, title, category, price)
         else:
             _template_e(draw, canvas, photo, title, category, price)
 
@@ -752,6 +932,7 @@ def add_text_overlay(
     price: Optional[str] = None,
     output_path: Optional[str] = None,
     template_index: Optional[int] = None,
+    additional_image_paths: Optional[List[str]] = None,
 ) -> Optional[str]:
     """Called by pinterest_daily.py — derives category label then delegates."""
     import re
@@ -795,6 +976,7 @@ def add_text_overlay(
         price=price,
         output_path=output_path,
         template_index=template_index,
+        additional_image_paths=additional_image_paths,
     )
 
 
