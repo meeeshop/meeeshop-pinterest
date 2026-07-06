@@ -157,6 +157,7 @@ def pick_board(
     used_boards: set,
     formatted: Dict[str, Any],
     run_board_pool: List[str],
+    history: Dict[str, Any] = None,
 ) -> Optional[Dict]:
     from board_mapping import CATEGORY_TO_BOARDS
 
@@ -204,10 +205,28 @@ def pick_board(
     cat = category_key(search)
 
     if cat != "default":
+        category_boards = []
         for board_name in CATEGORY_TO_BOARDS.get(cat, []):
             b = find(board_name)
             if b and b["name"] not in used_boards:
-                return b
+                category_boards.append(b)
+
+        if category_boards:
+            # Sort boards by last used time (Least Recently Used first)
+            last_used = (history or {}).get("board_last_used", {})
+
+            def get_last_used_time(b_dict):
+                b_name = b_dict["name"]
+                ts = last_used.get(b_name)
+                if ts:
+                    try:
+                        return datetime.fromisoformat(ts)
+                    except Exception:
+                        pass
+                return datetime.min
+
+            category_boards.sort(key=get_last_used_time)
+            return category_boards[0]
 
     for i in range(len(run_board_pool)):
         candidate = run_board_pool[(index + i) % len(run_board_pool)]
@@ -384,7 +403,7 @@ def run_daily_posting(use_video: bool = False):
             product_index += 1
 
             formatted = format_product_for_pinterest(product, store_base_url)
-            board_info = pick_board(posted, boards, used_boards, formatted, run_board_pool)
+            board_info = pick_board(posted, boards, used_boards, formatted, run_board_pool, history)
             if not board_info:
                 logger.warning("No board available, skipping product")
                 continue
