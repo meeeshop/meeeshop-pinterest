@@ -96,7 +96,17 @@ def post_pin(
         logger.error(f"Failed to download image for pin: {content['pin_title']}")
         return False
 
+    additional_image_files = []
+    overlay_image = None
     try:
+        # Download up to 3 additional images for collages
+        all_image_urls = product_data.get("all_image_urls", [])
+        extra_urls = [url for url in all_image_urls if url != product_data["image_url"]][:3]
+        for idx, url in enumerate(extra_urls):
+            temp_img_file = Path("/tmp") / f"pin_extra_{product_data['product_id']}_{idx}.jpg"
+            if download_image(url, temp_img_file):
+                additional_image_files.append(temp_img_file)
+
         overlay_file = Path("/tmp") / f"pin_overlay_{product_data['product_id']}.jpg"
         overlay_image = add_text_overlay(
             str(image_file),
@@ -104,6 +114,7 @@ def post_pin(
             cta="Shop Now",
             price=product_data.get("price"),
             output_path=str(overlay_file),
+            additional_image_paths=[str(p) for p in additional_image_files],
         )
 
         if not overlay_image:
@@ -123,8 +134,6 @@ def post_pin(
         )
 
         if success:
-            image_file.unlink(missing_ok=True)
-            Path(overlay_image).unlink(missing_ok=True)
             logger.info(f"✓ Posted: {content['pin_title']} (ID: {pin_id})")
             return True
         else:
@@ -133,8 +142,13 @@ def post_pin(
 
     except Exception as e:
         logger.error(f"Exception creating pin: {e}", exc_info=True)
-        image_file.unlink(missing_ok=True)
         return False
+    finally:
+        image_file.unlink(missing_ok=True)
+        if overlay_image and Path(overlay_image).exists() and overlay_image != str(image_file):
+            Path(overlay_image).unlink(missing_ok=True)
+        for f in additional_image_files:
+            f.unlink(missing_ok=True)
 
 
 def pick_board(
