@@ -288,15 +288,15 @@ def _compose_frame(
     draw = ImageDraw.Draw(img)
 
     # Category / Badge
-    draw.text((w // 2, box_y + int(box_h * 0.12)), fmt["badge"], fill="white", font=_font(int(box_h * 0.09)), anchor="mm")
+    draw.text((w // 2, box_y + int(box_h * 0.15)), fmt["badge"], fill="white", font=_font(int(box_h * 0.06)), anchor="mm")
 
     # Title
-    for i, line in enumerate(textwrap.wrap(title, 28)[:2]):
-        draw.text((w // 2, box_y + int(box_h * 0.35) + i * int(box_h * 0.20)), line, fill="white", font=_font(int(box_h * 0.15)), anchor="mm")
+    for i, line in enumerate(textwrap.wrap(title, 34)[:2]):
+        draw.text((w // 2, box_y + int(box_h * 0.40) + i * int(box_h * 0.12)), line, fill="white", font=_font(int(box_h * 0.08)), anchor="mm")
 
     # Price
     if price:
-        draw.text((w // 2, box_y + int(box_h * 0.8)), f"${price}", fill=(255, 127, 80), font=_font(int(box_h * 0.14)), anchor="mm")
+        draw.text((w // 2, box_y + int(box_h * 0.8)), f"${price}", fill=(255, 127, 80), font=_font(int(box_h * 0.09)), anchor="mm")
 
     # URL bar (last frame only)
     if show_url:
