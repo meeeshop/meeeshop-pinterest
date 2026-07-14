@@ -835,6 +835,47 @@ def _template_m(draw, canvas, photo, title, category, price):
     _draw_cta_bar(canvas, draw, PIN_H - CTA_H, CTA_H, (60, 75, 65), WHITE)
 
 
+# ── Template N ───────────────────────────────────────────────────────────────
+# Direct image with transparent overlay text in the center
+def _template_n(draw, canvas, photo, title, category, price):
+    # Full bleed photo
+    p = _boost(_fit_image(photo, PIN_W, PIN_H))
+    canvas.paste(p, (0, 0))
+
+    # Transparent center overlay for text
+    overlay = Image.new("RGBA", (PIN_W, PIN_H), (0, 0, 0, 0))
+    od = ImageDraw.Draw(overlay)
+    
+    # Box dimensions
+    box_w = int(PIN_W * 0.85)
+    box_h = int(PIN_H * 0.35)
+    box_x = (PIN_W - box_w) // 2
+    box_y = (PIN_H - box_h) // 2
+
+    # Draw semi-transparent black rectangle
+    od.rounded_rectangle([box_x, box_y, box_x + box_w, box_y + box_h], radius=20, fill=(0, 0, 0, 160))
+    canvas.paste(Image.alpha_composite(canvas.convert("RGBA"), overlay).convert("RGB"), (0, 0))
+    draw = ImageDraw.Draw(canvas)
+
+    # Text inside
+    margin = int(box_w * 0.05)
+    cf = _get_font(int(box_h * 0.12), bold=True)
+    cb = cf.getbbox(category.upper())
+    draw.text(((PIN_W - (cb[2]-cb[0])) // 2, box_y + int(box_h * 0.1)), category.upper(), fill=WHITE, font=cf)
+
+    tf = _get_font(int(box_h * 0.20), bold=True)
+    lines = _wrap_text(title, tf, box_w - 2*margin)
+    for i, line in enumerate(lines[:2]):
+        lb = tf.getbbox(line)
+        draw.text(((PIN_W - (lb[2]-lb[0])) // 2, box_y + int(box_h * 0.35) + i * int(box_h * 0.25)), line, fill=WHITE, font=tf)
+
+    if price:
+        pf = _get_font(int(box_h * 0.18), bold=True)
+        ps = f"${price}"
+        pb = pf.getbbox(ps)
+        draw.text(((PIN_W - (pb[2]-pb[0])) // 2, box_y + int(box_h * 0.8)), ps, fill=CORAL, font=pf)
+
+
 # ── Main entry ───────────────────────────────────────────────────────────────
 
 def create_pin_image(
@@ -869,7 +910,7 @@ def create_pin_image(
             elif "blog" in b_lower:
                 template_index = 9
             else:
-                template_index = ecommerce_templates[int(hashlib.md5(title.encode()).hexdigest(), 16) % len(ecommerce_templates)]
+                template_index = 13 # Template N: Center transparent overlay
 
         canvas = Image.new("RGB", (PIN_W, PIN_H), WARM_WHITE)
         draw = ImageDraw.Draw(canvas)
@@ -923,8 +964,10 @@ def create_pin_image(
             _template_l(draw, canvas, photo, photo2, photo3, title, category, price)
         elif template_index == 12:
             _template_m(draw, canvas, photo, title, category, price)
+        elif template_index == 13:
+            _template_n(draw, canvas, photo, title, category, price)
         else:
-            _template_e(draw, canvas, photo, title, category, price)
+            _template_n(draw, canvas, photo, title, category, price)
 
         if not output_path:
             output_path = tempfile.mktemp(suffix=".jpg", prefix="pin_final_")
