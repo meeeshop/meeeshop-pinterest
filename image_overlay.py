@@ -846,15 +846,30 @@ def create_pin_image(
     output_path: Optional[str] = None,
     template_index: Optional[int] = None,
     additional_image_paths: Optional[List[str]] = None,
+    board_name: str = "",
 ) -> Optional[str]:
     """
     Create a Pinterest pin using one of 12 rotating Kohl's-style/aesthetic templates
-    or template 9 for Blog Editorial posts.
+    or template 9 for Blog Editorial posts. Matches aesthetic templates to boards.
     """
     try:
         ecommerce_templates = [0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12]
+        
+        # Smart template matching based on board name
+        b_lower = board_name.lower()
         if template_index is None:
-            template_index = ecommerce_templates[int(hashlib.md5(title.encode()).hexdigest(), 16) % len(ecommerce_templates)]
+            if "poetcore" in b_lower:
+                template_index = 5  # Poetcore Storybook Editorial
+            elif "vamp" in b_lower or "romantic" in b_lower:
+                template_index = 7  # Vamp Romantic Cinematic
+            elif "gummy" in b_lower or "nostalgia" in b_lower:
+                template_index = 8  # Holographic
+            elif "athlete" in b_lower or "off-duty" in b_lower:
+                template_index = 10 # Split collage
+            elif "blog" in b_lower:
+                template_index = 9
+            else:
+                template_index = ecommerce_templates[int(hashlib.md5(title.encode()).hexdigest(), 16) % len(ecommerce_templates)]
 
         canvas = Image.new("RGB", (PIN_W, PIN_H), WARM_WHITE)
         draw = ImageDraw.Draw(canvas)
@@ -933,6 +948,7 @@ def add_text_overlay(
     output_path: Optional[str] = None,
     template_index: Optional[int] = None,
     additional_image_paths: Optional[List[str]] = None,
+    board_name: str = "",
 ) -> Optional[str]:
     """Called by pinterest_daily.py — derives category label then delegates."""
     import re
@@ -977,6 +993,7 @@ def add_text_overlay(
         output_path=output_path,
         template_index=template_index,
         additional_image_paths=additional_image_paths,
+        board_name=board_name,
     )
 
 
