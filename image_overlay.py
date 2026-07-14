@@ -852,25 +852,25 @@ def _template_n(draw, canvas, photo, title, category, price):
     box_x = (PIN_W - box_w) // 2
     box_y = (PIN_H - box_h) // 2
 
-    # Draw semi-transparent black rectangle
-    od.rounded_rectangle([box_x, box_y, box_x + box_w, box_y + box_h], radius=20, fill=(0, 0, 0, 160))
+    # Draw semi-transparent black rectangle (reduced opacity for more visibility of background)
+    od.rounded_rectangle([box_x, box_y, box_x + box_w, box_y + box_h], radius=20, fill=(0, 0, 0, 90))
     canvas.paste(Image.alpha_composite(canvas.convert("RGBA"), overlay).convert("RGB"), (0, 0))
     draw = ImageDraw.Draw(canvas)
 
     # Text inside
     margin = int(box_w * 0.05)
-    cf = _get_font(int(box_h * 0.12), bold=True)
+    cf = _get_font(int(box_h * 0.09), bold=True)
     cb = cf.getbbox(category.upper())
-    draw.text(((PIN_W - (cb[2]-cb[0])) // 2, box_y + int(box_h * 0.1)), category.upper(), fill=WHITE, font=cf)
+    draw.text(((PIN_W - (cb[2]-cb[0])) // 2, box_y + int(box_h * 0.12)), category.upper(), fill=WHITE, font=cf)
 
-    tf = _get_font(int(box_h * 0.20), bold=True)
+    tf = _get_font(int(box_h * 0.15), bold=True)
     lines = _wrap_text(title, tf, box_w - 2*margin)
     for i, line in enumerate(lines[:2]):
         lb = tf.getbbox(line)
-        draw.text(((PIN_W - (lb[2]-lb[0])) // 2, box_y + int(box_h * 0.35) + i * int(box_h * 0.25)), line, fill=WHITE, font=tf)
+        draw.text(((PIN_W - (lb[2]-lb[0])) // 2, box_y + int(box_h * 0.35) + i * int(box_h * 0.20)), line, fill=WHITE, font=tf)
 
     if price:
-        pf = _get_font(int(box_h * 0.18), bold=True)
+        pf = _get_font(int(box_h * 0.14), bold=True)
         ps = f"${price}"
         pb = pf.getbbox(ps)
         draw.text(((PIN_W - (pb[2]-pb[0])) // 2, box_y + int(box_h * 0.8)), ps, fill=CORAL, font=pf)
