@@ -244,49 +244,41 @@ def _compose_frame(
     w, h   = VIDEO_W, VIDEO_H
     canvas = bg.resize((w, h), Image.LANCZOS).convert("RGB")
 
+    # Make product image full-bleed
     pw, ph  = product_img.size
-    max_h   = h - 600
-    max_w   = int(w * 0.92)
-    base_sc = min(max_h / ph, max_w / pw)
+    base_sc = max(h / ph, w / pw)
     cur_sc  = base_sc * product_scale
     nw, nh  = max(1, int(pw * cur_sc)), max(1, int(ph * cur_sc))
     fg      = product_img.resize((nw, nh), Image.LANCZOS)
     x_off   = (w - nw) // 2
-    y_off   = max(10, (max_h - nh) // 2)
+    y_off   = (h - nh) // 2
     canvas.paste(fg, (x_off, y_off))
 
-    # Dark gradient at bottom
-    grad_h = 600
-    grad   = Image.new("RGBA", (w, grad_h), (0, 0, 0, 0))
-    gd     = ImageDraw.Draw(grad)
-    for y in range(grad_h):
-        gd.line([(0, y), (w, y)], fill=(0, 0, 0, int((y/grad_h)**1.3*215)))
+    # Transparent center overlay for text (Template N style)
+    box_w = int(w * 0.85)
+    box_h = int(h * 0.35)
+    box_x = (w - box_w) // 2
+    box_y = (h - box_h) // 2
+
+    overlay = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    od = ImageDraw.Draw(overlay)
+    od.rounded_rectangle([box_x, box_y, box_x + box_w, box_y + box_h], radius=20, fill=(0, 0, 0, 90))
+    
     cvs = canvas.convert("RGBA")
-    cvs.alpha_composite(grad, dest=(0, h - grad_h))
-    img  = cvs.convert("RGB")
+    cvs.alpha_composite(overlay)
+    img = cvs.convert("RGB")
     draw = ImageDraw.Draw(img)
 
-    # Brand badge
-    draw.rounded_rectangle([(24, 36), (268, 88)], radius=20, fill="white")
-    draw.text((146, 62), BRAND_NAME, font=_font(33), fill="black", anchor="mm")
+    # Category / Badge
+    draw.text((w // 2, box_y + int(box_h * 0.12)), fmt["badge"], fill="white", font=_font(int(box_h * 0.09)), anchor="mm")
 
-    # Format badge
-    bc = fmt["badge_color"]
-    draw.rounded_rectangle([(w-242, 36), (w-26, 88)], radius=20, fill=bc)
-    draw.text((w-134, 62), fmt["badge"], font=_font(25), fill="white", anchor="mm")
-
-    # Product title
+    # Title
     for i, line in enumerate(textwrap.wrap(title, 28)[:2]):
-        draw.text((w//2, h-440+i*62), line, font=_font(50), fill="white",
-                  anchor="mm", stroke_width=3, stroke_fill=(0, 0, 0, 170))
+        draw.text((w // 2, box_y + int(box_h * 0.35) + i * int(box_h * 0.20)), line, fill="white", font=_font(int(box_h * 0.15)), anchor="mm")
 
     # Price
-    draw.text((w//2, h-222), f"${price}", font=_font(72),
-              fill=(255, 215, 0), anchor="mm", stroke_width=3, stroke_fill=(0, 0, 0))
-
-    # CTA button
-    draw.rounded_rectangle([(w//2-215, h-154), (w//2+215, h-81)], radius=30, fill="white")
-    draw.text((w//2, h-117), fmt["cta"] + " →", font=_font(40), fill="black", anchor="mm")
+    if price:
+        draw.text((w // 2, box_y + int(box_h * 0.8)), f"${price}", fill=(255, 127, 80), font=_font(int(box_h * 0.14)), anchor="mm")
 
     # URL bar (last frame only)
     if show_url:
