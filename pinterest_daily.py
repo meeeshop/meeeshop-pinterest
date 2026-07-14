@@ -118,6 +118,7 @@ def post_pin(
     client: PinterestClient,
     product_data: Dict[str, Any],
     board_id: str,
+    board_name: str,
     content: Dict[str, Any],
 ) -> bool:
     """Post pin to Pinterest with image overlay"""
@@ -137,6 +138,7 @@ def post_pin(
             cta="Shop Now",
             price=product_data.get("price"),
             output_path=str(overlay_file),
+            board_name=board_name,
         )
 
         if not overlay_image:
@@ -452,7 +454,7 @@ def run_daily_posting(use_video: bool = False):
                 posted += 1
                 continue
 
-            if not post_pin(pinterest, formatted, board_id, content):
+            if not post_pin(pinterest, formatted, board_id, board, content):
                 logger.warning(f"Post failed for '{formatted['title']}', trying next")
                 continue
 

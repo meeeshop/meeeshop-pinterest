@@ -89,6 +89,7 @@ def post_pin(
     client: PinterestClient,
     product_data: Dict[str, Any],
     board_id: str,
+    board_name: str,
     content: Dict[str, Any],
 ) -> bool:
     image_file = Path("/tmp") / f"pin_{product_data['product_id']}.jpg"
@@ -115,6 +116,7 @@ def post_pin(
             price=product_data.get("price"),
             output_path=str(overlay_file),
             additional_image_paths=[str(p) for p in additional_image_files],
+            board_name=board_name,
         )
 
         if not overlay_image:
@@ -422,7 +424,7 @@ def run_daily_posting(use_video: bool = False):
                 posted += 1
                 continue
 
-            if not post_pin(pinterest, formatted, board_id, content):
+            if not post_pin(pinterest, formatted, board_id, board, content):
                 logger.warning(f"Post failed for '{formatted['title']}', trying next")
                 continue
 

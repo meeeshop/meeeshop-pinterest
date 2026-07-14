@@ -835,6 +835,47 @@ def _template_m(draw, canvas, photo, title, category, price):
     _draw_cta_bar(canvas, draw, PIN_H - CTA_H, CTA_H, (60, 75, 65), WHITE)
 
 
+# ── Template N ───────────────────────────────────────────────────────────────
+# Direct image with transparent overlay text in the center
+def _template_n(draw, canvas, photo, title, category, price):
+    # Full bleed photo
+    p = _boost(_fit_image(photo, PIN_W, PIN_H))
+    canvas.paste(p, (0, 0))
+
+    # Transparent center overlay for text
+    overlay = Image.new("RGBA", (PIN_W, PIN_H), (0, 0, 0, 0))
+    od = ImageDraw.Draw(overlay)
+    
+    # Box dimensions
+    box_w = int(PIN_W * 0.85)
+    box_h = int(PIN_H * 0.35)
+    box_x = (PIN_W - box_w) // 2
+    box_y = (PIN_H - box_h) // 2
+
+    # Draw semi-transparent black rectangle (reduced opacity for more visibility of background)
+    od.rounded_rectangle([box_x, box_y, box_x + box_w, box_y + box_h], radius=20, fill=(0, 0, 0, 90))
+    canvas.paste(Image.alpha_composite(canvas.convert("RGBA"), overlay).convert("RGB"), (0, 0))
+    draw = ImageDraw.Draw(canvas)
+
+    # Text inside
+    margin = int(box_w * 0.05)
+    cf = _get_font(int(box_h * 0.09), bold=True)
+    cb = cf.getbbox(category.upper())
+    draw.text(((PIN_W - (cb[2]-cb[0])) // 2, box_y + int(box_h * 0.12)), category.upper(), fill=WHITE, font=cf)
+
+    tf = _get_font(int(box_h * 0.15), bold=True)
+    lines = _wrap_text(title, tf, box_w - 2*margin)
+    for i, line in enumerate(lines[:2]):
+        lb = tf.getbbox(line)
+        draw.text(((PIN_W - (lb[2]-lb[0])) // 2, box_y + int(box_h * 0.35) + i * int(box_h * 0.20)), line, fill=WHITE, font=tf)
+
+    if price:
+        pf = _get_font(int(box_h * 0.14), bold=True)
+        ps = f"${price}"
+        pb = pf.getbbox(ps)
+        draw.text(((PIN_W - (pb[2]-pb[0])) // 2, box_y + int(box_h * 0.8)), ps, fill=CORAL, font=pf)
+
+
 # ── Main entry ───────────────────────────────────────────────────────────────
 
 def create_pin_image(
@@ -846,15 +887,30 @@ def create_pin_image(
     output_path: Optional[str] = None,
     template_index: Optional[int] = None,
     additional_image_paths: Optional[List[str]] = None,
+    board_name: str = "",
 ) -> Optional[str]:
     """
     Create a Pinterest pin using one of 12 rotating Kohl's-style/aesthetic templates
-    or template 9 for Blog Editorial posts.
+    or template 9 for Blog Editorial posts. Matches aesthetic templates to boards.
     """
     try:
         ecommerce_templates = [0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12]
+        
+        # Smart template matching based on board name
+        b_lower = board_name.lower()
         if template_index is None:
-            template_index = ecommerce_templates[int(hashlib.md5(title.encode()).hexdigest(), 16) % len(ecommerce_templates)]
+            if "poetcore" in b_lower:
+                template_index = 5  # Poetcore Storybook Editorial
+            elif "vamp" in b_lower or "romantic" in b_lower:
+                template_index = 7  # Vamp Romantic Cinematic
+            elif "gummy" in b_lower or "nostalgia" in b_lower:
+                template_index = 8  # Holographic
+            elif "athlete" in b_lower or "off-duty" in b_lower:
+                template_index = 10 # Split collage
+            elif "blog" in b_lower:
+                template_index = 9
+            else:
+                template_index = 13 # Template N: Center transparent overlay
 
         canvas = Image.new("RGB", (PIN_W, PIN_H), WARM_WHITE)
         draw = ImageDraw.Draw(canvas)
@@ -908,8 +964,10 @@ def create_pin_image(
             _template_l(draw, canvas, photo, photo2, photo3, title, category, price)
         elif template_index == 12:
             _template_m(draw, canvas, photo, title, category, price)
+        elif template_index == 13:
+            _template_n(draw, canvas, photo, title, category, price)
         else:
-            _template_e(draw, canvas, photo, title, category, price)
+            _template_n(draw, canvas, photo, title, category, price)
 
         if not output_path:
             output_path = tempfile.mktemp(suffix=".jpg", prefix="pin_final_")
@@ -933,6 +991,7 @@ def add_text_overlay(
     output_path: Optional[str] = None,
     template_index: Optional[int] = None,
     additional_image_paths: Optional[List[str]] = None,
+    board_name: str = "",
 ) -> Optional[str]:
     """Called by pinterest_daily.py — derives category label then delegates."""
     import re
@@ -977,6 +1036,7 @@ def add_text_overlay(
         output_path=output_path,
         template_index=template_index,
         additional_image_paths=additional_image_paths,
+        board_name=board_name,
     )
 
 

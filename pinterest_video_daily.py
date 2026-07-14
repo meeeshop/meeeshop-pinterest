@@ -240,53 +240,63 @@ def _compose_frame(
     fmt: Dict,
     product_scale: float = 1.0,
     show_url: bool = False,
+    x_offset: float = 0.0,
+    y_offset: float = 0.0,
+    angle: float = 0.0,
 ) -> Image.Image:
     w, h   = VIDEO_W, VIDEO_H
-    canvas = bg.resize((w, h), Image.LANCZOS).convert("RGB")
+    canvas = bg.copy()
 
+    # Create the floating product card
     pw, ph  = product_img.size
-    max_h   = h - 600
-    max_w   = int(w * 0.92)
+    max_h   = h - 500
+    max_w   = int(w * 0.90)
     base_sc = min(max_h / ph, max_w / pw)
     cur_sc  = base_sc * product_scale
     nw, nh  = max(1, int(pw * cur_sc)), max(1, int(ph * cur_sc))
-    fg      = product_img.resize((nw, nh), Image.LANCZOS)
-    x_off   = (w - nw) // 2
-    y_off   = max(10, (max_h - nh) // 2)
-    canvas.paste(fg, (x_off, y_off))
+    
+    fg = product_img.resize((nw, nh), Image.LANCZOS)
+    
+    # Add a white border to the card
+    fg_with_border = Image.new("RGBA", (nw + 20, nh + 20), (255, 255, 255, 255))
+    fg_with_border.paste(fg, (10, 10))
+    
+    # Rotate
+    if angle != 0:
+        fg_with_border = fg_with_border.rotate(angle, resample=Image.BICUBIC, expand=True)
+    
+    # Paste centered with offset
+    fw, fh = fg_with_border.size
+    x_pos = (w - fw) // 2 + int(x_offset)
+    y_pos = (h - fh) // 2 + int(y_offset)
+    
+    canvas.paste(fg_with_border, (x_pos, y_pos), fg_with_border)
 
-    # Dark gradient at bottom
-    grad_h = 600
-    grad   = Image.new("RGBA", (w, grad_h), (0, 0, 0, 0))
-    gd     = ImageDraw.Draw(grad)
-    for y in range(grad_h):
-        gd.line([(0, y), (w, y)], fill=(0, 0, 0, int((y/grad_h)**1.3*215)))
+    # Transparent center overlay for text (Template N style)
+    box_w = int(w * 0.85)
+    box_h = int(h * 0.35)
+    box_x = (w - box_w) // 2
+    box_y = (h - box_h) // 2
+
+    overlay = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    od = ImageDraw.Draw(overlay)
+    od.rounded_rectangle([box_x, box_y, box_x + box_w, box_y + box_h], radius=20, fill=(0, 0, 0, 90))
+    
     cvs = canvas.convert("RGBA")
-    cvs.alpha_composite(grad, dest=(0, h - grad_h))
-    img  = cvs.convert("RGB")
+    cvs.alpha_composite(overlay)
+    img = cvs.convert("RGB")
     draw = ImageDraw.Draw(img)
 
-    # Brand badge
-    draw.rounded_rectangle([(24, 36), (268, 88)], radius=20, fill="white")
-    draw.text((146, 62), BRAND_NAME, font=_font(33), fill="black", anchor="mm")
+    # Category / Badge
+    draw.text((w // 2, box_y + int(box_h * 0.15)), fmt["badge"], fill="white", font=_font(int(box_h * 0.06)), anchor="mm")
 
-    # Format badge
-    bc = fmt["badge_color"]
-    draw.rounded_rectangle([(w-242, 36), (w-26, 88)], radius=20, fill=bc)
-    draw.text((w-134, 62), fmt["badge"], font=_font(25), fill="white", anchor="mm")
-
-    # Product title
-    for i, line in enumerate(textwrap.wrap(title, 28)[:2]):
-        draw.text((w//2, h-440+i*62), line, font=_font(50), fill="white",
-                  anchor="mm", stroke_width=3, stroke_fill=(0, 0, 0, 170))
+    # Title
+    for i, line in enumerate(textwrap.wrap(title, 34)[:2]):
+        draw.text((w // 2, box_y + int(box_h * 0.40) + i * int(box_h * 0.12)), line, fill="white", font=_font(int(box_h * 0.08)), anchor="mm")
 
     # Price
-    draw.text((w//2, h-222), f"${price}", font=_font(72),
-              fill=(255, 215, 0), anchor="mm", stroke_width=3, stroke_fill=(0, 0, 0))
-
-    # CTA button
-    draw.rounded_rectangle([(w//2-215, h-154), (w//2+215, h-81)], radius=30, fill="white")
-    draw.text((w//2, h-117), fmt["cta"] + " →", font=_font(40), fill="black", anchor="mm")
+    if price:
+        draw.text((w // 2, box_y + int(box_h * 0.8)), f"${price}", fill=(255, 127, 80), font=_font(int(box_h * 0.09)), anchor="mm")
 
     # URL bar (last frame only)
     if show_url:
@@ -335,41 +345,30 @@ def _slide_clip(
     effect: str,
     show_url: bool = False,
 ) -> VideoClip:
-    ENTRANCE = 1.5
-    HOLD     = CLIP_DURATION - ENTRANCE - 0.5
-    EXIT     = 0.5
+    import math
+    
+    # Background is already blurred and prepared
+    bg_r = bg
 
-    bg_r = bg.resize((VIDEO_W, VIDEO_H), Image.LANCZOS)
-    pw, ph   = product_img.size
-    max_h    = VIDEO_H - 600
-    max_w    = int(VIDEO_W * 0.92)
-    base_sc  = min(max_h / ph, max_w / pw)
-
-    def _params(t_norm: float):
-        if effect == "zoom-in":
-            return 0.5 + 0.5 * t_norm, 0, 0
-        elif effect == "zoom-out":
-            return 1.2 - 0.2 * t_norm, 0, 0
-        elif effect.startswith("slide-"):
-            direction = effect.split("-")[1]
-            scale = 0.85 + 0.15 * t_norm
-            if direction == "left":  return scale, int(-VIDEO_W * (1 - t_norm)), 0
-            if direction == "right": return scale, int(VIDEO_W * (1 - t_norm)), 0
-            if direction == "up":    return scale, 0, int(-VIDEO_H * (1 - t_norm))
-            return scale, 0, int(VIDEO_H * (1 - t_norm))
-        return 1.0, 0, 0
+    def _params(t: float):
+        scale = 0.95
+        if effect == "float":
+            return scale, 0, math.cos(t * 2) * 20, math.sin(t * 2) * 3
+        elif effect == "wobble":
+            return scale, math.cos(t * 3) * 15, 0, math.sin(t * 4) * 4
+        elif effect == "spin":
+            return scale + (t * 0.02), 0, 0, t * 5
+        elif effect == "zoom-float":
+            return scale + (t * 0.03), 0, math.cos(t) * 10, math.sin(t) * 2
+        else:
+            return scale, 0, 0, math.sin(t * 2) * 3
 
     def make_frame(t: float):
-        if t < ENTRANCE:
-            t_norm = t / ENTRANCE
-        elif t < ENTRANCE + HOLD:
-            t_norm = 1.0
-        else:
-            t_norm = min(1.0, (t - ENTRANCE - HOLD) / EXIT)
-        scale, ox, oy = _params(t_norm)
+        scale, ox, oy, angle = _params(t)
         frame = _compose_frame(bg_r, product_img, title, price, url, fmt,
                                product_scale=scale,
-                               show_url=(show_url and t > CLIP_DURATION - 0.5))
+                               show_url=(show_url and t > CLIP_DURATION - 0.5),
+                               x_offset=ox, y_offset=oy, angle=angle)
         return np.array(frame)
 
     return VideoClip(make_frame, duration=CLIP_DURATION).set_fps(FPS)
@@ -395,25 +394,28 @@ def build_video(product: Dict, fmt: Dict, bg_colors: List[tuple], store_base_url
 
     logger.info(f"Building video: {title[:50]} ({len(images)} slides)")
 
-    effects = ["slide-left", "slide-right", "zoom-in", "slide-up", "zoom-out", "slide-out"]
+    effects = ["float", "wobble", "spin", "zoom-float"]
     clips   = []
     thumb_path = None
     intro_clip = None
 
     for i, img_data in enumerate(images):
-        bg       = _solid_bg(bg_colors[i % len(bg_colors)])
         prod_img = _load_product_image(img_data["src"])
         if prod_img is None:
             continue
+            
+        from PIL import ImageFilter
+        bg_r = prod_img.resize((VIDEO_W, VIDEO_H), Image.LANCZOS).filter(ImageFilter.GaussianBlur(30)).point(lambda p: p * 0.6)
+        
         effect   = effects[i % len(effects)]
         show_url = (i == len(images) - 1)
-        clip     = _slide_clip(bg, prod_img, title, price, url, fmt, effect, show_url)
+        clip     = _slide_clip(bg_r, prod_img, title, price, url, fmt, effect, show_url)
         clip     = clip.fadein(0.1).fadeout(0.1)
         clips.append(clip)
 
         # Create intro frame (static 2s full product) from first image
         if intro_clip is None:
-            intro_frame_img = _compose_frame(bg, prod_img, title, price, url, fmt, product_scale=1.0, show_url=False)
+            intro_frame_img = _compose_frame(bg_r, prod_img, title, price, url, fmt, product_scale=1.0, show_url=False)
             intro_clip = _static_frame_clip(intro_frame_img, duration=2.0).fadeout(0.3)
             thumb_path = _save_thumbnail(intro_frame_img, handle)
 

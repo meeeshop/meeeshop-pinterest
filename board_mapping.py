@@ -94,10 +94,15 @@ MEEESHOP_BOARDS = [
     "Womens Cardigans",
     "Womens shacket",
     "Zenana Womens...",
+    "Poetcore Aesthetics",
+    "Vamp Romantic Styles",
+    "Off-Duty Athlete Looks",
+    "Gimme Gummy Playful Nostalgia",
+    "Moody Blues & Vintage Pinks",
 ]
 
-# HIGH-TRAFFIC BOARDS (prioritized for new products)
-HIGH_TRAFFIC_BOARDS = ["Trends", "New", "Best selling products", "New Trendy Woman..."]
+# HIGH_TRAFFIC_BOARDS (prioritized for new products)
+HIGH_TRAFFIC_BOARDS = ["Trends", "New", "Best selling products", "New Trendy Woman...", "Poetcore Aesthetics", "Vamp Romantic Styles", "Off-Duty Athlete Looks"]
 
 # Priority boards rotated into every run's pool to ensure consistent reach
 PRIORITY_BOARDS = [
@@ -113,6 +118,9 @@ PRIORITY_BOARDS = [
     "Chic & Effortless Styles",
     "Stylish Finds",
     "Confidence Ladies",
+    "Poetcore Aesthetics",
+    "Vamp Romantic Styles",
+    "Off-Duty Athlete Looks",
 ]
 
 # Product category to board mapping
@@ -180,11 +188,13 @@ CATEGORY_TO_BOARDS = {
         "Boat Shoes",
         "Ankle Strap Flats",
         "Footwear",
+        "Off-Duty Athlete Looks",  # High traffic
         "Trends",  # High traffic
     ],
     "accessory": [
         "Beauty",
         "Handbag #handsips",
+        "Gimme Gummy Playful Nostalgia",  # High traffic
         "Trends",  # High traffic
     ],
     "jumpsuit": [
@@ -192,7 +202,16 @@ CATEGORY_TO_BOARDS = {
         "Trends",  # High traffic
         "New",  # High traffic
     ],
-    "default": ["Trends", "New", "Best selling products"],  # Prioritize high-traffic
+    "dark": [
+        "Vamp Romantic Styles",
+        "Moody Blues & Vintage Pinks",
+        "Trends",
+    ],
+    "aesthetic": [
+        "Poetcore Aesthetics",
+        "Trends",
+    ],
+    "default": ["Trends", "New", "Best selling products", "Poetcore Aesthetics"],  # Prioritize high-traffic
 }
 
 
