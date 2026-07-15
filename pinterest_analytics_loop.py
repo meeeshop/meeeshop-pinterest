@@ -35,6 +35,7 @@ sys.path.insert(0, str(ROOT))
 from pinterest_client import PinterestClient
 from shopify_products import get_pinterest_board_mapping, ShopifyClient
 import content_generator
+import image_overlay
 
 # ── Secrets Management ────────────────────────────────────────────────────────
 # Utilizing existing double-encryption secrets manager
@@ -570,6 +571,19 @@ def main():
             local_img = download_image_to_temp(img_url)
             if not local_img:
                 continue
+                
+            # Apply transparent overlay text
+            price = product.get("variants", [{}])[0].get("price", "") if product else ""
+            overlaid_img = image_overlay.add_text_overlay(
+                image_path=local_img,
+                title=product.get("title", ""),
+                price=price,
+                board_name=new_board
+            )
+            if overlaid_img:
+                if os.path.exists(local_img):
+                    os.unlink(local_img)
+                local_img = overlaid_img
                     
             top_keyword = content["keywords"][0].replace(' ', '-') if content.get("keywords") else "fashion"
             prod_url = f"{STORE_BASE_URL.rstrip('/')}/products/{handle}?utm_source=pinterest&utm_medium=repin&utm_term={top_keyword}"
@@ -638,6 +652,19 @@ def main():
                 local_img = download_image_to_temp(img_url)
                 if not local_img:
                     continue
+                        
+                # Apply transparent overlay text
+                price = replacement.get("variants", [{}])[0].get("price", "") if replacement else ""
+                overlaid_img = image_overlay.add_text_overlay(
+                    image_path=local_img,
+                    title=replacement.get("title", ""),
+                    price=price,
+                    board_name=target_board
+                )
+                if overlaid_img:
+                    if os.path.exists(local_img):
+                        os.unlink(local_img)
+                    local_img = overlaid_img
                         
                 top_keyword = content["keywords"][0].replace(' ', '-') if content.get("keywords") else "fashion"
                 prod_url = f"{STORE_BASE_URL.rstrip('/')}/products/{rep_handle}?utm_source=pinterest&utm_medium=piggyback&utm_term={top_keyword}"
