@@ -87,6 +87,8 @@ def parse_args():
     parser.add_argument("--limit", type=int, default=0, help="Max total pins to select before batching (0 = all)")
     parser.add_argument("--days", type=int, default=60, help="Number of days to look back for pins")
     parser.add_argument("--strategy", type=str, choices=["daily", "biweekly"], default="daily", help="Strategy to run ('daily' or 'biweekly')")
+    parser.add_argument("--template", type=int, default=13, help="Template index to use for image overlay")
+    parser.add_argument("--ignore-history", action="store_true", help="Ignore repin history to allow testing")
     return parser.parse_args()
 
 # ── Shopify API Helpers ───────────────────────────────────────────────────────
@@ -208,7 +210,7 @@ def get_top_performing_pins_analytics(client):
                 "domain": ".pinterest.com"
             })
             
-        analytics_url = "https://analytics.pinterest.com/overview/?content_type=organic&aggregation=last30d&age=all&board_metric=IMPRESSION&board_id=&claimed_account_type=all&device_type=all&gender=all&include_curated=created&include_realtime=true&pin_format=all&pin_metric=ENGAGEMENT&primary_metric=IMPRESSION&recent_pins=false&selected_split=NO_SPLIT&source_type=all"
+        analytics_url = "https://analytics.pinterest.com/overview/?content_type=organic&aggregation=last30d&age=all&board_metric=IMPRESSION&board_id=&claimed_account_type=all&device_type=all&gender=female&country=US&include_curated=created&include_realtime=true&pin_format=all&pin_metric=ENGAGEMENT&primary_metric=IMPRESSION&recent_pins=false&selected_split=NO_SPLIT&source_type=all"
         
         print("   [Selenium] Navigating to Analytics dashboard...")
         driver.get(analytics_url)
@@ -502,7 +504,7 @@ def main():
     eligible_pins = []
     for p in top_pins:
         pin_id = p.get('pin_id')
-        if pin_id and str(pin_id) in repin_history:
+        if not args.ignore_history and pin_id and str(pin_id) in repin_history:
             print(f"   [INFO] Skipping pin {pin_id} as it was already repinned previously.")
             continue
         if is_highly_engaged(p):
@@ -552,33 +554,41 @@ def main():
             # Generate fresh text for the re-pin
             content = content_generator.generate_content_package(product, new_board)
             title = content["pin_title"]
-            hashtags_str = " ".join(content["hashtags"])
+            hashtags_str = " ".join(content["hashtags"]) + " #USAWomensFashion #WomensStyle #USStyle"
             desc = f'{content["pin_description"]}\n\n{hashtags_str}'
                 
             images = product.get("images", [])
-            # Select an alternate image to avoid duplicate penalties (A/B testing)
-            if len(images) > 1:
-                img_obj = random.choice(images[1:]) # Pick from remaining images
-            elif images:
-                img_obj = images[0]
-            else:
-                img_obj = None
+            
+            if not images:
+                print("   [WARN] Product has no images. Skipping.")
+                continue
                 
-            img_url = img_obj.get("src") if img_obj else None
+            img_url = images[0].get("src") if images else None
             if not img_url:
                 print("   [WARN] Product has no images. Skipping.")
                 continue
+                
             local_img = download_image_to_temp(img_url)
             if not local_img:
                 continue
+                
+            additional_image_files = []
+            if len(images) > 1:
+                extra_urls = [img.get("src") for img in images[1:] if img.get("src")][:3]
+                for url in extra_urls:
+                    temp_img = download_image_to_temp(url)
+                    if temp_img:
+                        additional_image_files.append(temp_img)
                 
             # Apply transparent overlay text
             price = product.get("variants", [{}])[0].get("price", "") if product else ""
             overlaid_img = image_overlay.add_text_overlay(
                 image_path=local_img,
                 title=product.get("title", ""),
+                cta="Shop Now",
                 price=price,
-                board_name=new_board
+                board_name=new_board,
+                additional_image_paths=additional_image_files
             )
             if overlaid_img:
                 if os.path.exists(local_img):
@@ -635,15 +645,32 @@ def main():
                         
                 content = content_generator.generate_content_package(replacement, target_board)
                 title = content["pin_title"]
-                hashtags_str = " ".join(content["hashtags"])
+                hashtags_str = " ".join(content["hashtags"]) + " #USAWomensFashion #WomensStyle #USStyle"
                 desc = f'{content["pin_description"]}\n\n{hashtags_str}'
                     
                 # Use the original viral pin's image, not the replacement product's image!
                 img_url = pin_data.get('image_url')
+                additional_image_files = []
+                
+                images = replacement.get("images", [])
+                
                 if not img_url:
                     # Fallback to replacement product image
-                    images = replacement.get("images", [])
                     img_url = images[0].get("src") if images else None
+                    if len(images) > 1:
+                        extra_urls = [img.get("src") for img in images[1:] if img.get("src")][:3]
+                        for url in extra_urls:
+                            temp_img = download_image_to_temp(url)
+                            if temp_img:
+                                additional_image_files.append(temp_img)
+                else:
+                    # If using original viral pin's image, we can still add replacement images as variants
+                    if images:
+                        extra_urls = [img.get("src") for img in images if img.get("src")][:3]
+                        for url in extra_urls:
+                            temp_img = download_image_to_temp(url)
+                            if temp_img:
+                                additional_image_files.append(temp_img)
                     
                 if not img_url:
                     print("   [WARN] Could not find image for piggyback. Skipping.")
@@ -658,8 +685,10 @@ def main():
                 overlaid_img = image_overlay.add_text_overlay(
                     image_path=local_img,
                     title=replacement.get("title", ""),
+                    cta="Shop Now",
                     price=price,
-                    board_name=target_board
+                    board_name=target_board,
+                    additional_image_paths=additional_image_files
                 )
                 if overlaid_img:
                     if os.path.exists(local_img):

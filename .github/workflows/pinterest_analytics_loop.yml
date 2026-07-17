@@ -15,6 +15,11 @@ on:
         options:
           - daily
           - biweekly
+      ignore_history:
+        description: 'Ignore repin history to allow testing'
+        required: false
+        default: false
+        type: boolean
 
 jobs:
   analytics_and_repin:
@@ -73,6 +78,7 @@ jobs:
         run: |
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             STRATEGY="${{ github.event.inputs.strategy }}"
+            IGNORE_HISTORY="${{ github.event.inputs.ignore_history }}"
           else
             DAY=$(date +%d)
             if [ "$DAY" = "01" ] || [ "$DAY" = "15" ]; then
@@ -80,13 +86,20 @@ jobs:
             else
               STRATEGY="daily"
             fi
+            IGNORE_HISTORY="false"
           fi
           echo "Selected strategy: $STRATEGY"
+          echo "Ignore history: $IGNORE_HISTORY"
+          
+          IGNORE_FLAG=""
+          if [ "$IGNORE_HISTORY" = "true" ]; then
+            IGNORE_FLAG="--ignore-history"
+          fi
           
           if [ "$STRATEGY" = "biweekly" ]; then
-            python pinterest_analytics_loop.py --strategy biweekly --limit 3 --days 60
+            python pinterest_analytics_loop.py --strategy biweekly --limit 3 --days 60 --template 13 $IGNORE_FLAG
           else
-            python pinterest_analytics_loop.py --strategy daily --limit 1 --days 7
+            python pinterest_analytics_loop.py --strategy daily --limit 1 --days 7 --template 13 $IGNORE_FLAG
           fi
           
       - name: Upload Logs and History
