@@ -84,9 +84,9 @@ jobs:
           echo "Selected strategy: $STRATEGY"
           
           if [ "$STRATEGY" = "biweekly" ]; then
-            python pinterest_analytics_loop.py --strategy biweekly --limit 3 --days 60
+            python pinterest_analytics_loop.py --strategy biweekly --limit 3 --days 60 --template 13
           else
-            python pinterest_analytics_loop.py --strategy daily --limit 1 --days 7
+            python pinterest_analytics_loop.py --strategy daily --limit 1 --days 7 --template 13
           fi
           
       - name: Upload Logs and History

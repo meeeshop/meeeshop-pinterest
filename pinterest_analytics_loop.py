@@ -87,6 +87,7 @@ def parse_args():
     parser.add_argument("--limit", type=int, default=0, help="Max total pins to select before batching (0 = all)")
     parser.add_argument("--days", type=int, default=60, help="Number of days to look back for pins")
     parser.add_argument("--strategy", type=str, choices=["daily", "biweekly"], default="daily", help="Strategy to run ('daily' or 'biweekly')")
+    parser.add_argument("--template", type=int, default=13, help="Template index to use for image overlay")
     return parser.parse_args()
 
 # ── Shopify API Helpers ───────────────────────────────────────────────────────
@@ -578,7 +579,8 @@ def main():
                 image_path=local_img,
                 title=product.get("title", ""),
                 price=price,
-                board_name=new_board
+                board_name=new_board,
+                template_index=args.template
             )
             if overlaid_img:
                 if os.path.exists(local_img):
@@ -659,7 +661,8 @@ def main():
                     image_path=local_img,
                     title=replacement.get("title", ""),
                     price=price,
-                    board_name=target_board
+                    board_name=target_board,
+                    template_index=args.template
                 )
                 if overlaid_img:
                     if os.path.exists(local_img):
