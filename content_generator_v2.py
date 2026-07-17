@@ -61,11 +61,11 @@ Season: {ctx['season']}
 Format EXACTLY: [Search Keyword] | [Benefit] | MeeeShop
 Rules:
 - First part: what women search for (e.g. "Women's Midi Dress", "Floral Summer Top")
-- Second part: 1 benefit word (Flattering, Chic, Comfy, Versatile, Trendy)
+- Second part: 1 benefit word or USA-focus (Flattering, Chic, US Boutique, Trendy)
 - Always end with "| MeeeShop"
 - Total under 100 chars, NO hashtags, NO emojis
 
-Example: Women's Wrap Dress | Flattering | MeeeShop
+Example: Women's Wrap Dress | US Boutique | MeeeShop
 
 Reply ONLY with the title, nothing else."""
 
@@ -78,7 +78,7 @@ Reply ONLY with the title, nothing else."""
 
     # Fallback: build from product title
     base = f"Women's {product_type}" if product_type else title[:30]
-    return f"{base} | Chic | MeeeShop"[:100]
+    return f"{base} | US Boutique | MeeeShop"[:100]
 
 
 # ── Description ───────────────────────────────────────────────────────────────
@@ -101,7 +101,7 @@ Season: {ctx['season']} — upcoming: {ctx['upcoming']}
 Requirements:
 - 2-3 natural sentences, 150-200 characters total
 - Mention style benefit or occasion
-- Naturally reference USA/US shipping (e.g. "ships across the USA", "US women's fashion")
+- MUST include: "Free shipping within the USA" or "Free US shipping"
 - End with a CTA: "Shop now at MeeeShop" or "Tap to shop"
 - NO hashtags in description
 - Sound genuine, not spammy
@@ -113,7 +113,7 @@ Reply ONLY with the description, nothing else."""
         desc = result.strip().strip('"')
         return desc[:500]  # Pinterest allows up to 500 chars
 
-    return f"Elevate your {ctx['season'].lower()} wardrobe with this {product_type.lower() or 'style'}. Ships across the USA. Shop now at MeeeShop."[:500]
+    return f"Elevate your {ctx['season'].lower()} wardrobe with this {product_type.lower() or 'trendy US boutique style'}. Free shipping within the USA! Shop now at MeeeShop."[:500]
 
 
 # ── Alt text ──────────────────────────────────────────────────────────────────
@@ -154,15 +154,15 @@ def generate_hashtags(product_data: Dict[str, Any], board_name: str) -> List[str
     tags = product_data.get("tags", [])
     ctx = _get_seasonal_context()
 
-    # V2 base: added USA signals + seasonal
+    # V2 base: added USA signals + seasonal + free shipping
     base_hashtags = [
-        "#WomensStyle",
-        "#WomensFashion",
-        "#USAFashion",
-        "#AmericanStyle",
-        "#ShopUSA",
+        "#USAWomensFashion",
+        "#USABoutique",
+        "#FreeShippingUSA",
+        "#ShopSmallUSA",
+        "#USAShopping",
         f"#{ctx['season']}Style",
-        "#StyleInspo",
+        "#AmericanStyle",
     ]
 
     prompt = f"""Generate 6-8 Pinterest hashtags for women's fashion (use #):
@@ -172,7 +172,7 @@ Tags: {", ".join(tags[:3])}
 Board: {board_name}
 Season: {ctx['season']}, Occasion: {ctx['upcoming']}
 
-Focus on: style/occasion tags, search-friendly USA women's fashion tags
+Focus on: USA women's fashion tags, US boutique style, occasion tags
 Reply ONLY with hashtags separated by spaces."""
 
     result = generate(prompt, max_tokens=80, temperature=0.6)
@@ -194,7 +194,7 @@ def generate_keywords_for_seo(product_data: Dict[str, Any]) -> List[str]:
 Title: {title}
 Type: {product_type}
 
-Focus on: style keywords, occasion keywords, long-tail phrases
+Focus on: USA women's boutique, style keywords, occasion keywords, long-tail phrases
 Reply ONLY with keywords separated by commas."""
 
     result = generate(prompt, max_tokens=100, temperature=0.5)
@@ -202,9 +202,10 @@ Reply ONLY with keywords separated by commas."""
         return [k.strip() for k in result.split(",")]
 
     return [
-        product_type.lower() if product_type else "women's clothing",
-        "women's fashion",
-        "shop women's style",
+        product_type.lower() if product_type else "usa women's boutique",
+        "usa women's fashion",
+        "shop us boutique online",
+        "free shipping usa",
     ]
 
 
