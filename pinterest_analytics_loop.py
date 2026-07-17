@@ -88,6 +88,7 @@ def parse_args():
     parser.add_argument("--days", type=int, default=60, help="Number of days to look back for pins")
     parser.add_argument("--strategy", type=str, choices=["daily", "biweekly"], default="daily", help="Strategy to run ('daily' or 'biweekly')")
     parser.add_argument("--template", type=int, default=13, help="Template index to use for image overlay")
+    parser.add_argument("--ignore-history", action="store_true", help="Ignore repin history to allow testing")
     return parser.parse_args()
 
 # ── Shopify API Helpers ───────────────────────────────────────────────────────
@@ -503,7 +504,7 @@ def main():
     eligible_pins = []
     for p in top_pins:
         pin_id = p.get('pin_id')
-        if pin_id and str(pin_id) in repin_history:
+        if not args.ignore_history and pin_id and str(pin_id) in repin_history:
             print(f"   [INFO] Skipping pin {pin_id} as it was already repinned previously.")
             continue
         if is_highly_engaged(p):
