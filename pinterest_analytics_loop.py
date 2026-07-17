@@ -209,7 +209,7 @@ def get_top_performing_pins_analytics(client):
                 "domain": ".pinterest.com"
             })
             
-        analytics_url = "https://analytics.pinterest.com/overview/?content_type=organic&aggregation=last30d&age=all&board_metric=IMPRESSION&board_id=&claimed_account_type=all&device_type=all&gender=all&include_curated=created&include_realtime=true&pin_format=all&pin_metric=ENGAGEMENT&primary_metric=IMPRESSION&recent_pins=false&selected_split=NO_SPLIT&source_type=all"
+        analytics_url = "https://analytics.pinterest.com/overview/?content_type=organic&aggregation=last30d&age=all&board_metric=IMPRESSION&board_id=&claimed_account_type=all&device_type=all&gender=female&country=US&include_curated=created&include_realtime=true&pin_format=all&pin_metric=ENGAGEMENT&primary_metric=IMPRESSION&recent_pins=false&selected_split=NO_SPLIT&source_type=all"
         
         print("   [Selenium] Navigating to Analytics dashboard...")
         driver.get(analytics_url)
@@ -553,7 +553,7 @@ def main():
             # Generate fresh text for the re-pin
             content = content_generator.generate_content_package(product, new_board)
             title = content["pin_title"]
-            hashtags_str = " ".join(content["hashtags"])
+            hashtags_str = " ".join(content["hashtags"]) + " #USAWomensFashion #WomensStyle #USStyle"
             desc = f'{content["pin_description"]}\n\n{hashtags_str}'
                 
             images = product.get("images", [])
@@ -637,7 +637,7 @@ def main():
                         
                 content = content_generator.generate_content_package(replacement, target_board)
                 title = content["pin_title"]
-                hashtags_str = " ".join(content["hashtags"])
+                hashtags_str = " ".join(content["hashtags"]) + " #USAWomensFashion #WomensStyle #USStyle"
                 desc = f'{content["pin_description"]}\n\n{hashtags_str}'
                     
                 # Use the original viral pin's image, not the replacement product's image!
