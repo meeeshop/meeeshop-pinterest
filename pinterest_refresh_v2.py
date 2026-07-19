@@ -225,8 +225,8 @@ def make_refresh_pin_image(
         str(tmp_src),
         title=title,
         price=price,
+        cta="Shop Now",
         output_path=str(out_path),
-        template_index=new_idx,
     )
 
     tmp_src.unlink(missing_ok=True)

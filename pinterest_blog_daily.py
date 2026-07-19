@@ -216,15 +216,15 @@ def run_blog_posting() -> None:
                 Image.new("RGB", (800, 600), (220, 210, 205)).save(fallback_img)
             temp_src = fallback_img
 
-        # Create Editorial Blog Pin Image (Template J / index 9)
+        # Create Blog Pin Image using the transparent blog style (Template 9)
         final_image = create_pin_image(
             product_image_path=str(temp_src),
             title=article["title"],
             category=article["blog_title"],
-            price=clean_excerpt,  # Pass clean excerpt into the price slot for template J to display it
-            cta="READ THE BLOG POST →",
+            price=clean_excerpt,
+            cta="Read the Blog",
             output_path=str(temp_final),
-            template_index=9  # Dedicated blog template J
+            template_index=9
         )
 
         if not final_image:
