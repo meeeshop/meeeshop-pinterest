@@ -626,55 +626,54 @@ def _template_i(draw, canvas, photo, title, category, price):
 # ── Template J ───────────────────────────────────────────────────────────────
 # Blog Article Editorial Template:
 # Soft warm cream, large serif "MeeeShop Blog", thin elegant border, excerpt.
-def _template_j(draw, canvas, photo, title, category, excerpt):
-    bg_color = (250, 248, 245)
-    draw.rectangle([(0, 0), (PIN_W, PIN_H)], fill=bg_color)
+def _template_j(draw, canvas, photo, title, category, excerpt, cta):
+    # Full bleed photo for blog style transparent pin
+    p = _boost(_fit_image(photo, PIN_W, PIN_H))
+    canvas.paste(p, (0, 0))
 
-    HEADER_H = int(PIN_H * 0.18)
-    CTA_H = int(PIN_H * 0.10)
-    FOOTER_H = int(PIN_H * 0.24)
-    PHOTO_H = PIN_H - HEADER_H - FOOTER_H - CTA_H
-    PAD = int(PIN_W * 0.08)
-
-    # Blog Header Title
+    # Semi-transparent overlay box for the blog text
+    overlay = Image.new("RGBA", (PIN_W, PIN_H), (0, 0, 0, 0))
+    od = ImageDraw.Draw(overlay)
+    
+    # Centered transparent box for blog style
+    box_w = int(PIN_W * 0.85)
+    box_h = int(PIN_H * 0.6)
+    box_x = (PIN_W - box_w) // 2
+    box_y = (PIN_H - box_h) // 2
+    
+    od.rounded_rectangle([box_x, box_y, box_x + box_w, box_y + box_h], radius=20, fill=(0, 0, 0, 150))
+    canvas.paste(Image.alpha_composite(canvas.convert("RGBA"), overlay).convert("RGB"), (0, 0))
+    draw = ImageDraw.Draw(canvas)
+    
+    # Blog Header
     blog_header = category or "MeeeShop Blog"
-    cf = _get_font(int(HEADER_H * 0.25), bold=True, serif=True)
+    cf = _get_font(int(box_h * 0.08), bold=True, serif=True)
     cb = cf.getbbox(blog_header)
-    draw.text(((PIN_W - (cb[2]-cb[0])) // 2, int(HEADER_H * 0.28)), blog_header, fill=BLACK, font=cf)
+    draw.text(((PIN_W - (cb[2]-cb[0])) // 2, box_y + int(box_h * 0.1)), blog_header, fill=WHITE, font=cf)
     
     # Elegant divider line
-    draw.line([(PAD, int(HEADER_H * 0.65)), (PIN_W - PAD, int(HEADER_H * 0.65))], fill=MID_GREY, width=1)
-
-    # Photo centered with double thin borders
-    photo_w = PIN_W - PAD * 2
-    photo_h = PHOTO_H - PAD
-    p = _boost(_fit_image(photo, photo_w, photo_h))
-    canvas.paste(p, (PAD, HEADER_H + PAD // 2))
+    draw.line([(box_x + 40, box_y + int(box_h * 0.2)), (box_x + box_w - 40, box_y + int(box_h * 0.2))], fill=WHITE, width=1)
     
-    # Outer thin border
-    draw.rectangle([PAD - 4, HEADER_H + PAD // 2 - 4, PAD + photo_w + 4, HEADER_H + PAD // 2 + photo_h + 4], outline=MID_GREY, width=1)
-
-    # Footer Title & Excerpt
-    footer_y = HEADER_H + PHOTO_H
-    tf = _get_font(int(FOOTER_H * 0.15), bold=True, serif=True)
-    lines = _wrap_text(title, tf, PIN_W - PAD * 2)
+    # Title
+    tf = _get_font(int(box_h * 0.08), bold=True, serif=True)
+    lines = _wrap_text(title, tf, box_w - 80)
     for i, line in enumerate(lines[:2]):
-        draw.text((PAD, footer_y + int(FOOTER_H * 0.10) + i * int(FOOTER_H * 0.20)), line, fill=BLACK, font=tf)
-
-    # Blog excerpt/description preview (regular serif, smaller)
-    ef = _get_font(int(FOOTER_H * 0.09), bold=False, serif=True)
+        lb = tf.getbbox(line)
+        draw.text(((PIN_W - (lb[2]-lb[0])) // 2, box_y + int(box_h * 0.3) + i * int(box_h * 0.12)), line, fill=WHITE, font=tf)
+        
+    # Excerpt
+    ef = _get_font(int(box_h * 0.05), bold=False, serif=True)
     clean_excerpt = excerpt or "Read our latest article for styling tips, outfits, and fashion trends..."
-    excerpt_lines = _wrap_text(clean_excerpt, ef, PIN_W - PAD * 2)
+    excerpt_lines = _wrap_text(clean_excerpt, ef, box_w - 80)
     for i, line in enumerate(excerpt_lines[:2]):
-        draw.text((PAD, footer_y + int(FOOTER_H * 0.54) + i * int(FOOTER_H * 0.13)), line, fill=DARK_GREY, font=ef)
-
-    # Elegant Burgundy/Red CTA Footer
-    draw.rectangle([(0, footer_y + FOOTER_H), (PIN_W, footer_y + FOOTER_H + CTA_H)], fill=(115, 30, 70))
-    margin = int(PIN_W * 0.05)
-    font, cta_text = _fit_text("READ THE BLOG POST →", bold=True, max_w=PIN_W - 2 * margin, start_size=int(CTA_H * 0.35))
-    tb = font.getbbox(cta_text)
-    tw, th = tb[2] - tb[0], tb[3] - tb[1]
-    draw.text(((PIN_W - tw) // 2, footer_y + FOOTER_H + (CTA_H - th) // 2), cta_text, fill=WHITE, font=font)
+        lb = ef.getbbox(line)
+        draw.text(((PIN_W - (lb[2]-lb[0])) // 2, box_y + int(box_h * 0.58) + i * int(box_h * 0.08)), line, fill=(230, 230, 230), font=ef)
+        
+    # CTA
+    font = _get_font(int(box_h * 0.07), bold=True)
+    tb = font.getbbox(cta)
+    tw = tb[2] - tb[0]
+    draw.text(((PIN_W - tw) // 2, box_y + int(box_h * 0.85)), cta, fill=WHITE, font=font)
 
 
 # ── Template K ───────────────────────────────────────────────────────────────
@@ -837,7 +836,7 @@ def _template_m(draw, canvas, photo, title, category, price):
 
 # ── Template N ───────────────────────────────────────────────────────────────
 # Direct image with transparent overlay text in the center
-def _template_n(draw, canvas, photo, title, category, price):
+def _template_n(draw, canvas, photo, title, category, price, cta):
     # Full bleed photo
     p = _boost(_fit_image(photo, PIN_W, PIN_H))
     canvas.paste(p, (0, 0))
@@ -853,7 +852,7 @@ def _template_n(draw, canvas, photo, title, category, price):
     box_y = (PIN_H - box_h) // 2
 
     # Draw semi-transparent black rectangle (reduced opacity for more visibility of background)
-    od.rounded_rectangle([box_x, box_y, box_x + box_w, box_y + box_h], radius=20, fill=(0, 0, 0, 90))
+    od.rounded_rectangle([box_x, box_y, box_x + box_w, box_y + box_h], radius=20, fill=(0, 0, 0, 110))
     canvas.paste(Image.alpha_composite(canvas.convert("RGBA"), overlay).convert("RGB"), (0, 0))
     draw = ImageDraw.Draw(canvas)
 
@@ -868,6 +867,11 @@ def _template_n(draw, canvas, photo, title, category, price):
     for i, line in enumerate(lines[:2]):
         lb = tf.getbbox(line)
         draw.text(((PIN_W - (lb[2]-lb[0])) // 2, box_y + int(box_h * 0.35) + i * int(box_h * 0.20)), line, fill=WHITE, font=tf)
+
+    if cta:
+        ctf = _get_font(int(box_h * 0.10), bold=True)
+        ctb = ctf.getbbox(cta)
+        draw.text(((PIN_W - (ctb[2]-ctb[0])) // 2, box_y + int(box_h * 0.65)), cta, fill=WHITE, font=ctf)
 
     if price:
         pf = _get_font(int(box_h * 0.14), bold=True)
@@ -957,7 +961,7 @@ def create_pin_image(
         elif template_index == 8:
             _template_i(draw, canvas, photo, title, category, price)
         elif template_index == 9:
-            _template_j(draw, canvas, photo, title, category, price)
+            _template_j(draw, canvas, photo, title, category, price, cta)
         elif template_index == 10:
             _template_k(draw, canvas, photo, photo2, title, category, price)
         elif template_index == 11:
@@ -965,9 +969,9 @@ def create_pin_image(
         elif template_index == 12:
             _template_m(draw, canvas, photo, title, category, price)
         elif template_index == 13:
-            _template_n(draw, canvas, photo, title, category, price)
+            _template_n(draw, canvas, photo, title, category, price, cta)
         else:
-            _template_n(draw, canvas, photo, title, category, price)
+            _template_n(draw, canvas, photo, title, category, price, cta)
 
         if not output_path:
             output_path = tempfile.mktemp(suffix=".jpg", prefix="pin_final_")
@@ -1028,11 +1032,15 @@ def add_text_overlay(
     else:
         category = "New Arrival"
 
+    # ALWAYS enforce standard profile overlay (transparent centered)
+    template_index = 13
+
     return create_pin_image(
         product_image_path=image_path,
         title=title,
         category=category,
         price=price,
+        cta=cta,
         output_path=output_path,
         template_index=template_index,
         additional_image_paths=additional_image_paths,
