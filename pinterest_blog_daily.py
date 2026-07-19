@@ -216,12 +216,15 @@ def run_blog_posting() -> None:
                 Image.new("RGB", (800, 600), (220, 210, 205)).save(fallback_img)
             temp_src = fallback_img
 
+        import textwrap
+        wrapped_title = textwrap.fill(article["title"], width=22)
+
         # Create Blog Pin Image using standard profile overlay
         final_image = add_text_overlay(
             str(temp_src),
-            title=article["title"],
-            price=clean_excerpt,
-            cta="READ THE BLOG",
+            title=wrapped_title,
+            price="",
+            cta="Read the Blog",
             output_path=str(temp_final)
         )
 
