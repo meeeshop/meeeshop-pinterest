@@ -20,7 +20,7 @@ inject_to_env()
 
 from pinterest_client import PinterestClient
 from shopify_products import ShopifyClient
-from image_overlay import create_pin_image
+from image_overlay import add_text_overlay
 
 logging.basicConfig(
     level=logging.INFO,
@@ -216,15 +216,13 @@ def run_blog_posting() -> None:
                 Image.new("RGB", (800, 600), (220, 210, 205)).save(fallback_img)
             temp_src = fallback_img
 
-        # Create Editorial Blog Pin Image (Template J / index 9)
-        final_image = create_pin_image(
-            product_image_path=str(temp_src),
+        # Create Blog Pin Image using standard profile overlay
+        final_image = add_text_overlay(
+            str(temp_src),
             title=article["title"],
-            category=article["blog_title"],
-            price=clean_excerpt,  # Pass clean excerpt into the price slot for template J to display it
-            cta="READ THE BLOG POST →",
-            output_path=str(temp_final),
-            template_index=9  # Dedicated blog template J
+            price=clean_excerpt,
+            cta="READ THE BLOG",
+            output_path=str(temp_final)
         )
 
         if not final_image:
