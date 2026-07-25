@@ -1,0 +1,64 @@
+name: Seasonal Content Push Workflow
+
+on:
+  schedule:
+    - cron: '0 13 * * 1'   # Every Monday at 9 AM ET / 13:00 UTC
+  workflow_dispatch:
+    inputs:
+      pins_count:
+        description: 'Number of seasonal burst pins to post (default: 4)'
+        required: false
+        default: '4'
+      dry_run:
+        description: 'Dry run (simulate without posting)'
+        type: boolean
+        required: false
+        default: false
+
+concurrency:
+  group: seasonal-content-push
+  cancel-in-progress: true
+
+permissions:
+  actions: read
+  contents: write
+
+jobs:
+  seasonal-push:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Post Seasonal Burst Pins
+        env:
+          ENCRYPTION_KEY_PRIMARY: ${{ secrets.ENCRYPTION_KEY_PRIMARY }}
+          ENCRYPTION_KEY_FALLBACK: ${{ secrets.ENCRYPTION_KEY_FALLBACK }}
+          PINS_TO_POST: ${{ github.event.inputs.pins_count || '4' }}
+          DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
+        run: |
+          python pinterest_daily_v2.py
+
+      - name: Commit and push history updates
+        if: always()
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add posting_history_v2.json || true
+          git commit -m "chore: auto-update seasonal content history [skip ci]" || echo "No changes to commit"
+          git pull origin ${{ github.ref_name }} --rebase || true
+          git push origin HEAD || echo "Failed to push seasonal history updates"

@@ -56,10 +56,10 @@ API_VER = "2024-10"
 HEADERS = {"X-Shopify-Access-Token": SHOPIFY_TOKEN, "Content-Type": "application/json"}
 
 # Thresholds for a pin to be considered "Viral" or highly engaged
-VIRAL_SAVES_THRESHOLD = 3 
-VIRAL_IMPRESSIONS_THRESHOLD = 500
-VIRAL_ENGAGEMENTS_THRESHOLD = 5
-VIRAL_OUTBOUND_CLICKS_THRESHOLD = 2
+VIRAL_SAVES_THRESHOLD = 10 
+VIRAL_IMPRESSIONS_THRESHOLD = 2000
+VIRAL_ENGAGEMENTS_THRESHOLD = 15
+VIRAL_OUTBOUND_CLICKS_THRESHOLD = 5
 
 # State tracking file to prevent repinning the same pin
 HISTORY_FILE = ROOT / "repin_history.json"

@@ -17,8 +17,9 @@ name: Daily Video Pins (Product Slideshow → Pinterest)
 
 on:
   schedule:
-    - cron: '0 12 * * *'   # 8 AM ET  — morning scroll
-    - cron: '0 1  * * *'   # 9 PM ET  — prime time
+    - cron: '0 13 * * *'   # 9 AM ET — morning coffee scroll
+    - cron: '0 19 * * *'   # 3 PM ET — afternoon browse
+    - cron: '0 1  * * *'   # 9 PM ET — prime time
   workflow_dispatch:
     inputs:
       dry_run:
@@ -30,16 +31,18 @@ on:
           - 'true'
           - 'false'
       pins_per_run:
-        description: 'Max video pins to post per run (1 only, to avoid Pinterest blocking)'
+        description: 'Max video pins to post per run'
         required: false
-        default: '1'
+        default: '3'
         type: choice
         options:
           - '1'
+          - '2'
+          - '3'
 
 permissions:
   actions: read
-  contents: read
+  contents: write
 
 jobs:
   post-video-pins:
@@ -68,10 +71,20 @@ jobs:
         env:
           ENCRYPTION_KEY_PRIMARY: ${{ secrets.ENCRYPTION_KEY_PRIMARY }}
           ENCRYPTION_KEY_FALLBACK: ${{ secrets.ENCRYPTION_KEY_FALLBACK }}
-          MAX_PINS_PER_RUN: ${{ github.event.inputs.pins_per_run || '1' }}
+          MAX_PINS_PER_RUN: ${{ github.event.inputs.pins_per_run || '3' }}
           DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
         run: |
           python pinterest_video_daily.py
+
+      - name: Commit and push video history updates
+        if: always()
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add video_posting_history.json || true
+          git commit -m "chore: auto-update video posting history [skip ci]" || echo "No changes to commit"
+          git pull origin ${{ github.ref_name }} --rebase || true
+          git push origin HEAD || echo "Failed to push video history updates"
 
       - name: Upload video posting history
         if: always()
