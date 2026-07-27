@@ -99,6 +99,9 @@ MEEESHOP_BOARDS = [
     "Off-Duty Athlete Looks",
     "Gimme Gummy Playful Nostalgia",
     "Moody Blues & Vintage Pinks",
+    "Fall Outfits 2026",
+    "Affordable Women's Fashion USA",
+    "Casual Chic Style",
 ]
 
 # HIGH_TRAFFIC_BOARDS (prioritized for new products)

@@ -60,10 +60,12 @@ VIDEO_HISTORY_FILE = Path(__file__).parent / "video_posting_history.json"
 VIDEO_REPOST_COOLDOWN_DAYS = 10
 _AUDIO_DIR = Path(__file__).parent / "audio"
 
-MAX_PINS_PER_RUN = int(os.getenv("MAX_PINS_PER_RUN", "1"))
+MAX_PINS_PER_RUN = int(os.getenv("MAX_PINS_PER_RUN", "3"))
 DRY_RUN = os.getenv("DRY_RUN", "false").lower() in ("1", "true", "yes")
 MAX_VIDEO_SIZE_MB = 100
-BRAND_NAME = os.getenv("BRAND_NAME", "your-brand")
+BRAND_NAME = os.getenv("BRAND_NAME", "MeeeShop US Boutique")
+GTTS_TLD = "com"  # US Accent for gTTS voiceover
+GTTS_LANG = "en"
 
 # Pinterest pin creation endpoint (web-UI flow — no OAuth app needed)
 _PINTEREST_PIN_URL = "https://www.pinterest.com/resource/PinResource/create/"
