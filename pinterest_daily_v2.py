@@ -284,8 +284,11 @@ def build_run_board_pool(
         if name not in pool:
             pool.append(name)
 
-    logger.info(f"[V2] Board pool ({len(pool)} boards, cursor {cursor}/{len(all_names)}): {pool}")
+    logger.info(
+        f"[V2] Multi-board pool initialized across {len(all_names)} active boards (rotation cursor: {cursor})"
+    )
     return pool
+
 
 
 def run_daily_posting(use_video: bool = False):
