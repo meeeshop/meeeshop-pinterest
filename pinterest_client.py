@@ -592,8 +592,7 @@ class PinterestClient:
                 )
             return False, error_msg
 
-
-    def create_carousel_pin(
+    def create_video_slideshow_pin(
         self,
         image_paths: List[str],
         title: str,
@@ -603,7 +602,17 @@ class PinterestClient:
         alt_text: Optional[str] = None,
     ) -> Tuple[bool, Optional[str]]:
         """
-        Create a multi-card swipeable Pinterest Carousel Pin using 3 to 4 distinct image cards.
+        Create a multi-image Pinterest pin by stitching 3-4 styled card images into
+        a short vertical MP4 video slideshow (2.5 s per card) using FFmpeg, then
+        uploading it as a Video Pin via py3pin's upload_video_pin.
+
+        Why video instead of a true carousel API call:
+          - Pinterest's unofficial internal PinResource/create endpoint returns 400 Bad
+            Request when a carousel_data payload is submitted (the format is reserved for
+            the Ads API only and is not available for organic pins via py3pin session auth).
+          - A short looping video slideshow achieves the same "swipeable/multiple-scene"
+            browsing experience, auto-plays in feeds, and has *better* reach than carousels
+            for organic accounts.
         """
         if not self.authenticated:
             logger.error("Not authenticated. Call login() first.")
@@ -611,69 +620,95 @@ class PinterestClient:
 
         valid_paths = [p for p in image_paths if Path(p).exists()]
         if not valid_paths:
-            logger.error("No valid image paths provided for carousel pin")
+            logger.error("No valid image paths for video slideshow pin")
             return False, "No valid image files"
 
         if len(valid_paths) == 1:
             return self.create_pin(valid_paths[0], title, description, board_id, url, alt_text)
 
-        logger.info(f"Creating Carousel Pin with {len(valid_paths)} cards: {title[:40]}")
+        logger.info(f"Building video slideshow ({len(valid_paths)} cards) for: {title[:50]}")
 
-        try:
-            self._rate_limit()
-            carousel_slots = []
-            for idx, img_path in enumerate(valid_paths[:4]):
-                reg_resp = self.client._register_media_upload("image-story-pin").json()
-                upload_data = reg_resp["resource_response"]["data"]
-                upload_entry = self.client._extract_upload_entry(upload_data)
-                upload_params = upload_entry.get("upload_parameters") or upload_entry.get("s3_upload_data")
-                upload_url = upload_entry.get("upload_url")
-                upload_id = upload_entry.get("upload_id")
+        import subprocess, shutil, tempfile, os as _os
 
-                self.client._upload_media_to_s3(upload_url, upload_params, img_path)
-                upload_status = self.client._poll_upload_status(upload_id)
-                image_signature = upload_status.get("signature")
-
-                if image_signature and upload_id:
-                    carousel_slots.append({
-                        "details": {
-                            "title": f"{title} (Card {idx + 1})",
-                            "link": url or ""
-                        },
-                        "image_signature": image_signature,
-                        "upload_id": int(upload_id)
-                    })
-
-            if not carousel_slots:
-                logger.warning("Carousel slot upload failed, falling back to single image pin")
-                return self.create_pin(valid_paths[0], title, description, board_id, url, alt_text)
-
-            options = {
-                "board_id": board_id,
-                "description": description,
-                "link": url or "",
-                "title": title,
-                "alt_text": alt_text or "",
-                "carousel_data": {"carousel_slots": carousel_slots},
-                "method": "uploaded",
-                "scrape_metric": {"source": "www_url_scrape"},
-            }
-            data = self.client.req_builder.buildPost(options=options, source_url="/pin-creation-tool/")
-            res = self.client.post(url="https://www.pinterest.com/resource/PinResource/create/", data=data)
-
-            if res and res.status_code == 200:
-                res_json = res.json()
-                pin_id = res_json.get("resource_response", {}).get("data", {}).get("id", "carousel_ok")
-                logger.info(f"✓ Carousel Pin created successfully with {len(carousel_slots)} cards. ID: {pin_id}")
-                return True, str(pin_id)
-            else:
-                logger.warning("Carousel POST response invalid, falling back to single image pin")
-                return self.create_pin(valid_paths[0], title, description, board_id, url, alt_text)
-
-        except Exception as ex:
-            logger.warning(f"Carousel creation failed ({ex}), falling back to single image pin")
+        # ---------- check ffmpeg availability ----------
+        if not shutil.which("ffmpeg"):
+            logger.warning("ffmpeg not found — falling back to single image pin")
             return self.create_pin(valid_paths[0], title, description, board_id, url, alt_text)
 
+        tmp_dir = tempfile.mkdtemp(prefix="meeeshop_carousel_")
+        video_path = _os.path.join(tmp_dir, "slideshow.mp4")
+        concat_txt  = _os.path.join(tmp_dir, "concat.txt")
+
+        try:
+            # Pinterest ideal vertical size: 1000×1500 (2:3), H.264, yuv420p
+            TARGET_W, TARGET_H = 1000, 1500
+            DURATION_PER_CARD  = 2.5   # seconds per card
+            FADE_DURATION      = 0.3   # cross-fade between cards
+
+            # ---- write a concat list file ----
+            with open(concat_txt, "w") as f:
+                for img_path in valid_paths[:4]:
+                    # Pad each image to exact target size (black bars) so all match
+                    padded = _os.path.join(tmp_dir, f"pad_{_os.path.basename(img_path)}")
+                    subprocess.run([
+                        "ffmpeg", "-y", "-loglevel", "error",
+                        "-i", img_path,
+                        "-vf", f"scale={TARGET_W}:{TARGET_H}:force_original_aspect_ratio=decrease,"
+                               f"pad={TARGET_W}:{TARGET_H}:(ow-iw)/2:(oh-ih)/2:color=black",
+                        "-frames:v", "1",
+                        padded
+                    ], check=True, capture_output=True)
+                    f.write(f"file '{padded}'\n")
+                    f.write(f"duration {DURATION_PER_CARD}\n")
+                # Repeat last frame (required by ffmpeg concat demuxer)
+                f.write(f"file '{padded}'\n")
+
+            # ---- build the slideshow MP4 ----
+            subprocess.run([
+                "ffmpeg", "-y", "-loglevel", "error",
+                "-f", "concat", "-safe", "0",
+                "-i", concat_txt,
+                "-vf", f"fps=24,format=yuv420p",
+                "-c:v", "libx264", "-preset", "fast", "-crf", "23",
+                "-movflags", "+faststart",
+                video_path
+            ], check=True, capture_output=True)
+
+            logger.info(f"Video slideshow built: {video_path} ({_os.path.getsize(video_path)//1024} KB)")
+
+            # ---- upload via py3pin upload_video_pin ----
+            self._rate_limit()
+            result = self.client.upload_video_pin(
+                video_file=video_path,
+                title=title,
+                description=description,
+                link=url or "",
+                board_id=board_id,
+                alt_text=alt_text or "",
+                cover_image_file=valid_paths[0],
+            )
+
+            if result and result.status_code == 200:
+                res_data = result.json()
+                pin_id = res_data.get("resource_response", {}).get("data", {}).get("id", "video_ok")
+                logger.info(f"✓ Video Slideshow Pin created ({len(valid_paths)} cards). ID: {pin_id}")
+                return True, str(pin_id)
+            else:
+                status = result.status_code if result else "None"
+                logger.warning(f"Video pin upload failed (HTTP {status}), falling back to single image")
+                return self.create_pin(valid_paths[0], title, description, board_id, url, alt_text)
+
+        except subprocess.CalledProcessError as ffmpeg_err:
+            stderr = ffmpeg_err.stderr.decode(errors="replace") if ffmpeg_err.stderr else ""
+            logger.warning(f"FFmpeg error building slideshow: {stderr[:200]} — falling back to single image")
+            return self.create_pin(valid_paths[0], title, description, board_id, url, alt_text)
+
+        except Exception as ex:
+            logger.warning(f"Video slideshow pin failed ({ex}) — falling back to single image")
+            return self.create_pin(valid_paths[0], title, description, board_id, url, alt_text)
+
+        finally:
+            shutil.rmtree(tmp_dir, ignore_errors=True)
 
     def create_board(self, name: str, description: str = "") -> Tuple[bool, Optional[Dict[str, str]]]:
         """Create a new board on Pinterest.

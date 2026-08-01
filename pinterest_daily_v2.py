@@ -143,7 +143,7 @@ def post_pin(
         logger.info(f"Creating pin (Style: {style_used}, Template: {template_used}): {content['pin_title']}")
         time.sleep(2)
 
-        # Route carousel style to true multi-card create_carousel_pin
+        # Route carousel style to video slideshow pin (FFmpeg stitches 4 styled cards into MP4)
         if style_used == "carousel":
             from image_overlay import generate_carousel_card_set
             carousel_cards = generate_carousel_card_set(
@@ -159,7 +159,7 @@ def post_pin(
             )
 
             if len(carousel_cards) > 1:
-                success, pin_id = client.create_carousel_pin(
+                success, pin_id = client.create_video_slideshow_pin(
                     image_paths=carousel_cards,
                     title=content["pin_title"],
                     description=content["pin_description"],
