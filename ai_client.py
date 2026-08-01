@@ -153,7 +153,7 @@ _PROVIDERS = [
 ]
 
 _PROVIDER_BLACKLIST: set = set()
-_MAX_RETRIES = 2
+_MAX_RETRIES = 0
 
 
 def reset_provider_state():

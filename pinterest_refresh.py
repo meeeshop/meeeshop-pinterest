@@ -544,6 +544,10 @@ def run_refresh_posting():
             raise RuntimeError("No boards found")
         logger.info(f"Fetched {len(boards)} boards")
 
+        all_products = shopify.get_all_products(status="active")
+        products_by_handle = {p.get("handle"): p for p in all_products if p.get("handle")}
+        logger.info(f"Fetched and cached {len(all_products)} Shopify products")
+
         # Fetch pins created within 2-7 days, split by window
         pins_2day, pins_4_7day = fetch_pins_in_window(pinterest, boards)
         if not pins_2day and not pins_4_7day:
@@ -586,10 +590,11 @@ def run_refresh_posting():
                         continue
                     product_handle = parts[1].split("?")[0].strip("/")
 
-                    # Fetch product by handle
-                    product = shopify.get_product_by_handle(product_handle)
+                    # Fetch product by handle from memory
+                    product = products_by_handle.get(product_handle)
                     if not product:
-                        logger.warning(f"Product not found for handle: {product_handle}")
+                        # Skip deleted or out of stock products instantly
+                        # logger.warning(f"Product not found or inactive: {product_handle}")
                         continue
 
                 except Exception as e:
