@@ -484,7 +484,7 @@ def main():
             # Apply style-rotating overlay (hero/card/collage — avoids repetitive look)
             price = product.get("variants", [{}])[0].get("price", "") if product else ""
             overlaid_img = image_overlay.create_pin_image(
-                image_path=local_img,
+                product_image_path=local_img,
                 title=product.get("title", ""),
                 price=price,
                 cta="Shop Now",
@@ -585,7 +585,7 @@ def main():
                 # Apply style-rotating overlay for piggyback pin
                 price = replacement.get("variants", [{}])[0].get("price", "") if replacement else ""
                 overlaid_img = image_overlay.create_pin_image(
-                    image_path=local_img,
+                    product_image_path=local_img,
                     title=replacement.get("title", ""),
                     price=price,
                     cta="Shop Now",

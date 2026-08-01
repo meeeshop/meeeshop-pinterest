@@ -234,7 +234,7 @@ def make_refresh_pin_image(
     # hero / card / collage — keeps the account looking human, not automated.
     force_style = os.getenv("FORCE_IMAGE_STYLE", "auto") or "auto"
     result = create_pin_image(
-        image_path=str(tmp_src),
+        product_image_path=str(tmp_src),
         title=title,
         price=price,
         cta="Shop Now",
