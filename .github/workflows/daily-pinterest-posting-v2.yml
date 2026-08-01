@@ -82,11 +82,25 @@ jobs:
         env:
           ENCRYPTION_KEY_PRIMARY: ${{ secrets.ENCRYPTION_KEY_PRIMARY }}
           ENCRYPTION_KEY_FALLBACK: ${{ secrets.ENCRYPTION_KEY_FALLBACK }}
-          PINS_TO_POST: ${{ github.event.inputs.pins_count || '2' }}
           FORCE_IMAGE_STYLE: ${{ github.event.inputs.image_style || 'auto' }}
           DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
+          PINTEREST_DAILY_CAP: '15'
+          PINTEREST_WEEKEND_CAP: '18'
         run: |
-          python pinterest_daily_v2.py
+          # Weekend boost: Saturdays and Sundays are high-engagement planning days
+          # for USA women shoppers — allow 3 pins per slot instead of 2
+          if [ -n "${{ github.event.inputs.pins_count }}" ]; then
+            PINS="${{ github.event.inputs.pins_count }}"
+          else
+            DAY_OF_WEEK=$(date +%u)  # 1=Mon ... 6=Sat 7=Sun
+            if [ "$DAY_OF_WEEK" = "6" ] || [ "$DAY_OF_WEEK" = "7" ]; then
+              PINS="3"
+              echo "Weekend detected — posting 3 pins this slot"
+            else
+              PINS="2"
+            fi
+          fi
+          PINS_TO_POST=$PINS python pinterest_daily_v2.py
 
 
       - name: Commit and push history updates
@@ -94,7 +108,7 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add refresh_history_v2.json refresh_history.json posting_history_v2.json posting_history.json || true
+          git add refresh_history_v2.json refresh_history.json posting_history_v2.json posting_history.json daily_pin_count.json || true
           git commit -m "chore: auto-update posting and refresh history [skip ci]" || echo "No changes to commit"
           git pull origin ${{ github.ref_name }} --rebase || true
           git push origin HEAD || echo "Failed to push history updates"

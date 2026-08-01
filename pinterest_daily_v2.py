@@ -29,6 +29,7 @@ from shopify_products import ShopifyClient, format_product_for_pinterest
 from content_generator_v2 import generate_content_package   # ← V2 content
 from video_picker import EnvLoader
 from image_overlay import add_text_overlay
+from daily_pin_tracker import DailyPinTracker
 
 logger = logging.getLogger(__name__)
 
@@ -397,7 +398,13 @@ def run_daily_posting(use_video: bool = False):
 
 
     target = int(os.getenv("PINS_TO_POST", str(PINS_PER_RUN)))
-    logger.info(f"[V2] Daily run starting — target: {target} pins (daily cap: {MAX_PINS_PER_DAY})")
+
+    # ── Global daily cap guard (shared across fresh + refresh + analytics loop) ──
+    tracker = DailyPinTracker()
+    logger.info(f"[V2] Daily run starting — target: {target} pins | {tracker.summary()}")
+    if not dry_run and not tracker.can_post(n=1):
+        logger.info("[V2] Daily cap reached — skipping this run. Good job posting today!")
+        return
 
     history = reset_daily_count()
 
@@ -520,14 +527,15 @@ def run_daily_posting(use_video: bool = False):
 
             used_boards.add(board)
             posted += 1
-
+            if not dry_run:
+                tracker.record(n=1, source="daily_v2")
 
             if posted < target:
                 delay = random.randint(30, 60)
                 logger.info(f"Waiting {delay}s...")
                 time.sleep(delay)
 
-        logger.info(f"[V2] ✓ Done: {posted}/{target} pins posted")
+        logger.info(f"[V2] ✓ Done: {posted}/{target} pins posted. {tracker.summary()}")
 
     except Exception as e:
         logger.error(f"Daily posting error: {e}", exc_info=True)

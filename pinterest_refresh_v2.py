@@ -28,8 +28,9 @@ from pinterest_client import PinterestClient
 from shopify_products import ShopifyClient, format_product_for_pinterest
 from content_generator_v2 import generate_content_package   # ← V2 content
 from video_picker import EnvLoader
-from image_overlay import add_text_overlay, PIN_W, PIN_H
+from image_overlay import create_pin_image, PIN_W, PIN_H
 from board_mapping import MEEESHOP_BOARDS, CATEGORY_TO_BOARDS
+from daily_pin_tracker import DailyPinTracker
 
 logger = logging.getLogger(__name__)
 
@@ -216,20 +217,35 @@ def make_refresh_pin_image(
     if not download_image(image_url, tmp_src):
         return None
 
-    base_idx = int(hashlib.md5(str(product_id).encode()).hexdigest(), 16) % 5
-    window_offset = {"2day": 1, "4-7day": 2}.get(window, 0)
-    new_idx = (base_idx + window_offset) % 5
+    # Pull additional product images for collage / card styles
+    all_images = product.get("images", [])
+    additional_paths: list = []
+    for img in all_images[1:4]:  # up to 3 extras
+        extra_url = img.get("src", "")
+        if not extra_url:
+            continue
+        extra_path = Path("/tmp") / f"refresh_extra_{product_id}_{len(additional_paths)}.jpg"
+        if download_image(extra_url, extra_path):
+            additional_paths.append(str(extra_path))
 
     out_path = Path("/tmp") / f"refresh_overlay_{product_id}_{window}.jpg"
-    result = add_text_overlay(
-        str(tmp_src),
+
+    # Use style-rotating create_pin_image so refresh pins cycle through
+    # hero / card / collage — keeps the account looking human, not automated.
+    force_style = os.getenv("FORCE_IMAGE_STYLE", "auto") or "auto"
+    result = create_pin_image(
+        image_path=str(tmp_src),
         title=title,
         price=price,
         cta="Shop Now",
         output_path=str(out_path),
+        additional_image_paths=additional_paths,
+        force_style=force_style,
     )
 
     tmp_src.unlink(missing_ok=True)
+    for p in additional_paths:
+        Path(p).unlink(missing_ok=True)
     return result if result else None
 
 
@@ -437,6 +453,13 @@ def run_refresh_posting():
         logger.info("=" * 60)
         logger.info("[DRY RUN MODE ENABLED] No boards will be created, no pins will be posted, and no history files will be modified.")
         logger.info("=" * 60)
+
+    # ── Daily pin cap guard ─────────────────────────────────────────────────────
+    tracker = DailyPinTracker()
+    logger.info(f"[DailyPinTracker] {tracker.summary()}")
+    if not dry_run and not tracker.can_post(n=1):
+        logger.info("[DailyPinTracker] Daily cap reached. Skipping refresh run.")
+        return
 
     shopify_url   = get_secret("SHOPIFY_STORE_URL")
     shopify_token = get_secret("SHOPIFY_ACCESS_TOKEN")
@@ -653,6 +676,9 @@ def run_refresh_posting():
                     logger.warning(f"Refresh pin post failed for {product_id}")
                     continue
 
+                if not dry_run:
+                    tracker.record(n=1, source="refresh_v2")
+
                 refresh_history["refreshes"].append({
                     "product_id": product_id,
                     "title": formatted["title"],
@@ -676,7 +702,7 @@ def run_refresh_posting():
 
             logger.info(f"[V2] ✓ {window} window complete: {window_refreshed} pins posted")
 
-        logger.info(f"\n[V2] ✓ Refresh run complete: {total_refreshed} total pins posted")
+        logger.info(f"\n[V2] ✓ Refresh run complete: {total_refreshed} total pins posted. {tracker.summary()}")
 
     except Exception as e:
         logger.error(f"Refresh error: {e}", exc_info=True)
