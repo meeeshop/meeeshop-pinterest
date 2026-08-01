@@ -141,21 +141,59 @@ def post_pin(
         logger.info(f"Creating pin (Style: {style_used}, Template: {template_used}): {content['pin_title']}")
         time.sleep(2)
 
-        success, pin_id = client.create_pin(
-            image_path=overlay_image,
-            title=content["pin_title"],
-            description=content["pin_description"],
-            board_id=board_id,
-            url=product_data["url"],
-            alt_text=content.get("pin_alt_text") or product_data.get("image_alt", ""),
-        )
+        # Route carousel style to true multi-card create_carousel_pin
+        if style_used == "carousel":
+            carousel_cards = [overlay_image]
+            # Generate styled cards for additional images
+            for c_idx, add_file in enumerate(additional_image_files[:3]):
+                card_out = Path("/tmp") / f"pin_card_{product_data['product_id']}_{c_idx+1}.jpg"
+                c_img = add_text_overlay(
+                    str(add_file),
+                    title=f"{content['pin_title']} — Style {c_idx+2}",
+                    cta="Shop Now",
+                    price=product_data.get("price"),
+                    output_path=str(card_out),
+                    template_index=template_used,
+                    board_name=board_name,
+                )
+                if c_img:
+                    carousel_cards.append(c_img)
+
+            if len(carousel_cards) > 1:
+                success, pin_id = client.create_carousel_pin(
+                    image_paths=carousel_cards,
+                    title=content["pin_title"],
+                    description=content["pin_description"],
+                    board_id=board_id,
+                    url=product_data["url"],
+                    alt_text=content.get("pin_alt_text") or product_data.get("image_alt", ""),
+                )
+            else:
+                success, pin_id = client.create_pin(
+                    image_path=overlay_image,
+                    title=content["pin_title"],
+                    description=content["pin_description"],
+                    board_id=board_id,
+                    url=product_data["url"],
+                    alt_text=content.get("pin_alt_text") or product_data.get("image_alt", ""),
+                )
+        else:
+            success, pin_id = client.create_pin(
+                image_path=overlay_image,
+                title=content["pin_title"],
+                description=content["pin_description"],
+                board_id=board_id,
+                url=product_data["url"],
+                alt_text=content.get("pin_alt_text") or product_data.get("image_alt", ""),
+            )
 
         if success:
-            logger.info(f"✓ Posted: {content['pin_title']} (ID: {pin_id})")
+            logger.info(f"✓ Posted ({style_used}): {content['pin_title']} (ID: {pin_id})")
             return True, style_used, template_used
         else:
-            logger.error(f"✗ Failed: {content['pin_title']} — {pin_id}")
+            logger.error(f"✗ Failed ({style_used}): {content['pin_title']} — {pin_id}")
             return False, None, None
+
 
     except Exception as e:
         logger.error(f"Exception creating pin: {e}", exc_info=True)

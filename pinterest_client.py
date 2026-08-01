@@ -592,6 +592,89 @@ class PinterestClient:
                 )
             return False, error_msg
 
+
+    def create_carousel_pin(
+        self,
+        image_paths: List[str],
+        title: str,
+        description: str,
+        board_id: str,
+        url: Optional[str] = None,
+        alt_text: Optional[str] = None,
+    ) -> Tuple[bool, Optional[str]]:
+        """
+        Create a multi-card swipeable Pinterest Carousel Pin using 3 to 4 distinct image cards.
+        """
+        if not self.authenticated:
+            logger.error("Not authenticated. Call login() first.")
+            return False, "Not authenticated"
+
+        valid_paths = [p for p in image_paths if Path(p).exists()]
+        if not valid_paths:
+            logger.error("No valid image paths provided for carousel pin")
+            return False, "No valid image files"
+
+        if len(valid_paths) == 1:
+            return self.create_pin(valid_paths[0], title, description, board_id, url, alt_text)
+
+        logger.info(f"Creating Carousel Pin with {len(valid_paths)} cards: {title[:40]}")
+
+        try:
+            self._rate_limit()
+            carousel_slots = []
+            for idx, img_path in enumerate(valid_paths[:4]):
+                reg_resp = self.client._register_media_upload("image-story-pin").json()
+                upload_data = reg_resp["resource_response"]["data"]
+                upload_entry = self.client._extract_upload_entry(upload_data)
+                upload_params = upload_entry.get("upload_parameters") or upload_entry.get("s3_upload_data")
+                upload_url = upload_entry.get("upload_url")
+                upload_id = upload_entry.get("upload_id")
+
+                self.client._upload_media_to_s3(upload_url, upload_params, img_path)
+                upload_status = self.client._poll_upload_status(upload_id)
+                image_signature = upload_status.get("signature")
+
+                if image_signature and upload_id:
+                    carousel_slots.append({
+                        "details": {
+                            "title": f"{title} (Card {idx + 1})",
+                            "link": url or ""
+                        },
+                        "image_signature": image_signature,
+                        "upload_id": int(upload_id)
+                    })
+
+            if not carousel_slots:
+                logger.warning("Carousel slot upload failed, falling back to single image pin")
+                return self.create_pin(valid_paths[0], title, description, board_id, url, alt_text)
+
+            options = {
+                "board_id": board_id,
+                "description": description,
+                "link": url or "",
+                "title": title,
+                "alt_text": alt_text or "",
+                "carousel_data": {"carousel_slots": carousel_slots},
+                "method": "uploaded",
+                "scrape_metric": {"source": "www_url_scrape"},
+            }
+            data = self.client.req_builder.buildPost(options=options, source_url="/pin-creation-tool/")
+            res = self.client.post(url="https://www.pinterest.com/resource/PinResource/create/", data=data)
+
+            if res and res.status_code == 200:
+                res_json = res.json()
+                pin_id = res_json.get("resource_response", {}).get("data", {}).get("id", "carousel_ok")
+                logger.info(f"✓ Carousel Pin created successfully with {len(carousel_slots)} cards. ID: {pin_id}")
+                return True, str(pin_id)
+            else:
+                logger.warning("Carousel POST response invalid, falling back to single image pin")
+                return self.create_pin(valid_paths[0], title, description, board_id, url, alt_text)
+
+        except Exception as ex:
+            logger.warning(f"Carousel creation failed ({ex}), falling back to single image pin")
+            return self.create_pin(valid_paths[0], title, description, board_id, url, alt_text)
+
+
     def create_board(self, name: str, description: str = "") -> Tuple[bool, Optional[Dict[str, str]]]:
         """Create a new board on Pinterest.
 

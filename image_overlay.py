@@ -754,50 +754,74 @@ def _template_k(draw, canvas, photo, photo2, title, category, price):
 # 3-Image lifestyle grid: 1 large main image top, 2 smaller images bottom.
 # Dark chic background for high contrast.
 def _template_l(draw, canvas, photo, photo2, photo3, title, category, price):
+    """
+    3-Image Portrait Split Collage: Left 58% Full Hero Portrait + Right 42% Two Stacked Focus Detail Shots.
+    """
     bg_color = (25, 25, 28)
     draw.rectangle([(0, 0), (PIN_W, PIN_H)], fill=bg_color)
 
-    HEADER_H = int(PIN_H * 0.10)
+    HEADER_H = int(PIN_H * 0.08)
     CTA_H = int(PIN_H * 0.10)
-    FOOTER_H = int(PIN_H * 0.20)
+    FOOTER_H = int(PIN_H * 0.18)
     PHOTO_H = PIN_H - HEADER_H - FOOTER_H - CTA_H
-    PAD = int(PIN_W * 0.04)
+    PAD = int(PIN_W * 0.03)
 
     # Category top left
-    cf = _get_font(int(HEADER_H * 0.35), bold=True)
-    draw.text((PAD, int(HEADER_H * 0.35)), category.upper(), fill=CORAL, font=cf)
+    cf = _get_font(int(HEADER_H * 0.38), bold=True)
+    draw.text((PAD * 2, int(HEADER_H * 0.30)), category.upper(), fill=CORAL, font=cf)
 
-    # Main Image Top (PHOTO_H * 0.55)
-    top_h = int(PHOTO_H * 0.55)
-    p_top = _boost(_fit_image(photo, PIN_W - PAD * 2, top_h))
-    canvas.paste(p_top, (PAD, HEADER_H))
+    # Photo Area
+    photo_w = PIN_W - PAD * 2
+    photo_h = PHOTO_H
 
-    # Bottom 2 Images (PHOTO_H * 0.40)
-    bottom_h = PHOTO_H - top_h - PAD
-    sub_w = (PIN_W - PAD * 3) // 2
+    # Left 58% Hero Portrait
+    left_w = int(photo_w * 0.58)
+    right_w = photo_w - left_w - PAD
+    right_h = (photo_h - PAD) // 2
 
-    img2 = photo2 if photo2 else photo
-    img3 = photo3 if photo3 else (photo2 if photo2 else photo)
+    p_hero = _boost(_fit_image(photo, left_w, photo_h))
+    canvas.paste(p_hero, (PAD, HEADER_H))
 
-    p_bottom_left = _boost(_fit_image(img2, sub_w, bottom_h))
-    p_bottom_right = _boost(_fit_image(img3, sub_w, bottom_h))
+    # Focus Shot 1 (Top Right)
+    if photo2 is not None:
+        sub1 = photo2
+    else:
+        pw, ph = photo.size
+        cw, ch = int(pw * 0.65), int(ph * 0.45)
+        cx, cy = (pw - cw) // 2, int(ph * 0.08)
+        sub1 = photo.crop((cx, cy, cx + cw, cy + ch))
 
-    canvas.paste(p_bottom_left, (PAD, HEADER_H + top_h + PAD))
-    canvas.paste(p_bottom_right, (PAD * 2 + sub_w, HEADER_H + top_h + PAD))
+    p_focus1 = _boost(_fit_image(sub1, right_w, right_h))
+    canvas.paste(p_focus1, (PAD + left_w + PAD, HEADER_H))
+
+    # Focus Shot 2 (Bottom Right)
+    if photo3 is not None:
+        sub2 = photo3
+    elif photo2 is not None:
+        sub2 = photo2
+    else:
+        pw, ph = photo.size
+        cw, ch = int(pw * 0.65), int(ph * 0.45)
+        cx, cy = (pw - cw) // 2, int(ph * 0.48)
+        sub2 = photo.crop((cx, cy, cx + cw, cy + ch))
+
+    p_focus2 = _boost(_fit_image(sub2, right_w, photo_h - right_h - PAD))
+    canvas.paste(p_focus2, (PAD + left_w + PAD, HEADER_H + right_h + PAD))
 
     # Footer Info
     footer_y = HEADER_H + PHOTO_H
-    tf = _get_font(int(FOOTER_H * 0.18), bold=True)
-    lines = _wrap_text(title, tf, PIN_W - PAD * 3 - (140 if price else 0))
+    tf = _get_font(int(FOOTER_H * 0.22), bold=True)
+    lines = _wrap_text(title, tf, PIN_W - PAD * 4 - (140 if price else 0))
     for i, line in enumerate(lines[:2]):
-        draw.text((PAD, footer_y + int(FOOTER_H * 0.15) + i * int(FOOTER_H * 0.28)), line, fill=WHITE, font=tf)
+        draw.text((PAD * 2, footer_y + int(FOOTER_H * 0.15) + i * int(FOOTER_H * 0.32)), line, fill=WHITE, font=tf)
 
     if price:
-        pf = _get_font(int(FOOTER_H * 0.24), bold=True)
-        draw.text((PIN_W - PAD - 120, footer_y + int(FOOTER_H * 0.15)), f"${price}", fill=CORAL, font=pf)
+        pf = _get_font(int(FOOTER_H * 0.26), bold=True)
+        draw.text((PIN_W - PAD * 2 - 120, footer_y + int(FOOTER_H * 0.18)), f"${price}", fill=CORAL, font=pf)
 
     # Coral CTA Bar
     _draw_cta_bar(canvas, draw, footer_y + FOOTER_H, CTA_H, CORAL, WHITE)
+
 
 
 # ── Template M ───────────────────────────────────────────────────────────────
