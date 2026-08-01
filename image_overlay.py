@@ -15,8 +15,10 @@ import hashlib
 import logging
 import os
 import tempfile
+import time
 from pathlib import Path
 from typing import Optional, Tuple, List
+
 
 
 from PIL import Image, ImageDraw, ImageFont, ImageEnhance
