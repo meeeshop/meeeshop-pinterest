@@ -870,55 +870,79 @@ def _template_m(draw, canvas, photo, title, category, price):
         px = (PIN_W - (pb[2]-pb[0])) // 2
         py = footer_y + len(lines[:2]) * int(FOOTER_H * 0.20) + 10
         draw.text((px, py), ps, fill=RED, font=pf)
-
     # Minimalist dark olive/sage CTA footer
     _draw_cta_bar(canvas, draw, PIN_H - CTA_H, CTA_H, (60, 75, 65), WHITE)
 
 
-# ── Template N ───────────────────────────────────────────────────────────────
-# Direct image with transparent overlay text in the center
-def _template_n(draw, canvas, photo, title, category, price, cta):
-    # Full bleed photo
-    p = _boost(_fit_image(photo, PIN_W, PIN_H))
-    canvas.paste(p, (0, 0))
+def _prepare_photo_for_style(
+    photo: Image.Image,
+    photo2: Optional[Image.Image],
+    photo3: Optional[Image.Image],
+    target_w: int,
+    target_h: int,
+    style: str,
+) -> Image.Image:
+    """
+    Prepare product photo into target_w x target_h based on image_style ('hero', 'collage', 'card').
+    Renders all 3 image styles dynamically for ANY template!
+    """
+    if style == "collage":
+        # Build 3-Image Portrait Split Collage: Left 58% Full Hero Portrait + Right 42% Two Stacked Focus Detail Shots
+        composite = Image.new("RGB", (target_w, target_h), (255, 255, 255))
+        gap = 4
+        left_w = int(target_w * 0.58)
+        right_w = target_w - left_w - gap
+        right_h = (target_h - gap) // 2
 
-    # Transparent center overlay for text
-    overlay = Image.new("RGBA", (PIN_W, PIN_H), (0, 0, 0, 0))
-    od = ImageDraw.Draw(overlay)
-    
-    # Box dimensions
-    box_w = int(PIN_W * 0.85)
-    box_h = int(PIN_H * 0.35)
-    box_x = (PIN_W - box_w) // 2
-    box_y = (PIN_H - box_h) // 2
+        # Left 58% Hero Portrait
+        p_hero = _fit_image(photo, left_w, target_h)
+        composite.paste(p_hero, (0, 0))
 
-    # Draw semi-transparent black rectangle (reduced opacity for more visibility of background)
-    od.rounded_rectangle([box_x, box_y, box_x + box_w, box_y + box_h], radius=20, fill=(0, 0, 0, 110))
-    canvas.paste(Image.alpha_composite(canvas.convert("RGBA"), overlay).convert("RGB"), (0, 0))
-    draw = ImageDraw.Draw(canvas)
+        # Focus Shot 1 (Top Right)
+        if photo2 is not None:
+            sub1 = photo2
+        else:
+            pw, ph = photo.size
+            cw, ch = int(pw * 0.65), int(ph * 0.45)
+            cx, cy = (pw - cw) // 2, int(ph * 0.08)
+            sub1 = photo.crop((cx, cy, cx + cw, cy + ch))
 
-    # Text inside
-    margin = int(box_w * 0.05)
-    cf = _get_font(int(box_h * 0.09), bold=True)
-    cb = cf.getbbox(category.upper())
-    draw.text(((PIN_W - (cb[2]-cb[0])) // 2, box_y + int(box_h * 0.12)), category.upper(), fill=WHITE, font=cf)
+        p_focus1 = _fit_image(sub1, right_w, right_h)
+        composite.paste(p_focus1, (left_w + gap, 0))
 
-    tf = _get_font(int(box_h * 0.15), bold=True)
-    lines = _wrap_text(title, tf, box_w - 2*margin)
-    for i, line in enumerate(lines[:2]):
-        lb = tf.getbbox(line)
-        draw.text(((PIN_W - (lb[2]-lb[0])) // 2, box_y + int(box_h * 0.35) + i * int(box_h * 0.20)), line, fill=WHITE, font=tf)
+        # Focus Shot 2 (Bottom Right)
+        if photo3 is not None:
+            sub2 = photo3
+        elif photo2 is not None:
+            sub2 = photo2
+        else:
+            pw, ph = photo.size
+            cw, ch = int(pw * 0.65), int(ph * 0.45)
+            cx, cy = (pw - cw) // 2, int(ph * 0.48)
+            sub2 = photo.crop((cx, cy, cx + cw, cy + ch))
 
-    if cta:
-        ctf = _get_font(int(box_h * 0.10), bold=True)
-        ctb = ctf.getbbox(cta)
-        draw.text(((PIN_W - (ctb[2]-ctb[0])) // 2, box_y + int(box_h * 0.65)), cta, fill=WHITE, font=ctf)
+        p_focus2 = _fit_image(sub2, right_w, target_h - right_h - gap)
+        composite.paste(p_focus2, (left_w + gap, right_h + gap))
 
-    if price:
-        pf = _get_font(int(box_h * 0.14), bold=True)
-        ps = f"${price}"
-        pb = pf.getbbox(ps)
-        draw.text(((PIN_W - (pb[2]-pb[0])) // 2, box_y + int(box_h * 0.8)), ps, fill=CORAL, font=pf)
+        return _boost(composite)
+
+    elif style == "card":
+        # Build Semi-Transparent Floating Card Overlay
+        p = _fit_image(photo, target_w, target_h)
+        card_overlay = Image.new("RGBA", (target_w, target_h), (0, 0, 0, 0))
+        cdraw = ImageDraw.Draw(card_overlay)
+
+        margin_x = int(target_w * 0.06)
+        card_h = int(target_h * 0.38)
+        card_y = target_h - card_h - int(target_h * 0.05)
+
+        _draw_rounded_rect(cdraw, (margin_x, card_y, target_w - margin_x, card_y + card_h), 16, (15, 15, 20, 210))
+        p_rgba = p.convert("RGBA")
+        composite = Image.alpha_composite(p_rgba, card_overlay).convert("RGB")
+        return _boost(composite)
+
+    else:  # 'hero' style
+        return _boost(_fit_image(photo, target_w, target_h))
 
 
 # ── Main entry ───────────────────────────────────────────────────────────────
@@ -933,10 +957,11 @@ def create_pin_image(
     template_index: Optional[int] = None,
     additional_image_paths: Optional[List[str]] = None,
     board_name: str = "",
+    image_style: str = "hero",
 ) -> Optional[str]:
     """
-    Create a Pinterest pin using one of 12 rotating Kohl's-style/aesthetic templates
-    or template 9 for Blog Editorial posts. Matches aesthetic templates to boards.
+    Create a Pinterest pin using dynamic template matching and image_style framing
+    ('hero', 'collage', 'card').
     """
     try:
         ecommerce_templates = [0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12]
@@ -990,7 +1015,11 @@ def create_pin_image(
             except Exception as ex:
                 logger.warning(f"Failed to auto-crop photo2: {ex}")
 
-        logger.info(f"Using pin template {template_index} for: {title[:40]}")
+        # Apply image_style framing ('collage' or 'card' composite) if specified
+        if image_style in ("collage", "card"):
+            photo = _prepare_photo_for_style(photo, photo2, photo3, PIN_W, PIN_H, image_style)
+
+        logger.info(f"Using pin template {template_index} (Style: {image_style}) for: {title[:40]}")
 
 
         if template_index == 0:
@@ -1039,20 +1068,8 @@ def create_pin_image(
 
 # ── Public aliases ────────────────────────────────────────────────────────────
 
-def add_text_overlay(
-    image_path: str,
-    title: str,
-    cta: str = "Shop Now",
-    price: Optional[str] = None,
-    output_path: Optional[str] = None,
-    template_index: Optional[int] = None,
-    additional_image_paths: Optional[List[str]] = None,
-    board_name: str = "",
-) -> Optional[str]:
-    """Called by pinterest_daily.py — derives category label then delegates."""
-    import re
 ALL_TEMPLATES = [0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13]
-ALL_STYLES = ["hero", "collage", "card"]
+ALL_STYLES = ["hero", "carousel", "collage", "card"]
 
 
 def get_next_style_and_template(
@@ -1062,8 +1079,8 @@ def get_next_style_and_template(
     title: str = "",
 ) -> Tuple[str, int]:
     """
-    Strictly alternate image style ('hero', 'collage', 'card') and template index (0..13).
-    ALL 14 templates are available to ALL 3 image styles!
+    Strictly alternate image style ('hero', 'carousel', 'collage', 'card') and template index (0..13).
+    ALL 14 templates are available to ALL 4 image styles!
     """
     b_lower = (board_name or "").lower()
 
@@ -1105,6 +1122,7 @@ def add_text_overlay(
     board_name: str = "",
     last_style: Optional[str] = None,
     last_template: Optional[int] = None,
+    image_style: Optional[str] = None,
 ) -> Optional[str]:
     """Called by pinterest_daily_v2.py — derives category label and handles dynamic style/template rotation."""
     import re
@@ -1141,14 +1159,17 @@ def add_text_overlay(
     else:
         category = "New Arrival"
 
+    style = image_style
     # Dynamic template & style rotation if template_index is not explicitly specified
-    if template_index is None:
-        style, template_index = get_next_style_and_template(
+    if template_index is None or style is None:
+        next_style, template_index = get_next_style_and_template(
             last_style=last_style,
             last_template=last_template,
             board_name=board_name,
             title=title,
         )
+        if style is None:
+            style = next_style
 
     return create_pin_image(
         product_image_path=image_path,
@@ -1160,7 +1181,9 @@ def add_text_overlay(
         template_index=template_index,
         additional_image_paths=additional_image_paths,
         board_name=board_name,
+        image_style=style or "hero",
     )
+
 
 
 

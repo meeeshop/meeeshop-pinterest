@@ -132,7 +132,9 @@ def post_pin(
             template_index=template_used,
             additional_image_paths=[str(p) for p in additional_image_files],
             board_name=board_name,
+            image_style=style_used,
         )
+
 
         if not overlay_image:
             logger.warning("Image overlay failed, posting without overlay")
