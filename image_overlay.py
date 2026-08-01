@@ -1027,12 +1027,7 @@ def add_text_overlay(
 ) -> Optional[str]:
     """Called by pinterest_daily.py — derives category label then delegates."""
     import re
-STYLE_GROUPS = {
-    "hero": [0, 1, 2, 3, 4, 6, 12],
-    "collage": [10, 11],
-    "card": [13, 5, 7, 8, 9],
-}
-
+ALL_TEMPLATES = [0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13]
 ALL_STYLES = ["hero", "collage", "card"]
 
 
@@ -1043,42 +1038,36 @@ def get_next_style_and_template(
     title: str = "",
 ) -> Tuple[str, int]:
     """
-    Strictly alternate image style ('hero', 'collage', 'card') and template index
-    so no two consecutive pins share the same image style or template.
+    Strictly alternate image style ('hero', 'collage', 'card') and template index (0..13).
+    ALL 14 templates are available to ALL 3 image styles!
     """
     b_lower = (board_name or "").lower()
 
     # Aesthetic board overrides
-    if "poetcore" in b_lower:
-        return ("card", 5)
-    if "vamp" in b_lower or "romantic" in b_lower:
-        return ("card", 7)
-    if "gummy" in b_lower or "nostalgia" in b_lower:
-        return ("card", 8)
     if "blog" in b_lower:
         return ("card", 9)
 
-    # 1. Rotate to next style distinct from last_style
+    # 1. Rotate to next style in ALL_STYLES distinct from last_style
     if last_style and last_style in ALL_STYLES:
         last_idx = ALL_STYLES.index(last_style)
         next_style = ALL_STYLES[(last_idx + 1) % len(ALL_STYLES)]
     else:
         next_style = ALL_STYLES[0]
 
-    # 2. Select template from next_style distinct from last_template
-    candidates = STYLE_GROUPS[next_style]
-    if last_template is not None and len(candidates) > 1:
-        available_templates = [t for t in candidates if t != last_template]
+    # 2. Select next template from ALL_TEMPLATES distinct from last_template
+    if last_template is not None and len(ALL_TEMPLATES) > 1:
+        available_templates = [t for t in ALL_TEMPLATES if t != last_template]
     else:
-        available_templates = candidates
+        available_templates = ALL_TEMPLATES
 
     if not available_templates:
-        available_templates = candidates
+        available_templates = ALL_TEMPLATES
 
     title_hash = int(hashlib.md5(title.encode()).hexdigest(), 16)
     selected_template = available_templates[title_hash % len(available_templates)]
 
     return (next_style, selected_template)
+
 
 
 def add_text_overlay(
