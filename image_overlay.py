@@ -956,7 +956,18 @@ def create_pin_image(
                 except Exception as ex:
                     logger.warning(f"Failed to load photo3: {ex}")
 
+        # If photo2 is missing (single-image product), auto-generate a detail crop from photo so collages work on 100% of products!
+        if photo2 is None and photo is not None:
+            try:
+                pw, ph = photo.size
+                cw, ch = int(pw * 0.70), int(ph * 0.70)
+                cx, cy = (pw - cw) // 2, int(ph * 0.12)
+                photo2 = photo.crop((cx, cy, cx + cw, cy + ch))
+            except Exception as ex:
+                logger.warning(f"Failed to auto-crop photo2: {ex}")
+
         logger.info(f"Using pin template {template_index} for: {title[:40]}")
+
 
         if template_index == 0:
             _template_a(draw, canvas, photo, title, category, price)
@@ -1016,6 +1027,74 @@ def add_text_overlay(
 ) -> Optional[str]:
     """Called by pinterest_daily.py — derives category label then delegates."""
     import re
+STYLE_GROUPS = {
+    "hero": [0, 1, 2, 3, 4, 6, 12],
+    "collage": [10, 11],
+    "card": [13, 5, 7, 8, 9],
+}
+
+ALL_STYLES = ["hero", "collage", "card"]
+
+
+def get_next_style_and_template(
+    last_style: Optional[str] = None,
+    last_template: Optional[int] = None,
+    board_name: str = "",
+    title: str = "",
+) -> Tuple[str, int]:
+    """
+    Strictly alternate image style ('hero', 'collage', 'card') and template index
+    so no two consecutive pins share the same image style or template.
+    """
+    b_lower = (board_name or "").lower()
+
+    # Aesthetic board overrides
+    if "poetcore" in b_lower:
+        return ("card", 5)
+    if "vamp" in b_lower or "romantic" in b_lower:
+        return ("card", 7)
+    if "gummy" in b_lower or "nostalgia" in b_lower:
+        return ("card", 8)
+    if "blog" in b_lower:
+        return ("card", 9)
+
+    # 1. Rotate to next style distinct from last_style
+    if last_style and last_style in ALL_STYLES:
+        last_idx = ALL_STYLES.index(last_style)
+        next_style = ALL_STYLES[(last_idx + 1) % len(ALL_STYLES)]
+    else:
+        next_style = ALL_STYLES[0]
+
+    # 2. Select template from next_style distinct from last_template
+    candidates = STYLE_GROUPS[next_style]
+    if last_template is not None and len(candidates) > 1:
+        available_templates = [t for t in candidates if t != last_template]
+    else:
+        available_templates = candidates
+
+    if not available_templates:
+        available_templates = candidates
+
+    title_hash = int(hashlib.md5(title.encode()).hexdigest(), 16)
+    selected_template = available_templates[title_hash % len(available_templates)]
+
+    return (next_style, selected_template)
+
+
+def add_text_overlay(
+    image_path: str,
+    title: str,
+    cta: str = "Shop Now",
+    price: Optional[str] = None,
+    output_path: Optional[str] = None,
+    template_index: Optional[int] = None,
+    additional_image_paths: Optional[List[str]] = None,
+    board_name: str = "",
+    last_style: Optional[str] = None,
+    last_template: Optional[int] = None,
+) -> Optional[str]:
+    """Called by pinterest_daily_v2.py — derives category label and handles dynamic style/template rotation."""
+    import re
     tl = title.lower()
 
     def match_word_or_sub(keywords, boundary_keys={"top", "flat"}):
@@ -1049,27 +1128,14 @@ def add_text_overlay(
     else:
         category = "New Arrival"
 
-    # Dynamic template selection if template_index is not explicitly specified
+    # Dynamic template & style rotation if template_index is not explicitly specified
     if template_index is None:
-        if board_name:
-            b_lower = board_name.lower()
-            if "poetcore" in b_lower:
-                template_index = 5
-            elif "vamp" in b_lower or "romantic" in b_lower:
-                template_index = 7
-            elif "gummy" in b_lower or "nostalgia" in b_lower:
-                template_index = 8
-            elif "athlete" in b_lower or "off-duty" in b_lower:
-                template_index = 10
-            elif "blog" in b_lower:
-                template_index = 9
-            else:
-                # Rotate across e-commerce templates based on title hash
-                ecommerce_templates = [0, 1, 2, 3, 4, 6, 10, 11, 12, 13]
-                template_index = ecommerce_templates[int(hashlib.md5(title.encode()).hexdigest(), 16) % len(ecommerce_templates)]
-        else:
-            ecommerce_templates = [0, 1, 2, 3, 4, 6, 10, 11, 12, 13]
-            template_index = ecommerce_templates[int(hashlib.md5(title.encode()).hexdigest(), 16) % len(ecommerce_templates)]
+        style, template_index = get_next_style_and_template(
+            last_style=last_style,
+            last_template=last_template,
+            board_name=board_name,
+            title=title,
+        )
 
     return create_pin_image(
         product_image_path=image_path,
@@ -1082,6 +1148,8 @@ def add_text_overlay(
         additional_image_paths=additional_image_paths,
         board_name=board_name,
     )
+
+
 
 
 

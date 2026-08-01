@@ -16,7 +16,8 @@ import random
 import time
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any, Optional, Tuple
+
 import requests
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -91,14 +92,27 @@ def post_pin(
     board_id: str,
     board_name: str,
     content: Dict[str, Any],
-) -> bool:
+    last_style: Optional[str] = None,
+    last_template: Optional[int] = None,
+) -> Tuple[bool, Optional[str], Optional[int]]:
+    from image_overlay import get_next_style_and_template
+
     image_file = Path("/tmp") / f"pin_{product_data['product_id']}.jpg"
     if not download_image(product_data["image_url"], image_file):
         logger.error(f"Failed to download image for pin: {content['pin_title']}")
-        return False
+        return False, None, None
 
     additional_image_files = []
     overlay_image = None
+
+    # Compute next style & template for strict alternating rotation
+    style_used, template_used = get_next_style_and_template(
+        last_style=last_style,
+        last_template=last_template,
+        board_name=board_name,
+        title=content["pin_title"],
+    )
+
     try:
         # Download up to 3 additional images for collages
         all_image_urls = product_data.get("all_image_urls", [])
@@ -115,6 +129,7 @@ def post_pin(
             cta="Shop Now",
             price=product_data.get("price"),
             output_path=str(overlay_file),
+            template_index=template_used,
             additional_image_paths=[str(p) for p in additional_image_files],
             board_name=board_name,
         )
@@ -123,7 +138,7 @@ def post_pin(
             logger.warning("Image overlay failed, posting without overlay")
             overlay_image = str(image_file)
 
-        logger.info(f"Creating pin: {content['pin_title']}")
+        logger.info(f"Creating pin (Style: {style_used}, Template: {template_used}): {content['pin_title']}")
         time.sleep(2)
 
         success, pin_id = client.create_pin(
@@ -137,20 +152,21 @@ def post_pin(
 
         if success:
             logger.info(f"✓ Posted: {content['pin_title']} (ID: {pin_id})")
-            return True
+            return True, style_used, template_used
         else:
             logger.error(f"✗ Failed: {content['pin_title']} — {pin_id}")
-            return False
+            return False, None, None
 
     except Exception as e:
         logger.error(f"Exception creating pin: {e}", exc_info=True)
-        return False
+        return False, None, None
     finally:
         image_file.unlink(missing_ok=True)
         if overlay_image and Path(overlay_image).exists() and overlay_image != str(image_file):
             Path(overlay_image).unlink(missing_ok=True)
         for f in additional_image_files:
             f.unlink(missing_ok=True)
+
 
 
 def pick_board(
@@ -357,6 +373,9 @@ def run_daily_posting(use_video: bool = False):
         used_boards: set = set()
         product_index = 0
 
+        last_style = history.get("last_image_style")
+        last_template = history.get("last_template_index")
+
         while posted < target and product_index < len(pool):
             product = pool[product_index]
             product_index += 1
@@ -374,30 +393,44 @@ def run_daily_posting(use_video: bool = False):
             content = generate_content_package(formatted, board)
 
             if dry_run:
-                logger.info(f"  [DRY RUN] Would download and design pin image for product {product['id']}")
+                from image_overlay import get_next_style_and_template
+                dry_style, dry_tmpl = get_next_style_and_template(last_style, last_template, board, formatted["title"])
+                logger.info(f"  [DRY RUN] Would design pin image for product {product['id']} (Style: {dry_style}, Template: {dry_tmpl})")
                 logger.info(f"  [DRY RUN] Would generate AI title/description for board '{board}'")
                 logger.info(f"  [DRY RUN] Would create pin on board '{board}' (ID: {board_id}) with URL '{formatted['url']}'")
                 used_boards.add(board)
+                last_style, last_template = dry_style, dry_tmpl
                 posted += 1
                 continue
 
-            if not post_pin(pinterest, formatted, board_id, board, content):
+            success, style_used, template_used = post_pin(
+                pinterest, formatted, board_id, board, content, last_style, last_template
+            )
+            if not success:
                 logger.warning(f"Post failed for '{formatted['title']}', trying next")
                 continue
+
+            last_style = style_used
+            last_template = template_used
 
             history["posts"].append({
                 "product_id": product["id"],
                 "title": formatted["title"],
                 "board": board,
                 "timestamp": datetime.now().isoformat(),
+                "style": style_used,
+                "template": template_used,
             })
             history["board_last_used"][board] = datetime.now().isoformat()
+            history["last_image_style"] = style_used
+            history["last_template_index"] = template_used
             history["daily_count"] += 1
             history["last_post_time"] = datetime.now().isoformat()
             save_history(history)
 
             used_boards.add(board)
             posted += 1
+
 
             if posted < target:
                 delay = random.randint(30, 60)
