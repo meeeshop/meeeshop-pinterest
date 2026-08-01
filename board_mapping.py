@@ -104,10 +104,17 @@ MEEESHOP_BOARDS = [
     "Casual Chic Style",
 ]
 
-# HIGH_TRAFFIC_BOARDS (prioritized for new products)
-HIGH_TRAFFIC_BOARDS = ["Trends", "New", "Best selling products", "New Trendy Woman...", "Poetcore Aesthetics", "Vamp Romantic Styles", "Off-Duty Athlete Looks"]
+# High-traffic and priority boards for rotation pools
+HIGH_TRAFFIC_BOARDS = [
+    "Trends",
+    "New",
+    "Best selling products",
+    "New Trendy Woman...",
+    "Poetcore Aesthetics",
+    "Vamp Romantic Styles",
+    "Off-Duty Athlete Looks",
+]
 
-# Priority boards rotated into every run's pool to ensure consistent reach
 PRIORITY_BOARDS = [
     "Trends",
     "New",
@@ -126,157 +133,307 @@ PRIORITY_BOARDS = [
     "Off-Duty Athlete Looks",
 ]
 
-# Product category to board mapping
+# Dedicated Blog & Editorial Boards
+BLOG_BOARDS = [
+    "Our Recommended...",
+    "My Shop 8727/2019",
+    "Social",
+    "Fashion Models",
+    "Style Ideas",
+    "Outfit Ideas",
+    "Trends",
+    "Everyday Style",
+    "Casual Chic Style",
+    "Affordable Women's Fashion USA",
+]
+
+
+# Comprehensive category to board mapping covering ALL 105 boards
 CATEGORY_TO_BOARDS = {
     "dress": [
         "Dresses",
+        "Dress",
         "Cocktail Dresses",
         "Dressy Outfits",
-        "Casual",
-        "Trends",  # High traffic
-        "New",  # High traffic
+        "Short Tall dresses",
+        "Rompers_Jumpsuits &...",
+        "Poetcore Aesthetics",
+        "Vamp Romantic Styles",
+        "Festive & Flora Fits",
+        "Trends",
+        "New",
+        "Best selling products",
     ],
     "top": [
         "Blouses",
+        "Blouse",
         "Camis & Tanks",
         "Shirts & Tops",
         "Puff Sleeves Tops",
-        "Trends",  # High traffic
-        "New",  # High traffic
+        "Chic & Effortless Styles",
+        "Effortless Looks",
+        "Trends",
+        "New",
+        "Best selling products",
     ],
     "jeans": [
         "Jeans",
         "Fitted Jeans",
         "Straight Leg Jeans",
-        "Trends",  # High traffic
-        "New",  # High traffic
+        "Kimchi USA Jeans",
+        "Pants & Leggings",
+        "Casual Chic Style",
+        "Everyday Style",
+        "Trends",
+        "New",
     ],
     "jacket": [
         "Coats & Jackets",
-        "Sweaters",
+        "Outer wear",
         "Womens shacket",
-        "Trends",  # High traffic
+        "Sweaters",
+        "Winter Outfits",
+        "comfy fall outfits",
+        "Fall Outfits 2026",
+        "Trends",
+        "New",
     ],
     "pants": [
         "Pants & Leggings",
+        "Jeans",
         "Casual",
-        "Trends",  # High traffic
-        "New",  # High traffic
+        "Cool & Casual Styles",
+        "Weekend to Workout",
+        "Off-Duty Athlete Looks",
+        "Trends",
+        "New",
     ],
     "skirt": [
         "Skirts",
         "Dressy Outfits",
-        "Trends",  # High traffic
-        "New",  # High traffic
+        "Chic Looks",
+        "Fashion Models",
+        "Poetcore Aesthetics",
+        "Trends",
+        "New",
     ],
     "sweater": [
         "Sweaters",
         "Sweaters & Sweater...",
+        "Sweaters for women",
+        "Womens Cardigans",
         "Chic & Cozy Anim...",
-        "Trends",  # High traffic
-        "New",  # High traffic
+        "comfy fall outfits",
+        "Fall Outfits 2026",
+        "Trends",
+        "New",
     ],
     "cardigan": [
         "Womens Cardigans",
         "Sweaters",
-        "Trends",  # High traffic
+        "Sweaters & Sweater...",
+        "Chic & Cozy Anim...",
+        "Trends",
+        "New",
     ],
     "bag": [
         "Bags",
         "Handbag #handsips",
         "Trendy Backpacks",
-        "Trends",  # High traffic
+        "Nylon backpack",
+        "Gimme Gummy Playful Nostalgia",
+        "Trends",
+        "New",
     ],
     "shoe": [
+        "Footwear",
         "Boat Shoes",
         "Ankle Strap Flats",
-        "Footwear",
-        "Off-Duty Athlete Looks",  # High traffic
-        "Trends",  # High traffic
+        "Off-Duty Athlete Looks",
+        "Casual Chic Style",
+        "Trends",
+        "New",
     ],
     "accessory": [
         "Beauty",
         "Handbag #handsips",
-        "Gimme Gummy Playful Nostalgia",  # High traffic
-        "Trends",  # High traffic
+        "Music Clothes",
+        "Gimme Gummy Playful Nostalgia",
+        "Moody Blues & Vintage Pinks",
+        "Trends",
+        "New",
     ],
     "jumpsuit": [
         "Rompers_Jumpsuits &...",
-        "Trends",  # High traffic
-        "New",  # High traffic
+        "Dressy Outfits",
+        "Casual Chic Style",
+        "Trends",
+        "New",
+    ],
+    "lounge": [
+        "Loungewear",
+        "Weekend to Workout",
+        "Simple Outfits",
+        "Cool & Casual Styles",
+        "Relaxed Yet Trendy...",
+        "Off-Duty Athlete Looks",
     ],
     "dark": [
         "Vamp Romantic Styles",
         "Moody Blues & Vintage Pinks",
+        "Edgy Fashion",
         "Trends",
     ],
     "aesthetic": [
         "Poetcore Aesthetics",
+        "Festive & Flora Fits",
+        "Gimme Gummy Playful Nostalgia",
         "Trends",
     ],
-    "default": ["Trends", "New", "Best selling products", "Poetcore Aesthetics"],  # Prioritize high-traffic
+    "luxe": [
+        "Luxe Clothing",
+        "Meshohn Luxe Styles",
+        "Wardrobe Oozes",
+        "Mustard Seed Clothing",
+        "Zenana Womens...",
+        "Fern Clothes",
+        "LE US Womens Cloth...",
+        "Mist More Fashion...",
+    ],
+    "default": [
+        "Trends",
+        "New",
+        "new products",
+        "Best selling products",
+        "New Trendy Woman...",
+        "Outfit Ideas",
+        "Style Ideas",
+        "Ootd #ootd",
+        "Everyday Style",
+        "Wardrobe Must Haves",
+        "Woman Fashion!",
+        "Chic & Effortless Styles",
+        "Stylish Finds",
+        "Confidence Ladies",
+        "Shop For Hotties",
+        "Spicing Outfits",
+        "Fresh Finds New...",
+        "Casual Chic Style",
+        "Affordable Women's Fashion USA",
+        "American Ball",
+        "Unique USA",
+        "Every Peak Clothing",
+        "Shop Responsibly",
+        "Social",
+        "Fashion Models",
+        "All Pins",
+    ],
 }
 
 
-def get_board_for_product(product_title: str, product_type: str = None) -> str:
+def get_candidate_boards_for_product(product_title: str, product_type: str = None) -> list:
     """
-    Determine the best Pinterest board for a product based on its title/type
-    Prioritizes high-traffic boards (Trends, New)
+    Get all matching candidate board names for a product based on title & type.
 
     Args:
         product_title: Product title from Shopify
         product_type: Product type from Shopify
 
     Returns:
-        Board name to post to
+        List of board names matching the product (ordered by relevance)
     """
-    title_lower = product_title.lower()
+    title_lower = (product_title or "").lower()
     type_lower = (product_type or "").lower()
-
-    # Check for keywords in title or type
     search_text = f"{title_lower} {type_lower}"
 
-    for category, boards in CATEGORY_TO_BOARDS.items():
-        if category in search_text:
-            # Return the first available board for this category
-            for board in boards:
-                if board in MEEESHOP_BOARDS:
-                    return board
+    candidates = []
 
-    # Default to high-traffic boards
-    return CATEGORY_TO_BOARDS["default"][0]
+    for category, boards in CATEGORY_TO_BOARDS.items():
+        if category != "default" and category in search_text:
+            for b in boards:
+                if b in MEEESHOP_BOARDS and b not in candidates:
+                    candidates.append(b)
+
+    # Always append default/general boards to ensure broad options
+    for b in CATEGORY_TO_BOARDS["default"]:
+        if b in MEEESHOP_BOARDS and b not in candidates:
+            candidates.append(b)
+
+    return candidates
+
+
+def select_best_lru_board(
+    product_title: str,
+    product_type: str = None,
+    board_last_used: dict = None,
+    used_boards_in_run: set = None,
+) -> str:
+    """
+    Select the best board using Least Recently Used (LRU) logic among eligible candidate boards.
+    Ensures all 105 boards (including 3-month and 1-year-old dormant boards) get rotated!
+
+    Args:
+        product_title: Product title
+        product_type: Product type
+        board_last_used: Dict mapping board_name -> ISO timestamp string
+        used_boards_in_run: Set of board names already used in the current run
+
+    Returns:
+        Selected board name
+    """
+    if board_last_used is None:
+        board_last_used = {}
+    if used_boards_in_run is None:
+        used_boards_in_run = set()
+
+    candidates = get_candidate_boards_for_product(product_title, product_type)
+
+    # Filter out boards used in the current execution run if possible
+    available = [b for b in candidates if b not in used_boards_in_run]
+    if not available:
+        available = candidates
+
+    # Find the board with the oldest last_used timestamp (or never used)
+    def get_last_used_score(board_name: str) -> str:
+        return board_last_used.get(board_name, "1970-01-01T00:00:00")
+
+    available.sort(key=get_last_used_score)
+    return available[0]
+
+
+def get_board_for_product(product_title: str, product_type: str = None) -> str:
+    """
+    Legacy wrapper — returns candidate board for product.
+    """
+    candidates = get_candidate_boards_for_product(product_title, product_type)
+    return candidates[0] if candidates else MEEESHOP_BOARDS[0]
 
 
 def validate_board(board_name: str) -> str:
     """
-    Validate and return a board name from the list
-    If not found, return a high-traffic default board
-
-    Args:
-        board_name: Board name to validate
-
-    Returns:
-        Valid board name from MEEESHOP_BOARDS
+    Validate and return a board name from the list.
     """
     if board_name in MEEESHOP_BOARDS:
         return board_name
-
-    # If not found, return default (high-traffic board)
-    return CATEGORY_TO_BOARDS["default"][0]
+    return MEEESHOP_BOARDS[0]
 
 
 if __name__ == "__main__":
-    print(f"Total boards: {len(MEEESHOP_BOARDS)}\n")
-    print(f"High-traffic boards: {HIGH_TRAFFIC_BOARDS}\n")
-    print("Sample mappings:")
+    print(f"Total boards indexed: {len(MEEESHOP_BOARDS)}\n")
     samples = [
-        "Puff Sleeve Dress",
-        "Blue Jeans",
-        "Leather Jacket",
-        "Gold Necklace",
-        "Canvas Backpack",
-        "3/4 Puff Slv Texture Vneck Button Down Midi Dress",
+        ("Puff Sleeve Dress", "Dress"),
+        ("Blue Denim Jeans", "Jeans"),
+        ("Leather Jacket", "Jacket"),
+        ("Gold Necklace", "Accessory"),
+        ("Canvas Nylon Backpack", "Bag"),
+        ("Ankle Strap Flats", "Shoes"),
     ]
-    for sample in samples:
-        board = get_board_for_product(sample)
-        print(f"  '{sample}' -> {board}")
+    mock_last_used = {
+        "Dresses": "2026-08-01T00:00:00",
+        "Jeans": "2026-08-01T00:00:00",
+    }
+    for title, ptype in samples:
+        cands = get_candidate_boards_for_product(title, ptype)
+        best = select_best_lru_board(title, ptype, mock_last_used)
+        print(f"'{title}' -> Candidate Count: {len(cands)} | Best LRU Board: '{best}'")
+

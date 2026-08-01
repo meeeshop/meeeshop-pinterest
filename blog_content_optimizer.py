@@ -74,23 +74,60 @@ Reply ONLY with the description text."""
     )[:500]
 
 
-def select_blog_boards(article: Dict[str, Any], available_boards: List[Dict]) -> List[Dict]:
-    """Select 2-3 relevant boards for routing blog pins"""
+def select_blog_boards(
+    article: Dict[str, Any], available_boards: List[Dict]
+) -> List[Dict]:
+    """
+    Select relevant boards for routing blog pins, prioritizing dedicated blog boards
+    and matching topic boards across all available account boards.
+
+    Args:
+        article: Shopify blog article dict
+        available_boards: List of board dicts fetched from Pinterest API
+
+    Returns:
+        List of board dicts (prioritized target boards)
+    """
+    from board_mapping import BLOG_BOARDS
+
     title_lower = (article.get("title") or "").lower()
-    
-    preferred_names = ["Outfit Ideas", "Style Ideas", "Everyday Style", "Trends", "Ootd #ootd", "Fashion Models"]
-    
-    selected = []
+    excerpt_lower = (article.get("excerpt") or "").lower()
+    full_text = f"{title_lower} {excerpt_lower}"
+
     board_map = {b.get("name", "").lower(): b for b in available_boards}
-    
-    for name in preferred_names:
+
+    selected = []
+
+    # 1. Dedicated Blog Boards
+    for name in BLOG_BOARDS:
         b = board_map.get(name.lower())
         if b and b not in selected:
             selected.append(b)
-            if len(selected) >= 3:
-                break
-                
+
+    # 2. Topic Keyword Matching across all available boards
+    keywords = [
+        "dress",
+        "top",
+        "blouse",
+        "jeans",
+        "jacket",
+        "sweater",
+        "fall",
+        "winter",
+        "summer",
+        "spring",
+        "chic",
+        "casual",
+        "ootd",
+    ]
+    for b_dict in available_boards:
+        b_name = b_dict.get("name", "").lower()
+        if any(kw in full_text and kw in b_name for kw in keywords):
+            if b_dict not in selected:
+                selected.append(b_dict)
+
     if not selected and available_boards:
-        selected = available_boards[:2]
-        
+        selected = available_boards[:3]
+
     return selected
+

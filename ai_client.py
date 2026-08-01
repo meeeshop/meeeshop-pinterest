@@ -14,8 +14,16 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from secrets_manager import inject_to_env, get_secret
 inject_to_env()
 
-GROQ_KEY       = get_secret("GROQ_API_KEY")
-OPENROUTER_KEY = get_secret("OPENROUTER_API_KEY")
+try:
+    GROQ_KEY = get_secret("GROQ_API_KEY")
+except Exception:
+    GROQ_KEY = os.getenv("GROQ_API_KEY", "")
+
+try:
+    OPENROUTER_KEY = get_secret("OPENROUTER_API_KEY")
+except Exception:
+    OPENROUTER_KEY = os.getenv("OPENROUTER_API_KEY", "")
+
 
 _GROQ_URL        = "https://api.groq.com/openai/v1/chat/completions"
 _OPENROUTER_URL  = "https://openrouter.ai/api/v1/chat/completions"

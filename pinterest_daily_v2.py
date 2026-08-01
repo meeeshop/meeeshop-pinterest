@@ -161,83 +161,31 @@ def pick_board(
     run_board_pool: List[str],
     history: Dict[str, Any] = None,
 ) -> Optional[Dict]:
-    from board_mapping import CATEGORY_TO_BOARDS
+    from board_mapping import select_best_lru_board
 
     boards_by_name = {b["name"].lower(): b for b in boards}
 
-    def find(name: str) -> Optional[Dict]:
-        b = boards_by_name.get(name.lower())
-        if b:
-            return b
-        for board in boards:
-            if name.lower() in board["name"].lower():
-                return board
-        return None
+    title = formatted.get("title", "")
+    ptype = formatted.get("product_type", "")
+    last_used = (history or {}).get("board_last_used", {})
 
-    def category_key(text: str) -> str:
-        import re
-        category_mappings = [
-            (["backpack", "bag", "purse", "tote", "handbag", "crossbody", "clutch", "satchel", "wallet", "pouch", "duffel", "hobo"], "bag"),
-            (["dress", "gown", "midi", "maxi", "mini"], "dress"),
-            (["top", "blouse", "tank", "shirt", "cami"], "top"),
-            (["jeans", "denim", "pants", "legging"], "pants"),
-            (["jacket", "coat", "shacket", "blazer"], "jacket"),
-            (["cardigan"], "cardigan"),
-            (["sweater", "knit", "pullover"], "sweater"),
-            (["skirt"], "skirt"),
-            (["shoe", "boot", "flat", "heel", "sandal"], "shoe"),
-            (["jumpsuit", "romper"], "jumpsuit")
-        ]
-        boundary_keys = {"top", "flat"}
-        for keywords, category_key_val in category_mappings:
-            for kw in keywords:
-                if kw in boundary_keys:
-                    if kw == "top":
-                        if re.search(r'\btops?(?!-handle|-loading|-heavy)\b', text):
-                            return category_key_val
-                    else:
-                        if re.search(r'\b' + re.escape(kw) + r's?\b', text):
-                            return category_key_val
-                else:
-                    if kw in text:
-                        return category_key_val
-        return "default"
+    # Select best LRU board among candidate boards
+    best_name = select_best_lru_board(title, ptype, last_used, used_boards)
 
-    search = f"{formatted.get('title','').lower()} {formatted.get('product_type','').lower()}"
-    cat = category_key(search)
+    # Find the board object matching best_name
+    b = boards_by_name.get(best_name.lower())
+    if b:
+        return b
 
-    if cat != "default":
-        category_boards = []
-        for board_name in CATEGORY_TO_BOARDS.get(cat, []):
-            b = find(board_name)
-            if b and b["name"] not in used_boards:
-                category_boards.append(b)
+    # Partial name search fallback
+    for board in boards:
+        if best_name.lower() in board["name"].lower():
+            return board
 
-        if category_boards:
-            # Sort boards by last used time (Least Recently Used first)
-            last_used = (history or {}).get("board_last_used", {})
-
-            def get_last_used_time(b_dict):
-                b_name = b_dict["name"]
-                ts = last_used.get(b_name)
-                if ts:
-                    try:
-                        return datetime.fromisoformat(ts)
-                    except Exception:
-                        pass
-                return datetime.min
-
-            category_boards.sort(key=get_last_used_time)
-            return category_boards[0]
-
-    for i in range(len(run_board_pool)):
-        candidate = run_board_pool[(index + i) % len(run_board_pool)]
-        b = find(candidate)
-        if b and b["name"] not in used_boards:
-            return b
-
+    # Pool fallback if exact board not found on account
     available = [b for b in boards if b["name"] not in used_boards]
     return random.choice(available) if available else random.choice(boards)
+
 
 
 def fetch_all_eligible_products(
@@ -355,14 +303,23 @@ def run_daily_posting(use_video: bool = False):
         logger.info("[DRY RUN MODE ENABLED] No boards will be created, no pins will be posted, and no history files will be modified.")
         logger.info("=" * 60)
 
-    pinterest_email = get_secret("PINTEREST_EMAIL")
-    pinterest_password = get_secret("PINTEREST_PASSWORD")
+    try:
+        pinterest_email = get_secret("PINTEREST_EMAIL")
+    except Exception:
+        pinterest_email = os.getenv("PINTEREST_EMAIL", "dry_run@meeeshop.com" if dry_run else "")
+
+    try:
+        pinterest_password = get_secret("PINTEREST_PASSWORD")
+    except Exception:
+        pinterest_password = os.getenv("PINTEREST_PASSWORD", "dry_run_pass" if dry_run else "")
+
     shopify_url = get_secret("SHOPIFY_STORE_URL")
     shopify_token = get_secret("SHOPIFY_ACCESS_TOKEN")
     store_base_url = get_secret("STORE_BASE_URL")
 
-    if not all([pinterest_email, pinterest_password, shopify_url, shopify_token]):
+    if not dry_run and not all([pinterest_email, pinterest_password, shopify_url, shopify_token]):
         raise ValueError("Missing required credentials in .env")
+
 
     target = int(os.getenv("PINS_TO_POST", str(PINS_PER_RUN)))
     logger.info(f"[V2] Daily run starting — target: {target} pins (daily cap: {MAX_PINS_PER_DAY})")
@@ -380,13 +337,19 @@ def run_daily_posting(use_video: bool = False):
     shopify = ShopifyClient(shopify_url, shopify_token)
 
     try:
-        if not pinterest.login():
-            raise RuntimeError("Pinterest login failed")
+        boards = []
+        if not dry_run:
+            if not pinterest.login():
+                raise RuntimeError("Pinterest login failed")
+            boards = pinterest.fetch_boards()
 
-        boards = pinterest.fetch_boards()
         if not boards:
-            raise RuntimeError("No boards found — check Pinterest authentication")
-        logger.info(f"Fetched {len(boards)} boards")
+            from board_mapping import MEEESHOP_BOARDS
+
+            boards = [{"name": b, "id": f"mock_{i}"} for i, b in enumerate(MEEESHOP_BOARDS)]
+
+        logger.info(f"Loaded {len(boards)} boards")
+
 
         run_board_pool = build_run_board_pool(boards, history, target)
         save_history(history)

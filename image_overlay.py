@@ -1032,8 +1032,27 @@ def add_text_overlay(
     else:
         category = "New Arrival"
 
-    # ALWAYS enforce standard profile overlay (transparent centered)
-    template_index = 13
+    # Dynamic template selection if template_index is not explicitly specified
+    if template_index is None:
+        if board_name:
+            b_lower = board_name.lower()
+            if "poetcore" in b_lower:
+                template_index = 5
+            elif "vamp" in b_lower or "romantic" in b_lower:
+                template_index = 7
+            elif "gummy" in b_lower or "nostalgia" in b_lower:
+                template_index = 8
+            elif "athlete" in b_lower or "off-duty" in b_lower:
+                template_index = 10
+            elif "blog" in b_lower:
+                template_index = 9
+            else:
+                # Rotate across e-commerce templates based on title hash
+                ecommerce_templates = [0, 1, 2, 3, 4, 6, 10, 11, 12, 13]
+                template_index = ecommerce_templates[int(hashlib.md5(title.encode()).hexdigest(), 16) % len(ecommerce_templates)]
+        else:
+            ecommerce_templates = [0, 1, 2, 3, 4, 6, 10, 11, 12, 13]
+            template_index = ecommerce_templates[int(hashlib.md5(title.encode()).hexdigest(), 16) % len(ecommerce_templates)]
 
     return create_pin_image(
         product_image_path=image_path,
@@ -1046,6 +1065,7 @@ def add_text_overlay(
         additional_image_paths=additional_image_paths,
         board_name=board_name,
     )
+
 
 
 def optimize_image_for_pinterest(image_path: str, output_path: Optional[str] = None) -> Optional[str]:
