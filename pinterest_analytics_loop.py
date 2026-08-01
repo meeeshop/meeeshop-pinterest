@@ -629,7 +629,7 @@ def main():
                 tracker.record(n=1, source="analytics_loop")
 
         # Human-like delay between pins (30–90 seconds — looks organic, not bot)
-        delay = random.randint(30, 90)
+        delay = random.randint(5, 10)
         print(f"   ⏳ Waiting {delay}s before next pin (organic pacing)...")
         time.sleep(delay)
 

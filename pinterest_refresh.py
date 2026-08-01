@@ -724,7 +724,7 @@ def run_refresh_posting():
                 total_refreshed += 1
 
                 if window_refreshed < len(window_pins):
-                    delay = random.randint(30, 60)
+                    delay = random.randint(5, 10)
                     logger.info(f"Waiting {delay}s...")
                     time.sleep(delay)
 
