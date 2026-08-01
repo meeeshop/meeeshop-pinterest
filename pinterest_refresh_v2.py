@@ -28,7 +28,7 @@ from pinterest_client import PinterestClient
 from shopify_products import ShopifyClient, format_product_for_pinterest
 from content_generator_v2 import generate_content_package   # ← V2 content
 from video_picker import EnvLoader
-from image_overlay import create_pin_image, PIN_W, PIN_H
+from image_overlay import create_pin_image, PIN_W, PIN_H, add_text_overlay
 from board_mapping import MEEESHOP_BOARDS, CATEGORY_TO_BOARDS
 from daily_pin_tracker import DailyPinTracker
 
