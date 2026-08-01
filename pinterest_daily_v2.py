@@ -298,8 +298,35 @@ def build_run_board_pool(
 
 
 
+def get_product_main_category(title: str, product_type: str = "") -> str:
+    """Classify product into core category to enforce rotation across consecutive pins."""
+    import re
+    text = f"{title} {product_type}".lower()
+    if re.search(r'\b(bag|backpack|purse|tote|handbag|crossbody|clutch|satchel|wallet|pouch|duffel|hobo)\b', text):
+        return "bags"
+    elif re.search(r'\b(dress|gown|midi|maxi|mini)\b', text):
+        return "dresses"
+    elif re.search(r'\b(top|blouse|shirt|cami|tank|tee|sweatshirt)\b', text):
+        return "tops"
+    elif re.search(r'\b(jeans|denim|pants|legging|leggings|chino|shorts|bottom)\b', text):
+        return "bottoms"
+    elif re.search(r'\b(jacket|coat|shacket|blazer|cardigan|outerwear)\b', text):
+        return "outerwear"
+    elif re.search(r'\b(sweater|knit|pullover)\b', text):
+        return "sweaters"
+    elif re.search(r'\b(skirt)\b', text):
+        return "skirts"
+    elif re.search(r'\b(jumpsuit|romper|playsuit|overalls)\b', text):
+        return "jumpsuits"
+    elif re.search(r'\b(shoe|flats|boots|sneakers|sandals|heels)\b', text):
+        return "shoes"
+    else:
+        return "general"
+
+
 def run_daily_posting(use_video: bool = False):
     """Post PINS_PER_RUN pins per run (V2: 2 pins × 4 runs = 8/day)."""
+
 
     logging.basicConfig(
         level=logging.INFO,
@@ -371,14 +398,36 @@ def run_daily_posting(use_video: bool = False):
 
         posted = 0
         used_boards: set = set()
-        product_index = 0
+        used_product_indices: set = set()
 
         last_style = history.get("last_image_style")
         last_template = history.get("last_template_index")
+        last_category = history.get("last_product_category")
 
-        while posted < target and product_index < len(pool):
-            product = pool[product_index]
-            product_index += 1
+        while posted < target and len(used_product_indices) < len(pool):
+            # Select next candidate product whose category is DIFFERENT from last_category
+            selected_idx = None
+            for idx, prod in enumerate(pool):
+                if idx in used_product_indices:
+                    continue
+                cat = get_product_main_category(prod.get("title", ""), prod.get("product_type", ""))
+                if cat != last_category or len(used_product_indices) == 0:
+                    selected_idx = idx
+                    break
+
+            # Fallback: if no product of a different category is found, pick first unused product
+            if selected_idx is None:
+                for idx in range(len(pool)):
+                    if idx not in used_product_indices:
+                        selected_idx = idx
+                        break
+
+            if selected_idx is None:
+                break
+
+            used_product_indices.add(selected_idx)
+            product = pool[selected_idx]
+            cat_used = get_product_main_category(product.get("title", ""), product.get("product_type", ""))
 
             formatted = format_product_for_pinterest(product, store_base_url)
             board_info = pick_board(posted, boards, used_boards, formatted, run_board_pool, history)
@@ -388,18 +437,18 @@ def run_daily_posting(use_video: bool = False):
 
             board = board_info["name"]
             board_id = board_info["id"]
-            logger.info(f"Pin {posted + 1}/{target} → {board}")
+            logger.info(f"Pin {posted + 1}/{target} → {board} (Category: {cat_used})")
 
             content = generate_content_package(formatted, board)
 
             if dry_run:
                 from image_overlay import get_next_style_and_template
                 dry_style, dry_tmpl = get_next_style_and_template(last_style, last_template, board, formatted["title"])
-                logger.info(f"  [DRY RUN] Would design pin image for product {product['id']} (Style: {dry_style}, Template: {dry_tmpl})")
+                logger.info(f"  [DRY RUN] Would design pin image for product {product['id']} (Category: {cat_used}, Style: {dry_style}, Template: {dry_tmpl})")
                 logger.info(f"  [DRY RUN] Would generate AI title/description for board '{board}'")
                 logger.info(f"  [DRY RUN] Would create pin on board '{board}' (ID: {board_id}) with URL '{formatted['url']}'")
                 used_boards.add(board)
-                last_style, last_template = dry_style, dry_tmpl
+                last_style, last_template, last_category = dry_style, dry_tmpl, cat_used
                 posted += 1
                 continue
 
@@ -412,6 +461,7 @@ def run_daily_posting(use_video: bool = False):
 
             last_style = style_used
             last_template = template_used
+            last_category = cat_used
 
             history["posts"].append({
                 "product_id": product["id"],
@@ -420,10 +470,12 @@ def run_daily_posting(use_video: bool = False):
                 "timestamp": datetime.now().isoformat(),
                 "style": style_used,
                 "template": template_used,
+                "category": cat_used,
             })
             history["board_last_used"][board] = datetime.now().isoformat()
             history["last_image_style"] = style_used
             history["last_template_index"] = template_used
+            history["last_product_category"] = cat_used
             history["daily_count"] += 1
             history["last_post_time"] = datetime.now().isoformat()
             save_history(history)
