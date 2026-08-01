@@ -104,12 +104,22 @@ def _wrap_text(text: str, font, max_width: int) -> list:
 
 
 def _fit_image(img: Image.Image, w: int, h: int) -> Image.Image:
-    """Cover-fit: scale to fill box then center-crop."""
+    """
+    Cover-fit with top-weighted smart crop to preserve faces, necklines, and full outfit framing.
+    Avoids cutting off model heads or collar details on tall apparel.
+    """
     sw, sh = img.size
     scale = max(w / sw, h / sh)
     nw, nh = int(sw * scale), int(sh * scale)
     img = img.resize((nw, nh), Image.Resampling.LANCZOS)
-    x, y = (nw - w) // 2, (nh - h) // 2
+
+    # Top-weighted cropping for fashion: position crop slightly higher (20%) so model face/head is preserved
+    x = (nw - w) // 2
+    if nh > h:
+        y = int((nh - h) * 0.18)
+        y = max(0, min(y, nh - h))
+    else:
+        y = 0
     return img.crop((x, y, x + w, y + h))
 
 
@@ -152,9 +162,16 @@ def _draw_cta_bar(canvas: Image.Image, draw: ImageDraw.Draw,
 
 
 def _boost(img: Image.Image) -> Image.Image:
-    img = ImageEnhance.Contrast(img).enhance(1.08)
-    img = ImageEnhance.Color(img).enhance(1.06)
+    """
+    Hero Image Polish:
+    Enhances contrast (+10%), color vibrancy (+8%), and sharpness (+25%)
+    so fabric textures, lace/knit patterns, and garment details pop on mobile screens.
+    """
+    img = ImageEnhance.Contrast(img).enhance(1.10)
+    img = ImageEnhance.Color(img).enhance(1.08)
+    img = ImageEnhance.Sharpness(img).enhance(1.25)
     return img
+
 
 
 # ── Template A ───────────────────────────────────────────────────────────────
