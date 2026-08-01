@@ -27,6 +27,17 @@ on:
         description: 'Number of pins to post (default: 2)'
         required: false
         default: '2'
+      image_style:
+        description: 'Pin Image Style (auto, hero, carousel, collage, card)'
+        required: false
+        default: 'auto'
+        type: choice
+        options:
+          - auto
+          - hero
+          - carousel
+          - collage
+          - card
       dry_run:
         description: 'Dry run (simulate daily posting without actually creating pins)'
         type: boolean
@@ -72,9 +83,11 @@ jobs:
           ENCRYPTION_KEY_PRIMARY: ${{ secrets.ENCRYPTION_KEY_PRIMARY }}
           ENCRYPTION_KEY_FALLBACK: ${{ secrets.ENCRYPTION_KEY_FALLBACK }}
           PINS_TO_POST: ${{ github.event.inputs.pins_count || '2' }}
+          FORCE_IMAGE_STYLE: ${{ github.event.inputs.image_style || 'auto' }}
           DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
         run: |
           python pinterest_daily_v2.py
+
 
       - name: Commit and push history updates
         if: always()

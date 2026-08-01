@@ -145,21 +145,18 @@ def post_pin(
 
         # Route carousel style to true multi-card create_carousel_pin
         if style_used == "carousel":
-            carousel_cards = [overlay_image]
-            # Generate styled cards for additional images
-            for c_idx, add_file in enumerate(additional_image_files[:3]):
-                card_out = Path("/tmp") / f"pin_card_{product_data['product_id']}_{c_idx+1}.jpg"
-                c_img = add_text_overlay(
-                    str(add_file),
-                    title=f"{content['pin_title']} — Style {c_idx+2}",
-                    cta="Shop Now",
-                    price=product_data.get("price"),
-                    output_path=str(card_out),
-                    template_index=template_used,
-                    board_name=board_name,
-                )
-                if c_img:
-                    carousel_cards.append(c_img)
+            from image_overlay import generate_carousel_card_set
+            carousel_cards = generate_carousel_card_set(
+                product_image_path=str(image_file),
+                title=content["pin_title"],
+                category=board_name,
+                price=product_data.get("price"),
+                cta="Shop Now",
+                output_dir="/tmp",
+                template_index=template_used,
+                additional_image_paths=[str(p) for p in additional_image_files],
+                board_name=board_name,
+            )
 
             if len(carousel_cards) > 1:
                 success, pin_id = client.create_carousel_pin(
@@ -188,6 +185,7 @@ def post_pin(
                 url=product_data["url"],
                 alt_text=content.get("pin_alt_text") or product_data.get("image_alt", ""),
             )
+
 
         if success:
             logger.info(f"✓ Posted ({style_used}): {content['pin_title']} (ID: {pin_id})")

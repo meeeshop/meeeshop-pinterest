@@ -13,9 +13,11 @@ Templates modelled on Kohl's Pinterest pins:
 
 import hashlib
 import logging
+import os
 import tempfile
 from pathlib import Path
 from typing import Optional, Tuple, List
+
 
 from PIL import Image, ImageDraw, ImageFont, ImageEnhance
 
@@ -1081,15 +1083,18 @@ def get_next_style_and_template(
     """
     Strictly alternate image style ('hero', 'carousel', 'collage', 'card') and template index (0..13).
     ALL 14 templates are available to ALL 4 image styles!
+    Supports FORCE_IMAGE_STYLE env var for manual testing ('hero', 'carousel', 'collage', 'card', 'auto').
     """
     b_lower = (board_name or "").lower()
+    forced_style = os.getenv("FORCE_IMAGE_STYLE", "auto").strip().lower()
 
-    # Aesthetic board overrides
     if "blog" in b_lower:
         return ("card", 9)
 
-    # 1. Rotate to next style in ALL_STYLES distinct from last_style
-    if last_style and last_style in ALL_STYLES:
+    # 1. Select style (forced or alternating)
+    if forced_style and forced_style in ALL_STYLES:
+        next_style = forced_style
+    elif last_style and last_style in ALL_STYLES:
         last_idx = ALL_STYLES.index(last_style)
         next_style = ALL_STYLES[(last_idx + 1) % len(ALL_STYLES)]
     else:
@@ -1108,6 +1113,7 @@ def get_next_style_and_template(
     selected_template = available_templates[title_hash % len(available_templates)]
 
     return (next_style, selected_template)
+
 
 
 
@@ -1183,6 +1189,117 @@ def add_text_overlay(
         board_name=board_name,
         image_style=style or "hero",
     )
+
+
+def generate_carousel_card_set(
+    product_image_path: str,
+    title: str,
+    category: str = "New Arrival",
+    price: Optional[str] = None,
+    cta: str = "Shop Now at us.MeeeShop.com",
+    output_dir: str = "/tmp",
+    template_index: int = 0,
+    additional_image_paths: Optional[List[str]] = None,
+    board_name: str = "",
+) -> List[str]:
+    """
+    Generate 3 to 4 distinct styled image card files for a Carousel Pin.
+    Ensures 100% of products have 3-4 cards even if Shopify only provided 1 photo!
+    """
+    cards = []
+
+    # Card 1: Main Hero Front View with price badge
+    c1_path = str(Path(output_dir) / f"carousel_c1_{int(time.time()*1000)}.jpg")
+    img1 = create_pin_image(
+        product_image_path=product_image_path,
+        title=title,
+        category=category,
+        price=price,
+        cta=cta,
+        output_path=c1_path,
+        template_index=template_index,
+        board_name=board_name,
+        image_style="hero",
+    )
+    if img1:
+        cards.append(img1)
+
+    photo_main = Image.open(product_image_path).convert("RGB")
+    pw, ph = photo_main.size
+
+    # Card 2: Extra photo 1 or Upper Bodice / Neckline Focus Shot
+    c2_path = str(Path(output_dir) / f"carousel_c2_{int(time.time()*1000)}.jpg")
+    if additional_image_paths and len(additional_image_paths) > 0 and Path(additional_image_paths[0]).exists():
+        sub2_path = additional_image_paths[0]
+    else:
+        cw, ch = int(pw * 0.70), int(ph * 0.50)
+        cx, cy = (pw - cw) // 2, int(ph * 0.08)
+        sub2_img = photo_main.crop((cx, cy, cx + cw, cy + ch))
+        sub2_path = str(Path(output_dir) / f"carousel_sub2_{int(time.time()*1000)}.jpg")
+        sub2_img.save(sub2_path)
+
+    img2 = create_pin_image(
+        product_image_path=sub2_path,
+        title=f"{title} — Details & Fit",
+        category=category,
+        price=price,
+        cta=cta,
+        output_path=c2_path,
+        template_index=(template_index + 1) % 13,
+        board_name=board_name,
+        image_style="card",
+    )
+    if img2:
+        cards.append(img2)
+
+    # Card 3: Extra photo 2 or Lower Hemline / Pattern Focus Shot
+    c3_path = str(Path(output_dir) / f"carousel_c3_{int(time.time()*1000)}.jpg")
+    if additional_image_paths and len(additional_image_paths) > 1 and Path(additional_image_paths[1]).exists():
+        sub3_path = additional_image_paths[1]
+    else:
+        cw, ch = int(pw * 0.70), int(ph * 0.50)
+        cx, cy = (pw - cw) // 2, int(ph * 0.45)
+        sub3_img = photo_main.crop((cx, cy, cx + cw, cy + ch))
+        sub3_path = str(Path(output_dir) / f"carousel_sub3_{int(time.time()*1000)}.jpg")
+        sub3_img.save(sub3_path)
+
+    img3 = create_pin_image(
+        product_image_path=sub3_path,
+        title=f"{title} — Fabric & Quality",
+        category=category,
+        price=price,
+        cta=cta,
+        output_path=c3_path,
+        template_index=(template_index + 2) % 13,
+        board_name=board_name,
+        image_style="hero",
+    )
+    if img3:
+        cards.append(img3)
+
+    # Card 4: Extra photo 3 or Polaroid Style Outfit Card
+    c4_path = str(Path(output_dir) / f"carousel_c4_{int(time.time()*1000)}.jpg")
+    if additional_image_paths and len(additional_image_paths) > 2 and Path(additional_image_paths[2]).exists():
+        sub4_path = additional_image_paths[2]
+    else:
+        sub4_path = product_image_path
+
+    img4 = create_pin_image(
+        product_image_path=sub4_path,
+        title=f"{title} — Shop MeeeShop USA",
+        category=category,
+        price=price,
+        cta="Shop Now at us.MeeeShop.com",
+        output_path=c4_path,
+        template_index=12,
+        board_name=board_name,
+        image_style="hero",
+    )
+    if img4:
+        cards.append(img4)
+
+    return cards
+
 
 
 
