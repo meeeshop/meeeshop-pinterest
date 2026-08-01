@@ -17,10 +17,10 @@ name: Daily Pinterest Posting V2
 
 on:
   schedule:
-    - cron: '0 14 * * *'   # 10 AM ET — mid-morning peak
-    - cron: '0 18 * * *'   #  2 PM ET — post-lunch browse
-    - cron: '0 23 * * *'   #  7 PM ET — after-work scroll
-    - cron: '0 2  * * *'   # 10 PM ET — evening prime time
+    - cron: '0 13 * * *'   # 9 AM ET / 13:00 UTC — morning coffee scroll
+    - cron: '0 17 * * *'   # 1 PM ET / 17:00 UTC — post-lunch browse
+    - cron: '0 22 * * *'   # 6 PM ET / 22:00 UTC — after-work scroll
+    - cron: '0 1  * * *'   # 9 PM ET / 01:00 UTC — evening prime time bedtime scroll
   workflow_dispatch:
     inputs:
       pins_count:
@@ -32,6 +32,10 @@ on:
         type: boolean
         required: false
         default: false
+
+concurrency:
+  group: pinterest-posting-v2
+  cancel-in-progress: true
 
 permissions:
   actions: read
@@ -51,6 +55,7 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: '3.11'
+          cache: 'pip'
 
       - name: Install dependencies
         run: |

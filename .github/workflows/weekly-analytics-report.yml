@@ -1,0 +1,44 @@
+name: Weekly Pinterest Analytics Report
+
+on:
+  schedule:
+    - cron: '0 12 * * 0'   # Every Sunday at 12:00 UTC
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: write
+
+jobs:
+  generate-report:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Generate Analytics Report
+        run: |
+          python analytics_report.py
+
+      - name: Commit and push report
+        if: always()
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add weekly_analytics_report.json || true
+          git commit -m "chore: auto-generate weekly analytics report [skip ci]" || echo "No changes to commit"
+          git pull origin ${{ github.ref_name }} --rebase || true
+          git push origin HEAD || echo "Failed to push weekly report"
+
+      - name: Upload Weekly Report Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: weekly-analytics-report-${{ github.run_number }}
+          path: weekly_analytics_report.json
+          retention-days: 30

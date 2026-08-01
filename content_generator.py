@@ -31,6 +31,7 @@ Type: {product_type}
 
 Requirements:
 - Include 1-2 power keywords (style, occasion, material)
+- Optimize for 2026 USA Women's Fashion Trends (e.g., Poetcore, Vamp Romantic, Off-Duty Athlete, Gimme Gummy, Moody Blues) if applicable
 - Be engaging & benefit-focused (e.g., "Comfy", "Flattering", "Versatile")
 - NO hashtags in title
 - NO emojis
@@ -68,7 +69,7 @@ Tags: {tags}
 
 Requirements:
 - Brief & engaging
-- Include 1-2 keywords naturally
+- Include 1-2 keywords naturally, aligning with 2026 Pinterest trends (e.g. Poetcore, Off-Duty Athlete, Vamp Romantic)
 - Mention quality/style benefit
 - Call-to-action: "Shop Now" or "Discover"
 - NO hashtags
@@ -146,7 +147,7 @@ Board: {board_name}
 Focus on:
 - Style/occasion hashtags (#ClassyWomensFashion, #EverydayStyle)
 - Demographic hashtags (#WomenOver30, #CurvyFashion if applicable)
-- Trend hashtags (#SpringStyle, #Summer2026)
+- 2026 Trend hashtags (#Poetcore, #OffDutyAthlete, #VampRomantic, #GimmeGummy, #Summer2026)
 - Search-friendly hashtags
 
 Reply ONLY with hashtags separated by spaces, no explanation."""
@@ -172,7 +173,7 @@ Title: {title}
 Type: {product_type}
 
 Focus on:
-- What women search for (style keywords: "casual", "dressy", "boho")
+- What women search for (style keywords: "casual", "dressy", "boho", "poetcore", "off-duty athlete", "vamp romantic")
 - Occasion keywords: party, work, casual, date night
 - Material/fit keywords if evident
 - Long-tail phrases (2-3 word combinations)

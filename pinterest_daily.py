@@ -118,6 +118,7 @@ def post_pin(
     client: PinterestClient,
     product_data: Dict[str, Any],
     board_id: str,
+    board_name: str,
     content: Dict[str, Any],
 ) -> bool:
     """Post pin to Pinterest with image overlay"""
@@ -137,6 +138,7 @@ def post_pin(
             cta="Shop Now",
             price=product_data.get("price"),
             output_path=str(overlay_file),
+            board_name=board_name,
         )
 
         if not overlay_image:
@@ -178,6 +180,7 @@ def pick_board(
     used_boards: set,
     formatted: Dict[str, Any],
     run_board_pool: List[str],
+    history: Dict[str, Any] = None,
 ) -> Optional[Dict]:
     """Pick board: category-specific first, then cycle through this run's board pool.
 
@@ -231,10 +234,28 @@ def pick_board(
 
     # Try category-specific boards first (non-generic products)
     if cat != "default":
+        category_boards = []
         for board_name in CATEGORY_TO_BOARDS.get(cat, []):
             b = find(board_name)
             if b and b["name"] not in used_boards:
-                return b
+                category_boards.append(b)
+
+        if category_boards:
+            # Sort boards by last used time (Least Recently Used first)
+            last_used = (history or {}).get("board_last_used", {})
+
+            def get_last_used_time(b_dict):
+                b_name = b_dict["name"]
+                ts = last_used.get(b_name)
+                if ts:
+                    try:
+                        return datetime.fromisoformat(ts)
+                    except Exception:
+                        pass
+                return datetime.min
+
+            category_boards.sort(key=get_last_used_time)
+            return category_boards[0]
 
     # Cycle through this run's board pool (cursor-based, covers all boards over time)
     for i in range(len(run_board_pool)):
@@ -414,7 +435,7 @@ def run_daily_posting(use_video: bool = False):
             product_index += 1
 
             formatted = format_product_for_pinterest(product, store_base_url)
-            board_info = pick_board(posted, boards, used_boards, formatted, run_board_pool)
+            board_info = pick_board(posted, boards, used_boards, formatted, run_board_pool, history)
             if not board_info:
                 logger.warning("No board available, skipping product")
                 continue
@@ -433,7 +454,7 @@ def run_daily_posting(use_video: bool = False):
                 posted += 1
                 continue
 
-            if not post_pin(pinterest, formatted, board_id, content):
+            if not post_pin(pinterest, formatted, board_id, board, content):
                 logger.warning(f"Post failed for '{formatted['title']}', trying next")
                 continue
 

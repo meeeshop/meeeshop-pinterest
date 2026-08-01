@@ -1,5 +1,6 @@
 """
 pinterest_blog_daily.py — Post Shopify blog articles as editorial pins to Pinterest.
+Updated with SEO title/description optimization & multi-board distribution.
 """
 
 import json
@@ -21,6 +22,8 @@ inject_to_env()
 from pinterest_client import PinterestClient
 from shopify_products import ShopifyClient
 from image_overlay import create_pin_image
+from blog_content_optimizer import generate_blog_pin_title, generate_blog_pin_description, select_blog_boards
+from keyword_engine import get_seo_content
 
 logging.basicConfig(
     level=logging.INFO,
@@ -29,7 +32,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 HISTORY_FILE = Path(__file__).parent / "blog_posting_history.json"
-MAX_BLOGS_PER_RUN = 1
+MAX_BLOGS_PER_RUN = 2  # Updated to 2 blog pins per daily run
 DRY_RUN = os.getenv("DRY_RUN", "false").lower() in ("1", "true", "yes")
 
 def load_history() -> Dict[str, Any]:
@@ -190,10 +193,15 @@ def run_blog_posting() -> None:
     for article in to_post:
         logger.info(f"\n--- Posting Article: '{article['title']}' ---")
         
-        # Build description
+        # Optimize title and description with AI Keyword Engine
+        pin_title = generate_blog_pin_title(article)
+        pin_desc = generate_blog_pin_description(article)
+        seo_info = get_seo_content("blog", [])
+        hashtags = " ".join(seo_info["demographic_tags"][:3] + seo_info["seasonal_hashtags"][:2])
+        full_desc = f"{pin_desc}\n\n{hashtags}"
+        
         blog_url = f"{store_base_url.rstrip('/')}/blogs/{article['blog_handle']}/{article['handle']}"
-        desc = f"Read the new article: {article['title']}. {article['excerpt'][:150]}... Read more on MeeeShop!"
-        alt_text = f"MeeeShop Blog post: {article['title']}"
+        alt_text = f"MeeeShop Fashion Blog Article: {article['title']}"
 
         # Clean HTML tags from excerpt if present
         clean_excerpt = article['excerpt'].replace("<p>", "").replace("</p>", "").strip()[:140]
@@ -216,43 +224,37 @@ def run_blog_posting() -> None:
                 Image.new("RGB", (800, 600), (220, 210, 205)).save(fallback_img)
             temp_src = fallback_img
 
-        # Create Editorial Blog Pin Image (Template J / index 9)
+        # Create Blog Pin Image using template
         final_image = create_pin_image(
             product_image_path=str(temp_src),
-            title=article["title"],
+            title=pin_title,
             category=article["blog_title"],
-            price=clean_excerpt,  # Pass clean excerpt into the price slot for template J to display it
-            cta="READ THE BLOG POST →",
+            price=clean_excerpt,
+            cta="Read The Blog",
             output_path=str(temp_final),
-            template_index=9  # Dedicated blog template J
+            template_index=9
         )
 
         if not final_image:
             logger.error(f"Failed to generate template image for article: {article['title']}")
             continue
 
-        board_name = "Style Ideas" # Standard board for blogs
-        board_id = None
-        
-        if not DRY_RUN:
-            for b in boards:
-                if b.get("name", "").lower() == board_name.lower():
-                    board_id = b.get("id")
-                    break
-            if not board_id and boards:
-                board_id = boards[0].get("id")
-                board_name = boards[0].get("name")
+        # Target boards selection (Multi-board targeting)
+        target_boards = select_blog_boards(article, boards if boards else [{"name": "Style Ideas", "id": "fallback"}])
+        target_board = target_boards[0] if target_boards else {"name": "Style Ideas", "id": None}
+        board_name = target_board.get("name", "Style Ideas")
+        board_id = target_board.get("id")
         
         logger.info(f"Target Board: {board_name} (id={board_id})")
 
         if DRY_RUN:
-            logger.info(f"[DRY RUN] Would post article pin: '{article['title']}' to board '{board_name}'")
+            logger.info(f"[DRY RUN] Would post blog pin: '{pin_title}' to board '{board_name}'")
             if temp_src != fallback_img:
                 temp_src.unlink(missing_ok=True)
             temp_final.unlink(missing_ok=True)
             continue
 
-        if not board_id:
+        if not board_id and not DRY_RUN:
             logger.error(f"No board ID found for posting. Skipping article.")
             if temp_src != fallback_img:
                 temp_src.unlink(missing_ok=True)
@@ -262,8 +264,8 @@ def run_blog_posting() -> None:
         # Pin creation
         success, pin_id = pinterest.create_pin(
             image_path=final_image,
-            title=article["title"],
-            description=desc,
+            title=pin_title,
+            description=full_desc,
             board_id=board_id,
             url=blog_url,
             alt_text=alt_text
@@ -279,6 +281,7 @@ def run_blog_posting() -> None:
             history["posts"].append({
                 "product_id": str(article["id"]),
                 "product_title": article["title"],
+                "pin_title": pin_title,
                 "pin_id": pin_id,
                 "board": board_name,
                 "url": blog_url,
@@ -289,6 +292,6 @@ def run_blog_posting() -> None:
             logger.error(f"✗ Failed to create blog article pin: {pin_id}")
 
 
-
 if __name__ == "__main__":
     run_blog_posting()
+
