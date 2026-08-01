@@ -529,7 +529,7 @@ def run_refresh_posting():
             raise RuntimeError("No boards found")
         logger.info(f"Fetched {len(boards)} boards")
 
-        all_products = shopify.get_products()
+        all_products = shopify.get_all_products(status="active")
         products_by_handle = {p.get("handle"): p for p in all_products if p.get("handle")}
         logger.info(f"Fetched and cached {len(all_products)} Shopify products")
 
@@ -571,11 +571,9 @@ def run_refresh_posting():
                     product_handle = parts[1].split("?")[0].strip("/")
                     product = products_by_handle.get(product_handle)
                     if not product:
-                        # Try fallback to live network call just in case it's newly added
-                        product = shopify.get_product_by_handle(product_handle)
-                        if not product:
-                            logger.warning(f"Product not found: {product_handle}")
-                            continue
+                        # Product is not active or deleted, so we skip it to save time
+                        # logger.warning(f"Product not found or inactive: {product_handle}")
+                        continue
                 except Exception as e:
                     logger.warning(f"Failed to extract product from {product_link}: {e}")
                     continue

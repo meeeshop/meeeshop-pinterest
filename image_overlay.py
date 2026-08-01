@@ -878,6 +878,41 @@ def _template_m(draw, canvas, photo, title, category, price):
     _draw_cta_bar(canvas, draw, PIN_H - CTA_H, CTA_H, (60, 75, 65), WHITE)
 
 
+def _template_n(draw, canvas, photo, title, category, price, cta):
+    p = _fit_image(photo, PIN_W, PIN_H)
+    canvas.paste(p, (0, 0))
+    
+    # Center semi-transparent overlay
+    overlay_h = int(PIN_H * 0.35)
+    overlay_y = (PIN_H - overlay_h) // 2
+    overlay = Image.new("RGBA", (PIN_W, PIN_H), (0, 0, 0, 0))
+    odraw = ImageDraw.Draw(overlay)
+    odraw.rectangle([0, overlay_y, PIN_W, overlay_y + overlay_h], fill=(255, 255, 255, 220))
+    canvas.paste(overlay, (0, 0), overlay)
+
+    center_y = overlay_y + 30
+    
+    # Category
+    cf = _get_font(24, bold=True)
+    cb = cf.getbbox(category.upper())
+    draw.text(((PIN_W - (cb[2]-cb[0])) // 2, center_y), category.upper(), fill=DARK_GREY, font=cf)
+    
+    # Title
+    tf = _get_font(42, bold=True)
+    lines = _wrap_text(title, tf, PIN_W - 80)
+    for i, line in enumerate(lines[:2]):
+        tb = tf.getbbox(line)
+        draw.text(((PIN_W - (tb[2]-tb[0])) // 2, center_y + 40 + i * 45), line, fill=BLACK, font=tf)
+        
+    # Price
+    if price:
+        pf = _get_font(36, bold=True)
+        ps = f"${price}"
+        pb = pf.getbbox(ps)
+        draw.text(((PIN_W - (pb[2]-pb[0])) // 2, center_y + 40 + len(lines[:2]) * 45 + 10), ps, fill=RED, font=pf)
+
+
+
 def _prepare_photo_for_style(
     photo: Image.Image,
     photo2: Optional[Image.Image],
