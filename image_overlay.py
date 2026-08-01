@@ -13,9 +13,13 @@ Templates modelled on Kohl's Pinterest pins:
 
 import hashlib
 import logging
+import os
 import tempfile
+import time
 from pathlib import Path
 from typing import Optional, Tuple, List
+
+
 
 from PIL import Image, ImageDraw, ImageFont, ImageEnhance
 
@@ -104,12 +108,22 @@ def _wrap_text(text: str, font, max_width: int) -> list:
 
 
 def _fit_image(img: Image.Image, w: int, h: int) -> Image.Image:
-    """Cover-fit: scale to fill box then center-crop."""
+    """
+    Cover-fit with top-weighted smart crop to preserve faces, necklines, and full outfit framing.
+    Avoids cutting off model heads or collar details on tall apparel.
+    """
     sw, sh = img.size
     scale = max(w / sw, h / sh)
     nw, nh = int(sw * scale), int(sh * scale)
     img = img.resize((nw, nh), Image.Resampling.LANCZOS)
-    x, y = (nw - w) // 2, (nh - h) // 2
+
+    # Top-weighted cropping for fashion: position crop slightly higher (20%) so model face/head is preserved
+    x = (nw - w) // 2
+    if nh > h:
+        y = int((nh - h) * 0.18)
+        y = max(0, min(y, nh - h))
+    else:
+        y = 0
     return img.crop((x, y, x + w, y + h))
 
 
@@ -152,9 +166,16 @@ def _draw_cta_bar(canvas: Image.Image, draw: ImageDraw.Draw,
 
 
 def _boost(img: Image.Image) -> Image.Image:
-    img = ImageEnhance.Contrast(img).enhance(1.08)
-    img = ImageEnhance.Color(img).enhance(1.06)
+    """
+    Hero Image Polish:
+    Enhances contrast (+10%), color vibrancy (+8%), and sharpness (+25%)
+    so fabric textures, lace/knit patterns, and garment details pop on mobile screens.
+    """
+    img = ImageEnhance.Contrast(img).enhance(1.10)
+    img = ImageEnhance.Color(img).enhance(1.08)
+    img = ImageEnhance.Sharpness(img).enhance(1.25)
     return img
+
 
 
 # ── Template A ───────────────────────────────────────────────────────────────
@@ -737,50 +758,74 @@ def _template_k(draw, canvas, photo, photo2, title, category, price):
 # 3-Image lifestyle grid: 1 large main image top, 2 smaller images bottom.
 # Dark chic background for high contrast.
 def _template_l(draw, canvas, photo, photo2, photo3, title, category, price):
+    """
+    3-Image Portrait Split Collage: Left 58% Full Hero Portrait + Right 42% Two Stacked Focus Detail Shots.
+    """
     bg_color = (25, 25, 28)
     draw.rectangle([(0, 0), (PIN_W, PIN_H)], fill=bg_color)
 
-    HEADER_H = int(PIN_H * 0.10)
+    HEADER_H = int(PIN_H * 0.08)
     CTA_H = int(PIN_H * 0.10)
-    FOOTER_H = int(PIN_H * 0.20)
+    FOOTER_H = int(PIN_H * 0.18)
     PHOTO_H = PIN_H - HEADER_H - FOOTER_H - CTA_H
-    PAD = int(PIN_W * 0.04)
+    PAD = int(PIN_W * 0.03)
 
     # Category top left
-    cf = _get_font(int(HEADER_H * 0.35), bold=True)
-    draw.text((PAD, int(HEADER_H * 0.35)), category.upper(), fill=CORAL, font=cf)
+    cf = _get_font(int(HEADER_H * 0.38), bold=True)
+    draw.text((PAD * 2, int(HEADER_H * 0.30)), category.upper(), fill=CORAL, font=cf)
 
-    # Main Image Top (PHOTO_H * 0.55)
-    top_h = int(PHOTO_H * 0.55)
-    p_top = _boost(_fit_image(photo, PIN_W - PAD * 2, top_h))
-    canvas.paste(p_top, (PAD, HEADER_H))
+    # Photo Area
+    photo_w = PIN_W - PAD * 2
+    photo_h = PHOTO_H
 
-    # Bottom 2 Images (PHOTO_H * 0.40)
-    bottom_h = PHOTO_H - top_h - PAD
-    sub_w = (PIN_W - PAD * 3) // 2
+    # Left 58% Hero Portrait
+    left_w = int(photo_w * 0.58)
+    right_w = photo_w - left_w - PAD
+    right_h = (photo_h - PAD) // 2
 
-    img2 = photo2 if photo2 else photo
-    img3 = photo3 if photo3 else (photo2 if photo2 else photo)
+    p_hero = _boost(_fit_image(photo, left_w, photo_h))
+    canvas.paste(p_hero, (PAD, HEADER_H))
 
-    p_bottom_left = _boost(_fit_image(img2, sub_w, bottom_h))
-    p_bottom_right = _boost(_fit_image(img3, sub_w, bottom_h))
+    # Focus Shot 1 (Top Right)
+    if photo2 is not None:
+        sub1 = photo2
+    else:
+        pw, ph = photo.size
+        cw, ch = int(pw * 0.65), int(ph * 0.45)
+        cx, cy = (pw - cw) // 2, int(ph * 0.08)
+        sub1 = photo.crop((cx, cy, cx + cw, cy + ch))
 
-    canvas.paste(p_bottom_left, (PAD, HEADER_H + top_h + PAD))
-    canvas.paste(p_bottom_right, (PAD * 2 + sub_w, HEADER_H + top_h + PAD))
+    p_focus1 = _boost(_fit_image(sub1, right_w, right_h))
+    canvas.paste(p_focus1, (PAD + left_w + PAD, HEADER_H))
+
+    # Focus Shot 2 (Bottom Right)
+    if photo3 is not None:
+        sub2 = photo3
+    elif photo2 is not None:
+        sub2 = photo2
+    else:
+        pw, ph = photo.size
+        cw, ch = int(pw * 0.65), int(ph * 0.45)
+        cx, cy = (pw - cw) // 2, int(ph * 0.48)
+        sub2 = photo.crop((cx, cy, cx + cw, cy + ch))
+
+    p_focus2 = _boost(_fit_image(sub2, right_w, photo_h - right_h - PAD))
+    canvas.paste(p_focus2, (PAD + left_w + PAD, HEADER_H + right_h + PAD))
 
     # Footer Info
     footer_y = HEADER_H + PHOTO_H
-    tf = _get_font(int(FOOTER_H * 0.18), bold=True)
-    lines = _wrap_text(title, tf, PIN_W - PAD * 3 - (140 if price else 0))
+    tf = _get_font(int(FOOTER_H * 0.22), bold=True)
+    lines = _wrap_text(title, tf, PIN_W - PAD * 4 - (140 if price else 0))
     for i, line in enumerate(lines[:2]):
-        draw.text((PAD, footer_y + int(FOOTER_H * 0.15) + i * int(FOOTER_H * 0.28)), line, fill=WHITE, font=tf)
+        draw.text((PAD * 2, footer_y + int(FOOTER_H * 0.15) + i * int(FOOTER_H * 0.32)), line, fill=WHITE, font=tf)
 
     if price:
-        pf = _get_font(int(FOOTER_H * 0.24), bold=True)
-        draw.text((PIN_W - PAD - 120, footer_y + int(FOOTER_H * 0.15)), f"${price}", fill=CORAL, font=pf)
+        pf = _get_font(int(FOOTER_H * 0.26), bold=True)
+        draw.text((PIN_W - PAD * 2 - 120, footer_y + int(FOOTER_H * 0.18)), f"${price}", fill=CORAL, font=pf)
 
     # Coral CTA Bar
     _draw_cta_bar(canvas, draw, footer_y + FOOTER_H, CTA_H, CORAL, WHITE)
+
 
 
 # ── Template M ───────────────────────────────────────────────────────────────
@@ -829,55 +874,114 @@ def _template_m(draw, canvas, photo, title, category, price):
         px = (PIN_W - (pb[2]-pb[0])) // 2
         py = footer_y + len(lines[:2]) * int(FOOTER_H * 0.20) + 10
         draw.text((px, py), ps, fill=RED, font=pf)
-
     # Minimalist dark olive/sage CTA footer
     _draw_cta_bar(canvas, draw, PIN_H - CTA_H, CTA_H, (60, 75, 65), WHITE)
 
 
-# ── Template N ───────────────────────────────────────────────────────────────
-# Direct image with transparent overlay text in the center
 def _template_n(draw, canvas, photo, title, category, price, cta):
-    # Full bleed photo
-    p = _boost(_fit_image(photo, PIN_W, PIN_H))
+    p = _fit_image(photo, PIN_W, PIN_H)
     canvas.paste(p, (0, 0))
-
-    # Transparent center overlay for text
-    overlay = Image.new("RGBA", (PIN_W, PIN_H), (0, 0, 0, 0))
-    od = ImageDraw.Draw(overlay)
     
-    # Box dimensions
-    box_w = int(PIN_W * 0.85)
-    box_h = int(PIN_H * 0.35)
-    box_x = (PIN_W - box_w) // 2
-    box_y = (PIN_H - box_h) // 2
+    # Center semi-transparent overlay
+    overlay_h = int(PIN_H * 0.35)
+    overlay_y = (PIN_H - overlay_h) // 2
+    overlay = Image.new("RGBA", (PIN_W, PIN_H), (0, 0, 0, 0))
+    odraw = ImageDraw.Draw(overlay)
+    odraw.rectangle([0, overlay_y, PIN_W, overlay_y + overlay_h], fill=(255, 255, 255, 220))
+    canvas.paste(overlay, (0, 0), overlay)
 
-    # Draw semi-transparent black rectangle (reduced opacity for more visibility of background)
-    od.rounded_rectangle([box_x, box_y, box_x + box_w, box_y + box_h], radius=20, fill=(0, 0, 0, 110))
-    canvas.paste(Image.alpha_composite(canvas.convert("RGBA"), overlay).convert("RGB"), (0, 0))
-    draw = ImageDraw.Draw(canvas)
-
-    # Text inside
-    margin = int(box_w * 0.05)
-    cf = _get_font(int(box_h * 0.09), bold=True)
+    center_y = overlay_y + 30
+    
+    # Category
+    cf = _get_font(24, bold=True)
     cb = cf.getbbox(category.upper())
-    draw.text(((PIN_W - (cb[2]-cb[0])) // 2, box_y + int(box_h * 0.12)), category.upper(), fill=WHITE, font=cf)
-
-    tf = _get_font(int(box_h * 0.15), bold=True)
-    lines = _wrap_text(title, tf, box_w - 2*margin)
+    draw.text(((PIN_W - (cb[2]-cb[0])) // 2, center_y), category.upper(), fill=DARK_GREY, font=cf)
+    
+    # Title
+    tf = _get_font(42, bold=True)
+    lines = _wrap_text(title, tf, PIN_W - 80)
     for i, line in enumerate(lines[:2]):
-        lb = tf.getbbox(line)
-        draw.text(((PIN_W - (lb[2]-lb[0])) // 2, box_y + int(box_h * 0.35) + i * int(box_h * 0.20)), line, fill=WHITE, font=tf)
-
-    if cta:
-        ctf = _get_font(int(box_h * 0.10), bold=True)
-        ctb = ctf.getbbox(cta)
-        draw.text(((PIN_W - (ctb[2]-ctb[0])) // 2, box_y + int(box_h * 0.65)), cta, fill=WHITE, font=ctf)
-
+        tb = tf.getbbox(line)
+        draw.text(((PIN_W - (tb[2]-tb[0])) // 2, center_y + 40 + i * 45), line, fill=BLACK, font=tf)
+        
+    # Price
     if price:
-        pf = _get_font(int(box_h * 0.14), bold=True)
+        pf = _get_font(36, bold=True)
         ps = f"${price}"
         pb = pf.getbbox(ps)
-        draw.text(((PIN_W - (pb[2]-pb[0])) // 2, box_y + int(box_h * 0.8)), ps, fill=CORAL, font=pf)
+        draw.text(((PIN_W - (pb[2]-pb[0])) // 2, center_y + 40 + len(lines[:2]) * 45 + 10), ps, fill=RED, font=pf)
+
+
+
+def _prepare_photo_for_style(
+    photo: Image.Image,
+    photo2: Optional[Image.Image],
+    photo3: Optional[Image.Image],
+    target_w: int,
+    target_h: int,
+    style: str,
+) -> Image.Image:
+    """
+    Prepare product photo into target_w x target_h based on image_style ('hero', 'collage', 'card').
+    Renders all 3 image styles dynamically for ANY template!
+    """
+    if style == "collage":
+        # Build 3-Image Portrait Split Collage: Left 58% Full Hero Portrait + Right 42% Two Stacked Focus Detail Shots
+        composite = Image.new("RGB", (target_w, target_h), (255, 255, 255))
+        gap = 4
+        left_w = int(target_w * 0.58)
+        right_w = target_w - left_w - gap
+        right_h = (target_h - gap) // 2
+
+        # Left 58% Hero Portrait
+        p_hero = _fit_image(photo, left_w, target_h)
+        composite.paste(p_hero, (0, 0))
+
+        # Focus Shot 1 (Top Right)
+        if photo2 is not None:
+            sub1 = photo2
+        else:
+            pw, ph = photo.size
+            cw, ch = int(pw * 0.65), int(ph * 0.45)
+            cx, cy = (pw - cw) // 2, int(ph * 0.08)
+            sub1 = photo.crop((cx, cy, cx + cw, cy + ch))
+
+        p_focus1 = _fit_image(sub1, right_w, right_h)
+        composite.paste(p_focus1, (left_w + gap, 0))
+
+        # Focus Shot 2 (Bottom Right)
+        if photo3 is not None:
+            sub2 = photo3
+        elif photo2 is not None:
+            sub2 = photo2
+        else:
+            pw, ph = photo.size
+            cw, ch = int(pw * 0.65), int(ph * 0.45)
+            cx, cy = (pw - cw) // 2, int(ph * 0.48)
+            sub2 = photo.crop((cx, cy, cx + cw, cy + ch))
+
+        p_focus2 = _fit_image(sub2, right_w, target_h - right_h - gap)
+        composite.paste(p_focus2, (left_w + gap, right_h + gap))
+
+        return _boost(composite)
+
+    elif style == "card":
+        # Build Semi-Transparent Floating Card Overlay
+        p = _fit_image(photo, target_w, target_h)
+        card_overlay = Image.new("RGBA", (target_w, target_h), (0, 0, 0, 0))
+        cdraw = ImageDraw.Draw(card_overlay)
+
+        margin_x = int(target_w * 0.06)
+        card_h = int(target_h * 0.38)
+        card_y = target_h - card_h - int(target_h * 0.05)
+
+        _draw_rounded_rect(cdraw, (margin_x, card_y, target_w - margin_x, card_y + card_h), 16, (15, 15, 20, 210))
+        p_rgba = p.convert("RGBA")
+        composite = Image.alpha_composite(p_rgba, card_overlay).convert("RGB")
+        return _boost(composite)
+
+    else:  # 'hero' style
+        return _boost(_fit_image(photo, target_w, target_h))
 
 
 # ── Main entry ───────────────────────────────────────────────────────────────
@@ -892,10 +996,11 @@ def create_pin_image(
     template_index: Optional[int] = None,
     additional_image_paths: Optional[List[str]] = None,
     board_name: str = "",
+    image_style: str = "hero",
 ) -> Optional[str]:
     """
-    Create a Pinterest pin using one of 12 rotating Kohl's-style/aesthetic templates
-    or template 9 for Blog Editorial posts. Matches aesthetic templates to boards.
+    Create a Pinterest pin using dynamic template matching and image_style framing
+    ('hero', 'collage', 'card').
     """
     try:
         ecommerce_templates = [0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12]
@@ -939,7 +1044,22 @@ def create_pin_image(
                 except Exception as ex:
                     logger.warning(f"Failed to load photo3: {ex}")
 
-        logger.info(f"Using pin template {template_index} for: {title[:40]}")
+        # If photo2 is missing (single-image product), auto-generate a detail crop from photo so collages work on 100% of products!
+        if photo2 is None and photo is not None:
+            try:
+                pw, ph = photo.size
+                cw, ch = int(pw * 0.70), int(ph * 0.70)
+                cx, cy = (pw - cw) // 2, int(ph * 0.12)
+                photo2 = photo.crop((cx, cy, cx + cw, cy + ch))
+            except Exception as ex:
+                logger.warning(f"Failed to auto-crop photo2: {ex}")
+
+        # Apply image_style framing ('collage' or 'card' composite) if specified
+        if image_style in ("collage", "card"):
+            photo = _prepare_photo_for_style(photo, photo2, photo3, PIN_W, PIN_H, image_style)
+
+        logger.info(f"Using pin template {template_index} (Style: {image_style}) for: {title[:40]}")
+
 
         if template_index == 0:
             _template_a(draw, canvas, photo, title, category, price)
@@ -987,6 +1107,53 @@ def create_pin_image(
 
 # ── Public aliases ────────────────────────────────────────────────────────────
 
+ALL_TEMPLATES = [0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13]
+ALL_STYLES = ["hero", "carousel", "collage", "card"]
+
+
+def get_next_style_and_template(
+    last_style: Optional[str] = None,
+    last_template: Optional[int] = None,
+    board_name: str = "",
+    title: str = "",
+) -> Tuple[str, int]:
+    """
+    Strictly alternate image style ('hero', 'carousel', 'collage', 'card') and template index (0..13).
+    ALL 14 templates are available to ALL 4 image styles!
+    Supports FORCE_IMAGE_STYLE env var for manual testing ('hero', 'carousel', 'collage', 'card', 'auto').
+    """
+    b_lower = (board_name or "").lower()
+    forced_style = os.getenv("FORCE_IMAGE_STYLE", "auto").strip().lower()
+
+    if "blog" in b_lower:
+        return ("card", 9)
+
+    # 1. Select style (forced or alternating)
+    if forced_style and forced_style in ALL_STYLES:
+        next_style = forced_style
+    elif last_style and last_style in ALL_STYLES:
+        last_idx = ALL_STYLES.index(last_style)
+        next_style = ALL_STYLES[(last_idx + 1) % len(ALL_STYLES)]
+    else:
+        next_style = ALL_STYLES[0]
+
+    # 2. Select next template from ALL_TEMPLATES distinct from last_template
+    if last_template is not None and len(ALL_TEMPLATES) > 1:
+        available_templates = [t for t in ALL_TEMPLATES if t != last_template]
+    else:
+        available_templates = ALL_TEMPLATES
+
+    if not available_templates:
+        available_templates = ALL_TEMPLATES
+
+    title_hash = int(hashlib.md5(title.encode()).hexdigest(), 16)
+    selected_template = available_templates[title_hash % len(available_templates)]
+
+    return (next_style, selected_template)
+
+
+
+
 def add_text_overlay(
     image_path: str,
     title: str,
@@ -996,8 +1163,11 @@ def add_text_overlay(
     template_index: Optional[int] = None,
     additional_image_paths: Optional[List[str]] = None,
     board_name: str = "",
+    last_style: Optional[str] = None,
+    last_template: Optional[int] = None,
+    image_style: Optional[str] = None,
 ) -> Optional[str]:
-    """Called by pinterest_daily.py — derives category label then delegates."""
+    """Called by pinterest_daily_v2.py — derives category label and handles dynamic style/template rotation."""
     import re
     tl = title.lower()
 
@@ -1032,8 +1202,17 @@ def add_text_overlay(
     else:
         category = "New Arrival"
 
-    # ALWAYS enforce standard profile overlay (transparent centered)
-    template_index = 13
+    style = image_style
+    # Dynamic template & style rotation if template_index is not explicitly specified
+    if template_index is None or style is None:
+        next_style, template_index = get_next_style_and_template(
+            last_style=last_style,
+            last_template=last_template,
+            board_name=board_name,
+            title=title,
+        )
+        if style is None:
+            style = next_style
 
     return create_pin_image(
         product_image_path=image_path,
@@ -1045,7 +1224,123 @@ def add_text_overlay(
         template_index=template_index,
         additional_image_paths=additional_image_paths,
         board_name=board_name,
+        image_style=style or "hero",
     )
+
+
+def generate_carousel_card_set(
+    product_image_path: str,
+    title: str,
+    category: str = "New Arrival",
+    price: Optional[str] = None,
+    cta: str = "Shop Now at us.MeeeShop.com",
+    output_dir: str = "/tmp",
+    template_index: int = 0,
+    additional_image_paths: Optional[List[str]] = None,
+    board_name: str = "",
+) -> List[str]:
+    """
+    Generate 3 to 4 distinct styled image card files for a Carousel Pin.
+    Ensures 100% of products have 3-4 cards even if Shopify only provided 1 photo!
+    """
+    cards = []
+
+    # Card 1: Main Hero Front View with price badge
+    c1_path = str(Path(output_dir) / f"carousel_c1_{int(time.time()*1000)}.jpg")
+    img1 = create_pin_image(
+        product_image_path=product_image_path,
+        title=title,
+        category=category,
+        price=price,
+        cta=cta,
+        output_path=c1_path,
+        template_index=template_index,
+        board_name=board_name,
+        image_style="hero",
+    )
+    if img1:
+        cards.append(img1)
+
+    photo_main = Image.open(product_image_path).convert("RGB")
+    pw, ph = photo_main.size
+
+    # Card 2: Extra photo 1 or Upper Bodice / Neckline Focus Shot
+    c2_path = str(Path(output_dir) / f"carousel_c2_{int(time.time()*1000)}.jpg")
+    if additional_image_paths and len(additional_image_paths) > 0 and Path(additional_image_paths[0]).exists():
+        sub2_path = additional_image_paths[0]
+    else:
+        cw, ch = int(pw * 0.70), int(ph * 0.50)
+        cx, cy = (pw - cw) // 2, int(ph * 0.08)
+        sub2_img = photo_main.crop((cx, cy, cx + cw, cy + ch))
+        sub2_path = str(Path(output_dir) / f"carousel_sub2_{int(time.time()*1000)}.jpg")
+        sub2_img.save(sub2_path)
+
+    img2 = create_pin_image(
+        product_image_path=sub2_path,
+        title=f"{title} — Details & Fit",
+        category=category,
+        price=price,
+        cta=cta,
+        output_path=c2_path,
+        template_index=(template_index + 1) % 13,
+        board_name=board_name,
+        image_style="card",
+    )
+    if img2:
+        cards.append(img2)
+
+    # Card 3: Extra photo 2 or Lower Hemline / Pattern Focus Shot
+    c3_path = str(Path(output_dir) / f"carousel_c3_{int(time.time()*1000)}.jpg")
+    if additional_image_paths and len(additional_image_paths) > 1 and Path(additional_image_paths[1]).exists():
+        sub3_path = additional_image_paths[1]
+    else:
+        cw, ch = int(pw * 0.70), int(ph * 0.50)
+        cx, cy = (pw - cw) // 2, int(ph * 0.45)
+        sub3_img = photo_main.crop((cx, cy, cx + cw, cy + ch))
+        sub3_path = str(Path(output_dir) / f"carousel_sub3_{int(time.time()*1000)}.jpg")
+        sub3_img.save(sub3_path)
+
+    img3 = create_pin_image(
+        product_image_path=sub3_path,
+        title=f"{title} — Fabric & Quality",
+        category=category,
+        price=price,
+        cta=cta,
+        output_path=c3_path,
+        template_index=(template_index + 2) % 13,
+        board_name=board_name,
+        image_style="hero",
+    )
+    if img3:
+        cards.append(img3)
+
+    # Card 4: Extra photo 3 or Polaroid Style Outfit Card
+    c4_path = str(Path(output_dir) / f"carousel_c4_{int(time.time()*1000)}.jpg")
+    if additional_image_paths and len(additional_image_paths) > 2 and Path(additional_image_paths[2]).exists():
+        sub4_path = additional_image_paths[2]
+    else:
+        sub4_path = product_image_path
+
+    img4 = create_pin_image(
+        product_image_path=sub4_path,
+        title=f"{title} — Shop MeeeShop USA",
+        category=category,
+        price=price,
+        cta="Shop Now at us.MeeeShop.com",
+        output_path=c4_path,
+        template_index=12,
+        board_name=board_name,
+        image_style="hero",
+    )
+    if img4:
+        cards.append(img4)
+
+    return cards
+
+
+
+
+
 
 
 def optimize_image_for_pinterest(image_path: str, output_path: Optional[str] = None) -> Optional[str]:

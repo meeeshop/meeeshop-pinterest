@@ -506,20 +506,29 @@ def build_video(product: Dict, fmt: Dict, bg_colors: List[tuple], store_base_url
 # Board selection
 # ---------------------------------------------------------------------------
 
-def _pick_board(boards: List[Dict], formatted_product: Dict) -> Dict:
-    ideal      = select_board_for_product(formatted_product)
-    board_map  = {b["name"].lower(): b for b in boards}
+def _pick_board(boards: List[Dict], formatted_product: Dict, history: Dict = None) -> Dict:
+    from board_mapping import select_best_lru_board
+
+    board_map = {b["name"].lower(): b for b in boards}
+    title = formatted_product.get("title", "")
+    ptype = formatted_product.get("product_type", "")
+    last_used = (history or {}).get("board_last_used", {})
+
+    best_name = select_best_lru_board(title, ptype, last_used)
+
+    if best_name.lower() in board_map:
+        return board_map[best_name.lower()]
 
     for b in boards:
-        if b["name"].lower() == ideal.lower():
+        if best_name.lower() in b["name"].lower() or b["name"].lower() in best_name.lower():
             return b
-    for b in boards:
-        if ideal.lower() in b["name"].lower() or b["name"].lower() in ideal.lower():
-            return b
+
     for pref in VIDEO_PREFERRED_BOARDS:
         if pref.lower() in board_map:
             return board_map[pref.lower()]
+
     return random.choice(boards)
+
 
 
 # ---------------------------------------------------------------------------
@@ -676,14 +685,18 @@ def run_video_posting() -> None:
 
     # Pinterest auth
     pinterest = PinterestClient()
-    if not pinterest.login():
-        raise RuntimeError("Pinterest authentication failed")
-    logger.info("✓ Pinterest authentication OK")
+    boards = []
+    if not DRY_RUN:
+        if not pinterest.login():
+            raise RuntimeError("Pinterest authentication failed")
+        logger.info("✓ Pinterest authentication OK")
+        boards = pinterest.fetch_boards()
 
-    boards = pinterest.fetch_boards()
     if not boards:
-        raise RuntimeError("No Pinterest boards returned after login")
+        from board_mapping import MEEESHOP_BOARDS
+        boards = [{"name": b, "id": f"mock_{i}"} for i, b in enumerate(MEEESHOP_BOARDS)]
     logger.info(f"✓ Loaded {len(boards)} Pinterest boards")
+
 
     # Shopify products
     shopify  = ShopifyClient(shopify_url, shopify_token)
@@ -713,10 +726,11 @@ def run_video_posting() -> None:
         product_url = formatted["url"]
         logger.info(f"  Destination : {product_url}")
 
-        # Board selection — rotate per pin so they land on different boards
+        # Board selection — rotate per pin using LRU so they land on different boards
         rotated = boards[idx:] + boards[:idx] if idx > 0 else boards
-        board   = _pick_board(rotated, formatted)
+        board   = _pick_board(rotated, formatted, history)
         logger.info(f"  Board       : '{board['name']}' (id={board['id']})")
+
 
         # Content
         content = _build_pin_content(product, board["name"])

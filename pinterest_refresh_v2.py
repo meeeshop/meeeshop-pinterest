@@ -28,8 +28,9 @@ from pinterest_client import PinterestClient
 from shopify_products import ShopifyClient, format_product_for_pinterest
 from content_generator_v2 import generate_content_package   # ← V2 content
 from video_picker import EnvLoader
-from image_overlay import add_text_overlay, PIN_W, PIN_H
+from image_overlay import create_pin_image, PIN_W, PIN_H, add_text_overlay
 from board_mapping import MEEESHOP_BOARDS, CATEGORY_TO_BOARDS
+from daily_pin_tracker import DailyPinTracker
 
 logger = logging.getLogger(__name__)
 
@@ -206,6 +207,7 @@ def make_refresh_pin_image(
     price: Optional[str],
     product_id: str,
     window: str,
+    board_name: str = "",
 ) -> Optional[str]:
     image_url = pick_refresh_image_url(product, window)
     if not image_url:
@@ -216,20 +218,36 @@ def make_refresh_pin_image(
     if not download_image(image_url, tmp_src):
         return None
 
-    base_idx = int(hashlib.md5(str(product_id).encode()).hexdigest(), 16) % 5
-    window_offset = {"2day": 1, "4-7day": 2}.get(window, 0)
-    new_idx = (base_idx + window_offset) % 5
+    # Pull additional product images for collage / card styles
+    all_images = product.get("images", [])
+    additional_paths: list = []
+    for img in all_images[1:4]:  # up to 3 extras
+        extra_url = img.get("src", "")
+        if not extra_url:
+            continue
+        extra_path = Path("/tmp") / f"refresh_extra_{product_id}_{len(additional_paths)}.jpg"
+        if download_image(extra_url, extra_path):
+            additional_paths.append(str(extra_path))
 
     out_path = Path("/tmp") / f"refresh_overlay_{product_id}_{window}.jpg"
+
+    # Use style-rotating add_text_overlay so refresh pins cycle through
+    # hero / card / collage / carousel — it natively handles rotation and forced styles.
+    force_style = os.getenv("FORCE_IMAGE_STYLE", "auto") or "auto"
     result = add_text_overlay(
-        str(tmp_src),
+        image_path=str(tmp_src),
         title=title,
         price=price,
         cta="Shop Now",
         output_path=str(out_path),
+        additional_image_paths=additional_paths,
+        image_style=None if force_style == "auto" else force_style,
+        board_name=board_name,
     )
 
     tmp_src.unlink(missing_ok=True)
+    for p in additional_paths:
+        Path(p).unlink(missing_ok=True)
     return result if result else None
 
 
@@ -438,6 +456,13 @@ def run_refresh_posting():
         logger.info("[DRY RUN MODE ENABLED] No boards will be created, no pins will be posted, and no history files will be modified.")
         logger.info("=" * 60)
 
+    # ── Daily pin cap guard ─────────────────────────────────────────────────────
+    tracker = DailyPinTracker()
+    logger.info(f"[DailyPinTracker] {tracker.summary()}")
+    if not dry_run and not tracker.can_post(n=1):
+        logger.info("[DailyPinTracker] Daily cap reached. Skipping refresh run.")
+        return
+
     shopify_url   = get_secret("SHOPIFY_STORE_URL")
     shopify_token = get_secret("SHOPIFY_ACCESS_TOKEN")
     store_base_url = get_secret("STORE_BASE_URL")
@@ -504,7 +529,7 @@ def run_refresh_posting():
             raise RuntimeError("No boards found")
         logger.info(f"Fetched {len(boards)} boards")
 
-        all_products = shopify.get_products()
+        all_products = shopify.get_all_products(status="active")
         products_by_handle = {p.get("handle"): p for p in all_products if p.get("handle")}
         logger.info(f"Fetched and cached {len(all_products)} Shopify products")
 
@@ -546,11 +571,9 @@ def run_refresh_posting():
                     product_handle = parts[1].split("?")[0].strip("/")
                     product = products_by_handle.get(product_handle)
                     if not product:
-                        # Try fallback to live network call just in case it's newly added
-                        product = shopify.get_product_by_handle(product_handle)
-                        if not product:
-                            logger.warning(f"Product not found: {product_handle}")
-                            continue
+                        # Product is not active or deleted, so we skip it to save time
+                        # logger.warning(f"Product not found or inactive: {product_handle}")
+                        continue
                 except Exception as e:
                     logger.warning(f"Failed to extract product from {product_link}: {e}")
                     continue
@@ -630,7 +653,7 @@ def run_refresh_posting():
                     continue
 
                 overlay_path = make_refresh_pin_image(
-                    product, formatted["title"], formatted.get("price"), product_id, window
+                    product, formatted["title"], formatted.get("price"), product_id, window, board_name=new_board
                 )
                 if not overlay_path:
                     logger.warning(f"Image generation failed for {product_id}, skipping")
@@ -653,6 +676,9 @@ def run_refresh_posting():
                     logger.warning(f"Refresh pin post failed for {product_id}")
                     continue
 
+                if not dry_run:
+                    tracker.record(n=1, source="refresh_v2")
+
                 refresh_history["refreshes"].append({
                     "product_id": product_id,
                     "title": formatted["title"],
@@ -670,13 +696,13 @@ def run_refresh_posting():
                 total_refreshed += 1
 
                 if window_refreshed < len(window_pins):
-                    delay = random.randint(15, 25)
+                    delay = random.randint(5, 10)
                     logger.info(f"Waiting {delay}s...")
                     time.sleep(delay)
 
             logger.info(f"[V2] ✓ {window} window complete: {window_refreshed} pins posted")
 
-        logger.info(f"\n[V2] ✓ Refresh run complete: {total_refreshed} total pins posted")
+        logger.info(f"\n[V2] ✓ Refresh run complete: {total_refreshed} total pins posted. {tracker.summary()}")
 
     except Exception as e:
         logger.error(f"Refresh error: {e}", exc_info=True)

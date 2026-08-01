@@ -16,7 +16,8 @@ import random
 import time
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any, Optional, Tuple
+
 import requests
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -28,6 +29,7 @@ from shopify_products import ShopifyClient, format_product_for_pinterest
 from content_generator_v2 import generate_content_package   # ← V2 content
 from video_picker import EnvLoader
 from image_overlay import add_text_overlay
+from daily_pin_tracker import DailyPinTracker
 
 logger = logging.getLogger(__name__)
 
@@ -91,14 +93,27 @@ def post_pin(
     board_id: str,
     board_name: str,
     content: Dict[str, Any],
-) -> bool:
+    last_style: Optional[str] = None,
+    last_template: Optional[int] = None,
+) -> Tuple[bool, Optional[str], Optional[int]]:
+    from image_overlay import get_next_style_and_template
+
     image_file = Path("/tmp") / f"pin_{product_data['product_id']}.jpg"
     if not download_image(product_data["image_url"], image_file):
         logger.error(f"Failed to download image for pin: {content['pin_title']}")
-        return False
+        return False, None, None
 
     additional_image_files = []
     overlay_image = None
+
+    # Compute next style & template for strict alternating rotation
+    style_used, template_used = get_next_style_and_template(
+        last_style=last_style,
+        last_template=last_template,
+        board_name=board_name,
+        title=content["pin_title"],
+    )
+
     try:
         # Download up to 3 additional images for collages
         all_image_urls = product_data.get("all_image_urls", [])
@@ -115,42 +130,82 @@ def post_pin(
             cta="Shop Now",
             price=product_data.get("price"),
             output_path=str(overlay_file),
+            template_index=template_used,
             additional_image_paths=[str(p) for p in additional_image_files],
             board_name=board_name,
+            image_style=style_used,
         )
+
 
         if not overlay_image:
             logger.warning("Image overlay failed, posting without overlay")
             overlay_image = str(image_file)
 
-        logger.info(f"Creating pin: {content['pin_title']}")
+        logger.info(f"Creating pin (Style: {style_used}, Template: {template_used}): {content['pin_title']}")
         time.sleep(2)
 
-        success, pin_id = client.create_pin(
-            image_path=overlay_image,
-            title=content["pin_title"],
-            description=content["pin_description"],
-            board_id=board_id,
-            url=product_data["url"],
-            alt_text=content.get("pin_alt_text") or product_data.get("image_alt", ""),
-        )
+        # Route carousel style to video slideshow pin (FFmpeg stitches 4 styled cards into MP4)
+        if style_used == "carousel":
+            from image_overlay import generate_carousel_card_set
+            carousel_cards = generate_carousel_card_set(
+                product_image_path=str(image_file),
+                title=content["pin_title"],
+                category=board_name,
+                price=product_data.get("price"),
+                cta="Shop Now",
+                output_dir="/tmp",
+                template_index=template_used,
+                additional_image_paths=[str(p) for p in additional_image_files],
+                board_name=board_name,
+            )
+
+            if len(carousel_cards) > 1:
+                success, pin_id = client.create_video_slideshow_pin(
+                    image_paths=carousel_cards,
+                    title=content["pin_title"],
+                    description=content["pin_description"],
+                    board_id=board_id,
+                    url=product_data["url"],
+                    alt_text=content.get("pin_alt_text") or product_data.get("image_alt", ""),
+                )
+            else:
+                success, pin_id = client.create_pin(
+                    image_path=overlay_image,
+                    title=content["pin_title"],
+                    description=content["pin_description"],
+                    board_id=board_id,
+                    url=product_data["url"],
+                    alt_text=content.get("pin_alt_text") or product_data.get("image_alt", ""),
+                )
+        else:
+            success, pin_id = client.create_pin(
+                image_path=overlay_image,
+                title=content["pin_title"],
+                description=content["pin_description"],
+                board_id=board_id,
+                url=product_data["url"],
+                alt_text=content.get("pin_alt_text") or product_data.get("image_alt", ""),
+            )
+
 
         if success:
-            logger.info(f"✓ Posted: {content['pin_title']} (ID: {pin_id})")
-            return True
+            logger.info(f"✓ Posted ({style_used}): {content['pin_title']} (ID: {pin_id})")
+            return True, style_used, template_used
         else:
-            logger.error(f"✗ Failed: {content['pin_title']} — {pin_id}")
-            return False
+            logger.error(f"✗ Failed ({style_used}): {content['pin_title']} — {pin_id}")
+            return False, None, None
+
 
     except Exception as e:
         logger.error(f"Exception creating pin: {e}", exc_info=True)
-        return False
+        return False, None, None
     finally:
         image_file.unlink(missing_ok=True)
         if overlay_image and Path(overlay_image).exists() and overlay_image != str(image_file):
             Path(overlay_image).unlink(missing_ok=True)
         for f in additional_image_files:
             f.unlink(missing_ok=True)
+
 
 
 def pick_board(
@@ -161,83 +216,22 @@ def pick_board(
     run_board_pool: List[str],
     history: Dict[str, Any] = None,
 ) -> Optional[Dict]:
-    from board_mapping import CATEGORY_TO_BOARDS
+    from board_mapping import select_best_lru_board
 
-    boards_by_name = {b["name"].lower(): b for b in boards}
+    title = formatted.get("title", "")
+    ptype = formatted.get("product_type", "")
+    last_used = (history or {}).get("board_last_used", {})
 
-    def find(name: str) -> Optional[Dict]:
-        b = boards_by_name.get(name.lower())
-        if b:
-            return b
-        for board in boards:
-            if name.lower() in board["name"].lower():
-                return board
-        return None
+    # Select best live board matching category and LRU usage
+    return select_best_lru_board(
+        product_title=title,
+        product_type=ptype,
+        live_boards=boards,
+        board_last_used=last_used,
+        used_boards_in_run=used_boards,
+    )
 
-    def category_key(text: str) -> str:
-        import re
-        category_mappings = [
-            (["backpack", "bag", "purse", "tote", "handbag", "crossbody", "clutch", "satchel", "wallet", "pouch", "duffel", "hobo"], "bag"),
-            (["dress", "gown", "midi", "maxi", "mini"], "dress"),
-            (["top", "blouse", "tank", "shirt", "cami"], "top"),
-            (["jeans", "denim", "pants", "legging"], "pants"),
-            (["jacket", "coat", "shacket", "blazer"], "jacket"),
-            (["cardigan"], "cardigan"),
-            (["sweater", "knit", "pullover"], "sweater"),
-            (["skirt"], "skirt"),
-            (["shoe", "boot", "flat", "heel", "sandal"], "shoe"),
-            (["jumpsuit", "romper"], "jumpsuit")
-        ]
-        boundary_keys = {"top", "flat"}
-        for keywords, category_key_val in category_mappings:
-            for kw in keywords:
-                if kw in boundary_keys:
-                    if kw == "top":
-                        if re.search(r'\btops?(?!-handle|-loading|-heavy)\b', text):
-                            return category_key_val
-                    else:
-                        if re.search(r'\b' + re.escape(kw) + r's?\b', text):
-                            return category_key_val
-                else:
-                    if kw in text:
-                        return category_key_val
-        return "default"
 
-    search = f"{formatted.get('title','').lower()} {formatted.get('product_type','').lower()}"
-    cat = category_key(search)
-
-    if cat != "default":
-        category_boards = []
-        for board_name in CATEGORY_TO_BOARDS.get(cat, []):
-            b = find(board_name)
-            if b and b["name"] not in used_boards:
-                category_boards.append(b)
-
-        if category_boards:
-            # Sort boards by last used time (Least Recently Used first)
-            last_used = (history or {}).get("board_last_used", {})
-
-            def get_last_used_time(b_dict):
-                b_name = b_dict["name"]
-                ts = last_used.get(b_name)
-                if ts:
-                    try:
-                        return datetime.fromisoformat(ts)
-                    except Exception:
-                        pass
-                return datetime.min
-
-            category_boards.sort(key=get_last_used_time)
-            return category_boards[0]
-
-    for i in range(len(run_board_pool)):
-        candidate = run_board_pool[(index + i) % len(run_board_pool)]
-        b = find(candidate)
-        if b and b["name"] not in used_boards:
-            return b
-
-    available = [b for b in boards if b["name"] not in used_boards]
-    return random.choice(available) if available else random.choice(boards)
 
 
 def fetch_all_eligible_products(
@@ -336,12 +330,42 @@ def build_run_board_pool(
         if name not in pool:
             pool.append(name)
 
-    logger.info(f"[V2] Board pool ({len(pool)} boards, cursor {cursor}/{len(all_names)}): {pool}")
+    logger.info(
+        f"[V2] Multi-board pool initialized across {len(all_names)} active boards (rotation cursor: {cursor})"
+    )
     return pool
+
+
+
+def get_product_main_category(title: str, product_type: str = "") -> str:
+    """Classify product into core category to enforce rotation across consecutive pins."""
+    import re
+    text = f"{title} {product_type}".lower()
+    if re.search(r'\b(bag|backpack|purse|tote|handbag|crossbody|clutch|satchel|wallet|pouch|duffel|hobo)\b', text):
+        return "bags"
+    elif re.search(r'\b(dress|gown|midi|maxi|mini)\b', text):
+        return "dresses"
+    elif re.search(r'\b(top|blouse|shirt|cami|tank|tee|sweatshirt)\b', text):
+        return "tops"
+    elif re.search(r'\b(jeans|denim|pants|legging|leggings|chino|shorts|bottom)\b', text):
+        return "bottoms"
+    elif re.search(r'\b(jacket|coat|shacket|blazer|cardigan|outerwear)\b', text):
+        return "outerwear"
+    elif re.search(r'\b(sweater|knit|pullover)\b', text):
+        return "sweaters"
+    elif re.search(r'\b(skirt)\b', text):
+        return "skirts"
+    elif re.search(r'\b(jumpsuit|romper|playsuit|overalls)\b', text):
+        return "jumpsuits"
+    elif re.search(r'\b(shoe|flats|boots|sneakers|sandals|heels)\b', text):
+        return "shoes"
+    else:
+        return "general"
 
 
 def run_daily_posting(use_video: bool = False):
     """Post PINS_PER_RUN pins per run (V2: 2 pins × 4 runs = 8/day)."""
+
 
     logging.basicConfig(
         level=logging.INFO,
@@ -355,17 +379,32 @@ def run_daily_posting(use_video: bool = False):
         logger.info("[DRY RUN MODE ENABLED] No boards will be created, no pins will be posted, and no history files will be modified.")
         logger.info("=" * 60)
 
-    pinterest_email = get_secret("PINTEREST_EMAIL")
-    pinterest_password = get_secret("PINTEREST_PASSWORD")
+    try:
+        pinterest_email = get_secret("PINTEREST_EMAIL")
+    except Exception:
+        pinterest_email = os.getenv("PINTEREST_EMAIL", "dry_run@meeeshop.com" if dry_run else "")
+
+    try:
+        pinterest_password = get_secret("PINTEREST_PASSWORD")
+    except Exception:
+        pinterest_password = os.getenv("PINTEREST_PASSWORD", "dry_run_pass" if dry_run else "")
+
     shopify_url = get_secret("SHOPIFY_STORE_URL")
     shopify_token = get_secret("SHOPIFY_ACCESS_TOKEN")
     store_base_url = get_secret("STORE_BASE_URL")
 
-    if not all([pinterest_email, pinterest_password, shopify_url, shopify_token]):
+    if not dry_run and not all([pinterest_email, pinterest_password, shopify_url, shopify_token]):
         raise ValueError("Missing required credentials in .env")
 
+
     target = int(os.getenv("PINS_TO_POST", str(PINS_PER_RUN)))
-    logger.info(f"[V2] Daily run starting — target: {target} pins (daily cap: {MAX_PINS_PER_DAY})")
+
+    # ── Global daily cap guard (shared across fresh + refresh + analytics loop) ──
+    tracker = DailyPinTracker()
+    logger.info(f"[V2] Daily run starting — target: {target} pins | {tracker.summary()}")
+    if not dry_run and not tracker.can_post(n=1):
+        logger.info("[V2] Daily cap reached — skipping this run. Good job posting today!")
+        return
 
     history = reset_daily_count()
 
@@ -380,13 +419,19 @@ def run_daily_posting(use_video: bool = False):
     shopify = ShopifyClient(shopify_url, shopify_token)
 
     try:
-        if not pinterest.login():
-            raise RuntimeError("Pinterest login failed")
+        boards = []
+        if not dry_run:
+            if not pinterest.login():
+                raise RuntimeError("Pinterest login failed")
+            boards = pinterest.fetch_boards()
 
-        boards = pinterest.fetch_boards()
         if not boards:
-            raise RuntimeError("No boards found — check Pinterest authentication")
-        logger.info(f"Fetched {len(boards)} boards")
+            from board_mapping import MEEESHOP_BOARDS
+
+            boards = [{"name": b, "id": f"mock_{i}"} for i, b in enumerate(MEEESHOP_BOARDS)]
+
+        logger.info(f"Loaded {len(boards)} boards")
+
 
         run_board_pool = build_run_board_pool(boards, history, target)
         save_history(history)
@@ -398,11 +443,36 @@ def run_daily_posting(use_video: bool = False):
 
         posted = 0
         used_boards: set = set()
-        product_index = 0
+        used_product_indices: set = set()
 
-        while posted < target and product_index < len(pool):
-            product = pool[product_index]
-            product_index += 1
+        last_style = history.get("last_image_style")
+        last_template = history.get("last_template_index")
+        last_category = history.get("last_product_category")
+
+        while posted < target and len(used_product_indices) < len(pool):
+            # Select next candidate product whose category is DIFFERENT from last_category
+            selected_idx = None
+            for idx, prod in enumerate(pool):
+                if idx in used_product_indices:
+                    continue
+                cat = get_product_main_category(prod.get("title", ""), prod.get("product_type", ""))
+                if cat != last_category or len(used_product_indices) == 0:
+                    selected_idx = idx
+                    break
+
+            # Fallback: if no product of a different category is found, pick first unused product
+            if selected_idx is None:
+                for idx in range(len(pool)):
+                    if idx not in used_product_indices:
+                        selected_idx = idx
+                        break
+
+            if selected_idx is None:
+                break
+
+            used_product_indices.add(selected_idx)
+            product = pool[selected_idx]
+            cat_used = get_product_main_category(product.get("title", ""), product.get("product_type", ""))
 
             formatted = format_product_for_pinterest(product, store_base_url)
             board_info = pick_board(posted, boards, used_boards, formatted, run_board_pool, history)
@@ -412,42 +482,60 @@ def run_daily_posting(use_video: bool = False):
 
             board = board_info["name"]
             board_id = board_info["id"]
-            logger.info(f"Pin {posted + 1}/{target} → {board}")
+            logger.info(f"Pin {posted + 1}/{target} → {board} (Category: {cat_used})")
 
             content = generate_content_package(formatted, board)
 
             if dry_run:
-                logger.info(f"  [DRY RUN] Would download and design pin image for product {product['id']}")
+                from image_overlay import get_next_style_and_template
+                dry_style, dry_tmpl = get_next_style_and_template(last_style, last_template, board, formatted["title"])
+                logger.info(f"  [DRY RUN] Would design pin image for product {product['id']} (Category: {cat_used}, Style: {dry_style}, Template: {dry_tmpl})")
                 logger.info(f"  [DRY RUN] Would generate AI title/description for board '{board}'")
                 logger.info(f"  [DRY RUN] Would create pin on board '{board}' (ID: {board_id}) with URL '{formatted['url']}'")
                 used_boards.add(board)
+                last_style, last_template, last_category = dry_style, dry_tmpl, cat_used
                 posted += 1
                 continue
 
-            if not post_pin(pinterest, formatted, board_id, board, content):
+            success, style_used, template_used = post_pin(
+                pinterest, formatted, board_id, board, content, last_style, last_template
+            )
+            if not success:
                 logger.warning(f"Post failed for '{formatted['title']}', trying next")
                 continue
+
+            last_style = style_used
+            last_template = template_used
+            last_category = cat_used
 
             history["posts"].append({
                 "product_id": product["id"],
                 "title": formatted["title"],
                 "board": board,
                 "timestamp": datetime.now().isoformat(),
+                "style": style_used,
+                "template": template_used,
+                "category": cat_used,
             })
             history["board_last_used"][board] = datetime.now().isoformat()
+            history["last_image_style"] = style_used
+            history["last_template_index"] = template_used
+            history["last_product_category"] = cat_used
             history["daily_count"] += 1
             history["last_post_time"] = datetime.now().isoformat()
             save_history(history)
 
             used_boards.add(board)
             posted += 1
+            if not dry_run:
+                tracker.record(n=1, source="daily_v2")
 
             if posted < target:
-                delay = random.randint(30, 60)
+                delay = random.randint(5, 10)
                 logger.info(f"Waiting {delay}s...")
                 time.sleep(delay)
 
-        logger.info(f"[V2] ✓ Done: {posted}/{target} pins posted")
+        logger.info(f"[V2] ✓ Done: {posted}/{target} pins posted. {tracker.summary()}")
 
     except Exception as e:
         logger.error(f"Daily posting error: {e}", exc_info=True)

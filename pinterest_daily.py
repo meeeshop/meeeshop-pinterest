@@ -473,7 +473,7 @@ def run_daily_posting(use_video: bool = False):
             posted += 1
 
             if posted < target:
-                delay = random.randint(30, 60)
+                delay = random.randint(5, 10)
                 logger.info(f"Waiting {delay}s...")
                 time.sleep(delay)
 

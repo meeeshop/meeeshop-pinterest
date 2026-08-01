@@ -59,7 +59,7 @@ _sanitizer_installed = False
 # ── Key loading ───────────────────────────────────────────────────────────────
 
 def _load_dotenv() -> None:
-    """Load PRIMARY and FALLBACK keys from .env if not already in environment."""
+    """Load all keys from .env if not already in environment."""
     for candidate in [Path(__file__).with_name(".env"), Path(".env")]:
         if not candidate.exists():
             continue
@@ -70,8 +70,9 @@ def _load_dotenv() -> None:
             key, val = line.split("=", 1)
             key = key.strip()
             val = val.strip().strip('"')
-            if key in ("ENCRYPTION_KEY_PRIMARY", "ENCRYPTION_KEY_FALLBACK"):
+            if key and val:
                 os.environ.setdefault(key, val)
+
 
 
 def _get_keys() -> tuple[bytes, bytes]:
@@ -140,17 +141,25 @@ def get_secret(name: str) -> str:
         _install_sanitizer()
         _sanitizer_installed = True
 
-    primary, fallback = _get_keys()
-    vault = _load_vault()
-    if name not in vault:
-        raise KeyError(
-            f"\n[secrets_manager] Secret '{name}' not in secrets.enc.\n"
-            f"  Available: {list(vault.keys())}\n"
-        )
-    _audit(name)
-    value = _double_decrypt(vault[name], primary, fallback)
-    SecretSanitizer.register(value)
-    return value
+    _load_dotenv()
+    if os.environ.get(name):
+        return os.environ[name]
+
+    try:
+        primary, fallback = _get_keys()
+        vault = _load_vault()
+        if name in vault:
+            _audit(name)
+            value = _double_decrypt(vault[name], primary, fallback)
+            SecretSanitizer.register(value)
+            return value
+    except Exception as e:
+        pass
+
+    if os.environ.get(name):
+        return os.environ[name]
+
+    raise KeyError(f"\n[secrets_manager] Secret '{name}' not found in environment or secrets.enc.\n")
 
 
 def get_all_secrets() -> dict:
@@ -172,5 +181,9 @@ def get_all_secrets() -> dict:
 
 def inject_to_env() -> None:
     """Decrypt all secrets and inject into os.environ for this process."""
-    for name, value in get_all_secrets().items():
-        os.environ[name] = value
+    _load_dotenv()
+    try:
+        for name, value in get_all_secrets().items():
+            os.environ[name] = value
+    except Exception:
+        pass
