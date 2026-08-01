@@ -207,6 +207,7 @@ def make_refresh_pin_image(
     price: Optional[str],
     product_id: str,
     window: str,
+    board_name: str = "",
 ) -> Optional[str]:
     image_url = pick_refresh_image_url(product, window)
     if not image_url:
@@ -230,17 +231,18 @@ def make_refresh_pin_image(
 
     out_path = Path("/tmp") / f"refresh_overlay_{product_id}_{window}.jpg"
 
-    # Use style-rotating create_pin_image so refresh pins cycle through
-    # hero / card / collage — keeps the account looking human, not automated.
+    # Use style-rotating add_text_overlay so refresh pins cycle through
+    # hero / card / collage / carousel — it natively handles rotation and forced styles.
     force_style = os.getenv("FORCE_IMAGE_STYLE", "auto") or "auto"
-    result = create_pin_image(
-        product_image_path=str(tmp_src),
+    result = add_text_overlay(
+        image_path=str(tmp_src),
         title=title,
         price=price,
         cta="Shop Now",
         output_path=str(out_path),
         additional_image_paths=additional_paths,
-        force_style=force_style,
+        image_style=None if force_style == "auto" else force_style,
+        board_name=board_name,
     )
 
     tmp_src.unlink(missing_ok=True)
@@ -653,7 +655,7 @@ def run_refresh_posting():
                     continue
 
                 overlay_path = make_refresh_pin_image(
-                    product, formatted["title"], formatted.get("price"), product_id, window
+                    product, formatted["title"], formatted.get("price"), product_id, window, board_name=new_board
                 )
                 if not overlay_path:
                     logger.warning(f"Image generation failed for {product_id}, skipping")

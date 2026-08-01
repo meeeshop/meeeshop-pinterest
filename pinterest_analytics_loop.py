@@ -483,14 +483,14 @@ def main():
 
             # Apply style-rotating overlay (hero/card/collage — avoids repetitive look)
             price = product.get("variants", [{}])[0].get("price", "") if product else ""
-            overlaid_img = image_overlay.create_pin_image(
-                product_image_path=local_img,
+            overlaid_img = image_overlay.add_text_overlay(
+                image_path=local_img,
                 title=product.get("title", ""),
                 price=price,
                 cta="Shop Now",
                 board_name=new_board,
                 additional_image_paths=additional_image_files,
-                force_style=os.getenv("FORCE_IMAGE_STYLE", "auto") or "auto",
+                image_style=None if os.getenv("FORCE_IMAGE_STYLE", "auto") == "auto" else os.getenv("FORCE_IMAGE_STYLE"),
             )
             if overlaid_img:
                 if os.path.exists(local_img):
@@ -584,14 +584,14 @@ def main():
 
                 # Apply style-rotating overlay for piggyback pin
                 price = replacement.get("variants", [{}])[0].get("price", "") if replacement else ""
-                overlaid_img = image_overlay.create_pin_image(
-                    product_image_path=local_img,
+                overlaid_img = image_overlay.add_text_overlay(
+                    image_path=local_img,
                     title=replacement.get("title", ""),
                     price=price,
                     cta="Shop Now",
                     board_name=target_board,
                     additional_image_paths=additional_image_files,
-                    force_style=os.getenv("FORCE_IMAGE_STYLE", "auto") or "auto",
+                    image_style=None if os.getenv("FORCE_IMAGE_STYLE", "auto") == "auto" else os.getenv("FORCE_IMAGE_STYLE"),
                 )
                 if overlaid_img:
                     if os.path.exists(local_img):
