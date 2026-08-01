@@ -1,10 +1,7 @@
-#!/usr/bin/env python3
-"""
-board_mapping.py — Board name mappings for MeeeShop Pinterest account
-Extracted from actual board list - high-traffic boards prioritized
-"""
+from typing import List, Dict, Optional, Any
 
 # Complete list of MeeeShop Pinterest boards
+
 MEEESHOP_BOARDS = [
     "All Pins",
     "Fashion Models",
@@ -362,40 +359,82 @@ def get_candidate_boards_for_product(product_title: str, product_type: str = Non
     return candidates
 
 
+def match_live_board(
+    candidate_name: str, live_boards: List[Dict]
+) -> Optional[Dict]:
+    """
+    Match candidate_name (handling trailing dots '...') against live board dicts from Pinterest.
+    Returns matching live board dict or None.
+    """
+    cand_clean = candidate_name.rstrip(".").strip().lower()
+
+    # 1. Exact match
+    for b in live_boards:
+        if b.get("name", "").lower() == candidate_name.lower():
+            return b
+
+    # 2. Cleaned prefix/substring match (handles trailing '...')
+    for b in live_boards:
+        b_name_lower = b.get("name", "").lower()
+        if b_name_lower.startswith(cand_clean) or cand_clean in b_name_lower:
+            return b
+
+    return None
+
+
 def select_best_lru_board(
     product_title: str,
     product_type: str = None,
+    live_boards: List[Dict] = None,
     board_last_used: dict = None,
     used_boards_in_run: set = None,
-) -> str:
+) -> Dict:
     """
-    Select the best board using Least Recently Used (LRU) logic among eligible candidate boards.
-    Ensures all 105 boards (including 3-month and 1-year-old dormant boards) get rotated!
+    Select the best live Pinterest board object matching the product category,
+    using Least Recently Used (LRU) logic. Strictly avoids cross-category misassignments.
 
     Args:
         product_title: Product title
         product_type: Product type
+        live_boards: List of live board dicts from Pinterest API [{'name': ..., 'id': ...}]
         board_last_used: Dict mapping board_name -> ISO timestamp string
         used_boards_in_run: Set of board names already used in the current run
 
     Returns:
-        Selected board name
+        Selected live board dict
     """
     if board_last_used is None:
         board_last_used = {}
     if used_boards_in_run is None:
         used_boards_in_run = set()
+    if not live_boards:
+        live_boards = [
+            {"name": b, "id": f"mock_{i}"} for i, b in enumerate(MEEESHOP_BOARDS)
+        ]
 
     candidates = get_candidate_boards_for_product(product_title, product_type)
 
-    # Filter out boards used in the current execution run if possible
-    available = [b for b in candidates if b not in used_boards_in_run]
-    if not available:
-        available = candidates
+    # Resolve candidate names to live board objects
+    resolved_boards = []
+    for cand_name in candidates:
+        matched = match_live_board(cand_name, live_boards)
+        if matched and matched not in resolved_boards:
+            resolved_boards.append(matched)
 
-    # Find the board with the oldest last_used timestamp (or never used)
-    def get_last_used_score(board_name: str) -> str:
-        return board_last_used.get(board_name, "1970-01-01T00:00:00")
+    # Filter out boards used in current run if possible
+    available = [
+        b for b in resolved_boards if b.get("name") not in used_boards_in_run
+    ]
+    if not available:
+        available = resolved_boards
+
+    if not available:
+        available = live_boards
+
+    # Sort available boards by last_used timestamp (LRU first)
+    def get_last_used_score(board_dict: Dict) -> str:
+        b_name = board_dict.get("name", "")
+        return board_last_used.get(b_name, "1970-01-01T00:00:00")
 
     available.sort(key=get_last_used_score)
     return available[0]
@@ -407,6 +446,7 @@ def get_board_for_product(product_title: str, product_type: str = None) -> str:
     """
     candidates = get_candidate_boards_for_product(product_title, product_type)
     return candidates[0] if candidates else MEEESHOP_BOARDS[0]
+
 
 
 def validate_board(board_name: str) -> str:

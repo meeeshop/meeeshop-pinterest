@@ -163,28 +163,19 @@ def pick_board(
 ) -> Optional[Dict]:
     from board_mapping import select_best_lru_board
 
-    boards_by_name = {b["name"].lower(): b for b in boards}
-
     title = formatted.get("title", "")
     ptype = formatted.get("product_type", "")
     last_used = (history or {}).get("board_last_used", {})
 
-    # Select best LRU board among candidate boards
-    best_name = select_best_lru_board(title, ptype, last_used, used_boards)
+    # Select best live board matching category and LRU usage
+    return select_best_lru_board(
+        product_title=title,
+        product_type=ptype,
+        live_boards=boards,
+        board_last_used=last_used,
+        used_boards_in_run=used_boards,
+    )
 
-    # Find the board object matching best_name
-    b = boards_by_name.get(best_name.lower())
-    if b:
-        return b
-
-    # Partial name search fallback
-    for board in boards:
-        if best_name.lower() in board["name"].lower():
-            return board
-
-    # Pool fallback if exact board not found on account
-    available = [b for b in boards if b["name"] not in used_boards]
-    return random.choice(available) if available else random.choice(boards)
 
 
 
