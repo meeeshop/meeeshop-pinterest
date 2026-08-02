@@ -509,20 +509,21 @@ def build_video(product: Dict, fmt: Dict, bg_colors: List[tuple], store_base_url
 def _pick_board(boards: List[Dict], formatted_product: Dict, history: Dict = None) -> Dict:
     from board_mapping import select_best_lru_board
 
-    board_map = {b["name"].lower(): b for b in boards}
     title = formatted_product.get("title", "")
     ptype = formatted_product.get("product_type", "")
     last_used = (history or {}).get("board_last_used", {})
 
-    best_name = select_best_lru_board(title, ptype, last_used)
+    best_board = select_best_lru_board(
+        product_title=title, 
+        product_type=ptype, 
+        live_boards=boards, 
+        board_last_used=last_used
+    )
+    
+    if best_board and "name" in best_board:
+        return best_board
 
-    if best_name.lower() in board_map:
-        return board_map[best_name.lower()]
-
-    for b in boards:
-        if best_name.lower() in b["name"].lower() or b["name"].lower() in best_name.lower():
-            return b
-
+    board_map = {b["name"].lower(): b for b in boards}
     for pref in VIDEO_PREFERRED_BOARDS:
         if pref.lower() in board_map:
             return board_map[pref.lower()]
