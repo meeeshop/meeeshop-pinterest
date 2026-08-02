@@ -33,7 +33,19 @@ def parse_gid(gid: str) -> int:
 
 def map_graphql_product(node: Dict[str, Any]) -> Dict[str, Any]:
     """Map Shopify GraphQL Product node to REST-like dictionary format"""
-    images = [{"src": edge["node"]["url"]} for edge in node.get("images", {}).get("edges", [])]
+    images = [{"src": edge["node"]["url"]} for edge in node.get("images", {}).get("edges", []) if edge.get("node", {}).get("url")]
+    
+    # Collect images from variants to ensure variant-specific images are included
+    existing_urls = {img["src"] for img in images}
+    for edge in node.get("variants", {}).get("edges", []):
+        v = edge.get("node", {})
+        v_img = v.get("image")
+        if v_img and v_img.get("url"):
+            v_url = v_img["url"]
+            if v_url not in existing_urls:
+                existing_urls.add(v_url)
+                images.append({"src": v_url})
+
     variants = []
     for edge in node.get("variants", {}).get("edges", []):
         v = edge["node"]
@@ -42,6 +54,7 @@ def map_graphql_product(node: Dict[str, Any]) -> Dict[str, Any]:
             "price": v.get("price"),
             "inventory_quantity": v.get("inventoryQuantity", 0),
             "inventory_policy": (v.get("inventoryPolicy") or "").lower(),
+            "image": v.get("image", {}).get("url") if v.get("image") else None,
         })
 
     return {
@@ -130,7 +143,7 @@ class ShopifyClient:
                 tags
                 publishedAt
                 bodyHtml
-                images(first: 10) {
+                images(first: 250) {
                   edges {
                     node {
                       url
@@ -144,6 +157,9 @@ class ShopifyClient:
                       price
                       inventoryQuantity
                       inventoryPolicy
+                      image {
+                        url
+                      }
                     }
                   }
                 }
@@ -190,7 +206,7 @@ class ShopifyClient:
                 tags
                 publishedAt
                 bodyHtml
-                images(first: 10) {
+                images(first: 250) {
                   edges {
                     node {
                       url
@@ -204,6 +220,9 @@ class ShopifyClient:
                       price
                       inventoryQuantity
                       inventoryPolicy
+                      image {
+                        url
+                      }
                     }
                   }
                 }
@@ -281,7 +300,7 @@ class ShopifyClient:
                   tags
                   publishedAt
                   bodyHtml
-                  images(first: 10) {
+                  images(first: 250) {
                     edges {
                       node {
                         url
@@ -295,6 +314,9 @@ class ShopifyClient:
                         price
                         inventoryQuantity
                         inventoryPolicy
+                        image {
+                          url
+                        }
                       }
                     }
                   }
@@ -327,7 +349,7 @@ class ShopifyClient:
                 tags
                 publishedAt
                 bodyHtml
-                images(first: 10) {
+                images(first: 250) {
                   edges {
                     node {
                       url
@@ -341,6 +363,9 @@ class ShopifyClient:
                       price
                       inventoryQuantity
                       inventoryPolicy
+                      image {
+                        url
+                      }
                     }
                   }
                 }
