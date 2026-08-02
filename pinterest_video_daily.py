@@ -88,7 +88,7 @@ VIDEO_PREFERRED_BOARDS = [
 
 VIDEO_W, VIDEO_H  = 1080, 1920
 FPS               = 30
-CLIP_DURATION     = 5      # seconds per product image slide
+CLIP_DURATION     = 0.5    # seconds per product image slide for stop-motion effect
 VOICEOVER_DURATION = 4     # max voiceover length in seconds
 OUT_DIR           = Path(__file__).parent / "generated_videos"
 OUT_DIR.mkdir(exist_ok=True)
@@ -289,8 +289,8 @@ def _compose_frame(
     img = cvs.convert("RGB")
     draw = ImageDraw.Draw(img)
 
-    # Category / Badge
-    draw.text((w // 2, box_y + int(box_h * 0.15)), fmt["badge"], fill="white", font=_font(int(box_h * 0.06)), anchor="mm")
+    # CTA / Badge
+    draw.text((w // 2, box_y + int(box_h * 0.15)), fmt.get("cta", "SHOP NOW").upper(), fill="white", font=_font(int(box_h * 0.06)), anchor="mm")
 
     # Title
     for i, line in enumerate(textwrap.wrap(title, 34)[:2]):
@@ -352,25 +352,12 @@ def _slide_clip(
     # Background is already blurred and prepared
     bg_r = bg
 
-    def _params(t: float):
-        scale = 0.95
-        if effect == "float":
-            return scale, 0, math.cos(t * 2) * 20, math.sin(t * 2) * 3
-        elif effect == "wobble":
-            return scale, math.cos(t * 3) * 15, 0, math.sin(t * 4) * 4
-        elif effect == "spin":
-            return scale + (t * 0.02), 0, 0, t * 5
-        elif effect == "zoom-float":
-            return scale + (t * 0.03), 0, math.cos(t) * 10, math.sin(t) * 2
-        else:
-            return scale, 0, 0, math.sin(t * 2) * 3
-
     def make_frame(t: float):
-        scale, ox, oy, angle = _params(t)
+        # Static product image for fast continuous sliding
         frame = _compose_frame(bg_r, product_img, title, price, url, fmt,
-                               product_scale=scale,
-                               show_url=(show_url and t > CLIP_DURATION - 0.5),
-                               x_offset=ox, y_offset=oy, angle=angle)
+                               product_scale=0.95,
+                               show_url=show_url,
+                               x_offset=0, y_offset=0, angle=0)
         return np.array(frame)
 
     return VideoClip(make_frame, duration=CLIP_DURATION).set_fps(FPS)
@@ -386,13 +373,10 @@ def build_video(product: Dict, fmt: Dict, bg_colors: List[tuple], store_base_url
     handle = product.get("handle", "")
     url    = f"{store_base_url.rstrip('/')}/products/{handle}?utm_source=pinterest&utm_medium=video&utm_campaign={BRAND_NAME.lower()}"
 
-    images = product.get("images", [])[:6]
+    images = product.get("images", [])
     if not images:
         logger.error(f"No images for product {title}")
         return None
-    # Pad to 6 if fewer images available
-    while len(images) < 6:
-        images = (images * 2)[:6]
 
     logger.info(f"Building video: {title[:50]} ({len(images)} slides)")
 
@@ -409,25 +393,23 @@ def build_video(product: Dict, fmt: Dict, bg_colors: List[tuple], store_base_url
         from PIL import ImageFilter
         bg_r = prod_img.resize((VIDEO_W, VIDEO_H), Image.LANCZOS).filter(ImageFilter.GaussianBlur(30)).point(lambda p: p * 0.6)
         
-        effect   = effects[i % len(effects)]
         show_url = (i == len(images) - 1)
-        clip     = _slide_clip(bg_r, prod_img, title, price, url, fmt, effect, show_url)
-        clip     = clip.fadein(0.1).fadeout(0.1)
+        clip     = _slide_clip(bg_r, prod_img, title, price, url, fmt, "none", show_url)
         clips.append(clip)
 
-        # Create intro frame (static 2s full product) from first image
-        if intro_clip is None:
+        # Save thumbnail from first image
+        if thumb_path is None:
             intro_frame_img = _compose_frame(bg_r, prod_img, title, price, url, fmt, product_scale=1.0, show_url=False)
-            intro_clip = _static_frame_clip(intro_frame_img, duration=2.0).fadeout(0.3)
             thumb_path = _save_thumbnail(intro_frame_img, handle)
 
     if not clips:
         logger.error("No clips built — all product images failed to load")
         return None
 
-    # Prepend intro (2s static full product) + animated clips
-    if intro_clip:
-        clips = [intro_clip] + clips
+    import math
+    if clips and (len(clips) * CLIP_DURATION) < 5.0:
+        loops = int(math.ceil(5.0 / (len(clips) * CLIP_DURATION)))
+        clips = clips * loops
 
     video       = concatenate_videoclips(clips, method="compose")
     total_secs  = video.duration
