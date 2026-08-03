@@ -1,0 +1,52 @@
+{
+  "posts": [
+    {
+      "product_id": 8883466698923,
+      "title": "Radiant Sequin Ombre Midi Dress",
+      "board": "Dresses",
+      "timestamp": "2026-08-03T15:40:51.355670",
+      "style": "hero",
+      "template": 2,
+      "category": "dresses"
+    },
+    {
+      "product_id": 8811044274347,
+      "title": "Tummy Control Ultra High Rise Crop Wide",
+      "board": "Trends",
+      "timestamp": "2026-08-03T15:41:16.775603",
+      "style": "carousel",
+      "template": 13,
+      "category": "bottoms"
+    },
+    {
+      "product_id": 8818162860203,
+      "title": "Peanuts Relax Baby Tee",
+      "board": "New",
+      "timestamp": "2026-08-03T15:41:37.750253",
+      "style": "collage",
+      "template": 11,
+      "category": "tops"
+    },
+    {
+      "product_id": 8869173067947,
+      "title": "Basic Bae Wide Leg Pocketed Pants",
+      "board": "Pants & Leggings",
+      "timestamp": "2026-08-03T15:41:52.451547",
+      "style": "card",
+      "template": 4,
+      "category": "bottoms"
+    }
+  ],
+  "board_last_used": {
+    "Dresses": "2026-08-03T15:40:51.355682",
+    "Trends": "2026-08-03T15:41:16.775614",
+    "New": "2026-08-03T15:41:37.750261",
+    "Pants & Leggings": "2026-08-03T15:41:52.451555"
+  },
+  "daily_count": 4,
+  "last_post_time": "2026-08-03T15:41:52.451558",
+  "board_rotation_cursor": 3,
+  "last_image_style": "card",
+  "last_template_index": 4,
+  "last_product_category": "bottoms"
+}
