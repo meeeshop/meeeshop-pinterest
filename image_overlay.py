@@ -912,6 +912,88 @@ def _template_n(draw, canvas, photo, title, category, price, cta):
         draw.text(((PIN_W - (pb[2]-pb[0])) // 2, center_y + 40 + len(lines[:2]) * 45 + 10), ps, fill=RED, font=pf)
 
 
+# ── Template O ───────────────────────────────────────────────────────────────
+# 4-Image Quad Grid Showcase with Central Trust Badge (2x2 grid collage + trust pill).
+# High CTR format for US female shoppers wanting to see multiple outfit angles.
+def _template_o(draw, canvas, photo, photo2, photo3, photo4, title, category, price, trust_badge="FREE US SHIPPING"):
+    bg_color = WARM_WHITE
+    draw.rectangle([(0, 0), (PIN_W, PIN_H)], fill=bg_color)
+
+    HEADER_H = int(PIN_H * 0.09)
+    CTA_H    = int(PIN_H * 0.10)
+    FOOTER_H = int(PIN_H * 0.18)
+    GRID_H   = PIN_H - HEADER_H - FOOTER_H - CTA_H
+    PAD      = int(PIN_W * 0.04)
+    GAP      = int(PIN_W * 0.02)
+
+    # Category Top Header
+    cf = _get_font(int(HEADER_H * 0.35), bold=True)
+    spaced_cat = "  ".join(list(category.upper()))
+    cb = cf.getbbox(spaced_cat)
+    draw.text(((PIN_W - (cb[2]-cb[0])) // 2, int(HEADER_H * 0.30)), spaced_cat, fill=DARK_GREY, font=cf)
+
+    cell_w = (PIN_W - PAD * 2 - GAP) // 2
+    cell_h = (GRID_H - GAP) // 2
+
+    imgs = [photo]
+    for extra in (photo2, photo3, photo4):
+        if extra is not None:
+            imgs.append(extra)
+
+    pw, ph = photo.size
+    crops = [
+        (int(pw * 0.15), int(ph * 0.05), int(pw * 0.85), int(ph * 0.50)),
+        (int(pw * 0.15), int(ph * 0.40), int(pw * 0.85), int(ph * 0.85)),
+        (int(pw * 0.20), int(ph * 0.20), int(pw * 0.80), int(ph * 0.80)),
+    ]
+    crop_idx = 0
+    while len(imgs) < 4:
+        c_box = crops[crop_idx % len(crops)]
+        crop_img = photo.crop(c_box)
+        imgs.append(crop_img)
+        crop_idx += 1
+
+    coords = [
+        (PAD, HEADER_H),
+        (PAD + cell_w + GAP, HEADER_H),
+        (PAD, HEADER_H + cell_h + GAP),
+        (PAD + cell_w + GAP, HEADER_H + cell_h + GAP)
+    ]
+
+    for idx, (x, y) in enumerate(coords):
+        p_cell = _boost(_fit_image(imgs[idx], cell_w, cell_h))
+        canvas.paste(p_cell, (x, y))
+        draw.rectangle([x, y, x + cell_w, y + cell_h], outline=(210, 205, 195), width=2)
+
+    # Central Trust Badge Pill
+    badge_text = trust_badge or "FREE US SHIPPING"
+    bf = _get_font(int(GRID_H * 0.045), bold=True)
+    bb = bf.getbbox(badge_text)
+    bw, bh = bb[2] - bb[0] + 36, bb[3] - bb[1] + 16
+    bx = (PIN_W - bw) // 2
+    by = HEADER_H + (GRID_H - bh) // 2
+    _draw_rounded_rect(draw, (bx, by, bx + bw, by + bh), 12, CORAL)
+    draw.text((bx + 18, by + 8), badge_text, fill=WHITE, font=bf)
+
+    # Footer Title & Price
+    footer_y = HEADER_H + GRID_H
+    tf = _get_font(int(FOOTER_H * 0.22), bold=True, serif=True)
+    lines = _wrap_text(title, tf, PIN_W - PAD * 3 - (140 if price else 0))
+    for i, line in enumerate(lines[:2]):
+        draw.text((PAD * 2, footer_y + int(FOOTER_H * 0.15) + i * int(FOOTER_H * 0.30)), line, fill=BLACK, font=tf)
+
+    if price:
+        pf = _get_font(int(FOOTER_H * 0.24), bold=True, serif=True)
+        ps = f"${price}"
+        pb = pf.getbbox(ps)
+        pw_box, ph_box = pb[2]-pb[0]+24, pb[3]-pb[1]+12
+        px = PIN_W - PAD * 2 - pw_box
+        py = footer_y + int(FOOTER_H * 0.15)
+        _draw_rounded_rect(draw, (px, py, px + pw_box, py + ph_box), 8, RED)
+        draw.text((px + 12, py + 6), ps, fill=WHITE, font=pf)
+
+    _draw_cta_bar(canvas, draw, footer_y + FOOTER_H, CTA_H, RED, WHITE)
+
 
 def _prepare_photo_for_style(
     photo: Image.Image,
@@ -926,18 +1008,15 @@ def _prepare_photo_for_style(
     Renders all 3 image styles dynamically for ANY template!
     """
     if style == "collage":
-        # Build 3-Image Portrait Split Collage: Left 58% Full Hero Portrait + Right 42% Two Stacked Focus Detail Shots
         composite = Image.new("RGB", (target_w, target_h), (255, 255, 255))
         gap = 4
         left_w = int(target_w * 0.58)
         right_w = target_w - left_w - gap
         right_h = (target_h - gap) // 2
 
-        # Left 58% Hero Portrait
         p_hero = _fit_image(photo, left_w, target_h)
         composite.paste(p_hero, (0, 0))
 
-        # Focus Shot 1 (Top Right)
         if photo2 is not None:
             sub1 = photo2
         else:
@@ -949,7 +1028,6 @@ def _prepare_photo_for_style(
         p_focus1 = _fit_image(sub1, right_w, right_h)
         composite.paste(p_focus1, (left_w + gap, 0))
 
-        # Focus Shot 2 (Bottom Right)
         if photo3 is not None:
             sub2 = photo3
         elif photo2 is not None:
@@ -966,7 +1044,6 @@ def _prepare_photo_for_style(
         return _boost(composite)
 
     elif style == "card":
-        # Build Semi-Transparent Floating Card Overlay
         p = _fit_image(photo, target_w, target_h)
         card_overlay = Image.new("RGBA", (target_w, target_h), (0, 0, 0, 0))
         cdraw = ImageDraw.Draw(card_overlay)
@@ -980,7 +1057,7 @@ def _prepare_photo_for_style(
         composite = Image.alpha_composite(p_rgba, card_overlay).convert("RGB")
         return _boost(composite)
 
-    else:  # 'hero' style
+    else:
         return _boost(_fit_image(photo, target_w, target_h))
 
 
@@ -1003,23 +1080,23 @@ def create_pin_image(
     ('hero', 'collage', 'card').
     """
     try:
-        ecommerce_templates = [0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12]
+        ecommerce_templates = [0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14]
         
         # Smart template matching based on board name
         b_lower = board_name.lower()
         if template_index is None:
             if "poetcore" in b_lower:
-                template_index = 5  # Poetcore Storybook Editorial
+                template_index = 5
             elif "vamp" in b_lower or "romantic" in b_lower:
-                template_index = 7  # Vamp Romantic Cinematic
+                template_index = 7
             elif "gummy" in b_lower or "nostalgia" in b_lower:
-                template_index = 8  # Holographic
+                template_index = 8
             elif "athlete" in b_lower or "off-duty" in b_lower:
-                template_index = 10 # Split collage
+                template_index = 10
             elif "blog" in b_lower:
                 template_index = 9
             else:
-                template_index = 13 # Template N: Center transparent overlay
+                template_index = 14 # Default to Template O (Quad Quad Collage)
 
         canvas = Image.new("RGB", (PIN_W, PIN_H), WARM_WHITE)
         draw = ImageDraw.Draw(canvas)
@@ -1032,6 +1109,7 @@ def create_pin_image(
 
         photo2 = None
         photo3 = None
+        photo4 = None
         if additional_image_paths:
             if len(additional_image_paths) > 0 and Path(additional_image_paths[0]).exists():
                 try:
@@ -1043,8 +1121,12 @@ def create_pin_image(
                     photo3 = Image.open(additional_image_paths[1]).convert("RGB")
                 except Exception as ex:
                     logger.warning(f"Failed to load photo3: {ex}")
+            if len(additional_image_paths) > 2 and Path(additional_image_paths[2]).exists():
+                try:
+                    photo4 = Image.open(additional_image_paths[2]).convert("RGB")
+                except Exception as ex:
+                    logger.warning(f"Failed to load photo4: {ex}")
 
-        # If photo2 is missing (single-image product), auto-generate a detail crop from photo so collages work on 100% of products!
         if photo2 is None and photo is not None:
             try:
                 pw, ph = photo.size
@@ -1054,12 +1136,13 @@ def create_pin_image(
             except Exception as ex:
                 logger.warning(f"Failed to auto-crop photo2: {ex}")
 
-        # Apply image_style framing ('collage' or 'card' composite) if specified
         if image_style in ("collage", "card"):
             photo = _prepare_photo_for_style(photo, photo2, photo3, PIN_W, PIN_H, image_style)
 
         logger.info(f"Using pin template {template_index} (Style: {image_style}) for: {title[:40]}")
 
+        trust_badges = ["FREE US SHIPPING", "USA BESTSELLER", "TRENDING IN US", "VIRAL STYLE"]
+        trust_badge = trust_badges[int(hashlib.md5(title.encode()).hexdigest(), 16) % len(trust_badges)]
 
         if template_index == 0:
             _template_a(draw, canvas, photo, title, category, price)
@@ -1090,8 +1173,10 @@ def create_pin_image(
             _template_m(draw, canvas, photo, title, category, price)
         elif template_index == 13:
             _template_n(draw, canvas, photo, title, category, price, cta)
+        elif template_index == 14:
+            _template_o(draw, canvas, photo, photo2, photo3, photo4, title, category, price, trust_badge=trust_badge)
         else:
-            _template_n(draw, canvas, photo, title, category, price, cta)
+            _template_o(draw, canvas, photo, photo2, photo3, photo4, title, category, price, trust_badge=trust_badge)
 
         if not output_path:
             output_path = tempfile.mktemp(suffix=".jpg", prefix="pin_final_")
@@ -1107,7 +1192,7 @@ def create_pin_image(
 
 # ── Public aliases ────────────────────────────────────────────────────────────
 
-ALL_TEMPLATES = [0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13]
+ALL_TEMPLATES = [0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14]
 ALL_STYLES = ["hero", "carousel", "collage", "card"]
 
 
