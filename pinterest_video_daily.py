@@ -246,12 +246,15 @@ def _compose_frame(
     y_offset: float = 0.0,
     angle: float = 0.0,
 ) -> Image.Image:
+    """
+    Compose video frame: Render plain crisp warm cream text directly on product video frame.
+    ZERO background boxes, ZERO cards, ZERO gradient rectangles!
+    """
     w, h   = VIDEO_W, VIDEO_H
     canvas = bg.copy()
 
-    # Fill the screen with the product image
     pw, ph  = product_img.size
-    base_sc = max(h / ph, w / pw)  # Cover the entire frame
+    base_sc = max(h / ph, w / pw)
     cur_sc  = base_sc * product_scale
     nw, nh  = max(1, int(pw * cur_sc)), max(1, int(ph * cur_sc))
     
@@ -260,7 +263,6 @@ def _compose_frame(
     if angle != 0:
         fg = fg.rotate(angle, resample=Image.BICUBIC, expand=True)
     
-    # Paste centered with offset
     fw, fh = fg.size
     x_pos = (w - fw) // 2 + int(x_offset)
     y_pos = (h - fh) // 2 + int(y_offset)
@@ -270,37 +272,36 @@ def _compose_frame(
     else:
         canvas.paste(fg, (x_pos, y_pos))
 
-    # Transparent center overlay for text (Template N style)
-    box_w = int(w * 0.85)
-    box_h = int(h * 0.35)
-    box_x = (w - box_w) // 2
-    box_y = (h - box_h) // 2
-
-    overlay = Image.new("RGBA", (w, h), (0, 0, 0, 0))
-    od = ImageDraw.Draw(overlay)
-    od.rounded_rectangle([box_x, box_y, box_x + box_w, box_y + box_h], radius=20, fill=(0, 0, 0, 90))
-    
-    cvs = canvas.convert("RGBA")
-    cvs.alpha_composite(overlay)
-    img = cvs.convert("RGB")
+    img = canvas.convert("RGB")
     draw = ImageDraw.Draw(img)
 
-    # CTA / Badge
-    draw.text((w // 2, box_y + int(box_h * 0.15)), fmt.get("cta", "SHOP NOW").upper(), fill="white", font=_font(int(box_h * 0.06)), anchor="mm")
+    CREAM_WHITE = (250, 248, 244)
+    SHADOW_DARK = (15, 15, 15)
 
-    # Title
-    for i, line in enumerate(textwrap.wrap(title, 34)[:2]):
-        draw.text((w // 2, box_y + int(box_h * 0.40) + i * int(box_h * 0.12)), line, fill="white", font=_font(int(box_h * 0.08)), anchor="mm")
+    def draw_direct_text(pos, text, font, fill=CREAM_WHITE, anchor="mm"):
+        x, y = pos
+        for dx, dy in [(-2,0), (2,0), (0,-2), (0,2), (-1,-1), (1,1), (-1,1), (1,-1)]:
+            draw.text((x + dx, y + dy), text, fill=SHADOW_DARK, font=font, anchor=anchor)
+        draw.text((x, y), text, fill=fill, font=font, anchor=anchor)
 
-    # Price
+    # Line 1: Top handwritten script hook ("Trending:") directly on video frame
+    script_f = _font(54, bold=False, script=True)
+    draw_direct_text((w // 2, int(h * 0.12)), "Trending:", script_f, anchor="mm")
+
+    # Line 2: Product Title in bold sans-serif directly on video frame
+    title_f = _font(40, bold=True)
+    for i, line in enumerate(textwrap.wrap(title, 26)[:2]):
+        draw_direct_text((w // 2, int(h * 0.18) + i * 48), line.upper(), title_f, anchor="mm")
+
+    # Price directly on video frame
     if price:
-        draw.text((w // 2, box_y + int(box_h * 0.8)), f"${price}", fill=(255, 127, 80), font=_font(int(box_h * 0.09)), anchor="mm")
+        price_f = _font(38, bold=True)
+        draw_direct_text((w // 2, int(h * 0.88)), f"${price}", price_f, fill=CREAM_WHITE, anchor="mm")
 
-    # URL bar (last frame only)
-    if show_url:
-        short = url.replace("https://", "").split("?")[0][:44]
-        draw.rounded_rectangle([(35, h-62), (w-35, h-14)], radius=14, fill=(255, 255, 255, 190))
-        draw.text((w//2, h-38), short, font=_font(22, bold=False), fill=(0, 70, 180), anchor="mm")
+    # Bottom minimal CTA directly on video frame
+    cta_f = _font(24, bold=True)
+    cta_text = "SHOP NOW AT US.MEEESHOP.COM" if show_url else "SHOP NOW ★ US.MEEESHOP.COM"
+    draw_direct_text((w // 2, int(h * 0.94)), cta_text, cta_f, fill=CREAM_WHITE, anchor="mm")
 
     return img
 
@@ -713,8 +714,19 @@ def run_video_posting() -> None:
         logger.info("All products are within the repost cooldown window — skipping execution to avoid spam.")
         return
 
-    # Pick products for this run (one per pin)
-    to_post = random.sample(available, min(MAX_PINS_PER_RUN, len(available)))
+    # Pick products for this run using category LRU rotation
+    from pinterest_daily_v2 import select_next_product_lru
+    used_indices = set()
+    to_post = []
+    for _ in range(min(MAX_PINS_PER_RUN, len(available))):
+        s_idx = select_next_product_lru(available, used_indices, history)
+        if s_idx is not None:
+            used_indices.add(s_idx)
+            to_post.append(available[s_idx])
+
+    if not to_post:
+        to_post = available[:MAX_PINS_PER_RUN]
+
     logger.info(f"Will post {len(to_post)} video pin(s) (MAX_PINS_PER_RUN={MAX_PINS_PER_RUN})")
 
     posted_count   = 0
