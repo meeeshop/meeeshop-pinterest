@@ -965,15 +965,15 @@ def _template_o(draw, canvas, photo, photo2, photo3, photo4, title, category, pr
         canvas.paste(p_cell, (x, y))
         draw.rectangle([x, y, x + cell_w, y + cell_h], outline=(210, 205, 195), width=2)
 
-    # Central Trust Badge Pill (Font size increased by 50%)
+    # Central Trust Badge Pill (Ultra-visible font size 52px)
     badge_text = trust_badge or "FREE US SHIPPING"
-    bf = _get_font(int(GRID_H * 0.068), bold=True)
+    bf = _get_font(int(GRID_H * 0.102), bold=True)
     bb = bf.getbbox(badge_text)
-    bw, bh = bb[2] - bb[0] + 48, bb[3] - bb[1] + 24
+    bw, bh = bb[2] - bb[0] + 64, bb[3] - bb[1] + 32
     bx = (PIN_W - bw) // 2
     by = HEADER_H + (GRID_H - bh) // 2
-    _draw_rounded_rect(draw, (bx, by, bx + bw, by + bh), 14, CORAL)
-    draw.text((bx + 24, by + (bh - (bb[3] - bb[1])) // 2 - 2), badge_text, fill=WHITE, font=bf)
+    _draw_rounded_rect(draw, (bx, by, bx + bw, by + bh), 16, CORAL)
+    draw.text((bx + 32, by + (bh - (bb[3] - bb[1])) // 2 - 3), badge_text, fill=WHITE, font=bf)
 
     # Footer Title & Price
     footer_y = HEADER_H + GRID_H
@@ -1063,24 +1063,24 @@ def _prepare_photo_for_style(
 
 def _draw_trust_badge_pill(draw: ImageDraw.Draw, canvas: Image.Image, badge_text: str, y_top: int = 40, x_right: int = 40, bg_color=CORAL, fg_color=WHITE):
     """
-    Draw a bold, prominent floating trust pill badge (e.g. 'FREE US SHIPPING', 'USA BESTSELLER')
-    in the top-right corner of ANY pin template (font size increased by 50%: 20 -> 30px).
+    Draw an ultra-visible, bold floating trust pill badge (e.g. 'FREE US SHIPPING', 'USA BESTSELLER')
+    in the top-right corner of ANY pin template (font size 45px for high mobile visibility).
     """
-    bf = _get_font(30, bold=True)
+    bf = _get_font(45, bold=True)
     bb = bf.getbbox(badge_text)
     tw, th = bb[2] - bb[0], bb[3] - bb[1]
-    pw, ph = tw + 44, th + 22
+    pw, ph = tw + 56, th + 28
     px = PIN_W - x_right - pw
     py = y_top
 
     overlay = Image.new("RGBA", canvas.size, (0, 0, 0, 0))
     od = ImageDraw.Draw(overlay)
-    _draw_rounded_rect(od, (px + 3, py + 3, px + pw + 3, py + ph + 3), 14, (0, 0, 0, 85))
-    _draw_rounded_rect(od, (px, py, px + pw, py + ph), 14, (232, 93, 78, 250))
+    _draw_rounded_rect(od, (px + 4, py + 4, px + pw + 4, py + ph + 4), 16, (0, 0, 0, 95))
+    _draw_rounded_rect(od, (px, py, px + pw, py + ph), 16, (232, 93, 78, 255))
     
     canvas.paste(Image.alpha_composite(canvas.convert("RGBA"), overlay).convert("RGB"), (0, 0))
     draw = ImageDraw.Draw(canvas)
-    draw.text((px + 22, py + (ph - th) // 2 - 2), badge_text, fill=fg_color, font=bf)
+    draw.text((px + 28, py + (ph - th) // 2 - 3), badge_text, fill=fg_color, font=bf)
 
 
 # ── Main entry ───────────────────────────────────────────────────────────────
