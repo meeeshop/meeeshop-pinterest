@@ -19,7 +19,7 @@ def test_rendering():
         from create_test_image import create_test_product_image
         create_test_product_image(str(test_img))
 
-    for idx in [0, 1, 2, 10, 14]:
+    for idx in [0, 1, 2, 10, 14, 15, 16]:
         out_path = Path(__file__).parent / f"test_template_{idx}_output.jpg"
         result = create_pin_image(
             product_image_path=str(test_img),

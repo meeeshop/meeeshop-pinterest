@@ -337,35 +337,188 @@ def build_run_board_pool(
 
 
 
-def get_product_main_category(title: str, product_type: str = "") -> str:
+def get_product_main_category(title: str, product_type: str = "", tags: str = "") -> str:
     """Classify product into core category to enforce rotation across consecutive pins."""
     import re
-    text = f"{title} {product_type}".lower()
+    text = f"{title} {product_type} {tags}".lower()
     if re.search(r'\b(bag|backpack|purse|tote|handbag|crossbody|clutch|satchel|wallet|pouch|duffel|hobo)\b', text):
         return "bags"
-    elif re.search(r'\b(dress|gown|midi|maxi|mini)\b', text):
+    elif re.search(r'\b(dress|gown|midi|maxi|mini|tie-back|spaghetti)\b', text):
         return "dresses"
-    elif re.search(r'\b(top|blouse|shirt|cami|tank|tee|sweatshirt)\b', text):
+    elif re.search(r'\b(jumpsuit|romper|playsuit|overalls|cami jumpsui|jumpsui)\b', text):
+        return "jumpsuits"
+    elif re.search(r'\b(top|blouse|shirt|cami|tank|tee|sweatshirt|wallflower|wrap top|crop)\b', text):
         return "tops"
-    elif re.search(r'\b(jeans|denim|pants|legging|leggings|chino|shorts|bottom)\b', text):
+    elif re.search(r'\b(jeans|denim|pants|legging|leggings|chino|shorts|bottom|wide leg|trousers|cargo)\b', text):
         return "bottoms"
-    elif re.search(r'\b(jacket|coat|shacket|blazer|cardigan|outerwear)\b', text):
+    elif re.search(r'\b(jacket|coat|shacket|blazer|cardigan|outerwear|vest)\b', text):
         return "outerwear"
-    elif re.search(r'\b(sweater|knit|pullover)\b', text):
+    elif re.search(r'\b(sweater|knit|pullover|french terry)\b', text):
         return "sweaters"
     elif re.search(r'\b(skirt)\b', text):
         return "skirts"
-    elif re.search(r'\b(jumpsuit|romper|playsuit|overalls)\b', text):
-        return "jumpsuits"
     elif re.search(r'\b(shoe|flats|boots|sneakers|sandals|heels)\b', text):
         return "shoes"
     else:
         return "general"
 
 
+def fetch_all_eligible_products(
+    shopify: "ShopifyClient",
+    history: Dict[str, Any],
+    min_stock: int = 1,
+) -> List[Dict[str, Any]]:
+    """Fetch ALL active products with stock >= min_stock.
+
+    Uses category-aware cooldowns:
+    - Abundant categories (>15 items, e.g. bags): 7-day cooldown
+    - Rare categories (<=15 items, e.g. dresses, outerwear, tops): 1-day (24h) cooldown
+    Guarantees non-bag categories remain eligible every single day!
+    """
+    products = shopify.get_all_products(status="active")
+    logger.info(f"Fetched {len(products)} total products from Shopify")
+
+    now = datetime.now()
+    seven_days_ago = now - timedelta(days=7)
+    one_day_ago = now - timedelta(days=1)
+
+    cat_counts = {}
+    for p in products:
+        cat = get_product_main_category(p.get("title", ""), p.get("product_type", ""), p.get("tags", ""))
+        cat_counts[cat] = cat_counts.get(cat, 0) + 1
+
+    recent_ids = set()
+    for p in history.get("posts", []):
+        ts_str = p.get("timestamp")
+        p_id = str(p.get("product_id") or p.get("id") or "")
+        p_cat = p.get("category", "general")
+
+        cooldown_cutoff = seven_days_ago if cat_counts.get(p_cat, 0) > 15 else one_day_ago
+
+        if ts_str and p_id:
+            try:
+                ts_clean = ts_str.replace("Z", "+00:00")
+                ts = datetime.fromisoformat(ts_clean)
+                if ts.tzinfo is not None:
+                    ts = ts.replace(tzinfo=None)
+                if ts > cooldown_cutoff:
+                    recent_ids.add(p_id)
+            except Exception:
+                pass
+
+    # Load other history files
+    other_histories = [
+        ("refresh_history_v2.json", "refreshes", "timestamp"),
+        ("video_posting_history.json", "posts", "posted_at"),
+        ("blog_posting_history.json", "posts", "timestamp")
+    ]
+    for filename, list_key, time_key in other_histories:
+        history_path = Path(__file__).parent / filename
+        if history_path.exists():
+            try:
+                hist_data = json.loads(history_path.read_text(encoding="utf-8"))
+                for item in hist_data.get(list_key, []):
+                    ts_str = item.get(time_key)
+                    item_id = str(item.get("product_id") or item.get("id") or "")
+                    item_cat = item.get("category", "general")
+                    cooldown_cutoff = seven_days_ago if cat_counts.get(item_cat, 0) > 15 else one_day_ago
+
+                    if ts_str and item_id:
+                        try:
+                            ts_clean = ts_str.replace("Z", "+00:00")
+                            ts = datetime.fromisoformat(ts_clean)
+                            if ts.tzinfo is not None:
+                                ts = ts.replace(tzinfo=None)
+                            if ts > cooldown_cutoff:
+                                recent_ids.add(item_id)
+                        except Exception:
+                            pass
+            except Exception as e:
+                logger.warning(f"Failed to read {filename}: {e}")
+
+    eligible = [
+        p for p in products
+        if str(p.get("id")) not in recent_ids
+        and any(v.get("inventory_quantity", 0) >= min_stock for v in p.get("variants", []))
+    ]
+
+    logger.info(f"Eligible products (category-aware cooldown): {len(eligible)} across categories: {[get_product_main_category(p.get('title',''), p.get('product_type',''), p.get('tags','')) for p in eligible]}")
+    random.shuffle(eligible)
+    return eligible
+
+
+def select_next_product_lru(
+    pool: List[Dict[str, Any]],
+    used_indices: set,
+    history: Dict[str, Any]
+) -> Optional[int]:
+    """Select next candidate product prioritizing least-recently-used categories."""
+    category_last_used = history.get("category_last_used", {})
+
+    unused_by_cat = {}
+    for idx, prod in enumerate(pool):
+        if idx in used_indices:
+            continue
+        cat = get_product_main_category(prod.get("title", ""), prod.get("product_type", ""), prod.get("tags", ""))
+        if cat not in unused_by_cat:
+            unused_by_cat[cat] = []
+        unused_by_cat[cat].append(idx)
+
+    if not unused_by_cat:
+        return None
+
+    def cat_sort_key(cat_name: str):
+        last_ts = category_last_used.get(cat_name)
+        if not last_ts:
+            return datetime.min
+        try:
+            return datetime.fromisoformat(last_ts.replace("Z", "+00:00")).replace(tzinfo=None)
+        except Exception:
+            return datetime.min
+
+    sorted_cats = sorted(unused_by_cat.keys(), key=cat_sort_key)
+    best_cat = sorted_cats[0]
+    candidate_indices = unused_by_cat[best_cat]
+    selected_idx = random.choice(candidate_indices)
+    logger.info(f"[Category LRU Rotation] Selected '{best_cat}' (Rank 1/LRU out of available categories: {sorted_cats})")
+    return selected_idx
+
+
+def build_run_board_pool(
+    all_boards: List[Dict],
+    history: Dict[str, Any],
+    pins_this_run: int,
+) -> List[str]:
+    from board_mapping import MEEESHOP_BOARDS, PRIORITY_BOARDS
+
+    live_names = {b["name"] for b in all_boards}
+    ordered = [n for n in MEEESHOP_BOARDS if n in live_names]
+    extras = [b["name"] for b in all_boards if b["name"] not in set(ordered)]
+    all_names = ordered + extras
+
+    if not all_names:
+        return [b["name"] for b in all_boards]
+
+    priority_cursor = history.get("board_rotation_cursor", 0) % len(PRIORITY_BOARDS)
+    priority_pick = PRIORITY_BOARDS[priority_cursor % len(PRIORITY_BOARDS)]
+
+    fill_count = max(pins_this_run - 1, 1)
+    cursor = advance_board_cursor(history, fill_count, len(all_names))
+
+    pool = [priority_pick]
+    for i in range(fill_count):
+        name = all_names[(cursor + i) % len(all_names)]
+        if name not in pool:
+            pool.append(name)
+
+    logger.info(
+        f"[V2] Multi-board pool initialized across {len(all_names)} active boards (rotation cursor: {cursor})"
+    )
+    return pool
+
+
 def run_daily_posting(use_video: bool = False):
     """Post PINS_PER_RUN pins per run (V2: 2 pins × 4 runs = 8/day)."""
-
 
     logging.basicConfig(
         level=logging.INFO,
@@ -396,10 +549,8 @@ def run_daily_posting(use_video: bool = False):
     if not dry_run and not all([pinterest_email, pinterest_password, shopify_url, shopify_token]):
         raise ValueError("Missing required credentials in .env")
 
-
     target = int(os.getenv("PINS_TO_POST", str(PINS_PER_RUN)))
 
-    # ── Global daily cap guard (shared across fresh + refresh + analytics loop) ──
     tracker = DailyPinTracker()
     logger.info(f"[V2] Daily run starting — target: {target} pins | {tracker.summary()}")
     if not dry_run and not tracker.can_post(n=1):
@@ -432,11 +583,10 @@ def run_daily_posting(use_video: bool = False):
 
         logger.info(f"Loaded {len(boards)} boards")
 
-
         run_board_pool = build_run_board_pool(boards, history, target)
         save_history(history)
 
-        pool = fetch_all_eligible_products(shopify, history, min_stock=15)
+        pool = fetch_all_eligible_products(shopify, history, min_stock=1)
         if not pool:
             logger.warning("No eligible products — skipping execution to avoid spam.")
             return
@@ -450,29 +600,14 @@ def run_daily_posting(use_video: bool = False):
         last_category = history.get("last_product_category")
 
         while posted < target and len(used_product_indices) < len(pool):
-            # Select next candidate product whose category is DIFFERENT from last_category
-            selected_idx = None
-            for idx, prod in enumerate(pool):
-                if idx in used_product_indices:
-                    continue
-                cat = get_product_main_category(prod.get("title", ""), prod.get("product_type", ""))
-                if cat != last_category or len(used_product_indices) == 0:
-                    selected_idx = idx
-                    break
-
-            # Fallback: if no product of a different category is found, pick first unused product
-            if selected_idx is None:
-                for idx in range(len(pool)):
-                    if idx not in used_product_indices:
-                        selected_idx = idx
-                        break
+            selected_idx = select_next_product_lru(pool, used_product_indices, history)
 
             if selected_idx is None:
                 break
 
             used_product_indices.add(selected_idx)
             product = pool[selected_idx]
-            cat_used = get_product_main_category(product.get("title", ""), product.get("product_type", ""))
+            cat_used = get_product_main_category(product.get("title", ""), product.get("product_type", ""), product.get("tags", ""))
 
             formatted = format_product_for_pinterest(product, store_base_url)
             board_info = pick_board(posted, boards, used_boards, formatted, run_board_pool, history)
@@ -494,6 +629,9 @@ def run_daily_posting(use_video: bool = False):
                 logger.info(f"  [DRY RUN] Would create pin on board '{board}' (ID: {board_id}) with URL '{formatted['url']}'")
                 used_boards.add(board)
                 last_style, last_template, last_category = dry_style, dry_tmpl, cat_used
+                if "category_last_used" not in history:
+                    history["category_last_used"] = {}
+                history["category_last_used"][cat_used] = datetime.now().isoformat()
                 posted += 1
                 continue
 
@@ -507,6 +645,10 @@ def run_daily_posting(use_video: bool = False):
             last_style = style_used
             last_template = template_used
             last_category = cat_used
+
+            if "category_last_used" not in history:
+                history["category_last_used"] = {}
+            history["category_last_used"][cat_used] = datetime.now().isoformat()
 
             history["posts"].append({
                 "product_id": product["id"],

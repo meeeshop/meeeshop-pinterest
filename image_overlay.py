@@ -46,23 +46,46 @@ BLUSH      = (230, 185, 175)
 
 # ── Font helpers ─────────────────────────────────────────────────────────────
 
-def _get_font(size: int, bold: bool = False, serif: bool = False) -> ImageFont.FreeTypeFont:
-    if serif:
-        candidates = (
-            [
+def _get_font(size: int, bold: bool = False, serif: bool = False, italic: bool = False, script: bool = False) -> ImageFont.FreeTypeFont:
+    if script:
+        candidates = [
+            "C:/Windows/Fonts/georgiai.ttf",
+            "C:/Windows/Fonts/ariali.ttf",
+            "C:/Windows/Fonts/mvboli.ttf",
+            "C:/Windows/Fonts/segoesc.ttf",
+            "/usr/share/fonts/truetype/liberation/LiberationSans-Italic.ttf",
+            "/usr/share/fonts/truetype/dejavu/DejaVuSerif-Italic.ttf",
+        ]
+    elif serif:
+        if italic and bold:
+            candidates = [
+                "C:/Windows/Fonts/georgiaz.ttf",
+                "C:/Windows/Fonts/timesbi.ttf",
+                "C:/Windows/Fonts/georgiab.ttf",
+                "/usr/share/fonts/truetype/liberation/LiberationSerif-BoldItalic.ttf",
+            ]
+        elif italic:
+            candidates = [
+                "C:/Windows/Fonts/georgiai.ttf",
+                "C:/Windows/Fonts/timesi.ttf",
+                "/usr/share/fonts/truetype/liberation/LiberationSerif-Italic.ttf",
+            ]
+        elif bold:
+            candidates = [
                 "C:/Windows/Fonts/georgiab.ttf",
                 "C:/Windows/Fonts/timesbd.ttf",
                 "/usr/share/fonts/truetype/liberation/LiberationSerif-Bold.ttf",
                 "/usr/share/fonts/truetype/dejavu/DejaVuSerif-Bold.ttf",
                 "georgiab.ttf",
-            ] if bold else [
+            ]
+        else:
+            candidates = [
                 "C:/Windows/Fonts/georgia.ttf",
                 "C:/Windows/Fonts/times.ttf",
                 "/usr/share/fonts/truetype/liberation/LiberationSerif-Regular.ttf",
                 "/usr/share/fonts/truetype/dejavu/DejaVuSerif.ttf",
                 "georgia.ttf",
             ]
-        )
     else:
         candidates = (
             [
@@ -995,6 +1018,91 @@ def _template_o(draw, canvas, photo, photo2, photo3, photo4, title, category, pr
     _draw_cta_bar(canvas, draw, footer_y + FOOTER_H, CTA_H, RED, WHITE)
 
 
+# ── Template P ───────────────────────────────────────────────────────────────
+# Macy's Minimal Editorial Stacked Banner: Full photo + 2 minimal stacked banner bars (White + Red)
+# Clean, minimal text overlay, star logo badge at bottom center.
+def _template_p(draw, canvas, photo, title, category, price, cta="Shop Now"):
+    p = _boost(_fit_image(photo, PIN_W, PIN_H))
+    canvas.paste(p, (0, 0))
+    draw = ImageDraw.Draw(canvas)
+
+    line1 = "STYLE YOUR LOOK WITH"
+    line2 = title.upper()
+    if len(line2) > 24:
+        words = line2.split()
+        line2 = " ".join(words[:3])
+
+    # Top White Banner
+    f1 = _get_font(28, bold=True, serif=False)
+    b1 = f1.getbbox(line1)
+    w1, h1 = (b1[2] - b1[0]) + 44, (b1[3] - b1[1]) + 24
+    x1 = (PIN_W - w1) // 2
+    y1 = int(PIN_H * 0.48)
+
+    draw.rectangle([x1, y1, x1 + w1, y1 + h1], fill=WHITE)
+    draw.text((x1 + 22, y1 + 10), line1, fill=RED, font=f1)
+
+    # Bottom Red Banner (Serif Italic Bold)
+    f2 = _get_font(34, bold=True, serif=True, italic=True)
+    b2 = f2.getbbox(line2)
+    w2, h2 = (b2[2] - b2[0]) + 52, (b2[3] - b2[1]) + 28
+    x2 = (PIN_W - w2) // 2
+    y2 = y1 + h1 + 4
+
+    draw.rectangle([x2, y2, x2 + w2, y2 + h2], fill=RED)
+    draw.text((x2 + 26, y2 + 10), line2, fill=WHITE, font=f2)
+
+    # Bottom Center Star Logo (★ meee's US Boutique)
+    logo_y = PIN_H - 70
+    sf = _get_font(30, bold=True)
+    tf = _get_font(26, bold=True)
+    
+    logo_text = "meee's"
+    sb = sf.getbbox("★")
+    tb = tf.getbbox(logo_text)
+    total_w = (sb[2]-sb[0]) + 10 + (tb[2]-tb[0])
+    start_x = (PIN_W - total_w) // 2
+
+    draw.text((start_x, logo_y), "★", fill=RED, font=sf)
+    draw.text((start_x + (sb[2]-sb[0]) + 8, logo_y + 2), logo_text, fill=BLACK, font=tf)
+
+
+# ── Template Q ───────────────────────────────────────────────────────────────
+# Kohl's Cursive Script Overlay: Full photo + top-left handwritten "Trending:" script
+# + minimal white title + minimal bottom single line CTA.
+def _template_q(draw, canvas, photo, title, category, price, cta="SHOP NOW AT US.MEEESHOP.COM"):
+    p = _boost(_fit_image(photo, PIN_W, PIN_H))
+    canvas.paste(p, (0, 0))
+
+    overlay = Image.new("RGBA", (PIN_W, PIN_H), (0, 0, 0, 0))
+    od = ImageDraw.Draw(overlay)
+    zone_h = int(PIN_H * 0.35)
+    for y in range(zone_h):
+        alpha = int(140 * (1.0 - (y / zone_h)))
+        od.rectangle([(0, y), (PIN_W, y + 1)], fill=(0, 0, 0, alpha))
+
+    canvas.paste(Image.alpha_composite(p.convert("RGBA"), overlay).convert("RGB"), (0, 0))
+    draw = ImageDraw.Draw(canvas)
+
+    margin = 50
+    top_y = 60
+
+    script_f = _get_font(54, bold=False, script=True)
+    draw.text((margin, top_y), "Trending:", fill=WHITE, font=script_f)
+
+    cat_text = category.replace("Trending: ", "").upper()
+    f_title = _get_font(38, bold=True, serif=False)
+    lines = _wrap_text(cat_text, f_title, 550)
+    for i, line in enumerate(lines[:2]):
+        draw.text((margin, top_y + 65 + i * 46), line, fill=WHITE, font=f_title)
+
+    cta_f = _get_font(22, bold=True)
+    cta_str = "SHOP NOW AT US.MEEESHOP.COM"
+    cb = cta_f.getbbox(cta_str)
+    cx = (PIN_W - (cb[2] - cb[0])) // 2
+    draw.text((cx, PIN_H - 65), cta_str, fill=WHITE, font=cta_f)
+
+
 def _prepare_photo_for_style(
     photo: Image.Image,
     photo2: Optional[Image.Image],
@@ -1198,10 +1306,14 @@ def create_pin_image(
             _template_n(draw, canvas, photo, title, category, price, cta)
         elif template_index == 14:
             _template_o(draw, canvas, photo, photo2, photo3, photo4, title, category, price, trust_badge=trust_badge)
+        elif template_index == 15:
+            _template_p(draw, canvas, photo, title, category, price, cta)
+        elif template_index == 16:
+            _template_q(draw, canvas, photo, title, category, price, cta)
         else:
-            _template_o(draw, canvas, photo, photo2, photo3, photo4, title, category, price, trust_badge=trust_badge)
+            _template_p(draw, canvas, photo, title, category, price, cta)
 
-        # Draw trust badge pill on all single/split templates (0..13)
+        # Draw trust badge pill on all single/split templates except 14 (which has a central badge)
         if template_index != 14:
             _draw_trust_badge_pill(draw, canvas, trust_badge)
 
@@ -1219,7 +1331,7 @@ def create_pin_image(
 
 # ── Public aliases ────────────────────────────────────────────────────────────
 
-ALL_TEMPLATES = [0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14]
+ALL_TEMPLATES = [0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16]
 ALL_STYLES = ["hero", "carousel", "collage", "card"]
 
 
