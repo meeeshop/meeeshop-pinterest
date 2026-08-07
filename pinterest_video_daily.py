@@ -127,11 +127,35 @@ else:
     _FONT_REG  = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
 
 
-def _font(size: int, bold: bool = True) -> ImageFont.FreeTypeFont:
-    try:
-        return ImageFont.truetype(_FONT_BOLD if bold else _FONT_REG, size)
-    except Exception:
-        return ImageFont.load_default()
+def _font(size: int, bold: bool = True, script: bool = False, serif: bool = False, italic: bool = False) -> ImageFont.FreeTypeFont:
+    if script or italic:
+        candidates = [
+            "C:/Windows/Fonts/georgiai.ttf",
+            "C:/Windows/Fonts/timesi.ttf",
+            "/usr/share/fonts/truetype/dejavu/DejaVuSerif-BoldItalic.ttf",
+            "/usr/share/fonts/truetype/dejavu/DejaVuSerif-Italic.ttf",
+            "/usr/share/fonts/truetype/liberation/LiberationSerif-Italic.ttf",
+        ]
+    elif serif:
+        candidates = [
+            "C:/Windows/Fonts/georgia.ttf",
+            "C:/Windows/Fonts/times.ttf",
+            "/usr/share/fonts/truetype/dejavu/DejaVuSerif-Bold.ttf" if bold else "/usr/share/fonts/truetype/dejavu/DejaVuSerif.ttf",
+            "/usr/share/fonts/truetype/liberation/LiberationSerif-Regular.ttf",
+        ]
+    else:
+        candidates = [
+            _FONT_BOLD if bold else _FONT_REG,
+            "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf" if bold else "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+            "/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf",
+            "C:/Windows/Fonts/arialbd.ttf" if bold else "C:/Windows/Fonts/arial.ttf",
+        ]
+    for p in candidates:
+        try:
+            return ImageFont.truetype(p, size)
+        except Exception:
+            pass
+    return ImageFont.load_default()
 
 
 # ---------------------------------------------------------------------------
