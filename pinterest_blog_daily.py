@@ -224,15 +224,15 @@ def run_blog_posting() -> None:
                 Image.new("RGB", (800, 600), (220, 210, 205)).save(fallback_img)
             temp_src = fallback_img
 
-        # Create Blog Pin Image using template
+        # Create Blog Pin Image using template (Direct White/Cream Text Overlay)
         final_image = create_pin_image(
             product_image_path=str(temp_src),
             title=pin_title,
             category=article["blog_title"],
-            price=clean_excerpt,
-            cta="Read The Blog",
+            price=None,
+            cta="READ ARTICLE ★ US.MEEESHOP.COM",
             output_path=str(temp_final),
-            template_index=9
+            template_index=16
         )
 
         if not final_image:

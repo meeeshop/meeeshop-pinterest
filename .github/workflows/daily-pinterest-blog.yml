@@ -1,8 +1,8 @@
-name: Pinterest Daily Blog Postings
+name: Pinterest Blog Postings (Twice Weekly)
 
 on:
   schedule:
-    - cron: '30 15 * * *'   # 11:30 AM ET / 15:30 UTC daily
+    - cron: '30 15 * * 2,5'   # 11:30 AM ET / 15:30 UTC twice a week (Tuesday and Friday)
   workflow_dispatch:
     inputs:
       dry_run:
