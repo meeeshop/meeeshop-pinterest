@@ -1061,6 +1061,28 @@ def _prepare_photo_for_style(
         return _boost(_fit_image(photo, target_w, target_h))
 
 
+def _draw_trust_badge_pill(draw: ImageDraw.Draw, canvas: Image.Image, badge_text: str, y_top: int = 35, x_right: int = 35, bg_color=CORAL, fg_color=WHITE):
+    """
+    Draw a clean floating trust pill badge (e.g. 'FREE US SHIPPING', 'USA BESTSELLER')
+    in the top-right corner of ANY pin template.
+    """
+    bf = _get_font(20, bold=True)
+    bb = bf.getbbox(badge_text)
+    tw, th = bb[2] - bb[0], bb[3] - bb[1]
+    pw, ph = tw + 32, th + 16
+    px = PIN_W - x_right - pw
+    py = y_top
+
+    overlay = Image.new("RGBA", canvas.size, (0, 0, 0, 0))
+    od = ImageDraw.Draw(overlay)
+    _draw_rounded_rect(od, (px + 2, py + 2, px + pw + 2, py + ph + 2), 10, (0, 0, 0, 80))
+    _draw_rounded_rect(od, (px, py, px + pw, py + ph), 10, (232, 93, 78, 245))
+    
+    canvas.paste(Image.alpha_composite(canvas.convert("RGBA"), overlay).convert("RGB"), (0, 0))
+    draw = ImageDraw.Draw(canvas)
+    draw.text((px + 16, py + 7), badge_text, fill=fg_color, font=bf)
+
+
 # ── Main entry ───────────────────────────────────────────────────────────────
 
 def create_pin_image(
@@ -1144,6 +1166,7 @@ def create_pin_image(
         trust_badges = ["FREE US SHIPPING", "USA BESTSELLER", "TRENDING IN US", "VIRAL STYLE"]
         trust_badge = trust_badges[int(hashlib.md5(title.encode()).hexdigest(), 16) % len(trust_badges)]
 
+
         if template_index == 0:
             _template_a(draw, canvas, photo, title, category, price)
         elif template_index == 1:
@@ -1177,6 +1200,10 @@ def create_pin_image(
             _template_o(draw, canvas, photo, photo2, photo3, photo4, title, category, price, trust_badge=trust_badge)
         else:
             _template_o(draw, canvas, photo, photo2, photo3, photo4, title, category, price, trust_badge=trust_badge)
+
+        # Draw trust badge pill on all single/split templates (0..13)
+        if template_index != 14:
+            _draw_trust_badge_pill(draw, canvas, trust_badge)
 
         if not output_path:
             output_path = tempfile.mktemp(suffix=".jpg", prefix="pin_final_")

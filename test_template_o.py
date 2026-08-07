@@ -19,24 +19,23 @@ def test_rendering():
         from create_test_image import create_test_product_image
         create_test_product_image(str(test_img))
 
-    out_path = Path(__file__).parent / "test_template_o_output.jpg"
-    
-    result = create_pin_image(
-        product_image_path=str(test_img),
-        title="Chic Floral Print Spaghetti Strap Summer Maxi Dress",
-        category="Trending: Dresses",
-        price="49.99",
-        cta="Shop Now at us.MeeeShop.com",
-        output_path=str(out_path),
-        template_index=14,  # Template O
-        board_name="Summer Dresses & Outfits",
-        image_style="hero"
-    )
-
-    if result and Path(result).exists():
-        logger.info(f"✅ Template O generated successfully: {result} (Size: {Path(result).stat().st_size} bytes)")
-    else:
-        logger.error("❌ Failed to render Template O")
+    for idx in [0, 1, 2, 10, 14]:
+        out_path = Path(__file__).parent / f"test_template_{idx}_output.jpg"
+        result = create_pin_image(
+            product_image_path=str(test_img),
+            title="Chic Floral Print Spaghetti Strap Summer Maxi Dress",
+            category="Trending: Dresses",
+            price="49.99",
+            cta="Shop Now at us.MeeeShop.com",
+            output_path=str(out_path),
+            template_index=idx,
+            board_name="Summer Dresses & Outfits",
+            image_style="hero"
+        )
+        if result and Path(result).exists():
+            logger.info(f"✅ Template {idx} with Trust Badge generated successfully (Size: {Path(result).stat().st_size} bytes)")
+        else:
+            logger.error(f"❌ Failed to render Template {idx}")
 
 if __name__ == "__main__":
     test_rendering()
