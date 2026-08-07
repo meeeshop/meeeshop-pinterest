@@ -1068,39 +1068,43 @@ def _template_p(draw, canvas, photo, title, category, price, cta="Shop Now"):
 
 
 # ── Template Q ───────────────────────────────────────────────────────────────
-# Kohl's Cursive Script Overlay: Full photo + top-left handwritten "Trending:" script
-# + minimal white title + minimal bottom single line CTA.
+# Kohl's Plain Direct Font Overlay:
+# Pure crisp white/cream text rendered directly on full-bleed product photo.
+# ZERO background boxes, ZERO cards, ZERO gradient overlays.
 def _template_q(draw, canvas, photo, title, category, price, cta="SHOP NOW AT US.MEEESHOP.COM"):
     p = _boost(_fit_image(photo, PIN_W, PIN_H))
     canvas.paste(p, (0, 0))
-
-    overlay = Image.new("RGBA", (PIN_W, PIN_H), (0, 0, 0, 0))
-    od = ImageDraw.Draw(overlay)
-    zone_h = int(PIN_H * 0.35)
-    for y in range(zone_h):
-        alpha = int(140 * (1.0 - (y / zone_h)))
-        od.rectangle([(0, y), (PIN_W, y + 1)], fill=(0, 0, 0, alpha))
-
-    canvas.paste(Image.alpha_composite(p.convert("RGBA"), overlay).convert("RGB"), (0, 0))
     draw = ImageDraw.Draw(canvas)
 
-    margin = 50
-    top_y = 60
+    margin = 55
+    top_y = 65
 
-    script_f = _get_font(54, bold=False, script=True)
-    draw.text((margin, top_y), "Trending:", fill=WHITE, font=script_f)
+    # Line 1: Cursive Script ("Trending:") directly on photo
+    script_f = _get_font(60, bold=False, script=True)
+    script_text = "Trending:"
+    for dx, dy in [(-2,0), (2,0), (0,-2), (0,2), (-1,-1), (1,1), (-1,1), (1,-1)]:
+        draw.text((margin + dx, top_y + dy), script_text, fill=(15, 15, 15), font=script_f)
+    draw.text((margin, top_y), script_text, fill=WARM_WHITE, font=script_f)
 
+    # Line 2 & 3: Clean Bold Sans-Serif Category Title directly on photo
     cat_text = category.replace("Trending: ", "").upper()
-    f_title = _get_font(38, bold=True, serif=False)
-    lines = _wrap_text(cat_text, f_title, 550)
+    f_title = _get_font(44, bold=True, serif=False)
+    lines = _wrap_text(cat_text, f_title, 620)
     for i, line in enumerate(lines[:2]):
-        draw.text((margin, top_y + 65 + i * 46), line, fill=WHITE, font=f_title)
+        ly = top_y + 75 + i * 52
+        for dx, dy in [(-2,0), (2,0), (0,-2), (0,2), (-1,-1), (1,1), (-1,1), (1,-1)]:
+            draw.text((margin + dx, ly + dy), line, fill=(15, 15, 15), font=f_title)
+        draw.text((margin, ly), line, fill=WARM_WHITE, font=f_title)
 
-    cta_f = _get_font(22, bold=True)
+    # Bottom minimal CTA text directly on photo
+    cta_f = _get_font(26, bold=True)
     cta_str = "SHOP NOW AT US.MEEESHOP.COM"
     cb = cta_f.getbbox(cta_str)
     cx = (PIN_W - (cb[2] - cb[0])) // 2
-    draw.text((cx, PIN_H - 65), cta_str, fill=WHITE, font=cta_f)
+    cy = PIN_H - 75
+    for dx, dy in [(-2,0), (2,0), (0,-2), (0,2), (-1,-1), (1,1), (-1,1), (1,-1)]:
+        draw.text((cx + dx, cy + dy), cta_str, fill=(15, 15, 15), font=cta_f)
+    draw.text((cx, cy), cta_str, fill=WARM_WHITE, font=cta_f)
 
 
 def _prepare_photo_for_style(
@@ -1152,43 +1156,29 @@ def _prepare_photo_for_style(
         return _boost(composite)
 
     elif style == "card":
-        p = _fit_image(photo, target_w, target_h)
-        card_overlay = Image.new("RGBA", (target_w, target_h), (0, 0, 0, 0))
-        cdraw = ImageDraw.Draw(card_overlay)
-
-        margin_x = int(target_w * 0.06)
-        card_h = int(target_h * 0.38)
-        card_y = target_h - card_h - int(target_h * 0.05)
-
-        _draw_rounded_rect(cdraw, (margin_x, card_y, target_w - margin_x, card_y + card_h), 16, (15, 15, 20, 210))
-        p_rgba = p.convert("RGBA")
-        composite = Image.alpha_composite(p_rgba, card_overlay).convert("RGB")
-        return _boost(composite)
+        return _boost(_fit_image(photo, target_w, target_h))
 
     else:
         return _boost(_fit_image(photo, target_w, target_h))
 
 
-def _draw_trust_badge_pill(draw: ImageDraw.Draw, canvas: Image.Image, badge_text: str, y_top: int = 40, x_right: int = 40, bg_color=CORAL, fg_color=WHITE):
+def _draw_trust_badge_pill(draw: ImageDraw.Draw, canvas: Image.Image, badge_text: str, y_top: int = 50, x_right: int = 50, bg_color=None, fg_color=WARM_WHITE):
     """
-    Draw an ultra-visible, bold floating trust pill badge (e.g. 'FREE US SHIPPING', 'USA BESTSELLER')
-    in the top-right corner of ANY pin template (font size 45px for high mobile visibility).
+    Draw floating plain white/cream text directly on product image with ZERO background colors, cards, or pills.
     """
-    bf = _get_font(45, bold=True)
-    bb = bf.getbbox(badge_text)
+    bf = _get_font(36, bold=True)
+    full_text = f"★  {badge_text}"
+    bb = bf.getbbox(full_text)
     tw, th = bb[2] - bb[0], bb[3] - bb[1]
-    pw, ph = tw + 56, th + 28
-    px = PIN_W - x_right - pw
+    px = PIN_W - x_right - tw
     py = y_top
 
-    overlay = Image.new("RGBA", canvas.size, (0, 0, 0, 0))
-    od = ImageDraw.Draw(overlay)
-    _draw_rounded_rect(od, (px + 4, py + 4, px + pw + 4, py + ph + 4), 16, (0, 0, 0, 95))
-    _draw_rounded_rect(od, (px, py, px + pw, py + ph), 16, (232, 93, 78, 255))
+    # Contour text shadow for high contrast on light or dark product images
+    for dx, dy in [(-2,0), (2,0), (0,-2), (0,2), (-1,-1), (1,1), (-1,1), (1,-1)]:
+        draw.text((px + dx, py + dy), full_text, fill=(15, 15, 15), font=bf)
     
-    canvas.paste(Image.alpha_composite(canvas.convert("RGBA"), overlay).convert("RGB"), (0, 0))
-    draw = ImageDraw.Draw(canvas)
-    draw.text((px + 28, py + (ph - th) // 2 - 3), badge_text, fill=fg_color, font=bf)
+    # Pure warm cream font directly on photo
+    draw.text((px, py), full_text, fill=WARM_WHITE, font=bf)
 
 
 # ── Main entry ───────────────────────────────────────────────────────────────
