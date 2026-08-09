@@ -89,6 +89,42 @@
       "style": "carousel",
       "template": 13,
       "source": "old_boards_poster"
+    },
+    {
+      "product_id": 8818153324715,
+      "title": "Briony Cami Top",
+      "board": "Confident Looks",
+      "timestamp": "2026-08-09T15:24:39.068210",
+      "style": "collage",
+      "template": 0,
+      "source": "old_boards_poster"
+    },
+    {
+      "product_id": 8875353571499,
+      "title": "The Bonnie Cropped Hoodie - Bone",
+      "board": "American Bazi",
+      "timestamp": "2026-08-09T15:24:51.033839",
+      "style": "card",
+      "template": 12,
+      "source": "old_boards_poster"
+    },
+    {
+      "product_id": 8869172969643,
+      "title": "Basic Bae Built-in Shapewear Sleeveless Maxi Dress",
+      "board": "Thanks giving Outfits",
+      "timestamp": "2026-08-09T15:25:04.518513",
+      "style": "hero",
+      "template": 11,
+      "source": "old_boards_poster"
+    },
+    {
+      "product_id": 8818148081835,
+      "title": "Eliza Mock Neck Top",
+      "board": "MeeeShop's Luxe Styles",
+      "timestamp": "2026-08-09T15:25:22.687160",
+      "style": "carousel",
+      "template": 16,
+      "source": "old_boards_poster"
     }
   ],
   "board_last_used": {
@@ -101,12 +137,16 @@
     "Feminine & Flowy Fits": "2026-08-09T10:09:26.828452",
     "Farm clothes": "2026-08-09T10:09:43.724582",
     "Rompers, Jumpsuits & Outfit Sets": "2026-08-09T10:13:02.589376",
-    "Trendy & Timeless Fashion": "2026-08-09T10:13:27.467208"
+    "Trendy & Timeless Fashion": "2026-08-09T10:13:27.467208",
+    "Confident Looks": "2026-08-09T15:24:39.068219",
+    "American Bazi": "2026-08-09T15:24:51.033845",
+    "Thanks giving Outfits": "2026-08-09T15:25:04.518521",
+    "MeeeShop's Luxe Styles": "2026-08-09T15:25:22.687168"
   },
-  "daily_count": 10,
-  "last_post_time": "2026-08-09T10:13:27.467211",
+  "daily_count": 14,
+  "last_post_time": "2026-08-09T15:25:22.687171",
   "board_rotation_cursor": 3,
   "last_image_style": "carousel",
-  "last_template_index": 13,
+  "last_template_index": 16,
   "last_product_category": "bottoms"
 }
