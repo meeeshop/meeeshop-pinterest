@@ -35,18 +35,78 @@
       "style": "card",
       "template": 4,
       "category": "bottoms"
+    },
+    {
+      "product_id": 8787168886955,
+      "title": "Iconic Lymphatic Long Sleeve Bodysuit - Thong",
+      "board": "Must-Have Fashion Picks",
+      "timestamp": "2026-08-09T10:08:48.634147",
+      "style": "hero",
+      "template": 8,
+      "source": "old_boards_poster"
+    },
+    {
+      "product_id": 8919867326635,
+      "title": "Evening Lace Chapter Woven Midi Dress",
+      "board": "Short fall dresses",
+      "timestamp": "2026-08-09T10:09:12.855614",
+      "style": "carousel",
+      "template": 0,
+      "source": "old_boards_poster"
+    },
+    {
+      "product_id": 8895829573803,
+      "title": "Sequin Lurex Cowl Neck Dress",
+      "board": "Feminine & Flowy Fits",
+      "timestamp": "2026-08-09T10:09:26.828442",
+      "style": "collage",
+      "template": 13,
+      "source": "old_boards_poster"
+    },
+    {
+      "product_id": 8740284498091,
+      "title": "Judy Blue Full Size High Waist Wide Leg Jeans with Skewed Inseam plus Size",
+      "board": "Farm clothes",
+      "timestamp": "2026-08-09T10:09:43.724572",
+      "style": "card",
+      "template": 16,
+      "source": "old_boards_poster"
+    },
+    {
+      "product_id": 8818150703275,
+      "title": "Loden Mini Dress",
+      "board": "Rompers, Jumpsuits & Outfit Sets",
+      "timestamp": "2026-08-09T10:13:02.589366",
+      "style": "hero",
+      "template": 0,
+      "source": "old_boards_poster"
+    },
+    {
+      "product_id": 8787168788651,
+      "title": "L'original Lymphatic Stirrup Leggings",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-08-09T10:13:27.467197",
+      "style": "carousel",
+      "template": 13,
+      "source": "old_boards_poster"
     }
   ],
   "board_last_used": {
     "Dresses": "2026-08-03T15:40:51.355682",
     "Trends": "2026-08-03T15:41:16.775614",
     "New": "2026-08-03T15:41:37.750261",
-    "Pants & Leggings": "2026-08-03T15:41:52.451555"
+    "Pants & Leggings": "2026-08-03T15:41:52.451555",
+    "Must-Have Fashion Picks": "2026-08-09T10:08:48.634157",
+    "Short fall dresses": "2026-08-09T10:09:12.855625",
+    "Feminine & Flowy Fits": "2026-08-09T10:09:26.828452",
+    "Farm clothes": "2026-08-09T10:09:43.724582",
+    "Rompers, Jumpsuits & Outfit Sets": "2026-08-09T10:13:02.589376",
+    "Trendy & Timeless Fashion": "2026-08-09T10:13:27.467208"
   },
-  "daily_count": 4,
-  "last_post_time": "2026-08-03T15:41:52.451558",
+  "daily_count": 10,
+  "last_post_time": "2026-08-09T10:13:27.467211",
   "board_rotation_cursor": 3,
-  "last_image_style": "card",
-  "last_template_index": 4,
+  "last_image_style": "carousel",
+  "last_template_index": 13,
   "last_product_category": "bottoms"
 }

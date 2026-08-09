@@ -303,40 +303,6 @@ def fetch_all_eligible_products(
     return eligible
 
 
-def build_run_board_pool(
-    all_boards: List[Dict],
-    history: Dict[str, Any],
-    pins_this_run: int,
-) -> List[str]:
-    from board_mapping import MEEESHOP_BOARDS, PRIORITY_BOARDS
-
-    live_names = {b["name"] for b in all_boards}
-    ordered = [n for n in MEEESHOP_BOARDS if n in live_names]
-    extras = [b["name"] for b in all_boards if b["name"] not in set(ordered)]
-    all_names = ordered + extras
-
-    if not all_names:
-        return [b["name"] for b in all_boards]
-
-    priority_cursor = history.get("board_rotation_cursor", 0) % len(PRIORITY_BOARDS)
-    priority_pick = PRIORITY_BOARDS[priority_cursor % len(PRIORITY_BOARDS)]
-
-    fill_count = max(pins_this_run - 1, 1)
-    cursor = advance_board_cursor(history, fill_count, len(all_names))
-
-    pool = [priority_pick]
-    for i in range(fill_count):
-        name = all_names[(cursor + i) % len(all_names)]
-        if name not in pool:
-            pool.append(name)
-
-    logger.info(
-        f"[V2] Multi-board pool initialized across {len(all_names)} active boards (rotation cursor: {cursor})"
-    )
-    return pool
-
-
-
 def get_product_main_category(title: str, product_type: str = "", tags: str = "") -> str:
     """Classify product into core category to enforce rotation across consecutive pins."""
     import re
@@ -489,7 +455,7 @@ def build_run_board_pool(
     history: Dict[str, Any],
     pins_this_run: int,
 ) -> List[str]:
-    from board_mapping import MEEESHOP_BOARDS, PRIORITY_BOARDS
+    from board_mapping import MEEESHOP_BOARDS, PRIORITY_BOARDS, OLD_BOARDS_1Y
 
     live_names = {b["name"] for b in all_boards}
     ordered = [n for n in MEEESHOP_BOARDS if n in live_names]
@@ -512,7 +478,7 @@ def build_run_board_pool(
             pool.append(name)
 
     logger.info(
-        f"[V2] Multi-board pool initialized across {len(all_names)} active boards (rotation cursor: {cursor})"
+        f"[V2] Multi-board pool initialized across {len(all_names)} active & 1-year-old boards (rotation cursor: {cursor})"
     )
     return pool
 

@@ -317,8 +317,13 @@ def _compose_frame(
     for i, line in enumerate(textwrap.wrap(title, 26)[:2]):
         draw_direct_text((w // 2, int(h * 0.18) + i * 48), line.upper(), title_f, anchor="mm")
 
-    # Price directly on video frame
-    if price:
+    # Price directly on video frame (only if valid non-zero price)
+    try:
+        price_val = float(str(price).replace("$", "").strip()) if price else 0.0
+    except (ValueError, TypeError):
+        price_val = 0.0
+
+    if price_val > 0.01:
         price_f = _font(38, bold=True)
         draw_direct_text((w // 2, int(h * 0.88)), f"${price}", price_f, fill=CREAM_WHITE, anchor="mm")
 
@@ -835,10 +840,17 @@ def run_video_posting() -> None:
         except Exception:
             pass
 
+        from pinterest_daily_v2 import get_product_main_category
+        cat = get_product_main_category(product.get("title", ""), product.get("product_type", ""), str(product.get("tags", "")))
+        if "category_last_used" not in history:
+            history["category_last_used"] = {}
+        history["category_last_used"][cat] = datetime.now(timezone.utc).isoformat()
+
         history["posts"].append({
             "product_id":      str(product.get("id", "")),
             "product_handle":  product.get("handle", ""),
             "product_title":   product["title"],
+            "category":        cat,
             "pin_id":          pin_id,
             "board":           board["name"],
             "product_url":     product_url,
