@@ -71,6 +71,24 @@
       "style": "card",
       "template": 16,
       "source": "old_boards_poster"
+    },
+    {
+      "product_id": 8818150703275,
+      "title": "Loden Mini Dress",
+      "board": "Rompers, Jumpsuits & Outfit Sets",
+      "timestamp": "2026-08-09T10:13:02.589366",
+      "style": "hero",
+      "template": 0,
+      "source": "old_boards_poster"
+    },
+    {
+      "product_id": 8787168788651,
+      "title": "L'original Lymphatic Stirrup Leggings",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-08-09T10:13:27.467197",
+      "style": "carousel",
+      "template": 13,
+      "source": "old_boards_poster"
     }
   ],
   "board_last_used": {
@@ -81,12 +99,14 @@
     "Must-Have Fashion Picks": "2026-08-09T10:08:48.634157",
     "Short fall dresses": "2026-08-09T10:09:12.855625",
     "Feminine & Flowy Fits": "2026-08-09T10:09:26.828452",
-    "Farm clothes": "2026-08-09T10:09:43.724582"
+    "Farm clothes": "2026-08-09T10:09:43.724582",
+    "Rompers, Jumpsuits & Outfit Sets": "2026-08-09T10:13:02.589376",
+    "Trendy & Timeless Fashion": "2026-08-09T10:13:27.467208"
   },
-  "daily_count": 8,
-  "last_post_time": "2026-08-09T10:09:43.724586",
+  "daily_count": 10,
+  "last_post_time": "2026-08-09T10:13:27.467211",
   "board_rotation_cursor": 3,
-  "last_image_style": "card",
-  "last_template_index": 16,
+  "last_image_style": "carousel",
+  "last_template_index": 13,
   "last_product_category": "bottoms"
 }
