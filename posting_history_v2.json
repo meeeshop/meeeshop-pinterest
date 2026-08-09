@@ -125,6 +125,42 @@
       "style": "carousel",
       "template": 16,
       "source": "old_boards_poster"
+    },
+    {
+      "product_id": 8782659780779,
+      "title": "Still Thinking Lace Midi Dress",
+      "board": "Emory Park Clothing",
+      "timestamp": "2026-08-09T21:38:21.576780",
+      "style": "collage",
+      "template": 14,
+      "source": "old_boards_poster"
+    },
+    {
+      "product_id": 8921416302763,
+      "title": "Iconic Lymphatic Long Sleeve Bodysuit - Brief",
+      "board": "Zenana Women's Clothing, Dresses, Tops, Pants",
+      "timestamp": "2026-08-09T21:38:38.138468",
+      "style": "card",
+      "template": 8,
+      "source": "old_boards_poster"
+    },
+    {
+      "product_id": 8818181865643,
+      "title": "Breezy Tank - Olive",
+      "board": "Our Recommended Feminine Styles",
+      "timestamp": "2026-08-09T21:38:56.151580",
+      "style": "hero",
+      "template": 14,
+      "source": "old_boards_poster"
+    },
+    {
+      "product_id": 8888478728363,
+      "title": "Bibi Christmas Theme Chevron Sequins Detail Sweater",
+      "board": "Women's Cardigans",
+      "timestamp": "2026-08-09T21:39:19.725755",
+      "style": "carousel",
+      "template": 10,
+      "source": "old_boards_poster"
     }
   ],
   "board_last_used": {
@@ -141,12 +177,16 @@
     "Confident Looks": "2026-08-09T15:24:39.068219",
     "American Bazi": "2026-08-09T15:24:51.033845",
     "Thanks giving Outfits": "2026-08-09T15:25:04.518521",
-    "MeeeShop's Luxe Styles": "2026-08-09T15:25:22.687168"
+    "MeeeShop's Luxe Styles": "2026-08-09T15:25:22.687168",
+    "Emory Park Clothing": "2026-08-09T21:38:21.576789",
+    "Zenana Women's Clothing, Dresses, Tops, Pants": "2026-08-09T21:38:38.138477",
+    "Our Recommended Feminine Styles": "2026-08-09T21:38:56.151590",
+    "Women's Cardigans": "2026-08-09T21:39:19.725765"
   },
-  "daily_count": 14,
-  "last_post_time": "2026-08-09T15:25:22.687171",
+  "daily_count": 18,
+  "last_post_time": "2026-08-09T21:39:19.725770",
   "board_rotation_cursor": 3,
   "last_image_style": "carousel",
-  "last_template_index": 16,
+  "last_template_index": 10,
   "last_product_category": "bottoms"
 }
