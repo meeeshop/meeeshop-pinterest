@@ -233,6 +233,42 @@
       "style": "carousel",
       "template": 7,
       "source": "old_boards_poster"
+    },
+    {
+      "product_id": 8869160943787,
+      "title": "Oversized Mixed Media Knit Shacket",
+      "board": "Outerwear",
+      "timestamp": "2026-08-10T21:48:01.529379",
+      "style": "collage",
+      "template": 8,
+      "source": "old_boards_poster"
+    },
+    {
+      "product_id": 8782621376683,
+      "title": "Best in Show Dog Skater Skirt",
+      "board": "Blogs",
+      "timestamp": "2026-08-10T21:48:15.296988",
+      "style": "card",
+      "template": 9,
+      "source": "old_boards_poster"
+    },
+    {
+      "product_id": 8818156863659,
+      "title": "Evania Halter Top",
+      "board": "Must-Have Fashion Picks",
+      "timestamp": "2026-08-10T21:48:27.315050",
+      "style": "hero",
+      "template": 8,
+      "source": "old_boards_poster"
+    },
+    {
+      "product_id": 8789754740907,
+      "title": "Francesca Tummy Control High Rise Straight Jeans",
+      "board": "Farm clothes",
+      "timestamp": "2026-08-10T21:48:46.245521",
+      "style": "carousel",
+      "template": 2,
+      "source": "old_boards_poster"
     }
   ],
   "board_last_used": {
@@ -240,10 +276,10 @@
     "Trends": "2026-08-03T15:41:16.775614",
     "New": "2026-08-03T15:41:37.750261",
     "Pants & Leggings": "2026-08-03T15:41:52.451555",
-    "Must-Have Fashion Picks": "2026-08-09T10:08:48.634157",
+    "Must-Have Fashion Picks": "2026-08-10T21:48:27.315060",
     "Short fall dresses": "2026-08-09T10:09:12.855625",
     "Feminine & Flowy Fits": "2026-08-09T10:09:26.828452",
-    "Farm clothes": "2026-08-09T10:09:43.724582",
+    "Farm clothes": "2026-08-10T21:48:46.245529",
     "Rompers, Jumpsuits & Outfit Sets": "2026-08-09T10:13:02.589376",
     "Trendy & Timeless Fashion": "2026-08-09T10:13:27.467208",
     "Confident Looks": "2026-08-09T15:24:39.068219",
@@ -261,13 +297,15 @@
     "My Shop #1737732113": "2026-08-10T15:54:34.853022",
     "Weekend to Workwear": "2026-08-10T15:54:49.351251",
     "Shop For Holidays": "2026-08-10T15:55:10.494164",
-    "BFCM Deals": "2026-08-10T15:55:30.647046"
+    "BFCM Deals": "2026-08-10T15:55:30.647046",
+    "Outerwear": "2026-08-10T21:48:01.529390",
+    "Blogs": "2026-08-10T21:48:15.297000"
   },
-  "daily_count": 8,
-  "last_post_time": "2026-08-10T15:55:30.647050",
+  "daily_count": 12,
+  "last_post_time": "2026-08-10T21:48:46.245532",
   "board_rotation_cursor": 6,
   "last_image_style": "carousel",
-  "last_template_index": 7,
+  "last_template_index": 2,
   "last_product_category": "bags",
   "category_last_used": {
     "dresses": "2026-08-10T14:17:08.892781",
