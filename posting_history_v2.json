@@ -197,6 +197,42 @@
       "style": "carousel",
       "template": 3,
       "category": "bags"
+    },
+    {
+      "product_id": 8818181111979,
+      "title": "Playa Jumpsuit - Vintage Black",
+      "board": "My Shop #1737732113",
+      "timestamp": "2026-08-10T15:54:34.853013",
+      "style": "collage",
+      "template": 5,
+      "source": "old_boards_poster"
+    },
+    {
+      "product_id": 8919859527851,
+      "title": "Women's Joey Super Wide Leg Jeans with Cross Chain",
+      "board": "Weekend to Workwear",
+      "timestamp": "2026-08-10T15:54:49.351242",
+      "style": "card",
+      "template": 1,
+      "source": "old_boards_poster"
+    },
+    {
+      "product_id": 8818153390251,
+      "title": "Naomi Top",
+      "board": "Shop For Holidays",
+      "timestamp": "2026-08-10T15:55:10.494156",
+      "style": "hero",
+      "template": 0,
+      "source": "old_boards_poster"
+    },
+    {
+      "product_id": 8789754609835,
+      "title": "High Rise Flare Jeans",
+      "board": "BFCM Deals",
+      "timestamp": "2026-08-10T15:55:30.647036",
+      "style": "carousel",
+      "template": 7,
+      "source": "old_boards_poster"
     }
   ],
   "board_last_used": {
@@ -221,13 +257,17 @@
     "Dress": "2026-08-10T14:17:08.892794",
     "Wardrobe Must-Haves": "2026-08-10T14:17:28.134380",
     "Shirts & Tops": "2026-08-10T14:17:46.002795",
-    "Wardrobe Goals": "2026-08-10T14:18:01.629459"
+    "Wardrobe Goals": "2026-08-10T14:18:01.629459",
+    "My Shop #1737732113": "2026-08-10T15:54:34.853022",
+    "Weekend to Workwear": "2026-08-10T15:54:49.351251",
+    "Shop For Holidays": "2026-08-10T15:55:10.494164",
+    "BFCM Deals": "2026-08-10T15:55:30.647046"
   },
-  "daily_count": 4,
-  "last_post_time": "2026-08-10T14:18:01.629463",
+  "daily_count": 8,
+  "last_post_time": "2026-08-10T15:55:30.647050",
   "board_rotation_cursor": 6,
   "last_image_style": "carousel",
-  "last_template_index": 3,
+  "last_template_index": 7,
   "last_product_category": "bags",
   "category_last_used": {
     "dresses": "2026-08-10T14:17:08.892781",
