@@ -161,6 +161,42 @@
       "style": "carousel",
       "template": 10,
       "source": "old_boards_poster"
+    },
+    {
+      "product_id": 8921125945515,
+      "title": "Eli Tiered Dress - Vintage Black",
+      "board": "Dress",
+      "timestamp": "2026-08-10T14:17:08.892791",
+      "style": "collage",
+      "template": 4,
+      "category": "dresses"
+    },
+    {
+      "product_id": 8818172100779,
+      "title": "Cruz Hoodie",
+      "board": "Wardrobe Must-Haves",
+      "timestamp": "2026-08-10T14:17:28.134375",
+      "style": "card",
+      "template": 3,
+      "category": "general"
+    },
+    {
+      "product_id": 8881906188459,
+      "title": "Willie Nelson Wild West Tee",
+      "board": "Shirts & Tops",
+      "timestamp": "2026-08-10T14:17:46.002792",
+      "style": "hero",
+      "template": 8,
+      "category": "tops"
+    },
+    {
+      "product_id": 8820880703659,
+      "title": "Mayci Convertible Crossbody Clutch",
+      "board": "Wardrobe Goals",
+      "timestamp": "2026-08-10T14:18:01.629456",
+      "style": "carousel",
+      "template": 3,
+      "category": "bags"
     }
   ],
   "board_last_used": {
@@ -181,12 +217,22 @@
     "Emory Park Clothing": "2026-08-09T21:38:21.576789",
     "Zenana Women's Clothing, Dresses, Tops, Pants": "2026-08-09T21:38:38.138477",
     "Our Recommended Feminine Styles": "2026-08-09T21:38:56.151590",
-    "Women's Cardigans": "2026-08-09T21:39:19.725765"
+    "Women's Cardigans": "2026-08-09T21:39:19.725765",
+    "Dress": "2026-08-10T14:17:08.892794",
+    "Wardrobe Must-Haves": "2026-08-10T14:17:28.134380",
+    "Shirts & Tops": "2026-08-10T14:17:46.002795",
+    "Wardrobe Goals": "2026-08-10T14:18:01.629459"
   },
-  "daily_count": 18,
-  "last_post_time": "2026-08-09T21:39:19.725770",
-  "board_rotation_cursor": 3,
+  "daily_count": 4,
+  "last_post_time": "2026-08-10T14:18:01.629463",
+  "board_rotation_cursor": 6,
   "last_image_style": "carousel",
-  "last_template_index": 10,
-  "last_product_category": "bottoms"
+  "last_template_index": 3,
+  "last_product_category": "bags",
+  "category_last_used": {
+    "dresses": "2026-08-10T14:17:08.892781",
+    "general": "2026-08-10T14:17:28.134366",
+    "tops": "2026-08-10T14:17:46.002782",
+    "bags": "2026-08-10T14:18:01.629447"
+  }
 }
