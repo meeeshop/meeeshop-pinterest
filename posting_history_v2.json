@@ -269,6 +269,42 @@
       "style": "carousel",
       "template": 2,
       "source": "old_boards_poster"
+    },
+    {
+      "product_id": 8786783862955,
+      "title": "Whitney Foldover Compact Crossbody",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-08-11T15:54:46.753030",
+      "style": "collage",
+      "template": 13,
+      "source": "old_boards_poster"
+    },
+    {
+      "product_id": 8782660272299,
+      "title": "Heat Waves Power Mesh Midi Dress",
+      "board": "Davi & Dani Womens Clothing | us.meeeshop.com",
+      "timestamp": "2026-08-11T15:55:00.912404",
+      "style": "card",
+      "template": 5,
+      "source": "old_boards_poster"
+    },
+    {
+      "product_id": 8740256317611,
+      "title": "Hyfve Collared Wrap Top & Wide-leg Pants Set",
+      "board": "Confident Looks",
+      "timestamp": "2026-08-11T15:55:15.258623",
+      "style": "hero",
+      "template": 10,
+      "source": "old_boards_poster"
+    },
+    {
+      "product_id": 8866329657515,
+      "title": "Ruched Shoulder Wide Collar Pant Set",
+      "board": "Our Recommended Feminine Styles",
+      "timestamp": "2026-08-11T15:55:38.869321",
+      "style": "carousel",
+      "template": 8,
+      "source": "old_boards_poster"
     }
   ],
   "board_last_used": {
@@ -281,14 +317,14 @@
     "Feminine & Flowy Fits": "2026-08-09T10:09:26.828452",
     "Farm clothes": "2026-08-10T21:48:46.245529",
     "Rompers, Jumpsuits & Outfit Sets": "2026-08-09T10:13:02.589376",
-    "Trendy & Timeless Fashion": "2026-08-09T10:13:27.467208",
-    "Confident Looks": "2026-08-09T15:24:39.068219",
+    "Trendy & Timeless Fashion": "2026-08-11T15:54:46.753040",
+    "Confident Looks": "2026-08-11T15:55:15.258632",
     "American Bazi": "2026-08-09T15:24:51.033845",
     "Thanks giving Outfits": "2026-08-09T15:25:04.518521",
     "MeeeShop's Luxe Styles": "2026-08-09T15:25:22.687168",
     "Emory Park Clothing": "2026-08-09T21:38:21.576789",
     "Zenana Women's Clothing, Dresses, Tops, Pants": "2026-08-09T21:38:38.138477",
-    "Our Recommended Feminine Styles": "2026-08-09T21:38:56.151590",
+    "Our Recommended Feminine Styles": "2026-08-11T15:55:38.869330",
     "Women's Cardigans": "2026-08-09T21:39:19.725765",
     "Dress": "2026-08-10T14:17:08.892794",
     "Wardrobe Must-Haves": "2026-08-10T14:17:28.134380",
@@ -299,13 +335,14 @@
     "Shop For Holidays": "2026-08-10T15:55:10.494164",
     "BFCM Deals": "2026-08-10T15:55:30.647046",
     "Outerwear": "2026-08-10T21:48:01.529390",
-    "Blogs": "2026-08-10T21:48:15.297000"
+    "Blogs": "2026-08-10T21:48:15.297000",
+    "Davi & Dani Womens Clothing | us.meeeshop.com": "2026-08-11T15:55:00.912413"
   },
-  "daily_count": 12,
-  "last_post_time": "2026-08-10T21:48:46.245532",
+  "daily_count": 16,
+  "last_post_time": "2026-08-11T15:55:38.869333",
   "board_rotation_cursor": 6,
   "last_image_style": "carousel",
-  "last_template_index": 2,
+  "last_template_index": 8,
   "last_product_category": "bags",
   "category_last_used": {
     "dresses": "2026-08-10T14:17:08.892781",
