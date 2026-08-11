@@ -305,6 +305,42 @@
       "style": "carousel",
       "template": 8,
       "source": "old_boards_poster"
+    },
+    {
+      "product_id": 8904413380779,
+      "title": "Mina Half Zip Top (light Grey)",
+      "board": "American Bazi",
+      "timestamp": "2026-08-11T21:55:11.484385",
+      "style": "collage",
+      "template": 15,
+      "source": "old_boards_poster"
+    },
+    {
+      "product_id": 8905531457707,
+      "title": "Mock Neck Sweatshirt, Leopard",
+      "board": "MeeeShop's Luxe Styles",
+      "timestamp": "2026-08-11T21:55:25.521942",
+      "style": "card",
+      "template": 8,
+      "source": "old_boards_poster"
+    },
+    {
+      "product_id": 8818178719915,
+      "title": "Blondie Pretty Baby Tee",
+      "board": "Wardrobe Must-Haves",
+      "timestamp": "2026-08-11T21:55:44.043620",
+      "style": "hero",
+      "template": 7,
+      "source": "old_boards_poster"
+    },
+    {
+      "product_id": 8819278577835,
+      "title": "Pretty Sporty Tee",
+      "board": "Zenana Women's Clothing, Dresses, Tops, Pants",
+      "timestamp": "2026-08-11T21:56:04.762345",
+      "style": "carousel",
+      "template": 5,
+      "source": "old_boards_poster"
     }
   ],
   "board_last_used": {
@@ -319,15 +355,15 @@
     "Rompers, Jumpsuits & Outfit Sets": "2026-08-09T10:13:02.589376",
     "Trendy & Timeless Fashion": "2026-08-11T15:54:46.753040",
     "Confident Looks": "2026-08-11T15:55:15.258632",
-    "American Bazi": "2026-08-09T15:24:51.033845",
+    "American Bazi": "2026-08-11T21:55:11.484396",
     "Thanks giving Outfits": "2026-08-09T15:25:04.518521",
-    "MeeeShop's Luxe Styles": "2026-08-09T15:25:22.687168",
+    "MeeeShop's Luxe Styles": "2026-08-11T21:55:25.521953",
     "Emory Park Clothing": "2026-08-09T21:38:21.576789",
-    "Zenana Women's Clothing, Dresses, Tops, Pants": "2026-08-09T21:38:38.138477",
+    "Zenana Women's Clothing, Dresses, Tops, Pants": "2026-08-11T21:56:04.762355",
     "Our Recommended Feminine Styles": "2026-08-11T15:55:38.869330",
     "Women's Cardigans": "2026-08-09T21:39:19.725765",
     "Dress": "2026-08-10T14:17:08.892794",
-    "Wardrobe Must-Haves": "2026-08-10T14:17:28.134380",
+    "Wardrobe Must-Haves": "2026-08-11T21:55:44.043629",
     "Shirts & Tops": "2026-08-10T14:17:46.002795",
     "Wardrobe Goals": "2026-08-10T14:18:01.629459",
     "My Shop #1737732113": "2026-08-10T15:54:34.853022",
@@ -338,11 +374,11 @@
     "Blogs": "2026-08-10T21:48:15.297000",
     "Davi & Dani Womens Clothing | us.meeeshop.com": "2026-08-11T15:55:00.912413"
   },
-  "daily_count": 16,
-  "last_post_time": "2026-08-11T15:55:38.869333",
+  "daily_count": 20,
+  "last_post_time": "2026-08-11T21:56:04.762358",
   "board_rotation_cursor": 6,
   "last_image_style": "carousel",
-  "last_template_index": 8,
+  "last_template_index": 5,
   "last_product_category": "bags",
   "category_last_used": {
     "dresses": "2026-08-10T14:17:08.892781",
