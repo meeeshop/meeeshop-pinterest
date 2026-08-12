@@ -90,7 +90,7 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add posting_history_v2.json daily_pin_count.json || true
+          git add posting_history_v2.json daily_pin_count.json dynamic_boards.json || true
           git commit -m "chore: auto-update 1y board posting history [skip ci]" || echo "No changes to commit"
           git pull origin ${{ github.ref_name }} --rebase || true
           git push origin HEAD || echo "Failed to push history updates"
