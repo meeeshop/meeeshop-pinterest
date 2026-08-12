@@ -108,7 +108,7 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add refresh_history_v2.json refresh_history.json posting_history_v2.json posting_history.json daily_pin_count.json || true
+          git add refresh_history_v2.json refresh_history.json posting_history_v2.json posting_history.json daily_pin_count.json dynamic_boards.json || true
           git commit -m "chore: auto-update posting and refresh history [skip ci]" || echo "No changes to commit"
           git pull origin ${{ github.ref_name }} --rebase || true
           git push origin HEAD || echo "Failed to push history updates"
