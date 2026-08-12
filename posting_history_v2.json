@@ -89,6 +89,42 @@
       "style": "carousel",
       "template": 13,
       "source": "old_boards_poster"
+    },
+    {
+      "product_id": 8906718937259,
+      "title": "Tribal Print Knit Top",
+      "board": "Confident Looks",
+      "timestamp": "2026-08-12T04:28:41.785450",
+      "style": "collage",
+      "template": 1,
+      "source": "old_boards_poster"
+    },
+    {
+      "product_id": 8921411322027,
+      "title": "Retro Boat Neck Top in Leopard",
+      "board": "American Bazi",
+      "timestamp": "2026-08-12T04:28:54.975857",
+      "style": "card",
+      "template": 6,
+      "source": "old_boards_poster"
+    },
+    {
+      "product_id": 8818172199083,
+      "title": "The Bowling Top",
+      "board": "MeeeShop's Luxe Styles",
+      "timestamp": "2026-08-12T04:29:08.465527",
+      "style": "hero",
+      "template": 8,
+      "source": "old_boards_poster"
+    },
+    {
+      "product_id": 8888476041387,
+      "title": "Risen High Rise Crop Boyfriend Tapered Jeans",
+      "board": "Weekend to Workwear",
+      "timestamp": "2026-08-12T04:29:27.602917",
+      "style": "carousel",
+      "template": 14,
+      "source": "old_boards_poster"
     }
   ],
   "board_last_used": {
@@ -101,12 +137,16 @@
     "Feminine & Flowy Fits": "2026-08-09T10:09:26.828452",
     "Farm clothes": "2026-08-09T10:09:43.724582",
     "Rompers, Jumpsuits & Outfit Sets": "2026-08-09T10:13:02.589376",
-    "Trendy & Timeless Fashion": "2026-08-09T10:13:27.467208"
+    "Trendy & Timeless Fashion": "2026-08-09T10:13:27.467208",
+    "Confident Looks": "2026-08-12T04:28:41.785460",
+    "American Bazi": "2026-08-12T04:28:54.975866",
+    "MeeeShop's Luxe Styles": "2026-08-12T04:29:08.465538",
+    "Weekend to Workwear": "2026-08-12T04:29:27.602927"
   },
-  "daily_count": 10,
-  "last_post_time": "2026-08-09T10:13:27.467211",
+  "daily_count": 14,
+  "last_post_time": "2026-08-12T04:29:27.602930",
   "board_rotation_cursor": 3,
   "last_image_style": "carousel",
-  "last_template_index": 13,
+  "last_template_index": 14,
   "last_product_category": "bottoms"
 }
