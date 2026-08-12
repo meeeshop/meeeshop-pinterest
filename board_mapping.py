@@ -460,6 +460,27 @@ CATEGORY_TO_BOARDS = {
 }
 
 
+# Load and merge dynamically generated AI boards
+import json
+from pathlib import Path
+
+DYNAMIC_BOARDS_FILE = Path(__file__).parent / "dynamic_boards.json"
+if DYNAMIC_BOARDS_FILE.exists():
+    try:
+        dynamic_boards = json.loads(DYNAMIC_BOARDS_FILE.read_text(encoding="utf-8"))
+        for cat, boards in dynamic_boards.items():
+            if cat not in CATEGORY_TO_BOARDS:
+                CATEGORY_TO_BOARDS[cat] = []
+            for b in boards:
+                if b not in CATEGORY_TO_BOARDS[cat]:
+                    CATEGORY_TO_BOARDS[cat].append(b)
+                if b not in MEEESHOP_BOARDS:
+                    MEEESHOP_BOARDS.append(b)
+    except Exception as e:
+        import logging
+        logging.getLogger(__name__).warning(f"Failed to load dynamic boards: {e}")
+
+
 def get_candidate_boards_for_product(
     product_title: str, product_type: str = None, prioritize_old_boards: bool = False
 ) -> list:
