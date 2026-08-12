@@ -91,39 +91,255 @@
       "source": "old_boards_poster"
     },
     {
-      "product_id": 8906718937259,
-      "title": "Tribal Print Knit Top",
+      "product_id": 8818153324715,
+      "title": "Briony Cami Top",
       "board": "Confident Looks",
-      "timestamp": "2026-08-12T04:28:41.785450",
+      "timestamp": "2026-08-09T15:24:39.068210",
       "style": "collage",
+      "template": 0,
+      "source": "old_boards_poster"
+    },
+    {
+      "product_id": 8875353571499,
+      "title": "The Bonnie Cropped Hoodie - Bone",
+      "board": "American Bazi",
+      "timestamp": "2026-08-09T15:24:51.033839",
+      "style": "card",
+      "template": 12,
+      "source": "old_boards_poster"
+    },
+    {
+      "product_id": 8869172969643,
+      "title": "Basic Bae Built-in Shapewear Sleeveless Maxi Dress",
+      "board": "Thanks giving Outfits",
+      "timestamp": "2026-08-09T15:25:04.518513",
+      "style": "hero",
+      "template": 11,
+      "source": "old_boards_poster"
+    },
+    {
+      "product_id": 8818148081835,
+      "title": "Eliza Mock Neck Top",
+      "board": "MeeeShop's Luxe Styles",
+      "timestamp": "2026-08-09T15:25:22.687160",
+      "style": "carousel",
+      "template": 16,
+      "source": "old_boards_poster"
+    },
+    {
+      "product_id": 8782659780779,
+      "title": "Still Thinking Lace Midi Dress",
+      "board": "Emory Park Clothing",
+      "timestamp": "2026-08-09T21:38:21.576780",
+      "style": "collage",
+      "template": 14,
+      "source": "old_boards_poster"
+    },
+    {
+      "product_id": 8921416302763,
+      "title": "Iconic Lymphatic Long Sleeve Bodysuit - Brief",
+      "board": "Zenana Women's Clothing, Dresses, Tops, Pants",
+      "timestamp": "2026-08-09T21:38:38.138468",
+      "style": "card",
+      "template": 8,
+      "source": "old_boards_poster"
+    },
+    {
+      "product_id": 8818181865643,
+      "title": "Breezy Tank - Olive",
+      "board": "Our Recommended Feminine Styles",
+      "timestamp": "2026-08-09T21:38:56.151580",
+      "style": "hero",
+      "template": 14,
+      "source": "old_boards_poster"
+    },
+    {
+      "product_id": 8888478728363,
+      "title": "Bibi Christmas Theme Chevron Sequins Detail Sweater",
+      "board": "Women's Cardigans",
+      "timestamp": "2026-08-09T21:39:19.725755",
+      "style": "carousel",
+      "template": 10,
+      "source": "old_boards_poster"
+    },
+    {
+      "product_id": 8921125945515,
+      "title": "Eli Tiered Dress - Vintage Black",
+      "board": "Dress",
+      "timestamp": "2026-08-10T14:17:08.892791",
+      "style": "collage",
+      "template": 4,
+      "category": "dresses"
+    },
+    {
+      "product_id": 8818172100779,
+      "title": "Cruz Hoodie",
+      "board": "Wardrobe Must-Haves",
+      "timestamp": "2026-08-10T14:17:28.134375",
+      "style": "card",
+      "template": 3,
+      "category": "general"
+    },
+    {
+      "product_id": 8881906188459,
+      "title": "Willie Nelson Wild West Tee",
+      "board": "Shirts & Tops",
+      "timestamp": "2026-08-10T14:17:46.002792",
+      "style": "hero",
+      "template": 8,
+      "category": "tops"
+    },
+    {
+      "product_id": 8820880703659,
+      "title": "Mayci Convertible Crossbody Clutch",
+      "board": "Wardrobe Goals",
+      "timestamp": "2026-08-10T14:18:01.629456",
+      "style": "carousel",
+      "template": 3,
+      "category": "bags"
+    },
+    {
+      "product_id": 8818181111979,
+      "title": "Playa Jumpsuit - Vintage Black",
+      "board": "My Shop #1737732113",
+      "timestamp": "2026-08-10T15:54:34.853013",
+      "style": "collage",
+      "template": 5,
+      "source": "old_boards_poster"
+    },
+    {
+      "product_id": 8919859527851,
+      "title": "Women's Joey Super Wide Leg Jeans with Cross Chain",
+      "board": "Weekend to Workwear",
+      "timestamp": "2026-08-10T15:54:49.351242",
+      "style": "card",
       "template": 1,
       "source": "old_boards_poster"
     },
     {
-      "product_id": 8921411322027,
-      "title": "Retro Boat Neck Top in Leopard",
-      "board": "American Bazi",
-      "timestamp": "2026-08-12T04:28:54.975857",
-      "style": "card",
-      "template": 6,
+      "product_id": 8818153390251,
+      "title": "Naomi Top",
+      "board": "Shop For Holidays",
+      "timestamp": "2026-08-10T15:55:10.494156",
+      "style": "hero",
+      "template": 0,
       "source": "old_boards_poster"
     },
     {
-      "product_id": 8818172199083,
-      "title": "The Bowling Top",
-      "board": "MeeeShop's Luxe Styles",
-      "timestamp": "2026-08-12T04:29:08.465527",
+      "product_id": 8789754609835,
+      "title": "High Rise Flare Jeans",
+      "board": "BFCM Deals",
+      "timestamp": "2026-08-10T15:55:30.647036",
+      "style": "carousel",
+      "template": 7,
+      "source": "old_boards_poster"
+    },
+    {
+      "product_id": 8869160943787,
+      "title": "Oversized Mixed Media Knit Shacket",
+      "board": "Outerwear",
+      "timestamp": "2026-08-10T21:48:01.529379",
+      "style": "collage",
+      "template": 8,
+      "source": "old_boards_poster"
+    },
+    {
+      "product_id": 8782621376683,
+      "title": "Best in Show Dog Skater Skirt",
+      "board": "Blogs",
+      "timestamp": "2026-08-10T21:48:15.296988",
+      "style": "card",
+      "template": 9,
+      "source": "old_boards_poster"
+    },
+    {
+      "product_id": 8818156863659,
+      "title": "Evania Halter Top",
+      "board": "Must-Have Fashion Picks",
+      "timestamp": "2026-08-10T21:48:27.315050",
       "style": "hero",
       "template": 8,
       "source": "old_boards_poster"
     },
     {
-      "product_id": 8888476041387,
-      "title": "Risen High Rise Crop Boyfriend Tapered Jeans",
-      "board": "Weekend to Workwear",
-      "timestamp": "2026-08-12T04:29:27.602917",
+      "product_id": 8789754740907,
+      "title": "Francesca Tummy Control High Rise Straight Jeans",
+      "board": "Farm clothes",
+      "timestamp": "2026-08-10T21:48:46.245521",
       "style": "carousel",
-      "template": 14,
+      "template": 2,
+      "source": "old_boards_poster"
+    },
+    {
+      "product_id": 8786783862955,
+      "title": "Whitney Foldover Compact Crossbody",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-08-11T15:54:46.753030",
+      "style": "collage",
+      "template": 13,
+      "source": "old_boards_poster"
+    },
+    {
+      "product_id": 8782660272299,
+      "title": "Heat Waves Power Mesh Midi Dress",
+      "board": "Davi & Dani Womens Clothing | us.meeeshop.com",
+      "timestamp": "2026-08-11T15:55:00.912404",
+      "style": "card",
+      "template": 5,
+      "source": "old_boards_poster"
+    },
+    {
+      "product_id": 8740256317611,
+      "title": "Hyfve Collared Wrap Top & Wide-leg Pants Set",
+      "board": "Confident Looks",
+      "timestamp": "2026-08-11T15:55:15.258623",
+      "style": "hero",
+      "template": 10,
+      "source": "old_boards_poster"
+    },
+    {
+      "product_id": 8866329657515,
+      "title": "Ruched Shoulder Wide Collar Pant Set",
+      "board": "Our Recommended Feminine Styles",
+      "timestamp": "2026-08-11T15:55:38.869321",
+      "style": "carousel",
+      "template": 8,
+      "source": "old_boards_poster"
+    },
+    {
+      "product_id": 8904413380779,
+      "title": "Mina Half Zip Top (light Grey)",
+      "board": "American Bazi",
+      "timestamp": "2026-08-11T21:55:11.484385",
+      "style": "collage",
+      "template": 15,
+      "source": "old_boards_poster"
+    },
+    {
+      "product_id": 8905531457707,
+      "title": "Mock Neck Sweatshirt, Leopard",
+      "board": "MeeeShop's Luxe Styles",
+      "timestamp": "2026-08-11T21:55:25.521942",
+      "style": "card",
+      "template": 8,
+      "source": "old_boards_poster"
+    },
+    {
+      "product_id": 8818178719915,
+      "title": "Blondie Pretty Baby Tee",
+      "board": "Wardrobe Must-Haves",
+      "timestamp": "2026-08-11T21:55:44.043620",
+      "style": "hero",
+      "template": 7,
+      "source": "old_boards_poster"
+    },
+    {
+      "product_id": 8819278577835,
+      "title": "Pretty Sporty Tee",
+      "board": "Zenana Women's Clothing, Dresses, Tops, Pants",
+      "timestamp": "2026-08-11T21:56:04.762345",
+      "style": "carousel",
+      "template": 5,
       "source": "old_boards_poster"
     }
   ],
@@ -132,21 +348,42 @@
     "Trends": "2026-08-03T15:41:16.775614",
     "New": "2026-08-03T15:41:37.750261",
     "Pants & Leggings": "2026-08-03T15:41:52.451555",
-    "Must-Have Fashion Picks": "2026-08-09T10:08:48.634157",
+    "Must-Have Fashion Picks": "2026-08-10T21:48:27.315060",
     "Short fall dresses": "2026-08-09T10:09:12.855625",
     "Feminine & Flowy Fits": "2026-08-09T10:09:26.828452",
-    "Farm clothes": "2026-08-09T10:09:43.724582",
+    "Farm clothes": "2026-08-10T21:48:46.245529",
     "Rompers, Jumpsuits & Outfit Sets": "2026-08-09T10:13:02.589376",
-    "Trendy & Timeless Fashion": "2026-08-09T10:13:27.467208",
-    "Confident Looks": "2026-08-12T04:28:41.785460",
-    "American Bazi": "2026-08-12T04:28:54.975866",
-    "MeeeShop's Luxe Styles": "2026-08-12T04:29:08.465538",
-    "Weekend to Workwear": "2026-08-12T04:29:27.602927"
+    "Trendy & Timeless Fashion": "2026-08-11T15:54:46.753040",
+    "Confident Looks": "2026-08-11T15:55:15.258632",
+    "American Bazi": "2026-08-11T21:55:11.484396",
+    "Thanks giving Outfits": "2026-08-09T15:25:04.518521",
+    "MeeeShop's Luxe Styles": "2026-08-11T21:55:25.521953",
+    "Emory Park Clothing": "2026-08-09T21:38:21.576789",
+    "Zenana Women's Clothing, Dresses, Tops, Pants": "2026-08-11T21:56:04.762355",
+    "Our Recommended Feminine Styles": "2026-08-11T15:55:38.869330",
+    "Women's Cardigans": "2026-08-09T21:39:19.725765",
+    "Dress": "2026-08-10T14:17:08.892794",
+    "Wardrobe Must-Haves": "2026-08-11T21:55:44.043629",
+    "Shirts & Tops": "2026-08-10T14:17:46.002795",
+    "Wardrobe Goals": "2026-08-10T14:18:01.629459",
+    "My Shop #1737732113": "2026-08-10T15:54:34.853022",
+    "Weekend to Workwear": "2026-08-10T15:54:49.351251",
+    "Shop For Holidays": "2026-08-10T15:55:10.494164",
+    "BFCM Deals": "2026-08-10T15:55:30.647046",
+    "Outerwear": "2026-08-10T21:48:01.529390",
+    "Blogs": "2026-08-10T21:48:15.297000",
+    "Davi & Dani Womens Clothing | us.meeeshop.com": "2026-08-11T15:55:00.912413"
   },
-  "daily_count": 14,
-  "last_post_time": "2026-08-12T04:29:27.602930",
-  "board_rotation_cursor": 3,
+  "daily_count": 20,
+  "last_post_time": "2026-08-11T21:56:04.762358",
+  "board_rotation_cursor": 6,
   "last_image_style": "carousel",
-  "last_template_index": 14,
-  "last_product_category": "bottoms"
+  "last_template_index": 5,
+  "last_product_category": "bags",
+  "category_last_used": {
+    "dresses": "2026-08-10T14:17:08.892781",
+    "general": "2026-08-10T14:17:28.134366",
+    "tops": "2026-08-10T14:17:46.002782",
+    "bags": "2026-08-10T14:18:01.629447"
+  }
 }
