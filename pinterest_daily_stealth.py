@@ -456,9 +456,9 @@ def run_daily_stealth_posting(dry_run: bool = False, pins_count: Optional[int] =
             time.sleep(random.uniform(5, 12))
         else:
             consecutive_failures += 1
-            logger.warning(f"Stealth posting failed. Consecutive failures: {consecutive_failures}/3")
-            if consecutive_failures >= 3:
-                logger.error("Too many consecutive failures! Aborting run to prevent endless looping and wasting minutes.")
+            logger.warning(f"Stealth posting failed. Consecutive failures: {consecutive_failures}/1")
+            if consecutive_failures >= 1:
+                logger.error("Pin failed! Aborting run immediately as requested to prevent wasted minutes.")
                 sys.exit(1)
 
     logger.info(f"🎯 Stealth daily run finished. Posted {posted_count} pins.")
