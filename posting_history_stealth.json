@@ -59,19 +59,40 @@
       "style": "carousel",
       "template": 0,
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8786744934571,
+      "title": "Stylish Crossbody Bag for Everyday Summer Style and Back to School \u2014 MeeeShop US Boutique",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-08-13T05:29:39.715837",
+      "type": "blog",
+      "style": "collage",
+      "template": 3,
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8771487170731,
+      "title": "High Rise Denim Shorts with Embroidered Detail for Everyday Boutique Style \u2014 MeeeShop US Boutique",
+      "board": "Trends",
+      "timestamp": "2026-08-13T05:31:07.154353",
+      "type": "blog",
+      "style": "card",
+      "template": 1,
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-08-13T04:59:04.254165",
-    "Trends": "2026-08-13T05:00:35.241462",
+    "Trends": "2026-08-13T05:31:07.154353",
     "Dresses": "2026-08-13T05:07:16.467641",
     "Feminine & Flowy Fits": "2026-08-13T05:08:45.302648",
     "Short fall dresses": "2026-08-13T05:18:36.701706",
-    "Must-Have Fashion Picks": "2026-08-13T05:20:05.419233"
+    "Must-Have Fashion Picks": "2026-08-13T05:20:05.419233",
+    "Trendy & Timeless Fashion": "2026-08-13T05:29:39.715837"
   },
-  "daily_count": 6,
-  "last_post_time": "2026-08-13T05:20:05.419233",
+  "daily_count": 8,
+  "last_post_time": "2026-08-13T05:31:07.154353",
   "board_rotation_cursor": 0,
-  "last_image_style": "carousel",
-  "last_template_index": 0
+  "last_image_style": "card",
+  "last_template_index": 1
 }
