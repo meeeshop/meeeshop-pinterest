@@ -42,7 +42,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 HISTORY_FILE = ROOT / "posting_history_stealth.json"
-MAX_PINS_PER_DAY = int(os.environ.get("PINTEREST_DAILY_CAP", "8"))
+MAX_PINS_PER_DAY = int(os.environ.get("PINTEREST_DAILY_CAP", "25"))
 PINS_PER_RUN = int(os.environ.get("PINS_TO_POST", "2"))
 
 

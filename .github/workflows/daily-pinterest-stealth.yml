@@ -77,7 +77,7 @@ jobs:
           ENCRYPTION_KEY_PRIMARY: ${{ secrets.ENCRYPTION_KEY_PRIMARY }}
           ENCRYPTION_KEY_FALLBACK: ${{ secrets.ENCRYPTION_KEY_FALLBACK }}
           DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
-          PINTEREST_DAILY_CAP: '16'
+          PINTEREST_DAILY_CAP: '25'
           PYTHONUNBUFFERED: '1'
         run: |
           PINS="${{ github.event.inputs.pins_count || '4' }}"
