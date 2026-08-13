@@ -430,6 +430,7 @@ class StealthPinterestPoster:
         board_name: str,
         link_url: str,
         alt_text: Optional[str] = None,
+        cover_image_path: Optional[str] = None,
         dry_run: bool = False,
     ) -> Tuple[bool, Optional[str]]:
         img_file = Path(image_path)
@@ -497,6 +498,68 @@ class StealthPinterestPoster:
                     return False, "File input element not found in pin builder"
                 file_input.set_input_files(str(img_file))
                 time.sleep(4)
+
+                # 2b. For video pins: handle "Video cover image" step
+                is_video = img_file.suffix.lower() in (".mp4", ".mov", ".avi", ".webm")
+                if is_video:
+                    logger.info("🎬 Video detected — looking for cover image prompt...")
+                    try:
+                        cover_set = False
+
+                        # Preferred: use the pre-supplied cover_image_path (product JPG)
+                        if cover_image_path and Path(cover_image_path).exists():
+                            all_inputs = page.query_selector_all('input[type="file"]')
+                            if len(all_inputs) > 1:
+                                all_inputs[1].set_input_files(cover_image_path)
+                                logger.info(f"✓ Uploaded pre-supplied cover image: {Path(cover_image_path).name}")
+                                time.sleep(2)
+                                cover_set = True
+
+                        if not cover_set:
+                            # Try clicking a cover image trigger button
+                            cover_trigger_selectors = [
+                                '[data-test-id="video-cover-image-upload"]',
+                                'button:has-text("Choose a cover image")',
+                                'button:has-text("Upload cover image")',
+                                '[aria-label="Choose cover image"]',
+                                '[aria-label="Video cover image"]',
+                            ]
+                            for csel in cover_trigger_selectors:
+                                try:
+                                    cel = page.query_selector(csel)
+                                    if cel and cel.is_visible():
+                                        cel.click()
+                                        time.sleep(1)
+                                        logger.info(f"✓ Clicked video cover trigger: {csel}")
+                                        cover_set = True
+                                        break
+                                except Exception:
+                                    continue
+
+                        if not cover_set:
+                            # Last resort: ffmpeg first-frame extraction
+                            try:
+                                import subprocess
+                                cover_jpg = img_file.with_suffix(".cover.jpg")
+                                subprocess.run([
+                                    "ffmpeg", "-y", "-i", str(img_file),
+                                    "-vframes", "1", "-q:v", "2", str(cover_jpg)
+                                ], capture_output=True, timeout=15)
+                                if cover_jpg.exists():
+                                    all_inputs = page.query_selector_all('input[type="file"]')
+                                    if len(all_inputs) > 1:
+                                        all_inputs[1].set_input_files(str(cover_jpg))
+                                        logger.info("✓ Uploaded ffmpeg-extracted cover frame")
+                                        time.sleep(2)
+                                        cover_jpg.unlink(missing_ok=True)
+                                        cover_set = True
+                            except Exception as fe:
+                                logger.warning(f"ffmpeg cover frame failed: {fe}")
+
+                        if not cover_set:
+                            logger.warning("Could not set video cover — Publish may stay disabled")
+                    except Exception as ve:
+                        logger.warning(f"Video cover handling error: {ve}")
 
                 # 3. Enter Title
                 logger.info(f"📝 Entering title: {title[:50]}...")

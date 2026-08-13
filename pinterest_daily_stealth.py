@@ -186,6 +186,7 @@ def post_single_pin_stealth(
                     board_name=board_name,
                     link_url=product_data["url"],
                     alt_text=content.get("pin_alt_text"),
+                    cover_image_path=str(image_file),   # ← cover thumbnail for video
                     dry_run=dry_run,
                 )
                 video_file.unlink(missing_ok=True)
