@@ -174,6 +174,17 @@
       "pin_url": "https://www.pinterest.com/pin/962222276663027504",
       "blog_url": "https://us.meeeshop.com/blogs/our-tips/8-stylish-vegan-friendly-handbags-from-justin-taylor-collection-at-meeeshop-tips-for-buying-your-next-accessory",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8880718839979,
+      "title": "Lace Hem Midi Dress for Date Night and Late Summer Outings \u2014 MeeeShop US Boutique",
+      "board": "Rompers, Jumpsuits &...",
+      "timestamp": "2026-08-13T10:24:53.533944",
+      "type": "product",
+      "style": "carousel",
+      "template": 1,
+      "pin_url": "https://www.pinterest.com/pin/962222276663027670",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
@@ -191,11 +202,12 @@
     "Dressy Outfits": "2026-08-13T07:23:15.578073",
     "Must-Have Fashion...": "2026-08-13T07:29:13.724257",
     "Flares Jeans": "2026-08-13T09:47:17.613715",
-    "Short Tall dresses": "2026-08-13T09:51:59.815856"
+    "Short Tall dresses": "2026-08-13T09:51:59.815856",
+    "Rompers, Jumpsuits &...": "2026-08-13T10:24:53.533944"
   },
-  "daily_count": 17,
-  "last_post_time": "2026-08-13T10:19:03.342429",
+  "daily_count": 18,
+  "last_post_time": "2026-08-13T10:24:53.533944",
   "board_rotation_cursor": 0,
-  "last_image_style": "hero",
-  "last_template_index": 15
+  "last_image_style": "carousel",
+  "last_template_index": 1
 }
