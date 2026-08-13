@@ -113,6 +113,55 @@ def post_single_pin_stealth(
 
     overlay_file = temp_dir / f"stealth_overlay_{product_data['product_id']}.jpg"
     try:
+        # ── CAROUSEL PIN: download multiple images, apply per-slide overlays ─────
+        if pin_type == "carousel":
+            all_urls = product_data.get("all_image_urls", [])
+            if len(all_urls) < 2:
+                logger.warning("Not enough product images for carousel, falling back to product pin")
+                pin_type = "product"
+            else:
+                slide_images = []
+                for slide_idx, img_url in enumerate(all_urls[:4]):
+                    slide_raw = temp_dir / f"stealth_cslide_{product_data['product_id']}_{slide_idx}.jpg"
+                    slide_overlay = temp_dir / f"stealth_cslide_ovl_{product_data['product_id']}_{slide_idx}.jpg"
+                    if not download_image(img_url, slide_raw):
+                        continue
+                    # Slide 1: full overlay; subsequent slides: minimal overlay
+                    _, tpl = get_next_style_and_template(
+                        last_style=style_used,
+                        last_template=template_used if slide_idx == 0 else (template_used + slide_idx) % 17,
+                        board_name=board_name,
+                        title=content["pin_title"],
+                    )
+                    slide_out = add_text_overlay(
+                        str(slide_raw),
+                        title=content["pin_title"] if slide_idx == 0 else "",
+                        cta="Shop Now" if slide_idx == 0 else "",
+                        price=product_data.get("price") if slide_idx == 0 else None,
+                        output_path=str(slide_overlay),
+                        template_index=tpl if slide_idx == 0 else 0,
+                        board_name=board_name,
+                        image_style="card" if slide_idx > 0 else style_used,
+                    ) or str(slide_raw)
+                    slide_images.append(slide_out)
+                    slide_raw.unlink(missing_ok=True)
+
+                if len(slide_images) >= 2:
+                    logger.info(f"🎠 Posting CAROUSEL pin with {len(slide_images)} slides: {content['pin_title'][:60]}")
+                    success, res_msg = poster.create_carousel_pin(
+                        image_paths=slide_images,
+                        title=content["pin_title"],
+                        description=content["pin_description"],
+                        board_name=board_name,
+                        link_url=product_data["url"],
+                        dry_run=dry_run,
+                    )
+                    for sp in slide_images:
+                        Path(sp).unlink(missing_ok=True)
+                    return success, style_used, template_used
+                else:
+                    logger.warning("Not enough slide images prepared, falling back to product pin")
+                    pin_type = "product"
         # ── VIDEO PIN: generate mp4 slideshow from product images ──────────────
         if pin_type == "video":
             video_file = temp_dir / f"stealth_video_{product_data['product_id']}.mp4"
@@ -350,15 +399,17 @@ def run_daily_stealth_posting(dry_run: bool = False, pins_count: Optional[int] =
         board_name = board["name"] if board else "Trendy & Timeless Fashion"
         used_boards_in_run.add(board_name)
 
-        # Content Mix: forced_type or 70% Product, 20% Video, 10% Blog
-        if forced_type in ["product", "video", "blog"]:
+        # Content Mix: forced_type or 60% Product, 15% Video, 15% Carousel, 10% Blog
+        if forced_type in ["product", "video", "blog", "carousel"]:
             pin_type = forced_type
         else:
             rand_val = random.random()
-            if rand_val < 0.70:
+            if rand_val < 0.60:
                 pin_type = "product"
-            elif rand_val < 0.90:
+            elif rand_val < 0.75:
                 pin_type = "video"
+            elif rand_val < 0.90:
+                pin_type = "carousel"
             else:
                 pin_type = "blog"
 

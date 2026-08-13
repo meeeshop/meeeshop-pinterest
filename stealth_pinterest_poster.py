@@ -166,8 +166,264 @@ class StealthPinterestPoster:
         logger.warning(f"⚠️ Could not fill {field_name} field using any known selectors")
         return False
 
+    def create_carousel_pin(
+        self,
+        image_paths: List[str],
+        title: str,
+        description: str,
+        board_name: str,
+        link_url: str,
+        dry_run: bool = False,
+    ) -> Tuple[bool, Optional[str]]:
+        """
+        Create a Pinterest Carousel Pin (2–5 sliding images).
+        Clicks 'Create carousel' on pin-builder, uploads each image into its slot,
+        fills shared title/description/link, then publishes.
+        """
+        if not image_paths or len(image_paths) < 2:
+            return False, "Need at least 2 images for a carousel"
+
+        image_paths = [p for p in image_paths if Path(p).exists()][:5]
+        if len(image_paths) < 2:
+            return False, "Not enough valid image files for carousel"
+
+        logger.info(f"🎠 Launching Carousel Stealth Chromium (headless={self.headless})...")
+
+        with sync_playwright() as p:
+            browser = p.chromium.launch(
+                headless=self.headless,
+                args=[
+                    "--disable-blink-features=AutomationControlled",
+                    "--no-sandbox",
+                    "--disable-setuid-sandbox",
+                    "--disable-infobars",
+                    "--window-size=1280,900",
+                    "--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
+                ]
+            )
+            context = browser.new_context(
+                viewport={"width": 1280, "height": 900},
+                user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+                locale="en-US",
+                timezone_id="America/New_York"
+            )
+            context.add_init_script("""
+                Object.defineProperty(navigator, 'webdriver', { get: () => undefined });
+            """)
+
+            cookies = self._get_cookies_dict()
+            if cookies:
+                try:
+                    context.add_cookies(cookies)
+                    logger.info(f"✓ Injected {len(cookies)} cookies for carousel session")
+                except Exception as e:
+                    logger.warning(f"Cookie inject warning: {e}")
+
+            page = context.new_page()
+
+            try:
+                # 1. Navigate to pin-builder
+                page.goto("https://www.pinterest.com/pin-builder/", wait_until="domcontentloaded", timeout=45000)
+                time.sleep(3)
+
+                if "login" in page.url:
+                    if not self._login_via_ui(page):
+                        browser.close()
+                        return False, "Login failed"
+                    time.sleep(2)
+
+                # 2. Click "Create carousel" link
+                carousel_selectors = [
+                    'a:has-text("Create carousel")',
+                    'button:has-text("Create carousel")',
+                    '[data-test-id="create-carousel"]',
+                    'text="Create carousel"',
+                ]
+                carousel_clicked = False
+                for sel in carousel_selectors:
+                    try:
+                        el = page.query_selector(sel)
+                        if el and el.is_visible():
+                            el.click()
+                            carousel_clicked = True
+                            logger.info(f"✓ Clicked 'Create carousel' via: {sel}")
+                            time.sleep(2)
+                            break
+                    except Exception:
+                        continue
+
+                if not carousel_clicked:
+                    logger.warning("Could not find 'Create carousel' link — Pinterest UI may have changed")
+                    browser.close()
+                    return False, "Create carousel link not found"
+
+                # 3. Upload images into carousel slots one by one
+                for idx, img_path in enumerate(image_paths):
+                    logger.info(f"📤 Uploading carousel slide {idx + 1}/{len(image_paths)}: {Path(img_path).name}")
+
+                    # Each carousel slot has a file input — find the next empty one
+                    upload_selectors = [
+                        f'input[type="file"]:nth-of-type({idx + 1})',
+                        'input[type="file"]',
+                        '[data-test-id="media-upload-input"]',
+                        '[aria-label="Upload image"]',
+                    ]
+                    uploaded = False
+                    for sel in upload_selectors:
+                        try:
+                            inputs = page.query_selector_all('input[type="file"]')
+                            # Use the idx-th file input if available, else last
+                            target_input = inputs[min(idx, len(inputs) - 1)] if inputs else None
+                            if target_input:
+                                target_input.set_input_files(img_path)
+                                uploaded = True
+                                logger.info(f"✓ Uploaded slide {idx + 1}")
+                                time.sleep(2)
+                                break
+                        except Exception:
+                            continue
+
+                    if not uploaded:
+                        logger.warning(f"Could not upload slide {idx + 1}, skipping")
+                    else:
+                        # Click the "+" add next slide button if not the last slide
+                        if idx < len(image_paths) - 1:
+                            add_selectors = [
+                                'button[aria-label="Add slide"]',
+                                'button:has-text("+")',
+                                '[data-test-id="add-carousel-slide"]',
+                                '[aria-label="Add another image"]',
+                            ]
+                            for sel in add_selectors:
+                                try:
+                                    add_btn = page.query_selector(sel)
+                                    if add_btn and add_btn.is_visible():
+                                        add_btn.click()
+                                        time.sleep(1.5)
+                                        break
+                                except Exception:
+                                    continue
+
+                time.sleep(2)
+
+                # 4. Fill title
+                logger.info(f"📝 Entering carousel title: {title[:50]}...")
+                title_selectors = [
+                    'textarea[id*="pin-draft-title"]',
+                    '[data-test-id="pin-draft-title"] textarea',
+                    'input[placeholder*="title" i]',
+                    'textarea[placeholder*="title" i]',
+                ]
+                self._safe_fill_field(page, "title", title_selectors, title[:100])
+                time.sleep(1)
+
+                # 5. Fill description
+                logger.info("📄 Entering carousel description...")
+                desc_selectors = [
+                    'div[contenteditable="true"]',
+                    '[aria-label*="description" i]',
+                    'textarea[placeholder*="description" i]',
+                ]
+                self._safe_fill_field(page, "description", desc_selectors, description[:500])
+                time.sleep(1)
+
+                # 6. Fill link URL
+                if link_url:
+                    logger.info(f"🔗 Entering link URL: {link_url}")
+                    link_triggers = [
+                        'button:has-text("Add a destination link")',
+                        'button:has-text("Add a link")',
+                        '[aria-label="Add a destination link"]',
+                    ]
+                    for trigger_sel in link_triggers:
+                        try:
+                            trig = page.query_selector(trigger_sel)
+                            if trig and trig.is_visible():
+                                trig.click()
+                                time.sleep(0.5)
+                                break
+                        except Exception:
+                            pass
+                    link_selectors = [
+                        'input[placeholder*="link" i]',
+                        'textarea[placeholder*="link" i]',
+                        'input[placeholder*="destination" i]',
+                        '[aria-label*="link" i]',
+                    ]
+                    self._safe_fill_field(page, "link URL", link_selectors, link_url)
+                time.sleep(1.5)
+
+                if dry_run:
+                    logger.info("🧪 DRY RUN — Carousel form filled. Skipping publish.")
+                    browser.close()
+                    return True, "dry_run_carousel"
+
+                # 7. Select board and publish (reuse same logic)
+                logger.info(f"📌 Selecting board: {board_name}")
+                board_result = self._select_board_ui(page, board_name)
+
+                if board_result == "published":
+                    logger.info("✓ Carousel pin auto-published via board row Save!")
+                    self._save_cookies(context)
+                    browser.close()
+                    return True, page.url
+
+                # Manual publish
+                publish_selectors = [
+                    'button[data-test-id="pin-builder-save-button"]',
+                    'button:has-text("Publish")',
+                    '[data-test-id="save-pin-button"]',
+                    '[data-test-id="board-dropdown-save-button"]',
+                ]
+                publish_btn = None
+                for sel in publish_selectors:
+                    btns = page.query_selector_all(sel)
+                    for btn in btns:
+                        if btn.is_visible() and not btn.is_disabled():
+                            publish_btn = btn
+                            break
+                    if publish_btn:
+                        break
+
+                if publish_btn:
+                    try:
+                        publish_btn.click(timeout=8000)
+                    except Exception as e:
+                        logger.warning(f"Carousel publish click intercepted: {e}")
+                    try:
+                        page.wait_for_url(lambda u: "pin-builder" not in u, timeout=12000)
+                    except Exception:
+                        pass
+                    time.sleep(3)
+
+                final_url = page.url
+                logger.info(f"Carousel final URL: {final_url}")
+                if "pin-builder" not in final_url:
+                    logger.info("✓ Carousel pin published successfully!")
+                    self._save_cookies(context)
+                    browser.close()
+                    return True, final_url
+                else:
+                    try:
+                        body = page.locator("body").inner_text()
+                        logger.error(f"📌 Still on pin-builder after carousel publish. Snippet: {body[:300]}")
+                    except Exception:
+                        pass
+                    browser.close()
+                    return False, "Carousel publish failed"
+
+            except Exception as e:
+                logger.error(f"Carousel posting error: {e}", exc_info=True)
+                try:
+                    page.screenshot(path=str(ROOT / "stealth_carousel_error.png"))
+                except Exception:
+                    pass
+                browser.close()
+                return False, str(e)
+
     def create_pin(
         self,
+
         image_path: str,
         title: str,
         description: str,

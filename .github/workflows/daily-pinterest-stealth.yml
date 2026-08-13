@@ -28,6 +28,7 @@ on:
           - auto
           - product
           - video
+          - carousel
           - blog
       dry_run:
         description: 'Dry run (fill form without clicking publish)'
