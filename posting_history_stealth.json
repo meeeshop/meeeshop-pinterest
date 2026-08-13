@@ -139,6 +139,17 @@
       "style": "carousel",
       "template": 4,
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8897135476907,
+      "title": "Comfy Stretch Capri Pants for Casual Back to School Style \u2014 MeeeShop US Boutique",
+      "board": "Flares Jeans",
+      "timestamp": "2026-08-13T09:47:17.613715",
+      "type": "carousel",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276663026848",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
@@ -154,11 +165,12 @@
     "Jeans": "2026-08-13T07:18:41.157159",
     "Cocktail Dresses": "2026-08-13T07:21:42.267981",
     "Dressy Outfits": "2026-08-13T07:23:15.578073",
-    "Must-Have Fashion...": "2026-08-13T07:29:13.724257"
+    "Must-Have Fashion...": "2026-08-13T07:29:13.724257",
+    "Flares Jeans": "2026-08-13T09:47:17.613715"
   },
-  "daily_count": 14,
-  "last_post_time": "2026-08-13T07:29:13.724257",
+  "daily_count": 15,
+  "last_post_time": "2026-08-13T09:47:17.613715",
   "board_rotation_cursor": 0,
-  "last_image_style": "carousel",
-  "last_template_index": 4
+  "last_image_style": "collage",
+  "last_template_index": 14
 }
