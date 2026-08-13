@@ -233,17 +233,27 @@ class StealthPinterestPoster:
                     time.sleep(2)
 
                 # 2. Click "Create carousel" link
+                # Some UI versions hide it in a sidebar or menu. Try clicking a Create/Plus button first.
+                try:
+                    create_menu = page.query_selector('button[aria-label="Create"], [data-test-id="create-menu-button"], button:has-text("+")')
+                    if create_menu and create_menu.is_visible():
+                        create_menu.click()
+                        time.sleep(1)
+                except Exception:
+                    pass
+
                 carousel_selectors = [
+                    '[data-test-id="create-carousel"]',
                     'a:has-text("Create carousel")',
                     'button:has-text("Create carousel")',
-                    '[data-test-id="create-carousel"]',
                     'text="Create carousel"',
+                    'div:has-text("Create carousel")',
                 ]
                 carousel_clicked = False
                 for sel in carousel_selectors:
                     try:
-                        el = page.query_selector(sel)
-                        if el and el.is_visible():
+                        el = page.wait_for_selector(sel, timeout=3000, state="visible")
+                        if el:
                             el.click()
                             carousel_clicked = True
                             logger.info(f"✓ Clicked 'Create carousel' via: {sel}")
@@ -253,9 +263,22 @@ class StealthPinterestPoster:
                         continue
 
                 if not carousel_clicked:
-                    logger.warning("Could not find 'Create carousel' link — Pinterest UI may have changed")
+                    logger.warning("Could not find 'Create carousel' link — Pinterest UI may have changed. Attempting multi-file upload fallback...")
+                    try:
+                        file_input = page.query_selector('input[type="file"]')
+                        if file_input:
+                            file_input.set_input_files(image_paths)
+                            logger.info("✓ Uploaded all files directly to main input as fallback.")
+                            carousel_clicked = True
+                            time.sleep(4)
+                    except Exception as e:
+                        logger.warning(f"Multi-file upload failed: {e}. Falling back to single image.")
+                        image_paths = [image_paths[0]] # fallback to single image so we don't completely fail
+                        carousel_clicked = True # we will just process the single image below
+                        
+                if not carousel_clicked:
                     browser.close()
-                    return False, "Create carousel link not found"
+                    return False, "Create carousel link not found and fallback failed"
 
                 # 3. Upload images into carousel slots one by one
                 for idx, img_path in enumerate(image_paths):
