@@ -161,6 +161,19 @@
       "template": 6,
       "pin_url": "https://www.pinterest.com/pin/962222276663026906",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": "560438706347",
+      "article_id": "560438706347",
+      "title": "8 Stylish Vegan Friendly Handbags From Justin Taylor Collection At Meeeshop Tips For Buying Your Next Accessory",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-08-13T10:19:03.342429",
+      "type": "blog",
+      "style": "hero",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276663027504",
+      "blog_url": "https://us.meeeshop.com/blogs/our-tips/8-stylish-vegan-friendly-handbags-from-justin-taylor-collection-at-meeeshop-tips-for-buying-your-next-accessory",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
@@ -180,9 +193,9 @@
     "Flares Jeans": "2026-08-13T09:47:17.613715",
     "Short Tall dresses": "2026-08-13T09:51:59.815856"
   },
-  "daily_count": 16,
-  "last_post_time": "2026-08-13T09:51:59.815856",
+  "daily_count": 17,
+  "last_post_time": "2026-08-13T10:19:03.342429",
   "board_rotation_cursor": 0,
-  "last_image_style": "card",
-  "last_template_index": 6
+  "last_image_style": "hero",
+  "last_template_index": 15
 }
