@@ -123,6 +123,39 @@ class StealthPinterestPoster:
             if random.random() < 0.05:
                 time.sleep(random.uniform(0.1, 0.3))
 
+    def _safe_fill_field(self, page: Page, field_name: str, selectors: List[str], text: str) -> bool:
+        """Try a list of selectors for a form field. Supports inputs, textareas, and contenteditable elements."""
+        for selector in selectors:
+            try:
+                elem = page.wait_for_selector(selector, timeout=3000, state="visible")
+                if elem:
+                    elem.click()
+                    time.sleep(0.3)
+
+                    # Method 1: Try page.fill
+                    try:
+                        page.fill(selector, text)
+                        logger.info(f"✓ Filled {field_name} using: {selector}")
+                        return True
+                    except Exception:
+                        pass
+
+                    # Method 2: Try keyboard typing
+                    try:
+                        page.focus(selector)
+                        page.keyboard.press("Control+A")
+                        page.keyboard.press("Backspace")
+                        page.keyboard.type(text, delay=20)
+                        logger.info(f"✓ Typed into {field_name} using: {selector}")
+                        return True
+                    except Exception:
+                        pass
+            except Exception:
+                continue
+
+        logger.warning(f"⚠️ Could not fill {field_name} field using any known selectors")
+        return False
+
     def create_pin(
         self,
         image_path: str,
@@ -133,21 +166,6 @@ class StealthPinterestPoster:
         alt_text: Optional[str] = None,
         dry_run: bool = False,
     ) -> Tuple[bool, Optional[str]]:
-        """
-        Post a single pin via Playwright web UI automation.
-
-        Args:
-            image_path: Absolute path to image/video file
-            title: Pin title (up to 100 chars)
-            description: Pin description (up to 500 chars)
-            board_name: Exact or target board name to select
-            link_url: Store destination URL
-            alt_text: Image accessibility alt text
-            dry_run: If True, fills the pin builder form but stops before clicking publish
-
-        Returns:
-            Tuple of (success_bool, pin_url_or_error_msg)
-        """
         img_file = Path(image_path)
         if not img_file.exists():
             return False, f"Image file not found: {image_path}"
@@ -212,49 +230,50 @@ class StealthPinterestPoster:
                 if not file_input:
                     return False, "File input element not found in pin builder"
                 file_input.set_input_files(str(img_file))
-                time.sleep(3)
+                time.sleep(4)
 
                 # 3. Enter Title
                 logger.info(f"📝 Entering title: {title[:50]}...")
-                title_selector = '[aria-label="Add a title"], [data-test-id="pin-draft-title"] input, textarea[id*="pin-draft-title"]'
-                try:
-                    title_elem = page.wait_for_selector(title_selector, timeout=10000)
-                    if title_elem:
-                        title_elem.click()
-                        self._human_type(page, title_selector, title[:100])
-                except Exception as te:
-                    logger.warning(f"Secondary title selector search: {te}")
-                    page.fill('input[placeholder*="title" i], textarea[placeholder*="title" i]', title[:100])
-
+                title_selectors = [
+                    '[aria-label="Add a title"]',
+                    'div[data-test-id="pin-builder-title"] [contenteditable="true"]',
+                    '[data-test-id="pin-draft-title"] input',
+                    'textarea[id*="pin-draft-title"]',
+                    'input[placeholder*="title" i]',
+                    'textarea[placeholder*="title" i]',
+                    '[aria-label*="title" i]',
+                ]
+                self._safe_fill_field(page, "title", title_selectors, title[:100])
                 time.sleep(1)
 
                 # 4. Enter Description
                 logger.info("📄 Entering description...")
-                desc_selector = '[aria-label="Add a detailed description"], [data-test-id="pin-draft-description"] textarea, textarea[id*="pin-draft-description"]'
-                try:
-                    desc_elem = page.wait_for_selector(desc_selector, timeout=10000)
-                    if desc_elem:
-                        desc_elem.click()
-                        self._human_type(page, desc_selector, description[:500])
-                except Exception as de:
-                    logger.warning(f"Secondary description search: {de}")
-                    page.fill('textarea[placeholder*="description" i]', description[:500])
-
+                desc_selectors = [
+                    '[aria-label="Add a detailed description"]',
+                    '[aria-label*="description" i]',
+                    'div[data-test-id="pin-builder-description"] [contenteditable="true"]',
+                    '[data-test-id="pin-draft-description"] textarea',
+                    'textarea[id*="pin-draft-description"]',
+                    'textarea[placeholder*="description" i]',
+                    'div[contenteditable="true"][aria-label*="description" i]',
+                    'div[contenteditable="true"]',
+                ]
+                self._safe_fill_field(page, "description", desc_selectors, description[:500])
                 time.sleep(1)
 
                 # 5. Enter Link / URL
                 if link_url:
                     logger.info(f"🔗 Entering link URL: {link_url}")
-                    link_selector = '[aria-label="Add a link"], [data-test-id="pin-draft-link"] input, input[id*="pin-draft-link"]'
-                    try:
-                        link_elem = page.wait_for_selector(link_selector, timeout=10000)
-                        if link_elem:
-                            link_elem.click()
-                            self._human_type(page, link_selector, link_url)
-                    except Exception as le:
-                        logger.warning(f"Secondary link search: {le}")
-                        page.fill('input[placeholder*="link" i], input[placeholder*="destination" i]', link_url)
-
+                    link_selectors = [
+                        '[aria-label="Add a link"]',
+                        '[aria-label*="link" i]',
+                        '[aria-label*="destination" i]',
+                        '[data-test-id="pin-draft-link"] input',
+                        'input[id*="pin-draft-link"]',
+                        'input[placeholder*="link" i]',
+                        'input[placeholder*="destination" i]',
+                    ]
+                    self._safe_fill_field(page, "link URL", link_selectors, link_url)
                 time.sleep(1.5)
 
                 # 6. Select Board
@@ -269,13 +288,25 @@ class StealthPinterestPoster:
 
                 # 7. Click Publish
                 logger.info("🚀 Clicking Publish pin button...")
-                publish_btn = page.query_selector('[data-test-id="board-dropdown-save-button"], button:has-text("Save"), button:has-text("Publish")')
+                publish_selectors = [
+                    '[data-test-id="board-dropdown-save-button"]',
+                    'button:has-text("Publish")',
+                    'button:has-text("Save")',
+                    'button[type="submit"]',
+                    '[aria-label*="Publish" i]',
+                    '[aria-label*="Save" i]',
+                ]
+                publish_btn = None
+                for sel in publish_selectors:
+                    publish_btn = page.query_selector(sel)
+                    if publish_btn:
+                        break
+
                 if publish_btn:
                     publish_btn.click()
                     time.sleep(5)
                     logger.info("✓ Pin published successfully via Stealth UI Automation!")
-                    
-                    # Try to capture new cookies for saving back
+
                     try:
                         updated_cookies = context.cookies()
                         if updated_cookies:
@@ -319,23 +350,35 @@ class StealthPinterestPoster:
             logger.error(f"UI login failed: {e}")
             return False
 
-    def _select_board_ui(self, page: Page, board_name: str):
+    def _select_board_ui(self, page: Page, board_name: str) -> bool:
         """Click board dropdown selector and pick board by name."""
-        try:
-            board_btn = page.query_selector('[aria-label="Select board"], [data-test-id="board-dropdown-select-button"]')
-            if board_btn:
-                board_btn.click()
-                time.sleep(1)
-                search_input = page.query_selector('input[aria-label="Search boards"], input[placeholder*="Search" i]')
-                if search_input:
-                    search_input.fill(board_name)
+        board_selectors = [
+            '[aria-label="Select board"]',
+            '[aria-label*="Select board" i]',
+            '[data-test-id="board-dropdown-select-button"]',
+            '[aria-label*="board" i]',
+            'button:has-text("Choose board")',
+            'button:has-text("Select board")',
+        ]
+        for sel in board_selectors:
+            try:
+                board_btn = page.wait_for_selector(sel, timeout=3000, state="visible")
+                if board_btn:
+                    board_btn.click()
                     time.sleep(1)
-                board_item = page.query_selector(f'text="{board_name}"')
-                if board_item:
-                    board_item.click()
-                    return
-        except Exception as e:
-            logger.warning(f"Board selection UI interaction warning: {e}")
+                    search_input = page.query_selector('input[aria-label="Search boards"], input[placeholder*="Search" i], input[type="text"]')
+                    if search_input:
+                        search_input.fill(board_name)
+                        time.sleep(1)
+                    board_item = page.query_selector(f'text="{board_name}"')
+                    if board_item:
+                        board_item.click()
+                        logger.info(f"✓ Selected board '{board_name}' via selector: {sel}")
+                        return True
+            except Exception:
+                continue
+        logger.warning(f"⚠️ Board selection interaction warning for '{board_name}'")
+        return False
 
 
 if __name__ == "__main__":
