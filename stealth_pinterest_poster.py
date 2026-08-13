@@ -253,7 +253,7 @@ class StealthPinterestPoster:
                     'textarea[placeholder*="title" i]',
                     '[aria-label*="title" i]',
                 ]
-                self._safe_fill_field(page, "title", title_selectors, title[:100])
+                title_ok = self._safe_fill_field(page, "title", title_selectors, title[:100])
                 time.sleep(1)
 
                 # 4. Enter Description
@@ -268,31 +268,67 @@ class StealthPinterestPoster:
                     'div[contenteditable="true"][aria-label*="description" i]',
                     'div[contenteditable="true"]',
                 ]
-                self._safe_fill_field(page, "description", desc_selectors, description[:500])
+                desc_ok = self._safe_fill_field(page, "description", desc_selectors, description[:500])
                 time.sleep(1)
 
                 # 5. Enter Link / URL
+                link_ok = True
                 if link_url:
                     logger.info(f"🔗 Entering link URL: {link_url}")
-                    link_selectors = [
+                    # Click destination link trigger button if collapsed
+                    link_triggers = [
+                        'button:has-text("Add a destination link")',
+                        'button:has-text("Add a link")',
+                        '[aria-label="Add a destination link"]',
                         '[aria-label="Add a link"]',
+                        '[data-test-id="pin-builder-link"]',
+                        'div:has-text("Add a destination link")',
+                        'div:has-text("Add a link")',
+                    ]
+                    for trigger_sel in link_triggers:
+                        try:
+                            trig = page.query_selector(trigger_sel)
+                            if trig and trig.is_visible():
+                                trig.click()
+                                time.sleep(0.5)
+                                logger.info(f"✓ Clicked link trigger: {trigger_sel}")
+                                break
+                        except Exception:
+                            pass
+
+                    link_selectors = [
+                        '[data-test-id="pin-draft-link"] input',
+                        '[aria-label="Add a destination link"] input',
+                        '[aria-label="Add a link"] input',
                         '[aria-label*="link" i]',
                         '[aria-label*="destination" i]',
-                        '[data-test-id="pin-draft-link"] input',
-                        'input[id*="pin-draft-link"]',
                         'input[placeholder*="link" i]',
                         'input[placeholder*="destination" i]',
+                        'textarea[placeholder*="link" i]',
+                        'input[id*="pin-draft-link"]',
+                        'input[type="text"][placeholder*="http" i]',
+                        'input[type="url"]',
                     ]
-                    self._safe_fill_field(page, "link URL", link_selectors, link_url)
+                    link_ok = self._safe_fill_field(page, "link URL", link_selectors, link_url)
                 time.sleep(1.5)
 
                 # 6. Select Board
                 logger.info(f"📌 Selecting board: {board_name}")
-                self._select_board_ui(page, board_name)
+                board_ok = self._select_board_ui(page, board_name)
                 time.sleep(2)
 
+                if not title_ok or not link_ok:
+                    error_msg = f"Failed to fill mandatory fields (title_ok={title_ok}, link_ok={link_ok})"
+                    logger.error(error_msg)
+                    try:
+                        page.screenshot(path=str(ROOT / "stealth_form_failure.png"))
+                    except:
+                        pass
+                    browser.close()
+                    return False, error_msg
+
                 if dry_run:
-                    logger.info("🧪 DRY RUN MODE — Form filled successfully! Skipping Publish button click.")
+                    logger.info("🧪 DRY RUN MODE — All form fields verified & filled successfully! Skipping Publish click.")
                     browser.close()
                     return True, "dry_run_success"
 

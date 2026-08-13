@@ -85,6 +85,14 @@ jobs:
           fi
           PINS_TO_POST=$PINS python pinterest_daily_stealth.py $TYPE_FLAG
 
+      - name: Upload stealth screenshots (if generated)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stealth-screenshots-${{ github.run_number }}
+          path: "*.png"
+          retention-days: 7
+
       - name: Commit and push history updates
         if: always()
         run: |
