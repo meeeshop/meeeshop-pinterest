@@ -99,6 +99,36 @@
       "style": "carousel",
       "template": 10,
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8789757100203,
+      "title": "Slim Straight High Rise Jeans for Everyday Style and Comfortable Fit \u2014 MeeeShop US Boutique",
+      "board": "Jeans",
+      "timestamp": "2026-08-13T07:18:41.157159",
+      "type": "product",
+      "style": "collage",
+      "template": 15,
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8892151496875,
+      "title": "Easy Fit Cotton Date Night Dress for Women Perfect Summer Style \u2014 MeeeShop US Boutique",
+      "board": "Cocktail Dresses",
+      "timestamp": "2026-08-13T07:21:42.267981",
+      "type": "blog",
+      "style": "card",
+      "template": 14,
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8782637990059,
+      "title": "Oversized Black Date Night Dress for Late Summer Nights in Soft Quilted Poplin \u2014 MeeeShop US Boutiqu",
+      "board": "Dressy Outfits",
+      "timestamp": "2026-08-13T07:23:15.578073",
+      "type": "product",
+      "style": "hero",
+      "template": 3,
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
@@ -110,11 +140,14 @@
     "Must-Have Fashion Picks": "2026-08-13T05:20:05.419233",
     "Trendy & Timeless Fashion": "2026-08-13T05:29:39.715837",
     "Dress": "2026-08-13T05:40:54.740934",
-    "Bags": "2026-08-13T05:50:11.609263"
+    "Bags": "2026-08-13T05:50:11.609263",
+    "Jeans": "2026-08-13T07:18:41.157159",
+    "Cocktail Dresses": "2026-08-13T07:21:42.267981",
+    "Dressy Outfits": "2026-08-13T07:23:15.578073"
   },
-  "daily_count": 10,
-  "last_post_time": "2026-08-13T05:50:11.609263",
+  "daily_count": 13,
+  "last_post_time": "2026-08-13T07:23:15.578073",
   "board_rotation_cursor": 0,
-  "last_image_style": "carousel",
-  "last_template_index": 10
+  "last_image_style": "hero",
+  "last_template_index": 3
 }
