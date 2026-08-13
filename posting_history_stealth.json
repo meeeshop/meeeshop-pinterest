@@ -196,6 +196,39 @@
       "template": 15,
       "pin_url": "https://www.pinterest.com/pin/962222276663027756",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8818155913387,
+      "title": "Casual Fit Halter Tops for Work and Late Summer Style \u2014 MeeeShop US Boutique",
+      "board": "Shirts & Tops",
+      "timestamp": "2026-08-13T14:26:18.034117",
+      "type": "product",
+      "style": "card",
+      "template": 13,
+      "pin_url": "https://www.pinterest.com/pin/962222276663034144",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8869173330091,
+      "title": "Comfy Casual Fit Sweatshirt for Work and Everyday Style \u2014 MeeeShop US Boutique",
+      "board": "Blouses",
+      "timestamp": "2026-08-13T14:27:55.752687",
+      "type": "video",
+      "style": "hero",
+      "template": 8,
+      "pin_url": "https://www.pinterest.com/pin/962222276663034189",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8818153554091,
+      "title": "Elegant Maxi Dress for Date Night in Chic Summer Style \u2014 MeeeShop US Boutique",
+      "board": "Rompers_Jumpsuits &...",
+      "timestamp": "2026-08-13T14:29:29.191254",
+      "type": "product",
+      "style": "carousel",
+      "template": 5,
+      "pin_url": "https://www.pinterest.com/pin/962222276663034244",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
@@ -215,11 +248,14 @@
     "Flares Jeans": "2026-08-13T09:47:17.613715",
     "Short Tall dresses": "2026-08-13T09:51:59.815856",
     "Rompers, Jumpsuits &...": "2026-08-13T10:24:53.533944",
-    "Skirts": "2026-08-13T10:28:37.536045"
+    "Skirts": "2026-08-13T10:28:37.536045",
+    "Shirts & Tops": "2026-08-13T14:26:18.034117",
+    "Blouses": "2026-08-13T14:27:55.752687",
+    "Rompers_Jumpsuits &...": "2026-08-13T14:29:29.191254"
   },
-  "daily_count": 19,
-  "last_post_time": "2026-08-13T10:28:37.536045",
+  "daily_count": 22,
+  "last_post_time": "2026-08-13T14:29:29.191254",
   "board_rotation_cursor": 0,
-  "last_image_style": "collage",
-  "last_template_index": 15
+  "last_image_style": "carousel",
+  "last_template_index": 5
 }
