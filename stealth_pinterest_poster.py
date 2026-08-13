@@ -43,6 +43,16 @@ COOKIES_B64_FILE = ROOT / ".pinterest_cookies_b64"
 COOKIES_FILE = ROOT / ".pinterest_cookies"
 
 
+def safe_get_secret(key: str, default: Optional[str] = None) -> Optional[str]:
+    try:
+        val = get_secret(key)
+        if val:
+            return val
+    except Exception:
+        pass
+    return os.environ.get(key, default)
+
+
 class StealthPinterestPoster:
     """
     Playwright-based browser UI automation for creating Pinterest pins safely.
@@ -51,13 +61,13 @@ class StealthPinterestPoster:
 
     def __init__(self, headless: bool = True):
         self.headless = headless
-        self.username = get_secret("PINTEREST_USERNAME") or os.environ.get("PINTEREST_USERNAME", "meeeshop")
-        self.email = get_secret("PINTEREST_EMAIL") or os.environ.get("PINTEREST_EMAIL", "")
-        self.password = get_secret("PINTEREST_PASSWORD") or os.environ.get("PINTEREST_PASSWORD", "")
+        self.username = safe_get_secret("PINTEREST_USERNAME", "meeeshop")
+        self.email = safe_get_secret("PINTEREST_EMAIL", "")
+        self.password = safe_get_secret("PINTEREST_PASSWORD", "")
 
     def _get_cookies_dict(self) -> Optional[List[Dict[str, Any]]]:
         """Load cookies from env secret (PINTEREST_COOKIES_B64) or local file."""
-        cookies_b64 = get_secret("PINTEREST_COOKIES_B64") or os.environ.get("PINTEREST_COOKIES_B64")
+        cookies_b64 = safe_get_secret("PINTEREST_COOKIES_B64")
         if cookies_b64:
             try:
                 cookies_json = base64.b64decode(cookies_b64.strip()).decode('utf-8-sig')

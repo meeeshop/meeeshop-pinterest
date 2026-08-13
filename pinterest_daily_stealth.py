@@ -148,6 +148,16 @@ def post_single_pin_stealth(
             overlay_file.unlink(missing_ok=True)
 
 
+def safe_get_secret(key: str, default: Optional[str] = None) -> Optional[str]:
+    try:
+        val = get_secret(key)
+        if val:
+            return val
+    except Exception:
+        pass
+    return os.environ.get(key, default)
+
+
 def run_daily_stealth_posting(dry_run: bool = False, pins_count: Optional[int] = None, forced_type: Optional[str] = None):
     history = load_history()
     history = reset_daily_count_if_new_day(history)
@@ -158,8 +168,8 @@ def run_daily_stealth_posting(dry_run: bool = False, pins_count: Optional[int] =
         return
 
     # Shopify client
-    store_url = get_secret("SHOPIFY_STORE_URL")
-    access_token = get_secret("SHOPIFY_ACCESS_TOKEN")
+    store_url = safe_get_secret("SHOPIFY_STORE_URL")
+    access_token = safe_get_secret("SHOPIFY_ACCESS_TOKEN")
 
     if not store_url or not access_token:
         logger.error("Missing SHOPIFY_STORE_URL or SHOPIFY_ACCESS_TOKEN in secrets")
@@ -187,7 +197,7 @@ def run_daily_stealth_posting(dry_run: bool = False, pins_count: Optional[int] =
     posted_count = 0
     used_boards_in_run = set()
 
-    store_base_url = get_secret("STORE_BASE_URL") or get_secret("SHOPIFY_STORE_URL")
+    store_base_url = safe_get_secret("STORE_BASE_URL") or safe_get_secret("SHOPIFY_STORE_URL")
     if not store_base_url:
         logger.error("❌ Missing STORE_BASE_URL / SHOPIFY_STORE_URL in secrets vault")
         return
