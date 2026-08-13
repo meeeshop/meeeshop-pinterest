@@ -30,7 +30,7 @@ from shopify_products import ShopifyClient, format_product_for_pinterest
 from content_generator_v2 import generate_content_package
 from stealth_pinterest_poster import StealthPinterestPoster
 from image_overlay import add_text_overlay, get_next_style_and_template
-from board_mapping import select_best_lru_board
+from board_mapping import select_best_lru_board, MEEESHOP_BOARDS
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -184,10 +184,43 @@ def run_daily_stealth_posting(dry_run: bool = False, pins_count: Optional[int] =
         logger.warning("No products returned from Shopify")
         return
 
-    # Exclude products posted recently
-    recent_pids = {p.get("product_id") for p in history.get("posts", [])[-30:] if isinstance(p, dict)}
-    eligible = [p for p in products if p.get("id") not in recent_pids]
+    # Exclude products posted recently (10-day cross-file check)
+    ten_days_ago = datetime.now() - timedelta(days=10)
+    recent_ids = set()
+    for p in history.get("posts", []):
+        ts_str = p.get("timestamp")
+        if ts_str:
+            try:
+                ts = datetime.fromisoformat(ts_str.replace("Z", "+00:00"))
+                if ts.tzinfo is not None: ts = ts.replace(tzinfo=None)
+                if ts > ten_days_ago:
+                    recent_ids.add(str(p.get("product_id")))
+            except Exception: pass
+
+    other_histories = [
+        ("refresh_history_v2.json", "refreshes", "timestamp"),
+        ("video_posting_history.json", "posts", "posted_at"),
+        ("blog_posting_history.json", "posts", "timestamp"),
+        ("posting_history_v2.json", "posts", "timestamp"),
+    ]
+    for filename, list_key, time_key in other_histories:
+        history_path = ROOT / filename
+        if history_path.exists():
+            try:
+                hist_data = json.loads(history_path.read_text(encoding="utf-8"))
+                for item in hist_data.get(list_key, []):
+                    ts_str = item.get(time_key)
+                    if ts_str:
+                        ts = datetime.fromisoformat(ts_str.replace("Z", "+00:00"))
+                        if ts.tzinfo is not None: ts = ts.replace(tzinfo=None)
+                        if ts > ten_days_ago:
+                            item_id = item.get("product_id") or item.get("id")
+                            if item_id: recent_ids.add(str(item_id))
+            except Exception: pass
+
+    eligible = [p for p in products if str(p.get("id")) not in recent_ids]
     if not eligible:
+        logger.warning("All products posted in last 10 days! Falling back to 100% pool.")
         eligible = products
 
     random.shuffle(eligible)
@@ -211,16 +244,8 @@ def run_daily_stealth_posting(dry_run: bool = False, pins_count: Optional[int] =
         if not formatted.get("image_url"):
             continue
 
-        # Match board
-        live_boards = [
-            {"id": "b1", "name": "Dresses"},
-            {"id": "b2", "name": "Trends"},
-            {"id": "b3", "name": "Pants & Leggings"},
-            {"id": "b4", "name": "Must-Have Fashion Picks"},
-            {"id": "b5", "name": "Short fall dresses"},
-            {"id": "b6", "name": "Feminine & Flowy Fits"},
-            {"id": "b7", "name": "Trendy & Timeless Fashion"},
-        ]
+        # Match board using MEEESHOP_BOARDS
+        live_boards = [{"id": b, "name": b} for b in MEEESHOP_BOARDS]
 
         board = select_best_lru_board(
             product_title=formatted["title"],
