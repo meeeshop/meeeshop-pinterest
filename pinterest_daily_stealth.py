@@ -91,6 +91,7 @@ def post_single_pin_stealth(
     product_data: Dict[str, Any],
     board_name: str,
     content: Dict[str, Any],
+    pin_type: str = "product",
     last_style: Optional[str] = None,
     last_template: Optional[int] = None,
     dry_run: bool = False,
@@ -114,8 +115,8 @@ def post_single_pin_stealth(
         overlay_image = add_text_overlay(
             str(image_file),
             title=content["pin_title"],
-            cta="Shop Now",
-            price=product_data.get("price"),
+            cta="Shop Now" if pin_type != "blog" else "Read Post",
+            price=product_data.get("price") if pin_type != "blog" else None,
             output_path=str(overlay_file),
             template_index=template_used,
             board_name=board_name,
@@ -124,7 +125,7 @@ def post_single_pin_stealth(
         if not overlay_image:
             overlay_image = str(image_file)
 
-        logger.info(f"📌 Posting via Stealth Playwright UI (Style: {style_used}, Template: {template_used}): {content['pin_title']}")
+        logger.info(f"📌 Posting via Stealth Playwright UI (Type: {pin_type}, Style: {style_used}): {content['pin_title']}")
 
         success, res_msg = poster.create_pin(
             image_path=overlay_image,
