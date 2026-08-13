@@ -220,7 +220,27 @@ class StealthPinterestPoster:
                 except Exception as e:
                     logger.warning(f"Cookie inject warning: {e}")
 
+            captured_urls: List[str] = []
+
+            def handle_response(response):
+                try:
+                    if any(ep in response.url for ep in ["/resource/PinResource/create/", "/v3/pins/", "PinCreateResource"]):
+                        if response.status in (200, 201):
+                            data = response.json()
+                            pin_id = None
+                            if isinstance(data, dict):
+                                rdata = data.get("resource_response", {}).get("data", {}) or data.get("data", {})
+                                if isinstance(rdata, dict):
+                                    pin_id = rdata.get("id")
+                            if pin_id:
+                                purl = f"https://www.pinterest.com/pin/{pin_id}/"
+                                logger.info(f"🎯 Network listener captured created Pin URL: {purl}")
+                                captured_urls.append(purl)
+                except Exception:
+                    pass
+
             page = context.new_page()
+            page.on("response", handle_response)
 
             try:
                 # 1. Navigate to pin-builder
@@ -312,9 +332,15 @@ class StealthPinterestPoster:
                 # 6. Fill description
                 logger.info("📄 Entering carousel description...")
                 desc_selectors = [
-                    'div[contenteditable="true"]',
+                    '[aria-label="Add a detailed description"]',
                     '[aria-label*="description" i]',
+                    'div[data-test-id="pin-builder-description"] [contenteditable="true"]',
+                    '[data-test-id="pin-draft-description"] textarea',
+                    'textarea[id*="pin-draft-description"]',
                     'textarea[placeholder*="description" i]',
+                    'div[contenteditable="true"][aria-label*="description" i]',
+                    'div[contenteditable="true"]',
+                    'div[role="textbox"]',
                 ]
                 self._safe_fill_field(page, "description", desc_selectors, description[:500])
                 time.sleep(1)
@@ -383,22 +409,25 @@ class StealthPinterestPoster:
                     browser.close()
                     return True, "dry_run_carousel"
 
-                # 7. Select board and publish (reuse same logic)
+                # 9. Select board and publish
                 logger.info(f"📌 Selecting board: {board_name}")
                 board_result = self._select_board_ui(page, board_name)
 
                 if board_result == "published":
-                    logger.info("✓ Carousel pin auto-published via board row Save!")
-                    self._save_cookies(context)
+                    logger.info("✓ Carousel pin auto-published via board row Save button!")
+                    time.sleep(2)
+                    success, live_url = self._verify_and_get_live_pin_url(page, captured_urls, context, timeout_sec=10)
                     browser.close()
-                    return True, page.url
+                    return success, live_url
 
-                # Manual publish
+                # Manual publish click
+                logger.info("🚀 Clicking Publish pin button...")
                 publish_selectors = [
                     'button[data-test-id="pin-builder-save-button"]',
                     'button:has-text("Publish")',
                     '[data-test-id="save-pin-button"]',
                     '[data-test-id="board-dropdown-save-button"]',
+                    'button:has-text("Save")',
                 ]
                 publish_btn = None
                 for sel in publish_selectors:
@@ -406,49 +435,26 @@ class StealthPinterestPoster:
                     for btn in btns:
                         if btn.is_visible() and not btn.is_disabled():
                             publish_btn = btn
+                            logger.info(f"Found active publish button using: {sel}")
                             break
                     if publish_btn:
                         break
 
                 if publish_btn:
                     try:
+                        publish_btn.scroll_into_view_if_needed()
                         publish_btn.click(timeout=8000)
                     except Exception as e:
-                        logger.warning(f"Carousel publish click intercepted: {e}")
-                    try:
-                        page.wait_for_url(lambda u: "pin-builder" not in u, timeout=12000)
-                    except Exception:
-                        pass
-                    time.sleep(3)
+                        logger.warning(f"Carousel publish click intercepted ({e}), trying evaluate click...")
+                        try:
+                            page.evaluate("(el) => el.click()", publish_btn)
+                        except Exception:
+                            pass
+                    time.sleep(2)
 
-                final_url = page.url
-                logger.info(f"Carousel final URL: {final_url}")
-                
-                # Success if URL changed OR we see a success toast
-                success_toast_found = False
-                if "pin-builder" in final_url:
-                    try:
-                        # Carousel pins or dropdown saves often show a toast instead of redirecting immediately
-                        toast = page.wait_for_selector('div:has-text("Saved to"), div:has-text("Saved"), [data-test-id="saved-to-board"]', timeout=5000)
-                        if toast and toast.is_visible():
-                            success_toast_found = True
-                            logger.info("Found 'Saved to' toast confirmation!")
-                    except Exception:
-                        pass
-
-                if "pin-builder" not in final_url or success_toast_found:
-                    logger.info("✓ Carousel pin published successfully!")
-                    self._save_cookies(context)
-                    browser.close()
-                    return True, final_url
-                else:
-                    try:
-                        body = page.locator("body").inner_text()
-                        logger.error(f"📌 Still on pin-builder after carousel publish. Snippet: {body[:300]}")
-                    except Exception:
-                        pass
-                    browser.close()
-                    return False, "Carousel publish failed — still on pin-builder and no success toast found"
+                success, live_url = self._verify_and_get_live_pin_url(page, captured_urls, context, timeout_sec=25)
+                browser.close()
+                return success, live_url
 
             except Exception as e:
                 logger.error(f"Carousel posting error: {e}", exc_info=True)
@@ -512,7 +518,27 @@ class StealthPinterestPoster:
                 except Exception as e:
                     logger.warning(f"Could not inject cookies: {e}")
 
+            captured_urls: List[str] = []
+
+            def handle_response(response):
+                try:
+                    if any(ep in response.url for ep in ["/resource/PinResource/create/", "/v3/pins/", "PinCreateResource"]):
+                        if response.status in (200, 201):
+                            data = response.json()
+                            pin_id = None
+                            if isinstance(data, dict):
+                                rdata = data.get("resource_response", {}).get("data", {}) or data.get("data", {})
+                                if isinstance(rdata, dict):
+                                    pin_id = rdata.get("id")
+                            if pin_id:
+                                purl = f"https://www.pinterest.com/pin/{pin_id}/"
+                                logger.info(f"🎯 Network listener captured created Pin URL: {purl}")
+                                captured_urls.append(purl)
+                except Exception:
+                    pass
+
             page = context.new_page()
+            page.on("response", handle_response)
 
             try:
                 # 1. Navigate to Pin Builder page
@@ -731,11 +757,11 @@ class StealthPinterestPoster:
 
                 # 7. If board row Save button already published, skip the Publish step
                 if board_result == "published":
-                    logger.info("✓ Pin auto-published via board row Save button! Skipping redundant Publish click.")
+                    logger.info("✓ Pin auto-published via board row Save button!")
                     time.sleep(2)
-                    self._save_cookies(context)
+                    success, live_url = self._verify_and_get_live_pin_url(page, captured_urls, context, timeout_sec=10)
                     browser.close()
-                    return True, page.url
+                    return success, live_url
 
                 # Otherwise click the main Publish button
                 logger.info("🚀 Clicking Publish pin button...")
@@ -760,46 +786,22 @@ class StealthPinterestPoster:
 
                 if publish_btn:
                     try:
+                        publish_btn.scroll_into_view_if_needed()
                         publish_btn.click(timeout=8000)
                     except Exception as e:
-                        logger.warning(f"Publish button click intercepted: {e}")
-                    logger.info("Waiting for Pinterest to confirm pin...")
-                    try:
-                        page.wait_for_url(lambda u: "pin-builder" not in u, timeout=10000)
-                    except Exception:
-                        pass
-                    time.sleep(3)
+                        logger.warning(f"Publish button click intercepted ({e}), trying evaluate click...")
+                        try:
+                            page.evaluate("(el) => el.click()", publish_btn)
+                        except Exception:
+                            pass
+                    time.sleep(2)
                 else:
                     logger.warning("No Publish button found — assuming auto-published")
-                    time.sleep(3)
+                    time.sleep(2)
 
-                final_url = page.url
-                logger.info(f"Final page URL: {final_url}")
-
-                # Success if URL changed OR we see a success toast
-                success_toast_found = False
-                if "pin-builder" in final_url:
-                    try:
-                        # Video pins or dropdown saves often show a toast instead of redirecting immediately
-                        toast = page.wait_for_selector('div:has-text("Saved to"), div:has-text("Saved"), [data-test-id="saved-to-board"]', timeout=5000)
-                        if toast and toast.is_visible():
-                            success_toast_found = True
-                            logger.info("Found 'Saved to' toast confirmation!")
-                    except Exception:
-                        pass
-
-                if "pin-builder" not in final_url or success_toast_found:
-                    logger.info("✓ Pin published successfully via Stealth UI Automation!")
-                    self._save_cookies(context)
-                    browser.close()
-                    return True, final_url
-                else:
-                    try:
-                        body_text = page.locator('body').inner_text()
-                        logger.error(f"📌 Still on Pin Builder. Body snippet: {body_text[:400]}")
-                    except Exception: pass
-                    browser.close()
-                    return False, "Publish failed — still on pin-builder and no success toast found"
+                success, live_url = self._verify_and_get_live_pin_url(page, captured_urls, context, timeout_sec=25)
+                browser.close()
+                return success, live_url
 
             except Exception as e:
                 logger.error(f"Error during stealth posting: {e}", exc_info=True)
@@ -905,6 +907,110 @@ class StealthPinterestPoster:
                 continue
         logger.warning(f"⚠️ Board selection failed for '{board_name}'")
         return "failed"
+
+    def _verify_and_get_live_pin_url(
+        self,
+        page: Page,
+        captured_urls: List[str],
+        context: BrowserContext,
+        timeout_sec: int = 25,
+    ) -> Tuple[bool, str]:
+        """
+        Poll for post-publish confirmation and return (success, live_pin_url_or_reason).
+        Combines network interceptor URLs, DOM 'See your Pin' links, page redirects, and toast/modal checks.
+        """
+        start_time = time.time()
+        live_url = None
+        success_found = False
+
+        while time.time() - start_time < timeout_sec:
+            # 1. Network response intercepted URL
+            if captured_urls:
+                live_url = captured_urls[-1]
+                logger.info(f"🎉 Captured live Pin URL via network response payload: {live_url}")
+                success_found = True
+                break
+
+            # 2. Tab URL redirection away from pin-builder
+            current_url = page.url
+            if "pin-builder" not in current_url and "pinterest.com/pin/" in current_url:
+                live_url = current_url
+                logger.info(f"🎉 Tab redirected to live Pin URL: {live_url}")
+                success_found = True
+                break
+
+            # 3. Extract href from 'See your Pin' / 'View' links in DOM
+            pin_link_selectors = [
+                'a[href*="/pin/"]',
+                'a:has-text("See your Pin")',
+                'a:has-text("View Pin")',
+                'a:has-text("View")',
+                '[data-test-id="see-your-pin"]',
+                '[data-test-id="view-pin-button"]',
+                '[data-test-id="saved-to-board"] a',
+            ]
+            for pl_sel in pin_link_selectors:
+                try:
+                    link_el = page.query_selector(pl_sel)
+                    if link_el:
+                        href = link_el.get_attribute("href")
+                        if href:
+                            if href.startswith("/"):
+                                href = "https://www.pinterest.com" + href
+                            if "/pin/" in href:
+                                live_url = href
+                                logger.info(f"🎉 Extracted live Pin URL from DOM link ({pl_sel}): {live_url}")
+                                success_found = True
+                                break
+                except Exception:
+                    pass
+
+            if success_found:
+                break
+
+            # 4. Success toast / modal elements visibility check
+            success_ui_selectors = [
+                'div:has-text("Saved to")',
+                'div:has-text("Saved")',
+                'div:has-text("Published")',
+                'div:has-text("Your Pin is live")',
+                '[data-test-id="saved-to-board"]',
+                '[data-test-id="pin-builder-success-modal"]',
+                '[data-test-id="pin-builder-published-toast"]',
+            ]
+            for su_sel in success_ui_selectors:
+                try:
+                    s_el = page.query_selector(su_sel)
+                    if s_el and s_el.is_visible():
+                        logger.info(f"✓ Found success confirmation element: {su_sel}")
+                        success_found = True
+                        break
+                except Exception:
+                    pass
+
+            if success_found:
+                break
+
+            time.sleep(2)
+
+        # Fallback check on full inner text of body
+        if not success_found:
+            try:
+                body_text = page.locator("body").inner_text()
+                if any(phrase in body_text for phrase in ["Saved to", "Your Pin is live", "See your Pin", "Pin published", "Saved!"]):
+                    logger.info("✓ Found success text snippet in page body confirmation!")
+                    success_found = True
+            except Exception:
+                pass
+
+        final_url = live_url or page.url
+        if success_found:
+            logger.info(f"✓ Pin published successfully! Final Live URL: {final_url}")
+            self._save_cookies(context)
+            return True, final_url
+        else:
+            logger.error(f"📌 Still on pin-builder after publish. Current URL: {final_url}")
+            return False, "Publish failed — still on pin-builder and no success confirmation found"
 
 
 if __name__ == "__main__":

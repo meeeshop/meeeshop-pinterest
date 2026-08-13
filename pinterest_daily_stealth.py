@@ -102,7 +102,7 @@ def post_single_pin_stealth(
 
     image_file = temp_dir / f"stealth_pin_{product_data['product_id']}.jpg"
     if not download_image(product_data["image_url"], image_file):
-        return False, None, None
+        return False, None, None, "Failed to download image"
 
     style_used, template_used = get_next_style_and_template(
         last_style=last_style,
@@ -141,7 +141,7 @@ def post_single_pin_stealth(
                         output_path=str(slide_overlay),
                         template_index=tpl if slide_idx == 0 else 0,
                         board_name=board_name,
-                        image_style="card" if slide_idx > 0 else style_used,
+                        image_style="card" if (slide_idx > 0 or style_used == "collage") else style_used,
                     ) or str(slide_raw)
                     slide_images.append(slide_out)
                     slide_raw.unlink(missing_ok=True)
@@ -159,7 +159,7 @@ def post_single_pin_stealth(
                     )
                     for sp in slide_images:
                         Path(sp).unlink(missing_ok=True)
-                    return success, style_used, template_used
+                    return success, style_used, template_used, res_msg
                 else:
                     logger.warning("Not enough slide images prepared, falling back to product pin")
                     pin_type = "product"
@@ -193,7 +193,7 @@ def post_single_pin_stealth(
                 video_file.unlink(missing_ok=True)
                 for sp in slide_paths:
                     Path(sp).unlink(missing_ok=True)
-                return success, style_used, template_used
+                return success, style_used, template_used, res_msg
             else:
                 logger.warning("Video generation failed, falling back to image pin")
                 pin_type = "product"  # graceful fallback
@@ -224,11 +224,11 @@ def post_single_pin_stealth(
             dry_run=dry_run,
         )
 
-        return success, style_used, template_used
+        return success, style_used, template_used, res_msg
 
     except Exception as e:
         logger.error(f"Exception during stealth posting: {e}", exc_info=True)
-        return False, None, None
+        return False, None, None, str(e)
     finally:
         image_file.unlink(missing_ok=True)
         if overlay_file.exists():
@@ -419,7 +419,7 @@ def run_daily_stealth_posting(dry_run: bool = False, pins_count: Optional[int] =
         # Generate V2 AI content
         content = generate_content_package(formatted, board_name)
 
-        success, style_used, template_used = post_single_pin_stealth(
+        success, style_used, template_used, res_msg = post_single_pin_stealth(
             poster=poster,
             product_data=formatted,
             board_name=board_name,
@@ -436,6 +436,7 @@ def run_daily_stealth_posting(dry_run: bool = False, pins_count: Optional[int] =
             last_template = template_used
             posted_count += 1
             now_iso = datetime.now().isoformat()
+            live_pin_url = res_msg if (res_msg and res_msg.startswith("http")) else None
             history["posts"].append({
                 "product_id": formatted["product_id"],
                 "title": content["pin_title"],
@@ -444,6 +445,7 @@ def run_daily_stealth_posting(dry_run: bool = False, pins_count: Optional[int] =
                 "type": pin_type,
                 "style": style_used,
                 "template": template_used,
+                "pin_url": live_pin_url,
                 "source": "stealth_playwright"
             })
             history["board_last_used"][board_name] = now_iso
@@ -453,7 +455,7 @@ def run_daily_stealth_posting(dry_run: bool = False, pins_count: Optional[int] =
             history["last_template_index"] = template_used
 
             save_history(history)
-            logger.info(f"✓ Stealth posting successful ({posted_count}/{limit}) — Type: {pin_type}")
+            logger.info(f"✓ Stealth posting successful ({posted_count}/{limit}) — Type: {pin_type} | Live URL: {live_pin_url or 'N/A'}")
             time.sleep(random.uniform(5, 12))
         else:
             consecutive_failures += 1
