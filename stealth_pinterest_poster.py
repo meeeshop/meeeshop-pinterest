@@ -379,8 +379,8 @@ class StealthPinterestPoster:
                 final_url = page.url
                 logger.info(f"Final page URL: {final_url}")
 
-                # Success if URL changed OR board was confirmed selected
-                if "pin-builder" not in final_url or board_result == "selected":
+                # Success only if URL actually changed away from pin-builder
+                if "pin-builder" not in final_url:
                     logger.info("✓ Pin published successfully via Stealth UI Automation!")
                     self._save_cookies(context)
                     browser.close()
@@ -462,12 +462,25 @@ class StealthPinterestPoster:
                         search_input.fill(search_term)
                         time.sleep(2)  # Wait for search results
 
+                    # Detect "No boards found" — board doesn't exist, fallback
+                    no_boards_el = page.query_selector('div:has-text("No boards found"), [data-test-id="no-boards-found"]')
+                    if no_boards_el and no_boards_el.is_visible():
+                        logger.warning(f"Board '{board_name}' not found on profile! Clearing search to use first available board.")
+                        if search_input:
+                            search_input.fill("")
+                            time.sleep(1.5)
+
                     # Try to find the board row with a Save button (auto-publish path)
                     board_row = page.locator(
                         f'div[role="button"]:has-text("{search_term}"), div[role="listitem"]:has-text("{search_term}")'
                     ).first
                     if not board_row.is_visible():
                         board_row = page.locator(f'[data-test-id="board-row"]:has-text("{search_term}")').first
+                    # Fallback: use the very first board in the list
+                    if not board_row.is_visible():
+                        board_row = page.locator('[data-test-id="board-row"], div[role="listitem"]').first
+                        if board_row.is_visible():
+                            logger.info("Using first available board as fallback")
 
                     if board_row.is_visible():
                         row_save_btn = board_row.locator('[data-test-id="board-dropdown-save-button"], button:has-text("Save")')

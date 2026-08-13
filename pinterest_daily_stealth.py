@@ -113,6 +113,41 @@ def post_single_pin_stealth(
 
     overlay_file = temp_dir / f"stealth_overlay_{product_data['product_id']}.jpg"
     try:
+        # ── VIDEO PIN: generate mp4 slideshow from product images ──────────────
+        if pin_type == "video":
+            video_file = temp_dir / f"stealth_video_{product_data['product_id']}.mp4"
+            all_urls = product_data.get("all_image_urls", [])
+            # Download up to 3 product images for the slideshow
+            slide_paths = []
+            for idx, img_url in enumerate(all_urls[:3]):
+                slide_path = temp_dir / f"stealth_slide_{product_data['product_id']}_{idx}.jpg"
+                if download_image(img_url, slide_path):
+                    slide_paths.append(str(slide_path))
+            if len(slide_paths) < 2:
+                # Fallback to single image repeated
+                slide_paths = [str(image_file)] * 2
+
+            video_ok = _generate_slideshow_video(slide_paths, str(video_file), duration_per_slide=3)
+            if video_ok and video_file.exists():
+                logger.info(f"🎥 Created slideshow video: {video_file} ({len(slide_paths)} slides)")
+                success, res_msg = poster.create_pin(
+                    image_path=str(video_file),
+                    title=content["pin_title"],
+                    description=content["pin_description"],
+                    board_name=board_name,
+                    link_url=product_data["url"],
+                    alt_text=content.get("pin_alt_text"),
+                    dry_run=dry_run,
+                )
+                video_file.unlink(missing_ok=True)
+                for sp in slide_paths:
+                    Path(sp).unlink(missing_ok=True)
+                return success, style_used, template_used
+            else:
+                logger.warning("Video generation failed, falling back to image pin")
+                pin_type = "product"  # graceful fallback
+
+        # ── IMAGE / BLOG PIN ────────────────────────────────────────────────────
         overlay_image = add_text_overlay(
             str(image_file),
             title=content["pin_title"],
@@ -147,6 +182,60 @@ def post_single_pin_stealth(
         image_file.unlink(missing_ok=True)
         if overlay_file.exists():
             overlay_file.unlink(missing_ok=True)
+
+
+def _generate_slideshow_video(
+    image_paths: List[str],
+    output_path: str,
+    duration_per_slide: int = 3,
+) -> bool:
+    """
+    Generate a slideshow MP4 from a list of image paths using ffmpeg.
+    Each slide is shown for `duration_per_slide` seconds with a simple crossfade.
+    Returns True on success.
+    """
+    import subprocess
+    import shutil
+
+    if not shutil.which("ffmpeg"):
+        logger.warning("ffmpeg not found on PATH — cannot generate video pin")
+        return False
+
+    try:
+        # Build an ffmpeg concat input: each image shown for N seconds
+        concat_lines = []
+        for path in image_paths:
+            concat_lines.append(f"file '{path}'")
+            concat_lines.append(f"duration {duration_per_slide}")
+        # ffmpeg concat demuxer needs a last file line without duration
+        concat_lines.append(f"file '{image_paths[-1]}'")
+
+        concat_file = output_path + ".txt"
+        with open(concat_file, "w") as f:
+            f.write("\n".join(concat_lines))
+
+        cmd = [
+            "ffmpeg", "-y",
+            "-f", "concat", "-safe", "0",
+            "-i", concat_file,
+            "-vf", "scale=1000:1500:force_original_aspect_ratio=decrease,pad=1000:1500:(ow-iw)/2:(oh-ih)/2,setsar=1",
+            "-r", "25",
+            "-c:v", "libx264",
+            "-preset", "fast",
+            "-crf", "23",
+            "-pix_fmt", "yuv420p",
+            "-movflags", "+faststart",
+            output_path,
+        ]
+        result = subprocess.run(cmd, capture_output=True, timeout=60)
+        Path(concat_file).unlink(missing_ok=True)
+        if result.returncode != 0:
+            logger.error(f"ffmpeg error: {result.stderr.decode()[-500:]}")
+            return False
+        return True
+    except Exception as e:
+        logger.error(f"Slideshow video generation error: {e}")
+        return False
 
 
 def safe_get_secret(key: str, default: Optional[str] = None) -> Optional[str]:
