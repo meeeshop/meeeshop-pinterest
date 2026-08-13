@@ -183,6 +183,9 @@ def run_daily_stealth_posting(dry_run: bool = False, pins_count: Optional[int] =
     # Poster instance
     poster = StealthPinterestPoster(headless=True)
 
+    posted_count = 0
+    used_boards_in_run = set()
+
     store_base_url = get_secret("STORE_BASE_URL") or get_secret("SHOPIFY_STORE_URL")
     if not store_base_url:
         logger.error("❌ Missing STORE_BASE_URL / SHOPIFY_STORE_URL in secrets vault")
