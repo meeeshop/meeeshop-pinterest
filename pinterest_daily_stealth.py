@@ -184,13 +184,13 @@ def run_daily_stealth_posting(dry_run: bool = False, pins_count: Optional[int] =
     poster = StealthPinterestPoster(headless=True)
 
     posted_count = 0
-    used_boards_in_run = set()
+    store_base_url = get_secret("STORE_BASE_URL") or "https://meeeshop.com"
 
     for raw_product in eligible:
         if posted_count >= limit or (history["daily_count"] + posted_count) >= MAX_PINS_PER_DAY:
             break
 
-        formatted = format_product_for_pinterest(raw_product)
+        formatted = format_product_for_pinterest(raw_product, store_base_url)
         if not formatted.get("image_url"):
             continue
 
