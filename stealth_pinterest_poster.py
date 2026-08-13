@@ -314,8 +314,8 @@ class StealthPinterestPoster:
 
                 # 6. Select Board
                 logger.info(f"📌 Selecting board: {board_name}")
-                board_ok = self._select_board_ui(page, board_name)
-                time.sleep(2)
+                board_result = self._select_board_ui(page, board_name)
+                # board_result: "published" (auto-saved via row Save btn), "selected" (need Publish), or "failed"
 
                 if not title_ok or not link_ok:
                     error_msg = f"Failed to fill mandatory fields (title_ok={title_ok}, link_ok={link_ok})"
@@ -332,7 +332,15 @@ class StealthPinterestPoster:
                     browser.close()
                     return True, "dry_run_success"
 
-                # 7. Click Publish
+                # 7. If board row Save button already published, skip the Publish step
+                if board_result == "published":
+                    logger.info("✓ Pin auto-published via board row Save button! Skipping redundant Publish click.")
+                    time.sleep(2)
+                    self._save_cookies(context)
+                    browser.close()
+                    return True, page.url
+
+                # Otherwise click the main Publish button
                 logger.info("🚀 Clicking Publish pin button...")
                 publish_selectors = [
                     'button[data-test-id="pin-builder-save-button"]',
@@ -355,68 +363,35 @@ class StealthPinterestPoster:
 
                 if publish_btn:
                     try:
-                        publish_btn.click(timeout=5000)
+                        publish_btn.click(timeout=8000)
                     except Exception as e:
-                        logger.warning(f"Publish button click intercepted or timed out (might be auto-published): {e}")
-                    logger.info("Waiting for Pinterest backend to process pin creation...")
-                    
+                        logger.warning(f"Publish button click intercepted: {e}")
+                    logger.info("Waiting for Pinterest to confirm pin...")
                     try:
-                        page.wait_for_function('window.location.href.indexOf("pin-builder") === -1 || document.querySelector("div:has-text(\\"Saved\\")")', timeout=15000)
+                        page.wait_for_url(lambda u: "pin-builder" not in u, timeout=10000)
                     except Exception:
                         pass
-                    time.sleep(5)
+                    time.sleep(3)
                 else:
-                    logger.warning("Could not find a distinct Publish/Save button! Checking if it was auto-published by board selection...")
-                    time.sleep(5)  # Give it a moment in case it was auto-published
+                    logger.warning("No Publish button found — assuming auto-published")
+                    time.sleep(3)
 
                 final_url = page.url
                 logger.info(f"Final page URL: {final_url}")
-                
-                try:
-                    page.screenshot(path=str(ROOT / "stealth_after_publish.png"))
-                    logger.info("Captured screenshot stealth_after_publish.png")
-                except: pass
 
-                # Check for success
-                is_success = False
-                if "pin-builder" not in final_url:
-                    is_success = True
-                else:
-                    # Pinterest sometimes keeps you on pin-builder but shows a "Saved to [Board]" toast
-                    try:
-                        body_text = page.locator('body').inner_text()
-                        if "Saved to " in body_text or "Saved to\n" in body_text:
-                            is_success = True
-                            logger.info("Detected 'Saved to' success toast on the page!")
-                    except Exception: pass
-
-                if not is_success:
-                    logger.warning("⚠️ Still on Pin Builder page with no success toast! Pin might NOT have been published.")
-                    error_elements = page.query_selector_all('[role="alert"], [data-test-id="toast"], div:has-text("error"), div:has-text("Error")')
-                    if error_elements:
-                        for err_el in error_elements:
-                            try: logger.error(f"📌 Pinterest UI Alert: {err_el.inner_text()}")
-                            except Exception: pass
-                    else:
-                        try:
-                            body_text = page.locator('body').inner_text()
-                            logger.error(f"📌 Body text snippet (first 500 chars): {body_text[:500]}")
-                        except Exception: pass
-                    browser.close()
-                    return False, "Validation error or publish failed"
-                else:
+                # Success if URL changed OR board was confirmed selected
+                if "pin-builder" not in final_url or board_result == "selected":
                     logger.info("✓ Pin published successfully via Stealth UI Automation!")
-
-                    try:
-                        updated_cookies = context.cookies()
-                        if updated_cookies:
-                            COOKIES_FILE.write_text(json.dumps(updated_cookies, indent=2), encoding='utf-8')
-                            logger.info(f"✓ Saved updated session cookies ({len(updated_cookies)})")
-                    except Exception as ce:
-                        logger.debug(f"Cookie save note: {ce}")
-
+                    self._save_cookies(context)
                     browser.close()
                     return True, final_url
+                else:
+                    try:
+                        body_text = page.locator('body').inner_text()
+                        logger.error(f"📌 Still on Pin Builder. Body snippet: {body_text[:400]}")
+                    except Exception: pass
+                    browser.close()
+                    return False, "Publish failed — still on pin-builder"
 
             except Exception as e:
                 logger.error(f"Error during stealth posting: {e}", exc_info=True)
@@ -446,12 +421,28 @@ class StealthPinterestPoster:
             logger.error(f"UI login failed: {e}")
             return False
 
-    def _select_board_ui(self, page: Page, board_name: str) -> bool:
-        """Click board dropdown selector and pick board by name."""
+    def _save_cookies(self, context) -> None:
+        """Save updated session cookies back to disk."""
+        try:
+            updated_cookies = context.cookies()
+            if updated_cookies:
+                COOKIES_FILE.write_text(json.dumps(updated_cookies, indent=2), encoding='utf-8')
+                logger.info(f"✓ Saved updated session cookies ({len(updated_cookies)})")
+        except Exception as ce:
+            logger.debug(f"Cookie save note: {ce}")
+
+    def _select_board_ui(self, page: Page, board_name: str) -> str:
+        """
+        Open board dropdown and select the board.
+        Returns:
+          "published"  — board row Save button was clicked (pin is already live)
+          "selected"   — board was clicked/selected, still need to hit Publish
+          "failed"     — could not select board
+        """
         board_selectors = [
+            '[data-test-id="board-dropdown-select-button"]',
             '[aria-label="Select board"]',
             '[aria-label*="Select board" i]',
-            '[data-test-id="board-dropdown-select-button"]',
             '[aria-label*="board" i]',
             'button:has-text("Choose board")',
             'button:has-text("Select board")',
@@ -462,33 +453,37 @@ class StealthPinterestPoster:
                 if board_btn:
                     board_btn.click()
                     time.sleep(1)
-                    
+
                     search_term = board_name.replace("...", "").replace('"', "").strip()
-                    search_input = page.query_selector('input[aria-label="Search boards"], input[placeholder*="Search" i], input[type="text"]')
+                    search_input = page.query_selector(
+                        'input[aria-label="Search boards"], input[placeholder*="Search" i]'
+                    )
                     if search_input:
                         search_input.fill(search_term)
                         time.sleep(2)  # Wait for search results
-                    
-                    # Use substring match to find the board row
-                    board_row = page.locator(f'div[role="button"]:has-text("{search_term}"), div[role="listitem"]:has-text("{search_term}")').first
+
+                    # Try to find the board row with a Save button (auto-publish path)
+                    board_row = page.locator(
+                        f'div[role="button"]:has-text("{search_term}"), div[role="listitem"]:has-text("{search_term}")'
+                    ).first
                     if not board_row.is_visible():
-                        # Fallback to simple text match
-                        board_row = page.locator(f'text="{search_term}"').first
+                        board_row = page.locator(f'[data-test-id="board-row"]:has-text("{search_term}")').first
 
                     if board_row.is_visible():
-                        # Pinterest UI sometimes puts a "Save" button directly on the board row
-                        row_save_btn = board_row.locator('button, [data-test-id="board-dropdown-save-button"]')
+                        row_save_btn = board_row.locator('[data-test-id="board-dropdown-save-button"], button:has-text("Save")')
                         if row_save_btn.count() > 0 and row_save_btn.first.is_visible():
                             row_save_btn.first.click()
-                            logger.info(f"✓ Clicked Save button on board row '{board_name}'")
+                            logger.info(f"✓ Saved pin via board row button for '{board_name}' — pin is now LIVE")
+                            time.sleep(2)
+                            return "published"
                         else:
                             board_row.click()
-                            logger.info(f"✓ Clicked board text '{board_name}'")
-                        return True
+                            logger.info(f"✓ Selected board '{board_name}' — need to click Publish")
+                            return "selected"
             except Exception:
                 continue
-        logger.warning(f"⚠️ Board selection interaction warning for '{board_name}'")
-        return False
+        logger.warning(f"⚠️ Board selection failed for '{board_name}'")
+        return "failed"
 
 
 if __name__ == "__main__":
