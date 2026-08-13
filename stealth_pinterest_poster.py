@@ -377,8 +377,21 @@ class StealthPinterestPoster:
                     logger.info("Captured screenshot stealth_after_publish.png")
                 except: pass
 
-                if "pin-builder" in final_url:
-                    logger.warning("⚠️ Still on Pin Builder page! Pin might NOT have been published due to a validation error.")
+                # Check for success
+                is_success = False
+                if "pin-builder" not in final_url:
+                    is_success = True
+                else:
+                    # Pinterest sometimes keeps you on pin-builder but shows a "Saved to [Board]" toast
+                    try:
+                        body_text = page.locator('body').inner_text()
+                        if "Saved to " in body_text or "Saved to\n" in body_text:
+                            is_success = True
+                            logger.info("Detected 'Saved to' success toast on the page!")
+                    except Exception: pass
+
+                if not is_success:
+                    logger.warning("⚠️ Still on Pin Builder page with no success toast! Pin might NOT have been published.")
                     error_elements = page.query_selector_all('[role="alert"], [data-test-id="toast"], div:has-text("error"), div:has-text("Error")')
                     if error_elements:
                         for err_el in error_elements:
