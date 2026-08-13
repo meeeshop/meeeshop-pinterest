@@ -251,6 +251,17 @@
       "template": 16,
       "pin_url": "https://www.pinterest.com/pin/962222276663040007",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8931946627243,
+      "title": "High Waisted Stretch Shorts for Everyday Boutique Style and Comfortable Fit \u2014 MeeeShop US Boutique",
+      "board": "Our Recommended...",
+      "timestamp": "2026-08-13T22:42:21.147474",
+      "type": "product",
+      "style": "hero",
+      "template": 2,
+      "pin_url": "https://www.pinterest.com/pin/962222276663047261",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
@@ -275,11 +286,12 @@
     "Blouses": "2026-08-13T14:27:55.752687",
     "Rompers_Jumpsuits &...": "2026-08-13T14:29:29.191254",
     "Handbag #handsips": "2026-08-13T17:50:13.452142",
-    "Trendy & Timeless...": "2026-08-13T17:51:42.913361"
+    "Trendy & Timeless...": "2026-08-13T17:51:42.913361",
+    "Our Recommended...": "2026-08-13T22:42:21.147474"
   },
-  "daily_count": 24,
-  "last_post_time": "2026-08-13T17:51:42.913361",
+  "daily_count": 25,
+  "last_post_time": "2026-08-13T22:42:21.147474",
   "board_rotation_cursor": 0,
-  "last_image_style": "card",
-  "last_template_index": 16
+  "last_image_style": "hero",
+  "last_template_index": 2
 }
