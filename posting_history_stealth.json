@@ -129,6 +129,16 @@
       "style": "hero",
       "template": 3,
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8841130475691,
+      "title": "Relaxed fit chambray shirt for everyday style and back to school fashion \u2014 MeeeShop US Boutique",
+      "board": "Must-Have Fashion...",
+      "timestamp": "2026-08-13T07:29:13.724257",
+      "type": "video",
+      "style": "carousel",
+      "template": 4,
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
@@ -143,11 +153,12 @@
     "Bags": "2026-08-13T05:50:11.609263",
     "Jeans": "2026-08-13T07:18:41.157159",
     "Cocktail Dresses": "2026-08-13T07:21:42.267981",
-    "Dressy Outfits": "2026-08-13T07:23:15.578073"
+    "Dressy Outfits": "2026-08-13T07:23:15.578073",
+    "Must-Have Fashion...": "2026-08-13T07:29:13.724257"
   },
-  "daily_count": 13,
-  "last_post_time": "2026-08-13T07:23:15.578073",
+  "daily_count": 14,
+  "last_post_time": "2026-08-13T07:29:13.724257",
   "board_rotation_cursor": 0,
-  "last_image_style": "hero",
-  "last_template_index": 3
+  "last_image_style": "carousel",
+  "last_template_index": 4
 }
