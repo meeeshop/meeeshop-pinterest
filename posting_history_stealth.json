@@ -79,6 +79,16 @@
       "style": "card",
       "template": 1,
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8782689894571,
+      "title": "Little Black Dress for Date Night Fit and Flattering Style \u2014 MeeeShop US Boutique",
+      "board": "Dress",
+      "timestamp": "2026-08-13T05:40:54.740934",
+      "type": "product",
+      "style": "hero",
+      "template": 8,
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
@@ -88,11 +98,12 @@
     "Feminine & Flowy Fits": "2026-08-13T05:08:45.302648",
     "Short fall dresses": "2026-08-13T05:18:36.701706",
     "Must-Have Fashion Picks": "2026-08-13T05:20:05.419233",
-    "Trendy & Timeless Fashion": "2026-08-13T05:29:39.715837"
+    "Trendy & Timeless Fashion": "2026-08-13T05:29:39.715837",
+    "Dress": "2026-08-13T05:40:54.740934"
   },
-  "daily_count": 8,
-  "last_post_time": "2026-08-13T05:31:07.154353",
+  "daily_count": 9,
+  "last_post_time": "2026-08-13T05:40:54.740934",
   "board_rotation_cursor": 0,
-  "last_image_style": "card",
-  "last_template_index": 1
+  "last_image_style": "hero",
+  "last_template_index": 8
 }
