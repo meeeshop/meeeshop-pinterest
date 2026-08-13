@@ -232,103 +232,66 @@ class StealthPinterestPoster:
                         return False, "Login failed"
                     time.sleep(2)
 
-                # 2. Click "Create carousel" link
-                # Some UI versions hide it in a sidebar or menu. Try clicking a Create/Plus button first.
-                multi_upload_success = False
+                # 2. Click "Create carousel" link on pin-builder
+                carousel_clicked = False
                 try:
-                    create_menu = page.query_selector('button[aria-label="Create"], [data-test-id="create-menu-button"], button:has-text("+")')
-                    if create_menu and create_menu.is_visible():
-                        create_menu.click()
-                        time.sleep(1)
+                    loc = page.locator('text="Create carousel"').first
+                    if loc.is_visible(timeout=3000):
+                        loc.click()
+                        carousel_clicked = True
+                        logger.info("✓ Clicked 'Create carousel' text link")
+                        time.sleep(2)
                 except Exception:
                     pass
 
-                carousel_selectors = [
-                    '[data-test-id="create-carousel"]',
-                    'a:has-text("Create carousel")',
-                    'button:has-text("Create carousel")',
-                    'text="Create carousel"',
-                    'div:has-text("Create carousel")',
-                ]
-                carousel_clicked = False
-                for sel in carousel_selectors:
-                    try:
-                        el = page.wait_for_selector(sel, timeout=3000, state="visible")
-                        if el:
-                            el.click()
-                            carousel_clicked = True
-                            logger.info(f"✓ Clicked 'Create carousel' via: {sel}")
-                            time.sleep(2)
-                            break
-                    except Exception:
-                        continue
+                if not carousel_clicked:
+                    carousel_selectors = [
+                        '[data-test-id="create-carousel"]',
+                        'button:has-text("Create carousel")',
+                        'a:has-text("Create carousel")',
+                        '[aria-label*="Create carousel" i]',
+                    ]
+                    for sel in carousel_selectors:
+                        try:
+                            el = page.query_selector(sel)
+                            if el and el.is_visible():
+                                el.click()
+                                carousel_clicked = True
+                                logger.info(f"✓ Clicked 'Create carousel' via: {sel}")
+                                time.sleep(2)
+                                break
+                        except Exception:
+                            continue
 
                 if not carousel_clicked:
-                    logger.warning("Could not find 'Create carousel' link — Pinterest UI may have changed. Attempting multi-file upload fallback...")
-                    try:
-                        file_input = page.query_selector('input[type="file"]')
-                        if file_input:
-                            file_input.set_input_files(image_paths)
-                            logger.info("✓ Uploaded all files directly to main input as fallback.")
-                            carousel_clicked = True
-                            multi_upload_success = True
-                            time.sleep(4)
-                    except Exception as e:
-                        logger.warning(f"Multi-file upload failed: {e}. Falling back to single image.")
-                        image_paths = [image_paths[0]] # fallback to single image so we don't completely fail
-                        carousel_clicked = True # we will just process the single image below
-                        
-                if not carousel_clicked:
+                    logger.warning("Could not find 'Create carousel' button, attempting direct upload...")
+
+                # 3. Upload images (batch upload all slides into file input)
+                try:
+                    file_input = page.wait_for_selector('input[type="file"]', timeout=15000)
+                except Exception:
+                    file_input = None
+
+                if not file_input:
                     browser.close()
-                    return False, "Create carousel link not found and fallback failed"
+                    return False, "File input element not found in carousel builder"
 
-                # 3. Upload images into carousel slots one by one (if multi-upload didn't happen)
-                if not multi_upload_success:
+                logger.info(f"📤 Uploading {len(image_paths)} carousel slides...")
+                try:
+                    file_input.set_input_files(image_paths)
+                    logger.info(f"✓ Successfully uploaded {len(image_paths)} slides to carousel input!")
+                    time.sleep(4)
+                except Exception as e:
+                    logger.warning(f"Batch upload failed ({e}), trying slide by slide...")
                     for idx, img_path in enumerate(image_paths):
-                        logger.info(f"📤 Uploading carousel slide {idx + 1}/{len(image_paths)}: {Path(img_path).name}")
-
-                        # Each carousel slot has a file input — find the next empty one
-                        upload_selectors = [
-                            f'input[type="file"]:nth-of-type({idx + 1})',
-                            'input[type="file"]',
-                            '[data-test-id="media-upload-input"]',
-                            '[aria-label="Upload image"]',
-                        ]
-                        uploaded = False
-                        for sel in upload_selectors:
-                            try:
-                                inputs = page.query_selector_all('input[type="file"]')
-                                # Use the idx-th file input if available, else last
-                                target_input = inputs[min(idx, len(inputs) - 1)] if inputs else None
-                                if target_input:
-                                    target_input.set_input_files(img_path)
-                                    uploaded = True
-                                    logger.info(f"✓ Uploaded slide {idx + 1}")
-                                    time.sleep(2)
-                                    break
-                            except Exception:
-                                continue
-
-                        if not uploaded:
-                            logger.warning(f"Could not upload slide {idx + 1}, skipping")
-                        else:
-                            # Click the "+" add next slide button if not the last slide
-                            if idx < len(image_paths) - 1:
-                                add_selectors = [
-                                    'button[aria-label="Add slide"]',
-                                    'button:has-text("+")',
-                                    '[data-test-id="add-carousel-slide"]',
-                                    '[aria-label="Add another image"]',
-                                ]
-                                for sel in add_selectors:
-                                    try:
-                                        add_btn = page.query_selector(sel)
-                                        if add_btn and add_btn.is_visible():
-                                            add_btn.click()
-                                            time.sleep(1.5)
-                                            break
-                                    except Exception:
-                                        continue
+                        try:
+                            inputs = page.query_selector_all('input[type="file"]')
+                            target_input = inputs[min(idx, len(inputs) - 1)] if inputs else file_input
+                            target_input.set_input_files(img_path)
+                            logger.info(f"✓ Uploaded slide {idx + 1}/{len(image_paths)}")
+                            time.sleep(2)
+                        except Exception as se:
+                            logger.warning(f"Could not upload slide {idx + 1}: {se}")
 
                 time.sleep(2)
 
@@ -400,7 +363,6 @@ class StealthPinterestPoster:
                     'button:has-text("Publish")',
                     '[data-test-id="save-pin-button"]',
                     '[data-test-id="board-dropdown-save-button"]',
-                    'button:has-text("Save")',
                 ]
                 publish_btn = None
                 for sel in publish_selectors:
@@ -408,7 +370,6 @@ class StealthPinterestPoster:
                     for btn in btns:
                         if btn.is_visible() and not btn.is_disabled():
                             publish_btn = btn
-                            logger.info(f"Found active publish button using: {sel}")
                             break
                     if publish_btn:
                         break
