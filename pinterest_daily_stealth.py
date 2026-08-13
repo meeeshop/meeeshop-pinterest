@@ -154,6 +154,7 @@ def post_single_pin_stealth(
                         description=content["pin_description"],
                         board_name=board_name,
                         link_url=product_data["url"],
+                        alt_text=content.get("pin_alt_text"),
                         dry_run=dry_run,
                     )
                     for sp in slide_images:

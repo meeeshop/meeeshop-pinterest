@@ -173,12 +173,13 @@ class StealthPinterestPoster:
         description: str,
         board_name: str,
         link_url: str,
+        alt_text: Optional[str] = None,
         dry_run: bool = False,
     ) -> Tuple[bool, Optional[str]]:
         """
         Create a Pinterest Carousel Pin (2–5 sliding images).
-        Clicks 'Create carousel' on pin-builder, uploads each image into its slot,
-        fills shared title/description/link, then publishes.
+        Uploads 1st image to reveal 'Create carousel' button, clicks it, uploads remaining slides,
+        fills title, description, link URL, alt text, then publishes.
         """
         if not image_paths or len(image_paths) < 2:
             return False, "Need at least 2 images for a carousel"
@@ -232,41 +233,8 @@ class StealthPinterestPoster:
                         return False, "Login failed"
                     time.sleep(2)
 
-                # 2. Click "Create carousel" link on pin-builder
-                carousel_clicked = False
-                try:
-                    loc = page.locator('text="Create carousel"').first
-                    if loc.is_visible(timeout=3000):
-                        loc.click()
-                        carousel_clicked = True
-                        logger.info("✓ Clicked 'Create carousel' text link")
-                        time.sleep(2)
-                except Exception:
-                    pass
-
-                if not carousel_clicked:
-                    carousel_selectors = [
-                        '[data-test-id="create-carousel"]',
-                        'button:has-text("Create carousel")',
-                        'a:has-text("Create carousel")',
-                        '[aria-label*="Create carousel" i]',
-                    ]
-                    for sel in carousel_selectors:
-                        try:
-                            el = page.query_selector(sel)
-                            if el and el.is_visible():
-                                el.click()
-                                carousel_clicked = True
-                                logger.info(f"✓ Clicked 'Create carousel' via: {sel}")
-                                time.sleep(2)
-                                break
-                        except Exception:
-                            continue
-
-                if not carousel_clicked:
-                    logger.warning("Could not find 'Create carousel' button, attempting direct upload...")
-
-                # 3. Upload images (batch upload all slides into file input)
+                # 2. Upload initial image (image_paths[0]) first into pin builder
+                logger.info(f"📤 Uploading 1st image for carousel: {Path(image_paths[0]).name}")
                 try:
                     file_input = page.wait_for_selector('input[type="file"]', timeout=15000)
                 except Exception:
@@ -274,39 +242,74 @@ class StealthPinterestPoster:
 
                 if not file_input:
                     browser.close()
-                    return False, "File input element not found in carousel builder"
+                    return False, "File input element not found in pin builder"
 
-                logger.info(f"📤 Uploading {len(image_paths)} carousel slides...")
+                file_input.set_input_files(image_paths[0])
+                logger.info("✓ Uploaded initial image, waiting for preview & 'Create carousel' button...")
+                time.sleep(3)
+
+                # 3. Click "Create carousel" button (revealed after 1st image upload)
+                carousel_clicked = False
+                carousel_selectors = [
+                    'button:has-text("Create carousel")',
+                    '[data-test-id="create-carousel"]',
+                    'a:has-text("Create carousel")',
+                    '[aria-label*="Create carousel" i]',
+                    'div:has-text("Create carousel")',
+                    'span:has-text("Create carousel")',
+                    'text="Create carousel"',
+                ]
+                for sel in carousel_selectors:
+                    try:
+                        el = page.query_selector(sel)
+                        if el and el.is_visible():
+                            el.click()
+                            carousel_clicked = True
+                            logger.info(f"✓ Clicked 'Create carousel' via: {sel}")
+                            time.sleep(2)
+                            break
+                    except Exception:
+                        continue
+
+                if not carousel_clicked:
+                    logger.warning("Could not click 'Create carousel' button, attempting remaining images upload directly...")
+
+                # 4. Upload remaining images (image_paths[1:])
+                remaining_images = image_paths[1:]
+                logger.info(f"📤 Uploading {len(remaining_images)} remaining carousel slides...")
                 try:
-                    file_input.set_input_files(image_paths)
-                    logger.info(f"✓ Successfully uploaded {len(image_paths)} slides to carousel input!")
-                    time.sleep(4)
+                    inputs = page.query_selector_all('input[type="file"]')
+                    target_input = inputs[-1] if inputs else file_input
+                    target_input.set_input_files(remaining_images)
+                    logger.info(f"✓ Successfully uploaded {len(remaining_images)} additional slides!")
+                    time.sleep(3)
                 except Exception as e:
-                    logger.warning(f"Batch upload failed ({e}), trying slide by slide...")
-                    for idx, img_path in enumerate(image_paths):
+                    logger.warning(f"Batch remaining upload note ({e}), uploading slide by slide...")
+                    for idx, img_path in enumerate(remaining_images):
                         try:
                             inputs = page.query_selector_all('input[type="file"]')
-                            target_input = inputs[min(idx, len(inputs) - 1)] if inputs else file_input
+                            target_input = inputs[-1] if inputs else file_input
                             target_input.set_input_files(img_path)
-                            logger.info(f"✓ Uploaded slide {idx + 1}/{len(image_paths)}")
+                            logger.info(f"✓ Uploaded additional slide {idx + 1}/{len(remaining_images)}")
                             time.sleep(2)
                         except Exception as se:
-                            logger.warning(f"Could not upload slide {idx + 1}: {se}")
+                            logger.warning(f"Could not upload additional slide {idx + 1}: {se}")
 
                 time.sleep(2)
 
-                # 4. Fill title
+                # 5. Fill title
                 logger.info(f"📝 Entering carousel title: {title[:50]}...")
                 title_selectors = [
                     'textarea[id*="pin-draft-title"]',
                     '[data-test-id="pin-draft-title"] textarea',
                     'input[placeholder*="title" i]',
                     'textarea[placeholder*="title" i]',
+                    '[aria-label*="title" i]',
                 ]
                 self._safe_fill_field(page, "title", title_selectors, title[:100])
                 time.sleep(1)
 
-                # 5. Fill description
+                # 6. Fill description
                 logger.info("📄 Entering carousel description...")
                 desc_selectors = [
                     'div[contenteditable="true"]',
@@ -316,7 +319,7 @@ class StealthPinterestPoster:
                 self._safe_fill_field(page, "description", desc_selectors, description[:500])
                 time.sleep(1)
 
-                # 6. Fill link URL
+                # 7. Fill link URL
                 if link_url:
                     logger.info(f"🔗 Entering link URL: {link_url}")
                     link_triggers = [
@@ -340,7 +343,40 @@ class StealthPinterestPoster:
                         '[aria-label*="link" i]',
                     ]
                     self._safe_fill_field(page, "link URL", link_selectors, link_url)
-                time.sleep(1.5)
+                time.sleep(1)
+
+                # 8. Fill Alt Text
+                if alt_text:
+                    logger.info(f"🏷️ Entering carousel alt text: {alt_text[:40]}...")
+                    alt_triggers = [
+                        'button:has-text("Add alt text")',
+                        'button:has-text("Alt text")',
+                        '[aria-label="Add alt text"]',
+                        '[aria-label*="alt text" i]',
+                        '[data-test-id="add-alt-text-button"]',
+                    ]
+                    for trig_sel in alt_triggers:
+                        try:
+                            trig = page.query_selector(trig_sel)
+                            if trig and trig.is_visible():
+                                trig.click()
+                                time.sleep(0.5)
+                                logger.info(f"✓ Clicked alt text trigger: {trig_sel}")
+                                break
+                        except Exception:
+                            pass
+
+                    alt_selectors = [
+                        'textarea[placeholder*="alt text" i]',
+                        'input[placeholder*="alt text" i]',
+                        'textarea[placeholder*="Explain what people can see" i]',
+                        '[aria-label*="alt text" i]',
+                        '[aria-label*="Explain what people can see" i]',
+                        '[data-test-id="pin-draft-alt-text"] input',
+                        '[data-test-id="pin-draft-alt-text"] textarea',
+                    ]
+                    self._safe_fill_field(page, "alt text", alt_selectors, alt_text[:500])
+                time.sleep(1)
 
                 if dry_run:
                     logger.info("🧪 DRY RUN — Carousel form filled. Skipping publish.")
@@ -639,6 +675,39 @@ class StealthPinterestPoster:
                     ]
                     link_ok = self._safe_fill_field(page, "link URL", link_selectors, link_url)
                 time.sleep(1.5)
+
+                # 5b. Enter Alt Text (Product, Video, Blog pins)
+                if alt_text:
+                    logger.info(f"🏷️ Entering alt text: {alt_text[:40]}...")
+                    alt_triggers = [
+                        'button:has-text("Add alt text")',
+                        'button:has-text("Alt text")',
+                        '[aria-label="Add alt text"]',
+                        '[aria-label*="alt text" i]',
+                        '[data-test-id="add-alt-text-button"]',
+                    ]
+                    for trig_sel in alt_triggers:
+                        try:
+                            trig = page.query_selector(trig_sel)
+                            if trig and trig.is_visible():
+                                trig.click()
+                                time.sleep(0.5)
+                                logger.info(f"✓ Clicked alt text trigger: {trig_sel}")
+                                break
+                        except Exception:
+                            pass
+
+                    alt_selectors = [
+                        'textarea[placeholder*="alt text" i]',
+                        'input[placeholder*="alt text" i]',
+                        'textarea[placeholder*="Explain what people can see" i]',
+                        '[aria-label*="alt text" i]',
+                        '[aria-label*="Explain what people can see" i]',
+                        '[data-test-id="pin-draft-alt-text"] input',
+                        '[data-test-id="pin-draft-alt-text"] textarea',
+                    ]
+                    self._safe_fill_field(page, "alt text", alt_selectors, alt_text[:500])
+                time.sleep(1)
 
                 # 6. Select Board
                 logger.info(f"📌 Selecting board: {board_name}")
