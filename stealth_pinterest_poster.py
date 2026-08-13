@@ -336,22 +336,41 @@ class StealthPinterestPoster:
                 logger.info("🚀 Clicking Publish pin button...")
                 publish_selectors = [
                     '[data-test-id="board-dropdown-save-button"]',
+                    'button[data-test-id="pin-builder-save-button"]',
                     'button:has-text("Publish")',
                     'button:has-text("Save")',
-                    'button[type="submit"]',
-                    '[aria-label*="Publish" i]',
-                    '[aria-label*="Save" i]',
                 ]
                 publish_btn = None
                 for sel in publish_selectors:
                     publish_btn = page.query_selector(sel)
-                    if publish_btn:
+                    if publish_btn and publish_btn.is_visible():
+                        logger.info(f"Found publish button using: {sel}")
                         break
 
                 if publish_btn:
                     publish_btn.click()
+                    logger.info("Waiting for Pinterest backend to process pin creation...")
+                    
+                    # Wait for either a toast notification or URL change
+                    try:
+                        page.wait_for_function('window.location.href.indexOf("pin-builder") === -1 || document.querySelector("div:has-text(\\"Saved\\")")', timeout=15000)
+                    except Exception:
+                        pass
+                    
                     time.sleep(5)
-                    logger.info("✓ Pin published successfully via Stealth UI Automation!")
+                    final_url = page.url
+                    logger.info(f"Final page URL after publish: {final_url}")
+                    
+                    try:
+                        page.screenshot(path=str(ROOT / "stealth_after_publish.png"))
+                        logger.info("Captured screenshot stealth_after_publish.png")
+                    except:
+                        pass
+
+                    if "pin-builder" in final_url:
+                        logger.warning("⚠️ Still on Pin Builder page! Pin might NOT have been published due to a validation error.")
+                    else:
+                        logger.info("✓ Pin published successfully via Stealth UI Automation!")
 
                     try:
                         updated_cookies = context.cookies()
@@ -362,7 +381,7 @@ class StealthPinterestPoster:
                         logger.debug(f"Cookie save note: {ce}")
 
                     browser.close()
-                    return True, page.url
+                    return True, final_url
                 else:
                     logger.error("Could not find Publish/Save button on page")
                     browser.close()
