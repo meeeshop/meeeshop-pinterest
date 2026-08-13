@@ -16,11 +16,12 @@ name: Daily Pinterest Posting V2
 #   02:00 UTC = 10 PM ET / 9 PM CT / 7 PM PT  — evening prime (bed-time scroll)
 
 on:
-  schedule:
-    - cron: '0 13 * * *'   # 9 AM ET / 13:00 UTC — morning coffee scroll
-    - cron: '0 17 * * *'   # 1 PM ET / 17:00 UTC — post-lunch browse
-    - cron: '0 22 * * *'   # 6 PM ET / 22:00 UTC — after-work scroll
-    - cron: '0 1  * * *'   # 9 PM ET / 01:00 UTC — evening prime time bedtime scroll
+  # Legacy cron schedule disabled in favor of daily-pinterest-stealth.yml (Solution 3 Playwright UI Automation)
+  # schedule:
+  #   - cron: '0 13 * * *'
+  #   - cron: '0 17 * * *'
+  #   - cron: '0 22 * * *'
+  #   - cron: '0 1  * * *'
   workflow_dispatch:
     inputs:
       pins_count:

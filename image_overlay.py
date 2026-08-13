@@ -38,6 +38,14 @@ RED        = (220, 53,  69)
 WARM_WHITE = (250, 248, 244)
 DARK_GREY  = (40,  40,  40)
 MID_GREY   = (90,  90,  90)
+
+_ACCENTS = [
+    (238, 242, 247), # Slate blue tint
+    (247, 243, 238), # Peach tint
+    (240, 247, 242), # Mint tint
+    (247, 238, 242), # Blush tint
+    (238, 238, 247), # Lavender tint
+]
 CORAL      = (232, 93,  78)
 NAVY       = (22,  43,  77)
 SAGE       = (88,  120, 90)

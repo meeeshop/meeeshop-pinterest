@@ -1,0 +1,225 @@
+{
+  "posts": [
+    {
+      "product_id": 8789754806443,
+      "title": "Flattering Mid Rise Jeans for Everyday Style and Comfortable Fit \u2014 MeeeShop US Boutique",
+      "board": "Pants & Leggings",
+      "timestamp": "2026-08-13T04:59:04.254165",
+      "type": "product",
+      "style": "hero",
+      "template": 14,
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8916763345067,
+      "title": "Stylish Oversize Nylon Tote Bag for Everyday Use and Back to School \u2014 MeeeShop US Boutique",
+      "board": "Trends",
+      "timestamp": "2026-08-13T05:00:35.241462",
+      "type": "product",
+      "style": "carousel",
+      "template": 8,
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8745259991211,
+      "title": "Fit and Flare Midi Dress for Date Night in Late Summer Style \u2014 MeeeShop US Boutique",
+      "board": "Dresses",
+      "timestamp": "2026-08-13T05:07:16.467641",
+      "type": "product",
+      "style": "collage",
+      "template": 3,
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8825418088619,
+      "title": "Mini Skirt for Everyday Style and Comfortable Fit Perfect for Back to School Fashion",
+      "board": "Feminine & Flowy Fits",
+      "timestamp": "2026-08-13T05:08:45.302648",
+      "type": "video",
+      "style": "card",
+      "template": 10,
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8821453193387,
+      "title": "Fit and Flirty Space Vintage Dress for Date Night Outings \u2014 MeeeShop US Boutique",
+      "board": "Short fall dresses",
+      "timestamp": "2026-08-13T05:18:36.701706",
+      "type": "product",
+      "style": "hero",
+      "template": 3,
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8818150703275,
+      "title": "Mini Loden Dress for Date Night, Fit and Flare Style for Women \u2014 MeeeShop US Boutique",
+      "board": "Must-Have Fashion Picks",
+      "timestamp": "2026-08-13T05:20:05.419233",
+      "type": "blog",
+      "style": "carousel",
+      "template": 0,
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8786744934571,
+      "title": "Stylish Crossbody Bag for Everyday Summer Style and Back to School \u2014 MeeeShop US Boutique",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-08-13T05:29:39.715837",
+      "type": "blog",
+      "style": "collage",
+      "template": 3,
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8771487170731,
+      "title": "High Rise Denim Shorts with Embroidered Detail for Everyday Boutique Style \u2014 MeeeShop US Boutique",
+      "board": "Trends",
+      "timestamp": "2026-08-13T05:31:07.154353",
+      "type": "blog",
+      "style": "card",
+      "template": 1,
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8782689894571,
+      "title": "Little Black Dress for Date Night Fit and Flattering Style \u2014 MeeeShop US Boutique",
+      "board": "Dress",
+      "timestamp": "2026-08-13T05:40:54.740934",
+      "type": "product",
+      "style": "hero",
+      "template": 8,
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8825884147883,
+      "title": "Stylish Everyday Tote Bag for Back to School and Work in Classic Fit \u2014 MeeeShop US Boutique",
+      "board": "Bags",
+      "timestamp": "2026-08-13T05:50:11.609263",
+      "type": "product",
+      "style": "carousel",
+      "template": 10,
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8789757100203,
+      "title": "Slim Straight High Rise Jeans for Everyday Style and Comfortable Fit \u2014 MeeeShop US Boutique",
+      "board": "Jeans",
+      "timestamp": "2026-08-13T07:18:41.157159",
+      "type": "product",
+      "style": "collage",
+      "template": 15,
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8892151496875,
+      "title": "Easy Fit Cotton Date Night Dress for Women Perfect Summer Style \u2014 MeeeShop US Boutique",
+      "board": "Cocktail Dresses",
+      "timestamp": "2026-08-13T07:21:42.267981",
+      "type": "blog",
+      "style": "card",
+      "template": 14,
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8782637990059,
+      "title": "Oversized Black Date Night Dress for Late Summer Nights in Soft Quilted Poplin \u2014 MeeeShop US Boutiqu",
+      "board": "Dressy Outfits",
+      "timestamp": "2026-08-13T07:23:15.578073",
+      "type": "product",
+      "style": "hero",
+      "template": 3,
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8841130475691,
+      "title": "Relaxed fit chambray shirt for everyday style and back to school fashion \u2014 MeeeShop US Boutique",
+      "board": "Must-Have Fashion...",
+      "timestamp": "2026-08-13T07:29:13.724257",
+      "type": "video",
+      "style": "carousel",
+      "template": 4,
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8897135476907,
+      "title": "Comfy Stretch Capri Pants for Casual Back to School Style \u2014 MeeeShop US Boutique",
+      "board": "Flares Jeans",
+      "timestamp": "2026-08-13T09:47:17.613715",
+      "type": "carousel",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276663026848",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8782638022827,
+      "title": "Floral Fit and Flare Dress for Date Night Outings \u2014 MeeeShop US Boutique",
+      "board": "Short Tall dresses",
+      "timestamp": "2026-08-13T09:51:59.815856",
+      "type": "blog",
+      "style": "card",
+      "template": 6,
+      "pin_url": "https://www.pinterest.com/pin/962222276663026906",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": "560438706347",
+      "article_id": "560438706347",
+      "title": "8 Stylish Vegan Friendly Handbags From Justin Taylor Collection At Meeeshop Tips For Buying Your Next Accessory",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-08-13T10:19:03.342429",
+      "type": "blog",
+      "style": "hero",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276663027504",
+      "blog_url": "https://us.meeeshop.com/blogs/our-tips/8-stylish-vegan-friendly-handbags-from-justin-taylor-collection-at-meeeshop-tips-for-buying-your-next-accessory",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8880718839979,
+      "title": "Lace Hem Midi Dress for Date Night and Late Summer Outings \u2014 MeeeShop US Boutique",
+      "board": "Rompers, Jumpsuits &...",
+      "timestamp": "2026-08-13T10:24:53.533944",
+      "type": "product",
+      "style": "carousel",
+      "template": 1,
+      "pin_url": "https://www.pinterest.com/pin/962222276663027670",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8845244104875,
+      "title": "Stylish Fit and Flare Skirt for Everyday Boutique Style and Back to School \u2014 MeeeShop US Boutique",
+      "board": "Skirts",
+      "timestamp": "2026-08-13T10:28:37.536045",
+      "type": "video",
+      "style": "collage",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276663027756",
+      "source": "stealth_playwright"
+    }
+  ],
+  "board_last_used": {
+    "Pants & Leggings": "2026-08-13T04:59:04.254165",
+    "Trends": "2026-08-13T05:31:07.154353",
+    "Dresses": "2026-08-13T05:07:16.467641",
+    "Feminine & Flowy Fits": "2026-08-13T05:08:45.302648",
+    "Short fall dresses": "2026-08-13T05:18:36.701706",
+    "Must-Have Fashion Picks": "2026-08-13T05:20:05.419233",
+    "Trendy & Timeless Fashion": "2026-08-13T05:29:39.715837",
+    "Dress": "2026-08-13T05:40:54.740934",
+    "Bags": "2026-08-13T05:50:11.609263",
+    "Jeans": "2026-08-13T07:18:41.157159",
+    "Cocktail Dresses": "2026-08-13T07:21:42.267981",
+    "Dressy Outfits": "2026-08-13T07:23:15.578073",
+    "Must-Have Fashion...": "2026-08-13T07:29:13.724257",
+    "Flares Jeans": "2026-08-13T09:47:17.613715",
+    "Short Tall dresses": "2026-08-13T09:51:59.815856",
+    "Rompers, Jumpsuits &...": "2026-08-13T10:24:53.533944",
+    "Skirts": "2026-08-13T10:28:37.536045"
+  },
+  "daily_count": 19,
+  "last_post_time": "2026-08-13T10:28:37.536045",
+  "board_rotation_cursor": 0,
+  "last_image_style": "collage",
+  "last_template_index": 15
+}
