@@ -147,7 +147,7 @@ def post_single_pin_stealth(
             overlay_file.unlink(missing_ok=True)
 
 
-def run_daily_stealth_posting(dry_run: bool = False, pins_count: Optional[int] = None):
+def run_daily_stealth_posting(dry_run: bool = False, pins_count: Optional[int] = None, forced_type: Optional[str] = None):
     history = load_history()
     history = reset_daily_count_if_new_day(history)
 
@@ -184,7 +184,8 @@ def run_daily_stealth_posting(dry_run: bool = False, pins_count: Optional[int] =
     poster = StealthPinterestPoster(headless=True)
 
     posted_count = 0
-    store_base_url = get_secret("STORE_BASE_URL") or "https://meeeshop.com"
+    used_boards_in_run = set()
+    store_base_url = get_secret("STORE_BASE_URL") or "https://us.meeeshop.com"
 
     for raw_product in eligible:
         if posted_count >= limit or (history["daily_count"] + posted_count) >= MAX_PINS_PER_DAY:
@@ -216,6 +217,18 @@ def run_daily_stealth_posting(dry_run: bool = False, pins_count: Optional[int] =
         board_name = board["name"] if board else "Trendy & Timeless Fashion"
         used_boards_in_run.add(board_name)
 
+        # Content Mix: forced_type or 70% Product, 20% Video, 10% Blog
+        if forced_type in ["product", "video", "blog"]:
+            pin_type = forced_type
+        else:
+            rand_val = random.random()
+            if rand_val < 0.70:
+                pin_type = "product"
+            elif rand_val < 0.90:
+                pin_type = "video"
+            else:
+                pin_type = "blog"
+
         # Generate V2 AI content
         content = generate_content_package(formatted, board_name)
 
@@ -224,6 +237,7 @@ def run_daily_stealth_posting(dry_run: bool = False, pins_count: Optional[int] =
             product_data=formatted,
             board_name=board_name,
             content=content,
+            pin_type=pin_type,
             last_style=history.get("last_image_style"),
             last_template=history.get("last_template_index"),
             dry_run=dry_run,
@@ -237,6 +251,7 @@ def run_daily_stealth_posting(dry_run: bool = False, pins_count: Optional[int] =
                 "title": content["pin_title"],
                 "board": board_name,
                 "timestamp": now_iso,
+                "type": pin_type,
                 "style": style_used,
                 "template": template_used,
                 "source": "stealth_playwright"
@@ -248,7 +263,7 @@ def run_daily_stealth_posting(dry_run: bool = False, pins_count: Optional[int] =
             history["last_template_index"] = template_used
 
             save_history(history)
-            logger.info(f"✓ Stealth posting successful ({posted_count}/{limit})")
+            logger.info(f"✓ Stealth posting successful ({posted_count}/{limit}) — Type: {pin_type}")
             time.sleep(random.uniform(5, 12))
 
     logger.info(f"🎯 Stealth daily run finished. Posted {posted_count} pins.")
@@ -256,4 +271,8 @@ def run_daily_stealth_posting(dry_run: bool = False, pins_count: Optional[int] =
 
 if __name__ == "__main__":
     dry_run = "--dry-run" in sys.argv
-    run_daily_stealth_posting(dry_run=dry_run)
+    forced_type = None
+    for arg in sys.argv:
+        if arg.startswith("--type="):
+            forced_type = arg.split("=", 1)[1]
+    run_daily_stealth_posting(dry_run=dry_run, forced_type=forced_type)
