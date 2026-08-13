@@ -1,0 +1,33 @@
+{
+  "posts": [
+    {
+      "product_id": 8789754806443,
+      "title": "Flattering Mid Rise Jeans for Everyday Style and Comfortable Fit \u2014 MeeeShop US Boutique",
+      "board": "Pants & Leggings",
+      "timestamp": "2026-08-13T04:59:04.254165",
+      "type": "product",
+      "style": "hero",
+      "template": 14,
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8916763345067,
+      "title": "Stylish Oversize Nylon Tote Bag for Everyday Use and Back to School \u2014 MeeeShop US Boutique",
+      "board": "Trends",
+      "timestamp": "2026-08-13T05:00:35.241462",
+      "type": "product",
+      "style": "carousel",
+      "template": 8,
+      "source": "stealth_playwright"
+    }
+  ],
+  "board_last_used": {
+    "Pants & Leggings": "2026-08-13T04:59:04.254165",
+    "Trends": "2026-08-13T05:00:35.241462"
+  },
+  "daily_count": 2,
+  "last_post_time": "2026-08-13T05:00:35.241462",
+  "board_rotation_cursor": 0,
+  "last_image_style": "carousel",
+  "last_template_index": 8
+}
