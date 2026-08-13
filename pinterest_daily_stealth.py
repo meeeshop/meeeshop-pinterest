@@ -33,7 +33,7 @@ from image_overlay import add_text_overlay, get_next_style_and_template
 from board_mapping import select_best_lru_board
 
 logging.basicConfig(
-    level=logging.INFO,
+    level=logging.DEBUG,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
