@@ -31,6 +31,8 @@ from content_generator_v2 import generate_content_package
 from stealth_pinterest_poster import StealthPinterestPoster
 from image_overlay import add_text_overlay, get_next_style_and_template
 from board_mapping import select_best_lru_board, MEEESHOP_BOARDS
+from blog_content_optimizer import generate_blog_pin_title, generate_blog_pin_description, select_blog_boards
+from pinterest_blog_daily import fetch_shopify_articles
 
 logging.basicConfig(
     level=logging.INFO,
@@ -235,6 +237,85 @@ def post_single_pin_stealth(
             overlay_file.unlink(missing_ok=True)
 
 
+def post_single_blog_pin_stealth(
+    poster: StealthPinterestPoster,
+    article_data: Dict[str, Any],
+    store_base_url: str,
+    last_style: Optional[str] = None,
+    last_template: Optional[int] = None,
+    dry_run: bool = False,
+) -> Tuple[bool, Optional[str], Optional[int], Optional[str]]:
+    temp_dir = Path("/tmp") if os.name != "nt" else ROOT / "scratch"
+    temp_dir.mkdir(parents=True, exist_ok=True)
+
+    blog_url = f"{store_base_url.rstrip('/')}/blogs/{article_data['blog_handle']}/{article_data['handle']}"
+    pin_title = generate_blog_pin_title(article_data)
+    pin_desc = generate_blog_pin_description(article_data)
+    alt_text = f"MeeeShop Fashion Blog Article: {article_data['title']}"
+
+    board_name = "Trendy & Timeless Fashion"
+    try:
+        boards_selected = select_blog_boards(article_data, [{"name": b} for b in MEEESHOP_BOARDS])
+        if boards_selected:
+            board_name = boards_selected[0].get("name", board_name)
+    except Exception as be:
+        logger.warning(f"Blog board selection note: {be}")
+
+    style_used, template_used = get_next_style_and_template(
+        last_style=last_style,
+        last_template=last_template,
+        board_name=board_name,
+        title=pin_title,
+    )
+
+    image_file = temp_dir / f"stealth_blog_{article_data['id']}.jpg"
+    overlay_file = temp_dir / f"stealth_blog_ovl_{article_data['id']}.jpg"
+
+    try:
+        img_downloaded = False
+        if article_data.get("image_url"):
+            img_downloaded = download_image(article_data["image_url"], image_file)
+
+        if not img_downloaded:
+            logger.warning(f"No valid image for blog article '{article_data['title']}'")
+            return False, None, None, "No article image"
+
+        overlay_image = add_text_overlay(
+            str(image_file),
+            title=pin_title,
+            cta="Read Article",
+            price=None,
+            output_path=str(overlay_file),
+            template_index=template_used,
+            board_name=board_name,
+            image_style="card" if style_used == "collage" else style_used,
+        )
+        if not overlay_image:
+            overlay_image = str(image_file)
+
+        logger.info(f"📰 Posting BLOG ARTICLE via Stealth UI: '{pin_title}' (Blog URL: {blog_url})")
+
+        success, res_msg = poster.create_pin(
+            image_path=overlay_image,
+            title=pin_title,
+            description=pin_desc,
+            board_name=board_name,
+            link_url=blog_url,
+            alt_text=alt_text,
+            dry_run=dry_run,
+        )
+
+        return success, style_used, template_used, res_msg
+
+    except Exception as e:
+        logger.error(f"Exception during stealth blog posting: {e}", exc_info=True)
+        return False, None, None, str(e)
+    finally:
+        image_file.unlink(missing_ok=True)
+        if overlay_file.exists():
+            overlay_file.unlink(missing_ok=True)
+
+
 def _generate_slideshow_video(
     image_paths: List[str],
     output_path: str,
@@ -416,7 +497,71 @@ def run_daily_stealth_posting(dry_run: bool = False, pins_count: Optional[int] =
             else:
                 pin_type = "blog"
 
-        # Generate V2 AI content
+        # ── REAL BLOG ARTICLE POSTING HANDLER ────────────────────────────
+        if pin_type == "blog":
+            blog_articles = fetch_shopify_articles(shopify, limit=20)
+            if blog_articles:
+                random.shuffle(blog_articles)
+                blog_posted = False
+                for article in blog_articles:
+                    art_id = str(article["id"])
+                    already_posted = False
+                    for p in history.get("posts", []):
+                        if str(p.get("product_id")) == art_id or str(p.get("article_id")) == art_id:
+                            already_posted = True
+                            break
+                    if already_posted:
+                        continue
+
+                    success, style_used, template_used, res_msg = post_single_blog_pin_stealth(
+                        poster=poster,
+                        article_data=article,
+                        store_base_url=store_base_url,
+                        last_style=last_style,
+                        last_template=last_template,
+                        dry_run=dry_run,
+                    )
+                    if success:
+                        consecutive_failures = 0
+                        last_style = style_used
+                        last_template = template_used
+                        posted_count += 1
+                        now_iso = datetime.now().isoformat()
+                        live_pin_url = res_msg if (res_msg and res_msg.startswith("http")) else None
+                        blog_url = f"{store_base_url.rstrip('/')}/blogs/{article['blog_handle']}/{article['handle']}"
+                        history["posts"].append({
+                            "product_id": article["id"],
+                            "article_id": article["id"],
+                            "title": article["title"],
+                            "board": "Trendy & Timeless Fashion",
+                            "timestamp": now_iso,
+                            "type": "blog",
+                            "style": style_used,
+                            "template": template_used,
+                            "pin_url": live_pin_url,
+                            "blog_url": blog_url,
+                            "source": "stealth_playwright"
+                        })
+                        history["daily_count"] += 1
+                        history["last_post_time"] = now_iso
+                        history["last_image_style"] = style_used
+                        history["last_template_index"] = template_used
+                        save_history(history)
+                        logger.info(f"✓ Stealth blog posting successful ({posted_count}/{limit}) | Blog URL: {blog_url} | Live Pin URL: {live_pin_url or 'N/A'}")
+                        time.sleep(random.uniform(5, 12))
+                        blog_posted = True
+                        break
+
+                if blog_posted:
+                    continue
+                else:
+                    logger.warning("No unposted blog articles found, falling back to product pin")
+                    pin_type = "product"
+            else:
+                logger.warning("No blog articles fetched from Shopify, falling back to product pin")
+                pin_type = "product"
+
+        # Generate V2 AI content for product/video/carousel pins
         content = generate_content_package(formatted, board_name)
 
         success, style_used, template_used, res_msg = post_single_pin_stealth(
