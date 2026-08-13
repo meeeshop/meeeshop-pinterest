@@ -85,7 +85,16 @@ jobs:
           if [ "${{ github.event.inputs.pin_type }}" != "" ] && [ "${{ github.event.inputs.pin_type }}" != "auto" ]; then
             TYPE_FLAG="--type=${{ github.event.inputs.pin_type }}"
           fi
-          PINS_TO_POST=$PINS python pinterest_daily_stealth.py $TYPE_FLAG
+          
+          echo "Starting Stealth Posting..."
+          if ! PINS_TO_POST=$PINS python pinterest_daily_stealth.py $TYPE_FLAG; then
+            echo "⚠️ Attempt 1 failed. Retrying in 15 seconds..."
+            sleep 15
+            if ! PINS_TO_POST=$PINS python pinterest_daily_stealth.py $TYPE_FLAG; then
+              echo "❌ Attempt 2 failed. Forcing step to fail."
+              exit 1
+            fi
+          fi
 
       - name: Upload stealth screenshots (if generated)
         if: always()
