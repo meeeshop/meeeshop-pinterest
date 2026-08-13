@@ -357,37 +357,39 @@ class StealthPinterestPoster:
                     publish_btn.click()
                     logger.info("Waiting for Pinterest backend to process pin creation...")
                     
-                    # Wait for either a toast notification or URL change
                     try:
                         page.wait_for_function('window.location.href.indexOf("pin-builder") === -1 || document.querySelector("div:has-text(\\"Saved\\")")', timeout=15000)
                     except Exception:
                         pass
-                    
                     time.sleep(5)
-                    final_url = page.url
-                    logger.info(f"Final page URL after publish: {final_url}")
-                    
-                    try:
-                        page.screenshot(path=str(ROOT / "stealth_after_publish.png"))
-                        logger.info("Captured screenshot stealth_after_publish.png")
-                    except:
-                        pass
+                else:
+                    logger.warning("Could not find a distinct Publish/Save button! Checking if it was auto-published by board selection...")
+                    time.sleep(5)  # Give it a moment in case it was auto-published
 
-                    if "pin-builder" in final_url:
-                        logger.warning("⚠️ Still on Pin Builder page! Pin might NOT have been published due to a validation error.")
-                        error_elements = page.query_selector_all('[role="alert"], [data-test-id="toast"], div:has-text("error" i)')
-                        if error_elements:
-                            for err_el in error_elements:
-                                try:
-                                    logger.error(f"📌 Pinterest UI Alert: {err_el.inner_text()}")
-                                except Exception: pass
-                        else:
-                            try:
-                                body_text = page.locator('body').inner_text()
-                                logger.error(f"📌 Body text snippet (first 500 chars): {body_text[:500]}")
+                final_url = page.url
+                logger.info(f"Final page URL: {final_url}")
+                
+                try:
+                    page.screenshot(path=str(ROOT / "stealth_after_publish.png"))
+                    logger.info("Captured screenshot stealth_after_publish.png")
+                except: pass
+
+                if "pin-builder" in final_url:
+                    logger.warning("⚠️ Still on Pin Builder page! Pin might NOT have been published due to a validation error.")
+                    error_elements = page.query_selector_all('[role="alert"], [data-test-id="toast"], div:has-text("error"), div:has-text("Error")')
+                    if error_elements:
+                        for err_el in error_elements:
+                            try: logger.error(f"📌 Pinterest UI Alert: {err_el.inner_text()}")
                             except Exception: pass
                     else:
-                        logger.info("✓ Pin published successfully via Stealth UI Automation!")
+                        try:
+                            body_text = page.locator('body').inner_text()
+                            logger.error(f"📌 Body text snippet (first 500 chars): {body_text[:500]}")
+                        except Exception: pass
+                    browser.close()
+                    return False, "Validation error or publish failed"
+                else:
+                    logger.info("✓ Pin published successfully via Stealth UI Automation!")
 
                     try:
                         updated_cookies = context.cookies()
@@ -399,10 +401,6 @@ class StealthPinterestPoster:
 
                     browser.close()
                     return True, final_url
-                else:
-                    logger.error("Could not find Publish/Save button on page")
-                    browser.close()
-                    return False, "Publish button not found"
 
             except Exception as e:
                 logger.error(f"Error during stealth posting: {e}", exc_info=True)
@@ -455,11 +453,21 @@ class StealthPinterestPoster:
                         search_input.fill(search_term)
                         time.sleep(2)  # Wait for search results
                     
-                    # Use substring match (no quotes around search_term in text= selector)
-                    board_item = page.query_selector(f'text={search_term}')
-                    if board_item and board_item.is_visible():
-                        board_item.click()
-                        logger.info(f"✓ Selected board '{board_name}' via selector: {sel} matching '{search_term}'")
+                    # Use substring match to find the board row
+                    board_row = page.locator(f'div[role="button"]:has-text("{search_term}"), div[role="listitem"]:has-text("{search_term}")').first
+                    if not board_row.is_visible():
+                        # Fallback to simple text match
+                        board_row = page.locator(f'text="{search_term}"').first
+
+                    if board_row.is_visible():
+                        # Pinterest UI sometimes puts a "Save" button directly on the board row
+                        row_save_btn = board_row.locator('button, [data-test-id="board-dropdown-save-button"]')
+                        if row_save_btn.count() > 0 and row_save_btn.first.is_visible():
+                            row_save_btn.first.click()
+                            logger.info(f"✓ Clicked Save button on board row '{board_name}'")
+                        else:
+                            board_row.click()
+                            logger.info(f"✓ Clicked board text '{board_name}'")
                         return True
             except Exception:
                 continue
