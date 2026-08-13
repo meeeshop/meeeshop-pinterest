@@ -354,7 +354,10 @@ class StealthPinterestPoster:
                         break
 
                 if publish_btn:
-                    publish_btn.click()
+                    try:
+                        publish_btn.click(timeout=5000)
+                    except Exception as e:
+                        logger.warning(f"Publish button click intercepted or timed out (might be auto-published): {e}")
                     logger.info("Waiting for Pinterest backend to process pin creation...")
                     
                     try:

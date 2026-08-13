@@ -1,0 +1,95 @@
+{
+  "checked_at": "python-requests/2.32.3",
+  "products": [
+    {
+      "url": "https://us-meeeshop.myshopify.com/products/hyfve-tie-front-spaghetti-strap-top",
+      "opengraph": {
+        "title": "Hyfve Tie Front Spaghetti Strap Top | Free US Shipping",
+        "price_amount": "84.99",
+        "currency": "USD",
+        "availability": null,
+        "image": "http://us.meeeshop.com/cdn/shop/files/hyfve-tie-front-spaghetti-strap-top-in-light-blue-046763.jpg?v=1785336057"
+      },
+      "schema_org": {},
+      "missing_fields": [],
+      "rich_pin_status": "PASSED \u2705",
+      "recommendations": [
+        "Product URL contains full Rich Pin metadata!"
+      ],
+      "product_title": "Hyfve Tie Front Spaghetti Strap Top",
+      "product_id": 8740253106347
+    },
+    {
+      "url": "https://us-meeeshop.myshopify.com/products/hyfve-boned-tie-back-dress",
+      "opengraph": {
+        "title": "Hyfve Boned Tie-back Dress | Free US Shipping",
+        "price_amount": "114.99",
+        "currency": "USD",
+        "availability": null,
+        "image": "http://us.meeeshop.com/cdn/shop/files/hyfve-boned-tie-back-dress-in-black-boned-dress-272683.jpg?v=1785336103"
+      },
+      "schema_org": {},
+      "missing_fields": [],
+      "rich_pin_status": "PASSED \u2705",
+      "recommendations": [
+        "Product URL contains full Rich Pin metadata!"
+      ],
+      "product_title": "Hyfve Boned Tie-back Dress",
+      "product_id": 8740253597867
+    },
+    {
+      "url": "https://us-meeeshop.myshopify.com/products/hyfve-acid-wash-french-terry-wide-leg-pants",
+      "opengraph": {
+        "title": "Hyfve Acid Wash Terry Wide-leg | Free US Shipping",
+        "price_amount": "104.99",
+        "currency": "USD",
+        "availability": null,
+        "image": "http://us.meeeshop.com/cdn/shop/files/hyfve-acid-wash-french-terry-wide-leg-pants-in-min-205995.jpg?v=1785336151"
+      },
+      "schema_org": {},
+      "missing_fields": [],
+      "rich_pin_status": "PASSED \u2705",
+      "recommendations": [
+        "Product URL contains full Rich Pin metadata!"
+      ],
+      "product_title": "Hyfve Acid Wash French Terry Wide-leg Pants",
+      "product_id": 8740253761707
+    },
+    {
+      "url": "https://us-meeeshop.myshopify.com/products/hyfve-mineral-wash-wide-leg-cargo-pants",
+      "opengraph": {
+        "title": "Hyfve Mineral Wash Wide Leg Cargo Pants | Free US Shipping",
+        "price_amount": "104.99",
+        "currency": "USD",
+        "availability": null,
+        "image": "http://us.meeeshop.com/cdn/shop/files/hyfve-mineral-wash-wide-leg-cargo-pants-in-black-b-362923.jpg?v=1785336196"
+      },
+      "schema_org": {},
+      "missing_fields": [],
+      "rich_pin_status": "PASSED \u2705",
+      "recommendations": [
+        "Product URL contains full Rich Pin metadata!"
+      ],
+      "product_title": "Hyfve Mineral Wash Wide Leg Cargo Pants",
+      "product_id": 8740255531179
+    },
+    {
+      "url": "https://us-meeeshop.myshopify.com/products/hyfve-collared-wrap-top-wide-leg-pants-set",
+      "opengraph": {
+        "title": "Hyfve Collared Wrap Top & Wide-leg Pants | Free US Shipping",
+        "price_amount": "109.99",
+        "currency": "USD",
+        "availability": null,
+        "image": "http://us.meeeshop.com/cdn/shop/files/hyfve-collared-wrap-top-wide-leg-pants-set-in-blac-965099.jpg?v=1785336247"
+      },
+      "schema_org": {},
+      "missing_fields": [],
+      "rich_pin_status": "PASSED \u2705",
+      "recommendations": [
+        "Product URL contains full Rich Pin metadata!"
+      ],
+      "product_title": "Hyfve Collared Wrap Top & Wide-leg Pants Set",
+      "product_id": 8740256317611
+    }
+  ]
+}

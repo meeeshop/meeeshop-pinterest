@@ -33,7 +33,7 @@ from image_overlay import add_text_overlay, get_next_style_and_template
 from board_mapping import select_best_lru_board, MEEESHOP_BOARDS
 
 logging.basicConfig(
-    level=logging.DEBUG,
+    level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     force=True
 )
@@ -236,6 +236,9 @@ def run_daily_stealth_posting(dry_run: bool = False, pins_count: Optional[int] =
         logger.error("❌ Missing STORE_BASE_URL / SHOPIFY_STORE_URL in secrets vault")
         return
 
+    last_style = history.get("last_image_style")
+    last_template = history.get("last_template_index")
+
     for raw_product in eligible:
         if posted_count >= limit or (history["daily_count"] + posted_count) >= MAX_PINS_PER_DAY:
             break
@@ -279,12 +282,14 @@ def run_daily_stealth_posting(dry_run: bool = False, pins_count: Optional[int] =
             board_name=board_name,
             content=content,
             pin_type=pin_type,
-            last_style=history.get("last_image_style"),
-            last_template=history.get("last_template_index"),
+            last_style=last_style,
+            last_template=last_template,
             dry_run=dry_run,
         )
 
         if success:
+            last_style = style_used
+            last_template = template_used
             posted_count += 1
             now_iso = datetime.now().isoformat()
             history["posts"].append({
