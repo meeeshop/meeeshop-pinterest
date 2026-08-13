@@ -16,9 +16,9 @@ on:
   workflow_dispatch:
     inputs:
       pins_count:
-        description: 'Number of pins to post (default: 2)'
+        description: 'Number of pins to post (default: 4)'
         required: false
-        default: '2'
+        default: '4'
       pin_type:
         description: 'Pin Type to Post (auto=70/20/10 mix, product, video, blog)'
         required: false
@@ -76,10 +76,10 @@ jobs:
           ENCRYPTION_KEY_PRIMARY: ${{ secrets.ENCRYPTION_KEY_PRIMARY }}
           ENCRYPTION_KEY_FALLBACK: ${{ secrets.ENCRYPTION_KEY_FALLBACK }}
           DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
-          PINTEREST_DAILY_CAP: '12'
+          PINTEREST_DAILY_CAP: '16'
           PYTHONUNBUFFERED: '1'
         run: |
-          PINS="${{ github.event.inputs.pins_count || '2' }}"
+          PINS="${{ github.event.inputs.pins_count || '4' }}"
           TYPE_FLAG=""
           if [ "${{ github.event.inputs.pin_type }}" != "" ] && [ "${{ github.event.inputs.pin_type }}" != "auto" ]; then
             TYPE_FLAG="--type=${{ github.event.inputs.pin_type }}"
