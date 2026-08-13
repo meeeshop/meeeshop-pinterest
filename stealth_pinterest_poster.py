@@ -335,16 +335,22 @@ class StealthPinterestPoster:
                 # 7. Click Publish
                 logger.info("🚀 Clicking Publish pin button...")
                 publish_selectors = [
-                    '[data-test-id="board-dropdown-save-button"]',
                     'button[data-test-id="pin-builder-save-button"]',
+                    '[data-test-id="save-pin-button"]',
                     'button:has-text("Publish")',
+                    'button[aria-label="Save"]',
+                    '[data-test-id="board-dropdown-save-button"]',
                     'button:has-text("Save")',
                 ]
                 publish_btn = None
                 for sel in publish_selectors:
-                    publish_btn = page.query_selector(sel)
-                    if publish_btn and publish_btn.is_visible():
-                        logger.info(f"Found publish button using: {sel}")
+                    btns = page.query_selector_all(sel)
+                    for btn in btns:
+                        if btn.is_visible() and not btn.is_disabled():
+                            publish_btn = btn
+                            logger.info(f"Found active publish button using: {sel}")
+                            break
+                    if publish_btn:
                         break
 
                 if publish_btn:
@@ -369,6 +375,17 @@ class StealthPinterestPoster:
 
                     if "pin-builder" in final_url:
                         logger.warning("⚠️ Still on Pin Builder page! Pin might NOT have been published due to a validation error.")
+                        error_elements = page.query_selector_all('[role="alert"], [data-test-id="toast"], div:has-text("error" i)')
+                        if error_elements:
+                            for err_el in error_elements:
+                                try:
+                                    logger.error(f"📌 Pinterest UI Alert: {err_el.inner_text()}")
+                                except Exception: pass
+                        else:
+                            try:
+                                body_text = page.locator('body').inner_text()
+                                logger.error(f"📌 Body text snippet (first 500 chars): {body_text[:500]}")
+                            except Exception: pass
                     else:
                         logger.info("✓ Pin published successfully via Stealth UI Automation!")
 
@@ -431,14 +448,18 @@ class StealthPinterestPoster:
                 if board_btn:
                     board_btn.click()
                     time.sleep(1)
+                    
+                    search_term = board_name.replace("...", "").replace('"', "").strip()
                     search_input = page.query_selector('input[aria-label="Search boards"], input[placeholder*="Search" i], input[type="text"]')
                     if search_input:
-                        search_input.fill(board_name)
-                        time.sleep(1)
-                    board_item = page.query_selector(f'text="{board_name}"')
-                    if board_item:
+                        search_input.fill(search_term)
+                        time.sleep(2)  # Wait for search results
+                    
+                    # Use substring match (no quotes around search_term in text= selector)
+                    board_item = page.query_selector(f'text={search_term}')
+                    if board_item and board_item.is_visible():
                         board_item.click()
-                        logger.info(f"✓ Selected board '{board_name}' via selector: {sel}")
+                        logger.info(f"✓ Selected board '{board_name}' via selector: {sel} matching '{search_term}'")
                         return True
             except Exception:
                 continue
