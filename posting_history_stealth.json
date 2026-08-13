@@ -229,6 +229,28 @@
       "template": 5,
       "pin_url": "https://www.pinterest.com/pin/962222276663034244",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8825882509483,
+      "title": "Stylish Everyday Tote Bag for Back to School and Work with Comfortable Fit \u2014 MeeeShop US Boutique",
+      "board": "Handbag #handsips",
+      "timestamp": "2026-08-13T17:50:13.452142",
+      "type": "product",
+      "style": "collage",
+      "template": 8,
+      "pin_url": "https://www.pinterest.com/pin/962222276663039967",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8818161549483,
+      "title": "Classic Rock Tee for Everyday Style and Comfortable Fit \u2014 MeeeShop US Boutique",
+      "board": "Trendy & Timeless...",
+      "timestamp": "2026-08-13T17:51:42.913361",
+      "type": "product",
+      "style": "card",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276663040007",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
@@ -251,11 +273,13 @@
     "Skirts": "2026-08-13T10:28:37.536045",
     "Shirts & Tops": "2026-08-13T14:26:18.034117",
     "Blouses": "2026-08-13T14:27:55.752687",
-    "Rompers_Jumpsuits &...": "2026-08-13T14:29:29.191254"
+    "Rompers_Jumpsuits &...": "2026-08-13T14:29:29.191254",
+    "Handbag #handsips": "2026-08-13T17:50:13.452142",
+    "Trendy & Timeless...": "2026-08-13T17:51:42.913361"
   },
-  "daily_count": 22,
-  "last_post_time": "2026-08-13T14:29:29.191254",
+  "daily_count": 24,
+  "last_post_time": "2026-08-13T17:51:42.913361",
   "board_rotation_cursor": 0,
-  "last_image_style": "carousel",
-  "last_template_index": 5
+  "last_image_style": "card",
+  "last_template_index": 16
 }
