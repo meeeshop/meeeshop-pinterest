@@ -19,15 +19,37 @@
       "style": "carousel",
       "template": 8,
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8745259991211,
+      "title": "Fit and Flare Midi Dress for Date Night in Late Summer Style \u2014 MeeeShop US Boutique",
+      "board": "Dresses",
+      "timestamp": "2026-08-13T05:07:16.467641",
+      "type": "product",
+      "style": "collage",
+      "template": 3,
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8825418088619,
+      "title": "Mini Skirt for Everyday Style and Comfortable Fit Perfect for Back to School Fashion",
+      "board": "Feminine & Flowy Fits",
+      "timestamp": "2026-08-13T05:08:45.302648",
+      "type": "video",
+      "style": "card",
+      "template": 10,
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-08-13T04:59:04.254165",
-    "Trends": "2026-08-13T05:00:35.241462"
+    "Trends": "2026-08-13T05:00:35.241462",
+    "Dresses": "2026-08-13T05:07:16.467641",
+    "Feminine & Flowy Fits": "2026-08-13T05:08:45.302648"
   },
-  "daily_count": 2,
-  "last_post_time": "2026-08-13T05:00:35.241462",
+  "daily_count": 4,
+  "last_post_time": "2026-08-13T05:08:45.302648",
   "board_rotation_cursor": 0,
-  "last_image_style": "carousel",
-  "last_template_index": 8
+  "last_image_style": "card",
+  "last_template_index": 10
 }
