@@ -398,7 +398,20 @@ class StealthPinterestPoster:
 
                 final_url = page.url
                 logger.info(f"Carousel final URL: {final_url}")
-                if "pin-builder" not in final_url:
+                
+                # Success if URL changed OR we see a success toast
+                success_toast_found = False
+                if "pin-builder" in final_url:
+                    try:
+                        # Carousel pins or dropdown saves often show a toast instead of redirecting immediately
+                        toast = page.wait_for_selector('div:has-text("Saved to"), div:has-text("Saved"), [data-test-id="saved-to-board"]', timeout=5000)
+                        if toast and toast.is_visible():
+                            success_toast_found = True
+                            logger.info("Found 'Saved to' toast confirmation!")
+                    except Exception:
+                        pass
+
+                if "pin-builder" not in final_url or success_toast_found:
                     logger.info("✓ Carousel pin published successfully!")
                     self._save_cookies(context)
                     browser.close()
@@ -410,7 +423,7 @@ class StealthPinterestPoster:
                     except Exception:
                         pass
                     browser.close()
-                    return False, "Carousel publish failed"
+                    return False, "Carousel publish failed — still on pin-builder and no success toast found"
 
             except Exception as e:
                 logger.error(f"Carousel posting error: {e}", exc_info=True)
@@ -506,17 +519,11 @@ class StealthPinterestPoster:
                     try:
                         cover_set = False
 
-                        # Preferred: use the pre-supplied cover_image_path (product JPG)
-                        if cover_image_path and Path(cover_image_path).exists():
-                            all_inputs = page.query_selector_all('input[type="file"]')
-                            if len(all_inputs) > 1:
-                                all_inputs[1].set_input_files(cover_image_path)
-                                logger.info(f"✓ Uploaded pre-supplied cover image: {Path(cover_image_path).name}")
-                                time.sleep(2)
-                                cover_set = True
-
-                        if not cover_set:
-                            # Try clicking a cover image trigger button
+                        # Sometimes the file input for cover is already in the DOM, sometimes we must click a button first.
+                        # Let's ensure the cover file input is available.
+                        inputs = page.query_selector_all('input[type="file"]')
+                        if len(inputs) < 2:
+                            # Need to click the trigger to reveal it
                             cover_trigger_selectors = [
                                 '[data-test-id="video-cover-image-upload"]',
                                 'button:has-text("Choose a cover image")',
@@ -531,30 +538,43 @@ class StealthPinterestPoster:
                                         cel.click()
                                         time.sleep(1)
                                         logger.info(f"✓ Clicked video cover trigger: {csel}")
-                                        cover_set = True
                                         break
                                 except Exception:
                                     continue
+                            
+                            # Re-fetch inputs after click
+                            inputs = page.query_selector_all('input[type="file"]')
 
-                        if not cover_set:
-                            # Last resort: ffmpeg first-frame extraction
-                            try:
-                                import subprocess
-                                cover_jpg = img_file.with_suffix(".cover.jpg")
-                                subprocess.run([
-                                    "ffmpeg", "-y", "-i", str(img_file),
-                                    "-vframes", "1", "-q:v", "2", str(cover_jpg)
-                                ], capture_output=True, timeout=15)
-                                if cover_jpg.exists():
-                                    all_inputs = page.query_selector_all('input[type="file"]')
-                                    if len(all_inputs) > 1:
-                                        all_inputs[1].set_input_files(str(cover_jpg))
-                                        logger.info("✓ Uploaded ffmpeg-extracted cover frame")
-                                        time.sleep(2)
-                                        cover_jpg.unlink(missing_ok=True)
-                                        cover_set = True
-                            except Exception as fe:
-                                logger.warning(f"ffmpeg cover frame failed: {fe}")
+                        if len(inputs) > 1:
+                            # We have the cover slot! Now get the image to upload
+                            cover_upload_path = None
+
+                            if cover_image_path and Path(cover_image_path).exists():
+                                cover_upload_path = cover_image_path
+                                logger.info("Using pre-supplied cover image.")
+                            else:
+                                # Last resort: ffmpeg extraction
+                                try:
+                                    import subprocess
+                                    extracted = img_file.with_suffix(".cover.jpg")
+                                    subprocess.run([
+                                        "ffmpeg", "-y", "-i", str(img_file),
+                                        "-vframes", "1", "-q:v", "2", str(extracted)
+                                    ], capture_output=True, timeout=15)
+                                    if extracted.exists():
+                                        cover_upload_path = str(extracted)
+                                        logger.info("Generated cover image via ffmpeg.")
+                                except Exception as fe:
+                                    logger.warning(f"ffmpeg cover frame failed: {fe}")
+                            
+                            if cover_upload_path:
+                                inputs[1].set_input_files(cover_upload_path)
+                                logger.info(f"✓ Successfully uploaded cover image: {Path(cover_upload_path).name}")
+                                time.sleep(2)
+                                cover_set = True
+                                # Clean up extracted frame if we made one
+                                if not cover_image_path or cover_upload_path != cover_image_path:
+                                    Path(cover_upload_path).unlink(missing_ok=True)
 
                         if not cover_set:
                             logger.warning("Could not set video cover — Publish may stay disabled")
@@ -698,8 +718,19 @@ class StealthPinterestPoster:
                 final_url = page.url
                 logger.info(f"Final page URL: {final_url}")
 
-                # Success only if URL actually changed away from pin-builder
-                if "pin-builder" not in final_url:
+                # Success if URL changed OR we see a success toast
+                success_toast_found = False
+                if "pin-builder" in final_url:
+                    try:
+                        # Video pins or dropdown saves often show a toast instead of redirecting immediately
+                        toast = page.wait_for_selector('div:has-text("Saved to"), div:has-text("Saved"), [data-test-id="saved-to-board"]', timeout=5000)
+                        if toast and toast.is_visible():
+                            success_toast_found = True
+                            logger.info("Found 'Saved to' toast confirmation!")
+                    except Exception:
+                        pass
+
+                if "pin-builder" not in final_url or success_toast_found:
                     logger.info("✓ Pin published successfully via Stealth UI Automation!")
                     self._save_cookies(context)
                     browser.close()
@@ -710,7 +741,7 @@ class StealthPinterestPoster:
                         logger.error(f"📌 Still on Pin Builder. Body snippet: {body_text[:400]}")
                     except Exception: pass
                     browser.close()
-                    return False, "Publish failed — still on pin-builder"
+                    return False, "Publish failed — still on pin-builder and no success toast found"
 
             except Exception as e:
                 logger.error(f"Error during stealth posting: {e}", exc_info=True)

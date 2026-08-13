@@ -368,6 +368,7 @@ def run_daily_stealth_posting(dry_run: bool = False, pins_count: Optional[int] =
     poster = StealthPinterestPoster(headless=True)
 
     posted_count = 0
+    consecutive_failures = 0
     used_boards_in_run = set()
 
     store_base_url = safe_get_secret("STORE_BASE_URL") or safe_get_secret("SHOPIFY_STORE_URL")
@@ -429,6 +430,7 @@ def run_daily_stealth_posting(dry_run: bool = False, pins_count: Optional[int] =
         )
 
         if success:
+            consecutive_failures = 0
             last_style = style_used
             last_template = template_used
             posted_count += 1
@@ -452,6 +454,12 @@ def run_daily_stealth_posting(dry_run: bool = False, pins_count: Optional[int] =
             save_history(history)
             logger.info(f"✓ Stealth posting successful ({posted_count}/{limit}) — Type: {pin_type}")
             time.sleep(random.uniform(5, 12))
+        else:
+            consecutive_failures += 1
+            logger.warning(f"Stealth posting failed. Consecutive failures: {consecutive_failures}/3")
+            if consecutive_failures >= 3:
+                logger.error("Too many consecutive failures! Aborting run to prevent endless looping and wasting minutes.")
+                sys.exit(1)
 
     logger.info(f"🎯 Stealth daily run finished. Posted {posted_count} pins.")
 
