@@ -39,17 +39,39 @@
       "style": "card",
       "template": 10,
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8821453193387,
+      "title": "Fit and Flirty Space Vintage Dress for Date Night Outings \u2014 MeeeShop US Boutique",
+      "board": "Short fall dresses",
+      "timestamp": "2026-08-13T05:18:36.701706",
+      "type": "product",
+      "style": "hero",
+      "template": 3,
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8818150703275,
+      "title": "Mini Loden Dress for Date Night, Fit and Flare Style for Women \u2014 MeeeShop US Boutique",
+      "board": "Must-Have Fashion Picks",
+      "timestamp": "2026-08-13T05:20:05.419233",
+      "type": "blog",
+      "style": "carousel",
+      "template": 0,
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-08-13T04:59:04.254165",
     "Trends": "2026-08-13T05:00:35.241462",
     "Dresses": "2026-08-13T05:07:16.467641",
-    "Feminine & Flowy Fits": "2026-08-13T05:08:45.302648"
+    "Feminine & Flowy Fits": "2026-08-13T05:08:45.302648",
+    "Short fall dresses": "2026-08-13T05:18:36.701706",
+    "Must-Have Fashion Picks": "2026-08-13T05:20:05.419233"
   },
-  "daily_count": 4,
-  "last_post_time": "2026-08-13T05:08:45.302648",
+  "daily_count": 6,
+  "last_post_time": "2026-08-13T05:20:05.419233",
   "board_rotation_cursor": 0,
-  "last_image_style": "card",
-  "last_template_index": 10
+  "last_image_style": "carousel",
+  "last_template_index": 0
 }
