@@ -306,6 +306,52 @@
       "template": 2,
       "pin_url": "https://www.pinterest.com/pin/962222276663053194",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8911380512939,
+      "title": "Stylish Everyday Tote Bag for Back to School and Work in Chic Designs \u2014 MeeeShop US Boutique",
+      "board": "Trendy Backpacks",
+      "timestamp": "2026-08-14T14:18:11.269629",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 1,
+      "pin_url": "https://www.pinterest.com/pin/962222276663065088",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8882874974379,
+      "title": "Stylish Halter Maxi Dress for Date Night in Solid Colors and Flattering Fit \u2014 MeeeShop US Boutique",
+      "board": "Festive Styles",
+      "timestamp": "2026-08-14T14:19:15.111870",
+      "type": "carousel",
+      "style": "collage",
+      "template": 8,
+      "pin_url": "https://www.pinterest.com/pin/962222276663065111",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8897136984235,
+      "title": "Comfy Wide Leg Jeans for Back to School Casual Style \u2014 MeeeShop US Boutique",
+      "board": "Kancan USA Jeans",
+      "timestamp": "2026-08-14T14:20:49.329857",
+      "type": "video",
+      "style": "card",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276663065154",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": "559526379691",
+      "article_id": "559526379691",
+      "title": "Save Nature By Using Eco Friendly Clothing",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-08-14T14:22:20.457083",
+      "type": "blog",
+      "style": "hero",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276663065173",
+      "blog_url": "https://us.meeeshop.com/blogs/our-tips/save-nature-by-using-eco-friendly-clothing",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
@@ -335,11 +381,14 @@
     "Blouse": "2026-08-14T03:28:46.508958",
     "Wardrobe Must-Hav...": "2026-08-14T03:30:19.486361",
     "Camis & Tanks": "2026-08-14T03:31:50.753879",
-    "Wardrobe Must Haves": "2026-08-14T03:33:23.913397"
+    "Wardrobe Must Haves": "2026-08-14T03:33:23.913397",
+    "Trendy Backpacks": "2026-08-14T14:18:11.269629",
+    "Festive Styles": "2026-08-14T14:19:15.111870",
+    "Kancan USA Jeans": "2026-08-14T14:20:49.329857"
   },
-  "daily_count": 4,
-  "last_post_time": "2026-08-14T03:33:23.913397",
+  "daily_count": 8,
+  "last_post_time": "2026-08-14T14:22:20.457083",
   "board_rotation_cursor": 0,
   "last_image_style": "hero",
-  "last_template_index": 2
+  "last_template_index": 11
 }
