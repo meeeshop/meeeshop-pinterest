@@ -396,6 +396,50 @@
       "template": 8,
       "pin_url": "https://www.pinterest.com/pin/962222276663071714",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8818151784619,
+      "title": "Casual fit blouses for work and summer outfits for women \u2014 MeeeShop US Boutique",
+      "board": "Puff Sleeves Tops",
+      "timestamp": "2026-08-14T22:23:42.936675",
+      "type": "video",
+      "style": "carousel",
+      "template": 6,
+      "pin_url": "https://www.pinterest.com/pin/962222276663079337",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8905529917611,
+      "title": "Comfy Relaxed Fit Pants for Casual Summer Style and Back to School \u2014 MeeeShop US Boutique",
+      "board": "Casual",
+      "timestamp": "2026-08-14T22:24:44.734345",
+      "type": "carousel",
+      "style": "collage",
+      "template": 3,
+      "pin_url": "https://www.pinterest.com/pin/962222276663079349",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8879309488299,
+      "title": "Relaxed Fit Backless Hoodie for Casual Work Days and Late Summer Style \u2014 MeeeShop US Boutique",
+      "board": "Confident Looks",
+      "timestamp": "2026-08-14T22:25:45.540190",
+      "type": "carousel",
+      "style": "card",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276663079370",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8828889202859,
+      "title": "Elegant Black Jumpsuit for Everyday Chic Summer Style and Fit \u2014 MeeeShop US Boutique",
+      "board": "Casual Chic Style",
+      "timestamp": "2026-08-14T22:27:02.992163",
+      "type": "carousel",
+      "style": "hero",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276663079403",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
@@ -432,11 +476,15 @@
     "Footwear": "2026-08-14T17:46:13.419439",
     "Fitted Jeans": "2026-08-14T17:47:16.729769",
     "Chic Looks": "2026-08-14T17:48:34.979373",
-    "Straight Leg Jeans": "2026-08-14T17:49:39.432226"
+    "Straight Leg Jeans": "2026-08-14T17:49:39.432226",
+    "Puff Sleeves Tops": "2026-08-14T22:23:42.936675",
+    "Casual": "2026-08-14T22:24:44.734345",
+    "Confident Looks": "2026-08-14T22:25:45.540190",
+    "Casual Chic Style": "2026-08-14T22:27:02.992163"
   },
-  "daily_count": 12,
-  "last_post_time": "2026-08-14T17:49:39.432226",
+  "daily_count": 16,
+  "last_post_time": "2026-08-14T22:27:02.992163",
   "board_rotation_cursor": 0,
   "last_image_style": "hero",
-  "last_template_index": 8
+  "last_template_index": 15
 }
