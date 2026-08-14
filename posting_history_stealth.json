@@ -286,6 +286,50 @@
       "template": 5,
       "pin_url": "https://www.pinterest.com/pin/962222276663055339",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8869173428395,
+      "title": "Cute Casual Fit Button Down Top and Shorts Set for Everyday Style \u2014 MeeeShop US Boutique",
+      "board": "Blouses",
+      "timestamp": "2026-08-14T06:09:17.922166",
+      "type": "carousel",
+      "style": "card",
+      "template": 0,
+      "pin_url": "https://www.pinterest.com/pin/962222276663055596",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8827510161579,
+      "title": "Stylish Studded Bum Bag for Everyday Summer School Totes \u2014 MeeeShop US Boutique",
+      "board": "Handbag #handsips",
+      "timestamp": "2026-08-14T06:10:58.156137",
+      "type": "video",
+      "style": "hero",
+      "template": 8,
+      "pin_url": "https://www.pinterest.com/pin/962222276663055628",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8883469844651,
+      "title": "Soft Blush Pink Collagen Camisole for Casual Work Tops and Everyday Style \u2014 MeeeShop US Boutique",
+      "board": "Blouse",
+      "timestamp": "2026-08-14T06:11:57.601868",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 0,
+      "pin_url": "https://www.pinterest.com/pin/962222276663055647",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8879307423915,
+      "title": "Mini Skirt for Everyday Style and Comfortable Fit for Back to School Season Boutique Fashion",
+      "board": "Chic Looks",
+      "timestamp": "2026-08-14T06:13:01.687339",
+      "type": "carousel",
+      "style": "collage",
+      "template": 13,
+      "pin_url": "https://www.pinterest.com/pin/962222276663055666",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
@@ -312,11 +356,15 @@
     "Thanks giving Outfits": "2026-08-14T04:11:16.411399",
     "Shirts & Tops": "2026-08-14T05:52:28.721073",
     "Our Recommended...": "2026-08-14T05:55:29.793181",
-    "Bow heels": "2026-08-14T05:56:31.098220"
+    "Bow heels": "2026-08-14T05:56:31.098220",
+    "Blouses": "2026-08-14T06:09:17.922166",
+    "Handbag #handsips": "2026-08-14T06:10:58.156137",
+    "Blouse": "2026-08-14T06:11:57.601868",
+    "Chic Looks": "2026-08-14T06:13:01.687339"
   },
-  "daily_count": 8,
-  "last_post_time": "2026-08-14T05:56:31.098220",
+  "daily_count": 12,
+  "last_post_time": "2026-08-14T06:13:01.687339",
   "board_rotation_cursor": 0,
   "last_image_style": "collage",
-  "last_template_index": 5
+  "last_template_index": 13
 }
