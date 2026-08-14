@@ -262,6 +262,50 @@
       "template": 2,
       "pin_url": "https://www.pinterest.com/pin/962222276663047261",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8869173100715,
+      "title": "Classic Fit Long Sleeve Sweatshirt for Casual Work Days and Late Summer Style \u2014 MeeeShop US Boutique",
+      "board": "Blouse",
+      "timestamp": "2026-08-14T03:28:46.508958",
+      "type": "product",
+      "style": "carousel",
+      "template": 3,
+      "pin_url": "https://www.pinterest.com/pin/962222276663053113",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8818163941547,
+      "title": "Rock Chic Fit Graphic Tees for Everyday Style and Back to School Fashion \u2014 MeeeShop US Boutique",
+      "board": "Wardrobe Must-Hav...",
+      "timestamp": "2026-08-14T03:30:19.486361",
+      "type": "video",
+      "style": "collage",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276663053138",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8905531752619,
+      "title": "Casual V Neck Leopard Pullover for Work and School Days \u2014 MeeeShop US Boutique",
+      "board": "Camis & Tanks",
+      "timestamp": "2026-08-14T03:31:50.753879",
+      "type": "product",
+      "style": "card",
+      "template": 13,
+      "pin_url": "https://www.pinterest.com/pin/962222276663053165",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8897138360491,
+      "title": "Soft Faux Fur Puffer Vest for Everyday Chic Boutique Style and Fit \u2014 MeeeShop US Boutique",
+      "board": "Wardrobe Must Haves",
+      "timestamp": "2026-08-14T03:33:23.913397",
+      "type": "product",
+      "style": "hero",
+      "template": 2,
+      "pin_url": "https://www.pinterest.com/pin/962222276663053194",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
@@ -287,10 +331,14 @@
     "Rompers_Jumpsuits &...": "2026-08-13T14:29:29.191254",
     "Handbag #handsips": "2026-08-13T17:50:13.452142",
     "Trendy & Timeless...": "2026-08-13T17:51:42.913361",
-    "Our Recommended...": "2026-08-13T22:42:21.147474"
+    "Our Recommended...": "2026-08-13T22:42:21.147474",
+    "Blouse": "2026-08-14T03:28:46.508958",
+    "Wardrobe Must-Hav...": "2026-08-14T03:30:19.486361",
+    "Camis & Tanks": "2026-08-14T03:31:50.753879",
+    "Wardrobe Must Haves": "2026-08-14T03:33:23.913397"
   },
-  "daily_count": 25,
-  "last_post_time": "2026-08-13T22:42:21.147474",
+  "daily_count": 4,
+  "last_post_time": "2026-08-14T03:33:23.913397",
   "board_rotation_cursor": 0,
   "last_image_style": "hero",
   "last_template_index": 2
