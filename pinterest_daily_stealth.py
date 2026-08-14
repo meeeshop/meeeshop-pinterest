@@ -452,6 +452,7 @@ def run_daily_stealth_posting(dry_run: bool = False, pins_count: Optional[int] =
     posted_count = 0
     consecutive_failures = 0
     used_boards_in_run = set()
+    carousel_posted_in_run = False
 
     store_base_url = safe_get_secret("STORE_BASE_URL") or safe_get_secret("SHOPIFY_STORE_URL")
     if not store_base_url:
@@ -483,19 +484,21 @@ def run_daily_stealth_posting(dry_run: bool = False, pins_count: Optional[int] =
         board_name = board["name"] if board else "Trendy & Timeless Fashion"
         used_boards_in_run.add(board_name)
 
-        # Content Mix: forced_type or 60% Product, 15% Video, 15% Carousel, 10% Blog
+        # Content Mix: forced_type or Mandatory 1 Carousel Pin + Product/Video/Blog mix
         if forced_type in ["product", "video", "blog", "carousel"]:
             pin_type = forced_type
         else:
-            rand_val = random.random()
-            if rand_val < 0.60:
-                pin_type = "product"
-            elif rand_val < 0.75:
-                pin_type = "video"
-            elif rand_val < 0.90:
+            # Enforce at least 1 mandatory Carousel Pin per run
+            if not carousel_posted_in_run:
                 pin_type = "carousel"
             else:
-                pin_type = "blog"
+                rand_val = random.random()
+                if rand_val < 0.50:
+                    pin_type = "product"
+                elif rand_val < 0.75:
+                    pin_type = "video"
+                else:
+                    pin_type = "blog"
 
         # ── REAL BLOG ARTICLE POSTING HANDLER ────────────────────────────
         if pin_type == "blog":
@@ -576,6 +579,8 @@ def run_daily_stealth_posting(dry_run: bool = False, pins_count: Optional[int] =
         )
 
         if success:
+            if pin_type == "carousel":
+                carousel_posted_in_run = True
             consecutive_failures = 0
             last_style = style_used
             last_template = template_used
