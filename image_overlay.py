@@ -269,8 +269,9 @@ def _render_direct_pin(
             pf = _get_font(36, bold=True)
             draw_direct((PIN_W // 2, int(PIN_H * 0.58)), f"${price}", pf, fill=CREAM_WHITE, anchor="mm")
 
-        sf = _get_font(32, bold=True)
-        draw_direct((PIN_W // 2, PIN_H - 75), "★  meee's US", sf, fill=CREAM_WHITE, anchor="mm")
+        cta_text_str = (cta if cta and "meeeshop" in cta.lower() else "SHOP NOW AT US.MEEESHOP.COM").upper()
+        cta_font, fitted_cta = _fit_text(cta_text_str, bold=True, max_w=PIN_W - 120, start_size=26, min_size=14)
+        draw_direct((PIN_W // 2, PIN_H - 70), fitted_cta, cta_font, fill=CREAM_WHITE, anchor="mm")
 
     elif layout == "bottom_center":
         script_f = _get_font(56, bold=False, script=True)
@@ -286,8 +287,9 @@ def _render_direct_pin(
             pf = _get_font(36, bold=True)
             draw_direct((PIN_W // 2, int(PIN_H * 0.86)), f"${price}", pf, fill=CREAM_WHITE, anchor="mm")
 
-        cta_f = _get_font(26, bold=True)
-        draw_direct((PIN_W // 2, PIN_H - 70), "SHOP NOW AT US.MEEESHOP.COM", cta_f, fill=CREAM_WHITE, anchor="mm")
+        cta_text_str = (cta if cta and "meeeshop" in cta.lower() else "SHOP NOW AT US.MEEESHOP.COM").upper()
+        cta_font, fitted_cta = _fit_text(cta_text_str, bold=True, max_w=PIN_W - 120, start_size=26, min_size=14)
+        draw_direct((PIN_W // 2, PIN_H - 70), fitted_cta, cta_font, fill=CREAM_WHITE, anchor="mm")
 
     else:
         script_f = _get_font(60, bold=False, script=True)
@@ -305,11 +307,9 @@ def _render_direct_pin(
             pf = _get_font(38, bold=True)
             draw_direct((margin, top_y + 75 + len(lines[:2]) * 52 + 12), f"${price}", pf, fill=CREAM_WHITE)
 
-        cta_f = _get_font(26, bold=True)
-        cta_str = "SHOP NOW AT US.MEEESHOP.COM"
-        cb = cta_f.getbbox(cta_str)
-        cx = (PIN_W - (cb[2] - cb[0])) // 2
-        draw_direct((cx, PIN_H - 75), cta_str, cta_f, fill=CREAM_WHITE)
+        cta_text_str = (cta if cta and "meeeshop" in cta.lower() else "SHOP NOW AT US.MEEESHOP.COM").upper()
+        cta_font, fitted_cta = _fit_text(cta_text_str, bold=True, max_w=PIN_W - 120, start_size=26, min_size=14)
+        draw_direct((PIN_W // 2, PIN_H - 70), fitted_cta, cta_font, fill=CREAM_WHITE, anchor="mm")
 
 
 def _template_a(draw, canvas, photo, title, category, price):
