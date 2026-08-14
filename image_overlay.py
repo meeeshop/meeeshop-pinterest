@@ -232,7 +232,15 @@ def _render_direct_pin(
 
     def draw_direct(pos, text, font, fill=CREAM_WHITE, anchor=None):
         x, y = pos
-        for dx, dy in [(-2,0), (2,0), (0,-2), (0,2), (-1,-1), (1,1), (-1,1), (1,-1)]:
+        # 3px 16-direction ultra-bold contour outline for maximum legibility on light/dark photos
+        offsets = [
+            (-3,0), (3,0), (0,-3), (0,3),
+            (-3,-3), (3,3), (-3,3), (3,-3),
+            (-2,-2), (2,2), (-2,2), (2,-2),
+            (-2,0), (2,0), (0,-2), (0,2),
+            (-1,-1), (1,1), (-1,1), (1,-1)
+        ]
+        for dx, dy in offsets:
             if anchor:
                 draw.text((x + dx, y + dy), text, fill=SHADOW_DARK, font=font, anchor=anchor)
             else:
@@ -446,8 +454,15 @@ def _draw_trust_badge_pill(draw: ImageDraw.Draw, canvas: Image.Image, badge_text
     px = PIN_W - x_right - tw
     py = y_top
 
-    # Contour text shadow for high contrast on light or dark product images
-    for dx, dy in [(-2,0), (2,0), (0,-2), (0,2), (-1,-1), (1,1), (-1,1), (1,-1)]:
+    # 3px 16-direction ultra-bold contour outline for high contrast
+    offsets = [
+        (-3,0), (3,0), (0,-3), (0,3),
+        (-3,-3), (3,3), (-3,3), (3,-3),
+        (-2,-2), (2,2), (-2,2), (2,-2),
+        (-2,0), (2,0), (0,-2), (0,2),
+        (-1,-1), (1,1), (-1,1), (1,-1)
+    ]
+    for dx, dy in offsets:
         draw.text((px + dx, py + dy), full_text, fill=(15, 15, 15), font=bf)
     
     # Pure warm cream font directly on photo
