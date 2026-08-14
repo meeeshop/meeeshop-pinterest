@@ -78,6 +78,23 @@ def reset_daily_count_if_new_day(history: Dict[str, Any]) -> Dict[str, Any]:
     return history
 
 
+def get_today_type_counts(history: Dict[str, Any]) -> Dict[str, int]:
+    """Count pin format types posted today to enforce daily content mix caps."""
+    today = datetime.now().date()
+    counts = {"carousel": 0, "video": 0, "blog": 0, "product": 0}
+    for p in history.get("posts", []):
+        ts_str = p.get("timestamp")
+        if ts_str:
+            try:
+                ts_date = datetime.fromisoformat(ts_str.replace("Z", "+00:00")).date()
+                if ts_date == today:
+                    ptype = p.get("type", "product")
+                    counts[ptype] = counts.get(ptype, 0) + 1
+            except Exception:
+                pass
+    return counts
+
+
 def download_image(url: str, save_path: Path) -> bool:
     try:
         resp = requests.get(url, timeout=15)
@@ -452,6 +469,7 @@ def run_daily_stealth_posting(dry_run: bool = False, pins_count: Optional[int] =
     posted_count = 0
     consecutive_failures = 0
     used_boards_in_run = set()
+    carousel_posted_in_run = False
 
     store_base_url = safe_get_secret("STORE_BASE_URL") or safe_get_secret("SHOPIFY_STORE_URL")
     if not store_base_url:
@@ -483,19 +501,23 @@ def run_daily_stealth_posting(dry_run: bool = False, pins_count: Optional[int] =
         board_name = board["name"] if board else "Trendy & Timeless Fashion"
         used_boards_in_run.add(board_name)
 
-        # Content Mix: forced_type or 60% Product, 15% Video, 15% Carousel, 10% Blog
+        # Content Mix: forced_type or Carousel-Dominant (1 Blog/day, 3 Video/day, 1 Single Product/day, rest Carousel)
         if forced_type in ["product", "video", "blog", "carousel"]:
             pin_type = forced_type
         else:
-            rand_val = random.random()
-            if rand_val < 0.60:
-                pin_type = "product"
-            elif rand_val < 0.75:
-                pin_type = "video"
-            elif rand_val < 0.90:
-                pin_type = "carousel"
-            else:
+            today_counts = get_today_type_counts(history)
+            # 1. Cap Blog pins to 1 per calendar day
+            if today_counts.get("blog", 0) < 1 and random.random() < 0.35:
                 pin_type = "blog"
+            # 2. Cap Video pins to 3 per calendar day
+            elif today_counts.get("video", 0) < 3 and random.random() < 0.35:
+                pin_type = "video"
+            # 3. Cap Single Product pins to 1 per calendar day
+            elif today_counts.get("product", 0) < 1 and random.random() < 0.15:
+                pin_type = "product"
+            # 4. CAROUSEL is the DEFAULT primary format for all remaining slots (~11-12 pins/day)!
+            else:
+                pin_type = "carousel"
 
         # ── REAL BLOG ARTICLE POSTING HANDLER ────────────────────────────
         if pin_type == "blog":
@@ -576,6 +598,8 @@ def run_daily_stealth_posting(dry_run: bool = False, pins_count: Optional[int] =
         )
 
         if success:
+            if pin_type == "carousel":
+                carousel_posted_in_run = True
             consecutive_failures = 0
             last_style = style_used
             last_template = template_used
