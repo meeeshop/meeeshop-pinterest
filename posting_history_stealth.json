@@ -352,6 +352,50 @@
       "pin_url": "https://www.pinterest.com/pin/962222276663065173",
       "blog_url": "https://us.meeeshop.com/blogs/our-tips/save-nature-by-using-eco-friendly-clothing",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8928207962283,
+      "title": "Comfy Stylish Flat Sandals for Back to School and Summer in Purple \u2014 MeeeShop US Boutique",
+      "board": "Footwear",
+      "timestamp": "2026-08-14T17:46:13.419439",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 4,
+      "pin_url": "https://www.pinterest.com/pin/962222276663071636",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8897139605675,
+      "title": "Comfy Mid Rise Bootcut Jeans for Casual Back to School Style \u2014 MeeeShop US Boutique",
+      "board": "Fitted Jeans",
+      "timestamp": "2026-08-14T17:47:16.729769",
+      "type": "carousel",
+      "style": "collage",
+      "template": 3,
+      "pin_url": "https://www.pinterest.com/pin/962222276663071656",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8921404276907,
+      "title": "Coral Skirt for Everyday Style and Comfortable Fit Perfect for Back to School and Late Summer Outing",
+      "board": "Chic Looks",
+      "timestamp": "2026-08-14T17:48:34.979373",
+      "type": "carousel",
+      "style": "card",
+      "template": 10,
+      "pin_url": "https://www.pinterest.com/pin/962222276663071689",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8885467709611,
+      "title": "Comfy Skinny Jeans for Back to School with Tummy Control Fit \u2014 MeeeShop US Boutique",
+      "board": "Straight Leg Jeans",
+      "timestamp": "2026-08-14T17:49:39.432226",
+      "type": "carousel",
+      "style": "hero",
+      "template": 8,
+      "pin_url": "https://www.pinterest.com/pin/962222276663071714",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
@@ -384,11 +428,15 @@
     "Wardrobe Must Haves": "2026-08-14T03:33:23.913397",
     "Trendy Backpacks": "2026-08-14T14:18:11.269629",
     "Festive Styles": "2026-08-14T14:19:15.111870",
-    "Kancan USA Jeans": "2026-08-14T14:20:49.329857"
+    "Kancan USA Jeans": "2026-08-14T14:20:49.329857",
+    "Footwear": "2026-08-14T17:46:13.419439",
+    "Fitted Jeans": "2026-08-14T17:47:16.729769",
+    "Chic Looks": "2026-08-14T17:48:34.979373",
+    "Straight Leg Jeans": "2026-08-14T17:49:39.432226"
   },
-  "daily_count": 8,
-  "last_post_time": "2026-08-14T14:22:20.457083",
+  "daily_count": 12,
+  "last_post_time": "2026-08-14T17:49:39.432226",
   "board_rotation_cursor": 0,
   "last_image_style": "hero",
-  "last_template_index": 11
+  "last_template_index": 8
 }
