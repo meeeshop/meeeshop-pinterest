@@ -341,6 +341,78 @@
       "style": "carousel",
       "template": 5,
       "source": "old_boards_poster"
+    },
+    {
+      "product_id": 8818151620779,
+      "title": "Nerina Tube Top",
+      "board": "Wardrobe Goals",
+      "timestamp": "2026-08-12T15:55:26.528156",
+      "style": "collage",
+      "template": 3,
+      "source": "old_boards_poster"
+    },
+    {
+      "product_id": 8825882542251,
+      "title": "Mkf Collection by Mia K. - Vintage Stiella Crossbody Bag",
+      "board": "My Shop #1737732113",
+      "timestamp": "2026-08-12T15:55:40.088022",
+      "style": "card",
+      "template": 15,
+      "source": "old_boards_poster"
+    },
+    {
+      "product_id": 8930016264363,
+      "title": "The Kathryn Button-up, Hot Pink",
+      "board": "Shop For Holidays",
+      "timestamp": "2026-08-12T15:55:54.809124",
+      "style": "hero",
+      "template": 11,
+      "source": "old_boards_poster"
+    },
+    {
+      "product_id": 8818151293099,
+      "title": "Vionnet Tie Top",
+      "board": "BFCM Deals",
+      "timestamp": "2026-08-12T15:56:13.231815",
+      "style": "carousel",
+      "template": 16,
+      "source": "old_boards_poster"
+    },
+    {
+      "product_id": 8825274663083,
+      "title": "Lace Overlay Sleeveless Top w Bead Detail",
+      "board": "Blogs",
+      "timestamp": "2026-08-12T21:53:18.985031",
+      "style": "card",
+      "template": 9,
+      "source": "old_boards_poster"
+    },
+    {
+      "product_id": 8818150604971,
+      "title": "Stria Striped Pants",
+      "board": "Weekend to Workwear",
+      "timestamp": "2026-08-12T21:53:33.319681",
+      "style": "hero",
+      "template": 0,
+      "source": "old_boards_poster"
+    },
+    {
+      "product_id": 8928169099435,
+      "title": "Lace Crochet Long Sleeve Jumpsuit",
+      "board": "Rompers, Jumpsuits & Outfit Sets",
+      "timestamp": "2026-08-12T21:53:51.915430",
+      "style": "carousel",
+      "template": 11,
+      "source": "old_boards_poster"
+    },
+    {
+      "product_id": 8883466535083,
+      "title": "Ocean Blue Sleeveless Sexy Dress",
+      "board": "LE LIS Womens Clothing | us.meeeshop",
+      "timestamp": "2026-08-12T21:54:05.518857",
+      "style": "collage",
+      "template": 4,
+      "source": "old_boards_poster"
     }
   ],
   "board_last_used": {
@@ -352,7 +424,7 @@
     "Short fall dresses": "2026-08-09T10:09:12.855625",
     "Feminine & Flowy Fits": "2026-08-09T10:09:26.828452",
     "Farm clothes": "2026-08-10T21:48:46.245529",
-    "Rompers, Jumpsuits & Outfit Sets": "2026-08-09T10:13:02.589376",
+    "Rompers, Jumpsuits & Outfit Sets": "2026-08-12T21:53:51.915437",
     "Trendy & Timeless Fashion": "2026-08-11T15:54:46.753040",
     "Confident Looks": "2026-08-11T15:55:15.258632",
     "American Bazi": "2026-08-11T21:55:11.484396",
@@ -365,20 +437,21 @@
     "Dress": "2026-08-10T14:17:08.892794",
     "Wardrobe Must-Haves": "2026-08-11T21:55:44.043629",
     "Shirts & Tops": "2026-08-10T14:17:46.002795",
-    "Wardrobe Goals": "2026-08-10T14:18:01.629459",
-    "My Shop #1737732113": "2026-08-10T15:54:34.853022",
-    "Weekend to Workwear": "2026-08-10T15:54:49.351251",
-    "Shop For Holidays": "2026-08-10T15:55:10.494164",
-    "BFCM Deals": "2026-08-10T15:55:30.647046",
+    "Wardrobe Goals": "2026-08-12T15:55:26.528166",
+    "My Shop #1737732113": "2026-08-12T15:55:40.088032",
+    "Weekend to Workwear": "2026-08-12T21:53:33.319693",
+    "Shop For Holidays": "2026-08-12T15:55:54.809132",
+    "BFCM Deals": "2026-08-12T15:56:13.231824",
     "Outerwear": "2026-08-10T21:48:01.529390",
-    "Blogs": "2026-08-10T21:48:15.297000",
-    "Davi & Dani Womens Clothing | us.meeeshop.com": "2026-08-11T15:55:00.912413"
+    "Blogs": "2026-08-12T21:53:18.985044",
+    "Davi & Dani Womens Clothing | us.meeeshop.com": "2026-08-11T15:55:00.912413",
+    "LE LIS Womens Clothing | us.meeeshop": "2026-08-12T21:54:05.518869"
   },
-  "daily_count": 20,
-  "last_post_time": "2026-08-11T21:56:04.762358",
+  "daily_count": 28,
+  "last_post_time": "2026-08-12T21:54:05.518874",
   "board_rotation_cursor": 6,
-  "last_image_style": "carousel",
-  "last_template_index": 5,
+  "last_image_style": "collage",
+  "last_template_index": 4,
   "last_product_category": "bags",
   "category_last_used": {
     "dresses": "2026-08-10T14:17:08.892781",
