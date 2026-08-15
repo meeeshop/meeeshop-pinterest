@@ -440,6 +440,52 @@
       "template": 15,
       "pin_url": "https://www.pinterest.com/pin/962222276663079403",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8905531818155,
+      "title": "Relaxed Fit Blue Mock Neck Sweatshirt for Casual Work Days and Late Summer Style \u2014 MeeeShop US Bouti",
+      "board": "Farm clothes",
+      "timestamp": "2026-08-15T02:16:48.607095",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 3,
+      "pin_url": "https://www.pinterest.com/pin/962222276663084461",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8897135935659,
+      "title": "Comfy Mid Rise Wide Leg Jeans for Casual Back to School Style \u2014 MeeeShop US Boutique",
+      "board": "Kimchi USA Jeans",
+      "timestamp": "2026-08-15T02:18:21.641868",
+      "type": "product",
+      "style": "collage",
+      "template": 7,
+      "pin_url": "https://www.pinterest.com/pin/962222276663084507",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8880718676139,
+      "title": "Denim Two Piece Set for Everyday Boutique Style and Perfect Fit \u2014 MeeeShop US Boutique",
+      "board": "Wardrobe Goals",
+      "timestamp": "2026-08-15T02:19:19.587022",
+      "type": "carousel",
+      "style": "card",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276663084537",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": "558296236203",
+      "article_id": "558296236203",
+      "title": "2022 Spring Summer Trends",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-08-15T02:20:49.972597",
+      "type": "blog",
+      "style": "hero",
+      "template": 7,
+      "pin_url": "https://www.pinterest.com/pin/962222276663084579",
+      "blog_url": "https://us.meeeshop.com/blogs/our-tips/2022-spring-summer-trends",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
@@ -480,11 +526,14 @@
     "Puff Sleeves Tops": "2026-08-14T22:23:42.936675",
     "Casual": "2026-08-14T22:24:44.734345",
     "Confident Looks": "2026-08-14T22:25:45.540190",
-    "Casual Chic Style": "2026-08-14T22:27:02.992163"
+    "Casual Chic Style": "2026-08-14T22:27:02.992163",
+    "Farm clothes": "2026-08-15T02:16:48.607095",
+    "Kimchi USA Jeans": "2026-08-15T02:18:21.641868",
+    "Wardrobe Goals": "2026-08-15T02:19:19.587022"
   },
-  "daily_count": 16,
-  "last_post_time": "2026-08-14T22:27:02.992163",
+  "daily_count": 4,
+  "last_post_time": "2026-08-15T02:20:49.972597",
   "board_rotation_cursor": 0,
   "last_image_style": "hero",
-  "last_template_index": 15
+  "last_template_index": 7
 }
