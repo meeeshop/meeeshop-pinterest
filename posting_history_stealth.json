@@ -574,6 +574,50 @@
       "template": 1,
       "pin_url": "https://www.pinterest.com/pin/962222276663105317",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8818151162027,
+      "title": "Relaxed Fit Casual Work Tops for Women in Soft Styles Perfect for Late Summer Office Wear",
+      "board": "MeeeShop's Luxe Styles",
+      "timestamp": "2026-08-15T21:26:32.597254",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 0,
+      "pin_url": "https://www.pinterest.com/pin/962222276663111479",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8879306965163,
+      "title": "Cropped Track Jacket for Women, Perfect Fall Layering Style and Fit \u2014 MeeeShop US Boutique",
+      "board": "Outerwear",
+      "timestamp": "2026-08-15T21:27:33.722132",
+      "type": "carousel",
+      "style": "collage",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276663111511/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8782660567211,
+      "title": "Casual Fit Contour Top for Work and Late Summer Style \u2014 MeeeShop US Boutique",
+      "board": "Zenana Women's...",
+      "timestamp": "2026-08-15T21:28:37.773139",
+      "type": "carousel",
+      "style": "card",
+      "template": 10,
+      "pin_url": "https://www.pinterest.com/pin/962222276663111550",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8885871607979,
+      "title": "Beige Jacquard Fit and Flare Date Night Dress for Women \u2014 MeeeShop US Boutique",
+      "board": "Thanks giving Outfits",
+      "timestamp": "2026-08-15T21:29:48.959700",
+      "type": "carousel",
+      "style": "hero",
+      "template": 5,
+      "pin_url": "https://www.pinterest.com/pin/962222276663111592",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
@@ -625,11 +669,15 @@
     "Shop For Holidays": "2026-08-15T17:52:01.108662",
     "New": "2026-08-15T17:53:35.322510",
     "American Bazi": "2026-08-15T17:54:38.665703",
-    "Cool & Casual Styles": "2026-08-15T17:55:35.872843"
+    "Cool & Casual Styles": "2026-08-15T17:55:35.872843",
+    "MeeeShop's Luxe Styles": "2026-08-15T21:26:32.597254",
+    "Outerwear": "2026-08-15T21:27:33.722132",
+    "Zenana Women's...": "2026-08-15T21:28:37.773139",
+    "Thanks giving Outfits": "2026-08-15T21:29:48.959700"
   },
-  "daily_count": 12,
-  "last_post_time": "2026-08-15T17:55:35.872843",
+  "daily_count": 16,
+  "last_post_time": "2026-08-15T21:29:48.959700",
   "board_rotation_cursor": 0,
   "last_image_style": "hero",
-  "last_template_index": 1
+  "last_template_index": 5
 }
