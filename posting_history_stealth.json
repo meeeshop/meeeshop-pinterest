@@ -486,6 +486,50 @@
       "pin_url": "https://www.pinterest.com/pin/962222276663084579",
       "blog_url": "https://us.meeeshop.com/blogs/our-tips/2022-spring-summer-trends",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8825881428139,
+      "title": "Stylish Everyday Tote Bag and Wallet Set for Back to School and Work \u2014 MeeeShop US Boutique",
+      "board": "Nylon backpack",
+      "timestamp": "2026-08-15T12:23:08.409593",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 5,
+      "pin_url": "https://www.pinterest.com/pin/962222276663096475",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8789756674219,
+      "title": "High Rise Straight Jeans for Everyday Style and Flattering Fit \u2014 MeeeShop US Boutique",
+      "board": "Everyday Style",
+      "timestamp": "2026-08-15T12:24:44.151069",
+      "type": "video",
+      "style": "collage",
+      "template": 8,
+      "pin_url": "https://www.pinterest.com/pin/962222276663096524",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8921404211371,
+      "title": "Coral Skirt for Back to School and Everyday Boutique Style Fits Perfectly \u2014 MeeeShop US Boutique",
+      "board": "Fashion Models",
+      "timestamp": "2026-08-15T12:25:48.687373",
+      "type": "carousel",
+      "style": "card",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276663096541",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8879309193387,
+      "title": "Comfy Ribbed Long Sleeve Tops for Everyday Boutique Style and Fit \u2014 MeeeShop US Boutique",
+      "board": "My Shop #1737732113",
+      "timestamp": "2026-08-15T12:27:01.884990",
+      "type": "carousel",
+      "style": "hero",
+      "template": 4,
+      "pin_url": "https://www.pinterest.com/pin/962222276663096562",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
@@ -529,11 +573,15 @@
     "Casual Chic Style": "2026-08-14T22:27:02.992163",
     "Farm clothes": "2026-08-15T02:16:48.607095",
     "Kimchi USA Jeans": "2026-08-15T02:18:21.641868",
-    "Wardrobe Goals": "2026-08-15T02:19:19.587022"
+    "Wardrobe Goals": "2026-08-15T02:19:19.587022",
+    "Nylon backpack": "2026-08-15T12:23:08.409593",
+    "Everyday Style": "2026-08-15T12:24:44.151069",
+    "Fashion Models": "2026-08-15T12:25:48.687373",
+    "My Shop #1737732113": "2026-08-15T12:27:01.884990"
   },
-  "daily_count": 4,
-  "last_post_time": "2026-08-15T02:20:49.972597",
+  "daily_count": 8,
+  "last_post_time": "2026-08-15T12:27:01.884990",
   "board_rotation_cursor": 0,
   "last_image_style": "hero",
-  "last_template_index": 7
+  "last_template_index": 4
 }
