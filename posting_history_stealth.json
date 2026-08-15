@@ -530,6 +530,50 @@
       "template": 4,
       "pin_url": "https://www.pinterest.com/pin/962222276663096562",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8882913411243,
+      "title": "Floral Print Two Piece Sets for Everyday Boutique Style and Comfortable Fit \u2014 MeeeShop US Boutique",
+      "board": "Shop For Holidays",
+      "timestamp": "2026-08-15T17:52:01.108662",
+      "type": "video",
+      "style": "carousel",
+      "template": 2,
+      "pin_url": "https://www.pinterest.com/pin/962222276663105184/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8740284072107,
+      "title": "Comfy Mid Rise Jeans for Casual School Days and Late Summer Style \u2014 MeeeShop US Boutique",
+      "board": "New",
+      "timestamp": "2026-08-15T17:53:35.322510",
+      "type": "video",
+      "style": "collage",
+      "template": 3,
+      "pin_url": "https://www.pinterest.com/pin/962222276663105234",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8825418678443,
+      "title": "Classic Fit White Woven Top for Casual Work and Everyday Style \u2014 MeeeShop US Boutique",
+      "board": "American Bazi",
+      "timestamp": "2026-08-15T17:54:38.665703",
+      "type": "carousel",
+      "style": "card",
+      "template": 0,
+      "pin_url": "https://www.pinterest.com/pin/962222276663105271",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8876373246123,
+      "title": "Comfy High Waist Pants with Buckle Belt for Casual Back to School Style \u2014 MeeeShop US Boutique",
+      "board": "Cool & Casual Styles",
+      "timestamp": "2026-08-15T17:55:35.872843",
+      "type": "carousel",
+      "style": "hero",
+      "template": 1,
+      "pin_url": "https://www.pinterest.com/pin/962222276663105317",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
@@ -577,11 +621,15 @@
     "Nylon backpack": "2026-08-15T12:23:08.409593",
     "Everyday Style": "2026-08-15T12:24:44.151069",
     "Fashion Models": "2026-08-15T12:25:48.687373",
-    "My Shop #1737732113": "2026-08-15T12:27:01.884990"
+    "My Shop #1737732113": "2026-08-15T12:27:01.884990",
+    "Shop For Holidays": "2026-08-15T17:52:01.108662",
+    "New": "2026-08-15T17:53:35.322510",
+    "American Bazi": "2026-08-15T17:54:38.665703",
+    "Cool & Casual Styles": "2026-08-15T17:55:35.872843"
   },
-  "daily_count": 8,
-  "last_post_time": "2026-08-15T12:27:01.884990",
+  "daily_count": 12,
+  "last_post_time": "2026-08-15T17:55:35.872843",
   "board_rotation_cursor": 0,
   "last_image_style": "hero",
-  "last_template_index": 4
+  "last_template_index": 1
 }
