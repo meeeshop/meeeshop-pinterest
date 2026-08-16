@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """
-generate_pinterest_supplemental_feed.py — Pinterest Catalog & Supplemental Feed Generator
+generate_pinterest_supplemental_feed.py — Pinterest Primary Catalog Feed Generator
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Fetches active products from Shopify API, cleans GTINs, validates image links for
-PNG/JPEG format (using Shopify CDN format=jpg), maps 3+ level Google Product Taxonomy,
-and outputs both Pinterest Supplemental Feed and Full Feed.
-Uploads feeds to Shopify CDN and establishes clean static permalink redirects.
+Fetches active products from Shopify API, cleans GTINs (excluding internal 20-29 prefixes),
+validates image links for PNG/JPEG format (using Shopify CDN format=jpg), maps 3+ level Google
+Product Taxonomy for all products/shoes/accessories, and outputs Pinterest Catalog Feed.
+Uploads feed to Shopify CDN and establishes clean static permalink redirect /a/pinterest_catalog_feed.csv.
 """
 
 import os
@@ -16,6 +16,13 @@ import requests
 import secrets_manager
 import gzip
 import json
+
+# Reconfigure stdout encoding to UTF-8 if supported
+import sys
+try:
+    sys.stdout.reconfigure(encoding="utf-8")
+except Exception:
+    pass
 
 # ── Configuration & Credentials ───────────────────────────────────────────────
 try:
@@ -35,9 +42,7 @@ DEFAULT_AGE_GROUP = "adult"
 DEFAULT_CONDITION = "new"
 DEFAULT_BRAND = "MeeeShop"
 
-OUTPUT_SUPPLEMENTAL = "pinterest_supplemental_feed.csv"
 OUTPUT_FULL = "pinterest_catalog_feed.csv"
-REDIRECT_PATH_SUPPLEMENTAL = "/a/pinterest_supplemental_feed.csv"
 REDIRECT_PATH_FULL = "/a/pinterest_catalog_feed.csv"
 
 def clean_html(raw_html):
@@ -52,6 +57,7 @@ def clean_and_validate_gtin(raw_gtin):
     """
     Sanitizes and validates GTIN.
     Must be digits only, length 8, 12, 13, or 14, with valid GS1 check digit.
+    Excludes GS1 Restricted Distribution / Internal prefixes (20-29).
     Returns valid GTIN string, or "" if invalid.
     """
     if not raw_gtin:
@@ -60,6 +66,11 @@ def clean_and_validate_gtin(raw_gtin):
     if len(digits) not in [8, 12, 13, 14]:
         return ""
     
+    # Exclude GS1 Restricted Distribution / Internal barcode prefixes (20-29 and 020-029) to eliminate Warning 179
+    clean_digits = digits.lstrip('0')
+    if clean_digits.startswith(('20', '21', '22', '23', '24', '25', '26', '27', '28', '29')):
+        return ""
+
     # Validate GS1 Check Digit
     padded = digits.zfill(14)
     try:
@@ -94,14 +105,28 @@ def filter_image_url(url):
     return clean_url
 
 def get_google_product_category(product):
-    """Maps product details to full 3+ level Google Product Taxonomy paths (Fixes Warning 126)."""
+    """Maps product details to full 3+ level Google Product Taxonomy paths (Eliminates Warning 126)."""
     title = (product.get("title") or "").lower()
     ptype = (product.get("product_type") or "").lower()
     tags = (product.get("tags") or "").lower()
     text = f"{title} {ptype} {tags}"
 
-    if any(w in text for w in ["dress", "dresses", "gown", "romper", "jumpsuit"]):
+    if any(w in text for w in ["boot", "boots", "bootie", "booties"]):
+        return "Apparel & Accessories > Shoes > Boots"
+    elif any(w in text for w in ["sneaker", "sneakers", "athletic shoe", "running shoe"]):
+        return "Apparel & Accessories > Shoes > Athletic Shoes"
+    elif any(w in text for w in ["sandal", "sandals", "flip flop", "slide", "slides"]):
+        return "Apparel & Accessories > Shoes > Sandals"
+    elif any(w in text for w in ["heel", "heels", "pump", "pumps", "stiletto"]):
+        return "Apparel & Accessories > Shoes > Heels"
+    elif any(w in text for w in ["flat", "flats", "loafer", "loafers", "mule", "mules", "oxford"]):
+        return "Apparel & Accessories > Shoes > Flats"
+    elif any(w in text for w in ["shoe", "shoes", "footwear"]):
+        return "Apparel & Accessories > Shoes > Boots"
+    elif any(w in text for w in ["dress", "dresses", "gown", "romper", "jumpsuit"]):
         return "Apparel & Accessories > Clothing > Dresses"
+    elif any(w in text for w in ["set", "sets", "outfit", "two piece", "2 piece", "co-ord", "coord"]):
+        return "Apparel & Accessories > Clothing > Outfit Sets"
     elif any(w in text for w in ["pant", "pants", "jean", "jeans", "trouser", "trousers", "legging", "leggings"]):
         return "Apparel & Accessories > Clothing > Pants"
     elif any(w in text for w in ["short", "shorts"]):
@@ -118,10 +143,24 @@ def get_google_product_category(product):
         return "Apparel & Accessories > Clothing > Swimwear"
     elif any(w in text for w in ["pajama", "sleepwear", "loungewear", "robe", "nightgown"]):
         return "Apparel & Accessories > Clothing > Sleepwear & Loungewear"
-    elif any(w in text for w in ["jewelry", "necklace", "earring", "bracelet", "ring"]):
-        return "Apparel & Accessories > Jewelry"
+    elif any(w in text for w in ["necklace", "necklaces"]):
+        return "Apparel & Accessories > Jewelry > Necklaces"
+    elif any(w in text for w in ["earring", "earrings"]):
+        return "Apparel & Accessories > Jewelry > Earrings"
+    elif any(w in text for w in ["bracelet", "bracelets"]):
+        return "Apparel & Accessories > Jewelry > Bracelets"
+    elif any(w in text for w in ["ring", "rings"]):
+        return "Apparel & Accessories > Jewelry > Rings"
+    elif any(w in text for w in ["jewelry", "jewelries", "pendant", "charm"]):
+        return "Apparel & Accessories > Jewelry > Jewelry Sets"
+    elif any(w in text for w in ["hat", "hats", "cap", "caps", "beanie"]):
+        return "Apparel & Accessories > Clothing Accessories > Hats"
+    elif any(w in text for w in ["belt", "belts"]):
+        return "Apparel & Accessories > Clothing Accessories > Belts"
+    elif any(w in text for w in ["sunglasses", "eyewear"]):
+        return "Apparel & Accessories > Clothing Accessories > Sunglasses"
     else:
-        return "Apparel & Accessories > Clothing"
+        return "Apparel & Accessories > Clothing > Shirts & Tops"
 
 def extract_color(product, variant, current_color):
     """Extracts color from variant options, title, tags, or description."""
@@ -196,7 +235,6 @@ def upload_to_shopify_files(filepath):
     filename = os.path.basename(filepath)
     mime_type = "application/gzip" if filepath.endswith(".gz") else "text/csv"
 
-    # Delete existing file with same name if present
     query_existing = f"""
     query {{
       files(first: 10, query: "filename:{filename}") {{
@@ -226,7 +264,6 @@ def upload_to_shopify_files(filepath):
         resp.raise_for_status()
         time.sleep(2)
 
-    # Request Staged Upload
     file_size = str(os.path.getsize(filepath))
     staged_mut = f"""
     mutation {{
@@ -253,14 +290,12 @@ def upload_to_shopify_files(filepath):
     data = resp.json()
     target = data["data"]["stagedUploadsCreate"]["stagedTargets"][0]
 
-    # Upload file
     with open(filepath, "rb") as f:
         form_data = [(p["name"], p["value"]) for p in target["parameters"]]
         form_data.append(("file", (os.path.basename(filepath), f, mime_type)))
         upload_resp = requests.post(target["url"], files=form_data)
         upload_resp.raise_for_status()
 
-    # Create file in Shopify
     create_mut = """
     mutation fileCreate($files: [FileCreateInput!]!) {
       fileCreate(files: $files) {
@@ -277,7 +312,6 @@ def upload_to_shopify_files(filepath):
     create_data = resp.json()
     file_id = create_data["data"]["fileCreate"]["files"][0]["id"]
 
-    # Poll for CDN URL
     public_url = None
     for _ in range(12):
         time.sleep(2)
@@ -300,7 +334,7 @@ def upload_to_shopify_files(filepath):
             break
 
     if public_url:
-        print(f"✅ Uploaded: {public_url}", flush=True)
+        print(f"[OK] Uploaded: {public_url}", flush=True)
         return public_url
     else:
         raise Exception(f"Failed to retrieve public URL for {filepath}")
@@ -353,7 +387,7 @@ def create_or_update_redirect(redirect_path, target_url):
         resp.raise_for_status()
 
     static_url = f"{STORE_BASE_URL.rstrip('/')}{redirect_path}"
-    print(f"✅ Redirect active: {static_url}", flush=True)
+    print(f"[OK] Redirect active: {static_url}", flush=True)
     return static_url
 
 def generate_feeds():
@@ -372,8 +406,7 @@ def generate_feeds():
         "valid_gtins": 0,
         "cleared_gtins": 0,
         "valid_main_images": 0,
-        "cleared_main_images": 0,
-        "filtered_additional_images": 0
+        "cleared_main_images": 0
     }
 
     for product in products:
@@ -435,7 +468,7 @@ def generate_feeds():
 
             price = f"{variant.get('price')} USD"
 
-            # GTIN Sanitization & Checksum Validation
+            # GTIN Sanitization & Checksum Validation (Excludes 20-29 internal prefixes)
             raw_gtin = variant.get("barcode", "") or ""
             valid_gtin = clean_and_validate_gtin(raw_gtin)
             if valid_gtin:
@@ -485,32 +518,27 @@ def generate_feeds():
                 "shipping": "US:::0.00 USD"
             })
 
-    print("\n--- Pinterest Catalog & Feed Generation Summary ---", flush=True)
+    print("\n--- Pinterest Primary Catalog Feed Generation Summary ---", flush=True)
     print(f"Total Variants Processed: {stats['total_variants']}", flush=True)
     print(f"Valid GTINs Kept: {stats['valid_gtins']}", flush=True)
-    print(f"Invalid GTINs Cleared (Warning 179 Fix): {stats['cleared_gtins']}", flush=True)
+    print(f"Internal/Invalid GTINs Cleared (Warning 179 Fix): {stats['cleared_gtins']}", flush=True)
     print(f"Valid Main Images: {stats['valid_main_images']}", flush=True)
     print(f"Cleared Non-PNG/JPEG Main Images: {stats['cleared_main_images']}", flush=True)
 
-    # Write files (both Supplemental and Full Catalog feeds)
-    for outfile in [OUTPUT_SUPPLEMENTAL, OUTPUT_FULL]:
-        gz_file = outfile + ".gz"
-        print(f"Writing {len(rows)} records to {gz_file}...", flush=True)
-        with gzip.open(gz_file, mode="wt", newline="", encoding="utf-8") as f:
-            writer = csv.DictWriter(f, fieldnames=feed_headers, delimiter=',')
-            writer.writeheader()
-            writer.writerows(rows)
+    # Write ONLY Pinterest Primary Catalog feed file
+    outfile = OUTPUT_FULL
+    gz_file = outfile + ".gz"
+    print(f"Writing {len(rows)} records to {gz_file}...", flush=True)
+    with gzip.open(gz_file, mode="wt", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=feed_headers, delimiter=',')
+        writer.writeheader()
+        writer.writerows(rows)
 
-        cdn_url = upload_to_shopify_files(gz_file)
-        redirect_path = REDIRECT_PATH_SUPPLEMENTAL if outfile == OUTPUT_SUPPLEMENTAL else REDIRECT_PATH_FULL
-        static_url = create_or_update_redirect(redirect_path, cdn_url)
+    cdn_url = upload_to_shopify_files(gz_file)
+    static_url = create_or_update_redirect(REDIRECT_PATH_FULL, cdn_url)
 
-    print("\n🎉 Pinterest Feeds generated and deployed successfully!", flush=True)
+    print("\n[SUCCESS] Pinterest Primary Catalog Feed generated and deployed successfully!", flush=True)
+    print(f"🔗 Permanent Feed URL: {static_url}", flush=True)
 
 if __name__ == "__main__":
-    import sys
-    try:
-        sys.stdout.reconfigure(encoding="utf-8")
-    except Exception:
-        pass
     generate_feeds()
