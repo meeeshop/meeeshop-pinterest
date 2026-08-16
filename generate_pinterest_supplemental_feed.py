@@ -55,9 +55,9 @@ def clean_html(raw_html):
 
 def clean_and_validate_gtin(raw_gtin):
     """
-    Sanitizes and validates GTIN.
+    Sanitizes and validates GTIN according to GS1 standards & Pinterest/GMC rules.
     Must be digits only, length 8, 12, 13, or 14, with valid GS1 check digit.
-    Excludes GS1 Restricted Distribution / Internal prefixes (20-29).
+    Excludes internal store barcodes (20-29, 40-49), coupons (98-99), dummy repeats.
     Returns valid GTIN string, or "" if invalid.
     """
     if not raw_gtin:
@@ -65,10 +65,27 @@ def clean_and_validate_gtin(raw_gtin):
     digits = re.sub(r'\D', '', str(raw_gtin).strip())
     if len(digits) not in [8, 12, 13, 14]:
         return ""
-    
-    # Exclude GS1 Restricted Distribution / Internal barcode prefixes (20-29 and 020-029) to eliminate Warning 179
+
+    # Exclude dummy repeat digits (e.g. 111111111111, 000000000000)
+    if len(set(digits)) <= 2:
+        return ""
+
+    # Strip leading zeros to evaluate true GS1 prefix
     clean_digits = digits.lstrip('0')
-    if clean_digits.startswith(('20', '21', '22', '23', '24', '25', '26', '27', '28', '29')):
+    if not clean_digits:
+        return ""
+
+    # Exclude GS1 Restricted Distribution & Internal Barcodes:
+    # - Prefixes 20-29 & 020-029: Internal store / variable weight
+    # - Prefixes 40-49 & 040-049: Internal EAN-8 / EAN-13 store SKUs (e.g. 400000158204)
+    # - Prefixes 980-999: GS1 Refund / Coupon / In-store Vouchers (e.g. 9928254796771)
+    if clean_digits.startswith(('20','21','22','23','24','25','26','27','28','29',
+                               '40','41','42','43','44','45','46','47','48','49',
+                               '98','99')):
+        return ""
+
+    # Exclude sequential dummy barcodes (e.g. 123456789012, 012345678901)
+    if clean_digits in ("12345678", "123456789012", "01234567890123", "12345678901234"):
         return ""
 
     # Validate GS1 Check Digit
