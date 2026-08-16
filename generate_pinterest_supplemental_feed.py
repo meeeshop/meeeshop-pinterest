@@ -66,8 +66,9 @@ def clean_and_validate_gtin(raw_gtin):
     if len(digits) not in [8, 12, 13, 14]:
         return ""
     
-    # Exclude GS1 Restricted Distribution / Internal barcode prefixes (20-29) to eliminate Warning 179
-    if digits.startswith(('20', '21', '22', '23', '24', '25', '26', '27', '28', '29')):
+    # Exclude GS1 Restricted Distribution / Internal barcode prefixes (20-29 and 020-029) to eliminate Warning 179
+    clean_digits = digits.lstrip('0')
+    if clean_digits.startswith(('20', '21', '22', '23', '24', '25', '26', '27', '28', '29')):
         return ""
 
     # Validate GS1 Check Digit
@@ -140,8 +141,16 @@ def get_google_product_category(product):
         return "Apparel & Accessories > Clothing > Swimwear"
     elif any(w in text for w in ["pajama", "sleepwear", "loungewear", "robe", "nightgown"]):
         return "Apparel & Accessories > Clothing > Sleepwear & Loungewear"
-    elif any(w in text for w in ["jewelry", "necklace", "earring", "bracelet", "ring"]):
-        return "Apparel & Accessories > Jewelry"
+    elif any(w in text for w in ["necklace", "necklaces"]):
+        return "Apparel & Accessories > Jewelry > Necklaces"
+    elif any(w in text for w in ["earring", "earrings"]):
+        return "Apparel & Accessories > Jewelry > Earrings"
+    elif any(w in text for w in ["bracelet", "bracelets"]):
+        return "Apparel & Accessories > Jewelry > Bracelets"
+    elif any(w in text for w in ["ring", "rings"]):
+        return "Apparel & Accessories > Jewelry > Rings"
+    elif any(w in text for w in ["jewelry", "jewelries", "pendant", "charm"]):
+        return "Apparel & Accessories > Jewelry > Jewelry Sets"
     elif any(w in text for w in ["hat", "hats", "cap", "caps", "beanie"]):
         return "Apparel & Accessories > Clothing Accessories > Hats"
     elif any(w in text for w in ["belt", "belts"]):
