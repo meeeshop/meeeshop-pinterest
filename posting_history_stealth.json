@@ -306,6 +306,52 @@
       "template": 2,
       "pin_url": "https://www.pinterest.com/pin/962222276663053194",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8880719397035,
+      "title": "Casual Fit Noir Meadow Top for Work and Late Summer Style \u2014 MeeeShop US Boutique",
+      "board": "Puff Sleeves Tops",
+      "timestamp": "2026-08-16T04:08:59.707035",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 5,
+      "pin_url": "https://www.pinterest.com/pin/962222276663120537",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": "559244345515",
+      "article_id": "559244345515",
+      "title": "Plus Size Women Finding Their True Size",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-08-16T04:10:29.325791",
+      "type": "blog",
+      "style": "collage",
+      "template": 0,
+      "pin_url": "https://www.pinterest.com/pin/962222276663120570",
+      "blog_url": "https://us.meeeshop.com/blogs/plus-size-curvy-clothing/plus-size-women-finding-their-true-size",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8825275973803,
+      "title": "Casual Fit Tulip Sleeve Blouse for Work and Late Summer Style \u2014 MeeeShop US Boutique",
+      "board": "Confident Looks",
+      "timestamp": "2026-08-16T04:12:03.970667",
+      "type": "video",
+      "style": "card",
+      "template": 7,
+      "pin_url": "https://www.pinterest.com/pin/962222276663120602",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8921407324331,
+      "title": "Comfy Wide Leg Cropped Jeans for Casual Back to School Style in Apricot \u2014 MeeeShop US Boutique",
+      "board": "Fitted Jeans",
+      "timestamp": "2026-08-16T04:13:38.995157",
+      "type": "video",
+      "style": "hero",
+      "template": 6,
+      "pin_url": "https://www.pinterest.com/pin/962222276663120636",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
@@ -335,11 +381,14 @@
     "Blouse": "2026-08-14T03:28:46.508958",
     "Wardrobe Must-Hav...": "2026-08-14T03:30:19.486361",
     "Camis & Tanks": "2026-08-14T03:31:50.753879",
-    "Wardrobe Must Haves": "2026-08-14T03:33:23.913397"
+    "Wardrobe Must Haves": "2026-08-14T03:33:23.913397",
+    "Puff Sleeves Tops": "2026-08-16T04:08:59.707035",
+    "Confident Looks": "2026-08-16T04:12:03.970667",
+    "Fitted Jeans": "2026-08-16T04:13:38.995157"
   },
   "daily_count": 4,
-  "last_post_time": "2026-08-14T03:33:23.913397",
+  "last_post_time": "2026-08-16T04:13:38.995157",
   "board_rotation_cursor": 0,
   "last_image_style": "hero",
-  "last_template_index": 2
+  "last_template_index": 6
 }
