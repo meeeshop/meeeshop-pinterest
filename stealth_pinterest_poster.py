@@ -841,6 +841,87 @@ class StealthPinterestPoster:
         except Exception as ce:
             logger.debug(f"Cookie save note: {ce}")
 
+    def _try_browser_api_pin_create(
+        self,
+        page: Page,
+        title: str,
+        description: str,
+        link_url: str,
+        board_name: str,
+        alt_text: str = "",
+        media_url: str = "",
+    ) -> Optional[str]:
+        """
+        Solution 2 (Browser-API Hybrid):
+        Executes a native fetch() request directly inside the logged-in Playwright browser page.
+        Uses the browser's active session cookies, CSRF tokens, and TLS context.
+        Returns live_pin_url if successful, or None to fall back to UI builder.
+        """
+        try:
+            script = """
+            async (args) => {
+                const getCookie = (name) => {
+                    const value = `; ${document.cookie}`;
+                    const parts = value.split(`; ${name}=`);
+                    if (parts.length === 2) return parts.pop().split(';').shift();
+                    return null;
+                };
+
+                const csrftoken = getCookie('csrftoken') || getCookie('_pinterest_sess') || '';
+                if (!csrftoken) return null;
+
+                try {
+                    const resp = await fetch('/resource/PinResource/create/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                            'X-CSRFToken': csrftoken,
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
+                        body: new URLSearchParams({
+                            'source_url': '/pin-builder/',
+                            'data': JSON.stringify({
+                                'options': {
+                                    'title': args.title,
+                                    'description': args.description,
+                                    'link': args.link_url,
+                                    'image_url': args.media_url,
+                                    'alt_text': args.alt_text,
+                                    'board_name': args.board_name
+                                },
+                                'context': {}
+                            })
+                        })
+                    });
+
+                    if (resp.ok) {
+                        const json = await resp.json();
+                        const pinId = json?.resource_response?.data?.id || json?.data?.id;
+                        if (pinId) {
+                            return `https://www.pinterest.com/pin/${pinId}/`;
+                        }
+                    }
+                } catch (err) {
+                    return null;
+                }
+                return null;
+            }
+            """
+            live_url = page.evaluate(script, {
+                "title": title,
+                "description": description,
+                "link_url": link_url,
+                "board_name": board_name,
+                "alt_text": alt_text,
+                "media_url": media_url,
+            })
+            if live_url and live_url.startswith("http"):
+                logger.info(f"🎯 Browser-API Hybrid created Pin successfully: {live_url}")
+                return live_url
+        except Exception as e:
+            logger.debug(f"Browser-API hybrid attempt note: {e}")
+        return None
+
     def _select_board_ui(self, page: Page, board_name: str) -> str:
         """
         Open board dropdown and select the board.
