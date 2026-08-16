@@ -618,6 +618,52 @@
       "template": 5,
       "pin_url": "https://www.pinterest.com/pin/962222276663111592",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8897138491563,
+      "title": "Comfy High Rise Straight Jeans for Casual Back to School Style \u2014 MeeeShop US Boutique",
+      "board": "Weekend to Workwear",
+      "timestamp": "2026-08-16T03:05:34.105079",
+      "type": "video",
+      "style": "carousel",
+      "template": 10,
+      "pin_url": "https://www.pinterest.com/pin/962222276663119319",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": "559244345515",
+      "article_id": "559244345515",
+      "title": "Plus Size Women Finding Their True Size",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-08-16T03:07:16.729237",
+      "type": "blog",
+      "style": "collage",
+      "template": 6,
+      "pin_url": "https://www.pinterest.com/pin/962222276663119346",
+      "blog_url": "https://us.meeeshop.com/blogs/plus-size-curvy-clothing/plus-size-women-finding-their-true-size",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8818150768811,
+      "title": "Relaxed fit halter neck top for casual work style and everyday comfort \u2014 MeeeShop US Boutique",
+      "board": "Effortless Looks",
+      "timestamp": "2026-08-16T03:08:49.510266",
+      "type": "video",
+      "style": "card",
+      "template": 10,
+      "pin_url": "https://www.pinterest.com/pin/962222276663119382",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8789756903595,
+      "title": "Eco Friendly Dark Wash High Rise Crop Flare Jeans for Everyday Style \u2014 MeeeShop US Boutique",
+      "board": "Vamp Romantic Styles",
+      "timestamp": "2026-08-16T03:10:06.960088",
+      "type": "carousel",
+      "style": "hero",
+      "template": 2,
+      "pin_url": "https://www.pinterest.com/pin/962222276663119416",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
@@ -673,11 +719,14 @@
     "MeeeShop's Luxe Styles": "2026-08-15T21:26:32.597254",
     "Outerwear": "2026-08-15T21:27:33.722132",
     "Zenana Women's...": "2026-08-15T21:28:37.773139",
-    "Thanks giving Outfits": "2026-08-15T21:29:48.959700"
+    "Thanks giving Outfits": "2026-08-15T21:29:48.959700",
+    "Weekend to Workwear": "2026-08-16T03:05:34.105079",
+    "Effortless Looks": "2026-08-16T03:08:49.510266",
+    "Vamp Romantic Styles": "2026-08-16T03:10:06.960088"
   },
-  "daily_count": 16,
-  "last_post_time": "2026-08-15T21:29:48.959700",
+  "daily_count": 4,
+  "last_post_time": "2026-08-16T03:10:06.960088",
   "board_rotation_cursor": 0,
   "last_image_style": "hero",
-  "last_template_index": 5
+  "last_template_index": 2
 }
