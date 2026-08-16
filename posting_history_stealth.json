@@ -752,6 +752,50 @@
       "template": 10,
       "pin_url": "https://www.pinterest.com/pin/962222276663138020",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8782637826219,
+      "title": "Relaxed Fit Cape Cod Shirt for Everyday Summer Style and Back to School Fashion \u2014 MeeeShop US Boutiq",
+      "board": "Best selling products",
+      "timestamp": "2026-08-16T21:25:28.147257",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 13,
+      "pin_url": "https://www.pinterest.com/pin/962222276663143907",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8897140228267,
+      "title": "Comfy Plus Size Flare Jeans for Casual Back to School Style \u2014 MeeeShop US Boutique",
+      "board": "Off-Duty Athlete Looks",
+      "timestamp": "2026-08-16T21:26:31.643159",
+      "type": "carousel",
+      "style": "collage",
+      "template": 0,
+      "pin_url": "https://www.pinterest.com/pin/962222276663143945",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8825276170411,
+      "title": "Floral Fit and Flare Dress for Date Night Outings in Late Summer \u2014 MeeeShop US Boutique",
+      "board": "LE LIS Womens Clothi...",
+      "timestamp": "2026-08-16T21:27:35.872917",
+      "type": "carousel",
+      "style": "card",
+      "template": 2,
+      "pin_url": "https://www.pinterest.com/pin/962222276663143981",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8818155782315,
+      "title": "Mini Skirt for Everyday Style and Comfortable Fit Perfect for Back to School \u2014 MeeeShop US Boutique",
+      "board": "New Trendy Woman...",
+      "timestamp": "2026-08-16T21:28:40.971945",
+      "type": "carousel",
+      "style": "hero",
+      "template": 0,
+      "pin_url": "https://www.pinterest.com/pin/962222276663144006",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
@@ -818,11 +862,15 @@
     "Chic & Effortless Styles": "2026-08-16T17:51:05.225594",
     "Davi & Dani Womens...": "2026-08-16T17:52:10.627401",
     "Weekend to Workout": "2026-08-16T17:53:11.788896",
-    "Gimme Gummy Playful Nostalgia": "2026-08-16T17:54:11.594666"
+    "Gimme Gummy Playful Nostalgia": "2026-08-16T17:54:11.594666",
+    "Best selling products": "2026-08-16T21:25:28.147257",
+    "Off-Duty Athlete Looks": "2026-08-16T21:26:31.643159",
+    "LE LIS Womens Clothi...": "2026-08-16T21:27:35.872917",
+    "New Trendy Woman...": "2026-08-16T21:28:40.971945"
   },
-  "daily_count": 12,
-  "last_post_time": "2026-08-16T17:54:11.594666",
+  "daily_count": 16,
+  "last_post_time": "2026-08-16T21:28:40.971945",
   "board_rotation_cursor": 0,
   "last_image_style": "hero",
-  "last_template_index": 10
+  "last_template_index": 0
 }
