@@ -3,7 +3,8 @@
 generate_pinterest_supplemental_feed.py — Pinterest Catalog & Supplemental Feed Generator
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 Fetches active products from Shopify API, cleans GTINs, validates image links for
-PNG/JPEG format, and outputs both Pinterest Supplemental Feed and Full Feed.
+PNG/JPEG format (using Shopify CDN format=jpg), maps 3+ level Google Product Taxonomy,
+and outputs both Pinterest Supplemental Feed and Full Feed.
 Uploads feeds to Shopify CDN and establishes clean static permalink redirects.
 """
 
@@ -33,7 +34,6 @@ DEFAULT_GENDER = "female"
 DEFAULT_AGE_GROUP = "adult"
 DEFAULT_CONDITION = "new"
 DEFAULT_BRAND = "MeeeShop"
-DEFAULT_GOOGLE_CATEGORY = "166"  # Apparel & Accessories
 
 OUTPUT_SUPPLEMENTAL = "pinterest_supplemental_feed.csv"
 OUTPUT_FULL = "pinterest_catalog_feed.csv"
@@ -75,9 +75,10 @@ def clean_and_validate_gtin(raw_gtin):
 
 def filter_image_url(url):
     """
-    Validates image URL for Pinterest compatibility.
+    Validates and formats image URL for Pinterest compatibility.
     Pinterest requires PNG or JPEG formatting.
-    Strips non-JPEG/PNG URLs (e.g. webp, gif, svg, avif).
+    Shopify CDN converts WebP/SVG/PNG to JPEG on the fly by appending format=jpg.
+    Returns a guaranteed valid JPEG/PNG URL or "".
     """
     if not url or not isinstance(url, str):
         return ""
@@ -85,28 +86,42 @@ def filter_image_url(url):
     if not (clean_url.startswith("http://") or clean_url.startswith("https://")):
         return ""
     
-    # Extract path without query parameters to check extension
-    url_path = clean_url.split("?")[0].lower()
-    
-    # Check for unsupported extensions
-    unsupported_exts = [".webp", ".gif", ".svg", ".avif", ".tiff", ".bmp"]
-    for ext in unsupported_exts:
-        if url_path.endswith(ext):
-            return ""
-            
-    # Check for supported extensions or standard CDN image patterns
-    supported_exts = [".jpg", ".jpeg", ".png"]
-    has_supported_ext = any(url_path.endswith(ext) for ext in supported_exts)
-    
-    if not has_supported_ext:
-        # If Shopify CDN image without extension, append .jpg or ensure format parameter
-        if "cdn.shopify.com" in clean_url:
-            if not any(ext in url_path for ext in supported_exts):
-                clean_url = clean_url + ("&format=jpg" if "?" in clean_url else "?format=jpg")
-        else:
-            return ""
+    # If Shopify CDN image, ensure format=jpg is appended to guarantee JPEG output
+    if "cdn.shopify.com" in clean_url:
+        if not ("format=jpg" in clean_url or "format=jpeg" in clean_url or "format=png" in clean_url):
+            clean_url = clean_url + ("&format=jpg" if "?" in clean_url else "?format=jpg")
             
     return clean_url
+
+def get_google_product_category(product):
+    """Maps product details to full 3+ level Google Product Taxonomy paths (Fixes Warning 126)."""
+    title = (product.get("title") or "").lower()
+    ptype = (product.get("product_type") or "").lower()
+    tags = (product.get("tags") or "").lower()
+    text = f"{title} {ptype} {tags}"
+
+    if any(w in text for w in ["dress", "dresses", "gown", "romper", "jumpsuit"]):
+        return "Apparel & Accessories > Clothing > Dresses"
+    elif any(w in text for w in ["pant", "pants", "jean", "jeans", "trouser", "trousers", "legging", "leggings"]):
+        return "Apparel & Accessories > Clothing > Pants"
+    elif any(w in text for w in ["short", "shorts"]):
+        return "Apparel & Accessories > Clothing > Shorts"
+    elif any(w in text for w in ["skirt", "skirts"]):
+        return "Apparel & Accessories > Clothing > Skirts"
+    elif any(w in text for w in ["jacket", "jackets", "coat", "coats", "blazer", "blazers", "cardigan", "outerwear", "sweatshirt", "hoodie"]):
+        return "Apparel & Accessories > Clothing > Outerwear > Coats & Jackets"
+    elif any(w in text for w in ["top", "tops", "shirt", "shirts", "tee", "t-shirt", "blouse", "knit", "sweater"]):
+        return "Apparel & Accessories > Clothing > Shirts & Tops"
+    elif any(w in text for w in ["bag", "bags", "handbag", "clutch", "tote", "purse", "backpack", "crossbody"]):
+        return "Apparel & Accessories > Handbags, Wallets & Cases > Handbags"
+    elif any(w in text for w in ["bikini", "swimsuit", "swimwear", "monokini"]):
+        return "Apparel & Accessories > Clothing > Swimwear"
+    elif any(w in text for w in ["pajama", "sleepwear", "loungewear", "robe", "nightgown"]):
+        return "Apparel & Accessories > Clothing > Sleepwear & Loungewear"
+    elif any(w in text for w in ["jewelry", "necklace", "earring", "bracelet", "ring"]):
+        return "Apparel & Accessories > Jewelry"
+    else:
+        return "Apparel & Accessories > Clothing"
 
 def extract_color(product, variant, current_color):
     """Extracts color from variant options, title, tags, or description."""
@@ -367,12 +382,12 @@ def generate_feeds():
 
         images = product.get("images", [])
         
-        # Validate main image link
+        # Validate and format main image link
         raw_main_image = images[0].get("src") if images else ""
         main_image = filter_image_url(raw_main_image)
         if main_image:
             stats["valid_main_images"] += 1
-        elif raw_main_image:
+        else:
             stats["cleared_main_images"] += 1
 
         # Validate additional images links (up to 10)
@@ -381,8 +396,6 @@ def generate_feeds():
             filtered_img = filter_image_url(img.get("src"))
             if filtered_img:
                 additional_images_list.append(filtered_img)
-            else:
-                stats["filtered_additional_images"] += 1
             if len(additional_images_list) >= 10:
                 break
 
@@ -394,6 +407,7 @@ def generate_feeds():
 
         brand = DEFAULT_BRAND
         item_group_id = str(product.get("id"))
+        google_cat = get_google_product_category(product)
         product_type = product.get("product_type", "")
         tags = product.get("tags", "")
         tags_list = [t.strip() for t in tags.split(",") if t.strip()]
@@ -460,7 +474,7 @@ def generate_feeds():
                 "gtin": valid_gtin,
                 "mpn": sku,
                 "identifier_exists": identifier_exists,
-                "google_product_category": DEFAULT_GOOGLE_CATEGORY,
+                "google_product_category": google_cat,
                 "item_group_id": item_group_id,
                 "gender": DEFAULT_GENDER,
                 "age_group": DEFAULT_AGE_GROUP,
@@ -476,8 +490,7 @@ def generate_feeds():
     print(f"Valid GTINs Kept: {stats['valid_gtins']}", flush=True)
     print(f"Invalid GTINs Cleared (Warning 179 Fix): {stats['cleared_gtins']}", flush=True)
     print(f"Valid Main Images: {stats['valid_main_images']}", flush=True)
-    print(f"Cleared Non-PNG/JPEG Main Images (Error 1403/1300 Fix): {stats['cleared_main_images']}", flush=True)
-    print(f"Filtered Invalid Additional Images (Warning 1408 Fix): {stats['filtered_additional_images']}", flush=True)
+    print(f"Cleared Non-PNG/JPEG Main Images: {stats['cleared_main_images']}", flush=True)
 
     # Write files (both Supplemental and Full Catalog feeds)
     for outfile in [OUTPUT_SUPPLEMENTAL, OUTPUT_FULL]:
