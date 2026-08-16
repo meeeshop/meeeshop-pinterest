@@ -664,6 +664,50 @@
       "template": 2,
       "pin_url": "https://www.pinterest.com/pin/962222276663119416",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8789754544299,
+      "title": "High Waist Modern Wide Leg Jeans for Everyday Boutique Style and Comfort \u2014 MeeeShop US Boutique",
+      "board": "BFCM Deals",
+      "timestamp": "2026-08-16T12:23:05.678565",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 7,
+      "pin_url": "https://www.pinterest.com/pin/962222276663128337",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8818157158571,
+      "title": "Mini Skirt for Everyday Style and Perfect Fit for Back to School \u2014 MeeeShop US Boutique",
+      "board": "Poetcore Aesthetics",
+      "timestamp": "2026-08-16T12:24:37.835619",
+      "type": "video",
+      "style": "collage",
+      "template": 13,
+      "pin_url": "https://www.pinterest.com/pin/962222276663128368",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8745260056747,
+      "title": "Floral Midi Dress for Date Night in Chic Fit Style \u2014 MeeeShop US Boutique",
+      "board": "Emory Park Clothing",
+      "timestamp": "2026-08-16T12:25:37.214806",
+      "type": "carousel",
+      "style": "card",
+      "template": 5,
+      "pin_url": "https://www.pinterest.com/pin/962222276663128387",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8789754577067,
+      "title": "High Rise Straight Jeans for Everyday Style and Comfortable Fit \u2014 MeeeShop US Boutique",
+      "board": "new products",
+      "timestamp": "2026-08-16T12:27:05.654435",
+      "type": "product",
+      "style": "hero",
+      "template": 2,
+      "pin_url": "https://www.pinterest.com/pin/962222276663128420",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
@@ -722,11 +766,15 @@
     "Thanks giving Outfits": "2026-08-15T21:29:48.959700",
     "Weekend to Workwear": "2026-08-16T03:05:34.105079",
     "Effortless Looks": "2026-08-16T03:08:49.510266",
-    "Vamp Romantic Styles": "2026-08-16T03:10:06.960088"
+    "Vamp Romantic Styles": "2026-08-16T03:10:06.960088",
+    "BFCM Deals": "2026-08-16T12:23:05.678565",
+    "Poetcore Aesthetics": "2026-08-16T12:24:37.835619",
+    "Emory Park Clothing": "2026-08-16T12:25:37.214806",
+    "new products": "2026-08-16T12:27:05.654435"
   },
-  "daily_count": 4,
-  "last_post_time": "2026-08-16T03:10:06.960088",
+  "daily_count": 8,
+  "last_post_time": "2026-08-16T12:27:05.654435",
   "board_rotation_cursor": 0,
   "last_image_style": "hero",
-  "last_template_index": 6
+  "last_template_index": 2
 }
