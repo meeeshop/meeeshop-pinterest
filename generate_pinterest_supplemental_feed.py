@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """
-generate_pinterest_supplemental_feed.py — Pinterest Catalog & Supplemental Feed Generator
+generate_pinterest_supplemental_feed.py — Pinterest Primary Catalog Feed Generator
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 Fetches active products from Shopify API, cleans GTINs (excluding internal 20-29 prefixes),
 validates image links for PNG/JPEG format (using Shopify CDN format=jpg), maps 3+ level Google
-Product Taxonomy for all products/shoes/accessories, and outputs both Supplemental and Full Feed.
-Uploads feeds to Shopify CDN and establishes clean static permalink redirects.
+Product Taxonomy for all products/shoes/accessories, and outputs Pinterest Catalog Feed.
+Uploads feed to Shopify CDN and establishes clean static permalink redirect /a/pinterest_catalog_feed.csv.
 """
 
 import os
@@ -42,9 +42,7 @@ DEFAULT_AGE_GROUP = "adult"
 DEFAULT_CONDITION = "new"
 DEFAULT_BRAND = "MeeeShop"
 
-OUTPUT_SUPPLEMENTAL = "pinterest_supplemental_feed.csv"
 OUTPUT_FULL = "pinterest_catalog_feed.csv"
-REDIRECT_PATH_SUPPLEMENTAL = "/a/pinterest_supplemental_feed.csv"
 REDIRECT_PATH_FULL = "/a/pinterest_catalog_feed.csv"
 
 def clean_html(raw_html):
@@ -509,27 +507,27 @@ def generate_feeds():
                 "shipping": "US:::0.00 USD"
             })
 
-    print("\n--- Pinterest Catalog & Feed Generation Summary ---", flush=True)
+    print("\n--- Pinterest Primary Catalog Feed Generation Summary ---", flush=True)
     print(f"Total Variants Processed: {stats['total_variants']}", flush=True)
     print(f"Valid GTINs Kept: {stats['valid_gtins']}", flush=True)
     print(f"Internal/Invalid GTINs Cleared (Warning 179 Fix): {stats['cleared_gtins']}", flush=True)
     print(f"Valid Main Images: {stats['valid_main_images']}", flush=True)
     print(f"Cleared Non-PNG/JPEG Main Images: {stats['cleared_main_images']}", flush=True)
 
-    # Write files (both Supplemental and Full Catalog feeds)
-    for outfile in [OUTPUT_SUPPLEMENTAL, OUTPUT_FULL]:
-        gz_file = outfile + ".gz"
-        print(f"Writing {len(rows)} records to {gz_file}...", flush=True)
-        with gzip.open(gz_file, mode="wt", newline="", encoding="utf-8") as f:
-            writer = csv.DictWriter(f, fieldnames=feed_headers, delimiter=',')
-            writer.writeheader()
-            writer.writerows(rows)
+    # Write ONLY Pinterest Primary Catalog feed file
+    outfile = OUTPUT_FULL
+    gz_file = outfile + ".gz"
+    print(f"Writing {len(rows)} records to {gz_file}...", flush=True)
+    with gzip.open(gz_file, mode="wt", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=feed_headers, delimiter=',')
+        writer.writeheader()
+        writer.writerows(rows)
 
-        cdn_url = upload_to_shopify_files(gz_file)
-        redirect_path = REDIRECT_PATH_SUPPLEMENTAL if outfile == OUTPUT_SUPPLEMENTAL else REDIRECT_PATH_FULL
-        static_url = create_or_update_redirect(redirect_path, cdn_url)
+    cdn_url = upload_to_shopify_files(gz_file)
+    static_url = create_or_update_redirect(REDIRECT_PATH_FULL, cdn_url)
 
-    print("\n[SUCCESS] Pinterest Feeds generated and deployed successfully!", flush=True)
+    print("\n[SUCCESS] Pinterest Primary Catalog Feed generated and deployed successfully!", flush=True)
+    print(f"🔗 Permanent Feed URL: {static_url}", flush=True)
 
 if __name__ == "__main__":
     generate_feeds()
