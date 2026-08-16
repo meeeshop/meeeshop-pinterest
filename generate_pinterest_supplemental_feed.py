@@ -125,6 +125,8 @@ def get_google_product_category(product):
         return "Apparel & Accessories > Shoes > Boots"
     elif any(w in text for w in ["dress", "dresses", "gown", "romper", "jumpsuit"]):
         return "Apparel & Accessories > Clothing > Dresses"
+    elif any(w in text for w in ["set", "sets", "outfit", "two piece", "2 piece", "co-ord", "coord"]):
+        return "Apparel & Accessories > Clothing > Outfit Sets"
     elif any(w in text for w in ["pant", "pants", "jean", "jeans", "trouser", "trousers", "legging", "leggings"]):
         return "Apparel & Accessories > Clothing > Pants"
     elif any(w in text for w in ["short", "shorts"]):
