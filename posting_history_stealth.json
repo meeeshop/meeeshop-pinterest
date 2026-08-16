@@ -708,6 +708,50 @@
       "template": 2,
       "pin_url": "https://www.pinterest.com/pin/962222276663128420",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8892158738603,
+      "title": "Relaxed Fit Dreamcatcher Tank Top for Casual Work and Summer Style \u2014 MeeeShop US Boutique",
+      "board": "Chic & Effortless Styles",
+      "timestamp": "2026-08-16T17:51:05.225594",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 13,
+      "pin_url": "https://www.pinterest.com/pin/962222276663137944",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8782689632427,
+      "title": "Stylish Fit and Flare Date Night Dress for Women Late Summer Nights \u2014 MeeeShop US Boutique",
+      "board": "Davi & Dani Womens...",
+      "timestamp": "2026-08-16T17:52:10.627401",
+      "type": "carousel",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276663137973",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8919859462315,
+      "title": "Comfy Wide Leg Jeans for Casual School Style and Late Summer Nights \u2014 MeeeShop US Boutique",
+      "board": "Weekend to Workout",
+      "timestamp": "2026-08-16T17:53:11.788896",
+      "type": "carousel",
+      "style": "card",
+      "template": 2,
+      "pin_url": "https://www.pinterest.com/pin/962222276663137996",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8825883721899,
+      "title": "Stylish Everyday Tote Bag for Back to School and Work in Classic Fit \u2014 MeeeShop US Boutique",
+      "board": "Gimme Gummy Playful Nostalgia",
+      "timestamp": "2026-08-16T17:54:11.594666",
+      "type": "carousel",
+      "style": "hero",
+      "template": 10,
+      "pin_url": "https://www.pinterest.com/pin/962222276663138020",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
@@ -770,11 +814,15 @@
     "BFCM Deals": "2026-08-16T12:23:05.678565",
     "Poetcore Aesthetics": "2026-08-16T12:24:37.835619",
     "Emory Park Clothing": "2026-08-16T12:25:37.214806",
-    "new products": "2026-08-16T12:27:05.654435"
+    "new products": "2026-08-16T12:27:05.654435",
+    "Chic & Effortless Styles": "2026-08-16T17:51:05.225594",
+    "Davi & Dani Womens...": "2026-08-16T17:52:10.627401",
+    "Weekend to Workout": "2026-08-16T17:53:11.788896",
+    "Gimme Gummy Playful Nostalgia": "2026-08-16T17:54:11.594666"
   },
-  "daily_count": 8,
-  "last_post_time": "2026-08-16T12:27:05.654435",
+  "daily_count": 12,
+  "last_post_time": "2026-08-16T17:54:11.594666",
   "board_rotation_cursor": 0,
   "last_image_style": "hero",
-  "last_template_index": 2
+  "last_template_index": 10
 }
