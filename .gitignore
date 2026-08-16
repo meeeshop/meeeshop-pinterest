@@ -53,6 +53,9 @@ posting_history.json
 *.pkl
 *.pickle
 .cache/
+*.csv
+*.csv.gz
+*.txt.gz
 
 # Artifacts
 *.jpg
