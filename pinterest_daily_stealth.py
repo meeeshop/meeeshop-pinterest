@@ -30,7 +30,7 @@ from shopify_products import ShopifyClient, format_product_for_pinterest
 from content_generator_v2 import generate_content_package
 from stealth_pinterest_poster import StealthPinterestPoster
 from image_overlay import add_text_overlay, get_next_style_and_template
-from board_mapping import select_best_lru_board, MEEESHOP_BOARDS
+from board_mapping import select_best_lru_board, select_power_board, POWER_BOARDS, MEEESHOP_BOARDS
 from blog_content_optimizer import generate_blog_pin_title, generate_blog_pin_description, select_blog_boards
 from pinterest_blog_daily import fetch_shopify_articles
 
@@ -471,6 +471,21 @@ def run_daily_stealth_posting(dry_run: bool = False, pins_count: Optional[int] =
     used_boards_in_run = set()
     carousel_posted_in_run = False
 
+    # Check if a high-traffic Power Board (Trends, New, etc.) has been posted to today
+    today_date = datetime.now().date()
+    power_board_posted_today = False
+    for p in history.get("posts", []):
+        ts_str = p.get("timestamp")
+        if ts_str:
+            try:
+                if datetime.fromisoformat(ts_str.replace("Z", "+00:00")).date() == today_date:
+                    b_name = str(p.get("board", ""))
+                    if any(pb.lower() in b_name.lower() for pb in POWER_BOARDS):
+                        power_board_posted_today = True
+                        break
+            except Exception:
+                pass
+
     store_base_url = safe_get_secret("STORE_BASE_URL") or safe_get_secret("SHOPIFY_STORE_URL")
     if not store_base_url:
         logger.error("❌ Missing STORE_BASE_URL / SHOPIFY_STORE_URL in secrets vault")
@@ -490,15 +505,24 @@ def run_daily_stealth_posting(dry_run: bool = False, pins_count: Optional[int] =
         # Match board using MEEESHOP_BOARDS
         live_boards = [{"id": b, "name": b} for b in MEEESHOP_BOARDS]
 
-        board = select_best_lru_board(
-            product_title=formatted["title"],
-            product_type=formatted["product_type"],
-            live_boards=live_boards,
-            board_last_used=history.get("board_last_used", {}),
-            used_boards_in_run=used_boards_in_run,
-        )
+        # Guarantee at least 1 pin per day posts to a high-traffic Power Board (Trends, New, etc.)
+        if not power_board_posted_today and posted_count == 0:
+            board = select_power_board(
+                live_boards=live_boards,
+                board_last_used=history.get("board_last_used", {}),
+                used_boards_in_run=used_boards_in_run,
+            )
+            logger.info(f"🔥 Power Board Guarantee: Routing pin to high-traffic board '{board.get('name')}'")
+        else:
+            board = select_best_lru_board(
+                product_title=formatted["title"],
+                product_type=formatted["product_type"],
+                live_boards=live_boards,
+                board_last_used=history.get("board_last_used", {}),
+                used_boards_in_run=used_boards_in_run,
+            )
 
-        board_name = board["name"] if board else "Trendy & Timeless Fashion"
+        board_name = board["name"] if board else "Trends"
         used_boards_in_run.add(board_name)
 
         # Content Mix: forced_type or Carousel-Dominant (1 Blog/day, 3 Video/day, 1 Single Product/day, rest Carousel)
