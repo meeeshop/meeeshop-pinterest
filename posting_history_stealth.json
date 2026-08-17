@@ -664,6 +664,52 @@
       "template": 2,
       "pin_url": "https://www.pinterest.com/pin/962222276663119416",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8882918883499,
+      "title": "Elegant V Neck Maxi Dress for Date Night and Summer Outings \u2014 MeeeShop US Boutique",
+      "board": "Best selling products",
+      "timestamp": "2026-08-17T03:58:21.399479",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276663153710",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8931947020459,
+      "title": "Comfy High Waist Leggings for Casual Summer Style and Back to School \u2014 MeeeShop US Boutique",
+      "board": "Weekend to Workout",
+      "timestamp": "2026-08-17T04:00:05.263074",
+      "type": "video",
+      "style": "collage",
+      "template": 6,
+      "pin_url": "https://www.pinterest.com/pin/962222276663153741",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": "561618124971",
+      "article_id": "561618124971",
+      "title": "Elevate Your Style With Jade By Jane Styling The Latest Arrivals",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-08-17T04:01:35.821434",
+      "type": "blog",
+      "style": "card",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276663153775",
+      "blog_url": "https://us.meeeshop.com/blogs/our-tips/elevate-your-style-with-jade-by-jane-styling-the-latest-arrivals",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8825419104427,
+      "title": "Elegant Maxi Dress for Date Night and Late Summer Outings in USA \u2014 MeeeShop US Boutique",
+      "board": "Davi & Dani Womens...",
+      "timestamp": "2026-08-17T04:02:49.327662",
+      "type": "carousel",
+      "style": "hero",
+      "template": 1,
+      "pin_url": "https://www.pinterest.com/pin/962222276663153790",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
@@ -722,11 +768,14 @@
     "Thanks giving Outfits": "2026-08-15T21:29:48.959700",
     "Weekend to Workwear": "2026-08-16T03:05:34.105079",
     "Effortless Looks": "2026-08-16T03:08:49.510266",
-    "Vamp Romantic Styles": "2026-08-16T03:10:06.960088"
+    "Vamp Romantic Styles": "2026-08-16T03:10:06.960088",
+    "Best selling products": "2026-08-17T03:58:21.399479",
+    "Weekend to Workout": "2026-08-17T04:00:05.263074",
+    "Davi & Dani Womens...": "2026-08-17T04:02:49.327662"
   },
   "daily_count": 4,
-  "last_post_time": "2026-08-16T03:10:06.960088",
+  "last_post_time": "2026-08-17T04:02:49.327662",
   "board_rotation_cursor": 0,
   "last_image_style": "hero",
-  "last_template_index": 6
+  "last_template_index": 1
 }
