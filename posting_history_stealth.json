@@ -886,6 +886,50 @@
       "template": 14,
       "pin_url": "https://www.pinterest.com/pin/962222276663164576",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8933166940331,
+      "title": "Chic Women's Shirts & Tops for Casual work top \u2014 MeeeShop US Boutique",
+      "board": "Confidence Ladies",
+      "timestamp": "2026-08-17T17:59:20.540196",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 7,
+      "pin_url": "https://www.pinterest.com/pin/962222276663173412",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8825881198763,
+      "title": "Chic Women's Handbags for Everyday tote bag \u2014 MeeeShop US Boutique",
+      "board": "Fresh Finds New...",
+      "timestamp": "2026-08-17T18:00:37.668473",
+      "type": "carousel",
+      "style": "collage",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276663173451",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8936272068779,
+      "title": "Chic Women's Pants for Comfy casual pants \u2014 MeeeShop US Boutique",
+      "board": "Affordable Women's Fashion USA",
+      "timestamp": "2026-08-17T18:01:54.340969",
+      "type": "carousel",
+      "style": "card",
+      "template": 10,
+      "pin_url": "https://www.pinterest.com/pin/962222276663173507",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8782622523563,
+      "title": "Chic Women's Dresses for Date night dress \u2014 MeeeShop US Boutique",
+      "board": "Festive & Flora Fits",
+      "timestamp": "2026-08-17T18:03:04.325584",
+      "type": "carousel",
+      "style": "hero",
+      "template": 3,
+      "pin_url": "https://www.pinterest.com/pin/962222276663173554",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
@@ -963,11 +1007,15 @@
     "Style Ideas": "2026-08-17T12:28:00.194105",
     "Mustard Seed Clothing": "2026-08-17T12:29:03.024474",
     "Woman Fashion!": "2026-08-17T12:30:38.517438",
-    "Stylish Finds": "2026-08-17T12:32:18.114926"
+    "Stylish Finds": "2026-08-17T12:32:18.114926",
+    "Confidence Ladies": "2026-08-17T17:59:20.540196",
+    "Fresh Finds New...": "2026-08-17T18:00:37.668473",
+    "Affordable Women's Fashion USA": "2026-08-17T18:01:54.340969",
+    "Festive & Flora Fits": "2026-08-17T18:03:04.325584"
   },
-  "daily_count": 8,
-  "last_post_time": "2026-08-17T12:32:18.114926",
+  "daily_count": 12,
+  "last_post_time": "2026-08-17T18:03:04.325584",
   "board_rotation_cursor": 0,
   "last_image_style": "hero",
-  "last_template_index": 14
+  "last_template_index": 3
 }
