@@ -930,6 +930,50 @@
       "template": 3,
       "pin_url": "https://www.pinterest.com/pin/962222276663173554",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8818154111147,
+      "title": "Chic Women's TOPS for Casual work top \u2014 MeeeShop US Boutique",
+      "board": "Shop Responsibly",
+      "timestamp": "2026-08-17T21:30:47.850878",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276663180122",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8885455650987,
+      "title": "Chic Women's Pants for Comfy casual pants \u2014 MeeeShop US Boutique",
+      "board": "Social",
+      "timestamp": "2026-08-17T21:32:28.273361",
+      "type": "video",
+      "style": "collage",
+      "template": 10,
+      "pin_url": "https://www.pinterest.com/pin/962222276663180167",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8818150932651,
+      "title": "Chic Women's SKIRTS for Everyday boutique fashion \u2014 MeeeShop US Boutique",
+      "board": "Blogs",
+      "timestamp": "2026-08-17T21:33:34.238278",
+      "type": "carousel",
+      "style": "card",
+      "template": 9,
+      "pin_url": "https://www.pinterest.com/pin/962222276663180195",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8818151030955,
+      "title": "Chic Women's TOPS for Casual work top \u2014 MeeeShop US Boutique",
+      "board": "All Pins",
+      "timestamp": "2026-08-17T21:34:37.493493",
+      "type": "carousel",
+      "style": "hero",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276663180227",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
@@ -1011,11 +1055,15 @@
     "Confidence Ladies": "2026-08-17T17:59:20.540196",
     "Fresh Finds New...": "2026-08-17T18:00:37.668473",
     "Affordable Women's Fashion USA": "2026-08-17T18:01:54.340969",
-    "Festive & Flora Fits": "2026-08-17T18:03:04.325584"
+    "Festive & Flora Fits": "2026-08-17T18:03:04.325584",
+    "Shop Responsibly": "2026-08-17T21:30:47.850878",
+    "Social": "2026-08-17T21:32:28.273361",
+    "Blogs": "2026-08-17T21:33:34.238278",
+    "All Pins": "2026-08-17T21:34:37.493493"
   },
-  "daily_count": 12,
-  "last_post_time": "2026-08-17T18:03:04.325584",
+  "daily_count": 16,
+  "last_post_time": "2026-08-17T21:34:37.493493",
   "board_rotation_cursor": 0,
   "last_image_style": "hero",
-  "last_template_index": 3
+  "last_template_index": 14
 }
