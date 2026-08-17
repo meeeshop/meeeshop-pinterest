@@ -796,6 +796,52 @@
       "template": 0,
       "pin_url": "https://www.pinterest.com/pin/962222276663144006",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8789757722795,
+      "title": "Eco Friendly High Rise Flare Jeans for Everyday Chic Style and Comfortable Fit \u2014 MeeeShop US Boutiqu",
+      "board": "Outfit Ideas",
+      "timestamp": "2026-08-17T03:04:48.498448",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 10,
+      "pin_url": "https://www.pinterest.com/pin/962222276663152500",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": "560350625963",
+      "article_id": "560350625963",
+      "title": "5 Stunning Celeste Dresses For Spring",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-08-17T03:06:18.900812",
+      "type": "blog",
+      "style": "collage",
+      "template": 1,
+      "pin_url": "https://www.pinterest.com/pin/962222276663152538",
+      "blog_url": "https://us.meeeshop.com/blogs/plus-size-curvy-clothing/5-stunning-celeste-dresses-for-spring",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8818158010539,
+      "title": "Casual Fit Work Tops for Women in Soft Styles for Late Summer Office Wear \u2014 MeeeShop US Boutique",
+      "board": "Late Summer to Fall Teacher Style",
+      "timestamp": "2026-08-17T03:07:27.270395",
+      "type": "carousel",
+      "style": "card",
+      "template": 10,
+      "pin_url": "https://www.pinterest.com/pin/962222276663152565",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8827509604523,
+      "title": "Stylish suede shoulder bag for everyday use and back to school outfits \u2014 MeeeShop US Boutique",
+      "board": "Ootd #ootd",
+      "timestamp": "2026-08-17T03:08:29.058143",
+      "type": "carousel",
+      "style": "hero",
+      "template": 4,
+      "pin_url": "https://www.pinterest.com/pin/962222276663152587",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
@@ -866,11 +912,14 @@
     "Best selling products": "2026-08-16T21:25:28.147257",
     "Off-Duty Athlete Looks": "2026-08-16T21:26:31.643159",
     "LE LIS Womens Clothi...": "2026-08-16T21:27:35.872917",
-    "New Trendy Woman...": "2026-08-16T21:28:40.971945"
+    "New Trendy Woman...": "2026-08-16T21:28:40.971945",
+    "Outfit Ideas": "2026-08-17T03:04:48.498448",
+    "Late Summer to Fall Teacher Style": "2026-08-17T03:07:27.270395",
+    "Ootd #ootd": "2026-08-17T03:08:29.058143"
   },
-  "daily_count": 16,
-  "last_post_time": "2026-08-16T21:28:40.971945",
+  "daily_count": 4,
+  "last_post_time": "2026-08-17T03:08:29.058143",
   "board_rotation_cursor": 0,
   "last_image_style": "hero",
-  "last_template_index": 0
+  "last_template_index": 4
 }
