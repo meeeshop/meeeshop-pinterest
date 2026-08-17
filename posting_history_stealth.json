@@ -842,6 +842,50 @@
       "template": 4,
       "pin_url": "https://www.pinterest.com/pin/962222276663152587",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8818148802731,
+      "title": "Chic Women's TOPS for Casual work top \u2014 MeeeShop US Boutique",
+      "board": "Style Ideas",
+      "timestamp": "2026-08-17T12:28:00.194105",
+      "type": "video",
+      "style": "carousel",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276663164432",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8882910789803,
+      "title": "Chic Women's Dresses for Date night dress \u2014 MeeeShop US Boutique",
+      "board": "Mustard Seed Clothing",
+      "timestamp": "2026-08-17T12:29:03.024474",
+      "type": "carousel",
+      "style": "collage",
+      "template": 3,
+      "pin_url": "https://www.pinterest.com/pin/962222276663164469",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8911380086955,
+      "title": "Chic Women's Handbags for Everyday tote bag \u2014 MeeeShop US Boutique",
+      "board": "Woman Fashion!",
+      "timestamp": "2026-08-17T12:30:38.517438",
+      "type": "video",
+      "style": "card",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276663164523",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8911380152491,
+      "title": "Chic Women's Handbags for Everyday tote bag \u2014 MeeeShop US Boutique",
+      "board": "Stylish Finds",
+      "timestamp": "2026-08-17T12:32:18.114926",
+      "type": "product",
+      "style": "hero",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276663164576",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
@@ -915,11 +959,15 @@
     "New Trendy Woman...": "2026-08-16T21:28:40.971945",
     "Outfit Ideas": "2026-08-17T03:04:48.498448",
     "Late Summer to Fall Teacher Style": "2026-08-17T03:07:27.270395",
-    "Ootd #ootd": "2026-08-17T03:08:29.058143"
+    "Ootd #ootd": "2026-08-17T03:08:29.058143",
+    "Style Ideas": "2026-08-17T12:28:00.194105",
+    "Mustard Seed Clothing": "2026-08-17T12:29:03.024474",
+    "Woman Fashion!": "2026-08-17T12:30:38.517438",
+    "Stylish Finds": "2026-08-17T12:32:18.114926"
   },
-  "daily_count": 4,
-  "last_post_time": "2026-08-17T03:08:29.058143",
+  "daily_count": 8,
+  "last_post_time": "2026-08-17T12:32:18.114926",
   "board_rotation_cursor": 0,
   "last_image_style": "hero",
-  "last_template_index": 4
+  "last_template_index": 14
 }
