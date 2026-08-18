@@ -1108,6 +1108,50 @@
       "template": 4,
       "pin_url": "https://www.pinterest.com/pin/962222276663209574/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8897137082539,
+      "title": "Chic Women's Pants for Comfy casual pants \u2014 MeeeShop US Boutique",
+      "board": "Jeans",
+      "timestamp": "2026-08-18T21:30:46.553313",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276663215825/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8787168755883,
+      "title": "Chic Women's BODYSUIT for Everyday boutique fashion \u2014 MeeeShop US Boutique",
+      "board": "Our Recommended...",
+      "timestamp": "2026-08-18T21:31:56.180149",
+      "type": "carousel",
+      "style": "collage",
+      "template": 2,
+      "pin_url": "https://www.pinterest.com/pin/962222276663215859/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8892158509227,
+      "title": "Chic Women's Shirts & Tops for Casual work top \u2014 MeeeShop US Boutique",
+      "board": "Blouses",
+      "timestamp": "2026-08-18T21:33:04.907593",
+      "type": "carousel",
+      "style": "card",
+      "template": 8,
+      "pin_url": "https://www.pinterest.com/pin/962222276663215890/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8845243777195,
+      "title": "Chic Women's DRESSES for Date night dress \u2014 MeeeShop US Boutique",
+      "board": "Dress",
+      "timestamp": "2026-08-18T21:34:10.651062",
+      "type": "carousel",
+      "style": "hero",
+      "template": 1,
+      "pin_url": "https://www.pinterest.com/pin/962222276663215934/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
@@ -1118,9 +1162,9 @@
     "Short fall dresses": "2026-08-18T12:33:07.657229",
     "Must-Have Fashion Picks": "2026-08-13T05:20:05.419233",
     "Trendy & Timeless Fashion": "2026-08-13T05:29:39.715837",
-    "Dress": "2026-08-13T05:40:54.740934",
+    "Dress": "2026-08-18T21:34:10.651062",
     "Bags": "2026-08-13T05:50:11.609263",
-    "Jeans": "2026-08-13T07:18:41.157159",
+    "Jeans": "2026-08-18T21:30:46.553313",
     "Cocktail Dresses": "2026-08-18T18:07:41.317645",
     "Dressy Outfits": "2026-08-18T12:32:01.716331",
     "Must-Have Fashion...": "2026-08-18T12:30:59.972930",
@@ -1129,11 +1173,11 @@
     "Rompers, Jumpsuits &...": "2026-08-13T10:24:53.533944",
     "Skirts": "2026-08-13T10:28:37.536045",
     "Shirts & Tops": "2026-08-18T18:06:41.708137",
-    "Blouses": "2026-08-13T14:27:55.752687",
+    "Blouses": "2026-08-18T21:33:04.907593",
     "Rompers_Jumpsuits &...": "2026-08-13T14:29:29.191254",
     "Handbag #handsips": "2026-08-13T17:50:13.452142",
     "Trendy & Timeless...": "2026-08-18T18:04:10.590299",
-    "Our Recommended...": "2026-08-13T22:42:21.147474",
+    "Our Recommended...": "2026-08-18T21:31:56.180149",
     "Blouse": "2026-08-14T03:28:46.508958",
     "Wardrobe Must-Hav...": "2026-08-14T03:30:19.486361",
     "Camis & Tanks": "2026-08-14T03:31:50.753879",
@@ -1196,9 +1240,9 @@
     "All Pins": "2026-08-17T21:34:37.493493",
     "Outer wear": "2026-08-18T03:05:47.307004"
   },
-  "daily_count": 12,
-  "last_post_time": "2026-08-18T18:07:41.317645",
+  "daily_count": 16,
+  "last_post_time": "2026-08-18T21:34:10.651062",
   "board_rotation_cursor": 0,
   "last_image_style": "hero",
-  "last_template_index": 4
+  "last_template_index": 1
 }
