@@ -974,13 +974,57 @@
       "template": 14,
       "pin_url": "https://www.pinterest.com/pin/962222276663180227",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8879309455531,
+      "title": "Chic Women's Skirts for Everyday boutique fashion \u2014 MeeeShop US Boutique",
+      "board": "Feminine & Flowy Fits",
+      "timestamp": "2026-08-18T03:01:25.470252",
+      "type": "video",
+      "style": "carousel",
+      "template": 7,
+      "pin_url": "https://www.pinterest.com/pin/962222276663187640/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8789759459499,
+      "title": "Chic Women's DENIM (NEW) for Everyday boutique fashion \u2014 MeeeShop US Boutique",
+      "board": "Pants & Leggings",
+      "timestamp": "2026-08-18T03:03:00.147026",
+      "type": "video",
+      "style": "collage",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276663187674/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8828889071787,
+      "title": "Chic Women's DRESSES for Date night dress \u2014 MeeeShop US Boutique",
+      "board": "Dresses",
+      "timestamp": "2026-08-18T03:04:34.619148",
+      "type": "video",
+      "style": "card",
+      "template": 1,
+      "pin_url": "https://www.pinterest.com/pin/962222276663187722/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8897139474603,
+      "title": "Chic Women's Coats & Jackets for Fall layering jacket \u2014 MeeeShop US Boutique",
+      "board": "Outer wear",
+      "timestamp": "2026-08-18T03:05:47.307004",
+      "type": "carousel",
+      "style": "hero",
+      "template": 2,
+      "pin_url": "https://www.pinterest.com/pin/962222276663187758/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
-    "Pants & Leggings": "2026-08-13T04:59:04.254165",
+    "Pants & Leggings": "2026-08-18T03:03:00.147026",
     "Trends": "2026-08-13T05:31:07.154353",
-    "Dresses": "2026-08-13T05:07:16.467641",
-    "Feminine & Flowy Fits": "2026-08-13T05:08:45.302648",
+    "Dresses": "2026-08-18T03:04:34.619148",
+    "Feminine & Flowy Fits": "2026-08-18T03:01:25.470252",
     "Short fall dresses": "2026-08-13T05:18:36.701706",
     "Must-Have Fashion Picks": "2026-08-13T05:20:05.419233",
     "Trendy & Timeless Fashion": "2026-08-13T05:29:39.715837",
@@ -1059,11 +1103,12 @@
     "Shop Responsibly": "2026-08-17T21:30:47.850878",
     "Social": "2026-08-17T21:32:28.273361",
     "Blogs": "2026-08-17T21:33:34.238278",
-    "All Pins": "2026-08-17T21:34:37.493493"
+    "All Pins": "2026-08-17T21:34:37.493493",
+    "Outer wear": "2026-08-18T03:05:47.307004"
   },
-  "daily_count": 16,
-  "last_post_time": "2026-08-17T21:34:37.493493",
+  "daily_count": 4,
+  "last_post_time": "2026-08-18T03:05:47.307004",
   "board_rotation_cursor": 0,
   "last_image_style": "hero",
-  "last_template_index": 14
+  "last_template_index": 2
 }
