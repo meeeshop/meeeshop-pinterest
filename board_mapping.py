@@ -481,19 +481,61 @@ if DYNAMIC_BOARDS_FILE.exists():
         logging.getLogger(__name__).warning(f"Failed to load dynamic boards: {e}")
 
 
+POWER_BOARDS = [
+    "Trends",
+    "New",
+    "Best selling products",
+    "Fresh Finds New...",
+    "New Trendy Woman...",
+    "new products",
+    "Outfit Ideas",
+    "Style Ideas",
+]
+
+
+def select_power_board(
+    live_boards: List[Dict] = None,
+    board_last_used: dict = None,
+    used_boards_in_run: set = None,
+) -> Dict:
+    """Select the least recently used high-traffic Power Board (Trends, New, etc.)."""
+    if board_last_used is None:
+        board_last_used = {}
+    if used_boards_in_run is None:
+        used_boards_in_run = set()
+    if not live_boards:
+        live_boards = [{"name": b, "id": f"mock_{i}"} for i, b in enumerate(MEEESHOP_BOARDS)]
+
+    matched_power_boards = []
+    for p_name in POWER_BOARDS:
+        matched = match_live_board(p_name, live_boards)
+        if matched and matched not in matched_power_boards:
+            matched_power_boards.append(matched)
+
+    if not matched_power_boards:
+        matched_power_boards = [live_boards[0]]
+
+    # Filter unused in current run if possible
+    avail = [b for b in matched_power_boards if b.get("name") not in used_boards_in_run]
+    if not avail:
+        avail = matched_power_boards
+
+    def get_last_used(b_dict):
+        return board_last_used.get(b_dict.get("name", ""), "1970-01-01T00:00:00")
+
+    avail.sort(key=get_last_used)
+    return avail[0]
+
+
 def get_candidate_boards_for_product(
-    product_title: str, product_type: str = None, prioritize_old_boards: bool = False
+    product_title: str,
+    product_type: str = None,
+    prioritize_old_boards: bool = False,
+    live_boards: List[Dict] = None,
 ) -> list:
     """
     Get all matching candidate board names for a product based on title & type.
-
-    Args:
-        product_title: Product title from Shopify
-        product_type: Product type from Shopify
-        prioritize_old_boards: If True, candidate 1-year-old boards are ordered first.
-
-    Returns:
-        List of board names matching the product (ordered by relevance)
+    Dynamically scans live_boards to discover & use newly created Pinterest boards!
     """
     title_lower = (product_title or "").lower()
     type_lower = (product_type or "").lower()
@@ -501,15 +543,28 @@ def get_candidate_boards_for_product(
 
     candidates = []
 
+    # 1. Check mapped category boards
     for category, boards in CATEGORY_TO_BOARDS.items():
         if category != "default" and category in search_text:
             for b in boards:
-                if b in MEEESHOP_BOARDS and b not in candidates:
+                if b not in candidates:
                     candidates.append(b)
 
-    # Always append default/general boards to ensure broad options
+    # 2. Dynamic Live Board Keyword Matcher (discovers newly created Pinterest boards!)
+    if live_boards:
+        keywords = ["dress", "top", "blouse", "jeans", "pant", "skirt", "jacket", "coat", "sweater", "bag", "shoe", "lounge", "fall", "winter", "summer", "spring", "chic", "casual", "ootd"]
+        matching_kws = [kw for kw in keywords if kw in search_text]
+        if matching_kws:
+            for b_dict in live_boards:
+                b_name = b_dict.get("name", "")
+                b_name_lower = b_name.lower()
+                if any(kw in b_name_lower for kw in matching_kws):
+                    if b_name not in candidates:
+                        candidates.append(b_name)
+
+    # 3. Always append default/general boards to ensure broad options
     for b in CATEGORY_TO_BOARDS["default"]:
-        if b in MEEESHOP_BOARDS and b not in candidates:
+        if b not in candidates:
             candidates.append(b)
 
     if prioritize_old_boards:
@@ -576,7 +631,7 @@ def select_best_lru_board(
         ]
 
     candidates = get_candidate_boards_for_product(
-        product_title, product_type, prioritize_old_boards=prioritize_old_boards
+        product_title, product_type, prioritize_old_boards=prioritize_old_boards, live_boards=live_boards
     )
 
     # Resolve candidate names to live board objects
