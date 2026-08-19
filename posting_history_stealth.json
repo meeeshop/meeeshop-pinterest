@@ -1242,6 +1242,50 @@
       "template": 5,
       "pin_url": "https://www.pinterest.com/pin/962222276663233528/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8825882673323,
+      "title": "Chic Women's Handbags for Everyday tote bag \u2014 MeeeShop US Boutique",
+      "board": "Handbag #handsips",
+      "timestamp": "2026-08-19T17:55:31.438390",
+      "type": "product",
+      "style": "carousel",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276663241682/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8882915082411,
+      "title": "Chic Women's Outfit Sets for Everyday boutique fashion \u2014 MeeeShop US Boutique",
+      "board": "Wardrobe Must Haves",
+      "timestamp": "2026-08-19T17:56:39.233639",
+      "type": "carousel",
+      "style": "collage",
+      "template": 12,
+      "pin_url": "https://www.pinterest.com/pin/962222276663241715/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8885468463275,
+      "title": "Chic Women's Pants for Comfy casual pants \u2014 MeeeShop US Boutique",
+      "board": "Casual",
+      "timestamp": "2026-08-19T17:57:45.543242",
+      "type": "carousel",
+      "style": "card",
+      "template": 10,
+      "pin_url": "https://www.pinterest.com/pin/962222276663241749/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8782689697963,
+      "title": "Chic Women's SHIRTS & BLOUSES for Everyday boutique fashion \u2014 MeeeShop US Boutique",
+      "board": "Confident Looks",
+      "timestamp": "2026-08-19T17:58:50.960530",
+      "type": "carousel",
+      "style": "hero",
+      "template": 12,
+      "pin_url": "https://www.pinterest.com/pin/962222276663241783/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
@@ -1265,13 +1309,13 @@
     "Shirts & Tops": "2026-08-18T18:06:41.708137",
     "Blouses": "2026-08-18T21:33:04.907593",
     "Rompers_Jumpsuits &...": "2026-08-13T14:29:29.191254",
-    "Handbag #handsips": "2026-08-13T17:50:13.452142",
+    "Handbag #handsips": "2026-08-19T17:55:31.438390",
     "Trendy & Timeless...": "2026-08-18T18:04:10.590299",
     "Our Recommended...": "2026-08-18T21:31:56.180149",
     "Blouse": "2026-08-19T03:16:24.535618",
     "Wardrobe Must-Hav...": "2026-08-19T12:33:38.604091",
     "Camis & Tanks": "2026-08-14T03:31:50.753879",
-    "Wardrobe Must Haves": "2026-08-14T03:33:23.913397",
+    "Wardrobe Must Haves": "2026-08-19T17:56:39.233639",
     "Trendy Backpacks": "2026-08-14T14:18:11.269629",
     "Festive Styles": "2026-08-14T14:19:15.111870",
     "Kancan USA Jeans": "2026-08-14T14:20:49.329857",
@@ -1280,8 +1324,8 @@
     "Chic Looks": "2026-08-14T17:48:34.979373",
     "Straight Leg Jeans": "2026-08-14T17:49:39.432226",
     "Puff Sleeves Tops": "2026-08-14T22:23:42.936675",
-    "Casual": "2026-08-14T22:24:44.734345",
-    "Confident Looks": "2026-08-14T22:25:45.540190",
+    "Casual": "2026-08-19T17:57:45.543242",
+    "Confident Looks": "2026-08-19T17:58:50.960530",
     "Casual Chic Style": "2026-08-14T22:27:02.992163",
     "Farm clothes": "2026-08-15T02:16:48.607095",
     "Kimchi USA Jeans": "2026-08-15T02:18:21.641868",
@@ -1331,9 +1375,9 @@
     "Outer wear": "2026-08-18T03:05:47.307004",
     "Women's Cardigans": "2026-08-19T12:32:03.053992"
   },
-  "daily_count": 8,
-  "last_post_time": "2026-08-19T12:34:42.996179",
+  "daily_count": 12,
+  "last_post_time": "2026-08-19T17:58:50.960530",
   "board_rotation_cursor": 0,
   "last_image_style": "hero",
-  "last_template_index": 5
+  "last_template_index": 12
 }
