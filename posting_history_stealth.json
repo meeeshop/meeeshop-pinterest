@@ -886,6 +886,52 @@
       "template": 4,
       "pin_url": "https://www.pinterest.com/pin/962222276663255331/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": "561594499243",
+      "article_id": "561594499243",
+      "title": "Elevate Your Style Mastering The Latest Fashion Trends In 2026",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-08-20T06:53:41.551890",
+      "type": "blog",
+      "style": "carousel",
+      "template": 3,
+      "pin_url": "https://www.pinterest.com/pin/962222276663258764/",
+      "blog_url": "https://us.meeeshop.com/blogs/our-tips/elevate-your-style-mastering-the-latest-fashion-trends-in-2026",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8941771882667,
+      "title": "We need to create a natural, highly searchable Pinterest pin title for USA women shoppers. Product: ",
+      "board": "Woman Fashion!",
+      "timestamp": "2026-08-20T06:54:45.720264",
+      "type": "carousel",
+      "style": "collage",
+      "template": 2,
+      "pin_url": "https://www.pinterest.com/pin/962222276663258782/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8933200527531,
+      "title": "We need to create a natural, highly searchable Pinterest pin title for USA women shoppers. Product: ",
+      "board": "Stylish Finds",
+      "timestamp": "2026-08-20T06:55:52.677922",
+      "type": "carousel",
+      "style": "card",
+      "template": 3,
+      "pin_url": "https://www.pinterest.com/pin/962222276663258803/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8880718610603,
+      "title": "Deep Navy Bloom Midi Dress \u2013 Chic \u2014 MeeeShop US Boutique",
+      "board": "Confidence Ladies",
+      "timestamp": "2026-08-20T06:57:34.299256",
+      "type": "video",
+      "style": "hero",
+      "template": 10,
+      "pin_url": "https://www.pinterest.com/pin/962222276663258835/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
@@ -961,11 +1007,14 @@
     "Late Summer to Fall Teacher Style": "2026-08-17T03:07:27.270395",
     "Ootd #ootd": "2026-08-17T03:08:29.058143",
     "Style Ideas": "2026-08-20T04:02:33.989767",
-    "Mustard Seed Clothing": "2026-08-20T04:03:41.314634"
+    "Mustard Seed Clothing": "2026-08-20T04:03:41.314634",
+    "Woman Fashion!": "2026-08-20T06:54:45.720264",
+    "Stylish Finds": "2026-08-20T06:55:52.677922",
+    "Confidence Ladies": "2026-08-20T06:57:34.299256"
   },
-  "daily_count": 4,
-  "last_post_time": "2026-08-20T04:03:41.314634",
+  "daily_count": 8,
+  "last_post_time": "2026-08-20T06:57:34.299256",
   "board_rotation_cursor": 0,
   "last_image_style": "hero",
-  "last_template_index": 4
+  "last_template_index": 10
 }
