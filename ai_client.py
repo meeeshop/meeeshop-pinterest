@@ -97,9 +97,11 @@ def _clean_response_text(text: Optional[str]) -> str:
     """Clean markdown artifacts, thinking blocks, and whitespace."""
     if not text:
         return ""
-    # Strip <think>...</think> blocks from reasoning models
+    if "</think>" in text:
+        text = text.split("</think>", 1)[1]
+    elif "<think>" in text:
+        text = ""
     text = re.sub(r"<think>[\s\S]*?</think>", "", text, flags=re.IGNORECASE)
-    # If the response starts with reasoning analysis, extract clean output
     lines = text.strip().splitlines()
     cleaned_lines = []
     for line in lines:
@@ -120,6 +122,7 @@ def _call_groq(prompt: str, max_tokens: int = 400, temperature: float = 0.7) -> 
         raise RuntimeError("No GROQ_API_KEY configured")
 
     last_error = None
+    effective_tokens = max(max_tokens, 1200)
     for key_idx, key in enumerate(_GROQ_KEYS):
         key_label = "primary" if key_idx == 0 else f"fallback-{key_idx}"
         for model in _GROQ_MODELS:
@@ -130,7 +133,7 @@ def _call_groq(prompt: str, max_tokens: int = 400, temperature: float = 0.7) -> 
                     json={
                         "model": model,
                         "messages": [{"role": "user", "content": prompt}],
-                        "max_tokens": max_tokens,
+                        "max_tokens": effective_tokens,
                         "temperature": temperature,
                     },
                     timeout=25,
