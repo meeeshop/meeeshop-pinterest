@@ -1286,6 +1286,52 @@
       "template": 12,
       "pin_url": "https://www.pinterest.com/pin/962222276663241783/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8825275383979,
+      "title": "Chic Women's Fashion Outfit for Everyday boutique fashion \u2014 MeeeShop US Boutique",
+      "board": "new products",
+      "timestamp": "2026-08-20T03:01:27.570687",
+      "type": "product",
+      "style": "carousel",
+      "template": 1,
+      "pin_url": "https://www.pinterest.com/pin/962222276663254249/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8841417851051,
+      "title": "Chic Women's dress for Date night dress \u2014 MeeeShop US Boutique",
+      "board": "Short Tall dresses",
+      "timestamp": "2026-08-20T03:03:13.049948",
+      "type": "video",
+      "style": "collage",
+      "template": 5,
+      "pin_url": "https://www.pinterest.com/pin/962222276663254288/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8879310635179,
+      "title": "Chic Women's Shorts for Everyday boutique fashion \u2014 MeeeShop US Boutique",
+      "board": "Casual Chic Style",
+      "timestamp": "2026-08-20T03:04:19.984570",
+      "type": "carousel",
+      "style": "card",
+      "template": 3,
+      "pin_url": "https://www.pinterest.com/pin/962222276663254314/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": "559899672747",
+      "article_id": "559899672747",
+      "title": "Curvy Plus Size Clothing Sale",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-08-20T03:05:50.814840",
+      "type": "blog",
+      "style": "hero",
+      "template": 0,
+      "pin_url": "https://www.pinterest.com/pin/962222276663254341/",
+      "blog_url": "https://us.meeeshop.com/blogs/plus-size-curvy-clothing/curvy-plus-size-clothing-sale",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
@@ -1303,7 +1349,7 @@
     "Dressy Outfits": "2026-08-18T12:32:01.716331",
     "Must-Have Fashion...": "2026-08-18T12:30:59.972930",
     "Flares Jeans": "2026-08-19T03:18:29.944781",
-    "Short Tall dresses": "2026-08-13T09:51:59.815856",
+    "Short Tall dresses": "2026-08-20T03:03:13.049948",
     "Rompers, Jumpsuits &...": "2026-08-13T10:24:53.533944",
     "Skirts": "2026-08-19T12:34:42.996179",
     "Shirts & Tops": "2026-08-18T18:06:41.708137",
@@ -1326,7 +1372,7 @@
     "Puff Sleeves Tops": "2026-08-14T22:23:42.936675",
     "Casual": "2026-08-19T17:57:45.543242",
     "Confident Looks": "2026-08-19T17:58:50.960530",
-    "Casual Chic Style": "2026-08-14T22:27:02.992163",
+    "Casual Chic Style": "2026-08-20T03:04:19.984570",
     "Farm clothes": "2026-08-15T02:16:48.607095",
     "Kimchi USA Jeans": "2026-08-15T02:18:21.641868",
     "Wardrobe Goals": "2026-08-15T02:19:19.587022",
@@ -1348,7 +1394,7 @@
     "BFCM Deals": "2026-08-16T12:23:05.678565",
     "Poetcore Aesthetics": "2026-08-16T12:24:37.835619",
     "Emory Park Clothing": "2026-08-16T12:25:37.214806",
-    "new products": "2026-08-16T12:27:05.654435",
+    "new products": "2026-08-20T03:01:27.570687",
     "Chic & Effortless Styles": "2026-08-16T17:51:05.225594",
     "Davi & Dani Womens...": "2026-08-16T17:52:10.627401",
     "Weekend to Workout": "2026-08-16T17:53:11.788896",
@@ -1375,9 +1421,9 @@
     "Outer wear": "2026-08-18T03:05:47.307004",
     "Women's Cardigans": "2026-08-19T12:32:03.053992"
   },
-  "daily_count": 12,
-  "last_post_time": "2026-08-19T17:58:50.960530",
+  "daily_count": 4,
+  "last_post_time": "2026-08-20T03:05:50.814840",
   "board_rotation_cursor": 0,
   "last_image_style": "hero",
-  "last_template_index": 12
+  "last_template_index": 0
 }
