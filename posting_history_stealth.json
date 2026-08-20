@@ -1420,6 +1420,50 @@
       "template": 11,
       "pin_url": "https://www.pinterest.com/pin/962222276663274021/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8819278610603,
+      "title": "We need to create a natural, highly searchable Pinterest pin title for USA women shoppers. Product: ",
+      "board": "Sweaters",
+      "timestamp": "2026-08-20T21:32:57.133135",
+      "type": "carousel",
+      "style": "collage",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276663280500/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8818151456939,
+      "title": "We need a natural, highly searchable Pinterest pin title for USA women shoppers. Product: Anastasia ",
+      "board": "Puff Sleeves Tops",
+      "timestamp": "2026-08-20T21:34:03.105622",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276663280519/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8879306997931,
+      "title": "We need to produce a natural, highly searchable Pinterest pin title for USA women shoppers. Product:",
+      "board": "Farm clothes",
+      "timestamp": "2026-08-20T21:35:07.586741",
+      "type": "carousel",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276663280541/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8825884278955,
+      "title": "We need to produce a natural, highly searchable Pinterest pin title for USA women shoppers. Product:",
+      "board": "Trendy Backpacks",
+      "timestamp": "2026-08-20T21:36:14.297051",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276663280572/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
@@ -1450,18 +1494,18 @@
     "Wardrobe Must-Hav...": "2026-08-19T12:33:38.604091",
     "Camis & Tanks": "2026-08-20T12:33:25.750238",
     "Wardrobe Must Haves": "2026-08-19T17:56:39.233639",
-    "Trendy Backpacks": "2026-08-14T14:18:11.269629",
+    "Trendy Backpacks": "2026-08-20T21:36:14.297051",
     "Festive Styles": "2026-08-14T14:19:15.111870",
     "Kancan USA Jeans": "2026-08-20T15:36:28.595311",
     "Footwear": "2026-08-14T17:46:13.419439",
     "Fitted Jeans": "2026-08-20T18:03:57.898410",
     "Chic Looks": "2026-08-14T17:48:34.979373",
     "Straight Leg Jeans": "2026-08-14T17:49:39.432226",
-    "Puff Sleeves Tops": "2026-08-14T22:23:42.936675",
+    "Puff Sleeves Tops": "2026-08-20T21:34:03.105622",
     "Casual": "2026-08-19T17:57:45.543242",
     "Confident Looks": "2026-08-19T17:58:50.960530",
     "Casual Chic Style": "2026-08-20T03:04:19.984570",
-    "Farm clothes": "2026-08-15T02:16:48.607095",
+    "Farm clothes": "2026-08-20T21:35:07.586741",
     "Kimchi USA Jeans": "2026-08-15T02:18:21.641868",
     "Wardrobe Goals": "2026-08-20T15:33:32.154447",
     "Nylon backpack": "2026-08-15T12:23:08.409593",
@@ -1509,10 +1553,11 @@
     "Outer wear": "2026-08-18T03:05:47.307004",
     "Women's Cardigans": "2026-08-19T12:32:03.053992",
     "Loungewear": "2026-08-20T12:34:25.960617",
-    "Bow heels": "2026-08-20T18:00:36.882815"
+    "Bow heels": "2026-08-20T18:00:36.882815",
+    "Sweaters": "2026-08-20T21:32:57.133135"
   },
-  "daily_count": 12,
-  "last_post_time": "2026-08-20T18:03:57.898410",
+  "daily_count": 16,
+  "last_post_time": "2026-08-20T21:36:14.297051",
   "board_rotation_cursor": 0,
   "last_image_style": "carousel",
   "last_template_index": 11
