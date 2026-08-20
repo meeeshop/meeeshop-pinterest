@@ -122,7 +122,7 @@ def _call_groq(prompt: str, max_tokens: int = 400, temperature: float = 0.7) -> 
         raise RuntimeError("No GROQ_API_KEY configured")
 
     last_error = None
-    effective_tokens = max(max_tokens, 1200)
+    effective_tokens = min(max(max_tokens, 500), 1000)
     for key_idx, key in enumerate(_GROQ_KEYS):
         key_label = "primary" if key_idx == 0 else f"fallback-{key_idx}"
         for model in _GROQ_MODELS:
@@ -150,6 +150,7 @@ def _call_groq(prompt: str, max_tokens: int = 400, temperature: float = 0.7) -> 
 
                 if r.status_code in (401, 403, 429):
                     last_error = f"Groq {key_label} returned HTTP {r.status_code}"
+                    time.sleep(0.5)
                     break  # Key invalid or rate-limited, switch to fallback key
 
                 last_error = f"HTTP {r.status_code}: {r.text[:120]}"
