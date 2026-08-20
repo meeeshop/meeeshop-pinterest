@@ -1332,11 +1332,55 @@
       "pin_url": "https://www.pinterest.com/pin/962222276663254341/",
       "blog_url": "https://us.meeeshop.com/blogs/plus-size-curvy-clothing/curvy-plus-size-clothing-sale",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8919867261099,
+      "title": "We need to create a natural, highly searchable Pinterest pin title for USA women shoppers. Product: ",
+      "board": "Trends",
+      "timestamp": "2026-08-20T15:32:24.046419",
+      "type": "video",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276663269494/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8921415024811,
+      "title": "We need a natural, highly searchable Pinterest pin title for USA women shoppers. Product: Basic Bae ",
+      "board": "Wardrobe Goals",
+      "timestamp": "2026-08-20T15:33:32.154447",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276663269513/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8825275678891,
+      "title": "Pointelle Knit Puff Sleeve Top \u2013 Lightweight Casual Work Shirt for Back to School & Late Summer",
+      "board": "Camis & Tanks",
+      "timestamp": "2026-08-20T15:35:13.226164",
+      "type": "video",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276663269545/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8897138131115,
+      "title": "We need to create a natural, highly searchable Pinterest pin title for USA women shoppers. Product: ",
+      "board": "Kancan USA Jeans",
+      "timestamp": "2026-08-20T15:36:28.595311",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276663269580/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-08-18T03:03:00.147026",
-    "Trends": "2026-08-18T12:29:54.272239",
+    "Trends": "2026-08-20T15:32:24.046419",
     "Dresses": "2026-08-18T03:04:34.619148",
     "Feminine & Flowy Fits": "2026-08-18T03:01:25.470252",
     "Short fall dresses": "2026-08-18T12:33:07.657229",
@@ -1360,11 +1404,11 @@
     "Our Recommended...": "2026-08-18T21:31:56.180149",
     "Blouse": "2026-08-19T03:16:24.535618",
     "Wardrobe Must-Hav...": "2026-08-19T12:33:38.604091",
-    "Camis & Tanks": "2026-08-14T03:31:50.753879",
+    "Camis & Tanks": "2026-08-20T15:35:13.226164",
     "Wardrobe Must Haves": "2026-08-19T17:56:39.233639",
     "Trendy Backpacks": "2026-08-14T14:18:11.269629",
     "Festive Styles": "2026-08-14T14:19:15.111870",
-    "Kancan USA Jeans": "2026-08-14T14:20:49.329857",
+    "Kancan USA Jeans": "2026-08-20T15:36:28.595311",
     "Footwear": "2026-08-14T17:46:13.419439",
     "Fitted Jeans": "2026-08-14T17:47:16.729769",
     "Chic Looks": "2026-08-14T17:48:34.979373",
@@ -1375,7 +1419,7 @@
     "Casual Chic Style": "2026-08-20T03:04:19.984570",
     "Farm clothes": "2026-08-15T02:16:48.607095",
     "Kimchi USA Jeans": "2026-08-15T02:18:21.641868",
-    "Wardrobe Goals": "2026-08-15T02:19:19.587022",
+    "Wardrobe Goals": "2026-08-20T15:33:32.154447",
     "Nylon backpack": "2026-08-15T12:23:08.409593",
     "Everyday Style": "2026-08-15T12:24:44.151069",
     "Fashion Models": "2026-08-15T12:25:48.687373",
@@ -1421,9 +1465,9 @@
     "Outer wear": "2026-08-18T03:05:47.307004",
     "Women's Cardigans": "2026-08-19T12:32:03.053992"
   },
-  "daily_count": 4,
-  "last_post_time": "2026-08-20T03:05:50.814840",
+  "daily_count": 8,
+  "last_post_time": "2026-08-20T15:36:28.595311",
   "board_rotation_cursor": 0,
-  "last_image_style": "hero",
-  "last_template_index": 0
+  "last_image_style": "carousel",
+  "last_template_index": 15
 }
