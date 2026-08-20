@@ -1376,6 +1376,50 @@
       "template": 4,
       "pin_url": "https://www.pinterest.com/pin/962222276663265095/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8928205406379,
+      "title": "Green Cecilia Slingback Flats \u2013 Comfortable, Stylish Shoes for Back\u2011to\u2011School & Late Summer Outfits",
+      "board": "Bow heels",
+      "timestamp": "2026-08-20T18:00:36.882815",
+      "type": "carousel",
+      "style": "collage",
+      "template": 10,
+      "pin_url": "https://www.pinterest.com/pin/962222276663273902/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8818156568747,
+      "title": "Zelira Mini Dress \u2013 Flirty A-Line Mini for Back-to-School Date Night & Late Summer Fun",
+      "board": "Rompers_Jumpsuits &...",
+      "timestamp": "2026-08-20T18:01:41.570995",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276663273947/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8818148114603,
+      "title": "We need to produce a natural, highly searchable Pinterest pin title for USA women shoppers. Product:",
+      "board": "Everyday Style",
+      "timestamp": "2026-08-20T18:02:48.662772",
+      "type": "carousel",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276663273979/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8930419212459,
+      "title": "We need to produce a natural, highly searchable Pinterest pin title for USA women shoppers. Product:",
+      "board": "Fitted Jeans",
+      "timestamp": "2026-08-20T18:03:57.898410",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276663274021/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
@@ -1398,7 +1442,7 @@
     "Skirts": "2026-08-19T12:34:42.996179",
     "Shirts & Tops": "2026-08-18T18:06:41.708137",
     "Blouses": "2026-08-18T21:33:04.907593",
-    "Rompers_Jumpsuits &...": "2026-08-13T14:29:29.191254",
+    "Rompers_Jumpsuits &...": "2026-08-20T18:01:41.570995",
     "Handbag #handsips": "2026-08-19T17:55:31.438390",
     "Trendy & Timeless...": "2026-08-18T18:04:10.590299",
     "Our Recommended...": "2026-08-18T21:31:56.180149",
@@ -1410,7 +1454,7 @@
     "Festive Styles": "2026-08-14T14:19:15.111870",
     "Kancan USA Jeans": "2026-08-20T15:36:28.595311",
     "Footwear": "2026-08-14T17:46:13.419439",
-    "Fitted Jeans": "2026-08-14T17:47:16.729769",
+    "Fitted Jeans": "2026-08-20T18:03:57.898410",
     "Chic Looks": "2026-08-14T17:48:34.979373",
     "Straight Leg Jeans": "2026-08-14T17:49:39.432226",
     "Puff Sleeves Tops": "2026-08-14T22:23:42.936675",
@@ -1421,7 +1465,7 @@
     "Kimchi USA Jeans": "2026-08-15T02:18:21.641868",
     "Wardrobe Goals": "2026-08-20T15:33:32.154447",
     "Nylon backpack": "2026-08-15T12:23:08.409593",
-    "Everyday Style": "2026-08-15T12:24:44.151069",
+    "Everyday Style": "2026-08-20T18:02:48.662772",
     "Fashion Models": "2026-08-15T12:25:48.687373",
     "My Shop #1737732113": "2026-08-15T12:27:01.884990",
     "Shop For Holidays": "2026-08-15T17:52:01.108662",
@@ -1464,11 +1508,12 @@
     "All Pins": "2026-08-17T21:34:37.493493",
     "Outer wear": "2026-08-18T03:05:47.307004",
     "Women's Cardigans": "2026-08-19T12:32:03.053992",
-    "Loungewear": "2026-08-20T12:34:25.960617"
+    "Loungewear": "2026-08-20T12:34:25.960617",
+    "Bow heels": "2026-08-20T18:00:36.882815"
   },
-  "daily_count": 8,
-  "last_post_time": "2026-08-20T12:35:59.433834",
+  "daily_count": 12,
+  "last_post_time": "2026-08-20T18:03:57.898410",
   "board_rotation_cursor": 0,
-  "last_image_style": "hero",
-  "last_template_index": 4
+  "last_image_style": "carousel",
+  "last_template_index": 11
 }
