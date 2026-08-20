@@ -607,10 +607,10 @@ def create_pin_image(
         return None
 
 
-# ── Public aliases ────────────────────────────────────────────────────────────
-
-ALL_TEMPLATES = [0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16]
-ALL_STYLES = ["hero", "carousel", "collage", "card"]
+# High-converting templates for Pinterest: 14 (Quad Collage), 11 (Tri-Photo), 10 (Dual Split), 15 (Editorial Hero), 16 (Lookbook Hero)
+LIFESTYLE_TEMPLATES = [14, 11, 10, 15, 16, 14, 11]
+ALL_TEMPLATES = [14, 11, 10, 15, 16, 0, 1, 2, 3, 4, 5, 6, 7, 8, 12, 13]
+ALL_STYLES = ["collage", "carousel", "collage", "hero"]
 
 
 def get_next_style_and_template(
@@ -620,9 +620,10 @@ def get_next_style_and_template(
     title: str = "",
 ) -> Tuple[str, int]:
     """
-    Strictly alternate image style ('hero', 'carousel', 'collage', 'card') and template index (0..13).
-    ALL 14 templates are available to ALL 4 image styles!
-    Supports FORCE_IMAGE_STYLE env var for manual testing ('hero', 'carousel', 'collage', 'card', 'auto').
+    Pinterest 2026 Algorithmic Priority:
+    1. Heavily biases toward 'collage' (multi-image styling lookbooks) and 'carousel'.
+    2. Strict 2:3 vertical aspect ratio (1000x1500 px).
+    3. Multi-image templates (14, 11, 10, 15) for maximum engagement & saves.
     """
     b_lower = (board_name or "").lower()
     forced_style = os.getenv("FORCE_IMAGE_STYLE", "auto").strip().lower()
@@ -630,23 +631,28 @@ def get_next_style_and_template(
     if "blog" in b_lower:
         return ("card", 9)
 
-    # 1. Select style (forced or alternating)
+    # 1. Select style (favors multi-image collage & carousel)
     if forced_style and forced_style in ALL_STYLES:
         next_style = forced_style
     elif last_style and last_style in ALL_STYLES:
         last_idx = ALL_STYLES.index(last_style)
         next_style = ALL_STYLES[(last_idx + 1) % len(ALL_STYLES)]
     else:
-        next_style = ALL_STYLES[0]
+        next_style = "collage"
 
-    # 2. Select next template from ALL_TEMPLATES distinct from last_template
-    if last_template is not None and len(ALL_TEMPLATES) > 1:
-        available_templates = [t for t in ALL_TEMPLATES if t != last_template]
+    # 2. Select next template prioritizing lifestyle collages
+    if next_style in ("collage", "carousel"):
+        pool = LIFESTYLE_TEMPLATES
     else:
-        available_templates = ALL_TEMPLATES
+        pool = ALL_TEMPLATES
+
+    if last_template is not None and len(pool) > 1:
+        available_templates = [t for t in pool if t != last_template]
+    else:
+        available_templates = pool
 
     if not available_templates:
-        available_templates = ALL_TEMPLATES
+        available_templates = pool
 
     title_hash = int(hashlib.md5(title.encode()).hexdigest(), 16)
     selected_template = available_templates[title_hash % len(available_templates)]

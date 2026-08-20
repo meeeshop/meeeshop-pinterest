@@ -70,15 +70,16 @@ GTTS_LANG = "en"
 # Pinterest pin creation endpoint (web-UI flow — no OAuth app needed)
 _PINTEREST_PIN_URL = "https://www.pinterest.com/resource/PinResource/create/"
 
-# Boards preferred for video content
 VIDEO_PREFERRED_BOARDS = [
     "Trends",
+    "New",
+    "Trends",
+    "New",
+    "Best selling products",
     "Outfit Ideas",
     "Style Ideas",
     "Everyday Style",
     "Chic & Effortless Styles",
-    "New Trendy Women Apparel, Shoes, Handbags & more",
-    "Simple Outfits",
     "Ootd #ootd",
 ]
 

@@ -118,12 +118,13 @@ def post_pin(
         # Download up to 3 additional images for collages
         all_image_urls = product_data.get("all_image_urls", [])
         extra_urls = [url for url in all_image_urls if url != product_data["image_url"]][:3]
+        tmp_dir = Path(tempfile.gettempdir())
         for idx, url in enumerate(extra_urls):
-            temp_img_file = Path("/tmp") / f"pin_extra_{product_data['product_id']}_{idx}.jpg"
+            temp_img_file = tmp_dir / f"pin_extra_{product_data['product_id']}_{idx}.jpg"
             if download_image(url, temp_img_file):
                 additional_image_files.append(temp_img_file)
 
-        overlay_file = Path("/tmp") / f"pin_overlay_{product_data['product_id']}.jpg"
+        overlay_file = tmp_dir / f"pin_overlay_{product_data['product_id']}.jpg"
         overlay_image = add_text_overlay(
             str(image_file),
             title=content["pin_title"],
@@ -153,7 +154,7 @@ def post_pin(
                 category=board_name,
                 price=product_data.get("price"),
                 cta="Shop Now",
-                output_dir="/tmp",
+                output_dir=str(tmp_dir),
                 template_index=template_used,
                 additional_image_paths=[str(p) for p in additional_image_files],
                 board_name=board_name,
