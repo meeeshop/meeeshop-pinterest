@@ -1332,11 +1332,55 @@
       "pin_url": "https://www.pinterest.com/pin/962222276663254341/",
       "blog_url": "https://us.meeeshop.com/blogs/plus-size-curvy-clothing/curvy-plus-size-clothing-sale",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8905532276907,
+      "title": "We need to create a natural, highly searchable Pinterest pin title for USA women shoppers.\n\nProduct:",
+      "board": "Trends",
+      "timestamp": "2026-08-20T12:31:47.817146",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 2,
+      "pin_url": "https://www.pinterest.com/pin/962222276663264957/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8825418285227,
+      "title": "We need to create a natural, highly searchable Pinterest pin title for USA women shoppers. Product: ",
+      "board": "Camis & Tanks",
+      "timestamp": "2026-08-20T12:33:25.750238",
+      "type": "video",
+      "style": "collage",
+      "template": 3,
+      "pin_url": "https://www.pinterest.com/pin/962222276663265004/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8933166973099,
+      "title": "We need a natural, highly searchable Pinterest pin title for USA women shoppers. Product: Women\u2019s Ba",
+      "board": "Loungewear",
+      "timestamp": "2026-08-20T12:34:25.960617",
+      "type": "carousel",
+      "style": "card",
+      "template": 5,
+      "pin_url": "https://www.pinterest.com/pin/962222276663265045/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8883469189291,
+      "title": "We need to produce a Pinterest pin title, natural, highly searchable, for USA women shoppers. Produc",
+      "board": "Rompers, Jumpsuits &...",
+      "timestamp": "2026-08-20T12:35:59.433834",
+      "type": "video",
+      "style": "hero",
+      "template": 4,
+      "pin_url": "https://www.pinterest.com/pin/962222276663265095/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-08-18T03:03:00.147026",
-    "Trends": "2026-08-18T12:29:54.272239",
+    "Trends": "2026-08-20T12:31:47.817146",
     "Dresses": "2026-08-18T03:04:34.619148",
     "Feminine & Flowy Fits": "2026-08-18T03:01:25.470252",
     "Short fall dresses": "2026-08-18T12:33:07.657229",
@@ -1350,7 +1394,7 @@
     "Must-Have Fashion...": "2026-08-18T12:30:59.972930",
     "Flares Jeans": "2026-08-19T03:18:29.944781",
     "Short Tall dresses": "2026-08-20T03:03:13.049948",
-    "Rompers, Jumpsuits &...": "2026-08-13T10:24:53.533944",
+    "Rompers, Jumpsuits &...": "2026-08-20T12:35:59.433834",
     "Skirts": "2026-08-19T12:34:42.996179",
     "Shirts & Tops": "2026-08-18T18:06:41.708137",
     "Blouses": "2026-08-18T21:33:04.907593",
@@ -1360,7 +1404,7 @@
     "Our Recommended...": "2026-08-18T21:31:56.180149",
     "Blouse": "2026-08-19T03:16:24.535618",
     "Wardrobe Must-Hav...": "2026-08-19T12:33:38.604091",
-    "Camis & Tanks": "2026-08-14T03:31:50.753879",
+    "Camis & Tanks": "2026-08-20T12:33:25.750238",
     "Wardrobe Must Haves": "2026-08-19T17:56:39.233639",
     "Trendy Backpacks": "2026-08-14T14:18:11.269629",
     "Festive Styles": "2026-08-14T14:19:15.111870",
@@ -1419,11 +1463,12 @@
     "Blogs": "2026-08-17T21:33:34.238278",
     "All Pins": "2026-08-17T21:34:37.493493",
     "Outer wear": "2026-08-18T03:05:47.307004",
-    "Women's Cardigans": "2026-08-19T12:32:03.053992"
+    "Women's Cardigans": "2026-08-19T12:32:03.053992",
+    "Loungewear": "2026-08-20T12:34:25.960617"
   },
-  "daily_count": 4,
-  "last_post_time": "2026-08-20T03:05:50.814840",
+  "daily_count": 8,
+  "last_post_time": "2026-08-20T12:35:59.433834",
   "board_rotation_cursor": 0,
   "last_image_style": "hero",
-  "last_template_index": 0
+  "last_template_index": 4
 }
