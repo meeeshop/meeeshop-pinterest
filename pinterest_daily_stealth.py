@@ -471,18 +471,21 @@ def run_daily_stealth_posting(dry_run: bool = False, pins_count: Optional[int] =
     used_boards_in_run = set()
     carousel_posted_in_run = False
 
-    # Check if a high-traffic Power Board (Trends, New, etc.) has been posted to today
+    # Check if mandatory Power Boards ('Trends' and 'New') have been posted to today
     today_date = datetime.now().date()
-    power_board_posted_today = False
+    trends_posted_today = False
+    new_posted_today = False
+
     for p in history.get("posts", []):
         ts_str = p.get("timestamp")
         if ts_str:
             try:
                 if datetime.fromisoformat(ts_str.replace("Z", "+00:00")).date() == today_date:
-                    b_name = str(p.get("board", ""))
-                    if any(pb.lower() in b_name.lower() for pb in POWER_BOARDS):
-                        power_board_posted_today = True
-                        break
+                    b_name = str(p.get("board", "")).strip().lower()
+                    if b_name == "trends" or b_name.startswith("trends"):
+                        trends_posted_today = True
+                    elif b_name == "new" or b_name.startswith("new"):
+                        new_posted_today = True
             except Exception:
                 pass
 
@@ -505,14 +508,13 @@ def run_daily_stealth_posting(dry_run: bool = False, pins_count: Optional[int] =
         # Match board using MEEESHOP_BOARDS
         live_boards = [{"id": b, "name": b} for b in MEEESHOP_BOARDS]
 
-        # Guarantee at least 1 pin per day posts to a high-traffic Power Board (Trends, New, etc.)
-        if not power_board_posted_today and posted_count == 0:
-            board = select_power_board(
-                live_boards=live_boards,
-                board_last_used=history.get("board_last_used", {}),
-                used_boards_in_run=used_boards_in_run,
-            )
-            logger.info(f"🔥 Power Board Guarantee: Routing pin to high-traffic board '{board.get('name')}'")
+        # Mandatory Guarantees for "Trends" & "New" boards (at least 1 pin per calendar day each)
+        if not trends_posted_today and "Trends" not in used_boards_in_run:
+            board_name = "Trends"
+            logger.info("🔥 Mandatory Daily Guarantee: Routing pin to high-traffic 'Trends' board")
+        elif not new_posted_today and "New" not in used_boards_in_run:
+            board_name = "New"
+            logger.info("🔥 Mandatory Daily Guarantee: Routing pin to high-traffic 'New' board")
         else:
             board = select_best_lru_board(
                 product_title=formatted["title"],
@@ -521,8 +523,8 @@ def run_daily_stealth_posting(dry_run: bool = False, pins_count: Optional[int] =
                 board_last_used=history.get("board_last_used", {}),
                 used_boards_in_run=used_boards_in_run,
             )
+            board_name = board["name"] if board else "Trends"
 
-        board_name = board["name"] if board else "Trends"
         used_boards_in_run.add(board_name)
 
         # Content Mix: forced_type or Carousel-Dominant (1 Blog/day, 3 Video/day, 1 Single Product/day, rest Carousel)
@@ -622,6 +624,11 @@ def run_daily_stealth_posting(dry_run: bool = False, pins_count: Optional[int] =
         )
 
         if success:
+            if board_name.lower().startswith("trends"):
+                trends_posted_today = True
+            elif board_name.lower().startswith("new"):
+                new_posted_today = True
+
             if pin_type == "carousel":
                 carousel_posted_in_run = True
             consecutive_failures = 0
