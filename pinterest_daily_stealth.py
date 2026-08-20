@@ -218,6 +218,13 @@ def post_single_pin_stealth(
                 pin_type = "product"  # graceful fallback
 
         # ── IMAGE / BLOG PIN ────────────────────────────────────────────────────
+        extra_imgs = []
+        if pin_type != "blog":
+            for extra_idx, extra_url in enumerate(product_data.get("all_image_urls", [])[1:4]):
+                extra_path = temp_dir / f"stealth_extra_{product_data['product_id']}_{extra_idx}.jpg"
+                if download_image(extra_url, extra_path):
+                    extra_imgs.append(str(extra_path))
+
         overlay_image = add_text_overlay(
             str(image_file),
             title=content["pin_title"],
@@ -225,6 +232,7 @@ def post_single_pin_stealth(
             price=product_data.get("price") if pin_type != "blog" else None,
             output_path=str(overlay_file),
             template_index=template_used,
+            additional_image_paths=extra_imgs,
             board_name=board_name,
             image_style=style_used,
         )
@@ -252,6 +260,11 @@ def post_single_pin_stealth(
         image_file.unlink(missing_ok=True)
         if overlay_file.exists():
             overlay_file.unlink(missing_ok=True)
+        for ep in locals().get('extra_imgs', []):
+            try:
+                Path(ep).unlink(missing_ok=True)
+            except Exception:
+                pass
 
 
 def post_single_blog_pin_stealth(

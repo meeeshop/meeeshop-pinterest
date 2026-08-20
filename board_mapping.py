@@ -188,7 +188,11 @@ HIGH_TRAFFIC_BOARDS = [
 PRIORITY_BOARDS = [
     "Trends",
     "New",
+    "Trends",
+    "New",
     "Best selling products",
+    "Trends",
+    "New",
     "Outfit Ideas",
     "Ootd #ootd",
     "Style Ideas",
@@ -203,9 +207,6 @@ PRIORITY_BOARDS = [
     "Confident Looks",
     "Must-Have Fashion...",
     "Trendy & Timeless...",
-    "Poetcore Aesthetics",
-    "Vamp Romantic Styles",
-    "Off-Duty Athlete Looks",
 ]
 
 # Dedicated Blog & Editorial Boards
@@ -484,12 +485,13 @@ if DYNAMIC_BOARDS_FILE.exists():
 POWER_BOARDS = [
     "Trends",
     "New",
+    "Trends",
+    "New",
     "Best selling products",
-    "Fresh Finds New...",
-    "New Trendy Woman...",
-    "new products",
     "Outfit Ideas",
+    "Ootd #ootd",
     "Style Ideas",
+    "Everyday Style",
 ]
 
 
@@ -498,13 +500,28 @@ def select_power_board(
     board_last_used: dict = None,
     used_boards_in_run: set = None,
 ) -> Dict:
-    """Select the least recently used high-traffic Power Board (Trends, New, etc.)."""
+    """Select the least recently used high-traffic Power Board, strictly favoring Trends & New."""
     if board_last_used is None:
         board_last_used = {}
     if used_boards_in_run is None:
         used_boards_in_run = set()
     if not live_boards:
         live_boards = [{"name": b, "id": f"mock_{i}"} for i, b in enumerate(MEEESHOP_BOARDS)]
+
+    # 1. Try Tier-1 High-Follower Boards first ("Trends" and "New")
+    tier1_names = ["Trends", "New"]
+    tier1_boards = []
+    for t_name in tier1_names:
+        matched = match_live_board(t_name, live_boards)
+        if matched and matched not in tier1_boards:
+            tier1_boards.append(matched)
+
+    tier1_avail = [b for b in tier1_boards if b.get("name") not in used_boards_in_run]
+    if tier1_avail:
+        def get_last_used_t1(b_dict):
+            return board_last_used.get(b_dict.get("name", ""), "1970-01-01T00:00:00")
+        tier1_avail.sort(key=get_last_used_t1)
+        return tier1_avail[0]
 
     matched_power_boards = []
     for p_name in POWER_BOARDS:
