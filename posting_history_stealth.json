@@ -842,11 +842,55 @@
       "template": 4,
       "pin_url": "https://www.pinterest.com/pin/962222276663152587",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8941773029547,
+      "title": "Chic Women's Handbags for Everyday tote bag \u2014 MeeeShop US Boutique",
+      "board": "Trends",
+      "timestamp": "2026-08-20T03:59:58.245710",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276663255292/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8897140785323,
+      "title": "Chic Women's Pants for Comfy casual pants \u2014 MeeeShop US Boutique",
+      "board": "New",
+      "timestamp": "2026-08-20T04:01:27.899136",
+      "type": "product",
+      "style": "collage",
+      "template": 10,
+      "pin_url": "https://www.pinterest.com/pin/962222276663255306/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8786745589931,
+      "title": "Chic Women's Fashion Outfit for Everyday boutique fashion \u2014 MeeeShop US Boutique",
+      "board": "Style Ideas",
+      "timestamp": "2026-08-20T04:02:33.989767",
+      "type": "carousel",
+      "style": "card",
+      "template": 1,
+      "pin_url": "https://www.pinterest.com/pin/962222276663255313/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8880719233195,
+      "title": "Chic Women's Dresses for Date night dress \u2014 MeeeShop US Boutique",
+      "board": "Mustard Seed Clothing",
+      "timestamp": "2026-08-20T04:03:41.314634",
+      "type": "carousel",
+      "style": "hero",
+      "template": 4,
+      "pin_url": "https://www.pinterest.com/pin/962222276663255331/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-08-13T04:59:04.254165",
-    "Trends": "2026-08-13T05:31:07.154353",
+    "Trends": "2026-08-20T03:59:58.245710",
     "Dresses": "2026-08-13T05:07:16.467641",
     "Feminine & Flowy Fits": "2026-08-13T05:08:45.302648",
     "Short fall dresses": "2026-08-13T05:18:36.701706",
@@ -891,7 +935,7 @@
     "Fashion Models": "2026-08-15T12:25:48.687373",
     "My Shop #1737732113": "2026-08-15T12:27:01.884990",
     "Shop For Holidays": "2026-08-15T17:52:01.108662",
-    "New": "2026-08-15T17:53:35.322510",
+    "New": "2026-08-20T04:01:27.899136",
     "American Bazi": "2026-08-15T17:54:38.665703",
     "Cool & Casual Styles": "2026-08-15T17:55:35.872843",
     "MeeeShop's Luxe Styles": "2026-08-15T21:26:32.597254",
@@ -915,10 +959,12 @@
     "New Trendy Woman...": "2026-08-16T21:28:40.971945",
     "Outfit Ideas": "2026-08-17T03:04:48.498448",
     "Late Summer to Fall Teacher Style": "2026-08-17T03:07:27.270395",
-    "Ootd #ootd": "2026-08-17T03:08:29.058143"
+    "Ootd #ootd": "2026-08-17T03:08:29.058143",
+    "Style Ideas": "2026-08-20T04:02:33.989767",
+    "Mustard Seed Clothing": "2026-08-20T04:03:41.314634"
   },
   "daily_count": 4,
-  "last_post_time": "2026-08-17T03:08:29.058143",
+  "last_post_time": "2026-08-20T04:03:41.314634",
   "board_rotation_cursor": 0,
   "last_image_style": "hero",
   "last_template_index": 4
