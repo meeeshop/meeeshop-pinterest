@@ -2,6 +2,8 @@ from typing import List, Dict, Optional, Any
 
 # Complete list of 1-year-old Pinterest boards from MeeeShop account screenshots
 OLD_BOARDS_1Y = [
+    "Trends",
+    "New",
     "Must-Have Fashion...",
     "Feminine & Flowy Fits",
     "Confident Looks",
@@ -40,6 +42,8 @@ OLD_BOARDS_1Y = [
 
 # Complete list of MeeeShop Pinterest boards
 MEEESHOP_BOARDS = [
+    "Trends",
+    "New",
     "All Pins",
     "Fashion Models",
     "Fresh Finds New...",

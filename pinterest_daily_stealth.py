@@ -145,22 +145,37 @@ def post_single_pin_stealth(
                     slide_overlay = temp_dir / f"stealth_cslide_ovl_{product_data['product_id']}_{slide_idx}.jpg"
                     if not download_image(img_url, slide_raw):
                         continue
-                    # Slide 1: full overlay; subsequent slides: minimal overlay
-                    _, tpl = get_next_style_and_template(
-                        last_style=style_used,
-                        last_template=template_used if slide_idx == 0 else (template_used + slide_idx) % 17,
-                        board_name=board_name,
-                        title=content["pin_title"],
-                    )
+                    # Check if the image is ALREADY a pre-annotated anatomy / fit-guide image from the supplier
+                    is_pre_annotated = any(k in img_url.lower() for k in ["anatomy", "feature", "fit_guide", "infographic", "specs", "diagram", "chart"])
+                    
+                    if is_pre_annotated:
+                        logger.info(f"✨ Detected existing anatomy/fit image for slide {slide_idx + 1} — preserving as-is without overlays")
+                        slide_images.append(str(slide_raw))
+                        continue
+
+                    # Carousel Funnel Architecture:
+                    # Slide 1: Lookbook / Lifestyle Collage Hero (Template 14/15/16)
+                    # Slide 2: High-Converting Feature Breakdown / Infographic Fit Slide (Template 17)
+                    # Slide 3+: Additional lifestyle / product angles
+                    if slide_idx == 0:
+                        tpl = template_used if template_used != 17 else 14
+                        slide_style = style_used
+                    elif slide_idx == 1:
+                        tpl = 17  # Infographic Feature & Fit Breakdown slide!
+                        slide_style = "hero"
+                    else:
+                        tpl = 0
+                        slide_style = "card"
+
                     slide_out = add_text_overlay(
                         str(slide_raw),
-                        title=content["pin_title"] if slide_idx == 0 else "",
-                        cta="Shop Now" if slide_idx == 0 else "",
-                        price=product_data.get("price") if slide_idx == 0 else None,
+                        title=content["pin_title"] if slide_idx in (0, 1) else "",
+                        cta="SHOP THE LOOK → US.MEEESHOP.COM" if slide_idx == 0 else "",
+                        price=product_data.get("price") if slide_idx in (0, 1) else None,
                         output_path=str(slide_overlay),
-                        template_index=tpl if slide_idx == 0 else 0,
+                        template_index=tpl,
                         board_name=board_name,
-                        image_style="card" if (slide_idx > 0 or style_used == "collage") else style_used,
+                        image_style=slide_style,
                     ) or str(slide_raw)
                     slide_images.append(slide_out)
                     slide_raw.unlink(missing_ok=True)
@@ -182,40 +197,41 @@ def post_single_pin_stealth(
                 else:
                     logger.warning("Not enough slide images prepared, falling back to product pin")
                     pin_type = "product"
-        # ── VIDEO PIN: generate mp4 slideshow from product images ──────────────
+        # ── VIDEO PIN: rich 9:16 vertical video with animations, music, overlays & voiceover ──
         if pin_type == "video":
-            video_file = temp_dir / f"stealth_video_{product_data['product_id']}.mp4"
-            all_urls = product_data.get("all_image_urls", [])
-            # Download up to 3 product images for the slideshow
-            slide_paths = []
-            for idx, img_url in enumerate(all_urls[:3]):
-                slide_path = temp_dir / f"stealth_slide_{product_data['product_id']}_{idx}.jpg"
-                if download_image(img_url, slide_path):
-                    slide_paths.append(str(slide_path))
-            if len(slide_paths) < 2:
-                # Fallback to single image repeated
-                slide_paths = [str(image_file)] * 2
-
-            video_ok = _generate_slideshow_video(slide_paths, str(video_file), duration_per_slide=3)
-            if video_ok and video_file.exists():
-                logger.info(f"🎥 Created slideshow video: {video_file} ({len(slide_paths)} slides)")
-                success, res_msg = poster.create_pin(
-                    image_path=str(video_file),
-                    title=content["pin_title"],
-                    description=content["pin_description"],
-                    board_name=board_name,
-                    link_url=product_data["url"],
-                    alt_text=content.get("pin_alt_text"),
-                    cover_image_path=str(image_file),   # ← cover thumbnail for video
-                    dry_run=dry_run,
-                )
-                video_file.unlink(missing_ok=True)
-                for sp in slide_paths:
-                    Path(sp).unlink(missing_ok=True)
-                return success, style_used, template_used, res_msg
-            else:
-                logger.warning("Video generation failed, falling back to image pin")
-                pin_type = "product"  # graceful fallback
+            try:
+                from pinterest_video_daily import build_video, FORMATS, SOLID_BG_COLORS
+                fmt = random.choice(FORMATS)
+                shopify_prod_dict = {
+                    "title": product_data.get("title", ""),
+                    "handle": product_data.get("url", "").split("/products/")[-1].split("?")[0],
+                    "variants": [{"price": product_data.get("price", "0")}],
+                    "images": [{"src": u} for u in product_data.get("all_image_urls", [])[:4]],
+                }
+                video_res = build_video(shopify_prod_dict, fmt, SOLID_BG_COLORS, store_base_url)
+                if video_res and len(video_res) == 2 and Path(video_res[0]).exists():
+                    video_path, thumb_path = video_res
+                    logger.info(f"🎥 Generated rich 9:16 animated video pin with audio & voiceover: {video_path}")
+                    success, res_msg = poster.create_pin(
+                        image_path=str(video_path),
+                        title=content["pin_title"],
+                        description=content["pin_description"],
+                        board_name=board_name,
+                        link_url=product_data["url"],
+                        alt_text=content.get("pin_alt_text"),
+                        cover_image_path=str(thumb_path) if thumb_path and Path(thumb_path).exists() else str(image_file),
+                        dry_run=dry_run,
+                    )
+                    Path(video_path).unlink(missing_ok=True)
+                    if thumb_path:
+                        Path(thumb_path).unlink(missing_ok=True)
+                    return success, style_used, template_used, res_msg
+                else:
+                    logger.warning("Rich video generation returned None, falling back to product image pin")
+                    pin_type = "product"
+            except Exception as ve:
+                logger.warning(f"Rich video generation failed ({ve}), falling back to product image pin")
+                pin_type = "product"
 
         # ── IMAGE / BLOG PIN ────────────────────────────────────────────────────
         extra_imgs = []
@@ -478,6 +494,7 @@ def run_daily_stealth_posting(dry_run: bool = False, pins_count: Optional[int] =
 
     # Poster instance
     poster = StealthPinterestPoster(headless=True)
+    live_boards = [{"id": b, "name": b} for b in MEEESHOP_BOARDS]
 
     posted_count = 0
     consecutive_failures = 0
@@ -518,16 +535,14 @@ def run_daily_stealth_posting(dry_run: bool = False, pins_count: Optional[int] =
         if not formatted.get("image_url"):
             continue
 
-        # Match board using MEEESHOP_BOARDS
-        live_boards = [{"id": b, "name": b} for b in MEEESHOP_BOARDS]
-
-        # Mandatory Guarantees for "Trends" & "New" boards (at least 1 pin per calendar day each)
-        if not trends_posted_today and "Trends" not in used_boards_in_run:
+        # High-Follower Board Prioritization: Guarantee Trends & New in every run
+        # Board URL targets: https://www.pinterest.com/meeeshop/trends/ and https://www.pinterest.com/meeeshop/new/
+        if "Trends" not in used_boards_in_run:
             board_name = "Trends"
-            logger.info("🔥 Mandatory Daily Guarantee: Routing pin to high-traffic 'Trends' board")
-        elif not new_posted_today and "New" not in used_boards_in_run:
+            logger.info("🔥 High-Follower Priority: Routing pin to 'Trends' (https://www.pinterest.com/meeeshop/trends/)")
+        elif "New" not in used_boards_in_run:
             board_name = "New"
-            logger.info("🔥 Mandatory Daily Guarantee: Routing pin to high-traffic 'New' board")
+            logger.info("🔥 High-Follower Priority: Routing pin to 'New' (https://www.pinterest.com/meeeshop/new/)")
         else:
             board = select_best_lru_board(
                 product_title=formatted["title"],

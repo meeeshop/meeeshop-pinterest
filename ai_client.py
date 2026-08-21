@@ -94,18 +94,41 @@ _session = requests.Session()
 
 
 def _clean_response_text(text: Optional[str]) -> str:
-    """Clean markdown artifacts, thinking blocks, and whitespace."""
-    if not text:
+    """Clean markdown artifacts, thinking blocks, reasoning, unicode quirks, and whitespace."""
+    if not text or not isinstance(text, str):
         return ""
     if "</think>" in text:
         text = text.split("</think>", 1)[1]
     elif "<think>" in text:
         text = ""
     text = re.sub(r"<think>[\s\S]*?</think>", "", text, flags=re.IGNORECASE)
+    
+    # Normalize unicode hyphens, quotes, and non-breaking spaces
+    text = (
+        text.replace("\u2011", "-")
+        .replace("\u2013", "-")
+        .replace("\u2014", " — ")
+        .replace("\u00a0", " ")
+        .replace("\u2019", "'")
+        .replace("\u2018", "'")
+        .replace("\u201c", '"')
+        .replace("\u201d", '"')
+    )
+
     lines = text.strip().splitlines()
     cleaned_lines = []
     for line in lines:
-        if line.startswith("Here's a thinking process:") or line.startswith("Analysis:"):
+        l_lower = line.lower().strip()
+        if (
+            l_lower.startswith("here's a thinking process:")
+            or l_lower.startswith("analysis:")
+            or l_lower.startswith("thinking:")
+            or l_lower.startswith("we need to create")
+            or l_lower.startswith("create a natural")
+            or l_lower.startswith("here is a")
+            or l_lower.startswith("sure, here")
+            or l_lower.startswith("sure!")
+        ):
             continue
         cleaned_lines.append(line)
     return "\n".join(cleaned_lines).strip()
@@ -141,7 +164,7 @@ def _call_groq(prompt: str, max_tokens: int = 400, temperature: float = 0.7) -> 
                 if r.status_code == 200:
                     data = r.json()
                     msg = data.get("choices", [{}])[0].get("message", {})
-                    content = _clean_response_text(msg.get("content") or msg.get("reasoning"))
+                    content = _clean_response_text(msg.get("content"))
                     if content:
                         return content
 

@@ -472,7 +472,7 @@ def build_run_board_pool(
     fill_count = max(pins_this_run - 1, 1)
     cursor = advance_board_cursor(history, fill_count, len(all_names))
 
-    pool = [priority_pick]
+    pool = ["Trends", "New"]
     for i in range(fill_count):
         name = all_names[(cursor + i) % len(all_names)]
         if name not in pool:
