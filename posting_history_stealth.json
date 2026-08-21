@@ -1598,11 +1598,55 @@
       "template": 17,
       "pin_url": "https://www.pinterest.com/pin/962222276663305360/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8825274794155,
+      "title": "Lace Detailed Short Sleeve Top | MeeeShop US Boutique",
+      "board": "Trends",
+      "timestamp": "2026-08-21T21:29:50.572853",
+      "type": "carousel",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276663310503/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8841417359531,
+      "title": "Pink Utility Cargo Pants - Stylish & Practical for Back to School \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-08-21T21:31:01.218669",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276663310535/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8897138622635,
+      "title": "Women's Essential Flare Jeans - Perfect Back-to-School Style \u2014 MeeeShop",
+      "board": "Straight Leg Jeans",
+      "timestamp": "2026-08-21T21:32:10.936379",
+      "type": "carousel",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276663310553/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8941747470507,
+      "title": "Cloud Flow Sweatpants Hj701 | MeeeShop US Boutique",
+      "board": "Shop For Holidays",
+      "timestamp": "2026-08-21T21:33:29.613600",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276663310597/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-08-18T03:03:00.147026",
-    "Trends": "2026-08-21T18:01:07.751524",
+    "Trends": "2026-08-21T21:29:50.572853",
     "Dresses": "2026-08-18T03:04:34.619148",
     "Feminine & Flowy Fits": "2026-08-18T03:01:25.470252",
     "Short fall dresses": "2026-08-18T12:33:07.657229",
@@ -1634,7 +1678,7 @@
     "Footwear": "2026-08-14T17:46:13.419439",
     "Fitted Jeans": "2026-08-20T18:03:57.898410",
     "Chic Looks": "2026-08-14T17:48:34.979373",
-    "Straight Leg Jeans": "2026-08-14T17:49:39.432226",
+    "Straight Leg Jeans": "2026-08-21T21:32:10.936379",
     "Puff Sleeves Tops": "2026-08-20T21:34:03.105622",
     "Casual": "2026-08-19T17:57:45.543242",
     "Confident Looks": "2026-08-19T17:58:50.960530",
@@ -1646,8 +1690,8 @@
     "Everyday Style": "2026-08-20T18:02:48.662772",
     "Fashion Models": "2026-08-21T03:11:43.464820",
     "My Shop #1737732113": "2026-08-21T12:37:11.882612",
-    "Shop For Holidays": "2026-08-15T17:52:01.108662",
-    "New": "2026-08-21T18:02:17.879948",
+    "Shop For Holidays": "2026-08-21T21:33:29.613600",
+    "New": "2026-08-21T21:31:01.218669",
     "American Bazi": "2026-08-15T17:54:38.665703",
     "Cool & Casual Styles": "2026-08-15T17:55:35.872843",
     "MeeeShop's Luxe Styles": "2026-08-15T21:26:32.597254",
@@ -1691,9 +1735,9 @@
     "Sweaters": "2026-08-20T21:32:57.133135",
     "Luxe Clothing": "2026-08-21T18:05:31.547180"
   },
-  "daily_count": 12,
-  "last_post_time": "2026-08-21T18:05:31.547180",
+  "daily_count": 16,
+  "last_post_time": "2026-08-21T21:33:29.613600",
   "board_rotation_cursor": 0,
   "last_image_style": "carousel",
-  "last_template_index": 17
+  "last_template_index": 16
 }
