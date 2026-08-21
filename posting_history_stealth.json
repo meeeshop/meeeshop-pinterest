@@ -1376,11 +1376,35 @@
       "template": 4,
       "pin_url": "https://www.pinterest.com/pin/962222276663265095/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8740257923243,
+      "title": "Hyfve Ribbed Sleeveless Dress: Perfect Date Night Outfit \u2014 MeeeShop",
+      "board": "Trends",
+      "timestamp": "2026-08-21T04:08:48.832793",
+      "type": "carousel",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276663288654/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": "559571533995",
+      "article_id": "559571533995",
+      "title": "Will Womens Jeans Ever Go Out Of Fashion The Truth",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-08-21T04:10:28.384637",
+      "type": "blog",
+      "style": "carousel",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276663288689/",
+      "blog_url": "https://us.meeeshop.com/blogs/jeans-style-guide/will-womens-jeans-ever-go-out-of-fashion-the-truth",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-08-18T03:03:00.147026",
-    "Trends": "2026-08-20T12:31:47.817146",
+    "Trends": "2026-08-21T04:08:48.832793",
     "Dresses": "2026-08-18T03:04:34.619148",
     "Feminine & Flowy Fits": "2026-08-18T03:01:25.470252",
     "Short fall dresses": "2026-08-18T12:33:07.657229",
@@ -1466,9 +1490,9 @@
     "Women's Cardigans": "2026-08-19T12:32:03.053992",
     "Loungewear": "2026-08-20T12:34:25.960617"
   },
-  "daily_count": 8,
-  "last_post_time": "2026-08-20T12:35:59.433834",
+  "daily_count": 2,
+  "last_post_time": "2026-08-21T04:10:28.384637",
   "board_rotation_cursor": 0,
-  "last_image_style": "hero",
-  "last_template_index": 4
+  "last_image_style": "carousel",
+  "last_template_index": 15
 }
