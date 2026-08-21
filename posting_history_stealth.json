@@ -1530,11 +1530,22 @@
       "template": 17,
       "pin_url": "https://www.pinterest.com/pin/962222276663298138/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8882915311787,
+      "title": "Sleeveless Front Knot Ruched Cut Out Long Dress | MeeeShop US Boutique",
+      "board": "Trends",
+      "timestamp": "2026-08-21T13:36:17.231060",
+      "type": "video",
+      "style": "collage",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276663298597/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-08-18T03:03:00.147026",
-    "Trends": "2026-08-21T13:18:01.530725",
+    "Trends": "2026-08-21T13:36:17.231060",
     "Dresses": "2026-08-18T03:04:34.619148",
     "Feminine & Flowy Fits": "2026-08-18T03:01:25.470252",
     "Short fall dresses": "2026-08-18T12:33:07.657229",
@@ -1622,9 +1633,9 @@
     "Bow heels": "2026-08-20T18:00:36.882815",
     "Sweaters": "2026-08-20T21:32:57.133135"
   },
-  "daily_count": 6,
-  "last_post_time": "2026-08-21T13:18:01.530725",
+  "daily_count": 7,
+  "last_post_time": "2026-08-21T13:36:17.231060",
   "board_rotation_cursor": 0,
-  "last_image_style": "carousel",
-  "last_template_index": 17
+  "last_image_style": "collage",
+  "last_template_index": 11
 }
