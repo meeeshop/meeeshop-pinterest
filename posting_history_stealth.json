@@ -1587,11 +1587,44 @@
       "template": 11,
       "pin_url": "https://www.pinterest.com/pin/962222276663290555/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8906720247979,
+      "title": "Ruffle Sweater Dress: Cozy Chic Date Night Outfit Ideas \u2014 MeeeShop",
+      "board": "Trends",
+      "timestamp": "2026-08-21T06:11:18.948269",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276663290695/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8880718741675,
+      "title": "Tapestry Bloom Midi Skirt | Everyday Boutique Fashion Skirt | Floral Print Women's Midi Skirt",
+      "board": "New",
+      "timestamp": "2026-08-21T06:12:37.947032",
+      "type": "carousel",
+      "style": "collage",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276663290713/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8825418481835,
+      "title": "First, the product name is \"Sweet Note Moment Woven Top\". I must include this exact phrase in the ti",
+      "board": "Shop For Holidays",
+      "timestamp": "2026-08-21T06:13:55.966997",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276663290729/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-08-18T03:03:00.147026",
-    "Trends": "2026-08-21T05:54:28.131414",
+    "Trends": "2026-08-21T06:11:18.948269",
     "Dresses": "2026-08-18T03:04:34.619148",
     "Feminine & Flowy Fits": "2026-08-18T03:01:25.470252",
     "Short fall dresses": "2026-08-18T12:33:07.657229",
@@ -1635,8 +1668,8 @@
     "Everyday Style": "2026-08-21T04:57:49.544898",
     "Fashion Models": "2026-08-21T05:37:22.114909",
     "My Shop #1737732113": "2026-08-21T05:57:33.481377",
-    "Shop For Holidays": "2026-08-15T17:52:01.108662",
-    "New": "2026-08-21T05:56:08.637752",
+    "Shop For Holidays": "2026-08-21T06:13:55.966997",
+    "New": "2026-08-21T06:12:37.947032",
     "American Bazi": "2026-08-15T17:54:38.665703",
     "Cool & Casual Styles": "2026-08-15T17:55:35.872843",
     "MeeeShop's Luxe Styles": "2026-08-15T21:26:32.597254",
@@ -1678,9 +1711,9 @@
     "Loungewear": "2026-08-20T12:34:25.960617",
     "Sweaters": "2026-08-21T05:58:50.354308"
   },
-  "daily_count": 19,
-  "last_post_time": "2026-08-21T05:58:50.354308",
+  "daily_count": 22,
+  "last_post_time": "2026-08-21T06:13:55.966997",
   "board_rotation_cursor": 0,
-  "last_image_style": "collage",
-  "last_template_index": 11
+  "last_image_style": "carousel",
+  "last_template_index": 15
 }
