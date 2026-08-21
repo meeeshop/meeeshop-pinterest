@@ -56,15 +56,13 @@ OPENROUTER_KEY = _OPENROUTER_KEYS[0] if _OPENROUTER_KEYS else ""
 _GROQ_URL = "https://api.groq.com/openai/v1/chat/completions"
 _OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
 
-# Active and validated model pools
 # Active and validated high-limit model pools
 _GROQ_MODELS = [
-    "llama-3.3-70b-versatile",
-    "llama-3.1-8b-instant",
-    "gemma2-9b-it",
-    "mixtral-8x7b-32768",
     "openai/gpt-oss-120b",
     "openai/gpt-oss-20b",
+    "qwen/qwen3.6-27b",
+    "groq/compound",
+    "groq/compound-mini",
 ]
 
 _OPENROUTER_FREE_MODELS = [
@@ -97,10 +95,9 @@ def _clean_response_text(text: Optional[str]) -> str:
         return ""
     if "</think>" in text:
         text = text.split("</think>", 1)[1]
-    elif "<think>" in text:
-        text = ""
-    text = re.sub(r"<think>[\s\S]*?</think>", "", text, flags=re.IGNORECASE)
-    
+    else:
+        text = re.sub(r"<think>[\s\S]*?</think>", "", text, flags=re.IGNORECASE)
+
     # Normalize unicode hyphens, quotes, and non-breaking spaces
     text = (
         text.replace("\u2011", "-")
@@ -123,7 +120,6 @@ def _clean_response_text(text: Optional[str]) -> str:
             or l_lower.startswith("thinking:")
             or l_lower.startswith("we need to create")
             or l_lower.startswith("create a natural")
-            or l_lower.startswith("here is a")
             or l_lower.startswith("sure, here")
             or l_lower.startswith("sure!")
         ):
@@ -143,7 +139,7 @@ def _call_groq(prompt: str, max_tokens: int = 400, temperature: float = 0.7) -> 
         raise RuntimeError("No GROQ_API_KEY configured")
 
     last_error = None
-    effective_tokens = min(max(max_tokens, 500), 1000)
+    effective_tokens = max(max_tokens, 2500)
     for key_idx, key in enumerate(_GROQ_KEYS):
         key_label = "primary" if key_idx == 0 else f"fallback-{key_idx}"
         for model in _GROQ_MODELS:
