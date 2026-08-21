@@ -328,15 +328,26 @@ def generate_product_fit_highlights(product_data: Dict[str, Any]) -> Dict[str, A
 # ── Package ───────────────────────────────────────────────────────────────────
 
 def generate_content_package(product_data: Dict[str, Any], board_name: str) -> Dict[str, Any]:
-    """Complete Pinterest content package — V2 Overhauled"""
+    """Complete Pinterest content package — V2 Overhauled with smart pacing"""
+    import time
     logger.info(f"[V2 Overhaul] Generating content for: {product_data.get('title', 'Unknown')}")
+    title = generate_pinterest_title(product_data)
+    time.sleep(0.4)
+    desc = generate_pinterest_description(product_data, board_name)
+    time.sleep(0.4)
+    alt = generate_alt_text(product_data)
+    time.sleep(0.3)
+    tags = generate_hashtags(product_data, board_name)
+    kw = generate_keywords_for_seo(product_data)
+    highlights = generate_product_fit_highlights(product_data)
+
     return {
-        "pin_title":       generate_pinterest_title(product_data),
-        "pin_description": generate_pinterest_description(product_data, board_name),
-        "pin_alt_text":    generate_alt_text(product_data),
-        "hashtags":        generate_hashtags(product_data, board_name),
-        "keywords":        generate_keywords_for_seo(product_data),
-        "fit_highlights":  generate_product_fit_highlights(product_data),
+        "pin_title":       title,
+        "pin_description": desc,
+        "pin_alt_text":    alt,
+        "hashtags":        tags,
+        "keywords":        kw,
+        "fit_highlights":  highlights,
     }
 
 

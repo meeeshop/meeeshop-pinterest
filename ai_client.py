@@ -57,35 +57,33 @@ _GROQ_URL = "https://api.groq.com/openai/v1/chat/completions"
 _OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
 
 # Active and validated model pools
+# Active and validated high-limit model pools
 _GROQ_MODELS = [
-    "openai/gpt-oss-120b",
-    "openai/gpt-oss-20b",
-    "qwen/qwen3.6-27b",
-    "groq/compound-mini",
-    "groq/compound",
     "llama-3.3-70b-versatile",
     "llama-3.1-8b-instant",
+    "gemma2-9b-it",
+    "mixtral-8x7b-32768",
+    "openai/gpt-oss-120b",
+    "openai/gpt-oss-20b",
 ]
 
 _OPENROUTER_FREE_MODELS = [
+    "meta-llama/llama-3.3-70b-instruct:free",
+    "meta-llama/llama-3.1-8b-instruct:free",
+    "google/gemini-2.0-flash-lite:free",
+    "mistralai/mistral-7b-instruct:free",
+    "qwen/qwen-2.5-72b-instruct:free",
     "openrouter/free",
-    "poolside/laguna-s-2.1:free",
-    "poolside/laguna-xs-2.1:free",
     "google/gemma-4-26b-a4b-it:free",
-    "google/gemma-4-31b-it:free",
     "openai/gpt-oss-20b:free",
-    "nvidia/nemotron-3-nano-30b-a3b:free",
-    "z-ai/glm-5.2:free",
-    "liquid/lfm-2.5-2.6b:free",
-    "dots-studio/dots-3-note-preview:free",
 ]
 
 _OPENROUTER_MODEL_CATEGORIES = {
     "seo": [
+        "meta-llama/llama-3.3-70b-instruct:free",
+        "google/gemini-2.0-flash-lite:free",
+        "mistralai/mistral-7b-instruct:free",
         "openrouter/free",
-        "poolside/laguna-s-2.1:free",
-        "google/gemma-4-26b-a4b-it:free",
-        "openai/gpt-oss-20b:free",
     ],
     "general": _OPENROUTER_FREE_MODELS,
 }
@@ -171,10 +169,14 @@ def _call_groq(prompt: str, max_tokens: int = 400, temperature: float = 0.7) -> 
                 if r.status_code == 404:
                     continue  # Model not found on Groq, try next model
 
-                if r.status_code in (401, 403, 429):
+                if r.status_code == 429:
+                    last_error = f"Groq {key_label} returned HTTP 429 (rate limit on {model})"
+                    time.sleep(1.5)  # Short cooldown and try next model
+                    continue
+
+                if r.status_code in (401, 403):
                     last_error = f"Groq {key_label} returned HTTP {r.status_code}"
-                    time.sleep(0.5)
-                    break  # Key invalid or rate-limited, switch to fallback key
+                    break  # Key invalid, switch to fallback key
 
                 last_error = f"HTTP {r.status_code}: {r.text[:120]}"
             except Exception as e:
@@ -219,7 +221,7 @@ def _call_openrouter(prompt: str, max_tokens: int = 400, temperature: float = 0.
                     choices = data.get("choices", [])
                     if choices:
                         msg = choices[0].get("message", {})
-                        content = _clean_response_text(msg.get("content") or msg.get("reasoning"))
+                        content = _clean_response_text(msg.get("content"))
                         if content:
                             return content
 
@@ -231,7 +233,8 @@ def _call_openrouter(prompt: str, max_tokens: int = 400, temperature: float = 0.
                     break  # Key invalid, switch to next key
 
                 if r.status_code == 429:
-                    continue  # Specific free model rate-limited upstream, try next free model
+                    time.sleep(1.0)
+                    continue  # Rate-limited on this free model, try next free model
 
                 last_error = f"HTTP {r.status_code}: {r.text[:120]}"
             except Exception as e:

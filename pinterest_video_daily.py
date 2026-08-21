@@ -89,8 +89,8 @@ VIDEO_PREFERRED_BOARDS = [
 
 VIDEO_W, VIDEO_H  = 1080, 1920
 FPS               = 30
-CLIP_DURATION     = 1.0    # seconds per product image slide
-VOICEOVER_DURATION = 4     # max voiceover length in seconds
+CLIP_DURATION     = 2.8    # seconds per product image slide (allows shoppers to read fit/anatomy details)
+VOICEOVER_DURATION = 11    # synchronized voiceover duration in seconds
 OUT_DIR           = Path(__file__).parent / "generated_videos"
 OUT_DIR.mkdir(exist_ok=True)
 
