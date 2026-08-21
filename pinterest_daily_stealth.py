@@ -145,6 +145,14 @@ def post_single_pin_stealth(
                     slide_overlay = temp_dir / f"stealth_cslide_ovl_{product_data['product_id']}_{slide_idx}.jpg"
                     if not download_image(img_url, slide_raw):
                         continue
+                    # Check if the image is ALREADY a pre-annotated anatomy / fit-guide image from the supplier
+                    is_pre_annotated = any(k in img_url.lower() for k in ["anatomy", "feature", "fit_guide", "infographic", "specs", "diagram", "chart"])
+                    
+                    if is_pre_annotated:
+                        logger.info(f"✨ Detected existing anatomy/fit image for slide {slide_idx + 1} — preserving as-is without overlays")
+                        slide_images.append(str(slide_raw))
+                        continue
+
                     # Carousel Funnel Architecture:
                     # Slide 1: Lookbook / Lifestyle Collage Hero (Template 14/15/16)
                     # Slide 2: High-Converting Feature Breakdown / Infographic Fit Slide (Template 17)

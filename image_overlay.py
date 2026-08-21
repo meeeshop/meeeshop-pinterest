@@ -343,7 +343,7 @@ def _draw_smooth_curved_arrow(
     start_pt: Tuple[int, int],
     control_pt: Tuple[int, int],
     end_pt: Tuple[int, int],
-    color: Tuple[int, int, int] = (20, 20, 25),
+    color: Tuple[int, int, int] = (255, 255, 255),
     width: int = 3,
 ):
     """Draw smooth quadratic bezier curve with a crisp arrowhead pointing to the garment."""
@@ -352,15 +352,14 @@ def _draw_smooth_curved_arrow(
     points = []
     for i in range(num_steps + 1):
         t = i / float(num_steps)
-        # B(t) = (1-t)^2 * P0 + 2(1-t)t * P1 + t^2 * P2
         x = ((1 - t) ** 2) * start_pt[0] + 2 * (1 - t) * t * control_pt[0] + (t ** 2) * end_pt[0]
         y = ((1 - t) ** 2) * start_pt[1] + 2 * (1 - t) * t * control_pt[1] + (t ** 2) * end_pt[1]
         points.append((x, y))
 
-    # Draw white halo underneath for guaranteed 100% contrast on any background
-    for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+    # Draw dark shadow contour underneath for guaranteed 100% contrast
+    for dx, dy in [(-2, 0), (2, 0), (0, -2), (0, 2), (-1, -1), (1, 1), (-1, 1), (1, -1)]:
         halo_pts = [(x + dx, y + dy) for x, y in points]
-        draw.line(halo_pts, fill=(255, 255, 255, 220), width=width + 2)
+        draw.line(halo_pts, fill=(10, 10, 14, 220), width=width + 2)
 
     draw.line(points, fill=color, width=width)
 
@@ -374,6 +373,10 @@ def _draw_smooth_curved_arrow(
 
     a1 = (end_pt[0] - arrow_len * math.cos(angle - arrow_angle), end_pt[1] - arrow_len * math.sin(angle - arrow_angle))
     a2 = (end_pt[0] - arrow_len * math.cos(angle + arrow_angle), end_pt[1] - arrow_len * math.sin(angle + arrow_angle))
+
+    # Draw dark halo for arrowhead
+    for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+        draw.polygon([(end_pt[0] + dx, end_pt[1] + dy), (a1[0] + dx, a1[1] + dy), (a2[0] + dx, a2[1] + dy)], fill=(10, 10, 14, 220))
 
     draw.polygon([end_pt, a1, a2], fill=color)
 
@@ -394,8 +397,8 @@ def _render_feature_breakdown_pin(
 ):
     """
     Renders high-converting 'Anatomy of a Perfect Fit' Infographic Pin:
-    - Circular fabric/craftsmanship zoom-in inset
-    - Benefit-driven callouts with curved arrows pointing to garment details
+    - Circular fabric/craftsmanship zoom-in inset with white border
+    - Frosted dark glass pills with pure white & cream benefit callouts (eliminating muddy black text)
     - Left-side quick feature badges (Figure Enhancer, Stretchy Fabric, Super Soft)
     - Bold high-visibility bottom anchor bar with CTA
     """
@@ -415,17 +418,16 @@ def _render_feature_breakdown_pin(
         alpha = int(210 * (progress ** 1.35))
         ov_draw.line([(0, vignette_start + i), (PIN_W, vignette_start + i)], fill=(10, 10, 14, alpha))
 
-    # Top vignette
-    for i in range(130):
-        progress = 1.0 - (i / 130.0)
-        alpha = int(80 * (progress ** 1.5))
+    # Top subtle vignette
+    for i in range(140):
+        progress = 1.0 - (i / 140.0)
+        alpha = int(95 * (progress ** 1.5))
         ov_draw.line([(0, i), (PIN_W, i)], fill=(10, 10, 14, alpha))
 
     CREAM_WHITE    = (255, 255, 255, 255)
     CHAMPAGNE_GOLD = (255, 230, 130, 255)
     WARM_OAT       = (255, 245, 225, 255)
-    FROSTED_GLASS  = (15, 15, 20, 210)
-    DARK_TEXT      = (20, 20, 25, 255)
+    FROSTED_GLASS  = (15, 15, 20, 205)       # 80% opacity luxury dark glass
     SHADOW_DARK    = (5, 5, 8, 250)
 
     def draw_bold_shadowed(d, pos, text, font, fill=CREAM_WHITE, anchor=None):
@@ -441,14 +443,57 @@ def _render_feature_breakdown_pin(
         else:
             d.text((x, y), text, fill=fill, font=font)
 
+    def draw_callout_pill(d, x, y, title_text, desc_text, align="left"):
+        """Draw a frosted glass pill containing bold white title and warm cream description."""
+        t_font = _get_font(24, bold=True)
+        d_font = _get_font(20, bold=False)
+        
+        t_box = t_font.getbbox(title_text)
+        d_box = d_font.getbbox(desc_text)
+        
+        t_w = t_box[2] - t_box[0]
+        d_w = d_box[2] - d_box[0]
+        max_w = max(t_w, d_w)
+        
+        pad_x, pad_y = 20, 12
+        card_w = max_w + pad_x * 2
+        card_h = (t_box[3] - t_box[1]) + (d_box[3] - d_box[1]) + pad_y * 2 + 6
+        
+        if align == "right":
+            rx1 = x - card_w
+            rx2 = x
+        elif align == "center":
+            rx1 = x - card_w // 2
+            rx2 = x + card_w // 2
+        else:
+            rx1 = x
+            rx2 = x + card_w
+            
+        ry1 = y
+        ry2 = y + card_h
+        
+        _draw_rounded_rect(d, (rx1, ry1, rx2, ry2), r=14, fill=FROSTED_GLASS)
+        
+        if align == "right":
+            d.text((rx2 - pad_x, ry1 + pad_y), title_text, fill=CREAM_WHITE, font=t_font, anchor="ra")
+            d.text((rx2 - pad_x, ry1 + pad_y + 28), desc_text, fill=WARM_OAT, font=d_font, anchor="ra")
+        elif align == "center":
+            d.text((rx1 + card_w // 2, ry1 + pad_y), title_text, fill=CREAM_WHITE, font=t_font, anchor="ma")
+            d.text((rx1 + card_w // 2, ry1 + pad_y + 28), desc_text, fill=WARM_OAT, font=d_font, anchor="ma")
+        else:
+            d.text((rx1 + pad_x, ry1 + pad_y), title_text, fill=CREAM_WHITE, font=t_font)
+            d.text((rx1 + pad_x, ry1 + pad_y + 28), desc_text, fill=WARM_OAT, font=d_font)
+            
+        return (rx1, ry1, rx2, ry2)
+
     if not highlights:
         highlights = generate_product_fit_highlights({"title": title, "product_type": category})
 
-    # 1. Top-Left Headline ("A NEW KIND OF LUXE")
+    # 1. Top-Left Headline ("A NEW KIND OF LUXE" in Champagne Gold / White)
     h_sub = highlights.get("top_header_sub", "A NEW KIND OF")
     h_main = highlights.get("top_header_main", "LUXE")
-    draw_bold_shadowed(ov_draw, (45, 40), h_sub, _get_font(20, bold=True), fill=DARK_TEXT)
-    draw_bold_shadowed(ov_draw, (45, 62), h_main, _get_font(52, bold=True), fill=DARK_TEXT)
+    draw_bold_shadowed(ov_draw, (45, 40), h_sub, _get_font(20, bold=True), fill=CHAMPAGNE_GOLD)
+    draw_bold_shadowed(ov_draw, (45, 65), h_main, _get_font(52, bold=True), fill=CREAM_WHITE)
 
     # 2. Top-Right Trust Badge Pill
     tb_text = f"★  {(trust_badge or 'FREE US SHIPPING').upper()}"
@@ -468,7 +513,6 @@ def _render_feature_breakdown_pin(
     zoom_r = zoom_dia // 2
     zx, zy = 240, 310
     
-    # Extract zoom crop from photo2 (variant shot) or zoomed center of photo
     if photo2 is not None:
         zoom_src = photo2
     else:
@@ -479,57 +523,45 @@ def _render_feature_breakdown_pin(
     
     zoom_fit = _boost(_fit_image(zoom_src, zoom_dia, zoom_dia))
     
-    # Circular mask
     mask = Image.new("L", (zoom_dia, zoom_dia), 0)
     ImageDraw.Draw(mask).ellipse((0, 0, zoom_dia, zoom_dia), fill=255)
-    
-    # Paste onto canvas
     canvas.paste(zoom_fit, (zx - zoom_r, zy - zoom_r), mask)
-    
-    # Draw circular white border
     ImageDraw.Draw(canvas).ellipse((zx - zoom_r - 2, zy - zoom_r - 2, zx + zoom_r + 2, zy + zoom_r + 2), outline=(255, 255, 255), width=5)
 
-    # 4. Feature Callout 1 (Right Waist / Panels)
+    # 4. Feature Callout 1 (Right Waist / Panels) — Frosted Pill with White/Cream Text
     c1 = highlights.get("callout_waist", {})
     t1_title = c1.get("title", "Contour waistbands")
     t1_desc = c1.get("desc", "and slimming panels that hug your body")
-    c1_f_title = _get_font(25, bold=True)
-    c1_f_desc = _get_font(21, bold=False)
-    draw_bold_shadowed(ov_draw, (680, 330), t1_title, c1_f_title, fill=DARK_TEXT)
-    draw_bold_shadowed(ov_draw, (680, 360), t1_desc, c1_f_desc, fill=DARK_TEXT)
-    _draw_smooth_curved_arrow(ov_draw, start_pt=(675, 410), control_pt=(685, 420), end_pt=(660, 422), color=DARK_TEXT)
+    pill1_rect = draw_callout_pill(ov_draw, 520, 320, t1_title, t1_desc, align="left")
+    _draw_smooth_curved_arrow(ov_draw, start_pt=(pill1_rect[0] + 40, pill1_rect[3]), control_pt=(580, 420), end_pt=(560, 430), color=(255, 255, 255))
 
     # 5. Feature Callout 2 (Center Left / Detail Zoom)
     c2 = highlights.get("callout_zoom", {})
     t2_title = c2.get("title", "Heart-shaped yoke")
     t2_desc = c2.get("desc", "gives that natural lift")
-    draw_bold_shadowed(ov_draw, (220, 415), t2_title, c1_f_title, fill=DARK_TEXT, anchor="mt")
-    draw_bold_shadowed(ov_draw, (220, 445), t2_desc, c1_f_desc, fill=DARK_TEXT, anchor="mt")
-    _draw_smooth_curved_arrow(ov_draw, start_pt=(330, 455), control_pt=(365, 470), end_pt=(405, 465), color=DARK_TEXT)
+    pill2_rect = draw_callout_pill(ov_draw, 240, 425, t2_title, t2_desc, align="center")
+    _draw_smooth_curved_arrow(ov_draw, start_pt=(pill2_rect[1] + 30, pill2_rect[3]), control_pt=(360, 485), end_pt=(405, 475), color=(255, 255, 255))
 
     # 6. Feature Callout 3 (Left Pocket / Silhouette)
     c3 = highlights.get("callout_pocket", {})
     t3_title = c3.get("title", "Short back pockets")
     t3_desc = c3.get("desc", "make your silhouette look fuller")
-    draw_bold_shadowed(ov_draw, (280, 525), t3_title, c1_f_title, fill=DARK_TEXT, anchor="rt")
-    draw_bold_shadowed(ov_draw, (280, 555), t3_desc, c1_f_desc, fill=DARK_TEXT, anchor="rt")
-    _draw_smooth_curved_arrow(ov_draw, start_pt=(335, 535), control_pt=(380, 530), end_pt=(400, 515), color=DARK_TEXT)
+    pill3_rect = draw_callout_pill(ov_draw, 420, 535, t3_title, t3_desc, align="right")
+    _draw_smooth_curved_arrow(ov_draw, start_pt=(pill3_rect[2], pill3_rect[1] + 25), control_pt=(450, 545), end_pt=(480, 530), color=(255, 255, 255))
 
     # 7. Feature Callout 4 (Lower Leg / Stretch)
     c4 = highlights.get("callout_fabric", {})
     t4_title = c4.get("title", "2% Spandex blend.")
     t4_desc = c4.get("desc", "Hugs your curves and moves with you.")
-    draw_bold_shadowed(ov_draw, (730, 725), t4_title, c1_f_title, fill=DARK_TEXT)
-    draw_bold_shadowed(ov_draw, (730, 755), t4_desc, c1_f_desc, fill=DARK_TEXT)
-    _draw_smooth_curved_arrow(ov_draw, start_pt=(630, 765), control_pt=(600, 760), end_pt=(570, 755), color=DARK_TEXT)
+    pill4_rect = draw_callout_pill(ov_draw, 520, 730, t4_title, t4_desc, align="left")
+    _draw_smooth_curved_arrow(ov_draw, start_pt=(pill4_rect[0] + 30, pill4_rect[1] + 20), control_pt=(500, 755), end_pt=(470, 750), color=(255, 255, 255))
 
-    # 8. Left Feature Attribute Badges (Column at x=20, y=940..1280)
+    # 8. Left Feature Attribute Badges (Column at x=20, y=930..1280)
     badges = highlights.get("badges", ["Figure Enhancer", "Stretchy Fabric", "Super Soft"])
     b_y = 930
     for b_text in badges[:3]:
         card_w, card_h = 135, 105
-        _draw_rounded_rect(ov_draw, (20, b_y, 20 + card_w, b_y + card_h), r=16, fill=(15, 15, 20, 215))
-        # Icon / text
+        _draw_rounded_rect(ov_draw, (20, b_y, 20 + card_w, b_y + card_h), r=16, fill=FROSTED_GLASS)
         ov_draw.text((20 + card_w // 2, b_y + 20), "★", fill=CHAMPAGNE_GOLD, font=_get_font(26, bold=True), anchor="mt")
         b_lines = _wrap_text(b_text, _get_font(18, bold=True), max_width=card_w - 10)
         for li, line in enumerate(b_lines[:2]):
@@ -541,7 +573,6 @@ def _render_feature_breakdown_pin(
     hook_font = _get_font(25, bold=True)
     draw_bold_shadowed(ov_draw, (PIN_W // 2, 1165), hook_text, hook_font, fill=CHAMPAGNE_GOLD, anchor="mt")
 
-    # Product Title & Price
     clean_title = (title or "").strip()
     for leak in ["we need", "create a", "product:", "type:"]:
         if leak in clean_title.lower():
