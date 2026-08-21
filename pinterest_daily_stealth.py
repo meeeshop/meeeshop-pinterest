@@ -182,40 +182,41 @@ def post_single_pin_stealth(
                 else:
                     logger.warning("Not enough slide images prepared, falling back to product pin")
                     pin_type = "product"
-        # ── VIDEO PIN: generate mp4 slideshow from product images ──────────────
+        # ── VIDEO PIN: rich 9:16 vertical video with animations, music, overlays & voiceover ──
         if pin_type == "video":
-            video_file = temp_dir / f"stealth_video_{product_data['product_id']}.mp4"
-            all_urls = product_data.get("all_image_urls", [])
-            # Download up to 3 product images for the slideshow
-            slide_paths = []
-            for idx, img_url in enumerate(all_urls[:3]):
-                slide_path = temp_dir / f"stealth_slide_{product_data['product_id']}_{idx}.jpg"
-                if download_image(img_url, slide_path):
-                    slide_paths.append(str(slide_path))
-            if len(slide_paths) < 2:
-                # Fallback to single image repeated
-                slide_paths = [str(image_file)] * 2
-
-            video_ok = _generate_slideshow_video(slide_paths, str(video_file), duration_per_slide=3)
-            if video_ok and video_file.exists():
-                logger.info(f"🎥 Created slideshow video: {video_file} ({len(slide_paths)} slides)")
-                success, res_msg = poster.create_pin(
-                    image_path=str(video_file),
-                    title=content["pin_title"],
-                    description=content["pin_description"],
-                    board_name=board_name,
-                    link_url=product_data["url"],
-                    alt_text=content.get("pin_alt_text"),
-                    cover_image_path=str(image_file),   # ← cover thumbnail for video
-                    dry_run=dry_run,
-                )
-                video_file.unlink(missing_ok=True)
-                for sp in slide_paths:
-                    Path(sp).unlink(missing_ok=True)
-                return success, style_used, template_used, res_msg
-            else:
-                logger.warning("Video generation failed, falling back to image pin")
-                pin_type = "product"  # graceful fallback
+            try:
+                from pinterest_video_daily import build_video, FORMATS, SOLID_BG_COLORS
+                fmt = random.choice(FORMATS)
+                shopify_prod_dict = {
+                    "title": product_data.get("title", ""),
+                    "handle": product_data.get("url", "").split("/products/")[-1].split("?")[0],
+                    "variants": [{"price": product_data.get("price", "0")}],
+                    "images": [{"src": u} for u in product_data.get("all_image_urls", [])[:4]],
+                }
+                video_res = build_video(shopify_prod_dict, fmt, SOLID_BG_COLORS, store_base_url)
+                if video_res and len(video_res) == 2 and Path(video_res[0]).exists():
+                    video_path, thumb_path = video_res
+                    logger.info(f"🎥 Generated rich 9:16 animated video pin with audio & voiceover: {video_path}")
+                    success, res_msg = poster.create_pin(
+                        image_path=str(video_path),
+                        title=content["pin_title"],
+                        description=content["pin_description"],
+                        board_name=board_name,
+                        link_url=product_data["url"],
+                        alt_text=content.get("pin_alt_text"),
+                        cover_image_path=str(thumb_path) if thumb_path and Path(thumb_path).exists() else str(image_file),
+                        dry_run=dry_run,
+                    )
+                    Path(video_path).unlink(missing_ok=True)
+                    if thumb_path:
+                        Path(thumb_path).unlink(missing_ok=True)
+                    return success, style_used, template_used, res_msg
+                else:
+                    logger.warning("Rich video generation returned None, falling back to product image pin")
+                    pin_type = "product"
+            except Exception as ve:
+                logger.warning(f"Rich video generation failed ({ve}), falling back to product image pin")
+                pin_type = "product"
 
         # ── IMAGE / BLOG PIN ────────────────────────────────────────────────────
         extra_imgs = []

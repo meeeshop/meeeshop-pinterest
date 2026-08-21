@@ -932,60 +932,100 @@ class StealthPinterestPoster:
         """
         board_selectors = [
             '[data-test-id="board-dropdown-select-button"]',
-            '[aria-label="Select board"]',
-            '[aria-label*="Select board" i]',
-            '[aria-label*="board" i]',
+            'button[aria-label="Select board"]',
+            'button[aria-label*="Select board" i]',
+            'button[aria-label*="Select a board" i]',
+            'button[aria-label*="board" i]',
             'button:has-text("Choose board")',
             'button:has-text("Select board")',
+            '[data-test-id="board-dropdown"] button',
+            '[data-test-id="board-dropdown"]',
         ]
+        
+        board_btn = None
         for sel in board_selectors:
             try:
-                board_btn = page.wait_for_selector(sel, timeout=3000, state="visible")
-                if board_btn:
-                    board_btn.click()
-                    time.sleep(1)
-
-                    search_term = board_name.replace("...", "").replace('"', "").strip()
-                    search_input = page.query_selector(
-                        'input[aria-label="Search boards"], input[placeholder*="Search" i]'
-                    )
-                    if search_input:
-                        search_input.fill(search_term)
-                        time.sleep(2)  # Wait for search results
-
-                    # Detect "No boards found" — board doesn't exist, fallback
-                    no_boards_el = page.query_selector('div:has-text("No boards found"), [data-test-id="no-boards-found"]')
-                    if no_boards_el and no_boards_el.is_visible():
-                        logger.warning(f"Board '{board_name}' not found on profile! Clearing search to use first available board.")
-                        if search_input:
-                            search_input.fill("")
-                            time.sleep(1.5)
-
-                    # Try to find the board row with a Save button (auto-publish path)
-                    board_row = page.locator(
-                        f'div[role="button"]:has-text("{search_term}"), div[role="listitem"]:has-text("{search_term}")'
-                    ).first
-                    if not board_row.is_visible():
-                        board_row = page.locator(f'[data-test-id="board-row"]:has-text("{search_term}")').first
-                    # Fallback: use the very first board in the list
-                    if not board_row.is_visible():
-                        board_row = page.locator('[data-test-id="board-row"], div[role="listitem"]').first
-                        if board_row.is_visible():
-                            logger.info("Using first available board as fallback")
-
-                    if board_row.is_visible():
-                        row_save_btn = board_row.locator('[data-test-id="board-dropdown-save-button"], button:has-text("Save")')
-                        if row_save_btn.count() > 0 and row_save_btn.first.is_visible():
-                            row_save_btn.first.click()
-                            logger.info(f"✓ Saved pin via board row button for '{board_name}' — pin is now LIVE")
-                            time.sleep(2)
-                            return "published"
-                        else:
-                            board_row.click()
-                            logger.info(f"✓ Selected board '{board_name}' — need to click Publish")
-                            return "selected"
+                el = page.query_selector(sel)
+                if el and el.is_visible():
+                    board_btn = el
+                    break
             except Exception:
-                continue
+                pass
+
+        if not board_btn:
+            for sel in board_selectors:
+                try:
+                    board_btn = page.wait_for_selector(sel, timeout=3000, state="visible")
+                    if board_btn:
+                        break
+                except Exception:
+                    pass
+
+        if board_btn:
+            try:
+                board_btn.click()
+                time.sleep(1.5)
+
+                search_term = board_name.replace("...", "").replace('"', "").strip()
+                search_input = page.query_selector(
+                    'input[aria-label="Search boards"], input[placeholder*="Search" i], input[data-test-id="board-search-input"]'
+                )
+                if search_input:
+                    search_input.fill(search_term)
+                    time.sleep(1.5)
+
+                # Wait for board list items or rows to appear
+                try:
+                    page.wait_for_selector('[data-test-id="board-row"], div[role="button"], div[role="listitem"]', timeout=4000)
+                except Exception:
+                    pass
+
+                # Check if specific board is found
+                found_row = None
+                row_selectors = [
+                    f'[data-test-id="board-row"]:has-text("{search_term}")',
+                    f'div[role="button"]:has-text("{search_term}")',
+                    f'div[role="listitem"]:has-text("{search_term}")',
+                    f'div[title*="{search_term}" i]',
+                ]
+                for r_sel in row_selectors:
+                    rows = page.query_selector_all(r_sel)
+                    for r in rows:
+                        if r.is_visible():
+                            found_row = r
+                            break
+                    if found_row:
+                        break
+
+                # If not found with search, clear search and grab first available board row
+                if not found_row:
+                    logger.warning(f"Board '{search_term}' not found in search results. Clearing search for fallback...")
+                    if search_input:
+                        search_input.fill("")
+                        time.sleep(1.5)
+                    fallback_rows = page.query_selector_all('[data-test-id="board-row"], div[role="listitem"], div[role="button"]')
+                    for r in fallback_rows:
+                        if r.is_visible() and "create board" not in (r.inner_text() or "").lower():
+                            found_row = r
+                            break
+
+                if found_row:
+                    # Check if there is an embedded Save button inside the row
+                    save_btn = found_row.query_selector('[data-test-id="board-dropdown-save-button"], button:has-text("Save")')
+                    if save_btn and save_btn.is_visible():
+                        save_btn.click()
+                        logger.info(f"✓ Saved pin via board row button for '{board_name}' — pin is now LIVE")
+                        time.sleep(2)
+                        return "published"
+                    else:
+                        found_row.click()
+                        logger.info(f"✓ Selected board row for '{board_name}' — need to click Publish")
+                        time.sleep(1.5)
+                        return "selected"
+
+            except Exception as e:
+                logger.warning(f"Error in board selection sequence: {e}")
+
         logger.warning(f"⚠️ Board selection failed for '{board_name}'")
         return "failed"
 
