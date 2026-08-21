@@ -52,15 +52,12 @@ SAGE       = (88,  120, 90)
 BLUSH      = (230, 185, 175)
 
 
-# ── Font helpers ─────────────────────────────────────────────────────────────
-
 def _get_font(size: int, bold: bool = False, serif: bool = False, italic: bool = False, script: bool = False) -> ImageFont.FreeTypeFont:
     if script:
         candidates = [
+            "C:/Windows/Fonts/segoesc.ttf",
             "C:/Windows/Fonts/georgiai.ttf",
             "C:/Windows/Fonts/ariali.ttf",
-            "C:/Windows/Fonts/mvboli.ttf",
-            "C:/Windows/Fonts/segoesc.ttf",
             "/usr/share/fonts/truetype/liberation/LiberationSans-Italic.ttf",
             "/usr/share/fonts/truetype/dejavu/DejaVuSerif-Italic.ttf",
         ]
@@ -69,7 +66,6 @@ def _get_font(size: int, bold: bool = False, serif: bool = False, italic: bool =
             candidates = [
                 "C:/Windows/Fonts/georgiaz.ttf",
                 "C:/Windows/Fonts/timesbi.ttf",
-                "C:/Windows/Fonts/georgiab.ttf",
                 "/usr/share/fonts/truetype/liberation/LiberationSerif-BoldItalic.ttf",
             ]
         elif italic:
@@ -84,7 +80,6 @@ def _get_font(size: int, bold: bool = False, serif: bool = False, italic: bool =
                 "C:/Windows/Fonts/timesbd.ttf",
                 "/usr/share/fonts/truetype/liberation/LiberationSerif-Bold.ttf",
                 "/usr/share/fonts/truetype/dejavu/DejaVuSerif-Bold.ttf",
-                "georgiab.ttf",
             ]
         else:
             candidates = [
@@ -92,21 +87,22 @@ def _get_font(size: int, bold: bool = False, serif: bool = False, italic: bool =
                 "C:/Windows/Fonts/times.ttf",
                 "/usr/share/fonts/truetype/liberation/LiberationSerif-Regular.ttf",
                 "/usr/share/fonts/truetype/dejavu/DejaVuSerif.ttf",
-                "georgia.ttf",
             ]
     else:
         candidates = (
             [
-                "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
-                "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf",
-                "/usr/share/fonts/truetype/ubuntu/Ubuntu-B.ttf",
+                "C:/Windows/Fonts/segoeuib.ttf",
                 "C:/Windows/Fonts/arialbd.ttf",
+                "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf",
+                "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
+                "/usr/share/fonts/truetype/ubuntu/Ubuntu-B.ttf",
                 "arial.ttf",
             ] if bold else [
-                "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
-                "/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf",
-                "/usr/share/fonts/truetype/ubuntu/Ubuntu-R.ttf",
+                "C:/Windows/Fonts/segoeui.ttf",
                 "C:/Windows/Fonts/arial.ttf",
+                "/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf",
+                "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+                "/usr/share/fonts/truetype/ubuntu/Ubuntu-R.ttf",
                 "arial.ttf",
             ]
         )
@@ -209,9 +205,11 @@ def _boost(img: Image.Image) -> Image.Image:
 
 
 # ── Universal Direct Photo Pin Engine ───────────────────────────────────────
-# Fills 100% of the 1000x1500 canvas with the product photo (Full-Bleed 2:3 ratio)
-# Renders plain crisp white or warm cream fonts directly on top of the image.
-# ZERO background colors, ZERO cards, ZERO pills, ZERO header/footer bars.
+# Strict 2:3 vertical (1000x1500 px) Pinterest standard layout.
+# Dedicated non-overlapping zones:
+#   Top Zone    (y=40..110)  : Single clean trust badge pill (Top-Right or Top-Left)
+#   Middle Zone (y=110..1270): 100% unobstructed fashion model / outfit view
+#   Bottom Zone (y=1270..1460): Clean floating translucent card with Title, Price, and Shop CTA
 def _render_direct_pin(
     draw: ImageDraw.Draw,
     canvas: Image.Image,
@@ -220,156 +218,155 @@ def _render_direct_pin(
     category: str = "New Arrival",
     price: Optional[str] = None,
     cta: str = "SHOP NOW AT US.MEEESHOP.COM",
-    layout: str = "top_left_script",
+    layout: str = "bottom_floating",
     trust_badge: Optional[str] = "FREE US SHIPPING",
 ):
     p = _boost(_fit_image(photo, PIN_W, PIN_H))
     canvas.paste(p, (0, 0))
-    draw = ImageDraw.Draw(canvas)
 
-    CREAM_WHITE = (250, 248, 244)
-    SHADOW_DARK = (15, 15, 15)
+    # Create an RGBA overlay canvas for smooth translucent pills/cards
+    overlay = Image.new("RGBA", (PIN_W, PIN_H), (0, 0, 0, 0))
+    ov_draw = ImageDraw.Draw(overlay)
 
-    def draw_direct(pos, text, font, fill=CREAM_WHITE, anchor=None):
+    CREAM_WHITE = (255, 255, 255, 255)
+    GOLD_ACCENT = (255, 225, 120, 255)
+    DARK_CARD   = (15, 15, 18, 205)      # 80% opacity sleek dark card
+    DARK_PILL   = (20, 20, 24, 215)      # 85% opacity sleek dark pill
+    SHADOW_DARK = (10, 10, 10, 240)
+
+    def draw_shadowed_text(d, pos, text, font, fill=CREAM_WHITE, anchor=None):
         x, y = pos
-        # 3px 16-direction ultra-bold contour outline for maximum legibility on light/dark photos
-        offsets = [
-            (-3,0), (3,0), (0,-3), (0,3),
-            (-3,-3), (3,3), (-3,3), (3,-3),
-            (-2,-2), (2,2), (-2,2), (2,-2),
-            (-2,0), (2,0), (0,-2), (0,2),
-            (-1,-1), (1,1), (-1,1), (1,-1)
-        ]
-        for dx, dy in offsets:
+        # Clean 2px shadow
+        for dx, dy in [(-2, 0), (2, 0), (0, -2), (0, 2), (-1, -1), (1, 1), (-1, 1), (1, -1)]:
             if anchor:
-                draw.text((x + dx, y + dy), text, fill=SHADOW_DARK, font=font, anchor=anchor)
+                d.text((x + dx, y + dy), text, fill=SHADOW_DARK, font=font, anchor=anchor)
             else:
-                draw.text((x + dx, y + dy), text, fill=SHADOW_DARK, font=font)
+                d.text((x + dx, y + dy), text, fill=SHADOW_DARK, font=font)
         if anchor:
-            draw.text((x, y), text, fill=fill, font=font, anchor=anchor)
+            d.text((x, y), text, fill=fill, font=font, anchor=anchor)
         else:
-            draw.text((x, y), text, fill=fill, font=font)
+            d.text((x, y), text, fill=fill, font=font)
 
+    # 1. Top Single Trust Badge Pill (Top-Right, y=42)
     if trust_badge:
-        tb_f = _get_font(36, bold=True)
-        tb_text = f"★  {trust_badge}"
-        t_bb = tb_f.getbbox(tb_text)
-        tw = t_bb[2] - t_bb[0]
-        draw_direct((PIN_W - 50 - tw, 50), tb_text, tb_f, fill=CREAM_WHITE)
+        tb_text = f"★  {trust_badge.upper()}"
+        tb_font = _get_font(28, bold=True)
+        tb_box = tb_font.getbbox(tb_text)
+        tb_w = tb_box[2] - tb_box[0]
+        tb_h = tb_box[3] - tb_box[1]
 
-    margin = 55
-    top_y = 65
+        pad_x, pad_y = 20, 10
+        pill_w = tb_w + 2 * pad_x
+        pill_h = tb_h + 2 * pad_y
+        pill_x = PIN_W - pill_w - 40
+        pill_y = 42
 
-    if layout == "macy_editorial":
-        line1 = "STYLE YOUR LOOK WITH"
-        line2 = title.upper()
-        if len(line2) > 24:
-            words = line2.split()
-            line2 = " ".join(words[:3])
+        # Draw translucent pill
+        _draw_rounded_rect(ov_draw, (pill_x, pill_y, pill_x + pill_w, pill_y + pill_h), r=pill_h // 2, fill=DARK_PILL)
+        # Draw badge text centered inside pill
+        ov_draw.text((pill_x + pad_x, pill_y + pad_y - 2), tb_text, fill=CREAM_WHITE, font=tb_font)
 
-        f1 = _get_font(32, bold=True, serif=False)
-        f2 = _get_font(42, bold=True, serif=True, italic=True)
+    # 2. Bottom Floating Information Card (y=1270 to y=1455)
+    # Never overlaps with any top badges or middle garment details!
+    clean_title = (title or "").strip()
+    # Strip any leaked prompt fragments if any
+    for leak in ["we need", "create a", "product:", "type:"]:
+        if leak in clean_title.lower():
+            clean_title = "Trending Boutique Style"
+            break
 
-        draw_direct((PIN_W // 2, int(PIN_H * 0.46)), line1, f1, fill=CREAM_WHITE, anchor="mm")
-        draw_direct((PIN_W // 2, int(PIN_H * 0.52)), line2, f2, fill=CREAM_WHITE, anchor="mm")
+    card_x0 = 40
+    card_x1 = PIN_W - 40
+    card_y0 = 1270
+    card_y1 = 1455
+    card_r  = 20
 
-        if price:
-            pf = _get_font(36, bold=True)
-            draw_direct((PIN_W // 2, int(PIN_H * 0.58)), f"${price}", pf, fill=CREAM_WHITE, anchor="mm")
+    _draw_rounded_rect(ov_draw, (card_x0, card_y0, card_x1, card_y1), r=card_r, fill=DARK_CARD)
 
-        cta_text_str = (cta if cta and "meeeshop" in cta.lower() else "SHOP NOW AT US.MEEESHOP.COM").upper()
-        cta_font, fitted_cta = _fit_text(cta_text_str, bold=True, max_w=PIN_W - 120, start_size=26, min_size=14)
-        draw_direct((PIN_W // 2, PIN_H - 70), fitted_cta, cta_font, fill=CREAM_WHITE, anchor="mm")
+    # Title Line inside Bottom Card
+    title_font = _get_font(36, bold=True, serif=False)
+    # Fit title text to max card width (PIN_W - 140)
+    title_lines = _wrap_text(clean_title.upper(), title_font, max_width=PIN_W - 140)
+    display_title = title_lines[0] if title_lines else clean_title.upper()
+    if len(title_lines) > 1 and len(display_title) > 32:
+        display_title = display_title[:30] + "..."
 
-    elif layout == "bottom_center":
-        script_f = _get_font(56, bold=False, script=True)
-        draw_direct((PIN_W // 2, int(PIN_H * 0.70)), "Trending:", script_f, fill=CREAM_WHITE, anchor="mm")
+    ov_draw.text((PIN_W // 2, card_y0 + 26), display_title, fill=CREAM_WHITE, font=title_font, anchor="mt")
 
-        cat_text = category.replace("Trending: ", "").upper()
-        f_title = _get_font(44, bold=True, serif=False)
-        lines = _wrap_text(cat_text, f_title, 700)
-        for i, line in enumerate(lines[:2]):
-            draw_direct((PIN_W // 2, int(PIN_H * 0.76) + i * 50), line, f_title, fill=CREAM_WHITE, anchor="mm")
-
-        if price:
-            pf = _get_font(36, bold=True)
-            draw_direct((PIN_W // 2, int(PIN_H * 0.86)), f"${price}", pf, fill=CREAM_WHITE, anchor="mm")
-
-        cta_text_str = (cta if cta and "meeeshop" in cta.lower() else "SHOP NOW AT US.MEEESHOP.COM").upper()
-        cta_font, fitted_cta = _fit_text(cta_text_str, bold=True, max_w=PIN_W - 120, start_size=26, min_size=14)
-        draw_direct((PIN_W // 2, PIN_H - 70), fitted_cta, cta_font, fill=CREAM_WHITE, anchor="mm")
-
+    # Subtitle / Price & Shipping Line
+    price_str = f"${float(str(price).replace('$', '')):.2f}" if price and any(c.isdigit() for c in str(price)) else ""
+    if price_str:
+        sub_text = f"{price_str}  •  FREE US SHIPPING  •  7-DAY RETURNS"
     else:
-        script_f = _get_font(60, bold=False, script=True)
-        script_text = "Trending:"
-        draw_direct((margin, top_y), script_text, script_f, fill=CREAM_WHITE)
+        sub_text = "EVERYDAY FREE US SHIPPING  •  TRUE-TO-SIZE FIT"
+    sub_font = _get_font(22, bold=True)
+    ov_draw.text((PIN_W // 2, card_y0 + 78), sub_text, fill=GOLD_ACCENT, font=sub_font, anchor="mt")
 
-        cat_text = category.replace("Trending: ", "").upper()
-        f_title = _get_font(44, bold=True, serif=False)
-        lines = _wrap_text(cat_text, f_title, 650)
-        for i, line in enumerate(lines[:2]):
-            ly = top_y + 75 + i * 52
-            draw_direct((margin, ly), line, f_title, fill=CREAM_WHITE)
+    # CTA Button Bar inside Bottom Card
+    cta_bar_w = PIN_W - 160
+    cta_bar_h = 44
+    cta_bar_x = (PIN_W - cta_bar_w) // 2
+    cta_bar_y = card_y0 + 120
 
-        if price:
-            pf = _get_font(38, bold=True)
-            draw_direct((margin, top_y + 75 + len(lines[:2]) * 52 + 12), f"${price}", pf, fill=CREAM_WHITE)
+    # Sleek pill CTA button
+    _draw_rounded_rect(ov_draw, (cta_bar_x, cta_bar_y, cta_bar_x + cta_bar_w, cta_bar_y + cta_bar_h), r=cta_bar_h // 2, fill=(230, 45, 65, 240)) # Bold coral-red CTA pill
+    cta_font = _get_font(21, bold=True)
+    ov_draw.text((PIN_W // 2, cta_bar_y + 11), "SHOP NOW  →  US.MEEESHOP.COM", fill=CREAM_WHITE, font=cta_font, anchor="mt")
 
-        cta_text_str = (cta if cta and "meeeshop" in cta.lower() else "SHOP NOW AT US.MEEESHOP.COM").upper()
-        cta_font, fitted_cta = _fit_text(cta_text_str, bold=True, max_w=PIN_W - 120, start_size=26, min_size=14)
-        draw_direct((PIN_W // 2, PIN_H - 70), fitted_cta, cta_font, fill=CREAM_WHITE, anchor="mm")
+    # Merge RGBA overlay onto canvas
+    canvas.paste(Image.alpha_composite(canvas.convert("RGBA"), overlay).convert("RGB"), (0, 0))
 
 
 def _template_a(draw, canvas, photo, title, category, price):
-    _render_direct_pin(draw, canvas, photo, title, category, price, layout="top_left_script")
+    _render_direct_pin(draw, canvas, photo, title, category, price, layout="bottom_floating")
 
 def _template_b(draw, canvas, photo, title, category, price):
-    _render_direct_pin(draw, canvas, photo, title, category, price, layout="bottom_center")
+    _render_direct_pin(draw, canvas, photo, title, category, price, layout="bottom_floating")
 
 def _template_c(draw, canvas, photo, title, category, price):
-    _render_direct_pin(draw, canvas, photo, title, category, price, layout="macy_editorial")
+    _render_direct_pin(draw, canvas, photo, title, category, price, layout="bottom_floating")
 
 def _template_d(draw, canvas, photo, title, category, price, accent=None):
-    _render_direct_pin(draw, canvas, photo, title, category, price, layout="top_left_script")
+    _render_direct_pin(draw, canvas, photo, title, category, price, layout="bottom_floating")
 
 def _template_e(draw, canvas, photo, title, category, price):
-    _render_direct_pin(draw, canvas, photo, title, category, price, layout="bottom_center")
+    _render_direct_pin(draw, canvas, photo, title, category, price, layout="bottom_floating")
 
 def _template_f(draw, canvas, photo, title, category, price):
-    _render_direct_pin(draw, canvas, photo, title, category, price, layout="macy_editorial")
+    _render_direct_pin(draw, canvas, photo, title, category, price, layout="bottom_floating")
 
 def _template_g(draw, canvas, photo, title, category, price):
-    _render_direct_pin(draw, canvas, photo, title, category, price, layout="top_left_script")
+    _render_direct_pin(draw, canvas, photo, title, category, price, layout="bottom_floating")
 
 def _template_h(draw, canvas, photo, title, category, price):
-    _render_direct_pin(draw, canvas, photo, title, category, price, layout="bottom_center")
+    _render_direct_pin(draw, canvas, photo, title, category, price, layout="bottom_floating")
 
 def _template_i(draw, canvas, photo, title, category, price):
-    _render_direct_pin(draw, canvas, photo, title, category, price, layout="macy_editorial")
+    _render_direct_pin(draw, canvas, photo, title, category, price, layout="bottom_floating")
 
 def _template_j(draw, canvas, photo, title, category, price=None, cta="Shop Now"):
-    _render_direct_pin(draw, canvas, photo, title, category, price, cta, layout="top_left_script")
+    _render_direct_pin(draw, canvas, photo, title, category, price, cta, layout="bottom_floating")
 
 def _template_k(draw, canvas, photo, photo2, title, category, price):
-    _render_direct_pin(draw, canvas, photo, title, category, price, layout="bottom_center")
+    _render_direct_pin(draw, canvas, photo, title, category, price, layout="bottom_floating")
 
 def _template_l(draw, canvas, photo, photo2, photo3, title, category, price):
-    _render_direct_pin(draw, canvas, photo, title, category, price, layout="macy_editorial")
+    _render_direct_pin(draw, canvas, photo, title, category, price, layout="bottom_floating")
 
 def _template_m(draw, canvas, photo, title, category, price):
-    _render_direct_pin(draw, canvas, photo, title, category, price, layout="top_left_script")
+    _render_direct_pin(draw, canvas, photo, title, category, price, layout="bottom_floating")
 
 def _template_n(draw, canvas, photo, title, category, price, cta="Shop Now"):
-    _render_direct_pin(draw, canvas, photo, title, category, price, cta, layout="bottom_center")
+    _render_direct_pin(draw, canvas, photo, title, category, price, cta, layout="bottom_floating")
 
 def _template_o(draw, canvas, photo, photo2, photo3, photo4, title, category, price, trust_badge=None):
-    _render_direct_pin(draw, canvas, photo, title, category, price, layout="macy_editorial", trust_badge=trust_badge)
+    _render_direct_pin(draw, canvas, photo, title, category, price, layout="bottom_floating", trust_badge=trust_badge)
 
 def _template_p(draw, canvas, photo, title, category, price, cta="Shop Now"):
-    _render_direct_pin(draw, canvas, photo, title, category, price, cta, layout="macy_editorial")
+    _render_direct_pin(draw, canvas, photo, title, category, price, cta, layout="bottom_floating")
 
 def _template_q(draw, canvas, photo, title, category, price, cta="SHOP NOW AT US.MEEESHOP.COM"):
-    _render_direct_pin(draw, canvas, photo, title, category, price, cta, layout="top_left_script")
+    _render_direct_pin(draw, canvas, photo, title, category, price, cta, layout="bottom_floating")
 
 
 def _prepare_photo_for_style(
@@ -590,10 +587,6 @@ def create_pin_image(
             _template_q(draw, canvas, photo, title, category, price, cta)
         else:
             _template_p(draw, canvas, photo, title, category, price, cta)
-
-        # Draw trust badge pill on all single/split templates except 14 (which has a central badge)
-        if template_index != 14:
-            _draw_trust_badge_pill(draw, canvas, trust_badge)
 
         if not output_path:
             output_path = tempfile.mktemp(suffix=".jpg", prefix="pin_final_")
