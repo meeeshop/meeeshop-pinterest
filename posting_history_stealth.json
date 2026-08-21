@@ -1552,11 +1552,57 @@
       "template": 17,
       "pin_url": "https://www.pinterest.com/pin/962222276663297298/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8911380480171,
+      "title": "Mkf Collection by Mia K. - Jessy Signature Crossbody Bag | MeeeShop US Boutique",
+      "board": "Trends",
+      "timestamp": "2026-08-21T18:01:07.751524",
+      "type": "carousel",
+      "style": "collage",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276663305246/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8906718970027,
+      "title": "Tie Back Ruffle Top - Fresh Back-to-School & Summer Style \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-08-21T18:02:17.879948",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276663305273/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": "560417243307",
+      "article_id": "560417243307",
+      "title": "Upgrade Your Summer Wardrobe With Zenanas New Arrivals Double Elasticband Shorts Mineral Wash Leggings More",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-08-21T18:04:11.623119",
+      "type": "blog",
+      "style": "collage",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276663305328/",
+      "blog_url": "https://us.meeeshop.com/blogs/plus-size-curvy-clothing/upgrade-your-summer-wardrobe-with-zenanas-new-arrivals-double-elasticband-shorts-mineral-wash-leggings-more",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8897138426027,
+      "title": "Women's Luxe Bella Wide Leg Jeans | MeeeShop US Boutique",
+      "board": "Luxe Clothing",
+      "timestamp": "2026-08-21T18:05:31.547180",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276663305360/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-08-18T03:03:00.147026",
-    "Trends": "2026-08-21T12:32:13.981272",
+    "Trends": "2026-08-21T18:01:07.751524",
     "Dresses": "2026-08-18T03:04:34.619148",
     "Feminine & Flowy Fits": "2026-08-18T03:01:25.470252",
     "Short fall dresses": "2026-08-18T12:33:07.657229",
@@ -1601,7 +1647,7 @@
     "Fashion Models": "2026-08-21T03:11:43.464820",
     "My Shop #1737732113": "2026-08-21T12:37:11.882612",
     "Shop For Holidays": "2026-08-15T17:52:01.108662",
-    "New": "2026-08-21T12:33:55.444668",
+    "New": "2026-08-21T18:02:17.879948",
     "American Bazi": "2026-08-15T17:54:38.665703",
     "Cool & Casual Styles": "2026-08-15T17:55:35.872843",
     "MeeeShop's Luxe Styles": "2026-08-15T21:26:32.597254",
@@ -1642,10 +1688,11 @@
     "Women's Cardigans": "2026-08-19T12:32:03.053992",
     "Loungewear": "2026-08-20T12:34:25.960617",
     "Bow heels": "2026-08-20T18:00:36.882815",
-    "Sweaters": "2026-08-20T21:32:57.133135"
+    "Sweaters": "2026-08-20T21:32:57.133135",
+    "Luxe Clothing": "2026-08-21T18:05:31.547180"
   },
-  "daily_count": 8,
-  "last_post_time": "2026-08-21T12:37:11.882612",
+  "daily_count": 12,
+  "last_post_time": "2026-08-21T18:05:31.547180",
   "board_rotation_cursor": 0,
   "last_image_style": "carousel",
   "last_template_index": 17
