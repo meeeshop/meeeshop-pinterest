@@ -478,6 +478,7 @@ def run_daily_stealth_posting(dry_run: bool = False, pins_count: Optional[int] =
 
     # Poster instance
     poster = StealthPinterestPoster(headless=True)
+    live_boards = [{"id": b, "name": b} for b in MEEESHOP_BOARDS]
 
     posted_count = 0
     consecutive_failures = 0
