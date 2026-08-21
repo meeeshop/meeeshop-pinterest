@@ -204,12 +204,15 @@ def _boost(img: Image.Image) -> Image.Image:
     return img
 
 
-# ── Universal Direct Photo Pin Engine ───────────────────────────────────────
+# ── 2026 Luxury Contemporary Boutique Pin Engine ───────────────────────────
 # Strict 2:3 vertical (1000x1500 px) Pinterest standard layout.
-# Dedicated non-overlapping zones:
-#   Top Zone    (y=40..110)  : Single clean trust badge pill (Top-Right or Top-Left)
-#   Middle Zone (y=110..1270): 100% unobstructed fashion model / outfit view
-#   Bottom Zone (y=1270..1460): Clean floating translucent card with Title, Price, and Shop CTA
+# Follows modern luxury boutique aesthetics (Revolve, Aritzia, Zara, Anthropologie):
+#   - Zero solid black/red blocks covering the photo
+#   - Smooth bottom vertical gradient vignette for natural contrast
+#   - Editorial letter-spaced brand hook (M E E E S H O P • E D I T)
+#   - Crisp pure white typography with subtle drop-shadows
+#   - Frosted glass trust pill (Top-Right)
+#   - Elegant cream pill CTA button (SHOP THE LOOK → US.MEEESHOP.COM)
 def _render_direct_pin(
     draw: ImageDraw.Draw,
     canvas: Image.Image,
@@ -224,19 +227,36 @@ def _render_direct_pin(
     p = _boost(_fit_image(photo, PIN_W, PIN_H))
     canvas.paste(p, (0, 0))
 
-    # Create an RGBA overlay canvas for smooth translucent pills/cards
+    # Create an RGBA overlay for smooth gradient vignette and frosted elements
     overlay = Image.new("RGBA", (PIN_W, PIN_H), (0, 0, 0, 0))
     ov_draw = ImageDraw.Draw(overlay)
 
-    CREAM_WHITE = (255, 255, 255, 255)
-    GOLD_ACCENT = (255, 225, 120, 255)
-    DARK_CARD   = (15, 15, 18, 205)      # 80% opacity sleek dark card
-    DARK_PILL   = (20, 20, 24, 215)      # 85% opacity sleek dark pill
-    SHADOW_DARK = (10, 10, 10, 240)
+    # 1. Smooth Bottom Vertical Gradient Vignette (y=1160 to 1500)
+    # Transparent at top (y=1160), smoothly eases to soft dark (alpha=165) at bottom (y=1500)
+    # 100% preserves garment textures while making white typography pop with crystal clarity
+    vignette_start = 1160
+    vignette_height = PIN_H - vignette_start
+    for i in range(vignette_height):
+        progress = i / float(vignette_height)
+        # Smooth cubic ease-in
+        alpha = int(175 * (progress ** 1.5))
+        ov_draw.line([(0, vignette_start + i), (PIN_W, vignette_start + i)], fill=(12, 12, 16, alpha))
+
+    # Also a very subtle top gradient (y=0 to 120) for the top badge
+    for i in range(120):
+        progress = 1.0 - (i / 120.0)
+        alpha = int(60 * (progress ** 1.5))
+        ov_draw.line([(0, i), (PIN_W, i)], fill=(12, 12, 16, alpha))
+
+    CREAM_WHITE    = (255, 255, 255, 255)
+    CHAMPAGNE_GOLD = (255, 228, 140, 255)
+    WARM_OAT       = (245, 240, 230, 255)
+    FROSTED_GLASS  = (18, 18, 24, 185)       # 72% opacity sleek frosted dark glass
+    SHADOW_DARK    = (8, 8, 10, 230)
 
     def draw_shadowed_text(d, pos, text, font, fill=CREAM_WHITE, anchor=None):
         x, y = pos
-        # Clean 2px shadow
+        # Clean 2px soft drop-shadow
         for dx, dy in [(-2, 0), (2, 0), (0, -2), (0, 2), (-1, -1), (1, 1), (-1, 1), (1, -1)]:
             if anchor:
                 d.text((x + dx, y + dy), text, fill=SHADOW_DARK, font=font, anchor=anchor)
@@ -247,71 +267,64 @@ def _render_direct_pin(
         else:
             d.text((x, y), text, fill=fill, font=font)
 
-    # 1. Top Single Trust Badge Pill (Top-Right, y=42)
+    # 2. Top-Right Frosted Glass Trust Badge (y=45)
     if trust_badge:
         tb_text = f"★  {trust_badge.upper()}"
-        tb_font = _get_font(28, bold=True)
+        tb_font = _get_font(23, bold=True)
         tb_box = tb_font.getbbox(tb_text)
         tb_w = tb_box[2] - tb_box[0]
         tb_h = tb_box[3] - tb_box[1]
 
-        pad_x, pad_y = 20, 10
+        pad_x, pad_y = 18, 9
         pill_w = tb_w + 2 * pad_x
         pill_h = tb_h + 2 * pad_y
-        pill_x = PIN_W - pill_w - 40
-        pill_y = 42
+        pill_x = PIN_W - pill_w - 45
+        pill_y = 45
 
-        # Draw translucent pill
-        _draw_rounded_rect(ov_draw, (pill_x, pill_y, pill_x + pill_w, pill_y + pill_h), r=pill_h // 2, fill=DARK_PILL)
-        # Draw badge text centered inside pill
+        # Frosted glass pill with subtle border
+        _draw_rounded_rect(ov_draw, (pill_x, pill_y, pill_x + pill_w, pill_y + pill_h), r=pill_h // 2, fill=FROSTED_GLASS)
         ov_draw.text((pill_x + pad_x, pill_y + pad_y - 2), tb_text, fill=CREAM_WHITE, font=tb_font)
 
-    # 2. Bottom Floating Information Card (y=1270 to y=1455)
-    # Never overlaps with any top badges or middle garment details!
+    # 3. Clean Title & Category Formatting
     clean_title = (title or "").strip()
-    # Strip any leaked prompt fragments if any
     for leak in ["we need", "create a", "product:", "type:"]:
         if leak in clean_title.lower():
             clean_title = "Trending Boutique Style"
             break
 
-    card_x0 = 40
-    card_x1 = PIN_W - 40
-    card_y0 = 1270
-    card_y1 = 1455
-    card_r  = 20
+    # 4. Bottom Editorial Typography Zone (y=1255 to y=1460)
+    # Line 1: Letter-spaced brand hook
+    hook_text = "M E E E S H O P  •  N E W  A R R I V A L S"
+    hook_font = _get_font(18, bold=True)
+    draw_shadowed_text(ov_draw, (PIN_W // 2, 1255), hook_text, hook_font, fill=CHAMPAGNE_GOLD, anchor="mt")
 
-    _draw_rounded_rect(ov_draw, (card_x0, card_y0, card_x1, card_y1), r=card_r, fill=DARK_CARD)
-
-    # Title Line inside Bottom Card
+    # Line 2: Product Headline (36px Bold Modern Sans)
     title_font = _get_font(36, bold=True, serif=False)
-    # Fit title text to max card width (PIN_W - 140)
-    title_lines = _wrap_text(clean_title.upper(), title_font, max_width=PIN_W - 140)
+    title_lines = _wrap_text(clean_title.upper(), title_font, max_width=PIN_W - 120)
     display_title = title_lines[0] if title_lines else clean_title.upper()
-    if len(title_lines) > 1 and len(display_title) > 32:
-        display_title = display_title[:30] + "..."
+    if len(title_lines) > 1 and len(display_title) > 30:
+        display_title = display_title[:28] + "..."
+    draw_shadowed_text(ov_draw, (PIN_W // 2, 1290), display_title, title_font, fill=CREAM_WHITE, anchor="mt")
 
-    ov_draw.text((PIN_W // 2, card_y0 + 26), display_title, fill=CREAM_WHITE, font=title_font, anchor="mt")
-
-    # Subtitle / Price & Shipping Line
+    # Line 3: Price & Guarantee
     price_str = f"${float(str(price).replace('$', '')):.2f}" if price and any(c.isdigit() for c in str(price)) else ""
     if price_str:
-        sub_text = f"{price_str}  •  FREE US SHIPPING  •  7-DAY RETURNS"
+        sub_text = f"{price_str}   •   FREE US SHIPPING   •   7-DAY RETURNS"
     else:
-        sub_text = "EVERYDAY FREE US SHIPPING  •  TRUE-TO-SIZE FIT"
+        sub_text = "FREE US SHIPPING   •   TRUE-TO-SIZE FIT"
     sub_font = _get_font(22, bold=True)
-    ov_draw.text((PIN_W // 2, card_y0 + 78), sub_text, fill=GOLD_ACCENT, font=sub_font, anchor="mt")
+    draw_shadowed_text(ov_draw, (PIN_W // 2, 1342), sub_text, sub_font, fill=WARM_OAT, anchor="mt")
 
-    # CTA Button Bar inside Bottom Card
-    cta_bar_w = PIN_W - 160
-    cta_bar_h = 44
-    cta_bar_x = (PIN_W - cta_bar_w) // 2
-    cta_bar_y = card_y0 + 120
+    # Line 4: Clean Modern CTA Button (y=1390)
+    cta_btn_w = 480
+    cta_btn_h = 50
+    cta_btn_x = (PIN_W - cta_btn_w) // 2
+    cta_btn_y = 1390
 
-    # Sleek pill CTA button
-    _draw_rounded_rect(ov_draw, (cta_bar_x, cta_bar_y, cta_bar_x + cta_bar_w, cta_bar_y + cta_bar_h), r=cta_bar_h // 2, fill=(230, 45, 65, 240)) # Bold coral-red CTA pill
-    cta_font = _get_font(21, bold=True)
-    ov_draw.text((PIN_W // 2, cta_bar_y + 11), "SHOP NOW  →  US.MEEESHOP.COM", fill=CREAM_WHITE, font=cta_font, anchor="mt")
+    # Frosted warm cream pill button with dark text (Nordstrom / Revolve luxury standard)
+    _draw_rounded_rect(ov_draw, (cta_btn_x, cta_btn_y, cta_btn_x + cta_btn_w, cta_btn_y + cta_btn_h), r=cta_btn_h // 2, fill=(255, 255, 255, 240))
+    cta_font = _get_font(20, bold=True)
+    ov_draw.text((PIN_W // 2, cta_btn_y + 14), "SHOP THE LOOK  →  US.MEEESHOP.COM", fill=(20, 20, 25, 255), font=cta_font, anchor="mt")
 
     # Merge RGBA overlay onto canvas
     canvas.paste(Image.alpha_composite(canvas.convert("RGBA"), overlay).convert("RGB"), (0, 0))
@@ -369,20 +382,7 @@ def _template_q(draw, canvas, photo, title, category, price, cta="SHOP NOW AT US
     _render_direct_pin(draw, canvas, photo, title, category, price, cta, layout="bottom_floating")
 
 
-def _prepare_photo_for_style(
-    photo: Image.Image,
-    photo2: Optional[Image.Image],
-    photo3: Optional[Image.Image],
-    target_w: int,
-    target_h: int,
-    style: str,
-) -> Image.Image:
-    """Prepare product photo into 1000x1500 full-bleed canvas with zero borders or cards."""
-    return _boost(_fit_image(photo, target_w, target_h))
 
-
-def _draw_trust_badge_pill(draw: ImageDraw.Draw, canvas: Image.Image, badge_text: str, y_top: int = 50, x_right: int = 50, bg_color=None, fg_color=WARM_WHITE):
-    pass
 
 
 def _prepare_photo_for_style(
