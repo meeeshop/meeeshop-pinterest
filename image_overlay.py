@@ -17,7 +17,7 @@ import os
 import tempfile
 import time
 from pathlib import Path
-from typing import Optional, Tuple, List
+from typing import Optional, Tuple, List, Dict, Any
 
 
 
@@ -336,6 +336,237 @@ def _render_direct_pin(
     canvas.paste(Image.alpha_composite(canvas.convert("RGBA"), overlay).convert("RGB"), (0, 0))
 
 
+# ── Smooth Curved Arrow Helper ───────────────────────────────────────────────
+
+def _draw_smooth_curved_arrow(
+    draw: ImageDraw.Draw,
+    start_pt: Tuple[int, int],
+    control_pt: Tuple[int, int],
+    end_pt: Tuple[int, int],
+    color: Tuple[int, int, int] = (20, 20, 25),
+    width: int = 3,
+):
+    """Draw smooth quadratic bezier curve with a crisp arrowhead pointing to the garment."""
+    import math
+    num_steps = 25
+    points = []
+    for i in range(num_steps + 1):
+        t = i / float(num_steps)
+        # B(t) = (1-t)^2 * P0 + 2(1-t)t * P1 + t^2 * P2
+        x = ((1 - t) ** 2) * start_pt[0] + 2 * (1 - t) * t * control_pt[0] + (t ** 2) * end_pt[0]
+        y = ((1 - t) ** 2) * start_pt[1] + 2 * (1 - t) * t * control_pt[1] + (t ** 2) * end_pt[1]
+        points.append((x, y))
+
+    # Draw white halo underneath for guaranteed 100% contrast on any background
+    for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+        halo_pts = [(x + dx, y + dy) for x, y in points]
+        draw.line(halo_pts, fill=(255, 255, 255, 220), width=width + 2)
+
+    draw.line(points, fill=color, width=width)
+
+    # Arrowhead at end_pt
+    p_prev = points[-4]
+    dx = end_pt[0] - p_prev[0]
+    dy = end_pt[1] - p_prev[1]
+    angle = math.atan2(dy, dx)
+    arrow_len = 16
+    arrow_angle = math.pi / 5.5
+
+    a1 = (end_pt[0] - arrow_len * math.cos(angle - arrow_angle), end_pt[1] - arrow_len * math.sin(angle - arrow_angle))
+    a2 = (end_pt[0] - arrow_len * math.cos(angle + arrow_angle), end_pt[1] - arrow_len * math.sin(angle + arrow_angle))
+
+    draw.polygon([end_pt, a1, a2], fill=color)
+
+
+# ── Feature Breakdown / Infographic Pin Engine ───────────────────────────────
+
+def _render_feature_breakdown_pin(
+    draw: ImageDraw.Draw,
+    canvas: Image.Image,
+    photo: Image.Image,
+    photo2: Optional[Image.Image],
+    title: str,
+    category: str = "New Arrival",
+    price: Optional[str] = None,
+    cta: str = "SHOP THE LOOK → US.MEEESHOP.COM",
+    trust_badge: Optional[str] = "FREE US SHIPPING",
+    highlights: Optional[Dict[str, Any]] = None,
+):
+    """
+    Renders high-converting 'Anatomy of a Perfect Fit' Infographic Pin:
+    - Circular fabric/craftsmanship zoom-in inset
+    - Benefit-driven callouts with curved arrows pointing to garment details
+    - Left-side quick feature badges (Figure Enhancer, Stretchy Fabric, Super Soft)
+    - Bold high-visibility bottom anchor bar with CTA
+    """
+    from content_generator_v2 import generate_product_fit_highlights
+
+    p = _boost(_fit_image(photo, PIN_W, PIN_H))
+    canvas.paste(p, (0, 0))
+
+    overlay = Image.new("RGBA", (PIN_W, PIN_H), (0, 0, 0, 0))
+    ov_draw = ImageDraw.Draw(overlay)
+
+    # Bottom vignette for text anchor
+    vignette_start = 1080
+    vignette_height = PIN_H - vignette_start
+    for i in range(vignette_height):
+        progress = i / float(vignette_height)
+        alpha = int(210 * (progress ** 1.35))
+        ov_draw.line([(0, vignette_start + i), (PIN_W, vignette_start + i)], fill=(10, 10, 14, alpha))
+
+    # Top vignette
+    for i in range(130):
+        progress = 1.0 - (i / 130.0)
+        alpha = int(80 * (progress ** 1.5))
+        ov_draw.line([(0, i), (PIN_W, i)], fill=(10, 10, 14, alpha))
+
+    CREAM_WHITE    = (255, 255, 255, 255)
+    CHAMPAGNE_GOLD = (255, 230, 130, 255)
+    WARM_OAT       = (255, 245, 225, 255)
+    FROSTED_GLASS  = (15, 15, 20, 210)
+    DARK_TEXT      = (20, 20, 25, 255)
+    SHADOW_DARK    = (5, 5, 8, 250)
+
+    def draw_bold_shadowed(d, pos, text, font, fill=CREAM_WHITE, anchor=None):
+        x, y = pos
+        offsets = [(-3,0), (3,0), (0,-3), (0,3), (-2,-2), (2,2), (-2,2), (2,-2), (-1,-1), (1,1)]
+        for dx, dy in offsets:
+            if anchor:
+                d.text((x + dx, y + dy), text, fill=SHADOW_DARK, font=font, anchor=anchor)
+            else:
+                d.text((x + dx, y + dy), text, fill=SHADOW_DARK, font=font)
+        if anchor:
+            d.text((x, y), text, fill=fill, font=font, anchor=anchor)
+        else:
+            d.text((x, y), text, fill=fill, font=font)
+
+    if not highlights:
+        highlights = generate_product_fit_highlights({"title": title, "product_type": category})
+
+    # 1. Top-Left Headline ("A NEW KIND OF LUXE")
+    h_sub = highlights.get("top_header_sub", "A NEW KIND OF")
+    h_main = highlights.get("top_header_main", "LUXE")
+    draw_bold_shadowed(ov_draw, (45, 40), h_sub, _get_font(20, bold=True), fill=DARK_TEXT)
+    draw_bold_shadowed(ov_draw, (45, 62), h_main, _get_font(52, bold=True), fill=DARK_TEXT)
+
+    # 2. Top-Right Trust Badge Pill
+    tb_text = f"★  {(trust_badge or 'FREE US SHIPPING').upper()}"
+    tb_font = _get_font(30, bold=True)
+    tb_box = tb_font.getbbox(tb_text)
+    tb_w = tb_box[2] - tb_box[0]
+    tb_h = tb_box[3] - tb_box[1]
+    pill_w = tb_w + 48
+    pill_h = tb_h + 24
+    pill_x = PIN_W - pill_w - 45
+    pill_y = 45
+    _draw_rounded_rect(ov_draw, (pill_x, pill_y, pill_x + pill_w, pill_y + pill_h), r=pill_h // 2, fill=FROSTED_GLASS)
+    ov_draw.text((pill_x + 24, pill_y + 12), tb_text, fill=CREAM_WHITE, font=tb_font)
+
+    # 3. Circular Detail Zoom Inset (x=240, y=310, dia=210)
+    zoom_dia = 210
+    zoom_r = zoom_dia // 2
+    zx, zy = 240, 310
+    
+    # Extract zoom crop from photo2 (variant shot) or zoomed center of photo
+    if photo2 is not None:
+        zoom_src = photo2
+    else:
+        pw, ph = photo.size
+        cw, ch = int(pw * 0.40), int(ph * 0.30)
+        cx, cy = (pw - cw) // 2, int(ph * 0.40)
+        zoom_src = photo.crop((cx, cy, cx + cw, cy + ch))
+    
+    zoom_fit = _boost(_fit_image(zoom_src, zoom_dia, zoom_dia))
+    
+    # Circular mask
+    mask = Image.new("L", (zoom_dia, zoom_dia), 0)
+    ImageDraw.Draw(mask).ellipse((0, 0, zoom_dia, zoom_dia), fill=255)
+    
+    # Paste onto canvas
+    canvas.paste(zoom_fit, (zx - zoom_r, zy - zoom_r), mask)
+    
+    # Draw circular white border
+    ImageDraw.Draw(canvas).ellipse((zx - zoom_r - 2, zy - zoom_r - 2, zx + zoom_r + 2, zy + zoom_r + 2), outline=(255, 255, 255), width=5)
+
+    # 4. Feature Callout 1 (Right Waist / Panels)
+    c1 = highlights.get("callout_waist", {})
+    t1_title = c1.get("title", "Contour waistbands")
+    t1_desc = c1.get("desc", "and slimming panels that hug your body")
+    c1_f_title = _get_font(25, bold=True)
+    c1_f_desc = _get_font(21, bold=False)
+    draw_bold_shadowed(ov_draw, (680, 330), t1_title, c1_f_title, fill=DARK_TEXT)
+    draw_bold_shadowed(ov_draw, (680, 360), t1_desc, c1_f_desc, fill=DARK_TEXT)
+    _draw_smooth_curved_arrow(ov_draw, start_pt=(675, 410), control_pt=(685, 420), end_pt=(660, 422), color=DARK_TEXT)
+
+    # 5. Feature Callout 2 (Center Left / Detail Zoom)
+    c2 = highlights.get("callout_zoom", {})
+    t2_title = c2.get("title", "Heart-shaped yoke")
+    t2_desc = c2.get("desc", "gives that natural lift")
+    draw_bold_shadowed(ov_draw, (220, 415), t2_title, c1_f_title, fill=DARK_TEXT, anchor="mt")
+    draw_bold_shadowed(ov_draw, (220, 445), t2_desc, c1_f_desc, fill=DARK_TEXT, anchor="mt")
+    _draw_smooth_curved_arrow(ov_draw, start_pt=(330, 455), control_pt=(365, 470), end_pt=(405, 465), color=DARK_TEXT)
+
+    # 6. Feature Callout 3 (Left Pocket / Silhouette)
+    c3 = highlights.get("callout_pocket", {})
+    t3_title = c3.get("title", "Short back pockets")
+    t3_desc = c3.get("desc", "make your silhouette look fuller")
+    draw_bold_shadowed(ov_draw, (280, 525), t3_title, c1_f_title, fill=DARK_TEXT, anchor="rt")
+    draw_bold_shadowed(ov_draw, (280, 555), t3_desc, c1_f_desc, fill=DARK_TEXT, anchor="rt")
+    _draw_smooth_curved_arrow(ov_draw, start_pt=(335, 535), control_pt=(380, 530), end_pt=(400, 515), color=DARK_TEXT)
+
+    # 7. Feature Callout 4 (Lower Leg / Stretch)
+    c4 = highlights.get("callout_fabric", {})
+    t4_title = c4.get("title", "2% Spandex blend.")
+    t4_desc = c4.get("desc", "Hugs your curves and moves with you.")
+    draw_bold_shadowed(ov_draw, (730, 725), t4_title, c1_f_title, fill=DARK_TEXT)
+    draw_bold_shadowed(ov_draw, (730, 755), t4_desc, c1_f_desc, fill=DARK_TEXT)
+    _draw_smooth_curved_arrow(ov_draw, start_pt=(630, 765), control_pt=(600, 760), end_pt=(570, 755), color=DARK_TEXT)
+
+    # 8. Left Feature Attribute Badges (Column at x=20, y=940..1280)
+    badges = highlights.get("badges", ["Figure Enhancer", "Stretchy Fabric", "Super Soft"])
+    b_y = 930
+    for b_text in badges[:3]:
+        card_w, card_h = 135, 105
+        _draw_rounded_rect(ov_draw, (20, b_y, 20 + card_w, b_y + card_h), r=16, fill=(15, 15, 20, 215))
+        # Icon / text
+        ov_draw.text((20 + card_w // 2, b_y + 20), "★", fill=CHAMPAGNE_GOLD, font=_get_font(26, bold=True), anchor="mt")
+        b_lines = _wrap_text(b_text, _get_font(18, bold=True), max_width=card_w - 10)
+        for li, line in enumerate(b_lines[:2]):
+            ov_draw.text((20 + card_w // 2, b_y + 55 + li * 20), line, fill=CREAM_WHITE, font=_get_font(16, bold=True), anchor="mt")
+        b_y += card_h + 14
+
+    # 9. Bottom Anchor Bar
+    hook_text = "M E E E S H O P  •  N E W  A R R I V A L S"
+    hook_font = _get_font(25, bold=True)
+    draw_bold_shadowed(ov_draw, (PIN_W // 2, 1165), hook_text, hook_font, fill=CHAMPAGNE_GOLD, anchor="mt")
+
+    # Product Title & Price
+    clean_title = (title or "").strip()
+    for leak in ["we need", "create a", "product:", "type:"]:
+        if leak in clean_title.lower():
+            clean_title = "Trending Boutique Style"
+            break
+
+    price_str = f"${float(str(price).replace('$', '')):.2f}" if price and any(c.isdigit() for c in str(price)) else ""
+    sub_text = f"{price_str}   •   FREE US SHIPPING   •   TRUE-TO-SIZE FIT" if price_str else "FREE US SHIPPING   •   TRUE-TO-SIZE FIT"
+    draw_bold_shadowed(ov_draw, (PIN_W // 2, 1265), sub_text, _get_font(32, bold=True), fill=WARM_OAT, anchor="mt")
+
+    # CTA Button
+    cta_btn_w = 640
+    cta_btn_h = 72
+    cta_btn_x = (PIN_W - cta_btn_w) // 2
+    cta_btn_y = 1345
+    _draw_rounded_rect(ov_draw, (cta_btn_x, cta_btn_y, cta_btn_x + cta_btn_w, cta_btn_y + cta_btn_h), r=cta_btn_h // 2, fill=(255, 255, 255, 250))
+    cta_font = _get_font(28, bold=True)
+    ov_draw.text((PIN_W // 2, cta_btn_y + 19), "SHOP THE LOOK  →  US.MEEESHOP.COM", fill=(15, 15, 20, 255), font=cta_font, anchor="mt")
+
+    # Merge overlay onto canvas
+    canvas.paste(Image.alpha_composite(canvas.convert("RGBA"), overlay).convert("RGB"), (0, 0))
+
+
+# ── Template Mappings ────────────────────────────────────────────────────────
+
 def _template_a(draw, canvas, photo, title, category, price):
     _render_direct_pin(draw, canvas, photo, title, category, price, layout="bottom_floating")
 
@@ -386,6 +617,9 @@ def _template_p(draw, canvas, photo, title, category, price, cta="Shop Now"):
 
 def _template_q(draw, canvas, photo, title, category, price, cta="SHOP NOW AT US.MEEESHOP.COM"):
     _render_direct_pin(draw, canvas, photo, title, category, price, cta, layout="bottom_floating")
+
+def _template_infographic(draw, canvas, photo, photo2, title, category, price, cta="SHOP THE LOOK → US.MEEESHOP.COM", trust_badge=None, highlights=None):
+    _render_feature_breakdown_pin(draw, canvas, photo, photo2, title, category, price, cta, trust_badge=trust_badge, highlights=highlights)
 
 
 
@@ -591,8 +825,10 @@ def create_pin_image(
             _template_p(draw, canvas, photo, title, category, price, cta)
         elif template_index == 16:
             _template_q(draw, canvas, photo, title, category, price, cta)
+        elif template_index == 17:
+            _template_infographic(draw, canvas, photo, photo2, title, category, price, cta, trust_badge=trust_badge)
         else:
-            _template_p(draw, canvas, photo, title, category, price, cta)
+            _template_infographic(draw, canvas, photo, photo2, title, category, price, cta, trust_badge=trust_badge)
 
         if not output_path:
             output_path = tempfile.mktemp(suffix=".jpg", prefix="pin_final_")
@@ -606,9 +842,9 @@ def create_pin_image(
         return None
 
 
-# High-converting templates for Pinterest: 14 (Quad Collage), 11 (Tri-Photo), 10 (Dual Split), 15 (Editorial Hero), 16 (Lookbook Hero)
-LIFESTYLE_TEMPLATES = [14, 11, 10, 15, 16, 14, 11]
-ALL_TEMPLATES = [14, 11, 10, 15, 16, 0, 1, 2, 3, 4, 5, 6, 7, 8, 12, 13]
+# High-converting templates for Pinterest: 17 (Infographic Anatomy of a Fit), 14 (Quad Collage), 11 (Tri-Photo), 15 (Editorial Hero), 16 (Lookbook Hero)
+LIFESTYLE_TEMPLATES = [17, 14, 11, 17, 15, 16, 17]
+ALL_TEMPLATES = [17, 14, 11, 10, 15, 16, 17, 0, 1, 2, 3, 4, 5, 6, 7, 8, 12, 13]
 ALL_STYLES = ["collage", "carousel", "collage", "hero"]
 
 

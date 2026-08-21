@@ -145,22 +145,29 @@ def post_single_pin_stealth(
                     slide_overlay = temp_dir / f"stealth_cslide_ovl_{product_data['product_id']}_{slide_idx}.jpg"
                     if not download_image(img_url, slide_raw):
                         continue
-                    # Slide 1: full overlay; subsequent slides: minimal overlay
-                    _, tpl = get_next_style_and_template(
-                        last_style=style_used,
-                        last_template=template_used if slide_idx == 0 else (template_used + slide_idx) % 17,
-                        board_name=board_name,
-                        title=content["pin_title"],
-                    )
+                    # Carousel Funnel Architecture:
+                    # Slide 1: Lookbook / Lifestyle Collage Hero (Template 14/15/16)
+                    # Slide 2: High-Converting Feature Breakdown / Infographic Fit Slide (Template 17)
+                    # Slide 3+: Additional lifestyle / product angles
+                    if slide_idx == 0:
+                        tpl = template_used if template_used != 17 else 14
+                        slide_style = style_used
+                    elif slide_idx == 1:
+                        tpl = 17  # Infographic Feature & Fit Breakdown slide!
+                        slide_style = "hero"
+                    else:
+                        tpl = 0
+                        slide_style = "card"
+
                     slide_out = add_text_overlay(
                         str(slide_raw),
-                        title=content["pin_title"] if slide_idx == 0 else "",
-                        cta="Shop Now" if slide_idx == 0 else "",
-                        price=product_data.get("price") if slide_idx == 0 else None,
+                        title=content["pin_title"] if slide_idx in (0, 1) else "",
+                        cta="SHOP THE LOOK → US.MEEESHOP.COM" if slide_idx == 0 else "",
+                        price=product_data.get("price") if slide_idx in (0, 1) else None,
                         output_path=str(slide_overlay),
-                        template_index=tpl if slide_idx == 0 else 0,
+                        template_index=tpl,
                         board_name=board_name,
-                        image_style="card" if (slide_idx > 0 or style_used == "collage") else style_used,
+                        image_style=slide_style,
                     ) or str(slide_raw)
                     slide_images.append(slide_out)
                     slide_raw.unlink(missing_ok=True)

@@ -219,6 +219,112 @@ def generate_keywords_for_seo(product_data: Dict[str, Any]) -> List[str]:
     )
 
 
+# ── Fit Highlights / Infographic Annotations ──────────────────────────────────
+
+def generate_product_fit_highlights(product_data: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Generate benefit-driven feature annotations for the 'Anatomy of a Perfect Fit' pin infographic:
+    - Top headline hook
+    - 4 benefit callouts with specific body/garment locations
+    - 3 bottom-left quick feature badges
+    """
+    title = (product_data.get("title") or "").strip()
+    product_type = (product_data.get("product_type") or "").strip().lower()
+    tags_str = " ".join(product_data.get("tags", [])).lower()
+    desc_str = (product_data.get("description") or "").lower()
+    combined_text = f"{title.lower()} {product_type} {tags_str} {desc_str}"
+
+    # Default category-tailored highlights bank
+    if any(w in combined_text for w in ["jean", "denim", "pant", "flare", "trouser", "legging", "short"]):
+        return {
+            "top_header_sub": "A NEW KIND OF",
+            "top_header_main": "LUXE",
+            "callout_waist": {
+                "title": "Contour waistbands",
+                "desc": "and slimming panels that hug your body"
+            },
+            "callout_zoom": {
+                "title": "Heart-shaped yoke",
+                "desc": "gives that natural lift & shape"
+            },
+            "callout_pocket": {
+                "title": "Short back pockets",
+                "desc": "make your silhouette look fuller"
+            },
+            "callout_fabric": {
+                "title": "2% Spandex blend.",
+                "desc": "Hugs your curves and moves with you."
+            },
+            "badges": ["Figure Enhancer", "Stretchy Fabric", "Super Soft"]
+        }
+    elif any(w in combined_text for w in ["dress", "gown", "romper", "jumpsuit", "midi", "maxi"]):
+        return {
+            "top_header_sub": "THE PERFECT",
+            "top_header_main": "FIT",
+            "callout_waist": {
+                "title": "Sculpted bodice",
+                "desc": "frames collarbone & waistline effortlessly"
+            },
+            "callout_zoom": {
+                "title": "Tie-back detail",
+                "desc": "cinches the waist for a custom silhouette"
+            },
+            "callout_pocket": {
+                "title": "Flowy A-line drape",
+                "desc": "skims gracefully with gorgeous movement"
+            },
+            "callout_fabric": {
+                "title": "Luxe stretch blend.",
+                "desc": "100% breathable with all-day comfort."
+            },
+            "badges": ["Snatched Waist", "Bra-Friendly", "Ultra Breathable"]
+        }
+    elif any(w in combined_text for w in ["sweater", "cardigan", "knit", "hoodie", "crew"]):
+        return {
+            "top_header_sub": "COZY CHIC",
+            "top_header_main": "STYLE",
+            "callout_waist": {
+                "title": "Ribbed neckline",
+                "desc": "retains shape wash after wash"
+            },
+            "callout_zoom": {
+                "title": "Chunky knit weave",
+                "desc": "ultra-plush texture with zero itch"
+            },
+            "callout_pocket": {
+                "title": "Relaxed drop shoulder",
+                "desc": "effortless chic silhouette for layering"
+            },
+            "callout_fabric": {
+                "title": "Cloud-soft yarn.",
+                "desc": "Warm, lightweight & anti-pilling."
+            },
+            "badges": ["Ultra Cozy", "Zero Itch", "True to Size"]
+        }
+    else:  # Tops, Blouses, Bodysuits, Jackets, General Fashion
+        return {
+            "top_header_sub": "EFFORTLESS",
+            "top_header_main": "LUXE",
+            "callout_waist": {
+                "title": "Flattering neckline",
+                "desc": "enhances collarbone & shoulders"
+            },
+            "callout_zoom": {
+                "title": "Tailored seams",
+                "desc": "premium boutique craftsmanship"
+            },
+            "callout_pocket": {
+                "title": "Tuck-in cut",
+                "desc": "pairs seamlessly with high-waist bottoms"
+            },
+            "callout_fabric": {
+                "title": "4-Way Stretch blend.",
+                "desc": "Silky soft & wrinkle-resistant."
+            },
+            "badges": ["Double Lined", "4-Way Stretch", "Shape Retaining"]
+        }
+
+
 # ── Package ───────────────────────────────────────────────────────────────────
 
 def generate_content_package(product_data: Dict[str, Any], board_name: str) -> Dict[str, Any]:
@@ -230,6 +336,7 @@ def generate_content_package(product_data: Dict[str, Any], board_name: str) -> D
         "pin_alt_text":    generate_alt_text(product_data),
         "hashtags":        generate_hashtags(product_data, board_name),
         "keywords":        generate_keywords_for_seo(product_data),
+        "fit_highlights":  generate_product_fit_highlights(product_data),
     }
 
 
