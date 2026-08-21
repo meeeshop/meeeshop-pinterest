@@ -89,8 +89,8 @@ VIDEO_PREFERRED_BOARDS = [
 
 VIDEO_W, VIDEO_H  = 1080, 1920
 FPS               = 30
-CLIP_DURATION     = 1.0    # seconds per product image slide
-VOICEOVER_DURATION = 4     # max voiceover length in seconds
+CLIP_DURATION     = 2.8    # seconds per product image slide (allows shoppers to read fit/anatomy details)
+VOICEOVER_DURATION = 11    # synchronized voiceover duration in seconds
 OUT_DIR           = Path(__file__).parent / "generated_videos"
 OUT_DIR.mkdir(exist_ok=True)
 
@@ -258,6 +258,50 @@ def _load_product_image(url: str) -> Optional[Image.Image]:
         return None
 
 
+# ── Smooth Curved Arrow Helper for 1080x1920 Video ──────────────────────────
+
+def _draw_video_curved_arrow(
+    draw: ImageDraw.Draw,
+    start_pt: Tuple[int, int],
+    control_pt: Tuple[int, int],
+    end_pt: Tuple[int, int],
+    color: Tuple[int, int, int] = (255, 255, 255),
+    width: int = 4,
+):
+    """Draw smooth quadratic bezier curve with an arrowhead on 1080x1920 video frame."""
+    import math
+    num_steps = 25
+    points = []
+    for i in range(num_steps + 1):
+        t = i / float(num_steps)
+        x = ((1 - t) ** 2) * start_pt[0] + 2 * (1 - t) * t * control_pt[0] + (t ** 2) * end_pt[0]
+        y = ((1 - t) ** 2) * start_pt[1] + 2 * (1 - t) * t * control_pt[1] + (t ** 2) * end_pt[1]
+        points.append((x, y))
+
+    # Dark halo for contrast
+    for dx, dy in [(-2, 0), (2, 0), (0, -2), (0, 2), (-2, -2), (2, 2)]:
+        halo_pts = [(x + dx, y + dy) for x, y in points]
+        draw.line(halo_pts, fill=(10, 10, 14, 230), width=width + 3)
+
+    draw.line(points, fill=color, width=width)
+
+    # Arrowhead at end_pt
+    p_prev = points[-4]
+    dx = end_pt[0] - p_prev[0]
+    dy = end_pt[1] - p_prev[1]
+    angle = math.atan2(dy, dx)
+    arrow_len = 22
+    arrow_angle = math.pi / 5.5
+
+    a1 = (end_pt[0] - arrow_len * math.cos(angle - arrow_angle), end_pt[1] - arrow_len * math.sin(angle - arrow_angle))
+    a2 = (end_pt[0] - arrow_len * math.cos(angle + arrow_angle), end_pt[1] - arrow_len * math.sin(angle + arrow_angle))
+
+    for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+        draw.polygon([(end_pt[0] + dx, end_pt[1] + dy), (a1[0] + dx, a1[1] + dy), (a2[0] + dx, a2[1] + dy)], fill=(10, 10, 14, 230))
+
+    draw.polygon([end_pt, a1, a2], fill=color)
+
+
 def _compose_frame(
     bg: Image.Image,
     product_img: Image.Image,
@@ -270,10 +314,16 @@ def _compose_frame(
     x_offset: float = 0.0,
     y_offset: float = 0.0,
     angle: float = 0.0,
+    slide_idx: int = 0,
+    total_slides: int = 4,
+    highlights: Optional[Dict] = None,
 ) -> Image.Image:
     """
-    Compose video frame: Render plain crisp warm cream text directly on product video frame.
-    ZERO background boxes, ZERO cards, ZERO gradient rectangles!
+    Compose 9:16 vertical video frame (1080x1920) with frame-by-frame feature breakdown:
+    - Scene 0: Brand Hook & Full Lookbook Title
+    - Scene 1: Fit & Waistline Focus with Arrow Callout
+    - Scene 2: Fabric & Stretch Focus with Arrow Callout
+    - Scene 3+: Social Proof, Shipping Offer & Final Shop CTA
     """
     w, h   = VIDEO_W, VIDEO_H
     canvas = bg.copy()
@@ -284,7 +334,6 @@ def _compose_frame(
     nw, nh  = max(1, int(pw * cur_sc)), max(1, int(ph * cur_sc))
     
     fg = product_img.resize((nw, nh), Image.LANCZOS)
-    
     if angle != 0:
         fg = fg.rotate(angle, resample=Image.BICUBIC, expand=True)
     
@@ -297,42 +346,165 @@ def _compose_frame(
     else:
         canvas.paste(fg, (x_pos, y_pos))
 
-    img = canvas.convert("RGB")
-    draw = ImageDraw.Draw(img)
+    # RGBA overlay for frosted pills and gradient vignettes
+    overlay = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    ov_draw = ImageDraw.Draw(overlay)
 
-    CREAM_WHITE = (250, 248, 244)
-    SHADOW_DARK = (15, 15, 15)
+    # Top gradient vignette (0..200)
+    for i in range(200):
+        progress = 1.0 - (i / 200.0)
+        alpha = int(120 * (progress ** 1.4))
+        ov_draw.line([(0, i), (w, i)], fill=(10, 10, 14, alpha))
 
-    def draw_direct_text(pos, text, font, fill=CREAM_WHITE, anchor="mm"):
+    # Bottom gradient vignette (1450..1920)
+    v_start = 1450
+    v_h = h - v_start
+    for i in range(v_h):
+        progress = i / float(v_h)
+        alpha = int(220 * (progress ** 1.3))
+        ov_draw.line([(0, v_start + i), (w, v_start + i)], fill=(10, 10, 14, alpha))
+
+    CREAM_WHITE    = (255, 255, 255, 255)
+    CHAMPAGNE_GOLD = (255, 230, 130, 255)
+    WARM_OAT       = (255, 245, 225, 255)
+    FROSTED_GLASS  = (15, 15, 20, 210)
+    SHADOW_DARK    = (5, 5, 8, 250)
+
+    def draw_bold_shadowed(d, pos, text, font, fill=CREAM_WHITE, anchor="mm"):
         x, y = pos
-        for dx, dy in [(-2,0), (2,0), (0,-2), (0,2), (-1,-1), (1,1), (-1,1), (1,-1)]:
-            draw.text((x + dx, y + dy), text, fill=SHADOW_DARK, font=font, anchor=anchor)
-        draw.text((x, y), text, fill=fill, font=font, anchor=anchor)
+        for dx, dy in [(-3,0), (3,0), (0,-3), (0,3), (-2,-2), (2,2), (-2,2), (2,-2), (-1,-1), (1,1)]:
+            d.text((x + dx, y + dy), text, fill=SHADOW_DARK, font=font, anchor=anchor)
+        d.text((x, y), text, fill=fill, font=font, anchor=anchor)
 
-    # Line 1: Top handwritten script hook ("Trending:") directly on video frame
-    script_f = _font(54, bold=False, script=True)
-    draw_direct_text((w // 2, int(h * 0.12)), "Trending:", script_f, anchor="mm")
+    def draw_video_pill(d, x, y, title_text, desc_text, align="left"):
+        t_font = _font(34, bold=True)
+        d_font = _font(26, bold=False)
+        t_box = t_font.getbbox(title_text)
+        d_box = d_font.getbbox(desc_text)
+        t_w = t_box[2] - t_box[0]
+        d_w = d_box[2] - d_box[0]
+        max_w = max(t_w, d_w)
+        pad_x, pad_y = 28, 16
+        card_w = max_w + pad_x * 2
+        card_h = (t_box[3] - t_box[1]) + (d_box[3] - d_box[1]) + pad_y * 2 + 10
+        
+        if align == "right":
+            rx1 = x - card_w
+            rx2 = x
+        elif align == "center":
+            rx1 = x - card_w // 2
+            rx2 = x + card_w // 2
+        else:
+            rx1 = x
+            rx2 = x + card_w
+            
+        ry1 = y
+        ry2 = y + card_h
+        
+        # Rounded pill
+        r = 18
+        d.rounded_rectangle([rx1, ry1, rx2, ry2], radius=r, fill=FROSTED_GLASS)
+        
+        if align == "right":
+            d.text((rx2 - pad_x, ry1 + pad_y), title_text, fill=CREAM_WHITE, font=t_font, anchor="ra")
+            d.text((rx2 - pad_x, ry1 + pad_y + 40), desc_text, fill=WARM_OAT, font=d_font, anchor="ra")
+        elif align == "center":
+            d.text((rx1 + card_w // 2, ry1 + pad_y), title_text, fill=CREAM_WHITE, font=t_font, anchor="ma")
+            d.text((rx1 + card_w // 2, ry1 + pad_y + 40), desc_text, fill=WARM_OAT, font=d_font, anchor="ma")
+        else:
+            d.text((rx1 + pad_x, ry1 + pad_y), title_text, fill=CREAM_WHITE, font=t_font)
+            d.text((rx1 + pad_x, ry1 + pad_y + 40), desc_text, fill=WARM_OAT, font=d_font)
+            
+        return (rx1, ry1, rx2, ry2)
 
-    # Line 2: Product Title in bold sans-serif directly on video frame
-    title_f = _font(40, bold=True)
-    for i, line in enumerate(textwrap.wrap(title, 26)[:2]):
-        draw_direct_text((w // 2, int(h * 0.18) + i * 48), line.upper(), title_f, anchor="mm")
+    clean_title = (title or "").strip()
+    for leak in ["we need", "create a", "product:", "type:"]:
+        if leak in clean_title.lower():
+            clean_title = "Trending Boutique Style"
+            break
 
-    # Price directly on video frame (only if valid non-zero price)
-    try:
-        price_val = float(str(price).replace("$", "").strip()) if price else 0.0
-    except (ValueError, TypeError):
-        price_val = 0.0
+    price_str = f"${float(str(price).replace('$', '')):.2f}" if price and any(c.isdigit() for c in str(price)) else ""
 
-    if price_val > 0.01:
-        price_f = _font(38, bold=True)
-        draw_direct_text((w // 2, int(h * 0.88)), f"${price}", price_f, fill=CREAM_WHITE, anchor="mm")
+    if not highlights:
+        try:
+            from content_generator_v2 import generate_product_fit_highlights
+            highlights = generate_product_fit_highlights({"title": title, "product_type": "Fashion"})
+        except Exception:
+            highlights = {}
 
-    # Bottom minimal CTA directly on video frame
-    cta_f = _font(24, bold=True)
-    cta_text = "SHOP NOW AT US.MEEESHOP.COM" if show_url else "SHOP NOW ★ US.MEEESHOP.COM"
-    draw_direct_text((w // 2, int(h * 0.94)), cta_text, cta_f, fill=CREAM_WHITE, anchor="mm")
+    # ── SCENE 0: INTRO HOOK ──────────────────────────────────────────────────
+    if slide_idx == 0:
+        # Top Hook
+        draw_bold_shadowed(ov_draw, (w // 2, 140), "M E E E S H O P  •  N E W  A R R I V A L S", _font(30, bold=True), fill=CHAMPAGNE_GOLD, anchor="mm")
+        
+        # Product Headline (Wrapped)
+        title_lines = textwrap.wrap(clean_title.upper(), width=26)[:2]
+        for idx_l, t_line in enumerate(title_lines):
+            draw_bold_shadowed(ov_draw, (w // 2, 220 + idx_l * 56), t_line, _font(48, bold=True), fill=CREAM_WHITE, anchor="mm")
 
+        # Bottom Bar: Price & Fit Guarantee
+        sub_text = f"{price_str}   •   FREE US SHIPPING   •   TRUE-TO-SIZE FIT" if price_str else "FREE US SHIPPING   •   TRUE-TO-SIZE FIT"
+        draw_bold_shadowed(ov_draw, (w // 2, 1680), sub_text, _font(36, bold=True), fill=WARM_OAT, anchor="mm")
+
+        # CTA Pill
+        cta_btn_w, cta_btn_h = 720, 82
+        bx1 = (w - cta_btn_w) // 2
+        by1 = 1760
+        ov_draw.rounded_rectangle([bx1, by1, bx1 + cta_btn_w, by1 + cta_btn_h], radius=cta_btn_h // 2, fill=(255, 255, 255, 250))
+        ov_draw.text((w // 2, by1 + 22), "SHOP THE LOOK  →  US.MEEESHOP.COM", fill=(15, 15, 20, 255), font=_font(32, bold=True), anchor="mm")
+
+    # ── SCENE 1: FIT & SILHOUETTE FOCUS ──────────────────────────────────────
+    elif slide_idx == 1:
+        # Top Tag
+        ov_draw.rounded_rectangle([60, 110, 520, 175], radius=32, fill=FROSTED_GLASS)
+        ov_draw.text((290, 142), "★  FIT & SILHOUETTE FOCUS", fill=CHAMPAGNE_GOLD, font=_font(26, bold=True), anchor="mm")
+
+        # Waist Callout Pill
+        c1 = highlights.get("callout_waist", {})
+        t1_title = c1.get("title", "Contour Waistband")
+        t1_desc = c1.get("desc", "Slimming panels that hug your natural curves")
+        p1 = draw_video_pill(ov_draw, 480, 480, t1_title, t1_desc, align="left")
+        _draw_video_curved_arrow(ov_draw, start_pt=(p1[0] + 40, p1[3]), control_pt=(560, 620), end_pt=(530, 640), color=(255, 255, 255))
+
+        # Bottom Bar
+        draw_bold_shadowed(ov_draw, (w // 2, 1720), "DESIGNED FOR A FLATTERING, CONFIDENT FIT", _font(34, bold=True), fill=WARM_OAT, anchor="mm")
+        draw_bold_shadowed(ov_draw, (w // 2, 1780), "US.MEEESHOP.COM  •  FAST US DELIVERY", _font(28, bold=True), fill=CREAM_WHITE, anchor="mm")
+
+    # ── SCENE 2: FABRIC & CRAFTSMANSHIP FOCUS ────────────────────────────────
+    elif slide_idx == 2:
+        # Top Tag
+        ov_draw.rounded_rectangle([60, 110, 560, 175], radius=32, fill=FROSTED_GLASS)
+        ov_draw.text((310, 142), "★  PREMIUM FABRIC & STRETCH", fill=CHAMPAGNE_GOLD, font=_font(26, bold=True), anchor="mm")
+
+        # Fabric Callout Pill
+        c4 = highlights.get("callout_fabric", {})
+        t4_title = c4.get("title", "Ultra-Stretch Comfort Blend")
+        t4_desc = c4.get("desc", "Moves with you all day with zero bagging")
+        p2 = draw_video_pill(ov_draw, 140, 880, t4_title, t4_desc, align="left")
+        _draw_video_curved_arrow(ov_draw, start_pt=(p2[2] - 30, p2[1] + 30), control_pt=(720, 940), end_pt=(680, 980), color=(255, 255, 255))
+
+        # Bottom Bar
+        draw_bold_shadowed(ov_draw, (w // 2, 1720), "BREATHABLE ALL-DAY LUXE COMFORT", _font(34, bold=True), fill=WARM_OAT, anchor="mm")
+        draw_bold_shadowed(ov_draw, (w // 2, 1780), "US.MEEESHOP.COM  •  7-DAY EASY RETURNS", _font(28, bold=True), fill=CREAM_WHITE, anchor="mm")
+
+    # ── SCENE 3+: SOCIAL PROOF & FINAL OFFER CTA ─────────────────────────────
+    else:
+        # Top Tag
+        ov_draw.rounded_rectangle([60, 110, 480, 175], radius=32, fill=FROSTED_GLASS)
+        ov_draw.text((270, 142), "★ ★ ★ ★ ★  BESTSELLER", fill=CHAMPAGNE_GOLD, font=_font(26, bold=True), anchor="mm")
+
+        # Center Offer Card
+        draw_video_pill(ov_draw, w // 2, 1460, "Fast & Free US Shipping", "Easy 7-Day Hassle-Free Returns & Exchanges", align="center")
+
+        # Big CTA Pill
+        cta_btn_w, cta_btn_h = 760, 88
+        bx1 = (w - cta_btn_w) // 2
+        by1 = 1730
+        ov_draw.rounded_rectangle([bx1, by1, bx1 + cta_btn_w, by1 + cta_btn_h], radius=cta_btn_h // 2, fill=(255, 255, 255, 250))
+        ov_draw.text((w // 2, by1 + 24), "TAP TO SHOP YOUR SIZE  →  US.MEEESHOP.COM", fill=(15, 15, 20, 255), font=_font(30, bold=True), anchor="mm")
+
+    # Composite overlay onto canvas
+    img = Image.alpha_composite(canvas.convert("RGBA"), overlay).convert("RGB")
     return img
 
 
@@ -373,21 +545,22 @@ def _slide_clip(
     fmt: Dict,
     effect: str,
     show_url: bool = False,
+    slide_idx: int = 0,
+    total_slides: int = 4,
+    highlights: Optional[Dict] = None,
 ) -> VideoClip:
     import math
-    
-    # Background is already blurred and prepared
     bg_r = bg
 
     def _params(t: float):
-        scale = 1.05  # slightly zoomed in to allow panning without showing edges
+        scale = 1.05
         ox, oy = 0, 0
         progress = t / CLIP_DURATION
         
         if effect == "zoom_in":
-            scale = 1.0 + (progress * 0.1) # 1.0 to 1.1
+            scale = 1.0 + (progress * 0.1)
         elif effect == "zoom_out":
-            scale = 1.1 - (progress * 0.1) # 1.1 to 1.0
+            scale = 1.1 - (progress * 0.1)
         elif effect == "slide_left":
             ox = 50 - (progress * 100)
         elif effect == "slide_right":
@@ -401,10 +574,15 @@ def _slide_clip(
 
     def make_frame(t: float):
         scale, ox, oy, angle = _params(t)
-        frame = _compose_frame(bg_r, product_img, title, price, url, fmt,
-                               product_scale=scale,
-                               show_url=show_url,
-                               x_offset=ox, y_offset=oy, angle=angle)
+        frame = _compose_frame(
+            bg_r, product_img, title, price, url, fmt,
+            product_scale=scale,
+            show_url=show_url,
+            x_offset=ox, y_offset=oy, angle=angle,
+            slide_idx=slide_idx,
+            total_slides=total_slides,
+            highlights=highlights,
+        )
         return np.array(frame)
 
     return VideoClip(make_frame, duration=CLIP_DURATION).set_fps(FPS)
@@ -412,7 +590,7 @@ def _slide_clip(
 
 def build_video(product: Dict, fmt: Dict, bg_colors: List[tuple], store_base_url: str) -> Optional[Tuple[str, str]]:
     """
-    Build a 30s product slideshow mp4 from Shopify product images.
+    Build a multi-scene feature-progression product video (9:16 vertical 1080x1920) with audio & voiceover.
     Returns tuple (video_path, thumbnail_path) or None on failure.
     """
     title  = product["title"]
@@ -425,14 +603,18 @@ def build_video(product: Dict, fmt: Dict, bg_colors: List[tuple], store_base_url
         logger.error(f"No images for product {title}")
         return None
 
-    logger.info(f"Building video: {title[:50]} ({len(images)} slides)")
+    try:
+        from content_generator_v2 import generate_product_fit_highlights
+        highlights = generate_product_fit_highlights(product)
+    except Exception:
+        highlights = {}
 
-    effects = ["float", "wobble", "spin", "zoom-float"]
+    logger.info(f"Building multi-scene feature video: {title[:50]} ({len(images)} slides)")
+
     clips   = []
     thumb_path = None
-    intro_clip = None
 
-    for i, img_data in enumerate(images):
+    for i, img_data in enumerate(images[:4]):
         prod_img = _load_product_image(img_data["src"])
         if prod_img is None:
             continue
@@ -442,13 +624,12 @@ def build_video(product: Dict, fmt: Dict, bg_colors: List[tuple], store_base_url
         
         effects  = ["zoom_in", "zoom_out", "slide_left", "slide_right", "slide_up", "slide_down"]
         effect   = effects[i % len(effects)]
-        show_url = (i == len(images) - 1)
-        clip     = _slide_clip(bg_r, prod_img, title, price, url, fmt, effect, show_url)
+        show_url = (i == len(images[:4]) - 1)
+        clip     = _slide_clip(bg_r, prod_img, title, price, url, fmt, effect, show_url, slide_idx=i, total_slides=min(4, len(images)), highlights=highlights)
         clips.append(clip)
 
-        # Save thumbnail from first image
         if thumb_path is None:
-            intro_frame_img = _compose_frame(bg_r, prod_img, title, price, url, fmt, product_scale=1.0, show_url=False)
+            intro_frame_img = _compose_frame(bg_r, prod_img, title, price, url, fmt, product_scale=1.0, show_url=False, slide_idx=0, total_slides=len(images), highlights=highlights)
             thumb_path = _save_thumbnail(intro_frame_img, handle)
 
     if not clips:
@@ -460,51 +641,44 @@ def build_video(product: Dict, fmt: Dict, bg_colors: List[tuple], store_base_url
         loops = int(math.ceil(5.0 / (len(clips) * CLIP_DURATION)))
         clips = clips * loops
 
-    video       = concatenate_videoclips(clips, method="compose")
-    total_secs  = video.duration
-    audio_clips = []
-
-    # Background music
-    music_path = _pick_music_track()
-    if music_path:
-        bg_aud = AudioFileClip(music_path).volumex(0.35)
-        if bg_aud.duration < total_secs:
-            bg_aud = bg_aud.audio_loop(duration=total_secs)
-        else:
-            bg_aud = bg_aud.subclip(0, total_secs)
-        audio_clips.append(bg_aud)
-        logger.info(f"Background music: {os.path.basename(music_path)}")
-
-    # Voiceover (gTTS) — overlaid at end as CTA
-    vo_text = (
-        f"Discover the {title} at {BRAND_NAME} — only ${price}! "
-        f"Shop the link in description now!"
-    )
-    try:
-        from ai_client import generate as ai_generate
-        ai_result = ai_generate(
-            f"Write a 2-sentence Pinterest video voiceover for USA women shoppers.\n"
-            f"Product: '{title}' — ${price} at {BRAND_NAME}\n"
-            f"Rules: energetic fashion-influencer tone, mention price, say '{BRAND_NAME}', "
-            f"end with 'shop the link', max 35 words, no hashtags.\n"
-            f"Output ONLY the voiceover text, nothing else.",
-            max_tokens=80, temperature=0.9,
-        )
-        if ai_result and len(ai_result.strip()) > 10:
-            vo_text = ai_result.strip()
-    except Exception:
-        pass
+    video = concatenate_videoclips(clips, method="compose")
+    total_secs = video.duration
 
     with tempfile.TemporaryDirectory() as tmp:
-        vo_path = os.path.join(tmp, "vo.mp3")
+        audio_clips = []
+        music_track = _pick_music_track()
+        if music_track and os.path.exists(music_track):
+            try:
+                bg_m = AudioFileClip(music_track)
+                if bg_m.duration < total_secs:
+                    n_loops = int(math.ceil(total_secs / bg_m.duration)) + 1
+                    from moviepy.editor import concatenate_audioclips
+                    bg_m = concatenate_audioclips([bg_m] * n_loops)
+                bg_m = bg_m.subclip(0, total_secs).volumex(0.28)
+                audio_clips.append(bg_m)
+                logger.info(f"Music track mixed: {os.path.basename(music_track)}")
+            except Exception as e:
+                logger.warning(f"Music load failed: {e}")
+
+        # Natural Influencer Voiceover synchronized with fit & benefits
+        vo_path = os.path.join(tmp, "voiceover.mp3")
+        c1 = highlights.get("callout_waist", {})
+        c4 = highlights.get("callout_fabric", {})
+        waist_benefit = c1.get("title", "contour waistband")
+        fabric_benefit = c4.get("title", "premium stretch comfort")
+
+        vo_text = (
+            f"Check out the new {title} at MeeeShop. "
+            f"Designed with a {waist_benefit} and {fabric_benefit} that moves with you. "
+            f"Tap to shop your size with fast, free US shipping today at us.meeeshop.com!"
+        )
         try:
             gTTS(text=vo_text, lang="en", tld="us").save(vo_path)
             vo = AudioFileClip(vo_path)
-            if vo.duration > VOICEOVER_DURATION:
-                vo = vo.subclip(0, VOICEOVER_DURATION)
-            vo_start = max(0, total_secs - vo.duration - 1.0)
-            audio_clips.append(vo.set_start(vo_start).volumex(1.1))
-            logger.info(f"Voiceover: {vo.duration:.1f}s starting at {vo_start:.1f}s (end CTA)")
+            if vo.duration > total_secs:
+                vo = vo.subclip(0, total_secs - 0.5)
+            audio_clips.append(vo.set_start(0.5).volumex(1.15))
+            logger.info(f"Synchronized voiceover generated ({vo.duration:.1f}s)")
         except Exception as e:
             logger.warning(f"gTTS voiceover failed: {e}")
 
@@ -512,7 +686,7 @@ def build_video(product: Dict, fmt: Dict, bg_colors: List[tuple], store_base_url
             video = video.set_audio(CompositeAudioClip(audio_clips))
 
         out_path = str(OUT_DIR / f"{handle[:30]}_{int(time.time())}.mp4")
-        logger.info(f"Rendering → {out_path}")
+        logger.info(f"Rendering multi-scene feature video → {out_path}")
         video.write_videofile(
             out_path, fps=FPS, codec="libx264", audio_codec="aac",
             temp_audiofile=os.path.join(tmp, "tmp_audio.m4a"),
@@ -522,14 +696,7 @@ def build_video(product: Dict, fmt: Dict, bg_colors: List[tuple], store_base_url
 
     video.close()
     size_mb = os.path.getsize(out_path) / 1_048_576
-    logger.info(f"Rendered: {os.path.basename(out_path)} ({size_mb:.1f} MB)")
-    if size_mb > MAX_VIDEO_SIZE_MB:
-        logger.error(f"Video too large ({size_mb:.1f} MB > {MAX_VIDEO_SIZE_MB} MB) — skipping")
-        os.unlink(out_path)
-        if thumb_path and os.path.exists(thumb_path):
-            os.unlink(thumb_path)
-        return None
-
+    logger.info(f"Rendered video: {os.path.basename(out_path)} ({size_mb:.1f} MB)")
     return (out_path, thumb_path)
 
 

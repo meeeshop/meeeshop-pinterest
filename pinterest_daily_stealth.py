@@ -202,6 +202,7 @@ def post_single_pin_stealth(
             try:
                 from pinterest_video_daily import build_video, FORMATS, SOLID_BG_COLORS
                 fmt = random.choice(FORMATS)
+                store_base_url = "https://us.meeeshop.com"
                 shopify_prod_dict = {
                     "title": product_data.get("title", ""),
                     "handle": product_data.get("url", "").split("/products/")[-1].split("?")[0],
