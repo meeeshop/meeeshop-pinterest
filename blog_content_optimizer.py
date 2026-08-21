@@ -11,67 +11,106 @@ from keyword_engine import get_seo_content
 logger = logging.getLogger(__name__)
 
 
+PROMPT_LEAK_KEYWORDS = [
+    "we need",
+    "create a",
+    "here is",
+    "here's",
+    "natural, highly searchable",
+    "highly searchable",
+    "pinterest pin title",
+    "for usa women shoppers",
+    "rules:",
+    "requirements:",
+    "product:",
+    "article:",
+    "season/event:",
+    "occasion focus:",
+    "target event",
+    "reply only",
+    "prompt:",
+    "task:",
+    "ai:",
+    "shopper",
+    "sure!",
+    "sure,",
+    "write an seo",
+]
+
+
+def _is_prompt_leak(text: str) -> bool:
+    if not text or not isinstance(text, str):
+        return True
+    t_lower = text.lower().strip()
+    return any(kw in t_lower for kw in PROMPT_LEAK_KEYWORDS)
+
+
 def generate_blog_pin_title(article: Dict[str, Any]) -> str:
-    """Generate 80-100 character SEO title for blog pins"""
-    title = article.get("title", "")
-    blog_title = article.get("blog_title", "Fashion Blog")
+    """Generate 80-100 character SEO title for blog pins containing actual article title"""
+    title = (article.get("title") or "").strip()
+    blog_title = (article.get("blog_title") or "Fashion Blog").strip()
     seo_data = get_seo_content("blog", [])
 
-    prompt = f"""Create a highly searchable Pinterest pin title (80-100 chars) for this fashion blog article.
+    if not title:
+        return "Women's Boutique Style & Fashion Guide | MeeeShop"
 
+    clean_fallback = f"{title} | US Boutique Fashion Guide"[:100]
+
+    prompt = f"""Write an engaging Pinterest pin title (under 80 chars) for this fashion article:
 Article Title: {title}
 Category: {blog_title}
-Season/Event: {seo_data['event_name']}
 
-Requirements:
-- Target USA women reading fashion & outfit tips
-- Use search terms naturally (e.g. "How to Style...", "10 Outfit Ideas for...", "Trendy US Boutique Style Guide")
-- Max length: 100 characters (aim for 80-100 characters)
-- NO hashtags, NO emojis
+Rules:
+- MUST include key words from article title: "{title}"
+- Max 80 characters
+- NO prompt words, NO hashtags, NO emojis
 
-Reply ONLY with the title."""
+Reply ONLY with the title string."""
 
-    res = generate(prompt, max_tokens=40, temperature=0.6)
+    res = generate(prompt, max_tokens=40, temperature=0.5)
     if res:
-        cleaned = res.strip().strip('"').strip("'")
-        return cleaned[:100]
+        cleaned = res.strip().strip('"').strip("'").splitlines()[0].strip()
+        if not _is_prompt_leak(cleaned) and len(cleaned) >= 5:
+            if "MeeeShop" not in cleaned and len(cleaned) <= 75:
+                cleaned = f"{cleaned} — MeeeShop"
+            return cleaned[:100]
 
-    return f"{title} | US Boutique Fashion Guide"[:100]
+    return clean_fallback
 
 
 def generate_blog_pin_description(article: Dict[str, Any]) -> str:
     """Generate 350-450 character SEO description for blog pins"""
-    title = article.get("title", "")
-    excerpt = article.get("excerpt", "")
+    title = (article.get("title") or "").strip()
+    excerpt = (article.get("excerpt") or "").strip()
     seo_data = get_seo_content("blog", [])
 
-    prompt = f"""Write an SEO-rich Pinterest description (350-450 chars) for this fashion blog post.
+    clean_fallback = (
+        f"Looking for fresh style inspiration? Explore our latest style feature on {title}. "
+        f"Discover effortless outfit ideas, styling tips for {seo_data['event_name'].lower()}, and modern wardrobe essentials. "
+        f"MeeeShop brings you curated boutique trends and fashion advice. "
+        f"Read the full fashion guide on the MeeeShop Blog now!"
+    )[:500]
 
+    prompt = f"""Write an SEO-rich Pinterest description (350-450 chars) for:
 Article: {title}
-Summary/Excerpt: {excerpt[:150]}
-Season: {seo_data['event_name']}
+Summary: {excerpt[:150]}
 
 Requirements:
-- 3-4 natural, engaging sentences explaining what the reader will learn/discover.
-- Target USA women looking for style advice, outfit inspiration, and boutique trends.
+- 3-4 natural, engaging sentences explaining what the reader will discover in {title}.
+- Target USA women looking for outfit inspiration and boutique trends.
 - Include a CTA: "Read the full fashion guide on the MeeeShop Blog now!"
 - Length MUST be between 350 and 450 characters.
 - NO hashtags inside description text.
 
 Reply ONLY with the description text."""
 
-    res = generate(prompt, max_tokens=140, temperature=0.7)
+    res = generate(prompt, max_tokens=140, temperature=0.6)
     if res:
-        desc = res.strip().strip('"')
-        if len(desc) >= 150:
+        desc = res.strip().strip('"').strip("'")
+        if not _is_prompt_leak(desc) and len(desc) >= 150:
             return desc[:500]
 
-    return (
-        f"Looking for new outfit inspiration? Read our latest guide on {title}. "
-        f"Discover top styling tips, trend forecasts for {seo_data['event_name'].lower()}, and how to build "
-        f"versatile looks from your wardrobe. Explore chic fashion ideas from MeeeShop US Boutique. "
-        f"Read the full fashion guide on the MeeeShop Blog now!"
-    )[:500]
+    return clean_fallback
 
 
 def select_blog_boards(

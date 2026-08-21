@@ -518,16 +518,14 @@ def run_daily_stealth_posting(dry_run: bool = False, pins_count: Optional[int] =
         if not formatted.get("image_url"):
             continue
 
-        # Match board using MEEESHOP_BOARDS
-        live_boards = [{"id": b, "name": b} for b in MEEESHOP_BOARDS]
-
-        # Mandatory Guarantees for "Trends" & "New" boards (at least 1 pin per calendar day each)
-        if not trends_posted_today and "Trends" not in used_boards_in_run:
+        # High-Follower Board Prioritization: Guarantee Trends & New in every run
+        # Board URL targets: https://www.pinterest.com/meeeshop/trends/ and https://www.pinterest.com/meeeshop/new/
+        if "Trends" not in used_boards_in_run:
             board_name = "Trends"
-            logger.info("🔥 Mandatory Daily Guarantee: Routing pin to high-traffic 'Trends' board")
-        elif not new_posted_today and "New" not in used_boards_in_run:
+            logger.info("🔥 High-Follower Priority: Routing pin to 'Trends' (https://www.pinterest.com/meeeshop/trends/)")
+        elif "New" not in used_boards_in_run:
             board_name = "New"
-            logger.info("🔥 Mandatory Daily Guarantee: Routing pin to high-traffic 'New' board")
+            logger.info("🔥 High-Follower Priority: Routing pin to 'New' (https://www.pinterest.com/meeeshop/new/)")
         else:
             board = select_best_lru_board(
                 product_title=formatted["title"],
