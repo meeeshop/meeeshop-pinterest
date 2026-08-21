@@ -980,24 +980,68 @@ class StealthPinterestPoster:
                 except Exception:
                     pass
 
-                # Check if specific board is found
+                # Find matching board row using STRICT EXACT MATCH FIRST, then prefix match
                 found_row = None
-                row_selectors = [
-                    f'[data-test-id="board-row"]:has-text("{search_term}")',
-                    f'div[role="button"]:has-text("{search_term}")',
-                    f'div[role="listitem"]:has-text("{search_term}")',
-                    f'div[title*="{search_term}" i]',
-                ]
-                for r_sel in row_selectors:
-                    rows = page.query_selector_all(r_sel)
-                    for r in rows:
-                        if r.is_visible():
-                            found_row = r
-                            break
-                    if found_row:
-                        break
+                all_candidate_rows = page.query_selector_all(
+                    '[data-test-id="board-row"], div[role="button"], div[role="listitem"], div[data-test-id="board-list-item"]'
+                )
 
-                # If not found with search, clear search and grab first available board row
+                # Pass 1: Strict Exact Title Match (e.g. "New" must match "New", not "Fresh Finds: New Pieces...")
+                for r in all_candidate_rows:
+                    try:
+                        if not r.is_visible():
+                            continue
+                        # Check href if board link exists
+                        link_el = r.query_selector('a[href*="/meeeshop/"]')
+                        if link_el:
+                            href = link_el.get_attribute("href") or ""
+                            if f"/meeeshop/{search_term.lower()}/" in href.lower():
+                                found_row = r
+                                logger.info(f"🎯 Matched exact board URL ({href}) for '{board_name}'")
+                                break
+
+                        raw_text = r.inner_text() or ""
+                        lines = [l.strip() for l in raw_text.splitlines() if l.strip() and l.strip().lower() != "save"]
+                        first_line = lines[0] if lines else ""
+
+                        if first_line.lower() == search_term.lower():
+                            found_row = r
+                            logger.info(f"🎯 Matched EXACT board title '{first_line}' for '{board_name}'")
+                            break
+                    except Exception:
+                        continue
+
+                # Pass 2: Starts-with match if exact match wasn't found
+                if not found_row:
+                    for r in all_candidate_rows:
+                        try:
+                            if not r.is_visible():
+                                continue
+                            raw_text = r.inner_text() or ""
+                            lines = [l.strip() for l in raw_text.splitlines() if l.strip() and l.strip().lower() != "save"]
+                            first_line = lines[0] if lines else ""
+                            if first_line.lower().startswith(search_term.lower()):
+                                found_row = r
+                                logger.info(f"🎯 Matched prefix board title '{first_line}' for '{board_name}'")
+                                break
+                        except Exception:
+                            continue
+
+                # Pass 3: Substring search as last resort (excluding obvious wrong matches for "new")
+                if not found_row and search_term.lower() != "new":
+                    for r in all_candidate_rows:
+                        try:
+                            if not r.is_visible():
+                                continue
+                            raw_text = r.inner_text() or ""
+                            if search_term.lower() in raw_text.lower():
+                                found_row = r
+                                logger.info(f"🎯 Matched substring board title for '{board_name}'")
+                                break
+                        except Exception:
+                            continue
+
+                # If still not found with search, clear search and grab first available board row
                 if not found_row:
                     logger.warning(f"Board '{search_term}' not found in search results. Clearing search for fallback...")
                     if search_input:
