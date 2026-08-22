@@ -1688,11 +1688,55 @@
       "pin_url": "https://www.pinterest.com/pin/962222276663317357/",
       "blog_url": "https://us.meeeshop.com/blogs/plus-size-curvy-clothing/tips-for-trendy-stylish-plus-size-womens-winter-wear",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8786744475819,
+      "title": "Romy Foldover Puffer Crossbody - Trendy Back-to-School Must-Have \u2014 MeeeShop",
+      "board": "Trends",
+      "timestamp": "2026-08-22T12:24:22.187105",
+      "type": "video",
+      "style": "collage",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276663327379/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8941746323627,
+      "title": "Blue Horizon Denim Vest Hj903 | MeeeShop US Boutique",
+      "board": "New",
+      "timestamp": "2026-08-22T12:25:31.380986",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276663327399/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8879309226155,
+      "title": "Linen Halter Tank - Chic Summer to School Look for Women \u2014 MeeeShop",
+      "board": "American Bazi",
+      "timestamp": "2026-08-22T12:26:35.616325",
+      "type": "carousel",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276663327429/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8897137180843,
+      "title": "Women's Winter Reversible Fitted Puffer Jacket | MeeeShop US Boutique",
+      "board": "Coats & Jackets",
+      "timestamp": "2026-08-22T12:29:02.791992",
+      "type": "video",
+      "style": "carousel",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276663327491/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-08-18T03:03:00.147026",
-    "Trends": "2026-08-22T02:58:37.385562",
+    "Trends": "2026-08-22T12:24:22.187105",
     "Dresses": "2026-08-18T03:04:34.619148",
     "Feminine & Flowy Fits": "2026-08-18T03:01:25.470252",
     "Short fall dresses": "2026-08-18T12:33:07.657229",
@@ -1737,8 +1781,8 @@
     "Fashion Models": "2026-08-21T03:11:43.464820",
     "My Shop #1737732113": "2026-08-21T12:37:11.882612",
     "Shop For Holidays": "2026-08-21T21:33:29.613600",
-    "New": "2026-08-22T02:59:58.026991",
-    "American Bazi": "2026-08-15T17:54:38.665703",
+    "New": "2026-08-22T12:25:31.380986",
+    "American Bazi": "2026-08-22T12:26:35.616325",
     "Cool & Casual Styles": "2026-08-15T17:55:35.872843",
     "MeeeShop's Luxe Styles": "2026-08-15T21:26:32.597254",
     "Outerwear": "2026-08-15T21:27:33.722132",
@@ -1780,11 +1824,12 @@
     "Bow heels": "2026-08-20T18:00:36.882815",
     "Sweaters": "2026-08-20T21:32:57.133135",
     "Luxe Clothing": "2026-08-21T18:05:31.547180",
-    "Chic & Cozy Anim...": "2026-08-22T03:01:41.947147"
+    "Chic & Cozy Anim...": "2026-08-22T03:01:41.947147",
+    "Coats & Jackets": "2026-08-22T12:29:02.791992"
   },
-  "daily_count": 4,
-  "last_post_time": "2026-08-22T03:03:15.196314",
+  "daily_count": 8,
+  "last_post_time": "2026-08-22T12:29:02.791992",
   "board_rotation_cursor": 0,
   "last_image_style": "carousel",
-  "last_template_index": 15
+  "last_template_index": 11
 }
