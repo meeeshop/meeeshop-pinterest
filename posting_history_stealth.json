@@ -1642,11 +1642,57 @@
       "template": 16,
       "pin_url": "https://www.pinterest.com/pin/962222276663310597/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8931950788779,
+      "title": "Grey Camo Romper Made in USA | MeeeShop US Boutique",
+      "board": "Trends",
+      "timestamp": "2026-08-22T02:58:37.385562",
+      "type": "carousel",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276663317221/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8782638088363,
+      "title": "Link Pattern Cape Cod | MeeeShop US Boutique",
+      "board": "New",
+      "timestamp": "2026-08-22T02:59:58.026991",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276663317255/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8876277825707,
+      "title": "Urban Chic Denim Midi Dress | MeeeShop US Boutique",
+      "board": "Chic & Cozy Anim...",
+      "timestamp": "2026-08-22T03:01:41.947147",
+      "type": "product",
+      "style": "collage",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276663317306/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": "559670427819",
+      "article_id": "559670427819",
+      "title": "Tips For Trendy Stylish Plus Size Womens Winter Wear",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-08-22T03:03:15.196314",
+      "type": "blog",
+      "style": "carousel",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276663317357/",
+      "blog_url": "https://us.meeeshop.com/blogs/plus-size-curvy-clothing/tips-for-trendy-stylish-plus-size-womens-winter-wear",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-08-18T03:03:00.147026",
-    "Trends": "2026-08-21T21:29:50.572853",
+    "Trends": "2026-08-22T02:58:37.385562",
     "Dresses": "2026-08-18T03:04:34.619148",
     "Feminine & Flowy Fits": "2026-08-18T03:01:25.470252",
     "Short fall dresses": "2026-08-18T12:33:07.657229",
@@ -1691,7 +1737,7 @@
     "Fashion Models": "2026-08-21T03:11:43.464820",
     "My Shop #1737732113": "2026-08-21T12:37:11.882612",
     "Shop For Holidays": "2026-08-21T21:33:29.613600",
-    "New": "2026-08-21T21:31:01.218669",
+    "New": "2026-08-22T02:59:58.026991",
     "American Bazi": "2026-08-15T17:54:38.665703",
     "Cool & Casual Styles": "2026-08-15T17:55:35.872843",
     "MeeeShop's Luxe Styles": "2026-08-15T21:26:32.597254",
@@ -1733,11 +1779,12 @@
     "Loungewear": "2026-08-20T12:34:25.960617",
     "Bow heels": "2026-08-20T18:00:36.882815",
     "Sweaters": "2026-08-20T21:32:57.133135",
-    "Luxe Clothing": "2026-08-21T18:05:31.547180"
+    "Luxe Clothing": "2026-08-21T18:05:31.547180",
+    "Chic & Cozy Anim...": "2026-08-22T03:01:41.947147"
   },
-  "daily_count": 16,
-  "last_post_time": "2026-08-21T21:33:29.613600",
+  "daily_count": 4,
+  "last_post_time": "2026-08-22T03:03:15.196314",
   "board_rotation_cursor": 0,
   "last_image_style": "carousel",
-  "last_template_index": 16
+  "last_template_index": 15
 }
