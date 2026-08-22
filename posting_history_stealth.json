@@ -1732,11 +1732,55 @@
       "template": 11,
       "pin_url": "https://www.pinterest.com/pin/962222276663327491/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8941771980971,
+      "title": "Pu Vegan Leather 2 in 1 Tote Crossbody Handbag | MeeeShop US Boutique",
+      "board": "Trends",
+      "timestamp": "2026-08-22T17:52:15.152578",
+      "type": "carousel",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276663335775/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8811043684523,
+      "title": "The Modern Icon Woven Shift Dress: Effortless Summer Style for Back-to-School",
+      "board": "New",
+      "timestamp": "2026-08-22T17:54:49.594515",
+      "type": "video",
+      "style": "carousel",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276663335864/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8825275678891,
+      "title": "Pointelle Knit Puff Sleeve Top | MeeeShop US Boutique",
+      "board": "MeeeShop's Luxe Styles",
+      "timestamp": "2026-08-22T17:56:02.089648",
+      "type": "carousel",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276663335898/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8818150670507,
+      "title": "Evren Shorts: Trendy Blue Print for Back to School & Late Summer \u2014 MeeeShop",
+      "board": "BFCM Deals",
+      "timestamp": "2026-08-22T17:57:12.073066",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276663335932/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-08-18T03:03:00.147026",
-    "Trends": "2026-08-22T12:24:22.187105",
+    "Trends": "2026-08-22T17:52:15.152578",
     "Dresses": "2026-08-18T03:04:34.619148",
     "Feminine & Flowy Fits": "2026-08-18T03:01:25.470252",
     "Short fall dresses": "2026-08-18T12:33:07.657229",
@@ -1781,17 +1825,17 @@
     "Fashion Models": "2026-08-21T03:11:43.464820",
     "My Shop #1737732113": "2026-08-21T12:37:11.882612",
     "Shop For Holidays": "2026-08-21T21:33:29.613600",
-    "New": "2026-08-22T12:25:31.380986",
+    "New": "2026-08-22T17:54:49.594515",
     "American Bazi": "2026-08-22T12:26:35.616325",
     "Cool & Casual Styles": "2026-08-15T17:55:35.872843",
-    "MeeeShop's Luxe Styles": "2026-08-15T21:26:32.597254",
+    "MeeeShop's Luxe Styles": "2026-08-22T17:56:02.089648",
     "Outerwear": "2026-08-15T21:27:33.722132",
     "Zenana Women's...": "2026-08-15T21:28:37.773139",
     "Thanks giving Outfits": "2026-08-15T21:29:48.959700",
     "Weekend to Workwear": "2026-08-16T03:05:34.105079",
     "Effortless Looks": "2026-08-16T03:08:49.510266",
     "Vamp Romantic Styles": "2026-08-16T03:10:06.960088",
-    "BFCM Deals": "2026-08-16T12:23:05.678565",
+    "BFCM Deals": "2026-08-22T17:57:12.073066",
     "Poetcore Aesthetics": "2026-08-16T12:24:37.835619",
     "Emory Park Clothing": "2026-08-16T12:25:37.214806",
     "new products": "2026-08-20T03:01:27.570687",
@@ -1827,9 +1871,9 @@
     "Chic & Cozy Anim...": "2026-08-22T03:01:41.947147",
     "Coats & Jackets": "2026-08-22T12:29:02.791992"
   },
-  "daily_count": 8,
-  "last_post_time": "2026-08-22T12:29:02.791992",
+  "daily_count": 12,
+  "last_post_time": "2026-08-22T17:57:12.073066",
   "board_rotation_cursor": 0,
   "last_image_style": "carousel",
-  "last_template_index": 11
+  "last_template_index": 16
 }
