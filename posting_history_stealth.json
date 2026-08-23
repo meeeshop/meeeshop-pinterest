@@ -1866,11 +1866,55 @@
       "template": 14,
       "pin_url": "https://www.pinterest.com/pin/962222276663348513/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8745259270315,
+      "title": "Natural Instinct Woven Midi Dress - Chic Back-to-School & Summer Look \u2014 MeeeShop",
+      "board": "Trends",
+      "timestamp": "2026-08-23T12:23:27.175380",
+      "type": "carousel",
+      "style": "collage",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276663359818/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8820880441515,
+      "title": "Paige Woven Handbag | MeeeShop US Boutique",
+      "board": "New",
+      "timestamp": "2026-08-23T12:24:41.797396",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276663359841/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8906719101099,
+      "title": "Collared Argyle Top: Fresh Back-to-School Look for Women \u2014 MeeeShop",
+      "board": "Zenana Women's...",
+      "timestamp": "2026-08-23T12:25:45.076583",
+      "type": "carousel",
+      "style": "collage",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276663359864/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8782625734827,
+      "title": "Elizabeth Dress in Woodland Sunset | MeeeShop US Boutique",
+      "board": "Vamp Romantic Styles",
+      "timestamp": "2026-08-23T12:27:01.410872",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276663359884/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-08-18T03:03:00.147026",
-    "Trends": "2026-08-22T21:26:44.471873",
+    "Trends": "2026-08-23T12:23:27.175380",
     "Dresses": "2026-08-18T03:04:34.619148",
     "Feminine & Flowy Fits": "2026-08-18T03:01:25.470252",
     "Short fall dresses": "2026-08-18T12:33:07.657229",
@@ -1915,16 +1959,16 @@
     "Fashion Models": "2026-08-21T03:11:43.464820",
     "My Shop #1737732113": "2026-08-21T12:37:11.882612",
     "Shop For Holidays": "2026-08-21T21:33:29.613600",
-    "New": "2026-08-23T03:09:10.720857",
+    "New": "2026-08-23T12:24:41.797396",
     "American Bazi": "2026-08-22T12:26:35.616325",
     "Cool & Casual Styles": "2026-08-15T17:55:35.872843",
     "MeeeShop's Luxe Styles": "2026-08-22T17:56:02.089648",
     "Outerwear": "2026-08-15T21:27:33.722132",
-    "Zenana Women's...": "2026-08-15T21:28:37.773139",
+    "Zenana Women's...": "2026-08-23T12:25:45.076583",
     "Thanks giving Outfits": "2026-08-22T21:29:58.913873",
     "Weekend to Workwear": "2026-08-16T03:05:34.105079",
     "Effortless Looks": "2026-08-16T03:08:49.510266",
-    "Vamp Romantic Styles": "2026-08-16T03:10:06.960088",
+    "Vamp Romantic Styles": "2026-08-23T12:27:01.410872",
     "BFCM Deals": "2026-08-22T17:57:12.073066",
     "Poetcore Aesthetics": "2026-08-16T12:24:37.835619",
     "Emory Park Clothing": "2026-08-16T12:25:37.214806",
@@ -1961,9 +2005,9 @@
     "Chic & Cozy Anim...": "2026-08-22T03:01:41.947147",
     "Coats & Jackets": "2026-08-22T12:29:02.791992"
   },
-  "daily_count": 4,
-  "last_post_time": "2026-08-23T03:12:09.640252",
+  "daily_count": 8,
+  "last_post_time": "2026-08-23T12:27:01.410872",
   "board_rotation_cursor": 0,
   "last_image_style": "carousel",
-  "last_template_index": 14
+  "last_template_index": 15
 }
