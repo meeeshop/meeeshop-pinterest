@@ -1954,11 +1954,55 @@
       "template": 17,
       "pin_url": "https://www.pinterest.com/pin/962222276663371831/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8869160779947,
+      "title": "Mixed Media Shacket | MeeeShop US Boutique",
+      "board": "Trends",
+      "timestamp": "2026-08-23T21:26:45.383702",
+      "type": "carousel",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276663378001/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8930419081387,
+      "title": "Judy Blue Full Size Tummy Control Contrast Wash Skinny Jeans - Back to School",
+      "board": "New",
+      "timestamp": "2026-08-23T21:29:05.007784",
+      "type": "video",
+      "style": "carousel",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276663378081/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8782689861803,
+      "title": "Power Vee 'sweater' Sweatshirt - Wine: Cozy Back-to-School Vee Sweater \u2014 MeeeShop",
+      "board": "Sweaters #Sweaters...",
+      "timestamp": "2026-08-23T21:30:14.349007",
+      "type": "carousel",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276663378130/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8936272789675,
+      "title": "Newberry Dress: Chic Back to School & Date Night Outfit \u2014 MeeeShop",
+      "board": "Poetcore Aesthetics",
+      "timestamp": "2026-08-23T21:31:43.248240",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276663378176/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-08-18T03:03:00.147026",
-    "Trends": "2026-08-23T17:52:38.857124",
+    "Trends": "2026-08-23T21:26:45.383702",
     "Dresses": "2026-08-18T03:04:34.619148",
     "Feminine & Flowy Fits": "2026-08-18T03:01:25.470252",
     "Short fall dresses": "2026-08-18T12:33:07.657229",
@@ -2003,7 +2047,7 @@
     "Fashion Models": "2026-08-21T03:11:43.464820",
     "My Shop #1737732113": "2026-08-21T12:37:11.882612",
     "Shop For Holidays": "2026-08-21T21:33:29.613600",
-    "New": "2026-08-23T17:55:08.993656",
+    "New": "2026-08-23T21:29:05.007784",
     "American Bazi": "2026-08-22T12:26:35.616325",
     "Cool & Casual Styles": "2026-08-15T17:55:35.872843",
     "MeeeShop's Luxe Styles": "2026-08-22T17:56:02.089648",
@@ -2014,7 +2058,7 @@
     "Effortless Looks": "2026-08-23T17:56:23.268603",
     "Vamp Romantic Styles": "2026-08-23T12:27:01.410872",
     "BFCM Deals": "2026-08-22T17:57:12.073066",
-    "Poetcore Aesthetics": "2026-08-16T12:24:37.835619",
+    "Poetcore Aesthetics": "2026-08-23T21:31:43.248240",
     "Emory Park Clothing": "2026-08-16T12:25:37.214806",
     "new products": "2026-08-20T03:01:27.570687",
     "Chic & Effortless Styles": "2026-08-22T21:28:53.283779",
@@ -2047,11 +2091,12 @@
     "Sweaters": "2026-08-20T21:32:57.133135",
     "Luxe Clothing": "2026-08-21T18:05:31.547180",
     "Chic & Cozy Anim...": "2026-08-22T03:01:41.947147",
-    "Coats & Jackets": "2026-08-22T12:29:02.791992"
+    "Coats & Jackets": "2026-08-22T12:29:02.791992",
+    "Sweaters #Sweaters...": "2026-08-23T21:30:14.349007"
   },
-  "daily_count": 12,
-  "last_post_time": "2026-08-23T17:57:29.427287",
+  "daily_count": 16,
+  "last_post_time": "2026-08-23T21:31:43.248240",
   "board_rotation_cursor": 0,
   "last_image_style": "carousel",
-  "last_template_index": 17
+  "last_template_index": 16
 }
