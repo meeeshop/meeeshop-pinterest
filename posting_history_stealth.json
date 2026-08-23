@@ -1820,6 +1820,52 @@
       "template": 15,
       "pin_url": "https://www.pinterest.com/pin/962222276663341718/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": "558685585579",
+      "article_id": "558685585579",
+      "title": "Model Measurements",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-08-23T03:08:01.792407",
+      "type": "blog",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276663348436/",
+      "blog_url": "https://us.meeeshop.com/blogs/our-tips/model-measurements",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8883470598315,
+      "title": "Boss (babe) T-shirt - Redwood: Chic Back-to-School Top for Women \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-08-23T03:09:10.720857",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276663348462/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8740283220139,
+      "title": "Risen Full Size Mid Rise Wide Leg Jeans with Flared Look plus Size | MeeeShop US Boutique",
+      "board": "Kimchi USA Jeans",
+      "timestamp": "2026-08-23T03:10:59.230225",
+      "type": "product",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276663348493/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8845243187371,
+      "title": "Cocktail Club Woven Twill Top and Skirt - Chic Back-to-School Look \u2014 MeeeShop",
+      "board": "Chic Looks",
+      "timestamp": "2026-08-23T03:12:09.640252",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276663348513/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
@@ -1855,21 +1901,21 @@
     "Kancan USA Jeans": "2026-08-20T15:36:28.595311",
     "Footwear": "2026-08-14T17:46:13.419439",
     "Fitted Jeans": "2026-08-20T18:03:57.898410",
-    "Chic Looks": "2026-08-14T17:48:34.979373",
+    "Chic Looks": "2026-08-23T03:12:09.640252",
     "Straight Leg Jeans": "2026-08-21T21:32:10.936379",
     "Puff Sleeves Tops": "2026-08-20T21:34:03.105622",
     "Casual": "2026-08-19T17:57:45.543242",
     "Confident Looks": "2026-08-19T17:58:50.960530",
     "Casual Chic Style": "2026-08-20T03:04:19.984570",
     "Farm clothes": "2026-08-20T21:35:07.586741",
-    "Kimchi USA Jeans": "2026-08-15T02:18:21.641868",
+    "Kimchi USA Jeans": "2026-08-23T03:10:59.230225",
     "Wardrobe Goals": "2026-08-20T15:33:32.154447",
     "Nylon backpack": "2026-08-21T03:10:07.082298",
     "Everyday Style": "2026-08-20T18:02:48.662772",
     "Fashion Models": "2026-08-21T03:11:43.464820",
     "My Shop #1737732113": "2026-08-21T12:37:11.882612",
     "Shop For Holidays": "2026-08-21T21:33:29.613600",
-    "New": "2026-08-22T21:27:48.702493",
+    "New": "2026-08-23T03:09:10.720857",
     "American Bazi": "2026-08-22T12:26:35.616325",
     "Cool & Casual Styles": "2026-08-15T17:55:35.872843",
     "MeeeShop's Luxe Styles": "2026-08-22T17:56:02.089648",
@@ -1915,9 +1961,9 @@
     "Chic & Cozy Anim...": "2026-08-22T03:01:41.947147",
     "Coats & Jackets": "2026-08-22T12:29:02.791992"
   },
-  "daily_count": 16,
-  "last_post_time": "2026-08-22T21:29:58.913873",
+  "daily_count": 4,
+  "last_post_time": "2026-08-23T03:12:09.640252",
   "board_rotation_cursor": 0,
   "last_image_style": "carousel",
-  "last_template_index": 15
+  "last_template_index": 14
 }
