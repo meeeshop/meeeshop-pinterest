@@ -1910,11 +1910,55 @@
       "template": 15,
       "pin_url": "https://www.pinterest.com/pin/962222276663359884/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8885502410923,
+      "title": "Judy Blue Full Size Side Seam Detail Straight Jeans with Pockets | MeeeShop US Boutique",
+      "board": "Trends",
+      "timestamp": "2026-08-23T17:52:38.857124",
+      "type": "video",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276663371563/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8845244170411,
+      "title": "Caf\u00e9 Noir Polka Woven Midi Dress | MeeeShop US Boutique",
+      "board": "New",
+      "timestamp": "2026-08-23T17:55:08.993656",
+      "type": "video",
+      "style": "carousel",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276663371702/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8905531392171,
+      "title": "V-neck Collared Pullover, Blue - Effortless Back-to-School Chic \u2014 MeeeShop",
+      "board": "Effortless Looks",
+      "timestamp": "2026-08-23T17:56:23.268603",
+      "type": "carousel",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276663371769/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8818152898731,
+      "title": "Elsie Asymmetrical Top - Effortless Back-to-School Style \u2014 MeeeShop",
+      "board": "Best selling products",
+      "timestamp": "2026-08-23T17:57:29.427287",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276663371831/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-08-18T03:03:00.147026",
-    "Trends": "2026-08-23T12:23:27.175380",
+    "Trends": "2026-08-23T17:52:38.857124",
     "Dresses": "2026-08-18T03:04:34.619148",
     "Feminine & Flowy Fits": "2026-08-18T03:01:25.470252",
     "Short fall dresses": "2026-08-18T12:33:07.657229",
@@ -1959,7 +2003,7 @@
     "Fashion Models": "2026-08-21T03:11:43.464820",
     "My Shop #1737732113": "2026-08-21T12:37:11.882612",
     "Shop For Holidays": "2026-08-21T21:33:29.613600",
-    "New": "2026-08-23T12:24:41.797396",
+    "New": "2026-08-23T17:55:08.993656",
     "American Bazi": "2026-08-22T12:26:35.616325",
     "Cool & Casual Styles": "2026-08-15T17:55:35.872843",
     "MeeeShop's Luxe Styles": "2026-08-22T17:56:02.089648",
@@ -1967,7 +2011,7 @@
     "Zenana Women's...": "2026-08-23T12:25:45.076583",
     "Thanks giving Outfits": "2026-08-22T21:29:58.913873",
     "Weekend to Workwear": "2026-08-16T03:05:34.105079",
-    "Effortless Looks": "2026-08-16T03:08:49.510266",
+    "Effortless Looks": "2026-08-23T17:56:23.268603",
     "Vamp Romantic Styles": "2026-08-23T12:27:01.410872",
     "BFCM Deals": "2026-08-22T17:57:12.073066",
     "Poetcore Aesthetics": "2026-08-16T12:24:37.835619",
@@ -1977,7 +2021,7 @@
     "Davi & Dani Womens...": "2026-08-16T17:52:10.627401",
     "Weekend to Workout": "2026-08-16T17:53:11.788896",
     "Gimme Gummy Playful Nostalgia": "2026-08-16T17:54:11.594666",
-    "Best selling products": "2026-08-16T21:25:28.147257",
+    "Best selling products": "2026-08-23T17:57:29.427287",
     "Off-Duty Athlete Looks": "2026-08-16T21:26:31.643159",
     "LE LIS Womens Clothi...": "2026-08-16T21:27:35.872917",
     "New Trendy Woman...": "2026-08-16T21:28:40.971945",
@@ -2005,9 +2049,9 @@
     "Chic & Cozy Anim...": "2026-08-22T03:01:41.947147",
     "Coats & Jackets": "2026-08-22T12:29:02.791992"
   },
-  "daily_count": 8,
-  "last_post_time": "2026-08-23T12:27:01.410872",
+  "daily_count": 12,
+  "last_post_time": "2026-08-23T17:57:29.427287",
   "board_rotation_cursor": 0,
   "last_image_style": "carousel",
-  "last_template_index": 15
+  "last_template_index": 17
 }
