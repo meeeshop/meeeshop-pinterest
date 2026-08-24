@@ -2044,11 +2044,55 @@
       "template": 15,
       "pin_url": "https://www.pinterest.com/pin/962222276663386172/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8921415450795,
+      "title": "Basic Bae Full Size Striped Round Neck Cap Sleeve Mini Dress Back to School \u2014 MeeeShop",
+      "board": "Trends",
+      "timestamp": "2026-08-24T12:32:31.339455",
+      "type": "carousel",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276663397494/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8897140129963,
+      "title": "YMI Women's Mid Rise Belted Bootcut Jeans | MeeeShop US Boutique",
+      "board": "New",
+      "timestamp": "2026-08-24T12:33:41.787413",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276663397534/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8818153062571,
+      "title": "Emory Park Yara Mini Skort: Fresh Back-to-School Look for Trendy Women \u2014 MeeeShop",
+      "board": "New Trendy Woman...",
+      "timestamp": "2026-08-24T12:34:56.590981",
+      "type": "carousel",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276663397579/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8928207863979,
+      "title": "Sovella Active Recovery Sandals Women's Pf Slide Pink | MeeeShop US Boutique",
+      "board": "Boat Shoes",
+      "timestamp": "2026-08-24T12:37:33.243466",
+      "type": "video",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276663397624/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-08-18T03:03:00.147026",
-    "Trends": "2026-08-24T03:09:17.121976",
+    "Trends": "2026-08-24T12:32:31.339455",
     "Dresses": "2026-08-18T03:04:34.619148",
     "Feminine & Flowy Fits": "2026-08-18T03:01:25.470252",
     "Short fall dresses": "2026-08-18T12:33:07.657229",
@@ -2093,7 +2137,7 @@
     "Fashion Models": "2026-08-21T03:11:43.464820",
     "My Shop #1737732113": "2026-08-21T12:37:11.882612",
     "Shop For Holidays": "2026-08-21T21:33:29.613600",
-    "New": "2026-08-23T21:29:05.007784",
+    "New": "2026-08-24T12:33:41.787413",
     "American Bazi": "2026-08-22T12:26:35.616325",
     "Cool & Casual Styles": "2026-08-15T17:55:35.872843",
     "MeeeShop's Luxe Styles": "2026-08-22T17:56:02.089648",
@@ -2114,7 +2158,7 @@
     "Best selling products": "2026-08-23T17:57:29.427287",
     "Off-Duty Athlete Looks": "2026-08-16T21:26:31.643159",
     "LE LIS Womens Clothi...": "2026-08-16T21:27:35.872917",
-    "New Trendy Woman...": "2026-08-16T21:28:40.971945",
+    "New Trendy Woman...": "2026-08-24T12:34:56.590981",
     "Outfit Ideas": "2026-08-17T03:04:48.498448",
     "Late Summer to Fall Teacher Style": "2026-08-17T03:07:27.270395",
     "Ootd #ootd": "2026-08-17T03:08:29.058143",
@@ -2139,11 +2183,12 @@
     "Chic & Cozy Anim...": "2026-08-22T03:01:41.947147",
     "Coats & Jackets": "2026-08-22T12:29:02.791992",
     "Sweaters #Sweaters...": "2026-08-23T21:30:14.349007",
-    "Sweaters & Sweater...": "2026-08-24T03:13:06.869060"
+    "Sweaters & Sweater...": "2026-08-24T03:13:06.869060",
+    "Boat Shoes": "2026-08-24T12:37:33.243466"
   },
-  "daily_count": 4,
-  "last_post_time": "2026-08-24T03:14:20.016270",
+  "daily_count": 8,
+  "last_post_time": "2026-08-24T12:37:33.243466",
   "board_rotation_cursor": 0,
   "last_image_style": "carousel",
-  "last_template_index": 15
+  "last_template_index": 17
 }
