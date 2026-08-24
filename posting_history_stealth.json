@@ -2132,11 +2132,55 @@
       "template": 17,
       "pin_url": "https://www.pinterest.com/pin/962222276663406205/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8897137442987,
+      "title": "Ymi Women's High Rise Basic 5 Pocket Skinny Jeans | MeeeShop US Boutique",
+      "board": "Trends",
+      "timestamp": "2026-08-24T21:34:40.839024",
+      "type": "carousel",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276663412148/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8787168919723,
+      "title": "Elastique Athletics Le Monde Leggings: Chic Back-to-School Style \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-08-24T21:36:14.825261",
+      "type": "product",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276663412179/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8827510292651,
+      "title": "Pretty Simple Arlys Barrel Shoulder Bag for Summer \u2014 MeeeShop",
+      "board": "Ootd #ootd",
+      "timestamp": "2026-08-24T21:37:31.637502",
+      "type": "carousel",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276663412227/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8941746815147,
+      "title": "Hey Joanie Shadow Split Wideleg Jeans - Cool Back-to-School Style \u2014 MeeeShop",
+      "board": "Cool & Casual Styles",
+      "timestamp": "2026-08-24T21:38:38.932637",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276663412260/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-08-18T03:03:00.147026",
-    "Trends": "2026-08-24T18:02:59.366820",
+    "Trends": "2026-08-24T21:34:40.839024",
     "Dresses": "2026-08-18T03:04:34.619148",
     "Feminine & Flowy Fits": "2026-08-18T03:01:25.470252",
     "Short fall dresses": "2026-08-18T12:33:07.657229",
@@ -2181,9 +2225,9 @@
     "Fashion Models": "2026-08-21T03:11:43.464820",
     "My Shop #1737732113": "2026-08-21T12:37:11.882612",
     "Shop For Holidays": "2026-08-21T21:33:29.613600",
-    "New": "2026-08-24T18:04:16.220054",
+    "New": "2026-08-24T21:36:14.825261",
     "American Bazi": "2026-08-22T12:26:35.616325",
-    "Cool & Casual Styles": "2026-08-15T17:55:35.872843",
+    "Cool & Casual Styles": "2026-08-24T21:38:38.932637",
     "MeeeShop's Luxe Styles": "2026-08-22T17:56:02.089648",
     "Outerwear": "2026-08-15T21:27:33.722132",
     "Zenana Women's...": "2026-08-23T12:25:45.076583",
@@ -2205,7 +2249,7 @@
     "New Trendy Woman...": "2026-08-24T12:34:56.590981",
     "Outfit Ideas": "2026-08-24T18:06:31.659367",
     "Late Summer to Fall Teacher Style": "2026-08-17T03:07:27.270395",
-    "Ootd #ootd": "2026-08-17T03:08:29.058143",
+    "Ootd #ootd": "2026-08-24T21:37:31.637502",
     "Style Ideas": "2026-08-17T12:28:00.194105",
     "Mustard Seed Clothing": "2026-08-17T12:29:03.024474",
     "Woman Fashion!": "2026-08-17T12:30:38.517438",
@@ -2230,9 +2274,9 @@
     "Sweaters & Sweater...": "2026-08-24T03:13:06.869060",
     "Boat Shoes": "2026-08-24T12:37:33.243466"
   },
-  "daily_count": 12,
-  "last_post_time": "2026-08-24T18:06:31.659367",
+  "daily_count": 16,
+  "last_post_time": "2026-08-24T21:38:38.932637",
   "board_rotation_cursor": 0,
   "last_image_style": "carousel",
-  "last_template_index": 17
+  "last_template_index": 15
 }
