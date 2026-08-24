@@ -1998,11 +1998,57 @@
       "template": 16,
       "pin_url": "https://www.pinterest.com/pin/962222276663378176/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8941754679467,
+      "title": "Freasy Jogger | MeeeShop US Boutique",
+      "board": "Trends",
+      "timestamp": "2026-08-24T03:09:17.121976",
+      "type": "video",
+      "style": "collage",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276663386029/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": "561603313835",
+      "article_id": "561603313835",
+      "title": "Elevate Your Wardrobe Styling Tips For Timeless Fashion Staples In 2026",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-08-24T03:10:50.926706",
+      "type": "blog",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276663386088/",
+      "blog_url": "https://us.meeeshop.com/blogs/our-tips/elevate-your-wardrobe-styling-tips-for-timeless-fashion-staples-in-2026",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8906720280747,
+      "title": "2 Tone Light Sweater - Perfect Back-to-School Top for Women \u2014 MeeeShop",
+      "board": "Sweaters & Sweater...",
+      "timestamp": "2026-08-24T03:13:06.869060",
+      "type": "video",
+      "style": "collage",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276663386143/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8825881657515,
+      "title": "Mkf Collection by Mia K. - Yonah Signature Tote Bag: Back-to-School Must-Have",
+      "board": "Gimme Gummy Playful Nostalgia",
+      "timestamp": "2026-08-24T03:14:20.016270",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276663386172/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-08-18T03:03:00.147026",
-    "Trends": "2026-08-23T21:26:45.383702",
+    "Trends": "2026-08-24T03:09:17.121976",
     "Dresses": "2026-08-18T03:04:34.619148",
     "Feminine & Flowy Fits": "2026-08-18T03:01:25.470252",
     "Short fall dresses": "2026-08-18T12:33:07.657229",
@@ -2064,7 +2110,7 @@
     "Chic & Effortless Styles": "2026-08-22T21:28:53.283779",
     "Davi & Dani Womens...": "2026-08-16T17:52:10.627401",
     "Weekend to Workout": "2026-08-16T17:53:11.788896",
-    "Gimme Gummy Playful Nostalgia": "2026-08-16T17:54:11.594666",
+    "Gimme Gummy Playful Nostalgia": "2026-08-24T03:14:20.016270",
     "Best selling products": "2026-08-23T17:57:29.427287",
     "Off-Duty Athlete Looks": "2026-08-16T21:26:31.643159",
     "LE LIS Womens Clothi...": "2026-08-16T21:27:35.872917",
@@ -2092,11 +2138,12 @@
     "Luxe Clothing": "2026-08-21T18:05:31.547180",
     "Chic & Cozy Anim...": "2026-08-22T03:01:41.947147",
     "Coats & Jackets": "2026-08-22T12:29:02.791992",
-    "Sweaters #Sweaters...": "2026-08-23T21:30:14.349007"
+    "Sweaters #Sweaters...": "2026-08-23T21:30:14.349007",
+    "Sweaters & Sweater...": "2026-08-24T03:13:06.869060"
   },
-  "daily_count": 16,
-  "last_post_time": "2026-08-23T21:31:43.248240",
+  "daily_count": 4,
+  "last_post_time": "2026-08-24T03:14:20.016270",
   "board_rotation_cursor": 0,
   "last_image_style": "carousel",
-  "last_template_index": 16
+  "last_template_index": 15
 }
