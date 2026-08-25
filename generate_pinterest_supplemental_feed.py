@@ -45,6 +45,73 @@ DEFAULT_BRAND = "MeeeShop"
 OUTPUT_FULL = "pinterest_catalog_feed.csv"
 REDIRECT_PATH_FULL = "/a/pinterest_catalog_feed.csv"
 
+BLOCKED_SUPPLIERS = {
+    'CCWHOLESALECLOTHING', 'CC WHOLESALE CLOTHING', 'WHOLESALE',
+    'ATHINA RETAIL', 'ATHINA', 'BOHO CLOTHING AND ACCESSORIES', 'BOHO CLOTHING',
+    'AILI\'S CORNER', 'AILIS CORNER', 'SUPREME FASHION', 'COTTONWAYS',
+    'SHOPBASICBAE', 'HELLODAY.US', 'HELLO DAY', 'ELLISONYOUNG.COM', 'ELLISONYOUNG',
+    'LUCKY FEET SHOES', 'SPUN BAMBOO', 'TRENDSI', 'D&J', 'UNKNOWN', 'OTHER', 'DEFAULT', ''
+}
+
+KNOWN_POPULAR_BRANDS = [
+    ("JUDY BLUE", "Judy Blue"),
+    ("RISEN", "Risen"),
+    ("YMI", "YMI"),
+    ("EMORY PARK", "Emory Park"),
+    ("FLYING TOMATO", "Flying Tomato"),
+    ("MKF COLLECTION", "MKF Collection"),
+    ("MKF DROPSHIP", "MKF Collection"),
+    ("MIA K", "MKF Collection"),
+    ("ORANGE FARM", "Orange Farm"),
+    ("ARTEMIS VINTAGE", "Artemis Vintage"),
+    ("HEY JOANIE", "Hey Joanie"),
+    ("INDIE & CO", "Indie & Co."),
+    ("MADELINE LOVE", "Madeline Love"),
+    ("RETROLICIOUS", "Retrolicious"),
+    ("DOWNEAST", "Downeast"),
+    ("GRACE+EMMA", "Grace+Emma"),
+    ("HYFVE", "Hyfve"),
+    ("SOVELLA", "Sovella"),
+    ("PRETTY SIMPLE", "Pretty Simple"),
+    ("MISSFINCHNYC", "MissFinchNYC"),
+    ("SNOSKINS", "SnoSkins"),
+    ("BUKI", "Buki"),
+    ("ALYTH ACTIVE", "Alyth Active"),
+    ("DIZZY-LIZZIE", "Dizzy-Lizzie"),
+    ("GOAL FIVE", "Goal Five"),
+    ("ELASTIQUE ATHLETICS", "Elastique Athletics"),
+    ("TROPHY YOGA", "Trophy Yoga"),
+    ("VAILA SHOES", "Vaila Shoes"),
+    ("BOTORI EQUESTRIAN", "Botori Equestrian"),
+    ("VALENTINE", "Valentine"),
+    ("TYCHE", "Tyche"),
+    ("DIOSA", "Diosa"),
+    ("CEFIAN", "Cefian"),
+    ("GLEE + CO", "Glee + Co")
+]
+
+def resolve_feed_brand(product):
+    """Resolves authentic consumer brands while replacing wholesale distributor accounts with MeeeShop."""
+    vendor = (product.get("vendor") or "").strip()
+    title = (product.get("title") or "").strip()
+    v_upper = vendor.upper()
+    t_upper = title.upper()
+    
+    # 1. Check if vendor or title matches a recognized brand
+    for key, brand_name in KNOWN_POPULAR_BRANDS:
+        if key in v_upper or key in t_upper:
+            return brand_name
+            
+    # 2. Check if vendor is a blocked wholesale supplier
+    if v_upper in BLOCKED_SUPPLIERS or any(bs in v_upper for bs in ['BOHO', 'AILI', 'SUPREME', 'COTTONWAYS', 'BASICBAE', 'HELLODAY', 'ELLISON', 'SPUN BAMBOO', 'ATHINA', 'CCWHOLESALE']):
+        return DEFAULT_BRAND
+        
+    # 3. If vendor is present and not blocked/generic, use clean vendor
+    if vendor and v_upper not in BLOCKED_SUPPLIERS:
+        return vendor
+        
+    return DEFAULT_BRAND
+
 def clean_html(raw_html):
     """Removes HTML tags from product descriptions."""
     if not raw_html:
@@ -455,7 +522,7 @@ def generate_feeds():
         if len(prod_desc) > 4950:
             prod_desc = prod_desc[:4947] + "..."
 
-        brand = DEFAULT_BRAND
+        brand = resolve_feed_brand(product)
         item_group_id = str(product.get("id"))
         google_cat = get_google_product_category(product)
         product_type = product.get("product_type", "")
