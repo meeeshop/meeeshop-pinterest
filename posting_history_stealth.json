@@ -2310,11 +2310,55 @@
       "template": 14,
       "pin_url": "https://www.pinterest.com/pin/962222276663439715/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8941750124715,
+      "title": "Hey Joanie Queens of Noise High Rise Barrel Jeans - Trendy Back-to-School Denim",
+      "board": "Trends",
+      "timestamp": "2026-08-25T21:35:25.536231",
+      "type": "carousel",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276663445147/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8782637990059,
+      "title": "Dizzy-lizzie St. Tropez Softly Quilted Black Poplin Dress, Oversized Silhouette | MeeeShop US Boutiq",
+      "board": "New",
+      "timestamp": "2026-08-25T21:36:33.029774",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276663445182/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8933161402539,
+      "title": "Alyth Active Brushed Attain Crossover Legging | MeeeShop US Boutique",
+      "board": "Weekend to Workout",
+      "timestamp": "2026-08-25T21:37:59.882401",
+      "type": "carousel",
+      "style": "collage",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276663445215/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8818158862507,
+      "title": "Emory Park Laurel Halter Denim Midi Dress - Back to School Summer Style \u2014 MeeeShop",
+      "board": "Mustard Seed Clothing",
+      "timestamp": "2026-08-25T21:39:08.874432",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276663445244/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-08-18T03:03:00.147026",
-    "Trends": "2026-08-25T18:02:15.577619",
+    "Trends": "2026-08-25T21:35:25.536231",
     "Dresses": "2026-08-18T03:04:34.619148",
     "Feminine & Flowy Fits": "2026-08-18T03:01:25.470252",
     "Short fall dresses": "2026-08-18T12:33:07.657229",
@@ -2359,7 +2403,7 @@
     "Fashion Models": "2026-08-21T03:11:43.464820",
     "My Shop #1737732113": "2026-08-21T12:37:11.882612",
     "Shop For Holidays": "2026-08-21T21:33:29.613600",
-    "New": "2026-08-25T18:03:28.039066",
+    "New": "2026-08-25T21:36:33.029774",
     "American Bazi": "2026-08-22T12:26:35.616325",
     "Cool & Casual Styles": "2026-08-24T21:38:38.932637",
     "MeeeShop's Luxe Styles": "2026-08-22T17:56:02.089648",
@@ -2375,7 +2419,7 @@
     "new products": "2026-08-20T03:01:27.570687",
     "Chic & Effortless Styles": "2026-08-22T21:28:53.283779",
     "Davi & Dani Womens...": "2026-08-25T03:06:55.517268",
-    "Weekend to Workout": "2026-08-16T17:53:11.788896",
+    "Weekend to Workout": "2026-08-25T21:37:59.882401",
     "Gimme Gummy Playful Nostalgia": "2026-08-24T03:14:20.016270",
     "Best selling products": "2026-08-23T17:57:29.427287",
     "Off-Duty Athlete Looks": "2026-08-16T21:26:31.643159",
@@ -2385,7 +2429,7 @@
     "Late Summer to Fall Teacher Style": "2026-08-25T12:39:10.822926",
     "Ootd #ootd": "2026-08-24T21:37:31.637502",
     "Style Ideas": "2026-08-25T03:08:00.533370",
-    "Mustard Seed Clothing": "2026-08-17T12:29:03.024474",
+    "Mustard Seed Clothing": "2026-08-25T21:39:08.874432",
     "Woman Fashion!": "2026-08-25T18:05:59.369535",
     "Stylish Finds": "2026-08-17T12:32:18.114926",
     "Confidence Ladies": "2026-08-17T17:59:20.540196",
@@ -2408,9 +2452,9 @@
     "Sweaters & Sweater...": "2026-08-24T03:13:06.869060",
     "Boat Shoes": "2026-08-24T12:37:33.243466"
   },
-  "daily_count": 12,
-  "last_post_time": "2026-08-25T18:05:59.369535",
+  "daily_count": 16,
+  "last_post_time": "2026-08-25T21:39:08.874432",
   "board_rotation_cursor": 0,
   "last_image_style": "carousel",
-  "last_template_index": 14
+  "last_template_index": 17
 }
