@@ -2176,6 +2176,52 @@
       "template": 15,
       "pin_url": "https://www.pinterest.com/pin/962222276663412260/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": "559244411051",
+      "article_id": "559244411051",
+      "title": "Plus Size Formal Dresses For Women",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-08-25T03:03:31.795411",
+      "type": "blog",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276663419705/",
+      "blog_url": "https://us.meeeshop.com/blogs/plus-size-curvy-clothing/plus-size-formal-dresses-for-women",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8869173133483,
+      "title": "Shopbasicbae Basic Bae Side Slit Buttoned Waffle Knit Hoodie Top - Back to School",
+      "board": "New",
+      "timestamp": "2026-08-25T03:05:50.990333",
+      "type": "video",
+      "style": "carousel",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276663419761/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8818155552939,
+      "title": "Emory Park Julie Midi Dress - Perfect Back-to-School Chic \u2014 MeeeShop",
+      "board": "Davi & Dani Womens...",
+      "timestamp": "2026-08-25T03:06:55.517268",
+      "type": "carousel",
+      "style": "collage",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276663419776/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8818151063723,
+      "title": "Emory Park Niamh Midi Skirt: Meadow Green Pleated Style for Back-to-School \u2014 MeeeShop",
+      "board": "Style Ideas",
+      "timestamp": "2026-08-25T03:08:00.533370",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276663419789/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
@@ -2225,7 +2271,7 @@
     "Fashion Models": "2026-08-21T03:11:43.464820",
     "My Shop #1737732113": "2026-08-21T12:37:11.882612",
     "Shop For Holidays": "2026-08-21T21:33:29.613600",
-    "New": "2026-08-24T21:36:14.825261",
+    "New": "2026-08-25T03:05:50.990333",
     "American Bazi": "2026-08-22T12:26:35.616325",
     "Cool & Casual Styles": "2026-08-24T21:38:38.932637",
     "MeeeShop's Luxe Styles": "2026-08-22T17:56:02.089648",
@@ -2240,7 +2286,7 @@
     "Emory Park Clothing": "2026-08-24T18:05:24.611418",
     "new products": "2026-08-20T03:01:27.570687",
     "Chic & Effortless Styles": "2026-08-22T21:28:53.283779",
-    "Davi & Dani Womens...": "2026-08-16T17:52:10.627401",
+    "Davi & Dani Womens...": "2026-08-25T03:06:55.517268",
     "Weekend to Workout": "2026-08-16T17:53:11.788896",
     "Gimme Gummy Playful Nostalgia": "2026-08-24T03:14:20.016270",
     "Best selling products": "2026-08-23T17:57:29.427287",
@@ -2250,7 +2296,7 @@
     "Outfit Ideas": "2026-08-24T18:06:31.659367",
     "Late Summer to Fall Teacher Style": "2026-08-17T03:07:27.270395",
     "Ootd #ootd": "2026-08-24T21:37:31.637502",
-    "Style Ideas": "2026-08-17T12:28:00.194105",
+    "Style Ideas": "2026-08-25T03:08:00.533370",
     "Mustard Seed Clothing": "2026-08-17T12:29:03.024474",
     "Woman Fashion!": "2026-08-17T12:30:38.517438",
     "Stylish Finds": "2026-08-17T12:32:18.114926",
@@ -2274,9 +2320,9 @@
     "Sweaters & Sweater...": "2026-08-24T03:13:06.869060",
     "Boat Shoes": "2026-08-24T12:37:33.243466"
   },
-  "daily_count": 16,
-  "last_post_time": "2026-08-24T21:38:38.932637",
+  "daily_count": 4,
+  "last_post_time": "2026-08-25T03:08:00.533370",
   "board_rotation_cursor": 0,
   "last_image_style": "carousel",
-  "last_template_index": 15
+  "last_template_index": 16
 }
