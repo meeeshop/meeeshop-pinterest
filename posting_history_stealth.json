@@ -2266,11 +2266,55 @@
       "template": 16,
       "pin_url": "https://www.pinterest.com/pin/962222276663430782/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8818153783467,
+      "title": "Emory Park Bexley Top: Fresh Back-to-School Chic for Every Day \u2014 MeeeShop",
+      "board": "Trends",
+      "timestamp": "2026-08-25T18:02:15.577619",
+      "type": "carousel",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276663439597/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8930016985259,
+      "title": "Grace+emma Longsleeve Off-the-shoulder Top with Lace Trim, Black \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-08-25T18:03:28.039066",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276663439627/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8845244432555,
+      "title": "Flying Tomato Incredible Moments Twill Dress | MeeeShop US Boutique",
+      "board": "LE LIS Womens Clothi...",
+      "timestamp": "2026-08-25T18:04:35.754950",
+      "type": "carousel",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276663439670/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8879308964011,
+      "title": "Glee + Co Homebody Crewneck | Cozy Back to School Style \u2014 MeeeShop",
+      "board": "Woman Fashion!",
+      "timestamp": "2026-08-25T18:05:59.369535",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276663439715/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-08-18T03:03:00.147026",
-    "Trends": "2026-08-25T12:33:03.546541",
+    "Trends": "2026-08-25T18:02:15.577619",
     "Dresses": "2026-08-18T03:04:34.619148",
     "Feminine & Flowy Fits": "2026-08-18T03:01:25.470252",
     "Short fall dresses": "2026-08-18T12:33:07.657229",
@@ -2315,7 +2359,7 @@
     "Fashion Models": "2026-08-21T03:11:43.464820",
     "My Shop #1737732113": "2026-08-21T12:37:11.882612",
     "Shop For Holidays": "2026-08-21T21:33:29.613600",
-    "New": "2026-08-25T12:35:35.057877",
+    "New": "2026-08-25T18:03:28.039066",
     "American Bazi": "2026-08-22T12:26:35.616325",
     "Cool & Casual Styles": "2026-08-24T21:38:38.932637",
     "MeeeShop's Luxe Styles": "2026-08-22T17:56:02.089648",
@@ -2335,14 +2379,14 @@
     "Gimme Gummy Playful Nostalgia": "2026-08-24T03:14:20.016270",
     "Best selling products": "2026-08-23T17:57:29.427287",
     "Off-Duty Athlete Looks": "2026-08-16T21:26:31.643159",
-    "LE LIS Womens Clothi...": "2026-08-16T21:27:35.872917",
+    "LE LIS Womens Clothi...": "2026-08-25T18:04:35.754950",
     "New Trendy Woman...": "2026-08-24T12:34:56.590981",
     "Outfit Ideas": "2026-08-24T18:06:31.659367",
     "Late Summer to Fall Teacher Style": "2026-08-25T12:39:10.822926",
     "Ootd #ootd": "2026-08-24T21:37:31.637502",
     "Style Ideas": "2026-08-25T03:08:00.533370",
     "Mustard Seed Clothing": "2026-08-17T12:29:03.024474",
-    "Woman Fashion!": "2026-08-17T12:30:38.517438",
+    "Woman Fashion!": "2026-08-25T18:05:59.369535",
     "Stylish Finds": "2026-08-17T12:32:18.114926",
     "Confidence Ladies": "2026-08-17T17:59:20.540196",
     "Fresh Finds New...": "2026-08-17T18:00:37.668473",
@@ -2364,9 +2408,9 @@
     "Sweaters & Sweater...": "2026-08-24T03:13:06.869060",
     "Boat Shoes": "2026-08-24T12:37:33.243466"
   },
-  "daily_count": 8,
-  "last_post_time": "2026-08-25T12:39:10.822926",
+  "daily_count": 12,
+  "last_post_time": "2026-08-25T18:05:59.369535",
   "board_rotation_cursor": 0,
   "last_image_style": "carousel",
-  "last_template_index": 16
+  "last_template_index": 14
 }
