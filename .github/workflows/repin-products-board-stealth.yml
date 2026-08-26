@@ -75,8 +75,9 @@ jobs:
       - name: Commit and push repin history updates
         if: always()
         run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add repin_history_stealth.json
-          git commit -m "Auto-update repin history [skip ci]" || echo "No changes to commit"
-          git push origin develop || echo "Failed to push history"
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add repin_history_stealth.json .pinterest_cookies || true
+          git commit -m "chore: auto-update stealth repin history [skip ci]" || echo "No changes to commit"
+          git pull origin ${{ github.ref_name }} --rebase || true
+          git push origin HEAD || echo "Failed to push history updates"
