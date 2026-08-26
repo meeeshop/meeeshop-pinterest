@@ -13,7 +13,7 @@ Features:
    - Primary: Fast in-browser RepinResource/create/ execution (same session, CSRF & TLS).
    - Fallback: Human-like UI interaction on Pinterest Pin page.
 6. Anti-Shadowban Guardrails:
-   - Configurable batch size (Default: 5–10 pins per run, max 20/day).
+   - Configurable batch size (Default: 8 pins per run, max 20/day).
    - Humanized randomized delays (15–45 seconds with mouse/scroll jitter).
    - Strict deduplication history (repin_history_stealth.json).
    - Dry Run mode support (--dry-run).
@@ -27,8 +27,10 @@ import base64
 import random
 import logging
 import argparse
+import gzip
+import csv
 from pathlib import Path
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 from typing import Dict, Any, Optional, Tuple, List
 
 from playwright.sync_api import sync_playwright, Page, BrowserContext
@@ -36,13 +38,22 @@ from playwright.sync_api import sync_playwright, Page, BrowserContext
 ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
 
+# ── Force Robust Logging to stdout ──────────────────────────────────────────
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    force=True,
+    handlers=[logging.StreamHandler(sys.stdout)]
+)
+logger = logging.getLogger("ProductsBoardSaver")
+
 # ── Double Encryption Secrets Initialization ─────────────────────────────────
 try:
     from secrets_manager import inject_to_env, get_secret
     inject_to_env()
-    logging.info("[secrets] double-encryption secrets injected successfully")
+    logger.info("[secrets] double-encryption secrets injected successfully")
 except Exception as e:
-    logging.warning(f"[secrets] secrets_manager fallback: {e}")
+    logger.warning(f"[secrets] secrets_manager fallback: {e}")
     def get_secret(key: str) -> Optional[str]:
         return os.environ.get(key)
 
@@ -54,15 +65,10 @@ from board_mapping import (
     MEEESHOP_BOARDS,
 )
 
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-)
-logger = logging.getLogger("ProductsBoardSaver")
-
 COOKIES_B64_FILE = ROOT / ".pinterest_cookies_b64"
 COOKIES_FILE = ROOT / ".pinterest_cookies"
 REPIN_HISTORY_FILE = ROOT / "repin_history_stealth.json"
+CATALOG_FEED_FILE = ROOT / "pinterest_catalog_feed.csv.gz"
 
 
 def safe_get_secret(key: str, default: Optional[str] = None) -> Optional[str]:
@@ -92,12 +98,13 @@ def load_repin_history() -> Dict[str, Any]:
 def save_repin_history(history: Dict[str, Any]):
     try:
         REPIN_HISTORY_FILE.write_text(json.dumps(history, indent=2, default=str), encoding="utf-8")
+        logger.info(f"✓ Saved updated repin history ({len(history.get('repins', []))} total repins recorded)")
     except Exception as e:
         logger.error(f"Failed to save repin history: {e}")
 
 
 def get_today_repin_count(history: Dict[str, Any]) -> int:
-    today = datetime.utcnow().date()
+    today = datetime.now(timezone.utc).date()
     count = 0
     for item in history.get("repins", []):
         ts_str = item.get("timestamp")
@@ -128,6 +135,7 @@ class StealthProductsBoardSaver:
             try:
                 cookies_json = base64.b64decode(cookies_b64.strip()).decode('utf-8-sig')
                 cookies_raw = json.loads(cookies_json)
+                logger.info("✓ Loaded session cookies from PINTEREST_COOKIES_B64 secret")
                 return self._normalize_cookies(cookies_raw)
             except Exception as e:
                 logger.warning(f"Failed to parse PINTEREST_COOKIES_B64: {e}")
@@ -137,6 +145,7 @@ class StealthProductsBoardSaver:
                 content = COOKIES_B64_FILE.read_text(encoding='utf-8').strip()
                 cookies_json = base64.b64decode(content).decode('utf-8-sig')
                 cookies_raw = json.loads(cookies_json)
+                logger.info(f"✓ Loaded session cookies from {COOKIES_B64_FILE.name}")
                 return self._normalize_cookies(cookies_raw)
             except Exception as e:
                 logger.warning(f"Failed to load from {COOKIES_B64_FILE.name}: {e}")
@@ -144,6 +153,7 @@ class StealthProductsBoardSaver:
         if COOKIES_FILE.exists():
             try:
                 cookies_raw = json.loads(COOKIES_FILE.read_text(encoding='utf-8'))
+                logger.info(f"✓ Loaded session cookies from {COOKIES_FILE.name}")
                 return self._normalize_cookies(cookies_raw)
             except Exception as e:
                 logger.warning(f"Failed to load from {COOKIES_FILE.name}: {e}")
@@ -210,69 +220,97 @@ class StealthProductsBoardSaver:
         try:
             boards = page.evaluate(script)
             if boards and len(boards) > 0:
-                logger.info(f"✓ Found {len(boards)} live boards via browser API")
+                logger.info(f"✓ Found {len(boards)} live boards from Pinterest session")
                 return boards
         except Exception as e:
             logger.debug(f"Boards API fetch note: {e}")
 
-        # Fallback to local default board list
         logger.info(f"Using local board mapping fallback ({len(MEEESHOP_BOARDS)} boards)")
         return [{"id": f"board_{i}", "name": name} for i, name in enumerate(MEEESHOP_BOARDS)]
 
     def extract_pins_from_products_board(self, page: Page, max_pins: int = 40) -> List[Dict[str, Any]]:
-        """Navigate to the _products board and extract pin items."""
+        """Navigate to the _products board and extract pin items, with catalog fallback."""
         products_url = f"https://www.pinterest.com/{self.username}/_products/"
         logger.info(f"🔍 Navigating to _products board: {products_url}")
-        page.goto(products_url, wait_until="domcontentloaded", timeout=45000)
-        time.sleep(3)
+        
+        extracted = []
+        try:
+            page.goto(products_url, wait_until="domcontentloaded", timeout=30000)
+            time.sleep(3)
 
-        # Smooth scroll to trigger lazy loading of pins
-        logger.info("Scrolling board feed to discover product pins...")
-        for _ in range(3):
-            page.evaluate("window.scrollBy(0, 800)")
-            time.sleep(1.5 + random.uniform(0.2, 0.6))
+            # Smooth scroll to trigger lazy loading
+            for _ in range(3):
+                page.evaluate("window.scrollBy(0, 800)")
+                time.sleep(1.2)
 
-        # Extract pin elements
-        script = """
-        () => {
-            const results = [];
-            const pinElements = document.querySelectorAll('div[data-test-id="pin"], div[role="listitem"]');
-            
-            pinElements.forEach(el => {
-                const linkEl = el.querySelector('a[href*="/pin/"]');
-                const imgEl = el.querySelector('img');
-                const titleEl = el.querySelector('h3, [role="heading"], div[title]');
+            script = """
+            () => {
+                const results = [];
+                const pinElements = document.querySelectorAll('div[data-test-id="pin"], div[role="listitem"], a[href*="/pin/"]');
                 
-                let pinId = null;
-                let href = linkEl ? linkEl.getAttribute('href') : '';
-                if (href) {
-                    const match = href.match(/\\/pin\\/(\\d+)/);
-                    if (match) pinId = match[1];
-                }
-                
-                let title = '';
-                if (titleEl) {
-                    title = titleEl.getAttribute('title') || titleEl.textContent || '';
-                } else if (imgEl) {
-                    title = imgEl.getAttribute('alt') || '';
-                }
-                
-                const imgSrc = imgEl ? imgEl.getAttribute('src') : '';
-                
-                if (pinId && !results.some(r => r.pin_id === pinId)) {
-                    results.push({
-                        pin_id: pinId,
-                        title: title.trim(),
-                        pin_url: `https://www.pinterest.com/pin/${pinId}/`,
-                        image_url: imgSrc
-                    });
-                }
-            });
-            return results;
-        }
-        """
-        extracted = page.evaluate(script)
-        logger.info(f"✓ Discovered {len(extracted)} pins on _products board")
+                pinElements.forEach(el => {
+                    const linkEl = el.tagName === 'A' ? el : el.querySelector('a[href*="/pin/"]');
+                    const imgEl = el.querySelector('img');
+                    const titleEl = el.querySelector('h3, [role="heading"], div[title]');
+                    
+                    let pinId = null;
+                    let href = linkEl ? linkEl.getAttribute('href') : '';
+                    if (href) {
+                        const match = href.match(/\\/pin\\/(\\d+)/);
+                        if (match) pinId = match[1];
+                    }
+                    
+                    let title = '';
+                    if (titleEl) {
+                        title = titleEl.getAttribute('title') || titleEl.textContent || '';
+                    } else if (imgEl) {
+                        title = imgEl.getAttribute('alt') || '';
+                    }
+                    
+                    const imgSrc = imgEl ? imgEl.getAttribute('src') : '';
+                    
+                    if (pinId && !results.some(r => r.pin_id === pinId)) {
+                        results.push({
+                            pin_id: pinId,
+                            title: title.trim(),
+                            pin_url: `https://www.pinterest.com/pin/${pinId}/`,
+                            image_url: imgSrc
+                        });
+                    }
+                });
+                return results;
+            }
+            """
+            extracted = page.evaluate(script) or []
+            if extracted:
+                logger.info(f"✓ Extracted {len(extracted)} pins directly from _products web board")
+        except Exception as e:
+            logger.warning(f"Web extraction note: {e}")
+
+        # Fallback to catalog feed items if web board extraction returned few items
+        if len(extracted) < 5 and CATALOG_FEED_FILE.exists():
+            logger.info("📦 Augmenting from local catalog feed (pinterest_catalog_feed.csv.gz)...")
+            try:
+                with gzip.open(CATALOG_FEED_FILE, mode="rt", encoding="utf-8") as f:
+                    reader = csv.DictReader(f)
+                    for row in reader:
+                        pid = row.get("id") or row.get("item_group_id")
+                        title = row.get("title") or row.get("product_type") or ""
+                        link = row.get("link") or ""
+                        img = row.get("image_link") or ""
+                        if pid and title and not any(r.get("pin_id") == pid for r in extracted):
+                            extracted.append({
+                                "pin_id": pid,
+                                "title": title,
+                                "pin_url": link,
+                                "image_url": img
+                            })
+                        if len(extracted) >= max_pins * 2:
+                            break
+                logger.info(f"✓ Total available product pins: {len(extracted)}")
+            except Exception as fe:
+                logger.warning(f"Catalog feed read note: {fe}")
+
         return extracted[:max_pins]
 
     def repin_pin_in_browser(
@@ -357,10 +395,9 @@ class StealthProductsBoardSaver:
         pin_url = f"https://www.pinterest.com/pin/{pin_id}/"
         logger.info(f"Attempting UI save fallback on {pin_url} to '{target_board_name}'...")
         try:
-            page.goto(pin_url, wait_until="domcontentloaded", timeout=30000)
+            page.goto(pin_url, wait_until="domcontentloaded", timeout=25000)
             time.sleep(2)
 
-            # Look for board dropdown / save button
             board_btn_selectors = [
                 '[data-test-id="board-dropdown-select-button"]',
                 'button[aria-label*="board" i]',
@@ -374,13 +411,11 @@ class StealthProductsBoardSaver:
                     time.sleep(1)
                     break
 
-            # Type board name in search box if open
             search_input = page.query_selector('input[placeholder*="search" i], input[aria-label*="search" i]')
             if search_input and search_input.is_visible():
                 search_input.fill(target_board_name[:15])
                 time.sleep(1)
 
-            # Click save on matching board row
             save_row = page.query_selector(f'div:has-text("{target_board_name[:12]}") button:has-text("Save")')
             if save_row and save_row.is_visible():
                 save_row.click()
@@ -405,12 +440,12 @@ class StealthProductsBoardSaver:
         history = load_repin_history()
         today_count = get_today_repin_count(history)
 
-        logger.info("=" * 70)
-        logger.info(f"🚀 PINTEREST STEALTH PRODUCTS BOARD SAVER")
-        logger.info(f"Today's Repin Count: {today_count}/{daily_cap} | Batch Goal: {max_repins} pins")
+        print("\n" + "=" * 70, flush=True)
+        print(f"🚀 PINTEREST STEALTH PRODUCTS BOARD SAVER", flush=True)
+        print(f"Today's Repin Count: {today_count}/{daily_cap} | Batch Goal: {max_repins} pins", flush=True)
         if dry_run:
-            logger.info("🧪 DRY RUN MODE ENABLED — No changes will be published")
-        logger.info("=" * 70)
+            print("🧪 DRY RUN MODE ENABLED — No changes will be published", flush=True)
+        print("=" * 70 + "\n", flush=True)
 
         if today_count >= daily_cap:
             logger.warning(f"⚠️ Daily repin cap reached ({today_count}/{daily_cap}). Exiting safely to protect account.")
@@ -418,6 +453,7 @@ class StealthProductsBoardSaver:
 
         allowed_this_run = min(max_repins, daily_cap - today_count)
 
+        logger.info(f"🚀 Launching Stealth Chromium Browser (headless={self.headless})...")
         with sync_playwright() as p:
             browser = p.chromium.launch(
                 headless=self.headless,
@@ -466,7 +502,7 @@ class StealthProductsBoardSaver:
 
             random.shuffle(eligible_pins)
             to_process = eligible_pins[:allowed_this_run]
-            logger.info(f"🎯 Selected {len(to_process)} pins to save in this run")
+            logger.info(f"🎯 Selected {len(to_process)} pins to process in this run\n")
 
             repinned_count = 0
             used_boards_in_run = set()
@@ -486,12 +522,12 @@ class StealthProductsBoardSaver:
                 target_board_name = target_board_obj.get("name", "Trends")
                 target_board_id = str(target_board_obj.get("id", ""))
 
-                logger.info(f"\n[{idx}/{len(to_process)}] Processing Pin: {pin_id}")
-                logger.info(f"   📌 Title: {title[:60] if title else '(Untitled Product)'}")
-                logger.info(f"   📂 Target Board: '{target_board_name}' (ID: {target_board_id})")
+                print(f"[{idx}/{len(to_process)}] Processing Pin: {pin_id}", flush=True)
+                print(f"   📌 Title: {title[:60] if title else '(Untitled Product)'}", flush=True)
+                print(f"   📂 Target Board: '{target_board_name}' (ID: {target_board_id})", flush=True)
 
                 if dry_run:
-                    logger.info(f"   [DRY RUN] Would save pin {pin_id} to board '{target_board_name}'")
+                    print(f"   🧪 [DRY RUN] Would save pin {pin_id} -> board '{target_board_name}'\n", flush=True)
                     repinned_count += 1
                     continue
 
@@ -506,7 +542,7 @@ class StealthProductsBoardSaver:
                 if success:
                     repinned_count += 1
                     used_boards_in_run.add(target_board_name)
-                    now_iso = datetime.utcnow().isoformat()
+                    now_iso = datetime.now(timezone.utc).isoformat()
                     history.setdefault("repins", []).append({
                         "pin_id": pin_id,
                         "product_title": title,
@@ -520,9 +556,9 @@ class StealthProductsBoardSaver:
                     history["daily_count"] = get_today_repin_count(history)
                     history["last_repin_time"] = now_iso
                     save_repin_history(history)
-                    logger.info(f"   ✅ Saved successfully! Live URL: {live_url}")
+                    print(f"   ✅ Saved successfully! Live URL: {live_url}\n", flush=True)
                 else:
-                    logger.warning(f"   ❌ Failed to save pin {pin_id}")
+                    print(f"   ❌ Failed to save pin {pin_id}\n", flush=True)
 
                 # Human-like delay between repins (15–40 seconds)
                 if idx < len(to_process):
@@ -531,9 +567,9 @@ class StealthProductsBoardSaver:
                     time.sleep(delay)
 
             browser.close()
-            logger.info("\n" + "=" * 70)
-            logger.info(f"🎉 Session complete! Successfully repinned {repinned_count} pins.")
-            logger.info("=" * 70)
+            print("\n" + "=" * 70, flush=True)
+            print(f"🎉 Session complete! Successfully processed {repinned_count} pins.", flush=True)
+            print("=" * 70 + "\n", flush=True)
             return {"status": "success", "repinned": repinned_count}
 
 
