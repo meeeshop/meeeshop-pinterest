@@ -45,6 +45,134 @@ DEFAULT_BRAND = "MeeeShop"
 OUTPUT_FULL = "pinterest_catalog_feed.csv"
 REDIRECT_PATH_FULL = "/a/pinterest_catalog_feed.csv"
 
+BLOCKED_SUPPLIERS = {
+    'CCWHOLESALECLOTHING', 'CC WHOLESALE CLOTHING', 'CC WHOLESALE', 'WHOLESALE',
+    'ATHINA RETAIL', 'ATHINA', 'BOHO CLOTHING AND ACCESSORIES', 'BOHO CLOTHING',
+    'AILI\'S CORNER', 'AILIS CORNER', 'SUPREME FASHION', 'COTTONWAYS',
+    'SHOPBASICBAE', 'BASIC BAE', 'HELLODAY.US', 'HELLO DAY', 'ELLISONYOUNG.COM', 'ELLISONYOUNG',
+    'LUCKY FEET SHOES', 'SPUN BAMBOO', 'TRENDSI', 'D&J', 'UNKNOWN', 'OTHER', 'DEFAULT', '',
+    'MKF DROPSHIP', 'GLEE + CO', 'GLEE AND CO', 'ORANGE FARM CLOTHING', 'ORANGE FARM',
+    'GRACE+EMMA', 'GRACE AND EMMA', 'GRACE & EMMA', 'ARTEMIS VINTAGE', 'ARTEMIS',
+    'INDIE & CO.', 'INDIE AND CO.', 'INDIE & CO', 'INDIE AND CO', 'HEY JOANIE',
+    'PRETTY SIMPLE', 'MADELINE LOVE', 'MISSFINCHNYC', 'MISS FINCH NYC', 'SNOSKINS',
+    'ALYTH ACTIVE', 'DIZZY-LIZZIE', 'DIZZY LIZZIE', 'TROPHY YOGA', 'VAILA SHOES', 'VAILA',
+    'BOTORI EQUESTRIAN', 'BOTORI', 'VALENTINE', 'TYCHE', 'DIOSA', 'CEFIAN', 'SOVELLA'
+}
+
+KNOWN_POPULAR_BRANDS = [
+    ("JUDY BLUE", "Judy Blue"),
+    ("RISEN", "Risen"),
+    ("YMI", "YMI Jeans"),
+    ("EMORY PARK", "Emory Park"),
+    ("FLYING TOMATO", "Flying Tomato"),
+    ("MKF COLLECTION", "MKF Collection"),
+    ("MIA K", "MKF Collection"),
+    ("RETROLICIOUS", "Retrolicious"),
+    ("DOWNEAST", "Downeast"),
+    ("HYFVE", "Hyfve"),
+    ("BUKI", "Buki"),
+    ("GOAL FIVE", "Goal Five"),
+    ("ELASTIQUE ATHLETICS", "Elastique Athletics")
+]
+
+def resolve_feed_brand(product):
+    """Resolves authentic consumer brands while replacing wholesale distributor accounts with MeeeShop."""
+    vendor = (product.get("vendor") or "").strip()
+    title = (product.get("title") or "").strip()
+    v_upper = vendor.upper()
+    t_upper = title.upper()
+    
+    # 1. Check if vendor or title matches a recognized popular consumer brand
+    for key, brand_name in KNOWN_POPULAR_BRANDS:
+        if key in v_upper or key in t_upper:
+            return brand_name
+            
+    # 2. Check if vendor is a blocked wholesale supplier
+    if v_upper in BLOCKED_SUPPLIERS or any(bs in v_upper for bs in [
+        'BOHO', 'AILI', 'SUPREME', 'COTTONWAYS', 'BASICBAE', 'HELLODAY', 'ELLISON',
+        'SPUN BAMBOO', 'ATHINA', 'CCWHOLESALE', 'TRENDSI', 'ORANGE FARM', 'GRACE+EMMA',
+        'ARTEMIS', 'INDIE & CO', 'HEY JOANIE', 'PRETTY SIMPLE', 'MADELINE LOVE',
+        'MISSFINCHNYC', 'SNOSKINS', 'ALYTH', 'DIZZY-LIZZIE', 'TROPHY YOGA', 'VAILA',
+        'BOTORI', 'VALENTINE', 'TYCHE', 'DIOSA', 'CEFIAN', 'GLEE + CO'
+    ]):
+        return DEFAULT_BRAND
+        
+    # 3. If vendor is present and not blocked/generic, use clean vendor
+    if vendor and v_upper not in BLOCKED_SUPPLIERS:
+        return vendor
+        
+    return DEFAULT_BRAND
+
+SUPPLIER_PATTERNS = [
+    r'\bBoho Clothing and Accessories\b[\s\-\:\—]*',
+    r'\bBoho Clothing\b[\s\-\:\—]*',
+    r'\bAili\'s Corner\b[\s\-\:\—]*',
+    r'\bAilis Corner\b[\s\-\:\—]*',
+    r'\bSUPREME FASHION\b[\s\-\:\—]*',
+    r'\bSupreme Fashion\b[\s\-\:\—]*',
+    r'\bCottonways\b[\s\-\:\—]*',
+    r'\bShopbasicbae\b[\s\-\:\—]*',
+    r'\bBasic Bae\b[\s\-\:\—]*',
+    r'\bHelloday\.us\b[\s\-\:\—]*',
+    r'\bHello Day\b[\s\-\:\—]*',
+    r'\bEllisonyoung\.com\b[\s\-\:\—]*',
+    r'\bEllisonyoung\b[\s\-\:\—]*',
+    r'\bLucky Feet Shoes\b[\s\-\:\—]*',
+    r'\bSpun Bamboo\b[\s\-\:\—]*',
+    r'\bCCWHOLESALECLOTHING\b[\s\-\:\—]*',
+    r'\bCC\s+WHOLESALE\s+CLOTHING\b[\s\-\:\—]*',
+    r'\bCC\s+WHOLESALE\b[\s\-\:\—]*',
+    r'\bATHINA\s+RETAIL\b[\s\-\:\—]*',
+    r'\bATHINA\b[\s\-\:\—]*',
+    r'\bTrendsi\b[\s\-\:\—]*',
+    r'\bMKF\s+Dropship\b[\s\-\:\—]*',
+    r'\bglee\s*\+\s*co\b[\s\-\:\—]*',
+    r'\bGlee\s+and\s+Co\b[\s\-\:\—]*',
+    r'\bOrange\s+Farm\s+Clothing\b[\s\-\:\—]*',
+    r'\bOrange\s+Farm\b[\s\-\:\—]*',
+    r'\bGrace\s*\+\s*Emma\b[\s\-\:\—]*',
+    r'\bGrace\s+and\s+Emma\b[\s\-\:\—]*',
+    r'\bArtemis\s+Vintage\b[\s\-\:\—]*',
+    r'\bArtemis\b[\s\-\:\—]*',
+    r'\bIndie\s*&\s*Co\.?\b[\s\-\:\—]*',
+    r'\bIndie\s+and\s+Co\.?\b[\s\-\:\—]*',
+    r'\bHey\s+Joanie\b[\s\-\:\—]*',
+    r'\bPretty\s+Simple\b[\s\-\:\—]*',
+    r'\bMadeline\s+Love\b[\s\-\:\—]*',
+    r'\bMissFinchNYC\b[\s\-\:\—]*',
+    r'\bMiss\s+Finch\s+NYC\b[\s\-\:\—]*',
+    r'\bSnoSkins\b[\s\-\:\—]*',
+    r'\bAlyth\s+Active\b[\s\-\:\—]*',
+    r'\bDizzy\-Lizzie\b[\s\-\:\—]*',
+    r'\bDizzy\s+Lizzie\b[\s\-\:\—]*',
+    r'\bTrophy\s+Yoga\b[\s\-\:\—]*',
+    r'\bVaila\s+Shoes\b[\s\-\:\—]*',
+    r'\bVaila\b[\s\-\:\—]*',
+    r'\bBOTORI\s+Equestrian\b[\s\-\:\—]*',
+    r'\bBOTORI\b[\s\-\:\—]*',
+    r'\bVALENTINE\b[\s\-\:\—]*',
+    r'\bTYCHE\b[\s\-\:\—]*',
+    r'\bDIOSA\b[\s\-\:\—]*',
+    r'\bCEFIAN\b[\s\-\:\—]*',
+    r'\bSovella\b[\s\-\:\—]*'
+]
+
+def clean_feed_title(title):
+    if not title:
+        return ""
+    t = title.strip()
+    for pat in SUPPLIER_PATTERNS:
+        t = re.sub(pat, '', t, flags=re.IGNORECASE).strip()
+    t = re.sub(r'^(?:Clearance|New|Sale)\s+', '', t, flags=re.IGNORECASE).strip()
+    t = re.sub(r'^\*+|\*+$', '', t).strip()
+    t = re.sub(r'\[.*?\]', '', t).strip()
+    t = re.sub(r'\b(Hj\d{3}|HJ\d{3})\b', '', t, flags=re.IGNORECASE).strip()
+    t = re.sub(r'\bBundle Accessories Package\b', '', t, flags=re.IGNORECASE).strip()
+    t = re.sub(r'\s+', ' ', t).strip()
+    if t:
+        t = t[0].upper() + t[1:] if len(t) > 1 else t.upper()
+    return t
+
 def clean_html(raw_html):
     """Removes HTML tags from product descriptions."""
     if not raw_html:
@@ -455,7 +583,7 @@ def generate_feeds():
         if len(prod_desc) > 4950:
             prod_desc = prod_desc[:4947] + "..."
 
-        brand = DEFAULT_BRAND
+        brand = resolve_feed_brand(product)
         item_group_id = str(product.get("id"))
         google_cat = get_google_product_category(product)
         product_type = product.get("product_type", "")
@@ -471,7 +599,7 @@ def generate_feeds():
             feed_id = var_id
             sku = variant.get("sku") or var_id
 
-            title = product.get("title")
+            title = clean_feed_title(product.get("title"))
             if variant.get("title") and variant.get("title") != "Default Title":
                 title = f"{title} - {variant.get('title')}"
 
