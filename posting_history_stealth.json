@@ -2400,11 +2400,55 @@
       "template": 15,
       "pin_url": "https://www.pinterest.com/pin/962222276663452946/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8950654697643,
+      "title": "Urban Noir Denim Overalls Black Jumpsuit New | MeeeShop US Boutique",
+      "board": "Trends",
+      "timestamp": "2026-08-26T12:37:01.916012",
+      "type": "carousel",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276663463592/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8876373246123,
+      "title": "High Waist Pants with Buckle Belt - Chic Back-to-School Style \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-08-26T12:38:11.845050",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276663463631/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8931945971883,
+      "title": "High-neck Racerback Crop Top - Fresh Back-to-School Chic \u2014 MeeeShop",
+      "board": "Fresh Finds New...",
+      "timestamp": "2026-08-26T12:39:26.417127",
+      "type": "carousel",
+      "style": "collage",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276663463672/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8740258611371,
+      "title": "Hyfve Rolled Sleeve Button-up Top - Trendy & Cozy for Back to School \u2014 MeeeShop",
+      "board": "Affordable Women's Fashion USA",
+      "timestamp": "2026-08-26T12:40:43.339481",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276663463704/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-08-18T03:03:00.147026",
-    "Trends": "2026-08-26T03:10:19.777856",
+    "Trends": "2026-08-26T12:37:01.916012",
     "Dresses": "2026-08-18T03:04:34.619148",
     "Feminine & Flowy Fits": "2026-08-18T03:01:25.470252",
     "Short fall dresses": "2026-08-18T12:33:07.657229",
@@ -2449,7 +2493,7 @@
     "Fashion Models": "2026-08-21T03:11:43.464820",
     "My Shop #1737732113": "2026-08-21T12:37:11.882612",
     "Shop For Holidays": "2026-08-21T21:33:29.613600",
-    "New": "2026-08-25T21:36:33.029774",
+    "New": "2026-08-26T12:38:11.845050",
     "American Bazi": "2026-08-22T12:26:35.616325",
     "Cool & Casual Styles": "2026-08-24T21:38:38.932637",
     "MeeeShop's Luxe Styles": "2026-08-22T17:56:02.089648",
@@ -2479,8 +2523,8 @@
     "Woman Fashion!": "2026-08-25T18:05:59.369535",
     "Stylish Finds": "2026-08-26T03:14:16.477245",
     "Confidence Ladies": "2026-08-26T03:16:12.976574",
-    "Fresh Finds New...": "2026-08-17T18:00:37.668473",
-    "Affordable Women's Fashion USA": "2026-08-17T18:01:54.340969",
+    "Fresh Finds New...": "2026-08-26T12:39:26.417127",
+    "Affordable Women's Fashion USA": "2026-08-26T12:40:43.339481",
     "Festive & Flora Fits": "2026-08-17T18:03:04.325584",
     "Shop Responsibly": "2026-08-17T21:30:47.850878",
     "Social": "2026-08-17T21:32:28.273361",
@@ -2498,9 +2542,9 @@
     "Sweaters & Sweater...": "2026-08-24T03:13:06.869060",
     "Boat Shoes": "2026-08-24T12:37:33.243466"
   },
-  "daily_count": 4,
-  "last_post_time": "2026-08-26T03:16:12.976574",
+  "daily_count": 8,
+  "last_post_time": "2026-08-26T12:40:43.339481",
   "board_rotation_cursor": 0,
   "last_image_style": "carousel",
-  "last_template_index": 15
+  "last_template_index": 14
 }
