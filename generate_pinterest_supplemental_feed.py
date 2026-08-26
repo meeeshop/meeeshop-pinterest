@@ -161,6 +161,7 @@ def clean_feed_title(title):
     if not title:
         return ""
     t = title.strip()
+    t = re.sub(r'^[\s\.\,\*\-\–\—\:\_]+', '', t).strip()
     for pat in SUPPLIER_PATTERNS:
         t = re.sub(pat, '', t, flags=re.IGNORECASE).strip()
     t = re.sub(r'^(?:Clearance|New|Sale)\s+', '', t, flags=re.IGNORECASE).strip()
@@ -168,6 +169,8 @@ def clean_feed_title(title):
     t = re.sub(r'\[.*?\]', '', t).strip()
     t = re.sub(r'\b(Hj\d{3}|HJ\d{3})\b', '', t, flags=re.IGNORECASE).strip()
     t = re.sub(r'\bBundle Accessories Package\b', '', t, flags=re.IGNORECASE).strip()
+    t = re.sub(r'^[\s\.\,\*\-\–\—\:\_]+', '', t).strip()
+    t = re.sub(r'[\s\-–—:\.]+$', '', t).strip()
     t = re.sub(r'\s+', ' ', t).strip()
     if t:
         t = t[0].upper() + t[1:] if len(t) > 1 else t.upper()
