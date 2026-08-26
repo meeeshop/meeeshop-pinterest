@@ -2444,11 +2444,55 @@
       "template": 14,
       "pin_url": "https://www.pinterest.com/pin/962222276663463704/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8941772341419,
+      "title": "Plush Faux Fur Hobo Handbag with Adjustable Top Handle and Strap Back to School",
+      "board": "Trends",
+      "timestamp": "2026-08-26T19:27:36.925940",
+      "type": "carousel",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276663475041/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8745259466923,
+      "title": "Flying Tomato Purely Romantic Woven Lace Midi Skirt - Back-to-School Style \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-08-26T19:28:45.622446",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276663475066/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8782660567211,
+      "title": "Flying Tomato Noir Contour Woven Top - Trendy Back-to-School & Late Summer Top",
+      "board": "Shop Responsibly",
+      "timestamp": "2026-08-26T19:29:54.941489",
+      "type": "carousel",
+      "style": "collage",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276663475089/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8782638284971,
+      "title": "Black Bandana Print Cape Cod Top | MeeeShop US Boutique",
+      "board": "Social",
+      "timestamp": "2026-08-26T19:31:10.927763",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276663475120/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-08-18T03:03:00.147026",
-    "Trends": "2026-08-26T12:37:01.916012",
+    "Trends": "2026-08-26T19:27:36.925940",
     "Dresses": "2026-08-18T03:04:34.619148",
     "Feminine & Flowy Fits": "2026-08-18T03:01:25.470252",
     "Short fall dresses": "2026-08-18T12:33:07.657229",
@@ -2493,7 +2537,7 @@
     "Fashion Models": "2026-08-21T03:11:43.464820",
     "My Shop #1737732113": "2026-08-21T12:37:11.882612",
     "Shop For Holidays": "2026-08-21T21:33:29.613600",
-    "New": "2026-08-26T12:38:11.845050",
+    "New": "2026-08-26T19:28:45.622446",
     "American Bazi": "2026-08-22T12:26:35.616325",
     "Cool & Casual Styles": "2026-08-24T21:38:38.932637",
     "MeeeShop's Luxe Styles": "2026-08-22T17:56:02.089648",
@@ -2526,8 +2570,8 @@
     "Fresh Finds New...": "2026-08-26T12:39:26.417127",
     "Affordable Women's Fashion USA": "2026-08-26T12:40:43.339481",
     "Festive & Flora Fits": "2026-08-17T18:03:04.325584",
-    "Shop Responsibly": "2026-08-17T21:30:47.850878",
-    "Social": "2026-08-17T21:32:28.273361",
+    "Shop Responsibly": "2026-08-26T19:29:54.941489",
+    "Social": "2026-08-26T19:31:10.927763",
     "Blogs": "2026-08-17T21:33:34.238278",
     "All Pins": "2026-08-17T21:34:37.493493",
     "Outer wear": "2026-08-18T03:05:47.307004",
@@ -2542,8 +2586,8 @@
     "Sweaters & Sweater...": "2026-08-24T03:13:06.869060",
     "Boat Shoes": "2026-08-24T12:37:33.243466"
   },
-  "daily_count": 8,
-  "last_post_time": "2026-08-26T12:40:43.339481",
+  "daily_count": 12,
+  "last_post_time": "2026-08-26T19:31:10.927763",
   "board_rotation_cursor": 0,
   "last_image_style": "carousel",
   "last_template_index": 14
