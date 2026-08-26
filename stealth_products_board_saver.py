@@ -1,19 +1,18 @@
 """
 stealth_products_board_saver.py — Stealth Repin Automation from _products Board
 
-Automates discovering pins from the Meeeshop `_products` catalog board, loading their
-true product metadata (title, product type, link), matching them to relevant niche boards
+Automates discovering catalog product pins directly from `https://www.pinterest.com/meeeshop/_products/`,
+extracting their true Shopify metadata (title, product type, link), matching them to relevant niche boards
 using board_mapping.py, and repinning them via Pinterest's authenticated API.
 
 Features:
-1. Loads authenticated Pinterest session (PINTEREST_COOKIES_B64 / .pinterest_cookies).
-2. Fetches all 100+ live boards with their real numerical Pinterest Board IDs.
-3. Discovers pins from the _products board and loads true pin titles (e.g. "Calm Feather-soft Lounge Short").
-4. Accurately maps titles & product types to the correct niche boards (e.g. Loungewear, Cardigans, Dresses).
-5. Dual execution engine:
-   - Primary: Fast and reliable authenticated Repin API (PinterestClient.repin) using exact numerical board IDs.
-   - Fallback: Playwright UI Automation with direct board picker.
-6. Anti-Shadowban Guardrails:
+1. Authenticates session cookies (PINTEREST_COOKIES_B64 / .pinterest_cookies).
+2. Uses Playwright with authenticated session to scroll and discover catalog pins directly on `https://www.pinterest.com/{username}/_products/`.
+3. Fetches all 100+ live boards with their real numerical Pinterest Board IDs.
+4. Loads true product titles for every catalog pin (e.g. "Emory Park Amber Maxi Dress", "Calm Feather-soft Lounge Short").
+5. Accurately matches each product to its specific niche board (e.g. "Emory Park Clothing", "Loungewear", "Dresses").
+6. Repins to target boards using verified numerical board IDs.
+7. Anti-Shadowban Guardrails:
    - Default batch size: 8 pins per run (max 20/day).
    - 15–35s randomized human delays between repins.
    - Deduplication tracking in repin_history_stealth.json.
@@ -28,11 +27,12 @@ import base64
 import random
 import logging
 import argparse
-import gzip
-import csv
+import re
 from pathlib import Path
 from datetime import datetime, timezone, timedelta
 from typing import Dict, Any, Optional, Tuple, List
+
+from playwright.sync_api import sync_playwright
 
 ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
@@ -68,7 +68,6 @@ from board_mapping import (
 COOKIES_B64_FILE = ROOT / ".pinterest_cookies_b64"
 COOKIES_FILE = ROOT / ".pinterest_cookies"
 REPIN_HISTORY_FILE = ROOT / "repin_history_stealth.json"
-CATALOG_FEED_FILE = ROOT / "pinterest_catalog_feed.csv.gz"
 
 
 def safe_get_secret(key: str, default: Optional[str] = None) -> Optional[str]:
@@ -120,7 +119,7 @@ def get_today_repin_count(history: Dict[str, Any]) -> int:
 
 class StealthProductsBoardSaver:
     """
-    Scans pins from _products board, retrieves true product metadata,
+    Scans pins from _products catalog board, retrieves true product metadata,
     and repins them to matching organized boards using verified Pinterest Board IDs.
     """
 
@@ -130,6 +129,63 @@ class StealthProductsBoardSaver:
         self.pinterest = PinterestClient()
         self.logged_in = False
         self.live_boards = []
+
+    def _get_cookies_dict(self) -> Optional[List[Dict[str, Any]]]:
+        cookies_b64 = safe_get_secret("PINTEREST_COOKIES_B64")
+        if cookies_b64:
+            try:
+                cookies_json = base64.b64decode(cookies_b64.strip()).decode('utf-8-sig')
+                cookies_raw = json.loads(cookies_json)
+                logger.info("✓ Loaded session cookies from PINTEREST_COOKIES_B64 secret")
+                return self._normalize_cookies(cookies_raw)
+            except Exception as e:
+                logger.warning(f"Failed to parse PINTEREST_COOKIES_B64: {e}")
+
+        if COOKIES_B64_FILE.exists():
+            try:
+                content = COOKIES_B64_FILE.read_text(encoding='utf-8').strip()
+                cookies_json = base64.b64decode(content).decode('utf-8-sig')
+                cookies_raw = json.loads(cookies_json)
+                logger.info(f"✓ Loaded session cookies from {COOKIES_B64_FILE.name}")
+                return self._normalize_cookies(cookies_raw)
+            except Exception as e:
+                logger.warning(f"Failed to load from {COOKIES_B64_FILE.name}: {e}")
+
+        if COOKIES_FILE.exists():
+            try:
+                cookies_raw = json.loads(COOKIES_FILE.read_text(encoding='utf-8'))
+                logger.info(f"✓ Loaded session cookies from {COOKIES_FILE.name}")
+                return self._normalize_cookies(cookies_raw)
+            except Exception as e:
+                logger.warning(f"Failed to load from {COOKIES_FILE.name}: {e}")
+
+        return None
+
+    def _normalize_cookies(self, raw_cookies: Any) -> List[Dict[str, Any]]:
+        normalized = []
+        if isinstance(raw_cookies, dict):
+            for k, v in raw_cookies.items():
+                normalized.append({
+                    "name": str(k),
+                    "value": str(v),
+                    "domain": ".pinterest.com",
+                    "path": "/"
+                })
+        elif isinstance(raw_cookies, list):
+            for c in raw_cookies:
+                if isinstance(c, dict) and "name" in c and "value" in c:
+                    cookie = {
+                        "name": str(c["name"]),
+                        "value": str(c["value"]),
+                        "domain": c.get("domain", ".pinterest.com"),
+                        "path": c.get("path", "/")
+                    }
+                    if "sameSite" in c:
+                        ss = str(c["sameSite"]).capitalize()
+                        if ss in ["Strict", "Lax", "None"]:
+                            cookie["sameSite"] = ss
+                    normalized.append(cookie)
+        return normalized
 
     def initialize_session(self) -> bool:
         """Log in to Pinterest client and load all live boards with numerical IDs."""
@@ -145,88 +201,84 @@ class StealthProductsBoardSaver:
             logger.error("Failed to authenticate Pinterest Client")
             return False
 
-    def discover_product_pins(self, max_pins: int = 50) -> List[Dict[str, Any]]:
+    def discover_catalog_pins_from_products_board(self, max_pins: int = 50) -> List[Dict[str, Any]]:
         """
-        Discover product pins from:
-        1. Products board / Products you tagged on Pinterest
-        2. Playwright web scrape fallback
-        3. Local Shopify catalog feed fallback
+        Directly navigate to `https://www.pinterest.com/{username}/_products/`
+        with session cookies to extract actual catalog product pins.
         """
-        print("🔍 Discovering pins from _products board...", flush=True)
+        products_url = f"https://www.pinterest.com/{self.username}/_products/"
+        print(f"🔍 Scanning catalog feed on {products_url} via Authenticated Stealth Browser...", flush=True)
+
         discovered_pin_ids = []
+        try:
+            with sync_playwright() as p:
+                browser = p.chromium.launch(
+                    headless=self.headless,
+                    args=[
+                        "--disable-blink-features=AutomationControlled",
+                        "--no-sandbox",
+                        "--disable-setuid-sandbox",
+                        "--disable-infobars",
+                        "--window-size=1280,900",
+                        "--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
+                    ]
+                )
+                context = browser.new_context(
+                    viewport={"width": 1280, "height": 900},
+                    user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
+                )
 
-        # 1. Try finding products from 'Products you tagged' or '_products' board feed via API
-        products_board = next((b for b in self.live_boards if 'product' in b.get('name', '').lower() or 'product' in b.get('url', '').lower()), None)
-        if products_board:
-            b_id = str(products_board.get('id', ''))
-            logger.info(f"Found catalog board '{products_board.get('name')}' (ID: {b_id})")
-            try:
-                pins = self.pinterest.fetch_board_pins(board_id=b_id, board_name=products_board.get('name', ''))
-                for p in pins:
-                    pid = str(p.get('id') or p.get('pin_id') or '')
-                    if pid and pid not in discovered_pin_ids:
-                        discovered_pin_ids.append(pid)
-                if discovered_pin_ids:
-                    logger.info(f"✓ Found {len(discovered_pin_ids)} pins from board feed API")
-            except Exception as e:
-                logger.warning(f"Board feed API fetch note: {e}")
+                cookies = self._get_cookies_dict()
+                if cookies:
+                    context.add_cookies(cookies)
+                    logger.info(f"✓ Injected {len(cookies)} session cookies into Playwright context")
 
-        # 2. Try scraping _products web page via Playwright if fewer pins discovered
-        if len(discovered_pin_ids) < 10:
-            try:
-                from playwright.sync_api import sync_playwright
-                logger.info(f"Scanning web board https://www.pinterest.com/{self.username}/_products/ via Playwright...")
-                with sync_playwright() as p:
-                    browser = p.chromium.launch(headless=self.headless)
-                    context = browser.new_context(
-                        viewport={"width": 1280, "height": 900},
-                        user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
-                    )
-                    # Inject cookies if available
-                    cookies_b64 = safe_get_secret("PINTEREST_COOKIES_B64")
-                    if cookies_b64:
-                        try:
-                            cj = json.loads(base64.b64decode(cookies_b64.strip()).decode('utf-8-sig'))
-                            context.add_cookies([
-                                {"name": k, "value": v, "domain": ".pinterest.com", "path": "/"}
-                                if isinstance(cj, dict) else c for k, v in (cj.items() if isinstance(cj, dict) else [])
-                            ])
-                        except Exception:
-                            pass
+                page = context.new_page()
+                page.goto(products_url, wait_until="domcontentloaded", timeout=35000)
+                time.sleep(3)
 
-                    page = context.new_page()
-                    page.goto(f"https://www.pinterest.com/{self.username}/_products/", wait_until="domcontentloaded", timeout=30000)
-                    time.sleep(3)
-                    for _ in range(3):
-                        page.evaluate("window.scrollBy(0, 800)")
-                        time.sleep(1.0)
+                # Scroll down multiple times to trigger lazy loading of catalog pins
+                logger.info("Scrolling _products catalog feed...")
+                for scroll_idx in range(5):
+                    page.evaluate("window.scrollBy(0, 1000)")
+                    time.sleep(1.2 + random.uniform(0.1, 0.4))
 
-                    links = page.eval_on_selector_all('a[href*="/pin/"]', "els => els.map(e => e.getAttribute('href'))")
-                    for href in links:
-                        if href:
-                            import re
-                            m = re.search(r'/pin/(\d+)', href)
-                            if m and m.group(1) not in discovered_pin_ids:
-                                discovered_pin_ids.append(m.group(1))
-                    browser.close()
-                    logger.info(f"✓ Discovered {len(discovered_pin_ids)} pins from web board")
-            except Exception as pe:
-                logger.warning(f"Playwright web scrape note: {pe}")
+                links = page.evaluate("""() => Array.from(document.querySelectorAll('a')).map(a => a.href).filter(h => h && h.includes('/pin/'))""")
+                for l in links:
+                    m = re.search(r'/pin/(\d+)', l)
+                    if m and m.group(1) not in discovered_pin_ids:
+                        discovered_pin_ids.append(m.group(1))
 
-        # 3. For each discovered pin ID, load true Pin metadata (Real Title, Description, Link)
+                browser.close()
+                logger.info(f"✓ Discovered {len(discovered_pin_ids)} catalog pins directly on _products board")
+
+        except Exception as pe:
+            logger.error(f"Playwright _products board scan error: {pe}")
+
+        # Fallback to board feed if needed
+        if not discovered_pin_ids:
+            logger.info("Scanning fallback feed...")
+            for b in self.live_boards:
+                if '_products' in b.get('url', '') or 'products you tagged' in b.get('name', '').lower():
+                    pins = self.pinterest.fetch_board_pins(board_id=str(b.get('id')), board_name=b.get('name', ''))
+                    for p in pins:
+                        pid = str(p.get('id') or p.get('pin_id') or '')
+                        if pid and pid not in discovered_pin_ids:
+                            discovered_pin_ids.append(pid)
+
+        # For each discovered catalog pin ID, load true Pin metadata (Real Title, Description, Link)
         product_items = []
-        print(f"📦 Loading accurate metadata for {min(len(discovered_pin_ids), max_pins)} pins...", flush=True)
+        print(f"📦 Loading true product metadata for {min(len(discovered_pin_ids), max_pins)} catalog pins...", flush=True)
         for pid in discovered_pin_ids[:max_pins]:
             try:
                 pin_data = self.pinterest.client.load_pin(str(pid))
                 if isinstance(pin_data, dict):
-                    # Extract true title (not store header)
                     raw_title = pin_data.get('title') or pin_data.get('grid_title') or pin_data.get('seo_title') or ''
                     desc = pin_data.get('description') or ''
                     link = pin_data.get('link') or ''
                     img = pin_data.get('images', {}).get('orig', {}).get('url') if isinstance(pin_data.get('images'), dict) else ''
 
-                    # Clean up variant suffixes (e.g. " - Miststone / X-Large")
+                    # Strip variant suffixes (e.g. " - Miststone / X-Large" or " - Yellow Floral / M")
                     clean_title = raw_title.split(" - ")[0].strip() if " - " in raw_title else raw_title
 
                     product_items.append({
@@ -239,31 +291,6 @@ class StealthProductsBoardSaver:
                     })
             except Exception as le:
                 logger.warning(f"Failed to load pin {pid} metadata: {le}")
-
-        # Fallback to local catalog feed if pin metadata loading yielded no items
-        if not product_items and CATALOG_FEED_FILE.exists():
-            logger.info("Reading products from local catalog feed (pinterest_catalog_feed.csv.gz)...")
-            try:
-                with gzip.open(CATALOG_FEED_FILE, mode="rt", encoding="utf-8") as f:
-                    reader = csv.DictReader(f)
-                    for row in reader:
-                        pid = row.get("id") or row.get("item_group_id")
-                        title = row.get("title") or ""
-                        link = row.get("link") or ""
-                        img = row.get("image_link") or ""
-                        if pid and title:
-                            product_items.append({
-                                "pin_id": pid,
-                                "title": title,
-                                "raw_title": title,
-                                "description": row.get("description") or "",
-                                "link": link,
-                                "image_url": img
-                            })
-                        if len(product_items) >= max_pins:
-                            break
-            except Exception as fe:
-                logger.warning(f"Catalog feed read note: {fe}")
 
         return product_items
 
@@ -307,7 +334,7 @@ class StealthProductsBoardSaver:
         dry_run: bool = False
     ) -> Dict[str, Any]:
         """
-        Orchestrates the repinning session.
+        Orchestrates the repinning session from _products board.
         """
         history = load_repin_history()
         today_count = get_today_repin_count(history)
@@ -325,27 +352,27 @@ class StealthProductsBoardSaver:
 
         allowed_this_run = min(max_repins, daily_cap - today_count)
 
-        # Initialize session & load real board IDs
+        # 1. Initialize session & load real board IDs
         if not self.initialize_session():
             return {"status": "error", "reason": "auth_failed", "repinned": 0}
 
-        # Discover product pins
-        products = self.discover_product_pins(max_pins=50)
+        # 2. Discover catalog product pins directly from _products
+        products = self.discover_catalog_pins_from_products_board(max_pins=50)
         if not products:
-            logger.warning("No product pins found on _products board.")
+            logger.warning("No catalog pins found on _products board.")
             return {"status": "empty", "repinned": 0}
 
-        # Deduplicate against recent history
+        # 3. Deduplicate against recent history
         already_saved_ids = {str(item.get("pin_id")) for item in history.get("repins", [])}
         eligible = [p for p in products if str(p["pin_id"]) not in already_saved_ids]
 
         if not eligible:
-            logger.info("All scanned pins have already been organized. Re-evaluating older pins...")
+            logger.info("All scanned catalog pins have already been organized. Re-evaluating older pins...")
             eligible = products
 
         random.shuffle(eligible)
         to_process = eligible[:allowed_this_run]
-        print(f"\n🎯 Selected {len(to_process)} pins to process in this run\n", flush=True)
+        print(f"\n🎯 Selected {len(to_process)} catalog pins to process in this run\n", flush=True)
 
         repinned_count = 0
         used_boards_in_run = set()
@@ -366,7 +393,7 @@ class StealthProductsBoardSaver:
             target_board_name = target_board_obj.get("name", "Trends")
             target_board_id = str(target_board_obj.get("id", ""))
 
-            print(f"[{idx}/{len(to_process)}] Processing Pin: {pin_id}", flush=True)
+            print(f"[{idx}/{len(to_process)}] Processing Catalog Pin: {pin_id}", flush=True)
             print(f"   📌 Product: {raw_title}", flush=True)
             print(f"   📂 Target Board: '{target_board_name}' (ID: {target_board_id})", flush=True)
 
@@ -410,7 +437,7 @@ class StealthProductsBoardSaver:
                 time.sleep(delay)
 
         print("\n" + "=" * 70, flush=True)
-        print(f"🎉 Session complete! Successfully organized {repinned_count} pins.", flush=True)
+        print(f"🎉 Session complete! Successfully organized {repinned_count} catalog pins.", flush=True)
         print("=" * 70 + "\n", flush=True)
         return {"status": "success", "repinned": repinned_count}
 
