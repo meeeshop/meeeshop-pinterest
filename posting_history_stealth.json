@@ -2354,11 +2354,57 @@
       "template": 17,
       "pin_url": "https://www.pinterest.com/pin/962222276663445244/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8740284530859,
+      "title": "Judy Blue Full Size Wide Leg Capris Jeans plus Size - Back to School \u2014 MeeeShop",
+      "board": "Trends",
+      "timestamp": "2026-08-26T03:10:19.777856",
+      "type": "carousel",
+      "style": "collage",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276663452767/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": "558765211819",
+      "article_id": "558765211819",
+      "title": "Mothers Day Collection For Someone Special",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-08-26T03:11:55.828055",
+      "type": "blog",
+      "style": "carousel",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276663452809/",
+      "blog_url": "https://us.meeeshop.com/blogs/our-tips/mothers-day-collection-for-someone-special",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8919866310827,
+      "title": "Flying Tomato Bark Brown Vintage Woven Midi Dress - Chic Back-to-School Look",
+      "board": "Stylish Finds",
+      "timestamp": "2026-08-26T03:14:16.477245",
+      "type": "video",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276663452889/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8930016395435,
+      "title": "Grace+emma Longsleeve Off-the-shoulder Top with Lace Trim, Leopard | MeeeShop US Boutique",
+      "board": "Confidence Ladies",
+      "timestamp": "2026-08-26T03:16:12.976574",
+      "type": "product",
+      "style": "carousel",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276663452946/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-08-18T03:03:00.147026",
-    "Trends": "2026-08-25T21:35:25.536231",
+    "Trends": "2026-08-26T03:10:19.777856",
     "Dresses": "2026-08-18T03:04:34.619148",
     "Feminine & Flowy Fits": "2026-08-18T03:01:25.470252",
     "Short fall dresses": "2026-08-18T12:33:07.657229",
@@ -2431,8 +2477,8 @@
     "Style Ideas": "2026-08-25T03:08:00.533370",
     "Mustard Seed Clothing": "2026-08-25T21:39:08.874432",
     "Woman Fashion!": "2026-08-25T18:05:59.369535",
-    "Stylish Finds": "2026-08-17T12:32:18.114926",
-    "Confidence Ladies": "2026-08-17T17:59:20.540196",
+    "Stylish Finds": "2026-08-26T03:14:16.477245",
+    "Confidence Ladies": "2026-08-26T03:16:12.976574",
     "Fresh Finds New...": "2026-08-17T18:00:37.668473",
     "Affordable Women's Fashion USA": "2026-08-17T18:01:54.340969",
     "Festive & Flora Fits": "2026-08-17T18:03:04.325584",
@@ -2452,9 +2498,9 @@
     "Sweaters & Sweater...": "2026-08-24T03:13:06.869060",
     "Boat Shoes": "2026-08-24T12:37:33.243466"
   },
-  "daily_count": 16,
-  "last_post_time": "2026-08-25T21:39:08.874432",
+  "daily_count": 4,
+  "last_post_time": "2026-08-26T03:16:12.976574",
   "board_rotation_cursor": 0,
   "last_image_style": "carousel",
-  "last_template_index": 17
+  "last_template_index": 15
 }
