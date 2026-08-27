@@ -88,7 +88,7 @@ def was_recently_posted(article_id: str, history: Dict[str, Any]) -> bool:
 def fetch_shopify_articles(shopify: ShopifyClient, limit: int = 15) -> List[Dict[str, Any]]:
     query = """
     query ($first: Int!) {
-      articles(first: $first) {
+      articles(first: $first, sortKey: PUBLISHED_AT, reverse: true) {
         edges {
           node {
             id
