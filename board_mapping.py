@@ -215,18 +215,19 @@ PRIORITY_BOARDS = [
 
 # Dedicated Blog & Editorial Boards
 BLOG_BOARDS = [
-    "Our Recommended...",
-    "My Shop #1737732113",
-    "My Shop 8727/2019",
-    "Social",
     "Blogs",
-    "Fashion Models",
-    "Style Ideas",
-    "Outfit Ideas",
     "Trends",
+    "New",
+    "Style Ideas",
+    "Fashion Models",
+    "Outfit Ideas",
     "Everyday Style",
     "Casual Chic Style",
+    "Our Recommended...",
+    "Social",
     "Affordable Women's Fashion USA",
+    "My Shop #1737732113",
+    "My Shop 8727/2019",
 ]
 
 
