@@ -173,6 +173,15 @@ def run_blog_posting() -> None:
         logger.info("All articles have been posted recently or within the cooldown period. Skipping execution to avoid spam.")
         return
 
+    # Prioritize recent articles (published in the last 14 days)
+    recent_eligible = [art for art in eligible if art.get("published_at") and is_recent(art["published_at"], 14)]
+    
+    if recent_eligible:
+        logger.info(f"Found {len(recent_eligible)} recent articles (published in last 14 days). Prioritizing fresh content.")
+        eligible = recent_eligible
+    else:
+        logger.info("No recent articles found in the last 14 days. Falling back to unpinned evergreen older articles.")
+
     # Shuffle to vary postings
     random.shuffle(eligible)
     to_post = eligible[:MAX_BLOGS_PER_RUN]
