@@ -180,7 +180,8 @@ def run_blog_posting() -> None:
         logger.info(f"Found {len(recent_eligible)} recent articles (published in last 14 days). Prioritizing fresh content.")
         eligible = recent_eligible
     else:
-        logger.info("No recent articles found in the last 14 days. Falling back to unpinned evergreen older articles.")
+        logger.info("No recent articles found in the last 14 days. Exiting without posting older articles.")
+        return
 
     # Shuffle to vary postings
     random.shuffle(eligible)
