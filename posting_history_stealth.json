@@ -1552,11 +1552,57 @@
       "template": 17,
       "pin_url": "https://www.pinterest.com/pin/962222276663297298/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8933198954667,
+      "title": "Peyton Dress 100% Cotton Gauze - Flirty Babydoll Mini for Back-to-School \u2014 MeeeShop",
+      "board": "Trends",
+      "timestamp": "2026-08-27T12:38:17.070767",
+      "type": "product",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276663496466/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8950655320235,
+      "title": "Off-shoulder Lace Blazer Dress - Chic Layering for Back to School \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-08-27T12:40:39.676003",
+      "type": "video",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276663496526/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": "559670427819",
+      "article_id": "559670427819",
+      "title": "Tips For Trendy Stylish Plus Size Womens Winter Wear",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-08-27T12:42:14.435708",
+      "type": "blog",
+      "style": "collage",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276663496572/",
+      "blog_url": "https://us.meeeshop.com/blogs/plus-size-curvy-clothing/tips-for-trendy-stylish-plus-size-womens-winter-wear",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8931951247531,
+      "title": "Built-in Pocket Short Tennis Skirt Made in USA | MeeeShop US Boutique",
+      "board": "Chic Looks",
+      "timestamp": "2026-08-27T12:44:55.199749",
+      "type": "video",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276663496632/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-08-18T03:03:00.147026",
-    "Trends": "2026-08-21T12:32:13.981272",
+    "Trends": "2026-08-27T12:38:17.070767",
     "Dresses": "2026-08-18T03:04:34.619148",
     "Feminine & Flowy Fits": "2026-08-18T03:01:25.470252",
     "Short fall dresses": "2026-08-18T12:33:07.657229",
@@ -1587,7 +1633,7 @@
     "Kancan USA Jeans": "2026-08-20T15:36:28.595311",
     "Footwear": "2026-08-14T17:46:13.419439",
     "Fitted Jeans": "2026-08-20T18:03:57.898410",
-    "Chic Looks": "2026-08-14T17:48:34.979373",
+    "Chic Looks": "2026-08-27T12:44:55.199749",
     "Straight Leg Jeans": "2026-08-14T17:49:39.432226",
     "Puff Sleeves Tops": "2026-08-20T21:34:03.105622",
     "Casual": "2026-08-19T17:57:45.543242",
@@ -1601,7 +1647,7 @@
     "Fashion Models": "2026-08-21T03:11:43.464820",
     "My Shop #1737732113": "2026-08-21T12:37:11.882612",
     "Shop For Holidays": "2026-08-15T17:52:01.108662",
-    "New": "2026-08-21T12:33:55.444668",
+    "New": "2026-08-27T12:40:39.676003",
     "American Bazi": "2026-08-15T17:54:38.665703",
     "Cool & Casual Styles": "2026-08-15T17:55:35.872843",
     "MeeeShop's Luxe Styles": "2026-08-15T21:26:32.597254",
@@ -1644,8 +1690,8 @@
     "Bow heels": "2026-08-20T18:00:36.882815",
     "Sweaters": "2026-08-20T21:32:57.133135"
   },
-  "daily_count": 8,
-  "last_post_time": "2026-08-21T12:37:11.882612",
+  "daily_count": 4,
+  "last_post_time": "2026-08-27T12:44:55.199749",
   "board_rotation_cursor": 0,
   "last_image_style": "carousel",
   "last_template_index": 17
