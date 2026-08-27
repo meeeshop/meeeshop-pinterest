@@ -2488,11 +2488,55 @@
       "template": 14,
       "pin_url": "https://www.pinterest.com/pin/962222276663475120/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8941772898475,
+      "title": "Faux Leather Graphic Message Statement Top Handle Satchel Handbag | MeeeShop US Boutique",
+      "board": "Trends",
+      "timestamp": "2026-08-27T00:35:28.445662",
+      "type": "carousel",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276663482276/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8885871902891,
+      "title": "Kathryn Classic Button-up, Yellow Lace Top - Fresh Back-to-School Chic \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-08-27T00:36:37.003308",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276663482296/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8818150604971,
+      "title": "Emory Park Stria Striped Pants for Back to School & Work \u2014 MeeeShop",
+      "board": "Off-Duty Athlete Looks",
+      "timestamp": "2026-08-27T00:38:02.753914",
+      "type": "carousel",
+      "style": "collage",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276663482334/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8941754908843,
+      "title": "Goal Five Mesh It to Me Tank - Fresh Back-to-School Style \u2014 MeeeShop",
+      "board": "Blogs",
+      "timestamp": "2026-08-27T00:39:36.807805",
+      "type": "product",
+      "style": "card",
+      "template": 9,
+      "pin_url": "https://www.pinterest.com/pin/962222276663482384/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-08-18T03:03:00.147026",
-    "Trends": "2026-08-26T19:27:36.925940",
+    "Trends": "2026-08-27T00:35:28.445662",
     "Dresses": "2026-08-18T03:04:34.619148",
     "Feminine & Flowy Fits": "2026-08-18T03:01:25.470252",
     "Short fall dresses": "2026-08-18T12:33:07.657229",
@@ -2537,7 +2581,7 @@
     "Fashion Models": "2026-08-21T03:11:43.464820",
     "My Shop #1737732113": "2026-08-21T12:37:11.882612",
     "Shop For Holidays": "2026-08-21T21:33:29.613600",
-    "New": "2026-08-26T19:28:45.622446",
+    "New": "2026-08-27T00:36:37.003308",
     "American Bazi": "2026-08-22T12:26:35.616325",
     "Cool & Casual Styles": "2026-08-24T21:38:38.932637",
     "MeeeShop's Luxe Styles": "2026-08-22T17:56:02.089648",
@@ -2556,7 +2600,7 @@
     "Weekend to Workout": "2026-08-25T21:37:59.882401",
     "Gimme Gummy Playful Nostalgia": "2026-08-24T03:14:20.016270",
     "Best selling products": "2026-08-23T17:57:29.427287",
-    "Off-Duty Athlete Looks": "2026-08-16T21:26:31.643159",
+    "Off-Duty Athlete Looks": "2026-08-27T00:38:02.753914",
     "LE LIS Womens Clothi...": "2026-08-25T18:04:35.754950",
     "New Trendy Woman...": "2026-08-24T12:34:56.590981",
     "Outfit Ideas": "2026-08-24T18:06:31.659367",
@@ -2572,7 +2616,7 @@
     "Festive & Flora Fits": "2026-08-17T18:03:04.325584",
     "Shop Responsibly": "2026-08-26T19:29:54.941489",
     "Social": "2026-08-26T19:31:10.927763",
-    "Blogs": "2026-08-17T21:33:34.238278",
+    "Blogs": "2026-08-27T00:39:36.807805",
     "All Pins": "2026-08-17T21:34:37.493493",
     "Outer wear": "2026-08-18T03:05:47.307004",
     "Women's Cardigans": "2026-08-19T12:32:03.053992",
@@ -2586,9 +2630,9 @@
     "Sweaters & Sweater...": "2026-08-24T03:13:06.869060",
     "Boat Shoes": "2026-08-24T12:37:33.243466"
   },
-  "daily_count": 12,
-  "last_post_time": "2026-08-26T19:31:10.927763",
+  "daily_count": 4,
+  "last_post_time": "2026-08-27T00:39:36.807805",
   "board_rotation_cursor": 0,
-  "last_image_style": "carousel",
-  "last_template_index": 14
+  "last_image_style": "card",
+  "last_template_index": 9
 }
