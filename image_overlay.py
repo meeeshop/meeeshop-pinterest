@@ -596,6 +596,79 @@ def _render_feature_breakdown_pin(
     canvas.paste(Image.alpha_composite(canvas.convert("RGBA"), overlay).convert("RGB"), (0, 0))
 
 
+# ── Editorial Blog Pin Engine (Reference Matched) ─────────────────────────
+def _render_editorial_blog_pin(
+    draw: ImageDraw.Draw,
+    canvas: Image.Image,
+    photo: Image.Image,
+    title: str,
+    category: str = "STYLE GUIDE",
+    cta: str = "READ THE FULL GUIDE ->",
+):
+    """
+    Sleek editorial layout matching Pinterest aesthetic blog pins.
+    - Subtle left/top vignette
+    - Aesthetic serif typography
+    - Floating CTA and minimalist bottom branding
+    """
+    p = _boost(_fit_image(photo, PIN_W, PIN_H))
+    canvas.paste(p, (0, 0))
+
+    overlay = Image.new("RGBA", (PIN_W, PIN_H), (0, 0, 0, 0))
+    ov_draw = ImageDraw.Draw(overlay)
+
+    # 1. Subtle Dark Wash (Vignette) on left and top for text readability
+    for i in range(1200):
+        progress = 1.0 - (i / 1200.0)
+        alpha = int(140 * (progress ** 1.5))
+        ov_draw.line([(0, i), (PIN_W, i)], fill=(20, 20, 20, alpha))
+        
+    for x in range(900):
+        progress = 1.0 - (x / 900.0)
+        alpha = int(110 * (progress ** 1.5))
+        ov_draw.line([(x, 0), (x, PIN_H)], fill=(20, 20, 20, alpha))
+
+    # Palettes
+    CREAM_WHITE = (255, 250, 240, 255)
+    WARM_ACCENT = (235, 195, 155, 255) 
+
+    # Helper for crisp shadowed text
+    def draw_shadowed_text(d, pos, text, font, fill=CREAM_WHITE, anchor=None):
+        x, y = pos
+        offsets = [(-2,0), (2,0), (0,-2), (0,2), (-1,-1), (1,1)]
+        for dx, dy in offsets:
+            d.text((x + dx, y + dy), text, fill=(10, 10, 10, 200), font=font, anchor=anchor)
+        d.text((x, y), text, fill=fill, font=font, anchor=anchor)
+
+    # 2. Category Label (Top Left)
+    cat_font = _get_font(28, bold=True)
+    draw_shadowed_text(ov_draw, (70, 80), (category or "STYLE GUIDE").upper(), cat_font, fill=WARM_ACCENT)
+    
+    # 3. Main Title (Large Editorial Serif)
+    title_font = _get_font(105, bold=True, serif=True)
+    title_lines = _wrap_text(title, title_font, max_width=PIN_W - 140)
+    
+    y_pos = 160
+    for line in title_lines:
+        draw_shadowed_text(ov_draw, (70, y_pos), line, title_font, fill=CREAM_WHITE)
+        y_pos += 115
+        
+    # 4. CTA Pill
+    cta_y = y_pos + 60
+    cta_w = 460
+    cta_h = 60
+    _draw_rounded_rect(ov_draw, (70, cta_y, 70 + cta_w, cta_y + cta_h), r=8, fill=(235, 195, 155, 240))
+    cta_font = _get_font(24, bold=True)
+    ov_draw.text((70 + cta_w // 2, cta_y + 30), cta.upper(), fill=(20, 20, 20, 255), font=cta_font, anchor="mm")
+    
+    # 5. Bottom Branding
+    draw_shadowed_text(ov_draw, (70, PIN_H - 120), "MEEESHOP", _get_font(36, bold=True, serif=True), fill=CREAM_WHITE)
+    draw_shadowed_text(ov_draw, (70, PIN_H - 70), "Dressed for where the day goes.", _get_font(22, italic=True, serif=True), fill=CREAM_WHITE)
+
+    # Merge overlay
+    canvas.paste(Image.alpha_composite(canvas.convert("RGBA"), overlay).convert("RGB"), (0, 0))
+
+
 # ── Template Mappings ────────────────────────────────────────────────────────
 
 def _template_a(draw, canvas, photo, title, category, price):
@@ -646,8 +719,8 @@ def _template_o(draw, canvas, photo, photo2, photo3, photo4, title, category, pr
 def _template_p(draw, canvas, photo, title, category, price, cta="Shop Now"):
     _render_direct_pin(draw, canvas, photo, title, category, price, cta, layout="bottom_floating")
 
-def _template_q(draw, canvas, photo, title, category, price, cta="SHOP NOW AT US.MEEESHOP.COM"):
-    _render_direct_pin(draw, canvas, photo, title, category, price, cta, layout="bottom_floating")
+def _template_q(draw, canvas, photo, title, category, price, cta="READ THE FULL GUIDE ->"):
+    _render_editorial_blog_pin(draw, canvas, photo, title, category, cta)
 
 def _template_infographic(draw, canvas, photo, photo2, title, category, price, cta="SHOP THE LOOK → US.MEEESHOP.COM", trust_badge=None, highlights=None):
     _render_feature_breakdown_pin(draw, canvas, photo, photo2, title, category, price, cta, trust_badge=trust_badge, highlights=highlights)
