@@ -1598,11 +1598,55 @@
       "template": 17,
       "pin_url": "https://www.pinterest.com/pin/962222276663496632/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8825275547819,
+      "title": "Elastic Waisted Embossed Mesh Tiered Ruffle Skirt - Trendy Back-to-School Look",
+      "board": "Trends",
+      "timestamp": "2026-08-27T21:30:49.529637",
+      "type": "carousel",
+      "style": "collage",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276663511499/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8897138491563,
+      "title": "Ymi Women's High Rise Curve Confidence Straight Jeans | MeeeShop US Boutique",
+      "board": "New",
+      "timestamp": "2026-08-27T21:33:19.286453",
+      "type": "video",
+      "style": "carousel",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276663511587/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8825418317995,
+      "title": "Flying Tomato Give It a Go Woven Mini Dress - Fresh Back-to-School Style \u2014 MeeeShop",
+      "board": "Shop For Holidays",
+      "timestamp": "2026-08-27T21:34:24.292474",
+      "type": "carousel",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276663511610/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8941771620523,
+      "title": "Compact Two Tone Handbag Crossbody Bag - Trendy Back-to-School Must-Have \u2014 MeeeShop",
+      "board": "BFCM Deals",
+      "timestamp": "2026-08-27T21:35:31.056830",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276663511631/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-08-18T03:03:00.147026",
-    "Trends": "2026-08-27T12:38:17.070767",
+    "Trends": "2026-08-27T21:30:49.529637",
     "Dresses": "2026-08-18T03:04:34.619148",
     "Feminine & Flowy Fits": "2026-08-18T03:01:25.470252",
     "Short fall dresses": "2026-08-18T12:33:07.657229",
@@ -1646,8 +1690,8 @@
     "Everyday Style": "2026-08-20T18:02:48.662772",
     "Fashion Models": "2026-08-21T03:11:43.464820",
     "My Shop #1737732113": "2026-08-21T12:37:11.882612",
-    "Shop For Holidays": "2026-08-15T17:52:01.108662",
-    "New": "2026-08-27T12:40:39.676003",
+    "Shop For Holidays": "2026-08-27T21:34:24.292474",
+    "New": "2026-08-27T21:33:19.286453",
     "American Bazi": "2026-08-15T17:54:38.665703",
     "Cool & Casual Styles": "2026-08-15T17:55:35.872843",
     "MeeeShop's Luxe Styles": "2026-08-15T21:26:32.597254",
@@ -1657,7 +1701,7 @@
     "Weekend to Workwear": "2026-08-16T03:05:34.105079",
     "Effortless Looks": "2026-08-16T03:08:49.510266",
     "Vamp Romantic Styles": "2026-08-16T03:10:06.960088",
-    "BFCM Deals": "2026-08-16T12:23:05.678565",
+    "BFCM Deals": "2026-08-27T21:35:31.056830",
     "Poetcore Aesthetics": "2026-08-16T12:24:37.835619",
     "Emory Park Clothing": "2026-08-16T12:25:37.214806",
     "new products": "2026-08-20T03:01:27.570687",
@@ -1690,9 +1734,9 @@
     "Bow heels": "2026-08-20T18:00:36.882815",
     "Sweaters": "2026-08-20T21:32:57.133135"
   },
-  "daily_count": 4,
-  "last_post_time": "2026-08-27T12:44:55.199749",
+  "daily_count": 8,
+  "last_post_time": "2026-08-27T21:35:31.056830",
   "board_rotation_cursor": 0,
   "last_image_style": "carousel",
-  "last_template_index": 17
+  "last_template_index": 11
 }
