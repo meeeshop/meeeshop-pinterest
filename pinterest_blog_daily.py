@@ -88,7 +88,7 @@ def was_recently_posted(article_id: str, history: Dict[str, Any]) -> bool:
 def fetch_shopify_articles(shopify: ShopifyClient, limit: int = 15) -> List[Dict[str, Any]]:
     query = """
     query ($first: Int!) {
-      articles(first: $first) {
+      articles(first: $first, sortKey: PUBLISHED_AT, reverse: true) {
         edges {
           node {
             id
@@ -173,6 +173,16 @@ def run_blog_posting() -> None:
         logger.info("All articles have been posted recently or within the cooldown period. Skipping execution to avoid spam.")
         return
 
+    # Prioritize recent articles (published in the last 14 days)
+    recent_eligible = [art for art in eligible if art.get("published_at") and is_recent(art["published_at"], 14)]
+    
+    if recent_eligible:
+        logger.info(f"Found {len(recent_eligible)} recent articles (published in last 14 days). Prioritizing fresh content.")
+        eligible = recent_eligible
+    else:
+        logger.info("No recent articles found in the last 14 days. Exiting without posting older articles.")
+        return
+
     # Shuffle to vary postings
     random.shuffle(eligible)
     to_post = eligible[:MAX_BLOGS_PER_RUN]
@@ -224,13 +234,13 @@ def run_blog_posting() -> None:
                 Image.new("RGB", (800, 600), (220, 210, 205)).save(fallback_img)
             temp_src = fallback_img
 
-        # Create Blog Pin Image using template (Direct White/Cream Text Overlay)
+        # Create Blog Pin Image using template (Editorial Style Text Overlay)
         final_image = create_pin_image(
             product_image_path=str(temp_src),
-            title=pin_title,
-            category=article["blog_title"],
+            title=article["title"],  # Use original shorter title for the visual graphic
+            category="STYLE GUIDE",
             price=None,
-            cta="READ ARTICLE ★ US.MEEESHOP.COM",
+            cta="READ THE FULL GUIDE ->",
             output_path=str(temp_final),
             template_index=16
         )

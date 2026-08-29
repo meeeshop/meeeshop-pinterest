@@ -34,7 +34,7 @@ except Exception as e:
         return os.environ.get(key)
 
 logging.basicConfig(
-    level=logging.DEBUG,
+    level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
@@ -114,11 +114,19 @@ class StealthPinterestPoster:
                         "domain": c.get("domain", ".pinterest.com"),
                         "path": c.get("path", "/")
                     }
+                    if "secure" in c:
+                        cookie["secure"] = bool(c["secure"])
+                    if "httpOnly" in c:
+                        cookie["httpOnly"] = bool(c["httpOnly"])
+                    if "expiry" in c:
+                        cookie["expires"] = float(c["expiry"])
                     if "sameSite" in c:
                         # Normalize sameSite values for Playwright ('Strict', 'Lax', 'None')
                         ss = str(c["sameSite"]).capitalize()
                         if ss in ["Strict", "Lax", "None"]:
                             cookie["sameSite"] = ss
+                            if ss == "None":
+                                cookie["secure"] = True
                     normalized.append(cookie)
         return normalized
 
@@ -247,7 +255,7 @@ class StealthPinterestPoster:
                 page.goto("https://www.pinterest.com/pin-builder/", wait_until="domcontentloaded", timeout=45000)
                 time.sleep(3)
 
-                if "login" in page.url:
+                if "login" in page.url or "pin-builder" not in page.url:
                     if not self._login_via_ui(page):
                         browser.close()
                         return False, "Login failed"
@@ -256,8 +264,9 @@ class StealthPinterestPoster:
                 # 2. Upload initial image (image_paths[0]) first into pin builder
                 logger.info(f"📤 Uploading 1st image for carousel: {Path(image_paths[0]).name}")
                 try:
-                    file_input = page.wait_for_selector('input[type="file"]', timeout=15000)
-                except Exception:
+                    file_input = page.wait_for_selector('input[type="file"]', state="attached", timeout=15000)
+                except Exception as e:
+                    logger.error(f"Error waiting for file input in carousel: {e}")
                     file_input = None
 
                 if not file_input:
@@ -547,7 +556,7 @@ class StealthPinterestPoster:
                 time.sleep(3)
 
                 # Check if redirected to login
-                if "login" in page.url:
+                if "login" in page.url or "pin-builder" not in page.url:
                     logger.info("Session expired/not logged in. Attempting login via credentials...")
                     if not self._login_via_ui(page):
                         return False, "Failed to log into Pinterest via UI"
@@ -557,7 +566,7 @@ class StealthPinterestPoster:
 
                 # 2. Upload file
                 logger.info(f"📁 Uploading media file: {img_file.name}")
-                file_input = page.wait_for_selector('input[type="file"]', timeout=20000)
+                file_input = page.wait_for_selector('input[type="file"]', state="attached", timeout=20000)
                 if not file_input:
                     return False, "File input element not found in pin builder"
                 file_input.set_input_files(str(img_file))

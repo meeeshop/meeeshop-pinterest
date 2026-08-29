@@ -44,9 +44,7 @@ def save_pinterest_cookies():
         logger.info("⏳ Waiting for you to log in (timeout: 5 minutes)...\n")
 
         # Wait for home feed to appear (indicates successful login)
-        WebDriverWait(driver, 300).until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, "[data-test-id='homefeed']"))
-        )
+        input("\n🟢 Press ENTER in this terminal window ONLY AFTER you have fully logged in and see your home feed in the browser...")
 
         logger.info("✓ Login detected! Saving cookies...\n")
 
