@@ -34,7 +34,7 @@ except Exception as e:
         return os.environ.get(key)
 
 logging.basicConfig(
-    level=logging.DEBUG,
+    level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
@@ -247,7 +247,7 @@ class StealthPinterestPoster:
                 page.goto("https://www.pinterest.com/pin-builder/", wait_until="domcontentloaded", timeout=45000)
                 time.sleep(3)
 
-                if "login" in page.url:
+                if "login" in page.url or "pin-builder" not in page.url:
                     if not self._login_via_ui(page):
                         browser.close()
                         return False, "Login failed"
@@ -548,7 +548,7 @@ class StealthPinterestPoster:
                 time.sleep(3)
 
                 # Check if redirected to login
-                if "login" in page.url:
+                if "login" in page.url or "pin-builder" not in page.url:
                     logger.info("Session expired/not logged in. Attempting login via credentials...")
                     if not self._login_via_ui(page):
                         return False, "Failed to log into Pinterest via UI"

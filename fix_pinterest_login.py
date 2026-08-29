@@ -58,18 +58,11 @@ def main():
     print("\nReading saved cookies...")
     with open(cookies_file, "rb") as f:
         cookies_list = pickle.load(f)
-        
-    cookies_dict = {}
-    for cookie in cookies_list:
-        name = cookie.get('name')
-        value = cookie.get('value')
-        if name and value:
-            cookies_dict[name] = value
             
-    print(f"Extracted {len(cookies_dict)} cookies.")
+    print(f"Extracted {len(cookies_list)} cookies.")
     
-    # Base64 encode
-    cookies_json = json.dumps(cookies_dict)
+    # Base64 encode the full list
+    cookies_json = json.dumps(cookies_list)
     cookies_b64 = base64.b64encode(cookies_json.encode('utf-8')).decode('utf-8')
     
     # Update secrets.enc
