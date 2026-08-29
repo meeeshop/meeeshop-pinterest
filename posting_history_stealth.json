@@ -2532,11 +2532,57 @@
       "template": 9,
       "pin_url": "https://www.pinterest.com/pin/962222276663482384/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8782622654635,
+      "title": "Retrolicious Leaves Bow Top | MeeeShop US Boutique",
+      "board": "Trends",
+      "timestamp": "2026-08-29T19:59:54.463524",
+      "type": "carousel",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276663572817/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8818159517867,
+      "title": "Emory Park Miriam Mini Dress - Perfect Back-to-School Chic \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-08-29T20:00:59.649742",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276663572890/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": "570357514411",
+      "article_id": "570357514411",
+      "title": "25 Dress Styling Tips for Beautiful Spring Affairs in 2026",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-08-29T20:02:41.353100",
+      "type": "blog",
+      "style": "card",
+      "template": 9,
+      "pin_url": "https://www.pinterest.com/pin/962222276663572923/",
+      "blog_url": "https://us.meeeshop.com/blogs/dresses-style-guide/25-dress-styling-tips-for-beautiful-spring-affairs-in-2026",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8941746651307,
+      "title": "The Freeway Classic Western Shirt | MeeeShop US Boutique",
+      "board": "Must-Have Fashion...",
+      "timestamp": "2026-08-29T20:03:49.063922",
+      "type": "carousel",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276663572939/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-08-18T03:03:00.147026",
-    "Trends": "2026-08-27T00:35:28.445662",
+    "Trends": "2026-08-29T19:59:54.463524",
     "Dresses": "2026-08-18T03:04:34.619148",
     "Feminine & Flowy Fits": "2026-08-18T03:01:25.470252",
     "Short fall dresses": "2026-08-18T12:33:07.657229",
@@ -2547,7 +2593,7 @@
     "Jeans": "2026-08-18T21:30:46.553313",
     "Cocktail Dresses": "2026-08-18T18:07:41.317645",
     "Dressy Outfits": "2026-08-18T12:32:01.716331",
-    "Must-Have Fashion...": "2026-08-18T12:30:59.972930",
+    "Must-Have Fashion...": "2026-08-29T20:03:49.063922",
     "Flares Jeans": "2026-08-19T03:18:29.944781",
     "Short Tall dresses": "2026-08-20T03:03:13.049948",
     "Rompers, Jumpsuits &...": "2026-08-20T12:35:59.433834",
@@ -2581,7 +2627,7 @@
     "Fashion Models": "2026-08-21T03:11:43.464820",
     "My Shop #1737732113": "2026-08-21T12:37:11.882612",
     "Shop For Holidays": "2026-08-21T21:33:29.613600",
-    "New": "2026-08-27T00:36:37.003308",
+    "New": "2026-08-29T20:00:59.649742",
     "American Bazi": "2026-08-22T12:26:35.616325",
     "Cool & Casual Styles": "2026-08-24T21:38:38.932637",
     "MeeeShop's Luxe Styles": "2026-08-22T17:56:02.089648",
@@ -2631,8 +2677,8 @@
     "Boat Shoes": "2026-08-24T12:37:33.243466"
   },
   "daily_count": 4,
-  "last_post_time": "2026-08-27T00:39:36.807805",
+  "last_post_time": "2026-08-29T20:03:49.063922",
   "board_rotation_cursor": 0,
-  "last_image_style": "card",
-  "last_template_index": 9
+  "last_image_style": "collage",
+  "last_template_index": 17
 }
