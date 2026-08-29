@@ -256,8 +256,9 @@ class StealthPinterestPoster:
                 # 2. Upload initial image (image_paths[0]) first into pin builder
                 logger.info(f"📤 Uploading 1st image for carousel: {Path(image_paths[0]).name}")
                 try:
-                    file_input = page.wait_for_selector('input[type="file"]', timeout=15000)
-                except Exception:
+                    file_input = page.wait_for_selector('input[type="file"]', state="attached", timeout=15000)
+                except Exception as e:
+                    logger.error(f"Error waiting for file input in carousel: {e}")
                     file_input = None
 
                 if not file_input:
