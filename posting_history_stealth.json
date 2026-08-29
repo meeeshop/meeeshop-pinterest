@@ -1642,6 +1642,52 @@
       "template": 11,
       "pin_url": "https://www.pinterest.com/pin/962222276663511631/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": "570626048171",
+      "article_id": "570626048171",
+      "title": "How to Build a Capsule Wardrobe That Actually Survives the Seasons",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-08-29T16:19:13.372264",
+      "type": "blog",
+      "style": "card",
+      "template": 9,
+      "pin_url": "https://www.pinterest.com/pin/962222276663565806/",
+      "blog_url": "https://us.meeeshop.com/blogs/our-tips/how-to-build-a-capsule-wardrobe-that-actually-survives-the-seasons",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8789756444843,
+      "title": "Lauren Mid Rise Capri with Frayed Hem Jeans - Perfect Back-to-School Look \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-08-29T16:21:33.616269",
+      "type": "video",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276663565858/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8885499855019,
+      "title": "Risen Elastic Band Slouchy Cropped Barrel with Star Patch | MeeeShop US Boutique",
+      "board": "Cool & Casual Styles",
+      "timestamp": "2026-08-29T16:22:48.750791",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276663565881/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8820880736427,
+      "title": "Edith Tweed Tote Bag - Classic Chic for Back to School & Late Summer \u2014 MeeeShop",
+      "board": "Chic & Effortless Styles",
+      "timestamp": "2026-08-29T16:25:15.570008",
+      "type": "video",
+      "style": "collage",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276663565947/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
@@ -1691,9 +1737,9 @@
     "Fashion Models": "2026-08-21T03:11:43.464820",
     "My Shop #1737732113": "2026-08-21T12:37:11.882612",
     "Shop For Holidays": "2026-08-27T21:34:24.292474",
-    "New": "2026-08-27T21:33:19.286453",
+    "New": "2026-08-29T16:21:33.616269",
     "American Bazi": "2026-08-15T17:54:38.665703",
-    "Cool & Casual Styles": "2026-08-15T17:55:35.872843",
+    "Cool & Casual Styles": "2026-08-29T16:22:48.750791",
     "MeeeShop's Luxe Styles": "2026-08-15T21:26:32.597254",
     "Outerwear": "2026-08-15T21:27:33.722132",
     "Zenana Women's...": "2026-08-15T21:28:37.773139",
@@ -1705,7 +1751,7 @@
     "Poetcore Aesthetics": "2026-08-16T12:24:37.835619",
     "Emory Park Clothing": "2026-08-16T12:25:37.214806",
     "new products": "2026-08-20T03:01:27.570687",
-    "Chic & Effortless Styles": "2026-08-16T17:51:05.225594",
+    "Chic & Effortless Styles": "2026-08-29T16:25:15.570008",
     "Davi & Dani Womens...": "2026-08-16T17:52:10.627401",
     "Weekend to Workout": "2026-08-16T17:53:11.788896",
     "Gimme Gummy Playful Nostalgia": "2026-08-16T17:54:11.594666",
@@ -1734,9 +1780,9 @@
     "Bow heels": "2026-08-20T18:00:36.882815",
     "Sweaters": "2026-08-20T21:32:57.133135"
   },
-  "daily_count": 8,
-  "last_post_time": "2026-08-27T21:35:31.056830",
+  "daily_count": 4,
+  "last_post_time": "2026-08-29T16:25:15.570008",
   "board_rotation_cursor": 0,
-  "last_image_style": "carousel",
+  "last_image_style": "collage",
   "last_template_index": 11
 }
