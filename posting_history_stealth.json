@@ -2578,11 +2578,55 @@
       "template": 17,
       "pin_url": "https://www.pinterest.com/pin/962222276663572939/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8818150768811,
+      "title": "Emory Park Jadae Halter Neck Top - Fresh Back-to-School Chic \u2014 MeeeShop",
+      "board": "Trends",
+      "timestamp": "2026-08-29T23:08:03.063365",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276663577565/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8941749862571,
+      "title": "Barbara High Rise Bootcut Jeans - Perfect Back-to-School Style \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-08-29T23:09:38.776288",
+      "type": "product",
+      "style": "collage",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276663577614/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8825418711211,
+      "title": "Flying Tomato Hope You Remember Sequin Top - Sparkle Your Back-to-School Style",
+      "board": "All Pins",
+      "timestamp": "2026-08-29T23:12:18.367446",
+      "type": "video",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276663577693/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8879310897323,
+      "title": "Women's Half Zip Sweatshirt - Cozy Chic for Back-to-School & Summer \u2014 MeeeShop",
+      "board": "Trendy & Timeless...",
+      "timestamp": "2026-08-29T23:14:22.474834",
+      "type": "video",
+      "style": "collage",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276663577755/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-08-18T03:03:00.147026",
-    "Trends": "2026-08-29T19:59:54.463524",
+    "Trends": "2026-08-29T23:08:03.063365",
     "Dresses": "2026-08-18T03:04:34.619148",
     "Feminine & Flowy Fits": "2026-08-18T03:01:25.470252",
     "Short fall dresses": "2026-08-18T12:33:07.657229",
@@ -2602,7 +2646,7 @@
     "Blouses": "2026-08-18T21:33:04.907593",
     "Rompers_Jumpsuits &...": "2026-08-20T18:01:41.570995",
     "Handbag #handsips": "2026-08-19T17:55:31.438390",
-    "Trendy & Timeless...": "2026-08-18T18:04:10.590299",
+    "Trendy & Timeless...": "2026-08-29T23:14:22.474834",
     "Our Recommended...": "2026-08-18T21:31:56.180149",
     "Blouse": "2026-08-19T03:16:24.535618",
     "Wardrobe Must-Hav...": "2026-08-19T12:33:38.604091",
@@ -2627,7 +2671,7 @@
     "Fashion Models": "2026-08-21T03:11:43.464820",
     "My Shop #1737732113": "2026-08-21T12:37:11.882612",
     "Shop For Holidays": "2026-08-21T21:33:29.613600",
-    "New": "2026-08-29T20:00:59.649742",
+    "New": "2026-08-29T23:09:38.776288",
     "American Bazi": "2026-08-22T12:26:35.616325",
     "Cool & Casual Styles": "2026-08-24T21:38:38.932637",
     "MeeeShop's Luxe Styles": "2026-08-22T17:56:02.089648",
@@ -2663,7 +2707,7 @@
     "Shop Responsibly": "2026-08-26T19:29:54.941489",
     "Social": "2026-08-26T19:31:10.927763",
     "Blogs": "2026-08-27T00:39:36.807805",
-    "All Pins": "2026-08-17T21:34:37.493493",
+    "All Pins": "2026-08-29T23:12:18.367446",
     "Outer wear": "2026-08-18T03:05:47.307004",
     "Women's Cardigans": "2026-08-19T12:32:03.053992",
     "Loungewear": "2026-08-20T12:34:25.960617",
@@ -2676,9 +2720,9 @@
     "Sweaters & Sweater...": "2026-08-24T03:13:06.869060",
     "Boat Shoes": "2026-08-24T12:37:33.243466"
   },
-  "daily_count": 4,
-  "last_post_time": "2026-08-29T20:03:49.063922",
+  "daily_count": 8,
+  "last_post_time": "2026-08-29T23:14:22.474834",
   "board_rotation_cursor": 0,
   "last_image_style": "collage",
-  "last_template_index": 17
+  "last_template_index": 11
 }
