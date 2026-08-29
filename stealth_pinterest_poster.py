@@ -557,7 +557,7 @@ class StealthPinterestPoster:
 
                 # 2. Upload file
                 logger.info(f"📁 Uploading media file: {img_file.name}")
-                file_input = page.wait_for_selector('input[type="file"]', timeout=20000)
+                file_input = page.wait_for_selector('input[type="file"]', state="attached", timeout=20000)
                 if not file_input:
                     return False, "File input element not found in pin builder"
                 file_input.set_input_files(str(img_file))
