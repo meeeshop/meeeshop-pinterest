@@ -83,8 +83,19 @@ class PinterestClient:
             if sess is not None and hasattr(sess, 'cookies'):
                 targets.append((attr, sess))
         for attr, sess in targets:
-            for key, value in cookies_dict.items():
-                sess.cookies.set(key, value, domain='.pinterest.com')
+            if isinstance(cookies_dict, dict):
+                for key, value in cookies_dict.items():
+                    sess.cookies.set(key, value, domain='.pinterest.com')
+            elif isinstance(cookies_dict, list):
+                for c in cookies_dict:
+                    if isinstance(c, dict) and "name" in c and "value" in c:
+                        # Extract the required fields, fallback to defaults
+                        name = c["name"]
+                        value = c["value"]
+                        domain = c.get("domain", ".pinterest.com")
+                        path = c.get("path", "/")
+                        secure = c.get("secure", False)
+                        sess.cookies.set(name, value, domain=domain, path=path, secure=secure)
         logger.debug(f"Injected {len(cookies_dict)} cookies into: {[a for a, _ in targets]}")
 
     def _try_load_cookies_from_github_secret(self, force_fresh: bool = False) -> bool:
