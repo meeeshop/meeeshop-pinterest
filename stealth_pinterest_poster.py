@@ -114,11 +114,19 @@ class StealthPinterestPoster:
                         "domain": c.get("domain", ".pinterest.com"),
                         "path": c.get("path", "/")
                     }
+                    if "secure" in c:
+                        cookie["secure"] = bool(c["secure"])
+                    if "httpOnly" in c:
+                        cookie["httpOnly"] = bool(c["httpOnly"])
+                    if "expiry" in c:
+                        cookie["expires"] = float(c["expiry"])
                     if "sameSite" in c:
                         # Normalize sameSite values for Playwright ('Strict', 'Lax', 'None')
                         ss = str(c["sameSite"]).capitalize()
                         if ss in ["Strict", "Lax", "None"]:
                             cookie["sameSite"] = ss
+                            if ss == "None":
+                                cookie["secure"] = True
                     normalized.append(cookie)
         return normalized
 
