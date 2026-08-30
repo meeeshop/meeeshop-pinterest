@@ -2668,13 +2668,57 @@
       "template": 17,
       "pin_url": "https://www.pinterest.com/pin/962222276663588161/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8921406931115,
+      "title": "Georgie Zip-up Pocket Quilted Jacket - Green: Trendy Back-to-School Layer \u2014 MeeeShop",
+      "board": "Trends",
+      "timestamp": "2026-08-30T15:47:59.119170",
+      "type": "carousel",
+      "style": "collage",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276663599737/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8825884082347,
+      "title": "Mkf Collection by Mia K. - Lemuel Signature Crossbody Bag | MeeeShop US Boutique",
+      "board": "New",
+      "timestamp": "2026-08-30T15:50:39.981502",
+      "type": "video",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276663599817/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8921407127723,
+      "title": "Haven Pullover - Phalaenopsis: Cozy Back-to-School Sweater for Women \u2014 MeeeShop",
+      "board": "Sweaters for women",
+      "timestamp": "2026-08-30T15:52:01.145594",
+      "type": "carousel",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276663599851/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8882911346859,
+      "title": "Solid Square Neck Puff Sleeve Midi Dress - Flowy Back-to-School Style \u2014 MeeeShop",
+      "board": "Feminine & Flowy Fits",
+      "timestamp": "2026-08-30T15:53:11.738550",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276663599882/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-08-30T08:08:47.249630",
-    "Trends": "2026-08-30T08:06:00.112220",
+    "Trends": "2026-08-30T15:47:59.119170",
     "Dresses": "2026-08-18T03:04:34.619148",
-    "Feminine & Flowy Fits": "2026-08-18T03:01:25.470252",
+    "Feminine & Flowy Fits": "2026-08-30T15:53:11.738550",
     "Short fall dresses": "2026-08-18T12:33:07.657229",
     "Must-Have Fashion Picks": "2026-08-13T05:20:05.419233",
     "Trendy & Timeless Fashion": "2026-08-13T05:29:39.715837",
@@ -2717,7 +2761,7 @@
     "Fashion Models": "2026-08-21T03:11:43.464820",
     "My Shop #1737732113": "2026-08-21T12:37:11.882612",
     "Shop For Holidays": "2026-08-21T21:33:29.613600",
-    "New": "2026-08-29T23:09:38.776288",
+    "New": "2026-08-30T15:50:39.981502",
     "American Bazi": "2026-08-22T12:26:35.616325",
     "Cool & Casual Styles": "2026-08-24T21:38:38.932637",
     "MeeeShop's Luxe Styles": "2026-08-22T17:56:02.089648",
@@ -2764,11 +2808,12 @@
     "Coats & Jackets": "2026-08-22T12:29:02.791992",
     "Sweaters #Sweaters...": "2026-08-23T21:30:14.349007",
     "Sweaters & Sweater...": "2026-08-24T03:13:06.869060",
-    "Boat Shoes": "2026-08-24T12:37:33.243466"
+    "Boat Shoes": "2026-08-24T12:37:33.243466",
+    "Sweaters for women": "2026-08-30T15:52:01.145594"
   },
-  "daily_count": 4,
-  "last_post_time": "2026-08-30T08:11:25.974711",
+  "daily_count": 8,
+  "last_post_time": "2026-08-30T15:53:11.738550",
   "board_rotation_cursor": 0,
   "last_image_style": "carousel",
-  "last_template_index": 17
+  "last_template_index": 15
 }
