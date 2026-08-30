@@ -2756,11 +2756,55 @@
       "template": 14,
       "pin_url": "https://www.pinterest.com/pin/962222276663607865/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8818153717931,
+      "title": "Emory Park Olivia Top - Fresh Back-to-School Blouse for Effortless Summer Style",
+      "board": "Trends",
+      "timestamp": "2026-08-30T23:20:20.393630",
+      "type": "carousel",
+      "style": "collage",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276663612685/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8941747601579,
+      "title": "Moon Curve Raw Hem Crop Jeans - Perfect Back-to-School Chic \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-08-30T23:21:28.522842",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276663612714/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8882912067755,
+      "title": "Square Neck Hide Zipper Tie Shoulder Dress - Chic Back-to-School Look \u2014 MeeeShop",
+      "board": "Dressy Outfits",
+      "timestamp": "2026-08-30T23:22:40.260253",
+      "type": "carousel",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276663612729/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8949201764523,
+      "title": "Boucle Longline Cardigan Top - Boho Chic for Back to School & Late Summer \u2014 MeeeShop",
+      "board": "Womens Cardigans",
+      "timestamp": "2026-08-30T23:24:00.172742",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276663612739/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-08-30T08:08:47.249630",
-    "Trends": "2026-08-30T20:01:31.647914",
+    "Trends": "2026-08-30T23:20:20.393630",
     "Dresses": "2026-08-30T20:04:32.519899",
     "Feminine & Flowy Fits": "2026-08-30T15:53:11.738550",
     "Short fall dresses": "2026-08-18T12:33:07.657229",
@@ -2770,7 +2814,7 @@
     "Bags": "2026-08-19T03:17:27.300226",
     "Jeans": "2026-08-18T21:30:46.553313",
     "Cocktail Dresses": "2026-08-18T18:07:41.317645",
-    "Dressy Outfits": "2026-08-18T12:32:01.716331",
+    "Dressy Outfits": "2026-08-30T23:22:40.260253",
     "Must-Have Fashion...": "2026-08-29T20:03:49.063922",
     "Flares Jeans": "2026-08-19T03:18:29.944781",
     "Short Tall dresses": "2026-08-20T03:03:13.049948",
@@ -2805,7 +2849,7 @@
     "Fashion Models": "2026-08-21T03:11:43.464820",
     "My Shop #1737732113": "2026-08-21T12:37:11.882612",
     "Shop For Holidays": "2026-08-21T21:33:29.613600",
-    "New": "2026-08-30T20:03:11.632672",
+    "New": "2026-08-30T23:21:28.522842",
     "American Bazi": "2026-08-22T12:26:35.616325",
     "Cool & Casual Styles": "2026-08-24T21:38:38.932637",
     "MeeeShop's Luxe Styles": "2026-08-22T17:56:02.089648",
@@ -2853,11 +2897,12 @@
     "Sweaters #Sweaters...": "2026-08-23T21:30:14.349007",
     "Sweaters & Sweater...": "2026-08-24T03:13:06.869060",
     "Boat Shoes": "2026-08-24T12:37:33.243466",
-    "Sweaters for women": "2026-08-30T15:52:01.145594"
+    "Sweaters for women": "2026-08-30T15:52:01.145594",
+    "Womens Cardigans": "2026-08-30T23:24:00.172742"
   },
-  "daily_count": 12,
-  "last_post_time": "2026-08-30T20:06:17.138990",
+  "daily_count": 16,
+  "last_post_time": "2026-08-30T23:24:00.172742",
   "board_rotation_cursor": 0,
   "last_image_style": "carousel",
-  "last_template_index": 14
+  "last_template_index": 16
 }
