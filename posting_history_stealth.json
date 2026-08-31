@@ -2800,19 +2800,63 @@
       "template": 16,
       "pin_url": "https://www.pinterest.com/pin/962222276663612739/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8882915475627,
+      "title": "Elegant Printed Ruffle Long Sleeve Romper: Fresh Back-to-School Style \u2014 MeeeShop",
+      "board": "Trends",
+      "timestamp": "2026-08-31T08:22:23.172749",
+      "type": "carousel",
+      "style": "collage",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276663624778/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8897135902891,
+      "title": "Ymi Women's High Rise Curve Confidence Straight Jeans - Back to School Style",
+      "board": "New",
+      "timestamp": "2026-08-31T08:23:28.377230",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276663624798/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8919859298475,
+      "title": "Ymi Women's Joey Super Wide Leg Jeans with Love Patch - Back to School \u2014 MeeeShop",
+      "board": "Jeans",
+      "timestamp": "2026-08-31T08:25:40.341768",
+      "type": "video",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276663624824/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8882915311787,
+      "title": "Sleeveless Front Knot Ruched Cut Out Long Dress | MeeeShop US Boutique",
+      "board": "Short fall dresses",
+      "timestamp": "2026-08-31T08:26:55.669324",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276663624839/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-08-30T08:08:47.249630",
-    "Trends": "2026-08-30T23:20:20.393630",
+    "Trends": "2026-08-31T08:22:23.172749",
     "Dresses": "2026-08-30T20:04:32.519899",
     "Feminine & Flowy Fits": "2026-08-30T15:53:11.738550",
-    "Short fall dresses": "2026-08-18T12:33:07.657229",
+    "Short fall dresses": "2026-08-31T08:26:55.669324",
     "Must-Have Fashion Picks": "2026-08-13T05:20:05.419233",
     "Trendy & Timeless Fashion": "2026-08-13T05:29:39.715837",
     "Dress": "2026-08-18T21:34:10.651062",
     "Bags": "2026-08-19T03:17:27.300226",
-    "Jeans": "2026-08-18T21:30:46.553313",
+    "Jeans": "2026-08-31T08:25:40.341768",
     "Cocktail Dresses": "2026-08-18T18:07:41.317645",
     "Dressy Outfits": "2026-08-30T23:22:40.260253",
     "Must-Have Fashion...": "2026-08-29T20:03:49.063922",
@@ -2849,7 +2893,7 @@
     "Fashion Models": "2026-08-21T03:11:43.464820",
     "My Shop #1737732113": "2026-08-21T12:37:11.882612",
     "Shop For Holidays": "2026-08-21T21:33:29.613600",
-    "New": "2026-08-30T23:21:28.522842",
+    "New": "2026-08-31T08:23:28.377230",
     "American Bazi": "2026-08-22T12:26:35.616325",
     "Cool & Casual Styles": "2026-08-24T21:38:38.932637",
     "MeeeShop's Luxe Styles": "2026-08-22T17:56:02.089648",
@@ -2900,9 +2944,9 @@
     "Sweaters for women": "2026-08-30T15:52:01.145594",
     "Womens Cardigans": "2026-08-30T23:24:00.172742"
   },
-  "daily_count": 16,
-  "last_post_time": "2026-08-30T23:24:00.172742",
+  "daily_count": 4,
+  "last_post_time": "2026-08-31T08:26:55.669324",
   "board_rotation_cursor": 0,
   "last_image_style": "carousel",
-  "last_template_index": 16
+  "last_template_index": 17
 }
