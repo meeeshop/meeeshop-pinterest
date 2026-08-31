@@ -2844,6 +2844,52 @@
       "template": 17,
       "pin_url": "https://www.pinterest.com/pin/962222276663624839/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": "570372391083",
+      "article_id": "570372391083",
+      "title": "3-Piece Outfit Formula for Women 2026",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-08-31T18:32:23.030602",
+      "type": "blog",
+      "style": "card",
+      "template": 9,
+      "pin_url": "https://www.pinterest.com/pin/841962092890729185/",
+      "blog_url": "https://us.meeeshop.com/blogs/womens-skirts-style-guide/three-piece-outfit-formula-for-women",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8936274755755,
+      "title": "Downeast High Rise Wide Leg Jeans - Perfect Back-to-School Style \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-08-31T18:34:56.363827",
+      "type": "video",
+      "style": "collage",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276663639425/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8811044110507,
+      "title": "Elise Tummy Control High Rise Cuffed a Wide Leg Jeans | MeeeShop US Boutique",
+      "board": "Flares Jeans",
+      "timestamp": "2026-08-31T18:36:06.107736",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276663639467/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8818158174379,
+      "title": "Emory Park Riley Denim Shorts - Perfect Back-to-School Summer Vibes \u2014 MeeeShop",
+      "board": "Wardrobe Must-Hav...",
+      "timestamp": "2026-08-31T18:37:19.972670",
+      "type": "carousel",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276663639513/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
@@ -2860,7 +2906,7 @@
     "Cocktail Dresses": "2026-08-18T18:07:41.317645",
     "Dressy Outfits": "2026-08-30T23:22:40.260253",
     "Must-Have Fashion...": "2026-08-29T20:03:49.063922",
-    "Flares Jeans": "2026-08-19T03:18:29.944781",
+    "Flares Jeans": "2026-08-31T18:36:06.107736",
     "Short Tall dresses": "2026-08-20T03:03:13.049948",
     "Rompers, Jumpsuits &...": "2026-08-20T12:35:59.433834",
     "Skirts": "2026-08-19T12:34:42.996179",
@@ -2871,7 +2917,7 @@
     "Trendy & Timeless...": "2026-08-29T23:14:22.474834",
     "Our Recommended...": "2026-08-30T20:06:17.138990",
     "Blouse": "2026-08-19T03:16:24.535618",
-    "Wardrobe Must-Hav...": "2026-08-19T12:33:38.604091",
+    "Wardrobe Must-Hav...": "2026-08-31T18:37:19.972670",
     "Camis & Tanks": "2026-08-20T12:33:25.750238",
     "Wardrobe Must Haves": "2026-08-19T17:56:39.233639",
     "Trendy Backpacks": "2026-08-20T21:36:14.297051",
@@ -2893,7 +2939,7 @@
     "Fashion Models": "2026-08-21T03:11:43.464820",
     "My Shop #1737732113": "2026-08-21T12:37:11.882612",
     "Shop For Holidays": "2026-08-21T21:33:29.613600",
-    "New": "2026-08-31T08:23:28.377230",
+    "New": "2026-08-31T18:34:56.363827",
     "American Bazi": "2026-08-22T12:26:35.616325",
     "Cool & Casual Styles": "2026-08-24T21:38:38.932637",
     "MeeeShop's Luxe Styles": "2026-08-22T17:56:02.089648",
@@ -2944,9 +2990,9 @@
     "Sweaters for women": "2026-08-30T15:52:01.145594",
     "Womens Cardigans": "2026-08-30T23:24:00.172742"
   },
-  "daily_count": 4,
-  "last_post_time": "2026-08-31T08:26:55.669324",
+  "daily_count": 8,
+  "last_post_time": "2026-08-31T18:37:19.972670",
   "board_rotation_cursor": 0,
-  "last_image_style": "carousel",
+  "last_image_style": "collage",
   "last_template_index": 17
 }
