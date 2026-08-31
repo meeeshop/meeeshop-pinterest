@@ -2890,11 +2890,55 @@
       "template": 17,
       "pin_url": "https://www.pinterest.com/pin/962222276663639513/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8884564557995,
+      "title": "Textured Solid Mock Neck Caftan Jumpsuit | MeeeShop US Boutique",
+      "board": "Trends",
+      "timestamp": "2026-08-31T22:04:12.259743",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276663644460/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8787165118635,
+      "title": "Juliet Exposed Seam Detail A-line Denim Mini Skirt with Pockets Back-to-School",
+      "board": "New",
+      "timestamp": "2026-08-31T22:05:18.452040",
+      "type": "carousel",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276663644487/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8905532539051,
+      "title": "Butter Soft Quarter-zip Top, Slate Blue - Cozy & Chic for Back to School \u2014 MeeeShop",
+      "board": "Shirts & Tops",
+      "timestamp": "2026-08-31T22:07:26.782906",
+      "type": "video",
+      "style": "carousel",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276663644539/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8825418383531,
+      "title": "Fly into Style with Flying Tomato Call My Lovely Pants - Back to School Ready",
+      "board": "Wardrobe Must Haves",
+      "timestamp": "2026-08-31T22:08:39.936129",
+      "type": "carousel",
+      "style": "collage",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276663644559/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-08-30T08:08:47.249630",
-    "Trends": "2026-08-31T08:22:23.172749",
+    "Trends": "2026-08-31T22:04:12.259743",
     "Dresses": "2026-08-30T20:04:32.519899",
     "Feminine & Flowy Fits": "2026-08-30T15:53:11.738550",
     "Short fall dresses": "2026-08-31T08:26:55.669324",
@@ -2910,7 +2954,7 @@
     "Short Tall dresses": "2026-08-20T03:03:13.049948",
     "Rompers, Jumpsuits &...": "2026-08-20T12:35:59.433834",
     "Skirts": "2026-08-19T12:34:42.996179",
-    "Shirts & Tops": "2026-08-18T18:06:41.708137",
+    "Shirts & Tops": "2026-08-31T22:07:26.782906",
     "Blouses": "2026-08-18T21:33:04.907593",
     "Rompers_Jumpsuits &...": "2026-08-20T18:01:41.570995",
     "Handbag #handsips": "2026-08-19T17:55:31.438390",
@@ -2919,7 +2963,7 @@
     "Blouse": "2026-08-19T03:16:24.535618",
     "Wardrobe Must-Hav...": "2026-08-31T18:37:19.972670",
     "Camis & Tanks": "2026-08-20T12:33:25.750238",
-    "Wardrobe Must Haves": "2026-08-19T17:56:39.233639",
+    "Wardrobe Must Haves": "2026-08-31T22:08:39.936129",
     "Trendy Backpacks": "2026-08-20T21:36:14.297051",
     "Festive Styles": "2026-08-21T12:35:45.523082",
     "Kancan USA Jeans": "2026-08-20T15:36:28.595311",
@@ -2939,7 +2983,7 @@
     "Fashion Models": "2026-08-21T03:11:43.464820",
     "My Shop #1737732113": "2026-08-21T12:37:11.882612",
     "Shop For Holidays": "2026-08-21T21:33:29.613600",
-    "New": "2026-08-31T18:34:56.363827",
+    "New": "2026-08-31T22:05:18.452040",
     "American Bazi": "2026-08-22T12:26:35.616325",
     "Cool & Casual Styles": "2026-08-24T21:38:38.932637",
     "MeeeShop's Luxe Styles": "2026-08-22T17:56:02.089648",
@@ -2990,9 +3034,9 @@
     "Sweaters for women": "2026-08-30T15:52:01.145594",
     "Womens Cardigans": "2026-08-30T23:24:00.172742"
   },
-  "daily_count": 8,
-  "last_post_time": "2026-08-31T18:37:19.972670",
+  "daily_count": 12,
+  "last_post_time": "2026-08-31T22:08:39.936129",
   "board_rotation_cursor": 0,
   "last_image_style": "collage",
-  "last_template_index": 17
+  "last_template_index": 11
 }
