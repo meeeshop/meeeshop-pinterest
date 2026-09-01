@@ -13,9 +13,13 @@ Templates modelled on Kohl's Pinterest pins:
 
 import hashlib
 import logging
+import os
 import tempfile
+import time
 from pathlib import Path
-from typing import Optional, Tuple, List
+from typing import Optional, Tuple, List, Dict, Any
+
+
 
 from PIL import Image, ImageDraw, ImageFont, ImageEnhance
 
@@ -34,44 +38,71 @@ RED        = (220, 53,  69)
 WARM_WHITE = (250, 248, 244)
 DARK_GREY  = (40,  40,  40)
 MID_GREY   = (90,  90,  90)
+
+_ACCENTS = [
+    (238, 242, 247), # Slate blue tint
+    (247, 243, 238), # Peach tint
+    (240, 247, 242), # Mint tint
+    (247, 238, 242), # Blush tint
+    (238, 238, 247), # Lavender tint
+]
 CORAL      = (232, 93,  78)
 NAVY       = (22,  43,  77)
 SAGE       = (88,  120, 90)
 BLUSH      = (230, 185, 175)
 
 
-# ── Font helpers ─────────────────────────────────────────────────────────────
-
-def _get_font(size: int, bold: bool = False, serif: bool = False) -> ImageFont.FreeTypeFont:
-    if serif:
-        candidates = (
-            [
+def _get_font(size: int, bold: bool = False, serif: bool = False, italic: bool = False, script: bool = False) -> ImageFont.FreeTypeFont:
+    if script:
+        candidates = [
+            "C:/Windows/Fonts/segoesc.ttf",
+            "C:/Windows/Fonts/georgiai.ttf",
+            "C:/Windows/Fonts/ariali.ttf",
+            "/usr/share/fonts/truetype/liberation/LiberationSans-Italic.ttf",
+            "/usr/share/fonts/truetype/dejavu/DejaVuSerif-Italic.ttf",
+        ]
+    elif serif:
+        if italic and bold:
+            candidates = [
+                "C:/Windows/Fonts/georgiaz.ttf",
+                "C:/Windows/Fonts/timesbi.ttf",
+                "/usr/share/fonts/truetype/liberation/LiberationSerif-BoldItalic.ttf",
+            ]
+        elif italic:
+            candidates = [
+                "C:/Windows/Fonts/georgiai.ttf",
+                "C:/Windows/Fonts/timesi.ttf",
+                "/usr/share/fonts/truetype/liberation/LiberationSerif-Italic.ttf",
+            ]
+        elif bold:
+            candidates = [
                 "C:/Windows/Fonts/georgiab.ttf",
                 "C:/Windows/Fonts/timesbd.ttf",
                 "/usr/share/fonts/truetype/liberation/LiberationSerif-Bold.ttf",
                 "/usr/share/fonts/truetype/dejavu/DejaVuSerif-Bold.ttf",
-                "georgiab.ttf",
-            ] if bold else [
+            ]
+        else:
+            candidates = [
                 "C:/Windows/Fonts/georgia.ttf",
                 "C:/Windows/Fonts/times.ttf",
                 "/usr/share/fonts/truetype/liberation/LiberationSerif-Regular.ttf",
                 "/usr/share/fonts/truetype/dejavu/DejaVuSerif.ttf",
-                "georgia.ttf",
             ]
-        )
     else:
         candidates = (
             [
-                "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
-                "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf",
-                "/usr/share/fonts/truetype/ubuntu/Ubuntu-B.ttf",
+                "C:/Windows/Fonts/segoeuib.ttf",
                 "C:/Windows/Fonts/arialbd.ttf",
+                "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf",
+                "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
+                "/usr/share/fonts/truetype/ubuntu/Ubuntu-B.ttf",
                 "arial.ttf",
             ] if bold else [
-                "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
-                "/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf",
-                "/usr/share/fonts/truetype/ubuntu/Ubuntu-R.ttf",
+                "C:/Windows/Fonts/segoeui.ttf",
                 "C:/Windows/Fonts/arial.ttf",
+                "/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf",
+                "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+                "/usr/share/fonts/truetype/ubuntu/Ubuntu-R.ttf",
                 "arial.ttf",
             ]
         )
@@ -104,12 +135,22 @@ def _wrap_text(text: str, font, max_width: int) -> list:
 
 
 def _fit_image(img: Image.Image, w: int, h: int) -> Image.Image:
-    """Cover-fit: scale to fill box then center-crop."""
+    """
+    Cover-fit with top-weighted smart crop to preserve faces, necklines, and full outfit framing.
+    Avoids cutting off model heads or collar details on tall apparel.
+    """
     sw, sh = img.size
     scale = max(w / sw, h / sh)
     nw, nh = int(sw * scale), int(sh * scale)
     img = img.resize((nw, nh), Image.Resampling.LANCZOS)
-    x, y = (nw - w) // 2, (nh - h) // 2
+
+    # Top-weighted cropping for fashion: position crop slightly higher (20%) so model face/head is preserved
+    x = (nw - w) // 2
+    if nh > h:
+        y = int((nh - h) * 0.18)
+        y = max(0, min(y, nh - h))
+    else:
+        y = 0
     return img.crop((x, y, x + w, y + h))
 
 
@@ -152,732 +193,621 @@ def _draw_cta_bar(canvas: Image.Image, draw: ImageDraw.Draw,
 
 
 def _boost(img: Image.Image) -> Image.Image:
-    img = ImageEnhance.Contrast(img).enhance(1.08)
-    img = ImageEnhance.Color(img).enhance(1.06)
+    """
+    Hero Image Polish:
+    Enhances contrast (+10%), color vibrancy (+8%), and sharpness (+25%)
+    so fabric textures, lace/knit patterns, and garment details pop on mobile screens.
+    """
+    img = ImageEnhance.Contrast(img).enhance(1.10)
+    img = ImageEnhance.Color(img).enhance(1.08)
+    img = ImageEnhance.Sharpness(img).enhance(1.25)
     return img
 
 
-# ── Template A ───────────────────────────────────────────────────────────────
-# Dark header bar | full photo | dark info strip | red CTA bar
-# Like: Kohl's "Trending: Polo Shirts" layout
-def _template_a(draw, canvas, photo, title, category, price):
-    TOP_H  = int(PIN_H * 0.10)
-    CTA_H  = int(PIN_H * 0.10)
-    INFO_H = int(PIN_H * 0.13)
-    PHOTO_H = PIN_H - TOP_H - INFO_H - CTA_H
-
-    # Dark top bar — category
-    draw.rectangle([(0, 0), (PIN_W, TOP_H)], fill=BLACK)
-    cat_f, _ = _fit_text(category.upper(), True, PIN_W - 80, int(TOP_H * 0.45))
-    cb = cat_f.getbbox(category.upper())
-    draw.text(((PIN_W - (cb[2]-cb[0])) // 2, (TOP_H - (cb[3]-cb[1])) // 2),
-              category.upper(), fill=WHITE, font=cat_f)
-
-    # Photo
-    p = _boost(_fit_image(photo, PIN_W, PHOTO_H))
-    canvas.paste(p, (0, TOP_H))
-
-    # Dark info strip
-    info_y = TOP_H + PHOTO_H
-    draw.rectangle([(0, info_y), (PIN_W, info_y + INFO_H)], fill=DARK_GREY)
-    margin = int(PIN_W * 0.05)
-    tf = _get_font(int(INFO_H * 0.28), bold=True)
-    lines = _wrap_text(title, tf, PIN_W - 2*margin - (180 if price else 0))
-    lh = int(INFO_H * 0.33)
-    for i, line in enumerate(lines[:2]):
-        draw.text((margin, info_y + int(INFO_H * 0.10) + i * lh), line, fill=WHITE, font=tf)
-
-    if price:
-        pf = _get_font(int(INFO_H * 0.30), bold=True)
-        ps = f"${price}"
-        pb = pf.getbbox(ps)
-        pw, ph = pb[2]-pb[0]+28, pb[3]-pb[1]+16
-        px = PIN_W - margin - pw
-        py = info_y + (INFO_H - ph) // 2
-        _draw_rounded_rect(draw, (px, py, px+pw, py+ph), 8, WHITE)
-        draw.text((px+14, py+8), ps, fill=BLACK, font=pf)
-
-    # Red CTA
-    _draw_cta_bar(canvas, draw, info_y + INFO_H, CTA_H, RED, WHITE)
-
-
-# ── Template B ───────────────────────────────────────────────────────────────
-# Full-bleed photo with dark gradient overlay at bottom; text over photo;
-# white pill price badge; red CTA strip.
-# Like: Kohl's "Graduation Dresses" / "Casual Work Outfits" layout
-def _template_b(draw, canvas, photo, title, category, price):
-    CTA_H = int(PIN_H * 0.10)
-    PHOTO_H = PIN_H - CTA_H
-
-    # Full photo
-    p = _boost(_fit_image(photo, PIN_W, PHOTO_H))
+# ── 2026 Luxury Contemporary Boutique Pin Engine ───────────────────────────
+# Strict 2:3 vertical (1000x1500 px) Pinterest standard layout.
+# Follows modern luxury boutique aesthetics (Revolve, Aritzia, Zara, Anthropologie):
+#   - Zero solid black/red blocks covering the photo
+#   - Smooth bottom vertical gradient vignette for natural contrast
+#   - Editorial letter-spaced brand hook (M E E E S H O P • E D I T)
+#   - Crisp pure white typography with subtle drop-shadows
+#   - Frosted glass trust pill (Top-Right)
+#   - Elegant cream pill CTA button (SHOP THE LOOK → US.MEEESHOP.COM)
+def _render_direct_pin(
+    draw: ImageDraw.Draw,
+    canvas: Image.Image,
+    photo: Image.Image,
+    title: str,
+    category: str = "New Arrival",
+    price: Optional[str] = None,
+    cta: str = "SHOP NOW AT US.MEEESHOP.COM",
+    layout: str = "bottom_floating",
+    trust_badge: Optional[str] = "FREE US SHIPPING",
+):
+    p = _boost(_fit_image(photo, PIN_W, PIN_H))
     canvas.paste(p, (0, 0))
 
-    # Dark gradient over bottom 40% of photo
-    grad_h = int(PHOTO_H * 0.42)
-    grad_start = PHOTO_H - grad_h
-    overlay = Image.new("RGBA", (PIN_W, PHOTO_H), (0, 0, 0, 0))
-    od = ImageDraw.Draw(overlay)
-    for y in range(grad_h):
-        alpha = int(200 * (y / grad_h))
-        od.rectangle([(0, grad_start + y), (PIN_W, grad_start + y + 1)],
-                     fill=(0, 0, 0, alpha))
-    canvas.paste(Image.alpha_composite(p.convert("RGBA"), overlay).convert("RGB"), (0, 0))
-    draw = ImageDraw.Draw(canvas)
+    # Create an RGBA overlay for smooth gradient vignette and frosted elements
+    overlay = Image.new("RGBA", (PIN_W, PIN_H), (0, 0, 0, 0))
+    ov_draw = ImageDraw.Draw(overlay)
 
-    # Category label — italic style, small, upper-left of gradient zone
-    margin = int(PIN_W * 0.06)
-    cf = _get_font(int(PIN_H * 0.030), bold=False)
-    draw.text((margin, grad_start + int(grad_h * 0.18)), category.upper(),
-              fill=(220, 220, 220), font=cf)
+    # 1. Smooth Bottom Vertical Gradient Vignette (y=1080 to 1500)
+    # Starts at y=1080, smoothly eases to rich dark (alpha=205) at bottom (y=1500)
+    # Guarantees 100% mobile readability for bold white titles without needing to zoom in!
+    vignette_start = 1080
+    vignette_height = PIN_H - vignette_start
+    for i in range(vignette_height):
+        progress = i / float(vignette_height)
+        alpha = int(210 * (progress ** 1.35))
+        ov_draw.line([(0, vignette_start + i), (PIN_W, vignette_start + i)], fill=(10, 10, 14, alpha))
 
-    # Title — large bold
-    tf_size = int(PIN_H * 0.062)
-    tf = _get_font(tf_size, bold=True)
-    lines = _wrap_text(title, tf, PIN_W - 2*margin - (200 if price else 0))
-    title_y = grad_start + int(grad_h * 0.30)
-    lh = int(tf_size * 1.25)
-    for i, line in enumerate(lines[:2]):
-        draw.text((margin, title_y + i * lh), line, fill=WHITE, font=tf)
+    # Also a subtle top gradient (y=0 to 130) for the top badge
+    for i in range(130):
+        progress = 1.0 - (i / 130.0)
+        alpha = int(80 * (progress ** 1.5))
+        ov_draw.line([(0, i), (PIN_W, i)], fill=(10, 10, 14, alpha))
 
-    # Price badge — white pill, bottom-right
-    if price:
-        pf = _get_font(int(PIN_H * 0.040), bold=True)
-        ps = f"${price}"
-        pb = pf.getbbox(ps)
-        pw, ph = pb[2]-pb[0]+32, pb[3]-pb[1]+18
-        px = PIN_W - margin - pw
-        py = PHOTO_H - ph - int(PIN_H * 0.04)
-        _draw_rounded_rect(draw, (px, py, px+pw, py+ph), 10, RED)
-        draw.text((px+16, py+9), ps, fill=WHITE, font=pf)
+    CREAM_WHITE    = (255, 255, 255, 255)
+    CHAMPAGNE_GOLD = (255, 230, 130, 255)
+    WARM_OAT       = (255, 245, 225, 255)
+    FROSTED_GLASS  = (15, 15, 20, 205)       # 80% opacity sleek frosted dark glass
+    SHADOW_DARK    = (5, 5, 8, 250)
 
-    # Red CTA strip
-    _draw_cta_bar(canvas, draw, PHOTO_H, CTA_H, RED, WHITE)
+    def draw_bold_shadowed_text(d, pos, text, font, fill=CREAM_WHITE, anchor=None):
+        x, y = pos
+        # 3px 16-direction bold contour shadow for crystal-clear mobile contrast
+        offsets = [
+            (-3, 0), (3, 0), (0, -3), (0, 3),
+            (-3, -3), (3, 3), (-3, 3), (3, -3),
+            (-2, -2), (2, 2), (-2, 2), (2, -2),
+            (-2, 0), (2, 0), (0, -2), (0, 2),
+            (-1, -1), (1, 1), (-1, 1), (1, -1)
+        ]
+        for dx, dy in offsets:
+            if anchor:
+                d.text((x + dx, y + dy), text, fill=SHADOW_DARK, font=font, anchor=anchor)
+            else:
+                d.text((x + dx, y + dy), text, fill=SHADOW_DARK, font=font)
+        if anchor:
+            d.text((x, y), text, fill=fill, font=font, anchor=anchor)
+        else:
+            d.text((x, y), text, fill=fill, font=font)
 
+    # 2. Top-Right Frosted Glass Trust Badge (y=45)
+    if trust_badge:
+        tb_text = f"★  {trust_badge.upper()}"
+        tb_font = _get_font(30, bold=True)
+        tb_box = tb_font.getbbox(tb_text)
+        tb_w = tb_box[2] - tb_box[0]
+        tb_h = tb_box[3] - tb_box[1]
 
-# ── Template C ───────────────────────────────────────────────────────────────
-# Warm white bg; large bold category text top; photo centered with padding;
-# price bottom-left; CTA bar navy.
-# Like: Kohl's "Summer looks for the little ones" / flat-lay style
-def _template_c(draw, canvas, photo, title, category, price):
-    HEADER_H = int(PIN_H * 0.18)
-    CTA_H    = int(PIN_H * 0.10)
-    FOOTER_H = int(PIN_H * 0.12)
-    PHOTO_H  = PIN_H - HEADER_H - FOOTER_H - CTA_H
-    PAD      = int(PIN_W * 0.04)
+        pad_x, pad_y = 24, 12
+        pill_w = tb_w + 2 * pad_x
+        pill_h = tb_h + 2 * pad_y
+        pill_x = PIN_W - pill_w - 45
+        pill_y = 45
 
-    draw.rectangle([(0, 0), (PIN_W, PIN_H)], fill=WARM_WHITE)
+        # Frosted glass pill with subtle border
+        _draw_rounded_rect(ov_draw, (pill_x, pill_y, pill_x + pill_w, pill_y + pill_h), r=pill_h // 2, fill=FROSTED_GLASS)
+        ov_draw.text((pill_x + pad_x, pill_y + pad_y - 2), tb_text, fill=CREAM_WHITE, font=tb_font)
 
-    # Large category text — two-line split if contains ":"
-    parts = category.split(":", 1) if ":" in category else [category, ""]
-    line1 = parts[0].strip()
-    line2 = parts[1].strip() if parts[1] else ""
-    f1 = _get_font(int(HEADER_H * 0.32), bold=False)
-    f2 = _get_font(int(HEADER_H * 0.42), bold=True)
-    margin = int(PIN_W * 0.06)
-    b1 = f1.getbbox(line1)
-    draw.text((margin, int(HEADER_H * 0.12)), line1, fill=BLACK, font=f1)
-    if line2:
-        draw.text((margin, int(HEADER_H * 0.12) + (b1[3]-b1[1]) + 4),
-                  line2.upper(), fill=BLACK, font=f2)
+    # 3. Clean Title & Category Formatting
+    clean_title = (title or "").strip()
+    for leak in ["we need", "create a", "product:", "type:"]:
+        if leak in clean_title.lower():
+            clean_title = "Trending Boutique Style"
+            break
+
+    # 4. Bottom High-Impact Typography Zone (y=1160 to y=1470)
+    # Line 1: Bold Letter-spaced Brand Hook (26px)
+    hook_text = "M E E E S H O P  •  N E W  A R R I V A L S"
+    hook_font = _get_font(25, bold=True)
+    draw_bold_shadowed_text(ov_draw, (PIN_W // 2, 1165), hook_text, hook_font, fill=CHAMPAGNE_GOLD, anchor="mt")
+
+    # Line 2: Product Headline (52px ULTRA BOLD Modern Sans — Instantly readable on mobile)
+    title_font = _get_font(50, bold=True, serif=False)
+    title_lines = _wrap_text(clean_title.upper(), title_font, max_width=PIN_W - 100)
+    display_title = title_lines[0] if title_lines else clean_title.upper()
+    if len(title_lines) > 1 and len(display_title) > 28:
+        display_title = display_title[:26] + "..."
+    draw_bold_shadowed_text(ov_draw, (PIN_W // 2, 1215), display_title, title_font, fill=CREAM_WHITE, anchor="mt")
+
+    # Line 3: Price & Guarantee (34px BOLD)
+    price_str = f"${float(str(price).replace('$', '')):.2f}" if price and any(c.isdigit() for c in str(price)) else ""
+    if price_str:
+        sub_text = f"{price_str}   •   FREE US SHIPPING   •   7-DAY RETURNS"
     else:
-        draw.text((margin, int(HEADER_H * 0.30)), line1.upper(), fill=BLACK, font=f2)
+        sub_text = "FREE US SHIPPING   •   TRUE-TO-SIZE FIT"
+    sub_font = _get_font(32, bold=True)
+    draw_bold_shadowed_text(ov_draw, (PIN_W // 2, 1295), sub_text, sub_font, fill=WARM_OAT, anchor="mt")
 
-    # Photo with slight shadow effect (paste on slightly offset dark rect)
-    p = _boost(_fit_image(photo, PIN_W - PAD*2, PHOTO_H - PAD*2))
-    shadow = Image.new("RGB", (PIN_W - PAD*2 + 8, PHOTO_H - PAD*2 + 8), (180, 180, 180))
-    canvas.paste(shadow, (PAD + 4, HEADER_H + PAD + 4))
-    canvas.paste(p, (PAD, HEADER_H + PAD))
-    draw = ImageDraw.Draw(canvas)
+    # Line 4: Large High-Converting CTA Button (y=1365, Height=72px, Font=28px BOLD)
+    cta_btn_w = 640
+    cta_btn_h = 72
+    cta_btn_x = (PIN_W - cta_btn_w) // 2
+    cta_btn_y = 1365
 
-    # Footer: title left, price badge right
-    footer_y = HEADER_H + PHOTO_H
-    draw.rectangle([(0, footer_y), (PIN_W, footer_y + FOOTER_H)], fill=WARM_WHITE)
-    tf = _get_font(int(FOOTER_H * 0.30), bold=True)
-    lines = _wrap_text(title, tf, PIN_W - 2*margin - (160 if price else 0))
-    lh = int(FOOTER_H * 0.34)
-    for i, line in enumerate(lines[:2]):
-        draw.text((margin, footer_y + int(FOOTER_H * 0.10) + i*lh), line, fill=BLACK, font=tf)
+    # Crisp pure white rounded pill button with bold charcoal text
+    _draw_rounded_rect(ov_draw, (cta_btn_x, cta_btn_y, cta_btn_x + cta_btn_w, cta_btn_y + cta_btn_h), r=cta_btn_h // 2, fill=(255, 255, 255, 250))
+    cta_font = _get_font(28, bold=True)
+    ov_draw.text((PIN_W // 2, cta_btn_y + 19), "SHOP THE LOOK  →  US.MEEESHOP.COM", fill=(15, 15, 20, 255), font=cta_font, anchor="mt")
 
-    if price:
-        pf = _get_font(int(FOOTER_H * 0.32), bold=True)
-        ps = f"${price}"
-        pb = pf.getbbox(ps)
-        pw, ph = pb[2]-pb[0]+28, pb[3]-pb[1]+16
-        px = PIN_W - margin - pw
-        py = footer_y + (FOOTER_H - ph) // 2
-        _draw_rounded_rect(draw, (px, py, px+pw, py+ph), 8, RED)
-        draw.text((px+14, py+8), ps, fill=WHITE, font=pf)
-
-    # Navy CTA
-    _draw_cta_bar(canvas, draw, footer_y + FOOTER_H, CTA_H, NAVY, WHITE)
+    # Merge RGBA overlay onto canvas
+    canvas.paste(Image.alpha_composite(canvas.convert("RGBA"), overlay).convert("RGB"), (0, 0))
 
 
-# ── Template D ───────────────────────────────────────────────────────────────
-# Solid accent-color top band with big headline; photo fills lower 2/3;
-# price badge overlaps the photo/band boundary; black CTA strip.
-# Like: Kohl's "Playful two-pieces" / "Swimsuits for the whole family"
-def _template_d(draw, canvas, photo, title, category, price, accent=CORAL):
-    BAND_H  = int(PIN_H * 0.22)
-    CTA_H   = int(PIN_H * 0.10)
-    PHOTO_H = PIN_H - BAND_H - CTA_H
+# ── Smooth Curved Arrow Helper ───────────────────────────────────────────────
 
-    # Accent top band
-    draw.rectangle([(0, 0), (PIN_W, BAND_H)], fill=accent)
+def _draw_smooth_curved_arrow(
+    draw: ImageDraw.Draw,
+    start_pt: Tuple[int, int],
+    control_pt: Tuple[int, int],
+    end_pt: Tuple[int, int],
+    color: Tuple[int, int, int] = (255, 255, 255),
+    width: int = 3,
+):
+    """Draw smooth quadratic bezier curve with a crisp arrowhead pointing to the garment."""
+    import math
+    num_steps = 25
+    points = []
+    for i in range(num_steps + 1):
+        t = i / float(num_steps)
+        x = ((1 - t) ** 2) * start_pt[0] + 2 * (1 - t) * t * control_pt[0] + (t ** 2) * end_pt[0]
+        y = ((1 - t) ** 2) * start_pt[1] + 2 * (1 - t) * t * control_pt[1] + (t ** 2) * end_pt[1]
+        points.append((x, y))
 
-    # Category in white — smaller top line
-    margin = int(PIN_W * 0.06)
-    cf = _get_font(int(BAND_H * 0.22), bold=False)
-    draw.text((margin, int(BAND_H * 0.10)), category.upper(), fill=WHITE, font=cf)
+    # Draw dark shadow contour underneath for guaranteed 100% contrast
+    for dx, dy in [(-2, 0), (2, 0), (0, -2), (0, 2), (-1, -1), (1, 1), (-1, 1), (1, -1)]:
+        halo_pts = [(x + dx, y + dy) for x, y in points]
+        draw.line(halo_pts, fill=(10, 10, 14, 220), width=width + 2)
 
-    # Title in white — big bold
-    tf = _get_font(int(BAND_H * 0.32), bold=True)
-    lines = _wrap_text(title, tf, PIN_W - 2*margin)
-    lh = int(BAND_H * 0.36)
-    title_start = int(BAND_H * 0.35)
-    for i, line in enumerate(lines[:2]):
-        draw.text((margin, title_start + i*lh), line, fill=WHITE, font=tf)
+    draw.line(points, fill=color, width=width)
 
-    # Photo
-    p = _boost(_fit_image(photo, PIN_W, PHOTO_H))
-    canvas.paste(p, (0, BAND_H))
-    draw = ImageDraw.Draw(canvas)
+    # Arrowhead at end_pt
+    p_prev = points[-4]
+    dx = end_pt[0] - p_prev[0]
+    dy = end_pt[1] - p_prev[1]
+    angle = math.atan2(dy, dx)
+    arrow_len = 16
+    arrow_angle = math.pi / 5.5
 
-    # Price badge overlapping band/photo border
-    if price:
-        pf = _get_font(int(PIN_H * 0.038), bold=True)
-        ps = f"${price}"
-        pb = pf.getbbox(ps)
-        pw, ph = pb[2]-pb[0]+36, pb[3]-pb[1]+20
-        px = PIN_W - margin - pw
-        py = BAND_H - ph // 2
-        _draw_rounded_rect(draw, (px, py, px+pw, py+ph), 10, WHITE)
-        draw.text((px+18, py+10), ps, fill=BLACK, font=pf)
+    a1 = (end_pt[0] - arrow_len * math.cos(angle - arrow_angle), end_pt[1] - arrow_len * math.sin(angle - arrow_angle))
+    a2 = (end_pt[0] - arrow_len * math.cos(angle + arrow_angle), end_pt[1] - arrow_len * math.sin(angle + arrow_angle))
 
-    # Black CTA
-    _draw_cta_bar(canvas, draw, BAND_H + PHOTO_H, CTA_H, BLACK, WHITE)
+    # Draw dark halo for arrowhead
+    for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+        draw.polygon([(end_pt[0] + dx, end_pt[1] + dy), (a1[0] + dx, a1[1] + dy), (a2[0] + dx, a2[1] + dy)], fill=(10, 10, 14, 220))
+
+    draw.polygon([end_pt, a1, a2], fill=color)
 
 
-# ── Template E ───────────────────────────────────────────────────────────────
-# Full-bleed photo; floating semi-transparent dark text box center-bottom;
-# red CTA strip.
-# Like: Kohl's "Cute and colorful summer styles" layout
+# ── Feature Breakdown / Infographic Pin Engine ───────────────────────────────
+
+def _render_feature_breakdown_pin(
+    draw: ImageDraw.Draw,
+    canvas: Image.Image,
+    photo: Image.Image,
+    photo2: Optional[Image.Image],
+    title: str,
+    category: str = "New Arrival",
+    price: Optional[str] = None,
+    cta: str = "SHOP THE LOOK → US.MEEESHOP.COM",
+    trust_badge: Optional[str] = "FREE US SHIPPING",
+    highlights: Optional[Dict[str, Any]] = None,
+):
+    """
+    Renders high-converting 'Anatomy of a Perfect Fit' Infographic Pin:
+    - Circular fabric/craftsmanship zoom-in inset with white border
+    - Frosted dark glass pills with pure white & cream benefit callouts (eliminating muddy black text)
+    - Left-side quick feature badges (Figure Enhancer, Stretchy Fabric, Super Soft)
+    - Bold high-visibility bottom anchor bar with CTA
+    """
+    from content_generator_v2 import generate_product_fit_highlights
+
+    p = _boost(_fit_image(photo, PIN_W, PIN_H))
+    canvas.paste(p, (0, 0))
+
+    overlay = Image.new("RGBA", (PIN_W, PIN_H), (0, 0, 0, 0))
+    ov_draw = ImageDraw.Draw(overlay)
+
+    # Bottom vignette for text anchor
+    vignette_start = 1080
+    vignette_height = PIN_H - vignette_start
+    for i in range(vignette_height):
+        progress = i / float(vignette_height)
+        alpha = int(210 * (progress ** 1.35))
+        ov_draw.line([(0, vignette_start + i), (PIN_W, vignette_start + i)], fill=(10, 10, 14, alpha))
+
+    # Top subtle vignette
+    for i in range(140):
+        progress = 1.0 - (i / 140.0)
+        alpha = int(95 * (progress ** 1.5))
+        ov_draw.line([(0, i), (PIN_W, i)], fill=(10, 10, 14, alpha))
+
+    CREAM_WHITE    = (255, 255, 255, 255)
+    CHAMPAGNE_GOLD = (255, 230, 130, 255)
+    WARM_OAT       = (255, 245, 225, 255)
+    FROSTED_GLASS  = (15, 15, 20, 205)       # 80% opacity luxury dark glass
+    SHADOW_DARK    = (5, 5, 8, 250)
+
+    def draw_bold_shadowed(d, pos, text, font, fill=CREAM_WHITE, anchor=None):
+        x, y = pos
+        offsets = [(-3,0), (3,0), (0,-3), (0,3), (-2,-2), (2,2), (-2,2), (2,-2), (-1,-1), (1,1)]
+        for dx, dy in offsets:
+            if anchor:
+                d.text((x + dx, y + dy), text, fill=SHADOW_DARK, font=font, anchor=anchor)
+            else:
+                d.text((x + dx, y + dy), text, fill=SHADOW_DARK, font=font)
+        if anchor:
+            d.text((x, y), text, fill=fill, font=font, anchor=anchor)
+        else:
+            d.text((x, y), text, fill=fill, font=font)
+
+    def draw_callout_pill(d, x, y, title_text, desc_text, align="left"):
+        """Draw a frosted glass pill containing bold white title and warm cream description."""
+        t_font = _get_font(24, bold=True)
+        d_font = _get_font(20, bold=False)
+        
+        t_box = t_font.getbbox(title_text)
+        d_box = d_font.getbbox(desc_text)
+        
+        t_w = t_box[2] - t_box[0]
+        d_w = d_box[2] - d_box[0]
+        max_w = max(t_w, d_w)
+        
+        pad_x, pad_y = 20, 12
+        card_w = max_w + pad_x * 2
+        card_h = (t_box[3] - t_box[1]) + (d_box[3] - d_box[1]) + pad_y * 2 + 6
+        
+        if align == "right":
+            rx1 = x - card_w
+            rx2 = x
+        elif align == "center":
+            rx1 = x - card_w // 2
+            rx2 = x + card_w // 2
+        else:
+            rx1 = x
+            rx2 = x + card_w
+            
+        ry1 = y
+        ry2 = y + card_h
+        
+        _draw_rounded_rect(d, (rx1, ry1, rx2, ry2), r=14, fill=FROSTED_GLASS)
+        
+        if align == "right":
+            d.text((rx2 - pad_x, ry1 + pad_y), title_text, fill=CREAM_WHITE, font=t_font, anchor="ra")
+            d.text((rx2 - pad_x, ry1 + pad_y + 28), desc_text, fill=WARM_OAT, font=d_font, anchor="ra")
+        elif align == "center":
+            d.text((rx1 + card_w // 2, ry1 + pad_y), title_text, fill=CREAM_WHITE, font=t_font, anchor="ma")
+            d.text((rx1 + card_w // 2, ry1 + pad_y + 28), desc_text, fill=WARM_OAT, font=d_font, anchor="ma")
+        else:
+            d.text((rx1 + pad_x, ry1 + pad_y), title_text, fill=CREAM_WHITE, font=t_font)
+            d.text((rx1 + pad_x, ry1 + pad_y + 28), desc_text, fill=WARM_OAT, font=d_font)
+            
+        return (rx1, ry1, rx2, ry2)
+
+    if not highlights:
+        highlights = generate_product_fit_highlights({"title": title, "product_type": category})
+
+    # 1. Top-Left Headline ("A NEW KIND OF LUXE" in Champagne Gold / White)
+    h_sub = highlights.get("top_header_sub", "A NEW KIND OF")
+    h_main = highlights.get("top_header_main", "LUXE")
+    draw_bold_shadowed(ov_draw, (45, 40), h_sub, _get_font(20, bold=True), fill=CHAMPAGNE_GOLD)
+    draw_bold_shadowed(ov_draw, (45, 65), h_main, _get_font(52, bold=True), fill=CREAM_WHITE)
+
+    # 2. Top-Right Trust Badge Pill
+    tb_text = f"★  {(trust_badge or 'FREE US SHIPPING').upper()}"
+    tb_font = _get_font(30, bold=True)
+    tb_box = tb_font.getbbox(tb_text)
+    tb_w = tb_box[2] - tb_box[0]
+    tb_h = tb_box[3] - tb_box[1]
+    pill_w = tb_w + 48
+    pill_h = tb_h + 24
+    pill_x = PIN_W - pill_w - 45
+    pill_y = 45
+    _draw_rounded_rect(ov_draw, (pill_x, pill_y, pill_x + pill_w, pill_y + pill_h), r=pill_h // 2, fill=FROSTED_GLASS)
+    ov_draw.text((pill_x + 24, pill_y + 12), tb_text, fill=CREAM_WHITE, font=tb_font)
+
+    # 3. Circular Detail Zoom Inset (x=240, y=310, dia=210)
+    zoom_dia = 210
+    zoom_r = zoom_dia // 2
+    zx, zy = 240, 310
+    
+    if photo2 is not None:
+        zoom_src = photo2
+    else:
+        pw, ph = photo.size
+        cw, ch = int(pw * 0.40), int(ph * 0.30)
+        cx, cy = (pw - cw) // 2, int(ph * 0.40)
+        zoom_src = photo.crop((cx, cy, cx + cw, cy + ch))
+    
+    zoom_fit = _boost(_fit_image(zoom_src, zoom_dia, zoom_dia))
+    
+    mask = Image.new("L", (zoom_dia, zoom_dia), 0)
+    ImageDraw.Draw(mask).ellipse((0, 0, zoom_dia, zoom_dia), fill=255)
+    canvas.paste(zoom_fit, (zx - zoom_r, zy - zoom_r), mask)
+    ImageDraw.Draw(canvas).ellipse((zx - zoom_r - 2, zy - zoom_r - 2, zx + zoom_r + 2, zy + zoom_r + 2), outline=(255, 255, 255), width=5)
+
+    # 4. Feature Callout 1 (Right Waist / Panels) — Frosted Pill with White/Cream Text
+    c1 = highlights.get("callout_waist", {})
+    t1_title = c1.get("title", "Contour waistbands")
+    t1_desc = c1.get("desc", "and slimming panels that hug your body")
+    pill1_rect = draw_callout_pill(ov_draw, 520, 320, t1_title, t1_desc, align="left")
+    _draw_smooth_curved_arrow(ov_draw, start_pt=(pill1_rect[0] + 40, pill1_rect[3]), control_pt=(580, 420), end_pt=(560, 430), color=(255, 255, 255))
+
+    # 5. Feature Callout 2 (Center Left / Detail Zoom)
+    c2 = highlights.get("callout_zoom", {})
+    t2_title = c2.get("title", "Heart-shaped yoke")
+    t2_desc = c2.get("desc", "gives that natural lift")
+    pill2_rect = draw_callout_pill(ov_draw, 240, 425, t2_title, t2_desc, align="center")
+    _draw_smooth_curved_arrow(ov_draw, start_pt=(pill2_rect[1] + 30, pill2_rect[3]), control_pt=(360, 485), end_pt=(405, 475), color=(255, 255, 255))
+
+    # 6. Feature Callout 3 (Left Pocket / Silhouette)
+    c3 = highlights.get("callout_pocket", {})
+    t3_title = c3.get("title", "Short back pockets")
+    t3_desc = c3.get("desc", "make your silhouette look fuller")
+    pill3_rect = draw_callout_pill(ov_draw, 420, 535, t3_title, t3_desc, align="right")
+    _draw_smooth_curved_arrow(ov_draw, start_pt=(pill3_rect[2], pill3_rect[1] + 25), control_pt=(450, 545), end_pt=(480, 530), color=(255, 255, 255))
+
+    # 7. Feature Callout 4 (Lower Leg / Stretch)
+    c4 = highlights.get("callout_fabric", {})
+    t4_title = c4.get("title", "2% Spandex blend.")
+    t4_desc = c4.get("desc", "Hugs your curves and moves with you.")
+    pill4_rect = draw_callout_pill(ov_draw, 520, 730, t4_title, t4_desc, align="left")
+    _draw_smooth_curved_arrow(ov_draw, start_pt=(pill4_rect[0] + 30, pill4_rect[1] + 20), control_pt=(500, 755), end_pt=(470, 750), color=(255, 255, 255))
+
+    # 8. Left Feature Attribute Badges (Column at x=20, y=930..1280)
+    badges = highlights.get("badges", ["Figure Enhancer", "Stretchy Fabric", "Super Soft"])
+    b_y = 930
+    for b_text in badges[:3]:
+        card_w, card_h = 135, 105
+        _draw_rounded_rect(ov_draw, (20, b_y, 20 + card_w, b_y + card_h), r=16, fill=FROSTED_GLASS)
+        ov_draw.text((20 + card_w // 2, b_y + 20), "★", fill=CHAMPAGNE_GOLD, font=_get_font(26, bold=True), anchor="mt")
+        b_lines = _wrap_text(b_text, _get_font(18, bold=True), max_width=card_w - 10)
+        for li, line in enumerate(b_lines[:2]):
+            ov_draw.text((20 + card_w // 2, b_y + 55 + li * 20), line, fill=CREAM_WHITE, font=_get_font(16, bold=True), anchor="mt")
+        b_y += card_h + 14
+
+    # 9. Bottom Anchor Bar
+    hook_text = "M E E E S H O P  •  N E W  A R R I V A L S"
+    hook_font = _get_font(25, bold=True)
+    draw_bold_shadowed(ov_draw, (PIN_W // 2, 1165), hook_text, hook_font, fill=CHAMPAGNE_GOLD, anchor="mt")
+
+    clean_title = (title or "").strip()
+    for leak in ["we need", "create a", "product:", "type:"]:
+        if leak in clean_title.lower():
+            clean_title = "Trending Boutique Style"
+            break
+
+    price_str = f"${float(str(price).replace('$', '')):.2f}" if price and any(c.isdigit() for c in str(price)) else ""
+    sub_text = f"{price_str}   •   FREE US SHIPPING   •   TRUE-TO-SIZE FIT" if price_str else "FREE US SHIPPING   •   TRUE-TO-SIZE FIT"
+    draw_bold_shadowed(ov_draw, (PIN_W // 2, 1265), sub_text, _get_font(32, bold=True), fill=WARM_OAT, anchor="mt")
+
+    # CTA Button
+    cta_btn_w = 640
+    cta_btn_h = 72
+    cta_btn_x = (PIN_W - cta_btn_w) // 2
+    cta_btn_y = 1345
+    _draw_rounded_rect(ov_draw, (cta_btn_x, cta_btn_y, cta_btn_x + cta_btn_w, cta_btn_y + cta_btn_h), r=cta_btn_h // 2, fill=(255, 255, 255, 250))
+    cta_font = _get_font(28, bold=True)
+    ov_draw.text((PIN_W // 2, cta_btn_y + 19), "SHOP THE LOOK  →  US.MEEESHOP.COM", fill=(15, 15, 20, 255), font=cta_font, anchor="mt")
+
+    # Merge overlay onto canvas
+    canvas.paste(Image.alpha_composite(canvas.convert("RGBA"), overlay).convert("RGB"), (0, 0))
+
+
+# ── Editorial Blog Pin Engine (Reference Matched) ─────────────────────────
+def _render_editorial_blog_pin(
+    draw: ImageDraw.Draw,
+    canvas: Image.Image,
+    photo: Image.Image,
+    title: str,
+    category: str = "STYLE GUIDE",
+    cta: str = "READ THE FULL GUIDE ->",
+):
+    """
+    Sleek editorial layout matching Pinterest aesthetic blog pins.
+    - Subtle left/top vignette
+    - Aesthetic serif typography
+    - Floating CTA and minimalist bottom branding
+    """
+    p = _boost(_fit_image(photo, PIN_W, PIN_H))
+    canvas.paste(p, (0, 0))
+
+    overlay = Image.new("RGBA", (PIN_W, PIN_H), (0, 0, 0, 0))
+    ov_draw = ImageDraw.Draw(overlay)
+
+    # 1. Subtle Dark Wash (Vignette) on left and top for text readability
+    for i in range(1200):
+        progress = 1.0 - (i / 1200.0)
+        alpha = int(140 * (progress ** 1.5))
+        ov_draw.line([(0, i), (PIN_W, i)], fill=(20, 20, 20, alpha))
+        
+    for x in range(900):
+        progress = 1.0 - (x / 900.0)
+        alpha = int(110 * (progress ** 1.5))
+        ov_draw.line([(x, 0), (x, PIN_H)], fill=(20, 20, 20, alpha))
+
+    # Palettes
+    CREAM_WHITE = (255, 250, 240, 255)
+    WARM_ACCENT = (235, 195, 155, 255) 
+
+    # Helper for crisp shadowed text
+    def draw_shadowed_text(d, pos, text, font, fill=CREAM_WHITE, anchor=None):
+        x, y = pos
+        offsets = [(-2,0), (2,0), (0,-2), (0,2), (-1,-1), (1,1)]
+        for dx, dy in offsets:
+            d.text((x + dx, y + dy), text, fill=(10, 10, 10, 200), font=font, anchor=anchor)
+        d.text((x, y), text, fill=fill, font=font, anchor=anchor)
+
+    # 2. Category Label (Top Left)
+    cat_font = _get_font(28, bold=True)
+    draw_shadowed_text(ov_draw, (70, 80), (category or "STYLE GUIDE").upper(), cat_font, fill=WARM_ACCENT)
+    
+    # 3. Main Title (Large Editorial Serif)
+    title_font = _get_font(105, bold=True, serif=True)
+    title_lines = _wrap_text(title, title_font, max_width=PIN_W - 140)
+    
+    y_pos = 160
+    for line in title_lines:
+        draw_shadowed_text(ov_draw, (70, y_pos), line, title_font, fill=CREAM_WHITE)
+        y_pos += 115
+        
+    # 4. CTA Pill
+    cta_y = y_pos + 60
+    cta_w = 460
+    cta_h = 60
+    _draw_rounded_rect(ov_draw, (70, cta_y, 70 + cta_w, cta_y + cta_h), r=8, fill=(235, 195, 155, 240))
+    cta_font = _get_font(24, bold=True)
+    ov_draw.text((70 + cta_w // 2, cta_y + 30), cta.upper(), fill=(20, 20, 20, 255), font=cta_font, anchor="mm")
+    
+    # 5. Bottom Branding
+    draw_shadowed_text(ov_draw, (70, PIN_H - 120), "MEEESHOP", _get_font(36, bold=True, serif=True), fill=CREAM_WHITE)
+    draw_shadowed_text(ov_draw, (70, PIN_H - 70), "Dressed for where the day goes.", _get_font(22, italic=True, serif=True), fill=CREAM_WHITE)
+
+    # Merge overlay
+    canvas.paste(Image.alpha_composite(canvas.convert("RGBA"), overlay).convert("RGB"), (0, 0))
+
+
+# ── Template Mappings ────────────────────────────────────────────────────────
+
+def _template_a(draw, canvas, photo, title, category, price):
+    _render_direct_pin(draw, canvas, photo, title, category, price, layout="bottom_floating")
+
+def _template_b(draw, canvas, photo, title, category, price):
+    _render_direct_pin(draw, canvas, photo, title, category, price, layout="bottom_floating")
+
+def _template_c(draw, canvas, photo, title, category, price):
+    _render_direct_pin(draw, canvas, photo, title, category, price, layout="bottom_floating")
+
+def _template_d(draw, canvas, photo, title, category, price, accent=None):
+    _render_direct_pin(draw, canvas, photo, title, category, price, layout="bottom_floating")
+
 def _template_e(draw, canvas, photo, title, category, price):
-    CTA_H   = int(PIN_H * 0.10)
-    PHOTO_H = PIN_H - CTA_H
+    _render_direct_pin(draw, canvas, photo, title, category, price, layout="bottom_floating")
 
-    # Full photo
-    p = _boost(_fit_image(photo, PIN_W, PHOTO_H))
-    canvas.paste(p, (0, 0))
-    draw = ImageDraw.Draw(canvas)
-
-    # Floating text box — semi-transparent, bottom center
-    box_w = int(PIN_W * 0.88)
-    box_h = int(PIN_H * 0.22)
-    box_x = (PIN_W - box_w) // 2
-    box_y = PHOTO_H - box_h - int(PIN_H * 0.04)
-
-    # Semi-transparent overlay box
-    overlay = Image.new("RGBA", canvas.size, (0, 0, 0, 0))
-    od = ImageDraw.Draw(overlay)
-    _draw_rounded_rect(od, (box_x, box_y, box_x + box_w, box_y + box_h), 16,
-                       (20, 20, 20, 210))
-    canvas.paste(Image.alpha_composite(canvas.convert("RGBA"), overlay).convert("RGB"),
-                 (0, 0))
-    draw = ImageDraw.Draw(canvas)
-
-    # Category small label inside box
-    inner_margin = int(box_w * 0.06)
-    cf = _get_font(int(box_h * 0.17), bold=False)
-    draw.text((box_x + inner_margin, box_y + int(box_h * 0.08)),
-              category.upper(), fill=(200, 200, 200), font=cf)
-
-    # Title bold
-    tf = _get_font(int(box_h * 0.26), bold=True)
-    lines = _wrap_text(title, tf, box_w - 2*inner_margin - (160 if price else 0))
-    lh = int(box_h * 0.30)
-    for i, line in enumerate(lines[:2]):
-        draw.text((box_x + inner_margin, box_y + int(box_h * 0.36) + i*lh),
-                  line, fill=WHITE, font=tf)
-
-    # Price badge inside box, right side
-    if price:
-        pf = _get_font(int(box_h * 0.25), bold=True)
-        ps = f"${price}"
-        pb = pf.getbbox(ps)
-        pw, ph = pb[2]-pb[0]+28, pb[3]-pb[1]+14
-        px = box_x + box_w - inner_margin - pw
-        py = box_y + box_h - ph - int(box_h * 0.10)
-        _draw_rounded_rect(draw, (px, py, px+pw, py+ph), 8, RED)
-        draw.text((px+14, py+7), ps, fill=WHITE, font=pf)
-
-    # Red CTA strip
-    _draw_cta_bar(canvas, draw, PHOTO_H, CTA_H, RED, WHITE)
-
-
-# ── Accent colour cycle for template D ───────────────────────────────────────
-_ACCENTS = [CORAL, NAVY, SAGE, (180, 100, 160), (60, 130, 160)]
-
-
-# ── Template F ───────────────────────────────────────────────────────────────
-# Poetcore Storybook Editorial: linen bg, centered photo with double border,
-# editorial serif typography, typewriter price tag.
 def _template_f(draw, canvas, photo, title, category, price):
-    bg_color = (246, 243, 238)
-    draw.rectangle([(0, 0), (PIN_W, PIN_H)], fill=bg_color)
+    _render_direct_pin(draw, canvas, photo, title, category, price, layout="bottom_floating")
 
-    HEADER_H = int(PIN_H * 0.16)
-    FOOTER_H = int(PIN_H * 0.18)
-    CTA_H = int(PIN_H * 0.10)
-    PHOTO_H = PIN_H - HEADER_H - FOOTER_H - CTA_H
-    PAD = int(PIN_W * 0.08)
-
-    # Category top center (Georgia / Serif, italic)
-    cf = _get_font(int(HEADER_H * 0.28), bold=False, serif=True)
-    cb = cf.getbbox(category)
-    draw.text(((PIN_W - (cb[2]-cb[0])) // 2, int(HEADER_H * 0.35)), category, fill=DARK_GREY, font=cf)
-
-    # Photo centered with double thin borders
-    photo_w = PIN_W - PAD * 2
-    photo_h = PHOTO_H - PAD
-    p = _boost(_fit_image(photo, photo_w, photo_h))
-    canvas.paste(p, (PAD, HEADER_H + PAD // 2))
-    
-    # Outer thin border
-    draw.rectangle([PAD - 4, HEADER_H + PAD // 2 - 4, PAD + photo_w + 4, HEADER_H + PAD // 2 + photo_h + 4], outline=(150, 140, 130), width=2)
-    # Inner thin border
-    draw.rectangle([PAD - 12, HEADER_H + PAD // 2 - 12, PAD + photo_w + 12, HEADER_H + PAD // 2 + photo_h + 12], outline=(150, 140, 130), width=1)
-    
-    # Title & Price in footer
-    footer_y = HEADER_H + PHOTO_H
-    tf = _get_font(int(FOOTER_H * 0.22), bold=True, serif=True)
-    lines = _wrap_text(title, tf, PIN_W - PAD * 3 - (140 if price else 0))
-    for i, line in enumerate(lines[:2]):
-        draw.text((PAD, footer_y + int(FOOTER_H * 0.15) + i * int(FOOTER_H * 0.28)), line, fill=BLACK, font=tf)
-
-    # Soft typewriter/handwritten price badge
-    if price:
-        pf = _get_font(int(FOOTER_H * 0.24), bold=False, serif=True)
-        ps = f"${price}"
-        pb = pf.getbbox(ps)
-        pw, ph = pb[2]-pb[0]+24, pb[3]-pb[1]+12
-        px = PIN_W - PAD - pw
-        py = footer_y + int(FOOTER_H * 0.15)
-        draw.rectangle([px, py, px+pw, py+ph], fill=(235, 230, 225), outline=(180, 175, 170), width=1)
-        draw.text((px+12, py+6), ps, fill=DARK_GREY, font=pf)
-
-    # Sage/Earth tone CTA footer
-    _draw_cta_bar(canvas, draw, footer_y + FOOTER_H, CTA_H, SAGE, WHITE)
-
-
-# ── Template G ───────────────────────────────────────────────────────────────
-# Glamoratti High-Drama Vogue: deep black/charcoal bg, elegant gold border,
-# serif/sans bold caps.
 def _template_g(draw, canvas, photo, title, category, price):
-    draw.rectangle([(0, 0), (PIN_W, PIN_H)], fill=BLACK)
+    _render_direct_pin(draw, canvas, photo, title, category, price, layout="bottom_floating")
 
-    HEADER_H = int(PIN_H * 0.12)
-    CTA_H = int(PIN_H * 0.10)
-    FOOTER_H = int(PIN_H * 0.22)
-    PHOTO_H = PIN_H - HEADER_H - FOOTER_H - CTA_H
-    PAD = int(PIN_W * 0.06)
-
-    # Large Photo
-    photo_w = PIN_W - PAD * 2
-    photo_h = PHOTO_H
-    p = _boost(_fit_image(photo, photo_w, photo_h))
-    canvas.paste(p, (PAD, HEADER_H))
-
-    # Champagne gold/coral frame outline around photo
-    draw.rectangle([PAD - 2, HEADER_H - 2, PAD + photo_w + 2, HEADER_H + photo_h + 2], outline=CORAL, width=3)
-
-    # Header category uppercase spaced
-    cf = _get_font(int(HEADER_H * 0.32), bold=True)
-    spaced_cat = "  ".join(list(category.upper()))
-    cb = cf.getbbox(spaced_cat)
-    draw.text(((PIN_W - (cb[2]-cb[0])) // 2, int(HEADER_H * 0.35)), spaced_cat, fill=CORAL, font=cf)
-
-    # Footer
-    footer_y = HEADER_H + PHOTO_H
-    tf = _get_font(int(FOOTER_H * 0.20), bold=True, serif=True)
-    lines = _wrap_text(title.upper(), tf, PIN_W - PAD * 2)
-    for i, line in enumerate(lines[:2]):
-        draw.text((PAD, footer_y + int(FOOTER_H * 0.15) + i * int(FOOTER_H * 0.24)), line, fill=WHITE, font=tf)
-
-    # Gold-colored price tag
-    if price:
-        pf = _get_font(int(FOOTER_H * 0.22), bold=True)
-        ps = f"${price}"
-        pb = pf.getbbox(ps)
-        draw.text((PAD, footer_y + int(FOOTER_H * 0.65)), ps, fill=CORAL, font=pf)
-
-    # Black CTA with gold/coral text
-    _draw_cta_bar(canvas, draw, footer_y + FOOTER_H, CTA_H, BLACK, CORAL)
-
-
-# ── Template H ───────────────────────────────────────────────────────────────
-# Vamp Romantic Cinematic: moody vignettes, high-contrast serif typography.
 def _template_h(draw, canvas, photo, title, category, price):
-    CTA_H = int(PIN_H * 0.10)
-    PHOTO_H = PIN_H - CTA_H
+    _render_direct_pin(draw, canvas, photo, title, category, price, layout="bottom_floating")
 
-    # Full photo with 1.15x brightness reduction to look moody
-    p = ImageEnhance.Brightness(_fit_image(photo, PIN_W, PHOTO_H)).enhance(0.85)
-    p = ImageEnhance.Contrast(p).enhance(1.15)
-    canvas.paste(p, (0, 0))
-
-    # Deep vignette (dark corners and bottom)
-    overlay = Image.new("RGBA", (PIN_W, PHOTO_H), (0, 0, 0, 0))
-    od = ImageDraw.Draw(overlay)
-    # Bottom gradient (heavy dark)
-    bottom_h = int(PHOTO_H * 0.50)
-    for y in range(bottom_h):
-        alpha = int(230 * (y / bottom_h))
-        od.rectangle([(0, PHOTO_H - bottom_h + y), (PIN_W, PHOTO_H - bottom_h + y)], fill=(12, 5, 15, alpha))
-    # Top gradient (light dark)
-    top_h = int(PHOTO_H * 0.20)
-    for y in range(top_h):
-        alpha = int(120 * (1.0 - (y / top_h)))
-        od.rectangle([(0, y), (PIN_W, y)], fill=(12, 5, 15, alpha))
-
-    canvas.paste(Image.alpha_composite(p.convert("RGBA"), overlay).convert("RGB"), (0, 0))
-    draw = ImageDraw.Draw(canvas)
-
-    margin = int(PIN_W * 0.08)
-    
-    # Category (Spaced white serif uppercase)
-    cf = _get_font(int(PIN_H * 0.026), bold=True, serif=True)
-    draw.text((margin, int(PIN_H * 0.05)), category.upper(), fill=WHITE, font=cf)
-
-    # Title bottom left (Modern elegant serif)
-    tf = _get_font(int(PIN_H * 0.052), bold=True, serif=True)
-    lines = _wrap_text(title, tf, PIN_W - margin * 2)
-    start_y = PHOTO_H - int(PIN_H * 0.25)
-    for i, line in enumerate(lines[:2]):
-        draw.text((margin, start_y + i * int(PIN_H * 0.065)), line, fill=WHITE, font=tf)
-
-    # Price bottom left below title
-    if price:
-        pf = _get_font(int(PIN_H * 0.045), bold=True, serif=True)
-        draw.text((margin, PHOTO_H - int(PIN_H * 0.10)), f"${price}", fill=BLUSH, font=pf)
-
-    # Charcoal CTA bar
-    _draw_cta_bar(canvas, draw, PHOTO_H, CTA_H, (22, 12, 25), WHITE)
-
-
-# ── Template I ───────────────────────────────────────────────────────────────
-# Extra-Celestial Holographic: pastel/lavender gradient bg, floating photo,
-# futuristic minimalist style.
 def _template_i(draw, canvas, photo, title, category, price):
-    # Pastel/mint/lavender gradient background
-    gradient = Image.new("RGB", (PIN_W, PIN_H))
-    gd = ImageDraw.Draw(gradient)
-    for y in range(PIN_H):
-        t = y / PIN_H
-        # Mix from pale pink to soft lavender to mint green
-        r = int(245 * (1-t) + 230 * t)
-        g = int(230 * (1-t) + 242 * t)
-        b = int(245 * (1-t) + 238 * t)
-        gd.line([(0, y), (PIN_W, y)], fill=(r, g, b))
-    canvas.paste(gradient, (0, 0))
-    draw = ImageDraw.Draw(canvas)
+    _render_direct_pin(draw, canvas, photo, title, category, price, layout="bottom_floating")
 
-    HEADER_H = int(PIN_H * 0.12)
-    CTA_H = int(PIN_H * 0.10)
-    FOOTER_H = int(PIN_H * 0.20)
-    PHOTO_H = PIN_H - HEADER_H - FOOTER_H - CTA_H
-    PAD = int(PIN_W * 0.06)
+def _template_j(draw, canvas, photo, title, category, price=None, cta="Shop Now"):
+    _render_direct_pin(draw, canvas, photo, title, category, price, cta, layout="bottom_floating")
 
-    # Floating image with rounded corners and shadow
-    photo_w = PIN_W - PAD * 2
-    photo_h = PHOTO_H - PAD
-    p = _boost(_fit_image(photo, photo_w, photo_h))
-    
-    # Shadow rect
-    shadow = Image.new("RGBA", (photo_w, photo_h), (0, 0, 0, 45))
-    canvas.paste(shadow, (PAD + 8, HEADER_H + PAD // 2 + 8))
-    canvas.paste(p, (PAD, HEADER_H + PAD // 2))
-
-    # Category floating in top-left
-    cf = _get_font(int(HEADER_H * 0.30), bold=True)
-    draw.text((PAD + 12, HEADER_H - int(HEADER_H * 0.10)), category.upper(), fill=DARK_GREY, font=cf)
-
-    # Footer Title & Price
-    footer_y = HEADER_H + PHOTO_H
-    tf = _get_font(int(FOOTER_H * 0.20), bold=True)
-    lines = _wrap_text(title, tf, PIN_W - PAD * 3 - (140 if price else 0))
-    for i, line in enumerate(lines[:2]):
-        draw.text((PAD, footer_y + int(FOOTER_H * 0.10) + i * int(FOOTER_H * 0.28)), line, fill=BLACK, font=tf)
-
-    if price:
-        pf = _get_font(int(FOOTER_H * 0.24), bold=True)
-        ps = f"${price}"
-        pb = pf.getbbox(ps)
-        pw, ph = pb[2]-pb[0]+28, pb[3]-pb[1]+14
-        px = PIN_W - PAD - pw
-        py = footer_y + int(FOOTER_H * 0.10)
-        _draw_rounded_rect(draw, (px, py, px+pw, py+ph), 14, BLACK)
-        draw.text((px+14, py+7), ps, fill=WHITE, font=pf)
-
-    # Neon blue/mint CTA footer
-    _draw_cta_bar(canvas, draw, footer_y + FOOTER_H, CTA_H, NAVY, WHITE)
-
-
-# ── Template J ───────────────────────────────────────────────────────────────
-# Blog Article Editorial Template:
-# Soft warm cream, large serif "MeeeShop Blog", thin elegant border, excerpt.
-def _template_j(draw, canvas, photo, title, category, excerpt, cta):
-    # Full bleed photo for blog style transparent pin
-    p = _boost(_fit_image(photo, PIN_W, PIN_H))
-    canvas.paste(p, (0, 0))
-
-    # Semi-transparent overlay box for the blog text
-    overlay = Image.new("RGBA", (PIN_W, PIN_H), (0, 0, 0, 0))
-    od = ImageDraw.Draw(overlay)
-    
-    # Centered transparent box for blog style
-    box_w = int(PIN_W * 0.85)
-    box_h = int(PIN_H * 0.6)
-    box_x = (PIN_W - box_w) // 2
-    box_y = (PIN_H - box_h) // 2
-    
-    od.rounded_rectangle([box_x, box_y, box_x + box_w, box_y + box_h], radius=20, fill=(0, 0, 0, 150))
-    canvas.paste(Image.alpha_composite(canvas.convert("RGBA"), overlay).convert("RGB"), (0, 0))
-    draw = ImageDraw.Draw(canvas)
-    
-    # Blog Header
-    blog_header = category or "MeeeShop Blog"
-    cf = _get_font(int(box_h * 0.08), bold=True, serif=True)
-    cb = cf.getbbox(blog_header)
-    draw.text(((PIN_W - (cb[2]-cb[0])) // 2, box_y + int(box_h * 0.1)), blog_header, fill=WHITE, font=cf)
-    
-    # Elegant divider line
-    draw.line([(box_x + 40, box_y + int(box_h * 0.2)), (box_x + box_w - 40, box_y + int(box_h * 0.2))], fill=WHITE, width=1)
-    
-    # Title
-    tf = _get_font(int(box_h * 0.08), bold=True, serif=True)
-    lines = _wrap_text(title, tf, box_w - 80)
-    for i, line in enumerate(lines[:2]):
-        lb = tf.getbbox(line)
-        draw.text(((PIN_W - (lb[2]-lb[0])) // 2, box_y + int(box_h * 0.3) + i * int(box_h * 0.12)), line, fill=WHITE, font=tf)
-        
-    # Excerpt
-    ef = _get_font(int(box_h * 0.05), bold=False, serif=True)
-    clean_excerpt = excerpt or "Read our latest article for styling tips, outfits, and fashion trends..."
-    excerpt_lines = _wrap_text(clean_excerpt, ef, box_w - 80)
-    for i, line in enumerate(excerpt_lines[:2]):
-        lb = ef.getbbox(line)
-        draw.text(((PIN_W - (lb[2]-lb[0])) // 2, box_y + int(box_h * 0.58) + i * int(box_h * 0.08)), line, fill=(230, 230, 230), font=ef)
-        
-    # CTA
-    font = _get_font(int(box_h * 0.07), bold=True)
-    tb = font.getbbox(cta)
-    tw = tb[2] - tb[0]
-    draw.text(((PIN_W - tw) // 2, box_y + int(box_h * 0.85)), cta, fill=WHITE, font=font)
-
-
-# ── Template K ───────────────────────────────────────────────────────────────
-# 2-Image vertical split collage: Left side is photo, right side is photo2.
-# Soft aesthetic linen background, elegant serif title and price tag at the bottom.
 def _template_k(draw, canvas, photo, photo2, title, category, price):
-    bg_color = (248, 245, 240)
-    draw.rectangle([(0, 0), (PIN_W, PIN_H)], fill=bg_color)
+    _render_direct_pin(draw, canvas, photo, title, category, price, layout="bottom_floating")
 
-    HEADER_H = int(PIN_H * 0.12)
-    CTA_H = int(PIN_H * 0.10)
-    FOOTER_H = int(PIN_H * 0.20)
-    PHOTO_H = PIN_H - HEADER_H - FOOTER_H - CTA_H
-    PAD = int(PIN_W * 0.05)
-
-    # Category top centered (spaced, elegant sans-serif)
-    cf = _get_font(int(HEADER_H * 0.32), bold=True)
-    spaced_cat = "  ".join(list(category.upper()))
-    cb = cf.getbbox(spaced_cat)
-    draw.text(((PIN_W - (cb[2]-cb[0])) // 2, int(HEADER_H * 0.35)), spaced_cat, fill=DARK_GREY, font=cf)
-
-    # Calculate widths for 2 photos
-    photo_w = (PIN_W - PAD * 3) // 2
-    photo_h = PHOTO_H
-
-    # Left Photo
-    p1 = _boost(_fit_image(photo, photo_w, photo_h))
-    canvas.paste(p1, (PAD, HEADER_H))
-
-    # Right Photo (fallback to same photo if photo2 is none)
-    img2 = photo2 if photo2 else photo
-    p2 = _boost(_fit_image(img2, photo_w, photo_h))
-    canvas.paste(p2, (PAD * 2 + photo_w, HEADER_H))
-
-    # Draw thin borders around both
-    draw.rectangle([PAD, HEADER_H, PAD + photo_w, HEADER_H + photo_h], outline=(200, 195, 185), width=2)
-    draw.rectangle([PAD * 2 + photo_w, HEADER_H, PAD * 2 + photo_w * 2, HEADER_H + photo_h], outline=(200, 195, 185), width=2)
-
-    # Footer Title & Price
-    footer_y = HEADER_H + PHOTO_H
-    tf = _get_font(int(FOOTER_H * 0.20), bold=True, serif=True)
-    lines = _wrap_text(title, tf, PIN_W - PAD * 3 - (140 if price else 0))
-    for i, line in enumerate(lines[:2]):
-        draw.text((PAD, footer_y + int(FOOTER_H * 0.15) + i * int(FOOTER_H * 0.28)), line, fill=BLACK, font=tf)
-
-    if price:
-        pf = _get_font(int(FOOTER_H * 0.24), bold=True, serif=True)
-        ps = f"${price}"
-        pb = pf.getbbox(ps)
-        pw, ph = pb[2]-pb[0]+24, pb[3]-pb[1]+12
-        px = PIN_W - PAD - pw
-        py = footer_y + int(FOOTER_H * 0.15)
-        draw.rectangle([px, py, px+pw, py+ph], fill=(235, 230, 225), outline=(180, 175, 170), width=1)
-        draw.text((px+12, py+6), ps, fill=DARK_GREY, font=pf)
-
-    # Soft Rose CTA
-    _draw_cta_bar(canvas, draw, footer_y + FOOTER_H, CTA_H, (188, 108, 37), WHITE)
-
-
-# ── Template L ───────────────────────────────────────────────────────────────
-# 3-Image lifestyle grid: 1 large main image top, 2 smaller images bottom.
-# Dark chic background for high contrast.
 def _template_l(draw, canvas, photo, photo2, photo3, title, category, price):
-    bg_color = (25, 25, 28)
-    draw.rectangle([(0, 0), (PIN_W, PIN_H)], fill=bg_color)
+    _render_direct_pin(draw, canvas, photo, title, category, price, layout="bottom_floating")
 
-    HEADER_H = int(PIN_H * 0.10)
-    CTA_H = int(PIN_H * 0.10)
-    FOOTER_H = int(PIN_H * 0.20)
-    PHOTO_H = PIN_H - HEADER_H - FOOTER_H - CTA_H
-    PAD = int(PIN_W * 0.04)
-
-    # Category top left
-    cf = _get_font(int(HEADER_H * 0.35), bold=True)
-    draw.text((PAD, int(HEADER_H * 0.35)), category.upper(), fill=CORAL, font=cf)
-
-    # Main Image Top (PHOTO_H * 0.55)
-    top_h = int(PHOTO_H * 0.55)
-    p_top = _boost(_fit_image(photo, PIN_W - PAD * 2, top_h))
-    canvas.paste(p_top, (PAD, HEADER_H))
-
-    # Bottom 2 Images (PHOTO_H * 0.40)
-    bottom_h = PHOTO_H - top_h - PAD
-    sub_w = (PIN_W - PAD * 3) // 2
-
-    img2 = photo2 if photo2 else photo
-    img3 = photo3 if photo3 else (photo2 if photo2 else photo)
-
-    p_bottom_left = _boost(_fit_image(img2, sub_w, bottom_h))
-    p_bottom_right = _boost(_fit_image(img3, sub_w, bottom_h))
-
-    canvas.paste(p_bottom_left, (PAD, HEADER_H + top_h + PAD))
-    canvas.paste(p_bottom_right, (PAD * 2 + sub_w, HEADER_H + top_h + PAD))
-
-    # Footer Info
-    footer_y = HEADER_H + PHOTO_H
-    tf = _get_font(int(FOOTER_H * 0.18), bold=True)
-    lines = _wrap_text(title, tf, PIN_W - PAD * 3 - (140 if price else 0))
-    for i, line in enumerate(lines[:2]):
-        draw.text((PAD, footer_y + int(FOOTER_H * 0.15) + i * int(FOOTER_H * 0.28)), line, fill=WHITE, font=tf)
-
-    if price:
-        pf = _get_font(int(FOOTER_H * 0.24), bold=True)
-        draw.text((PIN_W - PAD - 120, footer_y + int(FOOTER_H * 0.15)), f"${price}", fill=CORAL, font=pf)
-
-    # Coral CTA Bar
-    _draw_cta_bar(canvas, draw, footer_y + FOOTER_H, CTA_H, CORAL, WHITE)
-
-
-# ── Template M ───────────────────────────────────────────────────────────────
-# Clean Polaroid style with negative space and linen background.
-# Minimalist, elegant serif text caption underneath.
 def _template_m(draw, canvas, photo, title, category, price):
-    bg_color = (245, 242, 237)
-    draw.rectangle([(0, 0), (PIN_W, PIN_H)], fill=bg_color)
+    _render_direct_pin(draw, canvas, photo, title, category, price, layout="bottom_floating")
 
-    HEADER_H = int(PIN_H * 0.08)
-    CTA_H = int(PIN_H * 0.10)
-    FOOTER_H = int(PIN_H * 0.26)
-    PHOTO_H = PIN_H - HEADER_H - FOOTER_H - CTA_H
-    PAD = int(PIN_W * 0.10)
+def _template_n(draw, canvas, photo, title, category, price, cta="Shop Now"):
+    _render_direct_pin(draw, canvas, photo, title, category, price, cta, layout="bottom_floating")
 
-    # Category small and light
-    cf = _get_font(int(HEADER_H * 0.35), bold=False, serif=True)
-    cb = cf.getbbox(category)
-    draw.text(((PIN_W - (cb[2]-cb[0])) // 2, int(HEADER_H * 0.30)), category.upper(), fill=MID_GREY, font=cf)
+def _template_o(draw, canvas, photo, photo2, photo3, photo4, title, category, price, trust_badge=None):
+    _render_direct_pin(draw, canvas, photo, title, category, price, layout="bottom_floating", trust_badge=trust_badge)
 
-    # Polaroid style photo frame
-    photo_w = PIN_W - PAD * 2
-    photo_h = PHOTO_H
-    p = _boost(_fit_image(photo, photo_w, photo_h))
+def _template_p(draw, canvas, photo, title, category, price, cta="Shop Now"):
+    _render_direct_pin(draw, canvas, photo, title, category, price, cta, layout="bottom_floating")
+
+def _template_q(draw, canvas, photo, title, category, price, cta="READ THE FULL GUIDE ->"):
+    _render_editorial_blog_pin(draw, canvas, photo, title, category, cta)
+
+def _template_infographic(draw, canvas, photo, photo2, title, category, price, cta="SHOP THE LOOK → US.MEEESHOP.COM", trust_badge=None, highlights=None):
+    _render_feature_breakdown_pin(draw, canvas, photo, photo2, title, category, price, cta, trust_badge=trust_badge, highlights=highlights)
+
+
+
+
+
+def _prepare_photo_for_style(
+    photo: Image.Image,
+    photo2: Optional[Image.Image],
+    photo3: Optional[Image.Image],
+    target_w: int,
+    target_h: int,
+    style: str,
+) -> Image.Image:
+    """
+    Prepare product photo into target_w x target_h based on image_style ('hero', 'collage', 'card').
+    Renders all 3 image styles dynamically for ANY template!
+    """
+    if style == "collage":
+        composite = Image.new("RGB", (target_w, target_h), (255, 255, 255))
+        gap = 4
+        left_w = int(target_w * 0.58)
+        right_w = target_w - left_w - gap
+        right_h = (target_h - gap) // 2
+
+        p_hero = _fit_image(photo, left_w, target_h)
+        composite.paste(p_hero, (0, 0))
+
+        if photo2 is not None:
+            sub1 = photo2
+        else:
+            pw, ph = photo.size
+            cw, ch = int(pw * 0.65), int(ph * 0.45)
+            cx, cy = (pw - cw) // 2, int(ph * 0.08)
+            sub1 = photo.crop((cx, cy, cx + cw, cy + ch))
+
+        p_focus1 = _fit_image(sub1, right_w, right_h)
+        composite.paste(p_focus1, (left_w + gap, 0))
+
+        if photo3 is not None:
+            sub2 = photo3
+        elif photo2 is not None:
+            sub2 = photo2
+        else:
+            pw, ph = photo.size
+            cw, ch = int(pw * 0.65), int(ph * 0.45)
+            cx, cy = (pw - cw) // 2, int(ph * 0.48)
+            sub2 = photo.crop((cx, cy, cx + cw, cy + ch))
+
+        p_focus2 = _fit_image(sub2, right_w, target_h - right_h - gap)
+        composite.paste(p_focus2, (left_w + gap, right_h + gap))
+
+        return _boost(composite)
+
+    elif style == "card":
+        return _boost(_fit_image(photo, target_w, target_h))
+
+    else:
+        return _boost(_fit_image(photo, target_w, target_h))
+
+
+def _draw_trust_badge_pill(draw: ImageDraw.Draw, canvas: Image.Image, badge_text: str, y_top: int = 50, x_right: int = 50, bg_color=None, fg_color=WARM_WHITE):
+    """
+    Draw floating plain white/cream text directly on product image with ZERO background colors, cards, or pills.
+    """
+    bf = _get_font(36, bold=True)
+    full_text = f"★  {badge_text}"
+    bb = bf.getbbox(full_text)
+    tw, th = bb[2] - bb[0], bb[3] - bb[1]
+    px = PIN_W - x_right - tw
+    py = y_top
+
+    # 3px 16-direction ultra-bold contour outline for high contrast
+    offsets = [
+        (-3,0), (3,0), (0,-3), (0,3),
+        (-3,-3), (3,3), (-3,3), (3,-3),
+        (-2,-2), (2,2), (-2,2), (2,-2),
+        (-2,0), (2,0), (0,-2), (0,2),
+        (-1,-1), (1,1), (-1,1), (1,-1)
+    ]
+    for dx, dy in offsets:
+        draw.text((px + dx, py + dy), full_text, fill=(15, 15, 15), font=bf)
     
-    # White background card
-    draw.rectangle([PAD - 12, HEADER_H - 12, PAD + photo_w + 12, HEADER_H + photo_h + 30], fill=WHITE)
-    # Paste photo
-    canvas.paste(p, (PAD, HEADER_H))
-    # Soft outline around the photo
-    draw.rectangle([PAD, HEADER_H, PAD + photo_w, HEADER_H + photo_h], outline=(230, 225, 220), width=1)
-    
-    # Title & Price in Polaroid footer area
-    footer_y = HEADER_H + PHOTO_H + 40
-    tf = _get_font(int(FOOTER_H * 0.15), bold=False, serif=True)
-    lines = _wrap_text(title, tf, PIN_W - PAD * 3 - (140 if price else 0))
-    for i, line in enumerate(lines[:2]):
-        lb = tf.getbbox(line)
-        lx = (PIN_W - (lb[2]-lb[0])) // 2
-        draw.text((lx, footer_y + i * int(FOOTER_H * 0.20)), line, fill=DARK_GREY, font=tf)
-
-    if price:
-        pf = _get_font(int(FOOTER_H * 0.18), bold=True, serif=True)
-        ps = f"${price}"
-        pb = pf.getbbox(ps)
-        px = (PIN_W - (pb[2]-pb[0])) // 2
-        py = footer_y + len(lines[:2]) * int(FOOTER_H * 0.20) + 10
-        draw.text((px, py), ps, fill=RED, font=pf)
-
-    # Minimalist dark olive/sage CTA footer
-    _draw_cta_bar(canvas, draw, PIN_H - CTA_H, CTA_H, (60, 75, 65), WHITE)
-
-
-# ── Template N ───────────────────────────────────────────────────────────────
-# Direct image with transparent overlay text in the center
-def _template_n(draw, canvas, photo, title, category, price, cta):
-    # Full bleed photo
-    p = _boost(_fit_image(photo, PIN_W, PIN_H))
-    canvas.paste(p, (0, 0))
-
-    # Transparent center overlay for text
-    overlay = Image.new("RGBA", (PIN_W, PIN_H), (0, 0, 0, 0))
-    od = ImageDraw.Draw(overlay)
-    
-    # Box dimensions
-    box_w = int(PIN_W * 0.85)
-    box_h = int(PIN_H * 0.35)
-    box_x = (PIN_W - box_w) // 2
-    box_y = (PIN_H - box_h) // 2
-
-    # Draw semi-transparent black rectangle (reduced opacity for more visibility of background)
-    od.rounded_rectangle([box_x, box_y, box_x + box_w, box_y + box_h], radius=20, fill=(0, 0, 0, 110))
-    canvas.paste(Image.alpha_composite(canvas.convert("RGBA"), overlay).convert("RGB"), (0, 0))
-    draw = ImageDraw.Draw(canvas)
-
-    # Text inside
-    margin = int(box_w * 0.05)
-    cf = _get_font(int(box_h * 0.09), bold=True)
-    cb = cf.getbbox(category.upper())
-    draw.text(((PIN_W - (cb[2]-cb[0])) // 2, box_y + int(box_h * 0.12)), category.upper(), fill=WHITE, font=cf)
-
-    tf = _get_font(int(box_h * 0.15), bold=True)
-    lines = _wrap_text(title, tf, box_w - 2*margin)
-    for i, line in enumerate(lines[:2]):
-        lb = tf.getbbox(line)
-        draw.text(((PIN_W - (lb[2]-lb[0])) // 2, box_y + int(box_h * 0.35) + i * int(box_h * 0.20)), line, fill=WHITE, font=tf)
-
-    if cta:
-        ctf = _get_font(int(box_h * 0.10), bold=True)
-        ctb = ctf.getbbox(cta)
-        draw.text(((PIN_W - (ctb[2]-ctb[0])) // 2, box_y + int(box_h * 0.65)), cta, fill=WHITE, font=ctf)
-
-    if price:
-        pf = _get_font(int(box_h * 0.14), bold=True)
-        ps = f"${price}"
-        pb = pf.getbbox(ps)
-        draw.text(((PIN_W - (pb[2]-pb[0])) // 2, box_y + int(box_h * 0.8)), ps, fill=CORAL, font=pf)
+    # Pure warm cream font directly on photo
+    draw.text((px, py), full_text, fill=WARM_WHITE, font=bf)
 
 
 # ── Main entry ───────────────────────────────────────────────────────────────
@@ -892,29 +822,30 @@ def create_pin_image(
     template_index: Optional[int] = None,
     additional_image_paths: Optional[List[str]] = None,
     board_name: str = "",
+    image_style: str = "hero",
 ) -> Optional[str]:
     """
-    Create a Pinterest pin using one of 12 rotating Kohl's-style/aesthetic templates
-    or template 9 for Blog Editorial posts. Matches aesthetic templates to boards.
+    Create a Pinterest pin using dynamic template matching and image_style framing
+    ('hero', 'collage', 'card').
     """
     try:
-        ecommerce_templates = [0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12]
+        ecommerce_templates = [0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14]
         
         # Smart template matching based on board name
         b_lower = board_name.lower()
         if template_index is None:
             if "poetcore" in b_lower:
-                template_index = 5  # Poetcore Storybook Editorial
+                template_index = 5
             elif "vamp" in b_lower or "romantic" in b_lower:
-                template_index = 7  # Vamp Romantic Cinematic
+                template_index = 7
             elif "gummy" in b_lower or "nostalgia" in b_lower:
-                template_index = 8  # Holographic
+                template_index = 8
             elif "athlete" in b_lower or "off-duty" in b_lower:
-                template_index = 10 # Split collage
+                template_index = 10
             elif "blog" in b_lower:
                 template_index = 9
             else:
-                template_index = 13 # Template N: Center transparent overlay
+                template_index = 14 # Default to Template O (Quad Quad Collage)
 
         canvas = Image.new("RGB", (PIN_W, PIN_H), WARM_WHITE)
         draw = ImageDraw.Draw(canvas)
@@ -927,6 +858,7 @@ def create_pin_image(
 
         photo2 = None
         photo3 = None
+        photo4 = None
         if additional_image_paths:
             if len(additional_image_paths) > 0 and Path(additional_image_paths[0]).exists():
                 try:
@@ -938,8 +870,29 @@ def create_pin_image(
                     photo3 = Image.open(additional_image_paths[1]).convert("RGB")
                 except Exception as ex:
                     logger.warning(f"Failed to load photo3: {ex}")
+            if len(additional_image_paths) > 2 and Path(additional_image_paths[2]).exists():
+                try:
+                    photo4 = Image.open(additional_image_paths[2]).convert("RGB")
+                except Exception as ex:
+                    logger.warning(f"Failed to load photo4: {ex}")
 
-        logger.info(f"Using pin template {template_index} for: {title[:40]}")
+        if photo2 is None and photo is not None:
+            try:
+                pw, ph = photo.size
+                cw, ch = int(pw * 0.70), int(ph * 0.70)
+                cx, cy = (pw - cw) // 2, int(ph * 0.12)
+                photo2 = photo.crop((cx, cy, cx + cw, cy + ch))
+            except Exception as ex:
+                logger.warning(f"Failed to auto-crop photo2: {ex}")
+
+        if image_style in ("collage", "card"):
+            photo = _prepare_photo_for_style(photo, photo2, photo3, PIN_W, PIN_H, image_style)
+
+        logger.info(f"Using pin template {template_index} (Style: {image_style}) for: {title[:40]}")
+
+        trust_badges = ["FREE US SHIPPING", "USA BESTSELLER", "TRENDING IN US", "VIRAL STYLE"]
+        trust_badge = trust_badges[int(hashlib.md5(title.encode()).hexdigest(), 16) % len(trust_badges)]
+
 
         if template_index == 0:
             _template_a(draw, canvas, photo, title, category, price)
@@ -970,8 +923,16 @@ def create_pin_image(
             _template_m(draw, canvas, photo, title, category, price)
         elif template_index == 13:
             _template_n(draw, canvas, photo, title, category, price, cta)
+        elif template_index == 14:
+            _template_o(draw, canvas, photo, photo2, photo3, photo4, title, category, price, trust_badge=trust_badge)
+        elif template_index == 15:
+            _template_p(draw, canvas, photo, title, category, price, cta)
+        elif template_index == 16:
+            _template_q(draw, canvas, photo, title, category, price, cta)
+        elif template_index == 17:
+            _template_infographic(draw, canvas, photo, photo2, title, category, price, cta, trust_badge=trust_badge)
         else:
-            _template_n(draw, canvas, photo, title, category, price, cta)
+            _template_infographic(draw, canvas, photo, photo2, title, category, price, cta, trust_badge=trust_badge)
 
         if not output_path:
             output_path = tempfile.mktemp(suffix=".jpg", prefix="pin_final_")
@@ -985,7 +946,60 @@ def create_pin_image(
         return None
 
 
-# ── Public aliases ────────────────────────────────────────────────────────────
+# High-converting templates for Pinterest: 17 (Infographic Anatomy of a Fit), 14 (Quad Collage), 11 (Tri-Photo), 15 (Editorial Hero), 16 (Lookbook Hero)
+LIFESTYLE_TEMPLATES = [17, 14, 11, 17, 15, 16, 17]
+ALL_TEMPLATES = [17, 14, 11, 10, 15, 16, 17, 0, 1, 2, 3, 4, 5, 6, 7, 8, 12, 13]
+ALL_STYLES = ["collage", "carousel", "collage", "hero"]
+
+
+def get_next_style_and_template(
+    last_style: Optional[str] = None,
+    last_template: Optional[int] = None,
+    board_name: str = "",
+    title: str = "",
+) -> Tuple[str, int]:
+    """
+    Pinterest 2026 Algorithmic Priority:
+    1. Heavily biases toward 'collage' (multi-image styling lookbooks) and 'carousel'.
+    2. Strict 2:3 vertical aspect ratio (1000x1500 px).
+    3. Multi-image templates (14, 11, 10, 15) for maximum engagement & saves.
+    """
+    b_lower = (board_name or "").lower()
+    forced_style = os.getenv("FORCE_IMAGE_STYLE", "auto").strip().lower()
+
+    if "blog" in b_lower:
+        return ("card", 9)
+
+    # 1. Select style (favors multi-image collage & carousel)
+    if forced_style and forced_style in ALL_STYLES:
+        next_style = forced_style
+    elif last_style and last_style in ALL_STYLES:
+        last_idx = ALL_STYLES.index(last_style)
+        next_style = ALL_STYLES[(last_idx + 1) % len(ALL_STYLES)]
+    else:
+        next_style = "collage"
+
+    # 2. Select next template prioritizing lifestyle collages
+    if next_style in ("collage", "carousel"):
+        pool = LIFESTYLE_TEMPLATES
+    else:
+        pool = ALL_TEMPLATES
+
+    if last_template is not None and len(pool) > 1:
+        available_templates = [t for t in pool if t != last_template]
+    else:
+        available_templates = pool
+
+    if not available_templates:
+        available_templates = pool
+
+    title_hash = int(hashlib.md5(title.encode()).hexdigest(), 16)
+    selected_template = available_templates[title_hash % len(available_templates)]
+
+    return (next_style, selected_template)
+
+
+
 
 def add_text_overlay(
     image_path: str,
@@ -996,8 +1010,11 @@ def add_text_overlay(
     template_index: Optional[int] = None,
     additional_image_paths: Optional[List[str]] = None,
     board_name: str = "",
+    last_style: Optional[str] = None,
+    last_template: Optional[int] = None,
+    image_style: Optional[str] = None,
 ) -> Optional[str]:
-    """Called by pinterest_daily.py — derives category label then delegates."""
+    """Called by pinterest_daily_v2.py — derives category label and handles dynamic style/template rotation."""
     import re
     tl = title.lower()
 
@@ -1032,8 +1049,17 @@ def add_text_overlay(
     else:
         category = "New Arrival"
 
-    # ALWAYS enforce standard profile overlay (transparent centered)
-    template_index = 13
+    style = image_style
+    # Dynamic template & style rotation if template_index is not explicitly specified
+    if template_index is None or style is None:
+        next_style, template_index = get_next_style_and_template(
+            last_style=last_style,
+            last_template=last_template,
+            board_name=board_name,
+            title=title,
+        )
+        if style is None:
+            style = next_style
 
     return create_pin_image(
         product_image_path=image_path,
@@ -1045,7 +1071,123 @@ def add_text_overlay(
         template_index=template_index,
         additional_image_paths=additional_image_paths,
         board_name=board_name,
+        image_style=style or "hero",
     )
+
+
+def generate_carousel_card_set(
+    product_image_path: str,
+    title: str,
+    category: str = "New Arrival",
+    price: Optional[str] = None,
+    cta: str = "Shop Now at us.MeeeShop.com",
+    output_dir: str = "/tmp",
+    template_index: int = 0,
+    additional_image_paths: Optional[List[str]] = None,
+    board_name: str = "",
+) -> List[str]:
+    """
+    Generate 3 to 4 distinct styled image card files for a Carousel Pin.
+    Ensures 100% of products have 3-4 cards even if Shopify only provided 1 photo!
+    """
+    cards = []
+
+    # Card 1: Main Hero Front View with price badge
+    c1_path = str(Path(output_dir) / f"carousel_c1_{int(time.time()*1000)}.jpg")
+    img1 = create_pin_image(
+        product_image_path=product_image_path,
+        title=title,
+        category=category,
+        price=price,
+        cta=cta,
+        output_path=c1_path,
+        template_index=template_index,
+        board_name=board_name,
+        image_style="hero",
+    )
+    if img1:
+        cards.append(img1)
+
+    photo_main = Image.open(product_image_path).convert("RGB")
+    pw, ph = photo_main.size
+
+    # Card 2: Extra photo 1 or Upper Bodice / Neckline Focus Shot
+    c2_path = str(Path(output_dir) / f"carousel_c2_{int(time.time()*1000)}.jpg")
+    if additional_image_paths and len(additional_image_paths) > 0 and Path(additional_image_paths[0]).exists():
+        sub2_path = additional_image_paths[0]
+    else:
+        cw, ch = int(pw * 0.70), int(ph * 0.50)
+        cx, cy = (pw - cw) // 2, int(ph * 0.08)
+        sub2_img = photo_main.crop((cx, cy, cx + cw, cy + ch))
+        sub2_path = str(Path(output_dir) / f"carousel_sub2_{int(time.time()*1000)}.jpg")
+        sub2_img.save(sub2_path)
+
+    img2 = create_pin_image(
+        product_image_path=sub2_path,
+        title=f"{title} — Details & Fit",
+        category=category,
+        price=price,
+        cta=cta,
+        output_path=c2_path,
+        template_index=(template_index + 1) % 13,
+        board_name=board_name,
+        image_style="card",
+    )
+    if img2:
+        cards.append(img2)
+
+    # Card 3: Extra photo 2 or Lower Hemline / Pattern Focus Shot
+    c3_path = str(Path(output_dir) / f"carousel_c3_{int(time.time()*1000)}.jpg")
+    if additional_image_paths and len(additional_image_paths) > 1 and Path(additional_image_paths[1]).exists():
+        sub3_path = additional_image_paths[1]
+    else:
+        cw, ch = int(pw * 0.70), int(ph * 0.50)
+        cx, cy = (pw - cw) // 2, int(ph * 0.45)
+        sub3_img = photo_main.crop((cx, cy, cx + cw, cy + ch))
+        sub3_path = str(Path(output_dir) / f"carousel_sub3_{int(time.time()*1000)}.jpg")
+        sub3_img.save(sub3_path)
+
+    img3 = create_pin_image(
+        product_image_path=sub3_path,
+        title=f"{title} — Fabric & Quality",
+        category=category,
+        price=price,
+        cta=cta,
+        output_path=c3_path,
+        template_index=(template_index + 2) % 13,
+        board_name=board_name,
+        image_style="hero",
+    )
+    if img3:
+        cards.append(img3)
+
+    # Card 4: Extra photo 3 or Polaroid Style Outfit Card
+    c4_path = str(Path(output_dir) / f"carousel_c4_{int(time.time()*1000)}.jpg")
+    if additional_image_paths and len(additional_image_paths) > 2 and Path(additional_image_paths[2]).exists():
+        sub4_path = additional_image_paths[2]
+    else:
+        sub4_path = product_image_path
+
+    img4 = create_pin_image(
+        product_image_path=sub4_path,
+        title=f"{title} — Shop MeeeShop USA",
+        category=category,
+        price=price,
+        cta="Shop Now at us.MeeeShop.com",
+        output_path=c4_path,
+        template_index=12,
+        board_name=board_name,
+        image_style="hero",
+    )
+    if img4:
+        cards.append(img4)
+
+    return cards
+
+
+
+
+
 
 
 def optimize_image_for_pinterest(image_path: str, output_path: Optional[str] = None) -> Optional[str]:

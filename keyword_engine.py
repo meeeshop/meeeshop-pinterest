@@ -83,11 +83,81 @@ OCCASION_KEYWORDS = {
 }
 
 DEMOGRAPHIC_TAGS = [
-    "#WomensFashionUSA", "#USABoutique", "#ShopSmallUSA", "#AmericanWomensStyle",
-    "#ChicStyleUSA", "#EverydayWomensStyle", "#TrendyBoutiqueFinds", "#AffordableFashionUSA"
+    "#WomensFashionUSA",
+    "#USABoutique",
+    "#ShopSmallUSA",
+    "#AmericanWomensStyle",
+    "#ChicStyleUSA",
+    "#EverydayWomensStyle",
+    "#TrendyBoutiqueFinds",
+    "#AffordableFashionUSA",
+    "#OOTDInspo",
+    "#BoutiqueShopping",
 ]
 
-PRICE_ANCHORS = ["Affordable US Boutique", "Free US Shipping", "Trendy Style Under $50", "Chic Fashion USA"]
+AESTHETIC_TAGS = {
+    "poetcore": ["#Poetcore", "#PoetcoreAesthetic", "#VintageRomance", "#SoftGirlStyle"],
+    "vamp": ["#VampRomantic", "#MoodyFashion", "#EdgyChic", "#DarkAcademiaStyle"],
+    "coastal": ["#CoastalChic", "#CoastalGrandma", "#ResortStyle", "#EffortlessStyle"],
+    "athlete": ["#OffDutyAthlete", "#AthleisureInspo", "#CleanGirlAesthetic", "#StreetwearWomen"],
+    "cozy": ["#CozyFallStyle", "#SweaterWeather", "#LayeredOutfit", "#FallOutfits2026"],
+    "default": ["#WomensFashion", "#OOTDFashion", "#StyleInspo", "#BoutiqueStyle"],
+}
+
+PRICE_ANCHORS = [
+    "Affordable US Boutique",
+    "Free US Shipping",
+    "Trendy Style Under $50",
+    "Chic Fashion USA",
+]
+
+
+def build_pin_hashtag_string(
+    product_type: str = "", title: str = "", max_tags: int = 5
+) -> str:
+    """
+    Build a clean, high-performing hashtag string targeting USA women shoppers.
+
+    Args:
+        product_type: Product category (e.g. Dress, Top, Jeans)
+        title: Product or article title
+        max_tags: Number of hashtags to return (default 5)
+
+    Returns:
+        Space-separated hashtag string
+    """
+    month = datetime.now().month
+    seasonal = SEASONAL_KEYWORDS.get(month, SEASONAL_KEYWORDS[8])
+
+    selected = []
+
+    # 1. Seasonal tag (1-2)
+    for s_tag in seasonal.get("hashtags", []):
+        if s_tag not in selected:
+            selected.append(s_tag)
+
+    # 2. Demographic USA tags (1-2)
+    import random
+
+    usa_tags = [t for t in DEMOGRAPHIC_TAGS if t not in selected]
+    random.shuffle(usa_tags)
+    selected.extend(usa_tags[:2])
+
+    # 3. Aesthetic tags if matching title/type
+    text_lower = f"{title} {product_type}".lower()
+    for key, tags in AESTHETIC_TAGS.items():
+        if key in text_lower:
+            for tag in tags:
+                if tag not in selected and len(selected) < max_tags:
+                    selected.append(tag)
+
+    # 4. Fallback default aesthetic tags if needed
+    if len(selected) < max_tags:
+        for tag in AESTHETIC_TAGS["default"]:
+            if tag not in selected and len(selected) < max_tags:
+                selected.append(tag)
+
+    return " ".join(selected[:max_tags])
 
 
 def get_seo_content(product_type: str = "", tags: List[str] = None) -> Dict[str, Any]:
@@ -95,8 +165,8 @@ def get_seo_content(product_type: str = "", tags: List[str] = None) -> Dict[str,
     Get comprehensive Pinterest SEO term package based on current month, product category, and tags.
     """
     month = datetime.now().month
-    seasonal = SEASONAL_KEYWORDS.get(month, SEASONAL_KEYWORDS[7])
-    
+    seasonal = SEASONAL_KEYWORDS.get(month, SEASONAL_KEYWORDS[8])
+
     # Determine category occasion terms
     cat = "default"
     if product_type:
@@ -105,14 +175,16 @@ def get_seo_content(product_type: str = "", tags: List[str] = None) -> Dict[str,
             if k in p_lower:
                 cat = k
                 break
-                
+
     occasions = OCCASION_KEYWORDS.get(cat, OCCASION_KEYWORDS["default"])
-    
+
     return {
         "event_name": seasonal["event"],
         "seasonal_keywords": seasonal["keywords"],
         "seasonal_hashtags": seasonal["hashtags"],
         "occasion_keywords": occasions,
         "demographic_tags": DEMOGRAPHIC_TAGS,
-        "price_anchors": PRICE_ANCHORS
+        "price_anchors": PRICE_ANCHORS,
+        "hashtag_string": build_pin_hashtag_string(product_type, "", max_tags=5),
     }
+

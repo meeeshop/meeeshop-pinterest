@@ -5,8 +5,11 @@ pinterest_analytics_loop.py — Evergreen Traffic & OOS Hijack Loop
 1. Uses py3-pinterest API to fetch your boards and recent pins natively.
 2. Evaluates each pin's API engagement stats (Saves) and extracts the Shopify URL.
 3. If highly engaged -> Checks Shopify inventory for that product handle.
-4. IF IN STOCK: Re-pins to a new overlapping relevant board.
+4. IF IN STOCK: Re-pins to a new overlapping relevant board with fresh image style.
 5. IF OUT OF STOCK: Creates a 301 redirect in Shopify & piggybacks the replacement pin.
+
+NOTE: Selenium analytics fallback has been REMOVED (account safety — Pinterest
+detects and flags headless Chrome automation). py3pin native API is used exclusively.
 """
 
 import os
@@ -17,16 +20,11 @@ import random
 import re
 import argparse
 from pathlib import Path
-import traceback # Added for detailed error logging
+import traceback
 import requests
 import tempfile
 from datetime import datetime, timedelta
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException, NoSuchElementException, WebDriverException
+# Selenium removed — Pinterest flags headless Chrome automation
 
 # ── Local Imports ─────────────────────────────────────────────────────────────
 ROOT = Path(__file__).resolve().parent
@@ -36,6 +34,7 @@ from pinterest_client import PinterestClient
 from shopify_products import get_pinterest_board_mapping, ShopifyClient
 import content_generator
 import image_overlay
+from daily_pin_tracker import DailyPinTracker
 
 # ── Secrets Management ────────────────────────────────────────────────────────
 # Utilizing existing double-encryption secrets manager
@@ -186,55 +185,11 @@ def download_image_to_temp(url):
         print(f"   [WARN] Failed to download image: {e}")
         return None
 
-# ── Fallback Selenium Analytics Fetcher ───────────────────────────────────────
-def get_top_performing_pins_analytics(client):
-    """Fallback: Use Selenium to scrape Analytics dashboard for pins getting traffic right now."""
-    print("   [Fallback] Using Selenium to scrape Analytics URL for viral pins...")
-    
-    chrome_options = Options()
-    chrome_options.add_argument("--headless=new")
-    chrome_options.add_argument("--disable-blink-features=AutomationControlled")
-    chrome_options.add_argument("--window-size=1920,1080")
-    
-    driver = webdriver.Chrome(options=chrome_options)
-    
-    try:
-        driver.get("https://www.pinterest.com/login/")
-        time.sleep(2)
-        
-        session = client._get_raw_session()
-        for cookie in session.cookies:
-            driver.add_cookie({
-                "name": cookie.name,
-                "value": cookie.value,
-                "domain": ".pinterest.com"
-            })
-            
-        analytics_url = "https://analytics.pinterest.com/overview/?content_type=organic&aggregation=last30d&age=all&board_metric=IMPRESSION&board_id=&claimed_account_type=all&device_type=all&gender=female&country=US&include_curated=created&include_realtime=true&pin_format=all&pin_metric=ENGAGEMENT&primary_metric=IMPRESSION&recent_pins=false&selected_split=NO_SPLIT&source_type=all"
-        
-        print("   [Selenium] Navigating to Analytics dashboard...")
-        driver.get(analytics_url)
-        time.sleep(15) # Wait for heavy JS dashboard to load
-        
-        # Scroll to lazy load the table
-        driver.execute_script("window.scrollBy(0, 1500);")
-        time.sleep(5)
-        
-        pin_links = []
-        elements = driver.find_elements(By.XPATH, "//a[contains(@href, '/pin/')]")
-        for el in elements:
-            href = el.get_attribute("href")
-            if href and "/pin/" in href and href not in pin_links:
-                pin_links.append(href)
-                
-        print(f"   [Selenium] Found {len(pin_links)} top pins from Analytics table.")
-        return pin_links[:20]
-        
-    except Exception as e:
-        print(f"   [WARN] Analytics fallback failed: {e}")
-        return []
-    finally:
-        driver.quit()
+# ── Analytics Fallback — Selenium REMOVED for account safety ─────────────────
+# Pinterest detects and flags headless Chrome automation sessions.
+# The py3pin native board_feed API (get_top_performing_pins) is the only safe
+# method to identify top-performing pins without risking a ban.
+# If no qualifying pins are found via the API, we simply exit gracefully.
 
 def get_pin_details_api(client, pin_url):
     """Fetch pin details securely using the authenticated session."""
@@ -410,6 +365,15 @@ def get_new_board(original_board, product_data):
 # ── Main Loop Logic ───────────────────────────────────────────────────────────
 def main():
     args = parse_args()
+
+    # ── Daily pin cap guard ───────────────────────────────────────────────────
+    dry_run = os.getenv("DRY_RUN", "false").lower() == "true"
+    tracker = DailyPinTracker()
+    pins_to_post = 3 if args.strategy == "biweekly" else 1
+    if not dry_run and not tracker.can_post(n=pins_to_post):
+        print(f"[DailyPinTracker] Daily cap reached ({tracker.total}/{tracker.cap}). Skipping analytics loop.")
+        return
+    print(f"[DailyPinTracker] {tracker.summary()}")
     print("=========================================================")
     print(" 🚀 Starting Pinterest Analytics & Evergreen Loop (API Mode)")
     if args.batch_size > 0:
@@ -422,74 +386,11 @@ def main():
         print("[ERROR] Pinterest login failed.")
         return
         
-    # 1. Try to fetch from API boards (limits to recent 60 days)
+    # Fetch top-performing pins via py3pin native API (safe — no Selenium)
     top_pins = get_top_performing_pins(client, limit=args.limit, days=args.days)
-    
-    # 2. Fallback to scraping the Analytics URL for actual historical viral pins (biweekly strategy only)
+
     if not top_pins:
-        if args.strategy == "biweekly":
-            print("[INFO] No eligible recent pins found via API. Switching to Analytics Dashboard fallback.")
-            analytics_urls = get_top_performing_pins_analytics(client)
-            
-            seen_handles = set()
-            deduped = []
-            for url in analytics_urls:
-                if args.limit and args.limit > 0 and len(deduped) >= args.limit:
-                    break
-                    
-                data = get_pin_details_api(client, url)
-                if not data:
-                    continue
-                    
-                saves = int(data.get('repin_count') or data.get('save_count') or 0)
-                if saves == 0:
-                    saves = int((data.get('aggregated_pin_data') or {}).get('saves') or 0)
-                if saves == 0:
-                    saves = int((data.get('pin_metrics') or {}).get('saves') or 0)
-                    
-                pin_metrics = data.get('pin_metrics') or {}
-                aggregated = data.get('aggregated_pin_data') or {}
-                
-                impressions = int(pin_metrics.get('impressions') or aggregated.get('impressions') or 0)
-                engagements = int(pin_metrics.get('engagements') or aggregated.get('engagements') or 0)
-                outbound_clicks = int(pin_metrics.get('outbound_clicks') or aggregated.get('outbound_clicks') or 0)
-                pin_clicks = int(pin_metrics.get('pin_clicks') or aggregated.get('pin_clicks') or 0)
-                    
-                link = data.get('link') or data.get('url') or ''
-                handle = extract_shopify_handle(link)
-                if not handle:
-                    handle = extract_shopify_handle(data.get('description', ''))
-                    
-                if handle and handle not in seen_handles:
-                    seen_handles.add(handle)
-                    
-                    image_url = data.get('image_large_url') or data.get('images', {}).get('orig', {}).get('url')
-                    if not image_url and 'images' in data:
-                        for size in ['1200x', '736x', '400x300']:
-                            if size in data['images']:
-                                image_url = data['images'][size].get('url')
-                                break
-                                
-                    deduped.append({
-                        'pin_id': data.get('id', url.split('/pin/')[-1].strip('/')),
-                        'pin_url': url,
-                        'saves': saves,
-                        'impressions': impressions,
-                        'engagements': engagements,
-                        'outbound_clicks': outbound_clicks,
-                        'pin_clicks': pin_clicks,
-                        'handle': handle,
-                        'image_url': image_url
-                    })
-                    
-            deduped.sort(key=lambda x: x['saves'], reverse=True)
-            top_pins = deduped
-        else:
-            print("[INFO] No eligible recent pins found via API, and fallback is disabled in daily strategy. Exiting.")
-            return
-        
-    if not top_pins:
-        print("[INFO] No eligible pins found via API or Analytics. Exiting.")
+        print("[INFO] No eligible recent pins found via py3pin API. Exiting gracefully.")
         return
 
     # Filter for highly engaged pins before batching
@@ -571,7 +472,7 @@ def main():
             local_img = download_image_to_temp(img_url)
             if not local_img:
                 continue
-                
+
             additional_image_files = []
             if len(images) > 1:
                 extra_urls = [img.get("src") for img in images[1:] if img.get("src")][:3]
@@ -579,16 +480,17 @@ def main():
                     temp_img = download_image_to_temp(url)
                     if temp_img:
                         additional_image_files.append(temp_img)
-                
-            # Apply transparent overlay text
+
+            # Apply style-rotating overlay (hero/card/collage — avoids repetitive look)
             price = product.get("variants", [{}])[0].get("price", "") if product else ""
             overlaid_img = image_overlay.add_text_overlay(
                 image_path=local_img,
                 title=product.get("title", ""),
-                cta="Shop Now",
                 price=price,
+                cta="Shop Now",
                 board_name=new_board,
-                additional_image_paths=additional_image_files
+                additional_image_paths=additional_image_files,
+                image_style=None if os.getenv("FORCE_IMAGE_STYLE", "auto") == "auto" else os.getenv("FORCE_IMAGE_STYLE"),
             )
             if overlaid_img:
                 if os.path.exists(local_img):
@@ -679,16 +581,17 @@ def main():
                 local_img = download_image_to_temp(img_url)
                 if not local_img:
                     continue
-                        
-                # Apply transparent overlay text
+
+                # Apply style-rotating overlay for piggyback pin
                 price = replacement.get("variants", [{}])[0].get("price", "") if replacement else ""
                 overlaid_img = image_overlay.add_text_overlay(
                     image_path=local_img,
                     title=replacement.get("title", ""),
-                    cta="Shop Now",
                     price=price,
+                    cta="Shop Now",
                     board_name=target_board,
-                    additional_image_paths=additional_image_files
+                    additional_image_paths=additional_image_files,
+                    image_style=None if os.getenv("FORCE_IMAGE_STYLE", "auto") == "auto" else os.getenv("FORCE_IMAGE_STYLE"),
                 )
                 if overlaid_img:
                     if os.path.exists(local_img):
@@ -718,15 +621,20 @@ def main():
                     os.unlink(local_img)
             else:
                 print("   [WARN] No in-stock replacement found. Skipping.")
-                
-        # Also add to history if successfully repinned evergreen
+
+        # Track in repin history and daily cap
         if product and is_in_stock(product) and pin_data.get('pin_id'):
             repin_history.add(str(pin_data.get('pin_id')))
-            
-        time.sleep(random.randint(5, 12)) # Human-like delay between actions
-        
+            if not dry_run:
+                tracker.record(n=1, source="analytics_loop")
+
+        # Human-like delay between pins (30–90 seconds — looks organic, not bot)
+        delay = random.randint(5, 10)
+        print(f"   ⏳ Waiting {delay}s before next pin (organic pacing)...")
+        time.sleep(delay)
+
     save_repin_history(repin_history)
-    print("\n✅ Analytics Loop Complete.")
+    print(f"\n✅ Analytics Loop Complete. {tracker.summary()}")
 
 if __name__ == "__main__":
     main()

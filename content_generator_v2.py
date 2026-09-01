@@ -17,56 +17,106 @@ from keyword_engine import get_seo_content
 logger = logging.getLogger(__name__)
 
 
+# ── Prompt Leak Filter ────────────────────────────────────────────────────────
+PROMPT_LEAK_KEYWORDS = [
+    "we need",
+    "create a",
+    "here is",
+    "here's",
+    "natural, highly searchable",
+    "highly searchable",
+    "pinterest pin title",
+    "for usa women shoppers",
+    "rules:",
+    "requirements:",
+    "product:",
+    "type:",
+    "season/event:",
+    "occasion focus:",
+    "target event",
+    "reply only",
+    "prompt:",
+    "task:",
+    "ai:",
+    "shopper",
+    "sure!",
+    "sure,",
+    "write an seo",
+    "write a catchy",
+]
+
+
+def _is_prompt_leak(text: str) -> bool:
+    if not text or not isinstance(text, str):
+        return True
+    t_lower = text.lower().strip()
+    return any(kw in t_lower for kw in PROMPT_LEAK_KEYWORDS)
+
+
 # ── Title ─────────────────────────────────────────────────────────────────────
 
 def generate_pinterest_title(product_data: Dict[str, Any]) -> str:
-    """Natural sentence search title up to 100 chars: '[Search Term] for [Occasion/Season] — MeeeShop US Boutique'"""
-    title = product_data.get("title", "")
-    product_type = product_data.get("product_type", "")
+    """Natural sentence search title up to 100 chars containing the actual product title."""
+    title = (product_data.get("title") or "").strip()
+    product_type = (product_data.get("product_type") or "").strip()
     seo_data = get_seo_content(product_type, product_data.get("tags", []))
     
     event = seo_data["event_name"]
     occasion = seo_data["occasion_keywords"][0] if seo_data["occasion_keywords"] else "Everyday Chic"
 
-    prompt = f"""Create a natural, highly searchable Pinterest pin title for USA women shoppers.
+    # Guaranteed clean fallback that ALWAYS includes the actual product title
+    if product_type and product_type.lower() not in title.lower():
+        clean_fallback = f"{title} — Women's {product_type.title()} | MeeeShop US Boutique"
+    else:
+        clean_fallback = f"{title} | MeeeShop US Boutique"
+    if len(clean_fallback) > 100:
+        clean_fallback = f"{title} | MeeeShop"[:100]
 
-Product: {title}
-Type: {product_type}
-Season/Event: {event}
-Occasion Focus: {occasion}
+    if not title:
+        return "Trendy Women's Boutique Fashion | MeeeShop US Boutique"
+
+    prompt = f"""Write a catchy, searchable Pinterest pin title (under 80 characters) for this exact product:
+Product Name: {title}
+Category: {product_type}
+Occasion: {occasion}
 
 Rules:
-- Format: Natural sentence or descriptive phrase (e.g. "Chic Floral Midi Dress for Summer Outings — MeeeShop US Boutique")
-- Max length: 100 characters (use as close to 80-100 characters as possible for maximum indexing)
-- Include key search terms women use on Pinterest (style, fit, occasion)
-- NO hashtags, NO emojis, NO pure pipe-spam '| | |'
+- MUST include the product name: "{title}"
+- Max 80 characters
+- NO prompt words, NO explanation, NO hashtags, NO emojis
 
 Reply ONLY with the title string."""
 
-    result = generate(prompt, max_tokens=50, temperature=0.6)
+    result = generate(prompt, max_tokens=40, temperature=0.5)
     if result:
-        cleaned = result.strip().strip('"').strip("'")
-        if "MeeeShop" not in cleaned and len(cleaned) <= 80:
-            cleaned = f"{cleaned} — MeeeShop US Boutique"
-        return cleaned[:100]
+        cleaned = result.strip().strip('"').strip("'").splitlines()[0].strip()
+        if not _is_prompt_leak(cleaned) and len(cleaned) >= 5:
+            if "MeeeShop" not in cleaned and len(cleaned) <= 75:
+                cleaned = f"{cleaned} — MeeeShop"
+            return cleaned[:100]
 
-    # Fallback search title
-    base = f"Chic Women's {product_type or 'Fashion Outfit'}"
-    fallback = f"{base} for {occasion.capitalize()} — MeeeShop US Boutique"
-    return fallback[:100]
+    return clean_fallback[:100]
 
 
 # ── Description ───────────────────────────────────────────────────────────────
 
 def generate_pinterest_description(product_data: Dict[str, Any], board_name: str) -> str:
     """Expanded SEO description 350-450 chars with USA context, search terms & CTA"""
-    title = product_data.get("title", "")
-    product_type = product_data.get("product_type", "")
+    title = (product_data.get("title") or "").strip()
+    product_type = (product_data.get("product_type") or "").strip()
     tags = ", ".join(product_data.get("tags", [])[:3])
     seo_data = get_seo_content(product_type, product_data.get("tags", []))
     
     seasonal_kw = ", ".join(seo_data["seasonal_keywords"][:3])
     occasion_kw = ", ".join(seo_data["occasion_keywords"][:3])
+
+    # Guaranteed clean fallback with actual product title and free shipping CTA
+    clean_fallback = (
+        f"Elevate your wardrobe with the {title}. Perfectly styled for {seo_data['event_name'].lower()} "
+        f"and {seo_data['occasion_keywords'][0]}, this versatile piece delivers effortless style and comfort. "
+        f"Whether you're dressing up for date night or keeping it casual for weekend errands, MeeeShop brings you "
+        f"trendy boutique fashion. Enjoy free shipping within the USA! Tap to shop your size now at MeeeShop."
+    )[:500]
 
     prompt = f"""Write an SEO-rich Pinterest pin description for a USA women's fashion store.
 
@@ -79,35 +129,31 @@ Target Search Terms to weave in naturally: {seasonal_kw}, {occasion_kw}
 
 Requirements:
 - Length MUST be between 350 and 450 characters (Pinterest ranks detailed descriptions much higher).
-- Write 3-4 fluid, inspiring sentences highlighting fit, styling versatility, and quality.
+- Write 3-4 fluid, inspiring sentences highlighting fit, styling versatility, and quality for {title}.
 - MUST explicitly include: "Free shipping within the USA" or "Fast & free US shipping".
 - End with a compelling CTA: "Tap to shop your size at MeeeShop today!" or "Discover more boutique finds at MeeeShop."
 - NO hashtags inside the description text itself.
 
 Reply ONLY with the description text."""
 
-    result = generate(prompt, max_tokens=150, temperature=0.7)
+    result = generate(prompt, max_tokens=150, temperature=0.6)
     if result:
-        desc = result.strip().strip('"')
-        if len(desc) >= 150:
+        desc = result.strip().strip('"').strip("'")
+        if not _is_prompt_leak(desc) and len(desc) >= 150:
             return desc[:500]
 
-    # Detailed Fallback
-    return (
-        f"Elevate your wardrobe with the {title}. Perfectly styled for {seo_data['event_name'].lower()} "
-        f"and {seo_data['occasion_keywords'][0]}, this versatile piece delivers effortless style and comfort. "
-        f"Whether you're dressing up for date night or keeping it casual for weekend errands, MeeeShop brings you "
-        f"trendy boutique fashion. Enjoy free shipping within the USA! Tap to shop your size now at MeeeShop."
-    )[:500]
+    return clean_fallback
 
 
 # ── Alt text ──────────────────────────────────────────────────────────────────
 
 def generate_alt_text(product_data: Dict[str, Any]) -> str:
     """Accessibility alt text (max 125 chars)"""
-    title = product_data.get("title", "")
-    product_type = product_data.get("product_type", "")
-    color = product_data.get("color", "")
+    title = (product_data.get("title") or "").strip()
+    product_type = (product_data.get("product_type") or "").strip()
+    color = (product_data.get("color") or "").strip()
+
+    clean_fallback = f"{title} - Women's {product_type or 'Fashion Outfit'} in {color or 'Boutique Style'}"[:125]
 
     prompt = f"""Generate concise alt text for an image of this product (max 125 chars):
 Product: {title}
@@ -121,13 +167,13 @@ Color: {color if color else "various"}
 
 Reply ONLY with alt text (under 125 chars), no explanation."""
 
-    result = generate(prompt, max_tokens=60, temperature=0.5)
+    result = generate(prompt, max_tokens=40, temperature=0.5)
     if result:
-        return result.strip()[:125]
+        cleaned = result.strip().strip('"').strip("'").splitlines()[0].strip()
+        if not _is_prompt_leak(cleaned) and len(cleaned) >= 5:
+            return cleaned[:125]
 
-    if color:
-        return f"{color} {product_type or 'item'} from MeeeShop US Boutique"[:125]
-    return f"{product_type or 'Fashion item'} from MeeeShop US Boutique"[:125]
+    return clean_fallback
 
 
 # ── Hashtags ──────────────────────────────────────────────────────────────────
@@ -173,17 +219,214 @@ def generate_keywords_for_seo(product_data: Dict[str, Any]) -> List[str]:
     )
 
 
-# ── Package ───────────────────────────────────────────────────────────────────
+# ── Fit Highlights / Infographic Annotations ──────────────────────────────────
+
+def generate_product_fit_highlights(product_data: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Generate benefit-driven feature annotations for the 'Anatomy of a Perfect Fit' pin infographic:
+    - Top headline hook
+    - 4 benefit callouts with specific body/garment locations
+    - 3 bottom-left quick feature badges
+    """
+    title = (product_data.get("title") or "").strip()
+    product_type = (product_data.get("product_type") or "").strip().lower()
+    tags_str = " ".join(product_data.get("tags", [])).lower()
+    desc_str = (product_data.get("description") or "").lower()
+    combined_text = f"{title.lower()} {product_type} {tags_str} {desc_str}"
+
+    # Default category-tailored highlights bank
+    if any(w in combined_text for w in ["jean", "denim", "pant", "flare", "trouser", "legging", "short"]):
+        return {
+            "top_header_sub": "A NEW KIND OF",
+            "top_header_main": "LUXE",
+            "callout_waist": {
+                "title": "Contour waistbands",
+                "desc": "and slimming panels that hug your body"
+            },
+            "callout_zoom": {
+                "title": "Heart-shaped yoke",
+                "desc": "gives that natural lift & shape"
+            },
+            "callout_pocket": {
+                "title": "Short back pockets",
+                "desc": "make your silhouette look fuller"
+            },
+            "callout_fabric": {
+                "title": "2% Spandex blend.",
+                "desc": "Hugs your curves and moves with you."
+            },
+            "badges": ["Figure Enhancer", "Stretchy Fabric", "Super Soft"]
+        }
+    elif any(w in combined_text for w in ["dress", "gown", "romper", "jumpsuit", "midi", "maxi"]):
+        return {
+            "top_header_sub": "THE PERFECT",
+            "top_header_main": "FIT",
+            "callout_waist": {
+                "title": "Sculpted bodice",
+                "desc": "frames collarbone & waistline effortlessly"
+            },
+            "callout_zoom": {
+                "title": "Tie-back detail",
+                "desc": "cinches the waist for a custom silhouette"
+            },
+            "callout_pocket": {
+                "title": "Flowy A-line drape",
+                "desc": "skims gracefully with gorgeous movement"
+            },
+            "callout_fabric": {
+                "title": "Luxe stretch blend.",
+                "desc": "100% breathable with all-day comfort."
+            },
+            "badges": ["Snatched Waist", "Bra-Friendly", "Ultra Breathable"]
+        }
+    elif any(w in combined_text for w in ["sweater", "cardigan", "knit", "hoodie", "crew"]):
+        return {
+            "top_header_sub": "COZY CHIC",
+            "top_header_main": "STYLE",
+            "callout_waist": {
+                "title": "Ribbed neckline",
+                "desc": "retains shape wash after wash"
+            },
+            "callout_zoom": {
+                "title": "Chunky knit weave",
+                "desc": "ultra-plush texture with zero itch"
+            },
+            "callout_pocket": {
+                "title": "Relaxed drop shoulder",
+                "desc": "effortless chic silhouette for layering"
+            },
+            "callout_fabric": {
+                "title": "Cloud-soft yarn.",
+                "desc": "Warm, lightweight & anti-pilling."
+            },
+            "badges": ["Ultra Cozy", "Zero Itch", "True to Size"]
+        }
+    else:  # Tops, Blouses, Bodysuits, Jackets, General Fashion
+        return {
+            "top_header_sub": "EFFORTLESS",
+            "top_header_main": "LUXE",
+            "callout_waist": {
+                "title": "Flattering neckline",
+                "desc": "enhances collarbone & shoulders"
+            },
+            "callout_zoom": {
+                "title": "Tailored seams",
+                "desc": "premium boutique craftsmanship"
+            },
+            "callout_pocket": {
+                "title": "Tuck-in cut",
+                "desc": "pairs seamlessly with high-waist bottoms"
+            },
+            "callout_fabric": {
+                "title": "4-Way Stretch blend.",
+                "desc": "Silky soft & wrinkle-resistant."
+            },
+            "badges": ["Double Lined", "4-Way Stretch", "Shape Retaining"]
+        }
+
+
+# ── Package (Single Consolidated AI Call per Product) ─────────────────────────
 
 def generate_content_package(product_data: Dict[str, Any], board_name: str) -> Dict[str, Any]:
-    """Complete Pinterest content package — V2 Overhauled"""
-    logger.info(f"[V2 Overhaul] Generating content for: {product_data.get('title', 'Unknown')}")
+    """
+    Generate the complete Pinterest content package in 1 SINGLE consolidated AI call.
+    Minimizes token usage, prevents rate limits (HTTP 429), and speeds up generation by 4x.
+    """
+    import json
+    title = (product_data.get("title") or "").strip()
+    product_type = (product_data.get("product_type") or "").strip()
+    tags = ", ".join(product_data.get("tags", [])[:4])
+    seo_data = get_seo_content(product_type, product_data.get("tags", []))
+
+    # Base fallback values
+    default_title = f"{title} | MeeeShop US Boutique"[:100]
+    default_desc = (
+        f"Elevate your wardrobe with the {title}. Perfectly styled for {seo_data['event_name'].lower()} "
+        f"and {seo_data['occasion_keywords'][0]}, this versatile piece delivers effortless style and comfort. "
+        f"Whether you're dressing up for date night or keeping it casual for weekend errands, MeeeShop brings you "
+        f"trendy boutique fashion. Fast & free shipping within the USA! Tap to shop your size now at MeeeShop."
+    )[:500]
+    default_alt = f"{title} - Women's {product_type or 'Fashion Outfit'} in Boutique Style"[:125]
+    default_tags = (
+        seo_data["demographic_tags"][:4] +
+        seo_data["seasonal_hashtags"][:3] +
+        ["#OutfitInspo", "#FashionUnder50", "#ShopBoutique"]
+    )[:12]
+    default_highlights = generate_product_fit_highlights(product_data)
+
+    logger.info(f"[V2 Single-Session AI] Generating all content for: {title}")
+
+    batch_prompt = f"""You are an elite Pinterest Fashion Copywriter for MeeeShop (USA Women's Fashion Boutique).
+Generate all Pinterest content in ONE valid JSON object for this product:
+
+Product Name: {title}
+Category: {product_type}
+Tags: {tags}
+Pinterest Board: {board_name}
+Target Event/Season: {seo_data['event_name']}
+Search Keywords: {', '.join(seo_data['seasonal_keywords'][:2])}, {', '.join(seo_data['occasion_keywords'][:2])}
+
+Generate a JSON object with these EXACT keys:
+{{
+  "pin_title": "Catchy searchable title under 80 chars including '{title}'",
+  "pin_description": "SEO description 350-450 chars with USA free shipping and shop CTA at MeeeShop",
+  "pin_alt_text": "Accessibility alt text under 125 chars describing garment features",
+  "hashtags": ["#tag1", "#tag2", "#tag3", "#tag4", "#tag5"]
+}}
+
+Rules:
+- NO markdown formatting (no ```json codeblocks), reply ONLY with the raw JSON object.
+- pin_title must be under 80 characters and include the product name.
+- pin_description MUST be 350 to 450 characters and mention free US shipping.
+- Return ONLY valid JSON."""
+
+    try:
+        raw_res = generate(batch_prompt, max_tokens=2500, temperature=0.5)
+        if raw_res:
+            import re
+            m = re.search(r'\{[\s\S]*\}', raw_res)
+            parsed = json.loads(m.group(0) if m else raw_res.strip())
+            
+            p_title = parsed.get("pin_title", "").strip().strip('"')
+            if not p_title or _is_prompt_leak(p_title) or len(p_title) < 5:
+                p_title = default_title
+            elif "MeeeShop" not in p_title and len(p_title) <= 75:
+                p_title = f"{p_title} — MeeeShop"[:100]
+
+            p_desc = parsed.get("pin_description", "").strip().strip('"')
+            if not p_desc or _is_prompt_leak(p_desc) or len(p_desc) < 150:
+                p_desc = default_desc
+
+            p_alt = parsed.get("pin_alt_text", "").strip().strip('"')
+            if not p_alt or _is_prompt_leak(p_alt) or len(p_alt) < 5:
+                p_alt = default_alt
+
+            p_tags = parsed.get("hashtags", [])
+            if isinstance(p_tags, list) and len(p_tags) >= 3:
+                p_tags = [t if t.startswith("#") else f"#{t}" for t in p_tags]
+                p_tags = list(dict.fromkeys(default_tags[:4] + p_tags))[:15]
+            else:
+                p_tags = default_tags
+
+            logger.info(f"✓ Single-call AI package generated successfully for '{title}'")
+            return {
+                "pin_title": p_title[:100],
+                "pin_description": p_desc[:500],
+                "pin_alt_text": p_alt[:125],
+                "hashtags": p_tags,
+                "keywords": generate_keywords_for_seo(product_data),
+                "fit_highlights": default_highlights,
+            }
+    except Exception as e:
+        logger.warning(f"Single-call batch AI generation failed ({e}) — using robust fallback package")
+
     return {
-        "pin_title":       generate_pinterest_title(product_data),
-        "pin_description": generate_pinterest_description(product_data, board_name),
-        "pin_alt_text":    generate_alt_text(product_data),
-        "hashtags":        generate_hashtags(product_data, board_name),
-        "keywords":        generate_keywords_for_seo(product_data),
+        "pin_title": default_title,
+        "pin_description": default_desc,
+        "pin_alt_text": default_alt,
+        "hashtags": default_tags,
+        "keywords": generate_keywords_for_seo(product_data),
+        "fit_highlights": default_highlights,
     }
 
 

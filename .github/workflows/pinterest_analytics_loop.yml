@@ -1,47 +1,86 @@
 name: Evergreen Pinterest Analytics Loop
 
+# Evergreen traffic loop — re-pins top-performing organic pins to new boards
+# to re-ignite traffic on viral content and capture OOS product redirects.
+#
+# Strategy:
+#   daily    (Mon–Fri): 1 repin of the top engaged pin from last 7 days
+#   biweekly (1st+15th): 3 repins of top pins from last 60 days (broader sweep)
+#
+# Schedule — 8 PM EST (01:00 UTC) Mon–Fri = peak USA women prime-time scrolling
+# Rotates image styles (hero/card/collage) to avoid looking repetitive.
+# Selenium analytics fallback is DISABLED — py3pin native API only (account safety).
+
 on:
   schedule:
-    # Runs at 1:00 AM UTC Mon, Wed, Fri (8:00 PM EST / 9:00 PM EDT)
-    # Peak evening traffic for US women shoppers
-    - cron: '0 1 * * 1,3,5'
+    # 01:00 UTC = 8:00 PM EST / 9:00 PM EDT — prime time USA women shoppers
+    - cron: '0 1 * * 1'   # Monday
+    - cron: '0 1 * * 2'   # Tuesday
+    - cron: '0 1 * * 3'   # Wednesday
+    - cron: '0 1 * * 4'   # Thursday
+    - cron: '0 1 * * 5'   # Friday
   workflow_dispatch:
     inputs:
       strategy:
-        description: 'Strategy to run (daily or biweekly)'
+        description: 'Strategy to run'
         required: false
         default: 'daily'
         type: choice
         options:
           - daily
           - biweekly
+      image_style:
+        description: 'Pin image style (auto = rotate through hero/card/collage)'
+        required: false
+        default: 'auto'
+        type: choice
+        options:
+          - auto
+          - hero
+          - card
+          - collage
       ignore_history:
-        description: 'Ignore repin history to allow testing'
+        description: 'Ignore repin history (for testing only)'
+        required: false
+        default: false
+        type: boolean
+      dry_run:
+        description: 'Dry run — log actions without posting'
         required: false
         default: false
         type: boolean
 
+permissions:
+  actions: read
+  contents: write
+
 jobs:
   analytics_and_repin:
     runs-on: ubuntu-latest
-    
+    timeout-minutes: 20
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Python 3.11
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
           cache: 'pip'
-          
+
       - name: Install Dependencies
-        working-directory: ./
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          pip install webdriver-manager selenium requests
-          
+
+      - name: Install system fonts and ffmpeg
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y fonts-liberation fonts-dejavu gsfonts ffmpeg
+
       - name: Download previous repin history (if exists)
         uses: dawidd6/action-download-artifact@v3
         continue-on-error: true
@@ -59,23 +98,29 @@ jobs:
             echo "Using repin history from: $found"
             cp "$found" repin_history.json
           fi
+          found_count=$(find . -maxdepth 2 -name "daily_pin_count.json" ! -path "./daily_pin_count.json" | sort | tail -1)
+          if [ -n "$found_count" ]; then
+            echo "Restoring daily_pin_count from artifact: $found_count"
+            cp "$found_count" daily_pin_count.json
+          fi
         continue-on-error: true
-          
-      - name: Decrypt Secrets & Run Analytics Loop
-        working-directory: ./
+
+      - name: Run Evergreen Analytics Loop
         env:
-          # Keys passed to secrets_manager.py for decryption
           ENCRYPTION_KEY_PRIMARY: ${{ secrets.ENCRYPTION_KEY_PRIMARY }}
           ENCRYPTION_KEY_FALLBACK: ${{ secrets.ENCRYPTION_KEY_FALLBACK }}
-          
-          # Standard env fallbacks
           PINTEREST_EMAIL: ${{ secrets.PINTEREST_EMAIL }}
           PINTEREST_PASSWORD: ${{ secrets.PINTEREST_PASSWORD }}
           PINTEREST_COOKIES_B64: ${{ secrets.PINTEREST_COOKIES_B64 }}
           SHOPIFY_STORE_URL: ${{ secrets.SHOPIFY_STORE_URL }}
           SHOPIFY_ACCESS_TOKEN: ${{ secrets.SHOPIFY_ACCESS_TOKEN }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          FORCE_IMAGE_STYLE: ${{ github.event.inputs.image_style || 'auto' }}
+          DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
+          PINTEREST_DAILY_CAP: '15'
+          PINTEREST_WEEKEND_CAP: '18'
         run: |
+          # Determine strategy: biweekly on the 1st and 15th of the month
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             STRATEGY="${{ github.event.inputs.strategy }}"
             IGNORE_HISTORY="${{ github.event.inputs.ignore_history }}"
@@ -88,20 +133,31 @@ jobs:
             fi
             IGNORE_HISTORY="false"
           fi
+
           echo "Selected strategy: $STRATEGY"
           echo "Ignore history: $IGNORE_HISTORY"
-          
+
           IGNORE_FLAG=""
           if [ "$IGNORE_HISTORY" = "true" ]; then
             IGNORE_FLAG="--ignore-history"
           fi
-          
+
           if [ "$STRATEGY" = "biweekly" ]; then
-            python pinterest_analytics_loop.py --strategy biweekly --limit 3 --days 60 --template 13 $IGNORE_FLAG
+            python pinterest_analytics_loop.py --strategy biweekly --limit 3 --days 60 $IGNORE_FLAG
           else
-            python pinterest_analytics_loop.py --strategy daily --limit 1 --days 7 --template 13 $IGNORE_FLAG
+            python pinterest_analytics_loop.py --strategy daily --limit 1 --days 7 $IGNORE_FLAG
           fi
-          
+
+      - name: Commit history updates
+        if: always()
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add repin_history.json daily_pin_count.json posting_history_v2.json refresh_history_v2.json || true
+          git commit -m "chore: auto-update evergreen repin history [skip ci]" || echo "No changes to commit"
+          git pull origin ${{ github.ref_name }} --rebase || true
+          git push origin HEAD || echo "Failed to push history"
+
       - name: Upload Logs and History
         uses: actions/upload-artifact@v4
         if: always()
@@ -110,4 +166,5 @@ jobs:
           path: |
             *.log
             repin_history.json
+            daily_pin_count.json
           retention-days: 30

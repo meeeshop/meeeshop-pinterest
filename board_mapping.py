@@ -1,16 +1,57 @@
-#!/usr/bin/env python3
-"""
-board_mapping.py — Board name mappings for MeeeShop Pinterest account
-Extracted from actual board list - high-traffic boards prioritized
-"""
+from typing import List, Dict, Optional, Any
+
+# Complete list of 1-year-old Pinterest boards from MeeeShop account screenshots
+OLD_BOARDS_1Y = [
+    "Trends",
+    "New",
+    "Must-Have Fashion...",
+    "Feminine & Flowy Fits",
+    "Confident Looks",
+    "Trendy & Timeless...",
+    "Farm clothes",
+    "Bow heels",
+    "My Shop #1737732113",
+    "Emory Park Clothing",
+    "Davi & Dani Womens...",
+    "Beauty",
+    "BFCM Deals",
+    "Umgee USA",
+    "Short fall dresses",
+    "Shop For Holidays",
+    "Thanks giving Outfits",
+    "Winter Outfits",
+    "comfy fall outfits",
+    "LE LIS Womens Clothi...",
+    "MeeeShop's Luxe Styles",
+    "Mustard Seed Clothing",
+    "American Bazi",
+    "Our Recommended...",
+    "\"Music Clothes\"",
+    "Rompers, Jumpsuits &...",
+    "Blogs",
+    "Outerwear",
+    "Women's Cardigans",
+    "Footwear",
+    "Zenana Women's...",
+    "Fall outfits",
+    "Relaxed Yet Trendy...",
+    "Wardrobe Goals",
+    "Weekend to Workwear",
+    "Wardrobe Must-Hav...",
+]
 
 # Complete list of MeeeShop Pinterest boards
 MEEESHOP_BOARDS = [
+    "Trends",
+    "New",
     "All Pins",
     "Fashion Models",
     "Fresh Finds New...",
+    "\"Fresh Finds: New...",
     "Music Clothes",
+    "\"Music Clothes\"",
     "American Ball",
+    "American Bazi",
     "Ankle Strap Flats",
     "Bags",
     "Beauty",
@@ -19,57 +60,80 @@ MEEESHOP_BOARDS = [
     "Blouse",
     "Blouses",
     "Boat Shoes",
+    "Bow heels",
+    "Blogs",
     "Camis & Tanks",
     "Casual",
     "Chic & Cozy Anim...",
+    "Chic & Cozy: Annie...",
     "Chic & Effortless Styles",
     "Chic Looks",
+    "Chic & Cozy: Annie...",
     "Coats & Jackets",
     "Cocktail Dresses",
     "comfy fall outfits",
+    "Confident Looks",
     "Confidence Ladies",
     "Cool & Casual Styles",
+    "Davi & Dani Womens...",
     "Daris & Desi Womens...",
     "Dress",
     "Dresses",
     "Dressy Outfits",
     "Edgy Fashion",
     "Effortless Looks",
+    "Emory Park Clothing",
     "Every Peak Clothing",
     "Everyday Style",
+    "Fall outfits",
     "Fall looks",
+    "Fall Outfits 2026",
+    "Farm clothes",
     "Fern Clothes",
     "Festival",
     "Festive & Flora Fits",
     "Festive Styles",
+    "Feminine & Flowy Fits",
     "Fitted Jeans",
+    "Flares Jeans",
     "Footwear",
     "Handbag #handsips",
     "Jeans",
+    "Kancan USA Jeans",
     "Kimchi USA Jeans",
+    "LE LIS Womens Clothi...",
     "LE US Womens Cloth...",
+    "Look casual...",
     "Loungewear",
     "Luxe Clothing",
+    "MeeeShop's Luxe Styles",
     "Meshohn Luxe Styles",
+    "Must-Have Fashion...",
     "Mist More Fashion...",
     "Mustard Seed Clothing",
+    "My Shop #1737732113",
     "My Shop 8727/2019",
     "New",
     "new products",
     "New Trendy Woman...",
+    "New Trendy Women...",
     "Nylon backpack",
     "Ootd #ootd",
     "Our Recommended...",
+    "Outerwear",
     "Outer wear",
     "Outfit Ideas",
     "Pants & Leggings",
     "Plus Size",
     "Puff Sleeves Tops",
     "Relaxed Yet Trendy...",
+    "Rompers, Jumpsuits &...",
     "Rompers_Jumpsuits &...",
     "Shirts & Tops",
+    "Shop For Holidays",
     "Shop For Hotties",
     "Shop Responsibly",
+    "Short fall dresses",
     "Short Tall dresses",
     "Simple Outfits",
     "Skirts",
@@ -79,36 +143,382 @@ MEEESHOP_BOARDS = [
     "Style Ideas",
     "Stylish Finds",
     "Sweaters",
+    "Sweaters #Sweaters...",
     "Sweaters & Sweater...",
     "Sweaters for women",
     "Thanks giving Outfits",
     "Trends",
+    "Trendy & Timeless...",
     "Trendy & Trendes...",
     "Trendy Backpacks",
+    "Umgee USA",
     "Unique USA",
+    "Wardrobe Goals",
     "Wardrobe Oozes",
+    "Wardrobe Must-Hav...",
     "Wardrobe Must Haves",
+    "Weekend to Workwear",
     "Weekend to Workout",
     "Winter Outfits",
     "Woman Fashion!",
+    "Women's Cardigans",
     "Womens Cardigans",
+    "Women's shacket",
     "Womens shacket",
+    "Zenana Women's...",
     "Zenana Womens...",
     "Poetcore Aesthetics",
     "Vamp Romantic Styles",
     "Off-Duty Athlete Looks",
     "Gimme Gummy Playful Nostalgia",
     "Moody Blues & Vintage Pinks",
-    "Fall Outfits 2026",
     "Affordable Women's Fashion USA",
     "Casual Chic Style",
 ]
 
-# HIGH_TRAFFIC_BOARDS (prioritized for new products)
-HIGH_TRAFFIC_BOARDS = ["Trends", "New", "Best selling products", "New Trendy Woman...", "Poetcore Aesthetics", "Vamp Romantic Styles", "Off-Duty Athlete Looks"]
+# High-traffic and priority boards for rotation pools
+HIGH_TRAFFIC_BOARDS = [
+    "Trends",
+    "New",
+    "Best selling products",
+    "New Trendy Woman...",
+    "Poetcore Aesthetics",
+    "Vamp Romantic Styles",
+    "Off-Duty Athlete Looks",
+    "Must-Have Fashion...",
+    "Trendy & Timeless...",
+]
 
-# Priority boards rotated into every run's pool to ensure consistent reach
 PRIORITY_BOARDS = [
+    "Trends",
+    "New",
+    "Trends",
+    "New",
+    "Best selling products",
+    "Trends",
+    "New",
+    "Outfit Ideas",
+    "Ootd #ootd",
+    "Style Ideas",
+    "Everyday Style",
+    "Wardrobe Must-Hav...",
+    "Wardrobe Must Haves",
+    "Woman Fashion!",
+    "Chic & Effortless Styles",
+    "Stylish Finds",
+    "Confidence Ladies",
+    "Feminine & Flowy Fits",
+    "Confident Looks",
+    "Must-Have Fashion...",
+    "Trendy & Timeless...",
+]
+
+# Dedicated Blog & Editorial Boards
+BLOG_BOARDS = [
+    "Blogs",
+    "Trends",
+    "New",
+    "Style Ideas",
+    "Fashion Models",
+    "Outfit Ideas",
+    "Everyday Style",
+    "Casual Chic Style",
+    "Our Recommended...",
+    "Social",
+    "Affordable Women's Fashion USA",
+    "My Shop #1737732113",
+    "My Shop 8727/2019",
+]
+
+
+# Comprehensive category to board mapping covering ALL active & 1-year-old boards
+CATEGORY_TO_BOARDS = {
+    "cardigan": [
+        "Women's Cardigans",
+        "Womens Cardigans",
+        "Sweaters",
+        "Sweaters #Sweaters...",
+        "Sweaters & Sweater...",
+        "Chic & Cozy: Annie...",
+        "Chic & Cozy Anim...",
+        "comfy fall outfits",
+        "Fall outfits",
+        "Trends",
+        "New",
+    ],
+    "tank": [
+        "Camis & Tanks",
+        "Off-Duty Athlete Looks",
+        "Weekend to Workout",
+        "Cool & Casual Styles",
+        "Shirts & Tops",
+        "Trends",
+        "New",
+    ],
+    "cami": [
+        "Camis & Tanks",
+        "Shirts & Tops",
+        "Feminine & Flowy Fits",
+        "Trends",
+        "New",
+    ],
+    "dress": [
+        "Dresses",
+        "Dress",
+        "Short fall dresses",
+        "Short Tall dresses",
+        "Feminine & Flowy Fits",
+        "Cocktail Dresses",
+        "Dressy Outfits",
+        "Rompers, Jumpsuits &...",
+        "Rompers_Jumpsuits &...",
+        "Festive Styles",
+        "Thanks giving Outfits",
+        "Confident Looks",
+        "Emory Park Clothing",
+        "Davi & Dani Womens...",
+        "LE LIS Womens Clothi...",
+        "Mustard Seed Clothing",
+        "Poetcore Aesthetics",
+        "Vamp Romantic Styles",
+        "Festive & Flora Fits",
+        "Trends",
+        "New",
+        "Best selling products",
+    ],
+    "top": [
+        "Shirts & Tops",
+        "Blouses",
+        "Blouse",
+        "Camis & Tanks",
+        "Puff Sleeves Tops",
+        "Confident Looks",
+        "Must-Have Fashion...",
+        "Trendy & Timeless...",
+        "Farm clothes",
+        "American Bazi",
+        "MeeeShop's Luxe Styles",
+        "Zenana Women's...",
+        "Chic & Effortless Styles",
+        "Effortless Looks",
+        "Trends",
+        "New",
+        "Best selling products",
+    ],
+    "jeans": [
+        "Jeans",
+        "Flares Jeans",
+        "Kancan USA Jeans",
+        "Fitted Jeans",
+        "Straight Leg Jeans",
+        "Kimchi USA Jeans",
+        "Pants & Leggings",
+        "Farm clothes",
+        "Casual Chic Style",
+        "Everyday Style",
+        "Trends",
+        "New",
+    ],
+    "jacket": [
+        "Outerwear",
+        "Outer wear",
+        "Coats & Jackets",
+        "Women's shacket",
+        "Womens shacket",
+        "Winter Outfits",
+        "Fall outfits",
+        "comfy fall outfits",
+        "Women's Cardigans",
+        "Womens Cardigans",
+        "Sweaters",
+        "Fall Outfits 2026",
+        "Trends",
+        "New",
+    ],
+    "pants": [
+        "Pants & Leggings",
+        "Jeans",
+        "Flares Jeans",
+        "Casual",
+        "Cool & Casual Styles",
+        "Weekend to Workwear",
+        "Weekend to Workout",
+        "Off-Duty Athlete Looks",
+        "Trends",
+        "New",
+    ],
+    "skirt": [
+        "Skirts",
+        "Dressy Outfits",
+        "Chic Looks",
+        "Fashion Models",
+        "Feminine & Flowy Fits",
+        "Poetcore Aesthetics",
+        "Trends",
+        "New",
+    ],
+    "sweater": [
+        "Sweaters",
+        "Sweaters #Sweaters...",
+        "Sweaters & Sweater...",
+        "Sweaters for women",
+        "Women's Cardigans",
+        "Womens Cardigans",
+        "comfy fall outfits",
+        "Fall outfits",
+        "Winter Outfits",
+        "Chic & Cozy: Annie...",
+        "Chic & Cozy Anim...",
+        "Fall Outfits 2026",
+        "Trends",
+        "New",
+    ],
+    "cardigan": [
+        "Women's Cardigans",
+        "Womens Cardigans",
+        "Sweaters",
+        "Sweaters #Sweaters...",
+        "Sweaters & Sweater...",
+        "Chic & Cozy: Annie...",
+        "Chic & Cozy Anim...",
+        "comfy fall outfits",
+        "Fall outfits",
+        "Trends",
+        "New",
+    ],
+    "bag": [
+        "Bags",
+        "Handbag #handsips",
+        "Trendy Backpacks",
+        "Nylon backpack",
+        "Gimme Gummy Playful Nostalgia",
+        "Trends",
+        "New",
+    ],
+    "shoe": [
+        "Footwear",
+        "Bow heels",
+        "Boat Shoes",
+        "Ankle Strap Flats",
+        "Off-Duty Athlete Looks",
+        "Casual Chic Style",
+        "Trends",
+        "New",
+    ],
+    "accessory": [
+        "Beauty",
+        "Handbag #handsips",
+        "Music Clothes",
+        "\"Music Clothes\"",
+        "Gimme Gummy Playful Nostalgia",
+        "Moody Blues & Vintage Pinks",
+        "Trends",
+        "New",
+    ],
+    "jumpsuit": [
+        "Rompers, Jumpsuits &...",
+        "Rompers_Jumpsuits &...",
+        "Dressy Outfits",
+        "Casual Chic Style",
+        "Trends",
+        "New",
+    ],
+    "lounge": [
+        "Loungewear",
+        "Relaxed Yet Trendy...",
+        "Weekend to Workwear",
+        "Weekend to Workout",
+        "Look casual...",
+        "Simple Outfits",
+        "Cool & Casual Styles",
+        "Off-Duty Athlete Looks",
+    ],
+    "dark": [
+        "Vamp Romantic Styles",
+        "Moody Blues & Vintage Pinks",
+        "Edgy Fashion",
+        "Trends",
+    ],
+    "aesthetic": [
+        "Poetcore Aesthetics",
+        "Festive & Flora Fits",
+        "Gimme Gummy Playful Nostalgia",
+        "Trends",
+    ],
+    "luxe": [
+        "Luxe Clothing",
+        "MeeeShop's Luxe Styles",
+        "Meshohn Luxe Styles",
+        "Wardrobe Goals",
+        "Wardrobe Oozes",
+        "Mustard Seed Clothing",
+        "Zenana Women's...",
+        "Zenana Womens...",
+        "Emory Park Clothing",
+        "Davi & Dani Womens...",
+        "LE LIS Womens Clothi...",
+        "Umgee USA",
+    ],
+    "default": [
+        "Must-Have Fashion...",
+        "Trendy & Timeless...",
+        "Our Recommended...",
+        "Wardrobe Must-Hav...",
+        "Wardrobe Must Haves",
+        "Wardrobe Goals",
+        "Confident Looks",
+        "My Shop #1737732113",
+        "Shop For Holidays",
+        "BFCM Deals",
+        "Trends",
+        "New",
+        "new products",
+        "Best selling products",
+        "New Trendy Woman...",
+        "Outfit Ideas",
+        "Style Ideas",
+        "Ootd #ootd",
+        "Everyday Style",
+        "Woman Fashion!",
+        "Chic & Effortless Styles",
+        "Stylish Finds",
+        "Confidence Ladies",
+        "Fresh Finds New...",
+        "Casual Chic Style",
+        "Affordable Women's Fashion USA",
+        "Shop Responsibly",
+        "Social",
+        "Fashion Models",
+        "Blogs",
+        "All Pins",
+    ],
+}
+
+
+# Load and merge dynamically generated AI boards
+import json
+from pathlib import Path
+
+DYNAMIC_BOARDS_FILE = Path(__file__).parent / "dynamic_boards.json"
+if DYNAMIC_BOARDS_FILE.exists():
+    try:
+        dynamic_boards = json.loads(DYNAMIC_BOARDS_FILE.read_text(encoding="utf-8"))
+        for cat, boards in dynamic_boards.items():
+            if cat not in CATEGORY_TO_BOARDS:
+                CATEGORY_TO_BOARDS[cat] = []
+            for b in boards:
+                if b not in CATEGORY_TO_BOARDS[cat]:
+                    CATEGORY_TO_BOARDS[cat].append(b)
+                if b not in MEEESHOP_BOARDS:
+                    MEEESHOP_BOARDS.append(b)
+    except Exception as e:
+        import logging
+        logging.getLogger(__name__).warning(f"Failed to load dynamic boards: {e}")
+
+
+POWER_BOARDS = [
+    "Trends",
+    "New",
     "Trends",
     "New",
     "Best selling products",
@@ -116,167 +526,235 @@ PRIORITY_BOARDS = [
     "Ootd #ootd",
     "Style Ideas",
     "Everyday Style",
-    "Wardrobe Must Haves",
-    "Woman Fashion!",
-    "Chic & Effortless Styles",
-    "Stylish Finds",
-    "Confidence Ladies",
-    "Poetcore Aesthetics",
-    "Vamp Romantic Styles",
-    "Off-Duty Athlete Looks",
 ]
 
-# Product category to board mapping
-CATEGORY_TO_BOARDS = {
-    "dress": [
-        "Dresses",
-        "Cocktail Dresses",
-        "Dressy Outfits",
-        "Casual",
-        "Trends",  # High traffic
-        "New",  # High traffic
-    ],
-    "top": [
-        "Blouses",
-        "Camis & Tanks",
-        "Shirts & Tops",
-        "Puff Sleeves Tops",
-        "Trends",  # High traffic
-        "New",  # High traffic
-    ],
-    "jeans": [
-        "Jeans",
-        "Fitted Jeans",
-        "Straight Leg Jeans",
-        "Trends",  # High traffic
-        "New",  # High traffic
-    ],
-    "jacket": [
-        "Coats & Jackets",
-        "Sweaters",
-        "Womens shacket",
-        "Trends",  # High traffic
-    ],
-    "pants": [
-        "Pants & Leggings",
-        "Casual",
-        "Trends",  # High traffic
-        "New",  # High traffic
-    ],
-    "skirt": [
-        "Skirts",
-        "Dressy Outfits",
-        "Trends",  # High traffic
-        "New",  # High traffic
-    ],
-    "sweater": [
-        "Sweaters",
-        "Sweaters & Sweater...",
-        "Chic & Cozy Anim...",
-        "Trends",  # High traffic
-        "New",  # High traffic
-    ],
-    "cardigan": [
-        "Womens Cardigans",
-        "Sweaters",
-        "Trends",  # High traffic
-    ],
-    "bag": [
-        "Bags",
-        "Handbag #handsips",
-        "Trendy Backpacks",
-        "Trends",  # High traffic
-    ],
-    "shoe": [
-        "Boat Shoes",
-        "Ankle Strap Flats",
-        "Footwear",
-        "Off-Duty Athlete Looks",  # High traffic
-        "Trends",  # High traffic
-    ],
-    "accessory": [
-        "Beauty",
-        "Handbag #handsips",
-        "Gimme Gummy Playful Nostalgia",  # High traffic
-        "Trends",  # High traffic
-    ],
-    "jumpsuit": [
-        "Rompers_Jumpsuits &...",
-        "Trends",  # High traffic
-        "New",  # High traffic
-    ],
-    "dark": [
-        "Vamp Romantic Styles",
-        "Moody Blues & Vintage Pinks",
-        "Trends",
-    ],
-    "aesthetic": [
-        "Poetcore Aesthetics",
-        "Trends",
-    ],
-    "default": ["Trends", "New", "Best selling products", "Poetcore Aesthetics"],  # Prioritize high-traffic
-}
+
+def select_power_board(
+    live_boards: List[Dict] = None,
+    board_last_used: dict = None,
+    used_boards_in_run: set = None,
+) -> Dict:
+    """Select the least recently used high-traffic Power Board, strictly favoring Trends & New."""
+    if board_last_used is None:
+        board_last_used = {}
+    if used_boards_in_run is None:
+        used_boards_in_run = set()
+    if not live_boards:
+        live_boards = [{"name": b, "id": f"mock_{i}"} for i, b in enumerate(MEEESHOP_BOARDS)]
+
+    # 1. Try Tier-1 High-Follower Boards first ("Trends" and "New")
+    tier1_names = ["Trends", "New"]
+    tier1_boards = []
+    for t_name in tier1_names:
+        matched = match_live_board(t_name, live_boards)
+        if matched and matched not in tier1_boards:
+            tier1_boards.append(matched)
+
+    tier1_avail = [b for b in tier1_boards if b.get("name") not in used_boards_in_run]
+    if tier1_avail:
+        def get_last_used_t1(b_dict):
+            return board_last_used.get(b_dict.get("name", ""), "1970-01-01T00:00:00")
+        tier1_avail.sort(key=get_last_used_t1)
+        return tier1_avail[0]
+
+    matched_power_boards = []
+    for p_name in POWER_BOARDS:
+        matched = match_live_board(p_name, live_boards)
+        if matched and matched not in matched_power_boards:
+            matched_power_boards.append(matched)
+
+    if not matched_power_boards:
+        matched_power_boards = [live_boards[0]]
+
+    # Filter unused in current run if possible
+    avail = [b for b in matched_power_boards if b.get("name") not in used_boards_in_run]
+    if not avail:
+        avail = matched_power_boards
+
+    def get_last_used(b_dict):
+        return board_last_used.get(b_dict.get("name", ""), "1970-01-01T00:00:00")
+
+    avail.sort(key=get_last_used)
+    return avail[0]
+
+
+def get_candidate_boards_for_product(
+    product_title: str,
+    product_type: str = None,
+    prioritize_old_boards: bool = False,
+    live_boards: List[Dict] = None,
+) -> list:
+    """
+    Get all matching candidate board names for a product based on title & type.
+    Dynamically scans live_boards to discover & use newly created Pinterest boards!
+    """
+    title_lower = (product_title or "").lower()
+    type_lower = (product_type or "").lower()
+    search_text = f"{title_lower} {type_lower}"
+
+    candidates = []
+
+    # 1. Check mapped category boards
+    for category, boards in CATEGORY_TO_BOARDS.items():
+        if category != "default" and category in search_text:
+            for b in boards:
+                if b not in candidates:
+                    candidates.append(b)
+
+    # 2. Dynamic Live Board Keyword Matcher (discovers newly created Pinterest boards!)
+    if live_boards:
+        keywords = ["dress", "top", "blouse", "jeans", "pant", "skirt", "jacket", "coat", "sweater", "bag", "shoe", "lounge", "fall", "winter", "summer", "spring", "chic", "casual", "ootd"]
+        matching_kws = [kw for kw in keywords if kw in search_text]
+        if matching_kws:
+            for b_dict in live_boards:
+                b_name = b_dict.get("name", "")
+                b_name_lower = b_name.lower()
+                if any(kw in b_name_lower for kw in matching_kws):
+                    if b_name not in candidates:
+                        candidates.append(b_name)
+
+    # 3. Always append default/general boards to ensure broad options
+    for b in CATEGORY_TO_BOARDS["default"]:
+        if b not in candidates:
+            candidates.append(b)
+
+    if prioritize_old_boards:
+        old_cands = [b for b in candidates if b in OLD_BOARDS_1Y or any(b.lower().startswith(o.rstrip(".").strip().lower()) for o in OLD_BOARDS_1Y)]
+        other_cands = [b for b in candidates if b not in old_cands]
+        candidates = old_cands + other_cands
+
+    return candidates
+
+
+def match_live_board(
+    candidate_name: str, live_boards: List[Dict]
+) -> Optional[Dict]:
+    """
+    Match candidate_name (handling trailing dots '...') against live board dicts from Pinterest.
+    Returns matching live board dict or None.
+    """
+    cand_clean = candidate_name.rstrip(".").strip().lower()
+
+    # 1. Exact match
+    for b in live_boards:
+        if b.get("name", "").lower() == candidate_name.lower():
+            return b
+
+    # 2. Cleaned prefix/substring match (handles trailing '...')
+    for b in live_boards:
+        b_name_lower = b.get("name", "").lower()
+        if b_name_lower.startswith(cand_clean) or cand_clean in b_name_lower or b_name_lower in cand_clean:
+            return b
+
+    return None
+
+
+def select_best_lru_board(
+    product_title: str,
+    product_type: str = None,
+    live_boards: List[Dict] = None,
+    board_last_used: dict = None,
+    used_boards_in_run: set = None,
+    prioritize_old_boards: bool = False,
+) -> Dict:
+    """
+    Select the best live Pinterest board object matching the product category,
+    using Least Recently Used (LRU) logic. Strictly avoids cross-category misassignments.
+
+    Args:
+        product_title: Product title
+        product_type: Product type
+        live_boards: List of live board dicts from Pinterest API [{'name': ..., 'id': ...}]
+        board_last_used: Dict mapping board_name -> ISO timestamp string
+        used_boards_in_run: Set of board names already used in the current run
+        prioritize_old_boards: If True, prioritizes 1-year-old boards first
+
+    Returns:
+        Selected live board dict
+    """
+    if board_last_used is None:
+        board_last_used = {}
+    if used_boards_in_run is None:
+        used_boards_in_run = set()
+    if not live_boards:
+        live_boards = [
+            {"name": b, "id": f"mock_{i}"} for i, b in enumerate(MEEESHOP_BOARDS)
+        ]
+
+    candidates = get_candidate_boards_for_product(
+        product_title, product_type, prioritize_old_boards=prioritize_old_boards, live_boards=live_boards
+    )
+
+    # Resolve candidate names to live board objects
+    resolved_boards = []
+    for cand_name in candidates:
+        matched = match_live_board(cand_name, live_boards)
+        if matched and matched not in resolved_boards:
+            resolved_boards.append(matched)
+
+    # Filter out boards used in current run if possible
+    available = [
+        b for b in resolved_boards if b.get("name") not in used_boards_in_run
+    ]
+    if not available:
+        available = resolved_boards
+
+    if not available:
+        available = live_boards
+
+    # If prioritizing old boards, split into old vs normal available boards
+    if prioritize_old_boards:
+        old_available = [
+            b for b in available
+            if any(b.get("name", "").lower().startswith(o.rstrip(".").strip().lower()) for o in OLD_BOARDS_1Y)
+        ]
+        if old_available:
+            available = old_available
+
+    # Sort available boards by last_used timestamp (LRU first)
+    def get_last_used_score(board_dict: Dict) -> str:
+        b_name = board_dict.get("name", "")
+        return board_last_used.get(b_name, "1970-01-01T00:00:00")
+
+    available.sort(key=get_last_used_score)
+    return available[0]
 
 
 def get_board_for_product(product_title: str, product_type: str = None) -> str:
     """
-    Determine the best Pinterest board for a product based on its title/type
-    Prioritizes high-traffic boards (Trends, New)
-
-    Args:
-        product_title: Product title from Shopify
-        product_type: Product type from Shopify
-
-    Returns:
-        Board name to post to
+    Legacy wrapper — returns candidate board for product.
     """
-    title_lower = product_title.lower()
-    type_lower = (product_type or "").lower()
-
-    # Check for keywords in title or type
-    search_text = f"{title_lower} {type_lower}"
-
-    for category, boards in CATEGORY_TO_BOARDS.items():
-        if category in search_text:
-            # Return the first available board for this category
-            for board in boards:
-                if board in MEEESHOP_BOARDS:
-                    return board
-
-    # Default to high-traffic boards
-    return CATEGORY_TO_BOARDS["default"][0]
+    candidates = get_candidate_boards_for_product(product_title, product_type)
+    return candidates[0] if candidates else MEEESHOP_BOARDS[0]
 
 
 def validate_board(board_name: str) -> str:
     """
-    Validate and return a board name from the list
-    If not found, return a high-traffic default board
-
-    Args:
-        board_name: Board name to validate
-
-    Returns:
-        Valid board name from MEEESHOP_BOARDS
+    Validate and return a board name from the list.
     """
     if board_name in MEEESHOP_BOARDS:
         return board_name
-
-    # If not found, return default (high-traffic board)
-    return CATEGORY_TO_BOARDS["default"][0]
+    return MEEESHOP_BOARDS[0]
 
 
 if __name__ == "__main__":
-    print(f"Total boards: {len(MEEESHOP_BOARDS)}\n")
-    print(f"High-traffic boards: {HIGH_TRAFFIC_BOARDS}\n")
-    print("Sample mappings:")
+    print(f"Total boards indexed: {len(MEEESHOP_BOARDS)}")
+    print(f"Total 1-year-old boards indexed: {len(OLD_BOARDS_1Y)}\n")
     samples = [
-        "Puff Sleeve Dress",
-        "Blue Jeans",
-        "Leather Jacket",
-        "Gold Necklace",
-        "Canvas Backpack",
-        "3/4 Puff Slv Texture Vneck Button Down Midi Dress",
+        ("Puff Sleeve Dress", "Dress"),
+        ("Blue Denim Jeans", "Jeans"),
+        ("Leather Jacket", "Jacket"),
+        ("Gold Necklace", "Accessory"),
+        ("Canvas Nylon Backpack", "Bag"),
+        ("Ankle Strap Flats", "Shoes"),
     ]
-    for sample in samples:
-        board = get_board_for_product(sample)
-        print(f"  '{sample}' -> {board}")
+    mock_last_used = {
+        "Dresses": "2026-08-01T00:00:00",
+        "Jeans": "2026-08-01T00:00:00",
+    }
+    for title, ptype in samples:
+        cands = get_candidate_boards_for_product(title, ptype, prioritize_old_boards=True)
+        best = select_best_lru_board(title, ptype, mock_last_used=mock_last_used, prioritize_old_boards=True)
+        print(f"'{title}' -> Candidate Count: {len(cands)} | Best Old LRU Board: '{best.get('name')}'")
+
+

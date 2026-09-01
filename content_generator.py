@@ -16,43 +16,69 @@ logger = logging.getLogger(__name__)
 # via inject_to_env() before this module is imported. No action needed here.
 
 
+PROMPT_LEAK_KEYWORDS = [
+    "we need",
+    "create a",
+    "here is",
+    "here's",
+    "natural, highly searchable",
+    "highly searchable",
+    "pinterest pin title",
+    "for usa women shoppers",
+    "rules:",
+    "requirements:",
+    "product:",
+    "type:",
+    "season/event:",
+    "occasion focus:",
+    "target event",
+    "reply only",
+    "prompt:",
+    "task:",
+    "ai:",
+    "shopper",
+    "sure!",
+    "sure,",
+    "write an seo",
+]
+
+
+def _is_prompt_leak(text: str) -> bool:
+    if not text or not isinstance(text, str):
+        return True
+    t_lower = text.lower().strip()
+    return any(kw in t_lower for kw in PROMPT_LEAK_KEYWORDS)
+
+
 def generate_pinterest_title(product_data: Dict[str, Any]) -> str:
-    """Generate Pinterest-optimized title (max 100 chars, recommend 40)"""
+    """Generate Pinterest-optimized title containing actual product title"""
+    title = (product_data.get("title") or "").strip()
+    product_type = (product_data.get("product_type") or "").strip()
 
-    title = product_data.get("title", "")
-    product_type = product_data.get("product_type", "")
+    if not title:
+        return "Women's Boutique Fashion | MeeeShop"
 
-    if len(title) <= 40:
-        return title
+    clean_fallback = f"{title} | MeeeShop"[:80]
 
-    prompt = f"""Generate a catchy Pinterest pin title (max 40 chars) for this women's fashion product:
-Title: {title}
+    prompt = f"""Write a concise Pinterest pin title (under 50 chars) for:
+Product: {title}
 Type: {product_type}
 
-Requirements:
-- Include 1-2 power keywords (style, occasion, material)
-- Optimize for 2026 USA Women's Fashion Trends (e.g., Poetcore, Vamp Romantic, Off-Duty Athlete, Gimme Gummy, Moody Blues) if applicable
-- Be engaging & benefit-focused (e.g., "Comfy", "Flattering", "Versatile")
-- NO hashtags in title
-- NO emojis
-- Concise and compelling
+Rules:
+- MUST include the product name: "{title}"
+- Max 50 characters
+- NO hashtags, NO emojis, NO explanations
 
-Reply ONLY with the title (under 40 chars), no explanation."""
+Reply ONLY with the title string."""
 
-    result = generate(prompt, max_tokens=30, temperature=0.7)
+    result = generate(prompt, max_tokens=30, temperature=0.5)
 
     if result:
-        trimmed = result[:40].strip()
-        return trimmed if trimmed else title[:40]
+        cleaned = result.strip().strip('"').strip("'").splitlines()[0].strip()
+        if not _is_prompt_leak(cleaned) and len(cleaned) >= 5:
+            return cleaned[:80]
 
-    # Fallback template
-    power_words = ["Chic", "Comfy", "Versatile", "Elegant"]
-    for word in power_words:
-        if word.lower() not in title.lower():
-            short_title = f"{word} {title[:30]}"
-            return short_title[:40]
-
-    return title[:40]
+    return clean_fallback
 
 
 def generate_pinterest_description(product_data: Dict[str, Any], board_name: str) -> str:

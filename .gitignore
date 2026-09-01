@@ -1,7 +1,16 @@
 # Environment & Secrets
 .env
+.env.*
+*.env
 .env.local
 .env.*.local
+key.txt
+*.key
+*.pem
+.enc.txt
+client_secret*.json
+credentials.json
+decrypted_secrets.json
 
 # Python
 __pycache__/
@@ -44,6 +53,9 @@ posting_history.json
 *.pkl
 *.pickle
 .cache/
+*.csv
+*.csv.gz
+*.txt.gz
 
 # Artifacts
 *.jpg
@@ -51,6 +63,7 @@ posting_history.json
 *.gif
 *.mp4
 *.webm
+*.html
 /tmp/
 /temp/
 
@@ -64,8 +77,5 @@ chromedriver
 .wdm/
 
 # Additional local only files
-*.json
-*.html
 .pinterest_cookies
 .pinterest_creds/
-
