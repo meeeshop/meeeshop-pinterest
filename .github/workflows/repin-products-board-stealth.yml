@@ -1,17 +1,21 @@
 name: Repin Products Board to Organized Boards (Stealth)
 
-# Stealth Playwright Workflow for organizing pins from _products board into niche boards.
-# Prevents duplicate saves and stays within safe Pinterest algorithm boundaries.
+# Stealth Playwright Workflow for organizing in-stock catalog pins from _products into niche boards.
+# Automatically filters out deleted (404) or sold-out items to protect conversion and shopper experience.
+# Scheduled for high-converting US women's peak browsing hours.
 
 on:
   schedule:
-    - cron: '0 15 * * *'   # 11:00 AM ET / 15:00 UTC — Daily midday organizer run
+    - cron: '0 12 * * *'   # 8:00 AM ET / 12:00 UTC — Morning East Coast commute & coffee scroll
+    - cron: '30 17 * * *'  # 1:30 PM ET / 10:30 AM PT / 17:30 UTC — Mid-day lunch & shopping break
+    - cron: '0 21 * * *'   # 5:00 PM ET / 2:00 PM PT / 21:00 UTC — After-work unwind scroll
+    - cron: '0 2 * * *'    # 10:00 PM ET / 9:00 PM CT / 7:00 PM PT / 02:00 UTC — Night Prime-Time Bedtime Lounge (Highest US Peak!)
   workflow_dispatch:
     inputs:
       pins_count:
-        description: 'Number of pins to save (default: 8)'
+        description: 'Number of in-stock pins to save (default: 4)'
         required: false
-        default: '8'
+        default: '4'
       daily_cap:
         description: 'Daily repin limit (default: 20)'
         required: false
@@ -50,26 +54,26 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          pip install playwright
+          pip install playwright requests
 
       - name: Install Playwright Chromium
         run: |
           python -m playwright install chromium --with-deps
 
-      - name: Run Stealth Products Board Saver
+      - name: Run Stealth In-Stock Products Board Saver
         env:
           ENCRYPTION_KEY_PRIMARY: ${{ secrets.ENCRYPTION_KEY_PRIMARY }}
           ENCRYPTION_KEY_FALLBACK: ${{ secrets.ENCRYPTION_KEY_FALLBACK }}
           PYTHONUNBUFFERED: '1'
         run: |
-          COUNT="${{ github.event.inputs.pins_count || '8' }}"
+          COUNT="${{ github.event.inputs.pins_count || '4' }}"
           CAP="${{ github.event.inputs.daily_cap || '20' }}"
           DRY_RUN_FLAG=""
           if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
             DRY_RUN_FLAG="--dry-run"
           fi
           
-          echo "Starting Products Board Organizer..."
+          echo "Starting In-Stock Products Board Organizer..."
           python stealth_products_board_saver.py --count $COUNT --cap $CAP $DRY_RUN_FLAG
 
       - name: Commit and push repin history updates
