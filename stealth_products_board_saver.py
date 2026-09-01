@@ -12,18 +12,19 @@ Key Features & US Organic Growth Strategy:
    - Deduplicates candidate products by canonical base title/handle (no duplicate variants).
    - Enforces distinct product types in every run (e.g. 1 Dress, 1 Skirt, 1 Cardigan, 1 Top/Pants).
    - Distributes each product to its dedicated, distinct niche board.
-2. Newest Published & Updated Products First:
+2. Direct Multi-Engine Publishing:
+   - Repins catalog pins if available OR downloads image and publishes Rich Product Pins via PinterestClient.
+   - Accurately reports exit status (fails CI with code 1 if 0 pins published in a live run).
+3. Newest Published & Updated Products First:
    - Queries Shopify GraphQL for newest active items (`sortKey: PUBLISHED_AT, reverse: true`).
    - Prioritizes latest collections, trending restocks, and fresh fashion arrivals.
-3. 100% In-Stock & Active Inventory Guard:
+4. 100% In-Stock & Active Inventory Guard:
    - Validates `totalInventory > 0` and confirms live storefront status (`200 OK`).
    - Completely skips deleted products (404s) and sold-out items.
-4. High-Intent US Women Shopper Boards:
+5. High-Intent US Women Shopper Boards:
    - Prioritizes top boutique brands (Zenana, Umgee USA, Emory Park, Davi & Dani, LE LIS, Inherit Co.).
    - Distributes across high-search seasonal and category boards (Fall Outfits, Loungewear, Dresses, Cardigans, Jeans, Skirts).
    - Excludes internal/admin boards (My Shop #..., Social, All Pins).
-5. Clean Title Optimization:
-   - Strips variant suffixes (e.g. "- Yellow Floral / M") to present clean editorial titles.
 6. Anti-Shadowban Guardrails:
    - Default batch size: 4 pins per run (16 pins/day across 4 US peak timeframes).
    - 15–35s randomized human delays between repins.
@@ -40,6 +41,7 @@ import random
 import logging
 import argparse
 import re
+import tempfile
 from pathlib import Path
 from datetime import datetime, timezone, timedelta
 from typing import Dict, Any, Optional, Tuple, List
@@ -490,14 +492,12 @@ class StealthProductsBoardSaver:
                     link = pin_data.get('link') or ''
                     img = pin_data.get('images', {}).get('orig', {}).get('url') if isinstance(pin_data.get('images'), dict) else ''
 
-                    # Verify in-stock
                     is_in_stock, reason = check_shopify_in_stock(link, pin_data)
                     if is_in_stock:
                         clean_title = raw_title.split(" - ")[0].strip() if " - " in raw_title else raw_title
                         canon_key = re.sub(r'[^a-z0-9]', '', clean_title.lower())
                         cat_group = classify_product_category_group(clean_title, "")
 
-                        # If product not yet present OR if updating with real Pinterest pin_id
                         if canon_key not in unique_products_map or unique_products_map[canon_key].get("pin_id") is None:
                             unique_products_map[canon_key] = {
                                 "pin_id": str(pid),
@@ -529,7 +529,6 @@ class StealthProductsBoardSaver:
         1. Every product is distinct (no duplicate base product).
         2. Every product belongs to a DIFFERENT category group (1 Dress, 1 Skirt, 1 Cardigan, 1 Top/Pants, etc.).
         """
-        # Filter out products already repinned recently
         eligible = [p for p in products if p.get("title", "").strip().lower() not in already_saved_titles]
         if not eligible:
             logger.info("All scanned products have already been organized recently. Re-evaluating older items...")
@@ -557,6 +556,19 @@ class StealthProductsBoardSaver:
 
         return selected_batch
 
+    def _download_temp_image(self, image_url: str) -> Optional[str]:
+        """Downloads an image URL to a local temporary file for Pinterest upload."""
+        try:
+            resp = requests.get(image_url, timeout=15)
+            if resp.status_code == 200 and len(resp.content) > 100:
+                tf = tempfile.NamedTemporaryFile(suffix=".jpg", delete=False)
+                tf.write(resp.content)
+                tf.close()
+                return tf.name
+        except Exception as e:
+            logger.warning(f"Failed to download image {image_url}: {e}")
+        return None
+
     def repin_or_publish_product(
         self,
         item: Dict[str, Any],
@@ -564,7 +576,7 @@ class StealthProductsBoardSaver:
         target_board_name: str
     ) -> Tuple[bool, Optional[str]]:
         """
-        Repins an existing catalog pin ID or publishes a rich pin for a newest active product.
+        Repins an existing catalog pin ID or publishes a rich pin for a newest active product via PinterestClient.
         """
         pin_id = item.get("pin_id")
         title = item.get("title", "")
@@ -588,25 +600,29 @@ class StealthProductsBoardSaver:
             except Exception as e:
                 logger.warning(f"Repin note for {pin_id}: {e}")
 
-        # B) Publish rich product pin for newest active product
+        # B) Publish rich product pin for newest active product via PinterestClient.create_pin
         if image_url and link:
-            try:
-                logger.info(f"Publishing newest in-stock product pin '{title[:35]}' to '{target_board_name}'...")
-                resp = self.pinterest.client.create_pin(
-                    board_id=str(target_board_id),
-                    section_id=None,
-                    title=title[:100],
-                    description=desc[:500],
-                    link=link,
-                    image_url=image_url
-                )
-                if isinstance(resp, dict):
-                    pid = resp.get("resource_response", {}).get("data", {}).get("id") or resp.get("data", {}).get("id")
-                    if pid:
-                        return True, f"https://www.pinterest.com/pin/{pid}/"
-                return True, link
-            except Exception as e:
-                logger.error(f"Publish product pin failed: {e}")
+            tmp_img = self._download_temp_image(image_url)
+            if tmp_img and Path(tmp_img).exists():
+                try:
+                    logger.info(f"Publishing newest in-stock product pin '{title[:35]}' to '{target_board_name}'...")
+                    success, created_id = self.pinterest.create_pin(
+                        image_path=tmp_img,
+                        title=title[:100],
+                        description=desc[:500],
+                        board_id=str(target_board_id),
+                        url=link,
+                        alt_text=f"{title} - MeeeShop US Women's Fashion"
+                    )
+                    Path(tmp_img).unlink(missing_ok=True)
+                    if success:
+                        live_url = f"https://www.pinterest.com/pin/{created_id}/" if created_id else link
+                        return True, live_url
+                    else:
+                        logger.error(f"create_pin returned failure for '{title}': {created_id}")
+                except Exception as e:
+                    Path(tmp_img).unlink(missing_ok=True)
+                    logger.error(f"Publish product pin failed: {e}")
 
         return False, None
 
@@ -637,12 +653,16 @@ class StealthProductsBoardSaver:
 
         # 1. Initialize session & load real buyer board IDs
         if not self.initialize_session():
+            if not dry_run:
+                sys.exit(1)
             return {"status": "error", "reason": "auth_failed", "repinned": 0}
 
         # 2. Discover unique, in-stock products
         products = self.discover_catalog_pins_from_products_board(max_pins=50)
         if not products:
             logger.warning("No verified in-stock products available.")
+            if not dry_run:
+                sys.exit(1)
             return {"status": "empty", "repinned": 0}
 
         # 3. Enforce Strict Product & Category Diversity
@@ -727,6 +747,11 @@ class StealthProductsBoardSaver:
         print("\n" + "=" * 70, flush=True)
         print(f"🎉 Session complete! Successfully organized {repinned_count} diverse in-stock products.", flush=True)
         print("=" * 70 + "\n", flush=True)
+
+        if repinned_count == 0 and not dry_run:
+            logger.error("❌ Session finished but 0 pins were successfully saved or published.")
+            sys.exit(1)
+
         return {"status": "success", "repinned": repinned_count}
 
 
