@@ -2934,6 +2934,52 @@
       "template": 11,
       "pin_url": "https://www.pinterest.com/pin/962222276663644559/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": "570656358571",
+      "article_id": "570656358571",
+      "title": "Will This Shrink? How to Predict Fabric Behavior Before You Buy",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-09-01T00:31:19.022297",
+      "type": "blog",
+      "style": "card",
+      "template": 9,
+      "pin_url": "https://www.pinterest.com/pin/962222276663647770/",
+      "blog_url": "https://us.meeeshop.com/blogs/our-tips/will-this-shrink-how-to-predict-fabric-behavior-before-you-buy",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8892151562411,
+      "title": "Seersucker V-neck Blouse: Fresh Labor Day & Fall Look \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-09-01T00:32:58.890400",
+      "type": "product",
+      "style": "collage",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276663647813/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8825881067691,
+      "title": "Mkf Collection by Mia K. - Adhara Shoulder Bag with Pouch: Fall 2026 Must-Have",
+      "board": "Bags",
+      "timestamp": "2026-09-01T00:34:13.233766",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276663647833/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8841130901675,
+      "title": "Jane Mixed Texture Knit Button V Neck Sweater Cardigan - Brown | Cozy Fall Look",
+      "board": "comfy fall outfits",
+      "timestamp": "2026-09-01T00:35:22.197797",
+      "type": "carousel",
+      "style": "collage",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276663647856/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
@@ -2945,7 +2991,7 @@
     "Must-Have Fashion Picks": "2026-08-13T05:20:05.419233",
     "Trendy & Timeless Fashion": "2026-08-13T05:29:39.715837",
     "Dress": "2026-08-18T21:34:10.651062",
-    "Bags": "2026-08-19T03:17:27.300226",
+    "Bags": "2026-09-01T00:34:13.233766",
     "Jeans": "2026-08-31T08:25:40.341768",
     "Cocktail Dresses": "2026-08-18T18:07:41.317645",
     "Dressy Outfits": "2026-08-30T23:22:40.260253",
@@ -2983,7 +3029,7 @@
     "Fashion Models": "2026-08-21T03:11:43.464820",
     "My Shop #1737732113": "2026-08-21T12:37:11.882612",
     "Shop For Holidays": "2026-08-21T21:33:29.613600",
-    "New": "2026-08-31T22:05:18.452040",
+    "New": "2026-09-01T00:32:58.890400",
     "American Bazi": "2026-08-22T12:26:35.616325",
     "Cool & Casual Styles": "2026-08-24T21:38:38.932637",
     "MeeeShop's Luxe Styles": "2026-08-22T17:56:02.089648",
@@ -3032,11 +3078,12 @@
     "Sweaters & Sweater...": "2026-08-24T03:13:06.869060",
     "Boat Shoes": "2026-08-24T12:37:33.243466",
     "Sweaters for women": "2026-08-30T15:52:01.145594",
-    "Womens Cardigans": "2026-08-30T23:24:00.172742"
+    "Womens Cardigans": "2026-08-30T23:24:00.172742",
+    "comfy fall outfits": "2026-09-01T00:35:22.197797"
   },
-  "daily_count": 12,
-  "last_post_time": "2026-08-31T22:08:39.936129",
+  "daily_count": 4,
+  "last_post_time": "2026-09-01T00:35:22.197797",
   "board_rotation_cursor": 0,
   "last_image_style": "collage",
-  "last_template_index": 11
+  "last_template_index": 15
 }
