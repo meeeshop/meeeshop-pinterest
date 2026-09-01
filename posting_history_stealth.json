@@ -2980,11 +2980,55 @@
       "template": 15,
       "pin_url": "https://www.pinterest.com/pin/962222276663647856/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8818148507819,
+      "title": "Emory Park Pia Top: Labor Day & Fall 2026 Trendy Blouse \u2014 MeeeShop",
+      "board": "Trends",
+      "timestamp": "2026-09-01T07:33:08.702113",
+      "type": "video",
+      "style": "carousel",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276663656109/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8941772210347,
+      "title": "Fluffy Plush Handbag with Integrated Top Handle and Chain Strap | MeeeShop US Boutique",
+      "board": "New",
+      "timestamp": "2026-09-01T07:35:35.516260",
+      "type": "video",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276663656152/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8905531785387,
+      "title": "V-neck Collared Pullover, Polka Dot Top - Perfect for Labor Day & Fall \u2014 MeeeShop",
+      "board": "Blouses",
+      "timestamp": "2026-09-01T07:38:08.294690",
+      "type": "video",
+      "style": "carousel",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276663656204/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8928207765675,
+      "title": "Sovella Active Recovery Sandals Women's Pf Slide Beige | MeeeShop US Boutique",
+      "board": "Ankle Strap Flats",
+      "timestamp": "2026-09-01T07:39:15.343019",
+      "type": "carousel",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276663656219/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-08-30T08:08:47.249630",
-    "Trends": "2026-08-31T22:04:12.259743",
+    "Trends": "2026-09-01T07:33:08.702113",
     "Dresses": "2026-08-30T20:04:32.519899",
     "Feminine & Flowy Fits": "2026-08-30T15:53:11.738550",
     "Short fall dresses": "2026-08-31T08:26:55.669324",
@@ -3001,7 +3045,7 @@
     "Rompers, Jumpsuits &...": "2026-08-20T12:35:59.433834",
     "Skirts": "2026-08-19T12:34:42.996179",
     "Shirts & Tops": "2026-08-31T22:07:26.782906",
-    "Blouses": "2026-08-18T21:33:04.907593",
+    "Blouses": "2026-09-01T07:38:08.294690",
     "Rompers_Jumpsuits &...": "2026-08-20T18:01:41.570995",
     "Handbag #handsips": "2026-08-19T17:55:31.438390",
     "Trendy & Timeless...": "2026-08-29T23:14:22.474834",
@@ -3029,7 +3073,7 @@
     "Fashion Models": "2026-08-21T03:11:43.464820",
     "My Shop #1737732113": "2026-08-21T12:37:11.882612",
     "Shop For Holidays": "2026-08-21T21:33:29.613600",
-    "New": "2026-09-01T00:32:58.890400",
+    "New": "2026-09-01T07:35:35.516260",
     "American Bazi": "2026-08-22T12:26:35.616325",
     "Cool & Casual Styles": "2026-08-24T21:38:38.932637",
     "MeeeShop's Luxe Styles": "2026-08-22T17:56:02.089648",
@@ -3079,11 +3123,12 @@
     "Boat Shoes": "2026-08-24T12:37:33.243466",
     "Sweaters for women": "2026-08-30T15:52:01.145594",
     "Womens Cardigans": "2026-08-30T23:24:00.172742",
-    "comfy fall outfits": "2026-09-01T00:35:22.197797"
+    "comfy fall outfits": "2026-09-01T00:35:22.197797",
+    "Ankle Strap Flats": "2026-09-01T07:39:15.343019"
   },
-  "daily_count": 4,
-  "last_post_time": "2026-09-01T00:35:22.197797",
+  "daily_count": 8,
+  "last_post_time": "2026-09-01T07:39:15.343019",
   "board_rotation_cursor": 0,
   "last_image_style": "collage",
-  "last_template_index": 15
+  "last_template_index": 14
 }
