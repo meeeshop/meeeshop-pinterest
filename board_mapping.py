@@ -233,6 +233,35 @@ BLOG_BOARDS = [
 
 # Comprehensive category to board mapping covering ALL active & 1-year-old boards
 CATEGORY_TO_BOARDS = {
+    "cardigan": [
+        "Women's Cardigans",
+        "Womens Cardigans",
+        "Sweaters",
+        "Sweaters #Sweaters...",
+        "Sweaters & Sweater...",
+        "Chic & Cozy: Annie...",
+        "Chic & Cozy Anim...",
+        "comfy fall outfits",
+        "Fall outfits",
+        "Trends",
+        "New",
+    ],
+    "tank": [
+        "Camis & Tanks",
+        "Off-Duty Athlete Looks",
+        "Weekend to Workout",
+        "Cool & Casual Styles",
+        "Shirts & Tops",
+        "Trends",
+        "New",
+    ],
+    "cami": [
+        "Camis & Tanks",
+        "Shirts & Tops",
+        "Feminine & Flowy Fits",
+        "Trends",
+        "New",
+    ],
     "dress": [
         "Dresses",
         "Dress",

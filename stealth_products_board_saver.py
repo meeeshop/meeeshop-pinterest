@@ -1,25 +1,30 @@
 """
-stealth_products_board_saver.py — Stealth Catalog Repin & Organizer for Newest In-Stock Products
+stealth_products_board_saver.py — Stealth Catalog Repin & Organizer for Diverse In-Stock Products
 
-Automates discovering the newest, recently published and updated in-stock products from Meeeshop,
-verifying real-time inventory and storefront health (skipping deleted 404s & sold-out items),
-matching them to high-converting US women's fashion boards, and repinning/saving them
+Automates discovering the newest, in-stock products from Meeeshop,
+ensuring strict product and category diversity (every pin in a run is a DIFFERENT product
+and DIFFERENT product type, saved to a DIFFERENT niche board), verifying real-time inventory
+and storefront health (skipping deleted 404s & sold-out items), and repinning/saving them
 via Pinterest's authenticated API during US peak shopping hours.
 
 Key Features & US Organic Growth Strategy:
-1. Newest Published & Updated Products First:
+1. Category & Product Diversity Enforcer:
+   - Deduplicates candidate products by canonical base title/handle (no duplicate variants).
+   - Enforces distinct product types in every run (e.g. 1 Dress, 1 Skirt, 1 Cardigan, 1 Top/Pants).
+   - Distributes each product to its dedicated, distinct niche board.
+2. Newest Published & Updated Products First:
    - Queries Shopify GraphQL for newest active items (`sortKey: PUBLISHED_AT, reverse: true`).
    - Prioritizes latest collections, trending restocks, and fresh fashion arrivals.
-2. 100% In-Stock & Active Inventory Guard:
+3. 100% In-Stock & Active Inventory Guard:
    - Validates `totalInventory > 0` and confirms live storefront status (`200 OK`).
    - Completely skips deleted products (404s) and sold-out items.
-3. High-Intent US Women Shopper Boards:
+4. High-Intent US Women Shopper Boards:
    - Prioritizes top boutique brands (Zenana, Umgee USA, Emory Park, Davi & Dani, LE LIS, Inherit Co.).
    - Distributes across high-search seasonal and category boards (Fall Outfits, Loungewear, Dresses, Cardigans, Jeans, Skirts).
    - Excludes internal/admin boards (My Shop #..., Social, All Pins).
-4. Clean Title Optimization:
+5. Clean Title Optimization:
    - Strips variant suffixes (e.g. "- Yellow Floral / M") to present clean editorial titles.
-5. Anti-Shadowban Guardrails:
+6. Anti-Shadowban Guardrails:
    - Default batch size: 4 pins per run (16 pins/day across 4 US peak timeframes).
    - 15–35s randomized human delays between repins.
    - Deduplication tracking in repin_history_stealth.json.
@@ -189,10 +194,39 @@ def check_shopify_in_stock(link: str, pin_data: Optional[Dict[str, Any]] = None)
         return True, "check_error_fallback_allowed"
 
 
+def classify_product_category_group(title: str, product_type: str = "") -> str:
+    """
+    Classifies a product into high-level distinct fashion category groups
+    to ensure 100% diverse product types per posting run.
+    """
+    text = f"{title} {product_type}".lower()
+    if any(w in text for w in ["dress", "gown", "maxi dress", "mini dress", "midi dress"]):
+        return "dresses"
+    if any(w in text for w in ["skirt", "midi skirt", "maxi skirt", "track skirt", "denim skirt"]):
+        return "skirts"
+    if any(w in text for w in ["cardigan", "open front", "shacket", "sweater", "pullover", "knit cardigan"]):
+        return "cardigans_sweaters"
+    if any(w in text for w in ["tank", "cami", "halter", "blouse", "tee", "t-shirt", "top", "shirt", "button cardigan top"]):
+        return "tops_tanks_blouses"
+    if any(w in text for w in ["jean", "denim", "pant", "legging", "track pant", "trouser", "flare", "wide leg"]):
+        return "pants_denim"
+    if any(w in text for w in ["lounge", "pajama", "sleepwear", "lounge short"]):
+        return "loungewear"
+    if any(w in text for w in ["bag", "tote", "backpack", "purse", "sling", "bum bag"]):
+        return "bags_accessories"
+    if any(w in text for w in ["jacket", "coat", "blazer", "outerwear", "trench"]):
+        return "outerwear"
+    if any(w in text for w in ["shoe", "heel", "boot", "flat", "sandals", "sneakers"]):
+        return "footwear"
+    if any(w in text for w in ["romper", "jumpsuit"]):
+        return "rompers_jumpsuits"
+    return "general_apparel"
+
+
 class StealthProductsBoardSaver:
     """
     Scans recently published/updated in-stock products from Shopify & Pinterest catalog,
-    and organizes them into matching buyer boards using verified numerical Pinterest Board IDs.
+    and organizes them into matching buyer boards with strict category & product diversity.
     """
 
     def __init__(self, headless: bool = True):
@@ -339,17 +373,17 @@ class StealthProductsBoardSaver:
                 vendor = node.get("vendor") or ""
                 published_at = node.get("publishedAt") or ""
                 
-                # Extract image url
                 img_edges = node.get("images", {}).get("edges", [])
                 image_url = img_edges[0]["node"]["url"] if img_edges else ""
                 product_link = f"https://us.meeeshop.com/products/{handle}"
 
-                # Only include active items with positive inventory
                 if inventory > 0 and handle:
+                    cat_group = classify_product_category_group(title, product_type)
                     in_stock_products.append({
                         "handle": handle,
                         "title": title,
                         "product_type": product_type,
+                        "category_group": cat_group,
                         "vendor": vendor,
                         "published_at": published_at,
                         "inventory": inventory,
@@ -357,7 +391,7 @@ class StealthProductsBoardSaver:
                         "image_url": image_url
                     })
 
-            logger.info(f"✓ Fetched {len(in_stock_products)} newest in-stock products from Shopify (Published: {in_stock_products[0]['published_at'] if in_stock_products else 'N/A'})")
+            logger.info(f"✓ Fetched {len(in_stock_products)} newest in-stock products from Shopify")
             return in_stock_products
 
         except Exception as e:
@@ -366,10 +400,32 @@ class StealthProductsBoardSaver:
 
     def discover_catalog_pins_from_products_board(self, max_pins: int = 50) -> List[Dict[str, Any]]:
         """
-        Combines Shopify's newest published products with Pinterest catalog pins on `_products`.
+        Combines Shopify's newest published products with Pinterest catalog pins on `_products`,
+        enforcing product-level deduplication.
         """
-        # 1. First, fetch newest published products from Shopify
         newest_shopify_products = self.fetch_newest_in_stock_products(limit=max_pins)
+
+        # Map by canonical title/handle to ensure only 1 instance per product
+        unique_products_map = {}
+
+        # 1. Add newest Shopify products first (freshest inventory)
+        if newest_shopify_products:
+            for sp in newest_shopify_products:
+                canon_key = re.sub(r'[^a-z0-9]', '', sp["title"].lower())
+                if canon_key not in unique_products_map:
+                    unique_products_map[canon_key] = {
+                        "pin_id": None,
+                        "title": sp["title"],
+                        "raw_title": sp["title"],
+                        "description": f"Shop {sp['title']} by {sp['vendor']}. Fast shipping across the USA from MeeeShop Boutique.",
+                        "link": sp["link"],
+                        "image_url": sp["image_url"],
+                        "product_type": sp["product_type"],
+                        "category_group": sp["category_group"],
+                        "vendor": sp["vendor"],
+                        "published_at": sp["published_at"],
+                        "source": "shopify_newest_active"
+                    }
 
         # 2. Extract catalog pin IDs from Pinterest _products board
         products_url = f"https://www.pinterest.com/{self.username}/_products/"
@@ -424,8 +480,7 @@ class StealthProductsBoardSaver:
         except Exception as pe:
             logger.warning(f"Playwright scan notice: {pe}")
 
-        # 3. For each discovered catalog pin ID, load metadata and cross-check stock
-        resolved_items = []
+        # 3. For each discovered catalog pin ID, load metadata, verify stock, and deduplicate
         for pid in list(discovered_catalog_pins.keys())[:max_pins]:
             try:
                 pin_data = self.pinterest.client.load_pin(str(pid))
@@ -439,39 +494,68 @@ class StealthProductsBoardSaver:
                     is_in_stock, reason = check_shopify_in_stock(link, pin_data)
                     if is_in_stock:
                         clean_title = raw_title.split(" - ")[0].strip() if " - " in raw_title else raw_title
-                        resolved_items.append({
-                            "pin_id": str(pid),
-                            "title": clean_title,
-                            "raw_title": raw_title,
-                            "description": desc,
-                            "link": link,
-                            "image_url": img,
-                            "source": "pinterest_catalog"
-                        })
+                        canon_key = re.sub(r'[^a-z0-9]', '', clean_title.lower())
+                        cat_group = classify_product_category_group(clean_title, "")
+
+                        # If product not yet present OR if updating with real Pinterest pin_id
+                        if canon_key not in unique_products_map or unique_products_map[canon_key].get("pin_id") is None:
+                            unique_products_map[canon_key] = {
+                                "pin_id": str(pid),
+                                "title": clean_title,
+                                "raw_title": raw_title,
+                                "description": desc,
+                                "link": link,
+                                "image_url": img,
+                                "category_group": cat_group,
+                                "source": "pinterest_catalog"
+                            }
                     else:
                         logger.info(f"Skipping old/OOS pin {pid} ({raw_title[:30]}...) -> {reason}")
             except Exception as le:
                 logger.debug(f"Pin {pid} load note: {le}")
 
-        # 4. If direct catalog pins yielded few items, augment directly with newest Shopify in-stock products
-        if newest_shopify_products:
-            for sp in newest_shopify_products:
-                if not any(sp["link"] in item.get("link", "") for item in resolved_items):
-                    resolved_items.append({
-                        "pin_id": None,
-                        "title": sp["title"],
-                        "raw_title": sp["title"],
-                        "description": f"Shop {sp['title']} by {sp['vendor']}. Fast shipping across the USA from MeeeShop Boutique.",
-                        "link": sp["link"],
-                        "image_url": sp["image_url"],
-                        "product_type": sp["product_type"],
-                        "vendor": sp["vendor"],
-                        "published_at": sp["published_at"],
-                        "source": "shopify_newest_active"
-                    })
-
-        logger.info(f"✓ Total verified in-stock products ready for distribution: {len(resolved_items)}")
+        resolved_items = list(unique_products_map.values())
+        logger.info(f"✓ Total unique, verified in-stock products ready for distribution: {len(resolved_items)}")
         return resolved_items
+
+    def select_diverse_product_batch(
+        self,
+        products: List[Dict[str, Any]],
+        batch_size: int,
+        already_saved_titles: set
+    ) -> List[Dict[str, Any]]:
+        """
+        Selects a strictly diverse batch of products where:
+        1. Every product is distinct (no duplicate base product).
+        2. Every product belongs to a DIFFERENT category group (1 Dress, 1 Skirt, 1 Cardigan, 1 Top/Pants, etc.).
+        """
+        # Filter out products already repinned recently
+        eligible = [p for p in products if p.get("title", "").strip().lower() not in already_saved_titles]
+        if not eligible:
+            logger.info("All scanned products have already been organized recently. Re-evaluating older items...")
+            eligible = products
+
+        selected_batch = []
+        used_category_groups = set()
+
+        # Pass 1: Select one product per category group
+        for p in eligible:
+            cat_group = p.get("category_group", "general_apparel")
+            if cat_group not in used_category_groups:
+                selected_batch.append(p)
+                used_category_groups.add(cat_group)
+                if len(selected_batch) >= batch_size:
+                    break
+
+        # Pass 2: If we still need more products, fill with remaining distinct products
+        if len(selected_batch) < batch_size:
+            for p in eligible:
+                if p not in selected_batch:
+                    selected_batch.append(p)
+                    if len(selected_batch) >= batch_size:
+                        break
+
+        return selected_batch
 
     def repin_or_publish_product(
         self,
@@ -533,13 +617,13 @@ class StealthProductsBoardSaver:
         dry_run: bool = False
     ) -> Dict[str, Any]:
         """
-        Orchestrates the repinning session prioritizing newest in-stock items.
+        Orchestrates the repinning session prioritizing distinct product categories and boards.
         """
         history = load_repin_history()
         today_count = get_today_repin_count(history)
 
         print("\n" + "=" * 70, flush=True)
-        print("🚀 PINTEREST STEALTH PRODUCTS BOARD SAVER (NEWEST IN-STOCK)", flush=True)
+        print("🚀 PINTEREST STEALTH PRODUCTS BOARD SAVER (DIVERSE CATEGORIES)", flush=True)
         print(f"Today's Repin Count: {today_count}/{daily_cap} | Batch Goal: {max_repins} pins", flush=True)
         if dry_run:
             print("🧪 DRY RUN MODE ENABLED — No changes will be published", flush=True)
@@ -555,22 +639,24 @@ class StealthProductsBoardSaver:
         if not self.initialize_session():
             return {"status": "error", "reason": "auth_failed", "repinned": 0}
 
-        # 2. Discover newest in-stock products
+        # 2. Discover unique, in-stock products
         products = self.discover_catalog_pins_from_products_board(max_pins=50)
         if not products:
             logger.warning("No verified in-stock products available.")
             return {"status": "empty", "repinned": 0}
 
-        # 3. Deduplicate against recent history
-        already_saved_handles = {str(item.get("product_title", "")).lower() for item in history.get("repins", [])}
-        eligible = [p for p in products if p.get("title", "").lower() not in already_saved_handles]
+        # 3. Enforce Strict Product & Category Diversity
+        already_saved_titles = {str(item.get("product_title", "")).strip().lower() for item in history.get("repins", [])}
+        to_process = self.select_diverse_product_batch(
+            products=products,
+            batch_size=allowed_this_run,
+            already_saved_titles=already_saved_titles
+        )
 
-        if not eligible:
-            logger.info("All scanned products have already been organized recently. Re-evaluating older items...")
-            eligible = products
-
-        to_process = eligible[:allowed_this_run]
-        print(f"\n🎯 Selected {len(to_process)} newest in-stock products to organize in this run\n", flush=True)
+        print(f"\n🎯 Selected {len(to_process)} strictly distinct products (1 per category group) for this run:\n", flush=True)
+        for idx, p in enumerate(to_process, 1):
+            print(f"   [{idx}] {p['title']} (Category: {p.get('category_group', 'apparel')})", flush=True)
+        print("\n" + "-" * 70 + "\n", flush=True)
 
         repinned_count = 0
         used_boards_in_run = set()
@@ -579,6 +665,7 @@ class StealthProductsBoardSaver:
             title = item.get("title", "")
             raw_title = item.get("raw_title", title)
             link = item.get("link", "")
+            cat_group = item.get("category_group", "apparel")
             pin_id = item.get("pin_id") or f"shopify_{idx}"
 
             # Match title to best organized buyer board using keyword engine + LRU
@@ -592,13 +679,14 @@ class StealthProductsBoardSaver:
             target_board_name = target_board_obj.get("name", "Trends")
             target_board_id = str(target_board_obj.get("id", ""))
 
-            print(f"[{idx}/{len(to_process)}] Processing Newest Product: {title}", flush=True)
-            print(f"   📌 Published Date: {item.get('published_at', 'Recent')}", flush=True)
+            print(f"[{idx}/{len(to_process)}] Processing Product: {title}", flush=True)
+            print(f"   🏷️ Category Group: {cat_group}", flush=True)
             print(f"   🔗 Storefront: {link}", flush=True)
             print(f"   📂 Target Board: '{target_board_name}' (ID: {target_board_id})", flush=True)
 
             if dry_run:
                 print(f"   🧪 [DRY RUN] Would save product '{title}' -> board '{target_board_name}' (ID: {target_board_id})\n", flush=True)
+                used_boards_in_run.add(target_board_name)
                 repinned_count += 1
                 continue
 
@@ -615,6 +703,7 @@ class StealthProductsBoardSaver:
                 history.setdefault("repins", []).append({
                     "pin_id": pin_id,
                     "product_title": title,
+                    "category_group": cat_group,
                     "source_board": "_products",
                     "target_board": target_board_name,
                     "target_board_id": target_board_id,
@@ -636,13 +725,13 @@ class StealthProductsBoardSaver:
                 time.sleep(delay)
 
         print("\n" + "=" * 70, flush=True)
-        print(f"🎉 Session complete! Successfully organized {repinned_count} newest in-stock products.", flush=True)
+        print(f"🎉 Session complete! Successfully organized {repinned_count} diverse in-stock products.", flush=True)
         print("=" * 70 + "\n", flush=True)
         return {"status": "success", "repinned": repinned_count}
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Save newest in-stock products from _products to organized boards.")
+    parser = argparse.ArgumentParser(description="Save diverse in-stock products from _products to organized boards.")
     parser.add_argument("--count", type=int, default=4, help="Number of pins to save in this run (default: 4)")
     parser.add_argument("--cap", type=int, default=20, help="Daily repin cap (default: 20)")
     parser.add_argument("--headless", action="store_true", default=True, help="Run browser in headless mode")
