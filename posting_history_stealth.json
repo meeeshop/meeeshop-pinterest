@@ -3202,11 +3202,55 @@
       "template": 14,
       "pin_url": "https://www.pinterest.com/pin/962222276663685127/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8968032092331,
+      "title": "Stella Onyx Black Denim Maxi Skirt - Labor Day & Fall 2026 Must-Have \u2014 MeeeShop",
+      "board": "Trends",
+      "timestamp": "2026-09-02T15:46:04.814475",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276663695567/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8782620491947,
+      "title": "Retrolicious Honey I'm Home Fit & Flare Dress | MeeeShop US Boutique",
+      "board": "New",
+      "timestamp": "2026-09-02T15:48:32.902306",
+      "type": "video",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276663695651/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8970887200939,
+      "title": "Emory Park Kaia Cardigan Top | MeeeShop US Boutique",
+      "board": "Chic & Cozy: Annie...",
+      "timestamp": "2026-09-02T15:51:01.623160",
+      "type": "video",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276663695740/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8930418983083,
+      "title": "Double Take Texture Ruffle Short Sleeve Top and Drawstring Wide Leg Pants Set | MeeeShop US Boutique",
+      "board": "Casual",
+      "timestamp": "2026-09-02T15:52:11.741894",
+      "type": "carousel",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276663695778/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-08-30T08:08:47.249630",
-    "Trends": "2026-09-01T23:10:10.177531",
+    "Trends": "2026-09-02T15:46:04.814475",
     "Dresses": "2026-08-30T20:04:32.519899",
     "Feminine & Flowy Fits": "2026-08-30T15:53:11.738550",
     "Short fall dresses": "2026-08-31T08:26:55.669324",
@@ -3240,7 +3284,7 @@
     "Chic Looks": "2026-08-23T03:12:09.640252",
     "Straight Leg Jeans": "2026-08-21T21:32:10.936379",
     "Puff Sleeves Tops": "2026-08-20T21:34:03.105622",
-    "Casual": "2026-08-19T17:57:45.543242",
+    "Casual": "2026-09-02T15:52:11.741894",
     "Confident Looks": "2026-09-01T20:11:52.459154",
     "Casual Chic Style": "2026-09-01T23:12:31.420634",
     "Farm clothes": "2026-08-20T21:35:07.586741",
@@ -3251,7 +3295,7 @@
     "Fashion Models": "2026-08-21T03:11:43.464820",
     "My Shop #1737732113": "2026-08-21T12:37:11.882612",
     "Shop For Holidays": "2026-08-21T21:33:29.613600",
-    "New": "2026-09-02T07:00:57.845539",
+    "New": "2026-09-02T15:48:32.902306",
     "American Bazi": "2026-08-22T12:26:35.616325",
     "Cool & Casual Styles": "2026-08-24T21:38:38.932637",
     "MeeeShop's Luxe Styles": "2026-08-22T17:56:02.089648",
@@ -3303,10 +3347,11 @@
     "Womens Cardigans": "2026-08-30T23:24:00.172742",
     "comfy fall outfits": "2026-09-01T00:35:22.197797",
     "Ankle Strap Flats": "2026-09-01T07:39:15.343019",
-    "Relaxed Yet Trendy...": "2026-09-01T15:54:13.191192"
+    "Relaxed Yet Trendy...": "2026-09-01T15:54:13.191192",
+    "Chic & Cozy: Annie...": "2026-09-02T15:51:01.623160"
   },
-  "daily_count": 4,
-  "last_post_time": "2026-09-02T07:03:56.808823",
+  "daily_count": 8,
+  "last_post_time": "2026-09-02T15:52:11.741894",
   "board_rotation_cursor": 0,
   "last_image_style": "collage",
   "last_template_index": 14
