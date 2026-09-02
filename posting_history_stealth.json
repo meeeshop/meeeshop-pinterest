@@ -3290,11 +3290,55 @@
       "template": 14,
       "pin_url": "https://www.pinterest.com/pin/962222276663702777/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8933188337835,
+      "title": "Pu Brown Cargo Pants | MeeeShop US Boutique",
+      "board": "Trends",
+      "timestamp": "2026-09-02T23:09:16.487028",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276663707497/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8789754609835,
+      "title": "High Rise Flare Jeans | MeeeShop US Boutique",
+      "board": "New",
+      "timestamp": "2026-09-02T23:10:24.406725",
+      "type": "carousel",
+      "style": "collage",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276663707542/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8949202387115,
+      "title": "Kachina Tapestry Knit Cardigan Ruana Top - Boho Fall Labor Day Look \u2014 MeeeShop",
+      "board": "Fall outfits",
+      "timestamp": "2026-09-02T23:11:31.652514",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276663707570/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8782638252203,
+      "title": "Cape Cod Top Lemons Print on Cotton Linen - Perfect Labor Day & Fall Outfit \u2014 MeeeShop",
+      "board": "Camis & Tanks",
+      "timestamp": "2026-09-02T23:12:37.424489",
+      "type": "carousel",
+      "style": "collage",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276663707620/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-08-30T08:08:47.249630",
-    "Trends": "2026-09-02T20:05:50.815914",
+    "Trends": "2026-09-02T23:09:16.487028",
     "Dresses": "2026-08-30T20:04:32.519899",
     "Feminine & Flowy Fits": "2026-08-30T15:53:11.738550",
     "Short fall dresses": "2026-08-31T08:26:55.669324",
@@ -3318,7 +3362,7 @@
     "Our Recommended...": "2026-08-30T20:06:17.138990",
     "Blouse": "2026-09-02T07:02:11.433507",
     "Wardrobe Must-Hav...": "2026-08-31T18:37:19.972670",
-    "Camis & Tanks": "2026-08-20T12:33:25.750238",
+    "Camis & Tanks": "2026-09-02T23:12:37.424489",
     "Wardrobe Must Haves": "2026-08-31T22:08:39.936129",
     "Trendy Backpacks": "2026-08-20T21:36:14.297051",
     "Festive Styles": "2026-08-21T12:35:45.523082",
@@ -3339,7 +3383,7 @@
     "Fashion Models": "2026-08-21T03:11:43.464820",
     "My Shop #1737732113": "2026-08-21T12:37:11.882612",
     "Shop For Holidays": "2026-08-21T21:33:29.613600",
-    "New": "2026-09-02T20:07:04.816031",
+    "New": "2026-09-02T23:10:24.406725",
     "American Bazi": "2026-08-22T12:26:35.616325",
     "Cool & Casual Styles": "2026-08-24T21:38:38.932637",
     "MeeeShop's Luxe Styles": "2026-08-22T17:56:02.089648",
@@ -3392,11 +3436,12 @@
     "comfy fall outfits": "2026-09-01T00:35:22.197797",
     "Ankle Strap Flats": "2026-09-01T07:39:15.343019",
     "Relaxed Yet Trendy...": "2026-09-01T15:54:13.191192",
-    "Chic & Cozy: Annie...": "2026-09-02T15:51:01.623160"
+    "Chic & Cozy: Annie...": "2026-09-02T15:51:01.623160",
+    "Fall outfits": "2026-09-02T23:11:31.652514"
   },
-  "daily_count": 12,
-  "last_post_time": "2026-09-02T20:09:33.329091",
+  "daily_count": 16,
+  "last_post_time": "2026-09-02T23:12:37.424489",
   "board_rotation_cursor": 0,
   "last_image_style": "collage",
-  "last_template_index": 14
+  "last_template_index": 11
 }
