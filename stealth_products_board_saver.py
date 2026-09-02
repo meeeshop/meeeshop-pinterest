@@ -1,17 +1,17 @@
 """
-stealth_products_board_saver.py — Stealth Catalog Repin & Organizer with 7-Day Product Cooldown
+stealth_products_board_saver.py — Stealth Catalog Repin & Organizer with Live Pinterest & 7-Day Cooldown
 
-Automates discovering in-stock products from Meeeshop, enforcing strict 7-day cooldown
-(never repinning or saving products that were already pinned in the last 7 days across all workflows),
+Automates discovering in-stock products from Meeeshop, enforcing strict live Pinterest deduplication
+(scans live Pinterest profile pins + local history to never re-pin recently saved products),
 ensuring category & product diversity (every pin in a run is a DIFFERENT product from a DIFFERENT category,
 saved to a DIFFERENT niche board), verifying real-time inventory and storefront health (skipping deleted 404s
 and sold-out items), and publishing/repinning via Pinterest's authenticated API during US peak shopping hours.
 
 Key Features & US Organic Growth Strategy:
-1. Strict 7-Day Cross-Workflow Cooldown:
-   - Scans all history files (repin_history_stealth.json, posting_history_stealth.json, posting_history_v2.json, video_posting_history.json).
-   - Skips any product that was already posted, repinned, or saved within the last 7 days.
-   - Rotates through the entire catalog so new, fresh products are featured on every single run.
+1. Live Pinterest & Cross-Workflow Deduplication:
+   - Fetches recent pins directly from live Pinterest profile (`get_user_pins`).
+   - Scans all local history files (repin_history_stealth.json, posting_history_stealth.json, etc.).
+   - Skips any product that is already present on Pinterest or was saved within the last 7 days.
 2. Category & Product Diversity Enforcer:
    - Deduplicates candidate products by canonical base title/handle (no duplicate variants).
    - Enforces distinct product types in every run (e.g. 1 Dress, 1 Skirt, 1 Cardigan, 1 Top/Pants).
@@ -177,7 +177,6 @@ def get_recently_pinned_cooldown_set(days: int = 7) -> Set[str]:
                             if dt >= cutoff:
                                 raw_title = str(item.get(title_key, "")).strip().lower()
                                 if raw_title:
-                                    # Normalize title by removing common brand suffixes
                                     clean = raw_title.split("—")[0].split("-")[0].split("|")[0].strip()
                                     clean_norm = re.sub(r'[^a-z0-9]', '', clean)
                                     if clean_norm:
@@ -190,7 +189,7 @@ def get_recently_pinned_cooldown_set(days: int = 7) -> Set[str]:
             except Exception as e:
                 logger.warning(f"Error reading history from {fpath.name}: {e}")
 
-    logger.info(f"✓ Loaded {len(recent_set)} unique product keys under {days}-day cooldown")
+    logger.info(f"✓ Loaded {len(recent_set)} product keys from local JSON history")
     return recent_set
 
 
@@ -278,7 +277,7 @@ def classify_product_category_group(title: str, product_type: str = "") -> str:
 class StealthProductsBoardSaver:
     """
     Scans recently published/updated in-stock products from Shopify & Pinterest catalog,
-    and organizes them into matching buyer boards with strict 7-day cooldown & category diversity.
+    and organizes them into matching buyer boards with live Pinterest deduplication & category diversity.
     """
 
     def __init__(self, headless: bool = True):
@@ -375,7 +374,38 @@ class StealthProductsBoardSaver:
             logger.error("Failed to authenticate Pinterest Client")
             return False
 
-    def fetch_newest_in_stock_products(self, limit: int = 100) -> List[Dict[str, Any]]:
+    def fetch_live_pinterest_pinned_keys(self) -> Set[str]:
+        """
+        Fetches the user's latest 250 pins directly from live Pinterest profile
+        to ensure 100% real-time deduplication against already pinned items.
+        """
+        live_keys = set()
+        try:
+            print("📡 Fetching recent pins directly from live Pinterest profile...", flush=True)
+            pins = self.pinterest.client.get_user_pins(username=self.username)
+            for p in (pins or []):
+                title = p.get('title') or p.get('grid_title') or ''
+                link = p.get('link') or p.get('url') or ''
+                if title:
+                    clean = title.split('—')[0].split('-')[0].split('|')[0].strip()
+                    clean_norm = re.sub(r'[^a-z0-9]', '', clean.lower())
+                    if clean_norm:
+                        live_keys.add(clean_norm)
+                    full_norm = re.sub(r'[^a-z0-9]', '', title.lower())
+                    if full_norm:
+                        live_keys.add(full_norm)
+                if link and 'products/' in link:
+                    handle = link.split('products/')[-1].split('?')[0].strip()
+                    handle_norm = re.sub(r'[^a-z0-9]', '', handle.lower())
+                    if handle_norm:
+                        live_keys.add(handle_norm)
+
+            logger.info(f"✓ Loaded {len(live_keys)} product keys directly from live Pinterest account")
+        except Exception as e:
+            logger.warning(f"Notice fetching live Pinterest pins: {e}")
+        return live_keys
+
+    def fetch_newest_in_stock_products(self, limit: int = 150) -> List[Dict[str, Any]]:
         """
         Fetch the newest active, in-stock products directly from Shopify GraphQL API
         ordered by PUBLISHED_AT DESC.
@@ -412,7 +442,7 @@ class StealthProductsBoardSaver:
         }
         """
         try:
-            res = self.shopify.run_graphql(query, {"first": min(limit, 150)})
+            res = self.shopify.run_graphql(query, {"first": min(limit, 200)})
             edges = res.get("data", {}).get("products", {}).get("edges", [])
             in_stock_products = []
 
@@ -450,7 +480,7 @@ class StealthProductsBoardSaver:
             logger.error(f"Failed to fetch newest products from Shopify: {e}")
             return []
 
-    def discover_catalog_pins_from_products_board(self, max_pins: int = 100) -> List[Dict[str, Any]]:
+    def discover_catalog_pins_from_products_board(self, max_pins: int = 150) -> List[Dict[str, Any]]:
         """
         Combines Shopify's newest published products with Pinterest catalog pins on `_products`,
         enforcing product-level deduplication.
@@ -466,6 +496,7 @@ class StealthProductsBoardSaver:
                 if canon_key not in unique_products_map:
                     unique_products_map[canon_key] = {
                         "pin_id": None,
+                        "handle": sp["handle"],
                         "title": sp["title"],
                         "raw_title": sp["title"],
                         "description": f"Shop {sp['title']} by {sp['vendor']}. Fast shipping across the USA from MeeeShop Boutique.",
@@ -546,10 +577,12 @@ class StealthProductsBoardSaver:
                         clean_title = raw_title.split(" - ")[0].strip() if " - " in raw_title else raw_title
                         canon_key = re.sub(r'[^a-z0-9]', '', clean_title.lower())
                         cat_group = classify_product_category_group(clean_title, "")
+                        handle = link.split('products/')[-1].split('?')[0].strip() if 'products/' in link else ""
 
                         if canon_key not in unique_products_map or unique_products_map[canon_key].get("pin_id") is None:
                             unique_products_map[canon_key] = {
                                 "pin_id": str(pid),
+                                "handle": handle,
                                 "title": clean_title,
                                 "raw_title": raw_title,
                                 "description": desc,
@@ -575,7 +608,7 @@ class StealthProductsBoardSaver:
     ) -> List[Dict[str, Any]]:
         """
         Selects a strictly diverse batch of fresh products where:
-        1. Products pinned in the last 7 days are strictly skipped.
+        1. Products already pinned live on Pinterest or saved in last 7 days are strictly skipped.
         2. Every product in the batch belongs to a DIFFERENT category group (1 Dress, 1 Skirt, 1 Cardigan, 1 Top/Pants, etc.).
         """
         def is_in_cooldown(p: Dict[str, Any]) -> bool:
@@ -584,12 +617,12 @@ class StealthProductsBoardSaver:
             handle_clean = re.sub(r'[^a-z0-9]', '', p.get("handle", "").lower())
             return any(k in cooldown_set for k in [title_clean, raw_clean, handle_clean] if k)
 
-        # Filter out products currently in 7-day cooldown
+        # Filter out products currently in cooldown or already live on Pinterest
         fresh_eligible = [p for p in products if not is_in_cooldown(p)]
-        logger.info(f"✓ Found {len(fresh_eligible)} un-pinned fresh products not seen in last 7 days (out of {len(products)} total)")
+        logger.info(f"✓ Found {len(fresh_eligible)} un-pinned fresh products not seen on Pinterest (out of {len(products)} total)")
 
         if not fresh_eligible:
-            logger.info("All scanned products have been organized in the last 7 days. Re-evaluating older candidates...")
+            logger.info("All scanned products are currently on Pinterest boards. Re-evaluating older candidates...")
             fresh_eligible = products
 
         selected_batch = []
@@ -692,13 +725,13 @@ class StealthProductsBoardSaver:
         dry_run: bool = False
     ) -> Dict[str, Any]:
         """
-        Orchestrates the repinning session prioritizing un-pinned items with 7-day cooldown.
+        Orchestrates the repinning session prioritizing un-pinned items with live Pinterest deduplication.
         """
         history = load_repin_history()
         today_count = get_today_repin_count(history)
 
         print("\n" + "=" * 70, flush=True)
-        print("🚀 PINTEREST STEALTH PRODUCTS BOARD SAVER (7-DAY COOLDOWN & DIVERSE CATEGORIES)", flush=True)
+        print("🚀 PINTEREST STEALTH PRODUCTS BOARD SAVER (LIVE COOLDOWN & DIVERSE CATEGORIES)", flush=True)
         print(f"Today's Repin Count: {today_count}/{daily_cap} | Batch Goal: {max_repins} pins", flush=True)
         if dry_run:
             print("🧪 DRY RUN MODE ENABLED — No changes will be published", flush=True)
@@ -716,20 +749,25 @@ class StealthProductsBoardSaver:
                 sys.exit(1)
             return {"status": "error", "reason": "auth_failed", "repinned": 0}
 
-        # 2. Discover unique, in-stock products
-        products = self.discover_catalog_pins_from_products_board(max_pins=100)
+        # 2. Build live cooldown set from live Pinterest profile + JSON history
+        local_cooldown = get_recently_pinned_cooldown_set(days=7)
+        live_cooldown = self.fetch_live_pinterest_pinned_keys()
+        unified_cooldown = local_cooldown.union(live_cooldown)
+        print(f"🔒 Total active cooldown keys (Live Pinterest + History): {len(unified_cooldown)}\n", flush=True)
+
+        # 3. Discover unique, in-stock products
+        products = self.discover_catalog_pins_from_products_board(max_pins=150)
         if not products:
             logger.warning("No verified in-stock products available.")
             if not dry_run:
                 sys.exit(1)
             return {"status": "empty", "repinned": 0}
 
-        # 3. Enforce 7-Day Cooldown & Strict Product/Category Diversity
-        cooldown_set = get_recently_pinned_cooldown_set(days=7)
+        # 4. Enforce Strict Live Cooldown & Product/Category Diversity
         to_process = self.select_diverse_product_batch(
             products=products,
             batch_size=allowed_this_run,
-            cooldown_set=cooldown_set
+            cooldown_set=unified_cooldown
         )
 
         print(f"\n🎯 Selected {len(to_process)} fresh distinct products (1 per category group) for this run:\n", flush=True)
