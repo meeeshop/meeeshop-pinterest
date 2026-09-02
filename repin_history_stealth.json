@@ -79,6 +79,46 @@
       "target_board_id": "962222345325046949",
       "live_url": "https://us.meeeshop.com/products/brinx-light-wash-oversized-denim-jacket",
       "timestamp": "2026-09-02T05:40:21.721760+00:00"
+    },
+    {
+      "pin_id": "shopify_1_1788331695",
+      "product_title": "Kylin Open Front Cardigan Top",
+      "category_group": "cardigans_sweaters",
+      "source_board": "_products",
+      "target_board": "Chic & Cozy: Annie Wear Trends",
+      "target_board_id": "962222345325678844",
+      "live_url": "https://us.meeeshop.com/products/kylin-open-front-cardigan-top",
+      "timestamp": "2026-09-02T06:48:19.431530+00:00"
+    },
+    {
+      "pin_id": "4609082448475997248",
+      "product_title": "Remi Navy Denim Midi Skirt",
+      "category_group": "skirts",
+      "source_board": "_products",
+      "target_board": "Chic Looks",
+      "target_board_id": "962222345325728634",
+      "live_url": "https://www.pinterest.com/pin/4609082448475997248/",
+      "timestamp": "2026-09-02T06:48:45.484377+00:00"
+    },
+    {
+      "pin_id": "shopify_3_1788331744",
+      "product_title": "Lennox Classic Midi Dress",
+      "category_group": "dresses",
+      "source_board": "_products",
+      "target_board": "Short fall dresses",
+      "target_board_id": "962222345325607224",
+      "live_url": "https://us.meeeshop.com/products/lennox-classic-midi-dress",
+      "timestamp": "2026-09-02T06:49:08.822526+00:00"
+    },
+    {
+      "pin_id": "shopify_4_1788331775",
+      "product_title": "Essential Sand Flutter Sleeve Top",
+      "category_group": "tops_tanks_blouses",
+      "source_board": "_products",
+      "target_board": "Shirts & Tops",
+      "target_board_id": "962222345325006413",
+      "live_url": "https://us.meeeshop.com/products/essential-sand-flutter-sleeve-top",
+      "timestamp": "2026-09-02T06:49:39.779102+00:00"
     }
   ],
   "board_last_used": {
@@ -89,8 +129,12 @@
     "Sweaters": "2026-09-02T05:39:10.195999+00:00",
     "Dressy Outfits": "2026-09-02T05:39:38.279600+00:00",
     "Dress": "2026-09-02T05:39:58.782831+00:00",
-    "Outerwear": "2026-09-02T05:40:21.721760+00:00"
+    "Outerwear": "2026-09-02T05:40:21.721760+00:00",
+    "Chic & Cozy: Annie Wear Trends": "2026-09-02T06:48:19.431530+00:00",
+    "Chic Looks": "2026-09-02T06:48:45.484377+00:00",
+    "Short fall dresses": "2026-09-02T06:49:08.822526+00:00",
+    "Shirts & Tops": "2026-09-02T06:49:39.779102+00:00"
   },
-  "daily_count": 8,
-  "last_repin_time": "2026-09-02T05:40:21.721760+00:00"
+  "daily_count": 12,
+  "last_repin_time": "2026-09-02T06:49:39.779102+00:00"
 }
