@@ -3156,6 +3156,52 @@
       "template": 17,
       "pin_url": "https://www.pinterest.com/pin/962222276663677301/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": "570698301611",
+      "article_id": "570698301611",
+      "title": "How to Organize Your Closet to Save Time Every Morning",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-09-02T06:58:15.796733",
+      "type": "blog",
+      "style": "card",
+      "template": 9,
+      "pin_url": "https://www.pinterest.com/pin/962222276663685057/",
+      "blog_url": "https://us.meeeshop.com/blogs/our-tips/how-to-organize-your-closet-to-save-time-every-morning",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8782638514347,
+      "title": "Gulf Coast Halter Dress Blue White Yarndyed Stripe | MeeeShop US Boutique",
+      "board": "New",
+      "timestamp": "2026-09-02T07:00:57.845539",
+      "type": "video",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276663685095/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8933161730219,
+      "title": "Serene Determination Built-in Tank | Fall 2026 Casual Work Top \u2014 MeeeShop",
+      "board": "Blouse",
+      "timestamp": "2026-09-02T07:02:11.433507",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276663685107/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8827510522027,
+      "title": "Sally Suede Barrel Shoulder Bag - Fall 2026 Labor Day Must-Have \u2014 MeeeShop",
+      "board": "Handbag #handsips",
+      "timestamp": "2026-09-02T07:03:56.808823",
+      "type": "product",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276663685127/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
@@ -3179,10 +3225,10 @@
     "Shirts & Tops": "2026-08-31T22:07:26.782906",
     "Blouses": "2026-09-01T07:38:08.294690",
     "Rompers_Jumpsuits &...": "2026-08-20T18:01:41.570995",
-    "Handbag #handsips": "2026-08-19T17:55:31.438390",
+    "Handbag #handsips": "2026-09-02T07:03:56.808823",
     "Trendy & Timeless...": "2026-08-29T23:14:22.474834",
     "Our Recommended...": "2026-08-30T20:06:17.138990",
-    "Blouse": "2026-08-19T03:16:24.535618",
+    "Blouse": "2026-09-02T07:02:11.433507",
     "Wardrobe Must-Hav...": "2026-08-31T18:37:19.972670",
     "Camis & Tanks": "2026-08-20T12:33:25.750238",
     "Wardrobe Must Haves": "2026-08-31T22:08:39.936129",
@@ -3205,7 +3251,7 @@
     "Fashion Models": "2026-08-21T03:11:43.464820",
     "My Shop #1737732113": "2026-08-21T12:37:11.882612",
     "Shop For Holidays": "2026-08-21T21:33:29.613600",
-    "New": "2026-09-01T23:11:14.147641",
+    "New": "2026-09-02T07:00:57.845539",
     "American Bazi": "2026-08-22T12:26:35.616325",
     "Cool & Casual Styles": "2026-08-24T21:38:38.932637",
     "MeeeShop's Luxe Styles": "2026-08-22T17:56:02.089648",
@@ -3259,9 +3305,9 @@
     "Ankle Strap Flats": "2026-09-01T07:39:15.343019",
     "Relaxed Yet Trendy...": "2026-09-01T15:54:13.191192"
   },
-  "daily_count": 20,
-  "last_post_time": "2026-09-01T23:13:33.653509",
+  "daily_count": 4,
+  "last_post_time": "2026-09-02T07:03:56.808823",
   "board_rotation_cursor": 0,
   "last_image_style": "collage",
-  "last_template_index": 17
+  "last_template_index": 14
 }
