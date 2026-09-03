@@ -3424,11 +3424,55 @@
       "template": 16,
       "pin_url": "https://www.pinterest.com/pin/962222276663726494/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8745258909867,
+      "title": "Flying Tomato Romantic Canopy Woven Midi Dress - Perfect Labor Day & Fall Look",
+      "board": "Trends",
+      "timestamp": "2026-09-03T20:07:04.342039",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276663733962/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8892150153387,
+      "title": "Sport Full Zip Jacket | MeeeShop US Boutique",
+      "board": "New",
+      "timestamp": "2026-09-03T20:08:16.727510",
+      "type": "carousel",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276663733997/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8782659780779,
+      "title": "Flying Tomato Still Thinking Lace Midi Dress | MeeeShop US Boutique",
+      "board": "Rompers, Jumpsuits &...",
+      "timestamp": "2026-09-03T20:09:33.744091",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276663734038/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8880718053547,
+      "title": "Satin Detailed Midi Skirt: Labor Day Chic & Fall Elegance \u2014 MeeeShop",
+      "board": "Fashion Models",
+      "timestamp": "2026-09-03T20:10:46.054458",
+      "type": "carousel",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276663734085/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-08-30T08:08:47.249630",
-    "Trends": "2026-09-03T15:35:10.305028",
+    "Trends": "2026-09-03T20:07:04.342039",
     "Dresses": "2026-08-30T20:04:32.519899",
     "Feminine & Flowy Fits": "2026-08-30T15:53:11.738550",
     "Short fall dresses": "2026-08-31T08:26:55.669324",
@@ -3442,7 +3486,7 @@
     "Must-Have Fashion...": "2026-08-29T20:03:49.063922",
     "Flares Jeans": "2026-08-31T18:36:06.107736",
     "Short Tall dresses": "2026-09-03T07:07:40.471733",
-    "Rompers, Jumpsuits &...": "2026-08-20T12:35:59.433834",
+    "Rompers, Jumpsuits &...": "2026-09-03T20:09:33.744091",
     "Skirts": "2026-09-01T15:53:02.807938",
     "Shirts & Tops": "2026-08-31T22:07:26.782906",
     "Blouses": "2026-09-01T07:38:08.294690",
@@ -3470,10 +3514,10 @@
     "Wardrobe Goals": "2026-09-02T20:08:11.829837",
     "Nylon backpack": "2026-08-21T03:10:07.082298",
     "Everyday Style": "2026-09-02T20:09:33.329091",
-    "Fashion Models": "2026-08-21T03:11:43.464820",
+    "Fashion Models": "2026-09-03T20:10:46.054458",
     "My Shop #1737732113": "2026-08-21T12:37:11.882612",
     "Shop For Holidays": "2026-08-21T21:33:29.613600",
-    "New": "2026-09-03T15:36:22.876125",
+    "New": "2026-09-03T20:08:16.727510",
     "American Bazi": "2026-08-22T12:26:35.616325",
     "Cool & Casual Styles": "2026-08-24T21:38:38.932637",
     "MeeeShop's Luxe Styles": "2026-08-22T17:56:02.089648",
@@ -3530,9 +3574,9 @@
     "Fall outfits": "2026-09-02T23:11:31.652514",
     "Winter Outfits": "2026-09-03T15:38:46.303716"
   },
-  "daily_count": 8,
-  "last_post_time": "2026-09-03T15:38:46.303716",
+  "daily_count": 12,
+  "last_post_time": "2026-09-03T20:10:46.054458",
   "board_rotation_cursor": 0,
   "last_image_style": "collage",
-  "last_template_index": 16
+  "last_template_index": 17
 }
