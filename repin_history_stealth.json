@@ -199,6 +199,46 @@
       "target_board_id": "962222345324527791",
       "live_url": "https://us.meeeshop.com/products/aspen-flannel-tunic-red-black-yarndyed-plaid",
       "timestamp": "2026-09-02T20:05:19.670011+00:00"
+    },
+    {
+      "pin_id": "shopify_1_1788418203",
+      "product_title": "Montauk Dress Black with Embroidered Cheetahs",
+      "category_group": "dresses",
+      "source_board": "_products",
+      "target_board": "Rompers, Jumpsuits & Outfit Sets",
+      "target_board_id": "962222345325668668",
+      "live_url": "https://us.meeeshop.com/products/montauk-dress-black-with-embroidered-cheetahs",
+      "timestamp": "2026-09-03T06:50:06.733837+00:00"
+    },
+    {
+      "pin_id": "shopify_2_1788418225",
+      "product_title": "Milano Top Ivory Embroidered Cheetahs",
+      "category_group": "tops_tanks_blouses",
+      "source_board": "_products",
+      "target_board": "Confident Looks",
+      "target_board_id": "962222345325695770",
+      "live_url": "https://us.meeeshop.com/products/milano-top-ivory-embroidered-cheetahs",
+      "timestamp": "2026-09-03T06:50:29.112026+00:00"
+    },
+    {
+      "pin_id": "shopify_3_1788418259",
+      "product_title": "Woodstock Skirt Blue White",
+      "category_group": "skirts",
+      "source_board": "_products",
+      "target_board": "Trends",
+      "target_board_id": "962222345325426077",
+      "live_url": "https://us.meeeshop.com/products/woodstock-skirt-blue-white",
+      "timestamp": "2026-09-03T06:51:03.427987+00:00"
+    },
+    {
+      "pin_id": "shopify_4_1788418279",
+      "product_title": "Cape Cod Tunic Botanical Print",
+      "category_group": "general_apparel",
+      "source_board": "_products",
+      "target_board": "Wardrobe Must-Haves",
+      "target_board_id": "962222345325704400",
+      "live_url": "https://us.meeeshop.com/products/cape-cod-tunic-botanical-print",
+      "timestamp": "2026-09-03T06:51:22.490210+00:00"
     }
   ],
   "board_last_used": {
@@ -221,8 +261,12 @@
     "Cocktail Dresses": "2026-09-02T20:03:52.186194+00:00",
     "Camis & Tanks": "2026-09-02T20:04:13.228858+00:00",
     "Trendy & Timeless Fashion": "2026-09-02T20:04:40.999070+00:00",
-    "Our Recommended Feminine Styles": "2026-09-02T20:05:19.670011+00:00"
+    "Our Recommended Feminine Styles": "2026-09-02T20:05:19.670011+00:00",
+    "Rompers, Jumpsuits & Outfit Sets": "2026-09-03T06:50:06.733837+00:00",
+    "Confident Looks": "2026-09-03T06:50:29.112026+00:00",
+    "Trends": "2026-09-03T06:51:03.427987+00:00",
+    "Wardrobe Must-Haves": "2026-09-03T06:51:22.490210+00:00"
   },
-  "daily_count": 20,
-  "last_repin_time": "2026-09-02T20:05:19.670011+00:00"
+  "daily_count": 4,
+  "last_repin_time": "2026-09-03T06:51:22.490210+00:00"
 }
