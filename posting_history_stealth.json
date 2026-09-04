@@ -3646,11 +3646,55 @@
       "template": 15,
       "pin_url": "https://www.pinterest.com/pin/962222276663764994/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8885468463275,
+      "title": "Judy Blue Full Size Medium Rise Tummy Control Destroy Flare | MeeeShop US Boutique",
+      "board": "Trends",
+      "timestamp": "2026-09-04T22:54:13.386785",
+      "type": "carousel",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276663769163/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8970885136555,
+      "title": "Emory Park Nadia Sweater - Cozy Fall Layer for Labor Day & Weekend Chic \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-09-04T22:55:29.717892",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276663769193/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8879308996779,
+      "title": "Cropped High Neck Rib Tank - Perfect Labor Day & Fall 2026 Look \u2014 MeeeShop",
+      "board": "American Bazi",
+      "timestamp": "2026-09-04T22:56:36.790739",
+      "type": "carousel",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276663769228/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8970888183979,
+      "title": "Emory Park Juliet Top - Labor Day Outfit Idea \u2014 MeeeShop",
+      "board": "MeeeShop's Luxe Styles",
+      "timestamp": "2026-09-04T22:58:06.656706",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276663769275/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-08-30T08:08:47.249630",
-    "Trends": "2026-09-04T19:51:14.787872",
+    "Trends": "2026-09-04T22:54:13.386785",
     "Dresses": "2026-08-30T20:04:32.519899",
     "Feminine & Flowy Fits": "2026-08-30T15:53:11.738550",
     "Short fall dresses": "2026-08-31T08:26:55.669324",
@@ -3695,10 +3739,10 @@
     "Fashion Models": "2026-09-03T20:10:46.054458",
     "My Shop #1737732113": "2026-09-04T07:09:51.722709",
     "Shop For Holidays": "2026-09-04T15:34:26.849836",
-    "New": "2026-09-04T19:52:30.312757",
-    "American Bazi": "2026-08-22T12:26:35.616325",
+    "New": "2026-09-04T22:55:29.717892",
+    "American Bazi": "2026-09-04T22:56:36.790739",
     "Cool & Casual Styles": "2026-08-24T21:38:38.932637",
-    "MeeeShop's Luxe Styles": "2026-08-22T17:56:02.089648",
+    "MeeeShop's Luxe Styles": "2026-09-04T22:58:06.656706",
     "Outerwear": "2026-08-15T21:27:33.722132",
     "Zenana Women's...": "2026-08-23T12:25:45.076583",
     "Thanks giving Outfits": "2026-08-22T21:29:58.913873",
@@ -3752,9 +3796,9 @@
     "Fall outfits": "2026-09-02T23:11:31.652514",
     "Winter Outfits": "2026-09-03T15:38:46.303716"
   },
-  "daily_count": 12,
-  "last_post_time": "2026-09-04T19:58:07.318666",
+  "daily_count": 16,
+  "last_post_time": "2026-09-04T22:58:06.656706",
   "board_rotation_cursor": 0,
   "last_image_style": "carousel",
-  "last_template_index": 15
+  "last_template_index": 16
 }
