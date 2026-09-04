@@ -479,6 +479,46 @@
       "target_board_id": "962222345325596670",
       "live_url": "https://us.meeeshop.com/products/flying-tomato-ill-think-about-polo-top",
       "timestamp": "2026-09-04T19:51:11.860844+00:00"
+    },
+    {
+      "pin_id": "shopify_1_1788561683",
+      "product_title": "The Tote Crossbody Bag with Handles",
+      "category_group": "bags_accessories",
+      "source_board": "_products",
+      "target_board": "New Trendy Women Apparel, Shoes, Handbags & more",
+      "target_board_id": "962222345325172900",
+      "live_url": "https://us.meeeshop.com/products/the-tote-crossbody-bag-with-handles",
+      "timestamp": "2026-09-04T22:41:26.276552+00:00"
+    },
+    {
+      "pin_id": "shopify_2_1788561703",
+      "product_title": "Flying Tomato Clay Modern Sway Woven Midi Dress",
+      "category_group": "dresses",
+      "source_board": "_products",
+      "target_board": "BFCM Deals",
+      "target_board_id": "962222345325599496",
+      "live_url": "https://us.meeeshop.com/products/flying-tomato-clay-modern-sway-woven-midi-dress",
+      "timestamp": "2026-09-04T22:41:46.391018+00:00"
+    },
+    {
+      "pin_id": "shopify_3_1788561739",
+      "product_title": "Flying Tomato Fireside Charm Cinched Neck Sweater",
+      "category_group": "cardigans_sweaters",
+      "source_board": "_products",
+      "target_board": "Sweaters for women",
+      "target_board_id": "962222345325605900",
+      "live_url": "https://us.meeeshop.com/products/flying-tomato-fireside-charm-cinched-neck-sweater",
+      "timestamp": "2026-09-04T22:42:22.662581+00:00"
+    },
+    {
+      "pin_id": "shopify_4_1788561775",
+      "product_title": "Flying Tomato Moonlit Garden Printed Maxi Skirt",
+      "category_group": "skirts",
+      "source_board": "_products",
+      "target_board": "new products",
+      "target_board_id": "962222345326267752",
+      "live_url": "https://us.meeeshop.com/products/flying-tomato-moonlit-garden-printed-maxi-skirt",
+      "timestamp": "2026-09-04T22:42:58.551556+00:00"
     }
   ],
   "board_last_used": {
@@ -529,8 +569,12 @@
     "Nylon backpack": "2026-09-04T19:49:53.799241+00:00",
     "Mustard Seed Clothing": "2026-09-04T19:50:17.170810+00:00",
     "Effortless Looks": "2026-09-04T19:50:39.967919+00:00",
-    "best selling products": "2026-09-04T19:51:11.860844+00:00"
+    "best selling products": "2026-09-04T19:51:11.860844+00:00",
+    "New Trendy Women Apparel, Shoes, Handbags & more": "2026-09-04T22:41:26.276552+00:00",
+    "BFCM Deals": "2026-09-04T22:41:46.391018+00:00",
+    "Sweaters for women": "2026-09-04T22:42:22.662581+00:00",
+    "new products": "2026-09-04T22:42:58.551556+00:00"
   },
-  "daily_count": 12,
-  "last_repin_time": "2026-09-04T19:51:11.860844+00:00"
+  "daily_count": 16,
+  "last_repin_time": "2026-09-04T22:42:58.551556+00:00"
 }
