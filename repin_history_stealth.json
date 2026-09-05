@@ -519,6 +519,46 @@
       "target_board_id": "962222345326267752",
       "live_url": "https://us.meeeshop.com/products/flying-tomato-moonlit-garden-printed-maxi-skirt",
       "timestamp": "2026-09-04T22:42:58.551556+00:00"
+    },
+    {
+      "pin_id": "4610208372035806272",
+      "product_title": "Flying Tomato Macadamia Draped Sweater Knit Top",
+      "category_group": "cardigans_sweaters",
+      "source_board": "_products",
+      "target_board": "Fall outfits",
+      "target_board_id": "962222345325057608",
+      "live_url": "https://www.pinterest.com/pin/4610208372035806272/",
+      "timestamp": "2026-09-05T06:40:04.179589+00:00"
+    },
+    {
+      "pin_id": "4601412268111769664",
+      "product_title": "Women's 100% Cotton Gauze Heidi Top",
+      "category_group": "tops_tanks_blouses",
+      "source_board": "_products",
+      "target_board": "Puff Sleeve Tops",
+      "target_board_id": "962222345325585624",
+      "live_url": "https://www.pinterest.com/pin/4601412268111769664/",
+      "timestamp": "2026-09-05T06:40:33.385819+00:00"
+    },
+    {
+      "pin_id": "4590575508822612864",
+      "product_title": "Anjanette Dress",
+      "category_group": "dresses",
+      "source_board": "_products",
+      "target_board": "Outfit Ideas",
+      "target_board_id": "962222345325672760",
+      "live_url": "https://www.pinterest.com/pin/4590575508822612864/",
+      "timestamp": "2026-09-05T06:40:50.565738+00:00"
+    },
+    {
+      "pin_id": "4604649251062542400",
+      "product_title": "Ymi Women's Luxe Britney Wide Leg Jeans",
+      "category_group": "pants_denim",
+      "source_board": "_products",
+      "target_board": "Flares Jeans",
+      "target_board_id": "962222345325683655",
+      "live_url": "https://www.pinterest.com/pin/4604649251062542400/",
+      "timestamp": "2026-09-05T06:41:17.164562+00:00"
     }
   ],
   "board_last_used": {
@@ -573,8 +613,12 @@
     "New Trendy Women Apparel, Shoes, Handbags & more": "2026-09-04T22:41:26.276552+00:00",
     "BFCM Deals": "2026-09-04T22:41:46.391018+00:00",
     "Sweaters for women": "2026-09-04T22:42:22.662581+00:00",
-    "new products": "2026-09-04T22:42:58.551556+00:00"
+    "new products": "2026-09-04T22:42:58.551556+00:00",
+    "Fall outfits": "2026-09-05T06:40:04.179589+00:00",
+    "Puff Sleeve Tops": "2026-09-05T06:40:33.385819+00:00",
+    "Outfit Ideas": "2026-09-05T06:40:50.565738+00:00",
+    "Flares Jeans": "2026-09-05T06:41:17.164562+00:00"
   },
-  "daily_count": 16,
-  "last_repin_time": "2026-09-04T22:42:58.551556+00:00"
+  "daily_count": 4,
+  "last_repin_time": "2026-09-05T06:41:17.164562+00:00"
 }
