@@ -3813,11 +3813,55 @@
       "template": 11,
       "pin_url": "https://www.pinterest.com/pin/962222276663797095/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8970887069867,
+      "title": "Emory Park Aurora Maxi Dress: Fall 2026 Labor Day Glam \u2014 MeeeShop",
+      "board": "Trends",
+      "timestamp": "2026-09-05T22:46:09.625983",
+      "type": "video",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276663803666/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8869173002411,
+      "title": "Air Scuba Round Neck Long Sleeve Sweatshirt - Cozy Fall Labor Day Look \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-09-05T22:47:17.384821",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276663803695/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8827509571755,
+      "title": "Celeste Crescent Shoulder Bag | MeeeShop US Boutique",
+      "board": "Trendy Backpacks",
+      "timestamp": "2026-09-05T22:48:29.782327",
+      "type": "carousel",
+      "style": "collage",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276663803710/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8930017149099,
+      "title": "V-neck Top with Lace Trim, Grey - Effortless Labor Day & Fall Look \u2014 MeeeShop",
+      "board": "Effortless Looks",
+      "timestamp": "2026-09-05T22:49:38.613066",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276663803745/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-08-30T08:08:47.249630",
-    "Trends": "2026-09-05T19:23:22.037300",
+    "Trends": "2026-09-05T22:46:09.625983",
     "Dresses": "2026-08-30T20:04:32.519899",
     "Feminine & Flowy Fits": "2026-08-30T15:53:11.738550",
     "Short fall dresses": "2026-08-31T08:26:55.669324",
@@ -3843,7 +3887,7 @@
     "Wardrobe Must-Hav...": "2026-08-31T18:37:19.972670",
     "Camis & Tanks": "2026-09-02T23:12:37.424489",
     "Wardrobe Must Haves": "2026-08-31T22:08:39.936129",
-    "Trendy Backpacks": "2026-08-20T21:36:14.297051",
+    "Trendy Backpacks": "2026-09-05T22:48:29.782327",
     "Festive Styles": "2026-09-04T19:55:11.548082",
     "Kancan USA Jeans": "2026-09-03T23:10:08.465682",
     "Footwear": "2026-08-14T17:46:13.419439",
@@ -3862,7 +3906,7 @@
     "Fashion Models": "2026-09-03T20:10:46.054458",
     "My Shop #1737732113": "2026-09-04T07:09:51.722709",
     "Shop For Holidays": "2026-09-04T15:34:26.849836",
-    "New": "2026-09-05T19:25:10.823527",
+    "New": "2026-09-05T22:47:17.384821",
     "American Bazi": "2026-09-04T22:56:36.790739",
     "Cool & Casual Styles": "2026-08-24T21:38:38.932637",
     "MeeeShop's Luxe Styles": "2026-09-04T22:58:06.656706",
@@ -3870,7 +3914,7 @@
     "Zenana Women's...": "2026-09-05T14:22:53.769986",
     "Thanks giving Outfits": "2026-09-05T06:53:54.686559",
     "Weekend to Workwear": "2026-08-25T12:37:52.848459",
-    "Effortless Looks": "2026-08-23T17:56:23.268603",
+    "Effortless Looks": "2026-09-05T22:49:38.613066",
     "Vamp Romantic Styles": "2026-09-05T19:26:29.840004",
     "BFCM Deals": "2026-09-04T19:58:07.318666",
     "Poetcore Aesthetics": "2026-08-23T21:31:43.248240",
@@ -3919,9 +3963,9 @@
     "Fall outfits": "2026-09-02T23:11:31.652514",
     "Winter Outfits": "2026-09-03T15:38:46.303716"
   },
-  "daily_count": 11,
-  "last_post_time": "2026-09-05T19:28:56.742954",
+  "daily_count": 15,
+  "last_post_time": "2026-09-05T22:49:38.613066",
   "board_rotation_cursor": 0,
   "last_image_style": "carousel",
-  "last_template_index": 11
+  "last_template_index": 14
 }
