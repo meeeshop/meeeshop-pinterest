@@ -3690,6 +3690,52 @@
       "template": 16,
       "pin_url": "https://www.pinterest.com/pin/962222276663769275/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": "570716815531",
+      "article_id": "570716815531",
+      "title": "How to Style Fine-Knit Cardigans as Standalone Tops with Tailored Trousers",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-09-05T06:49:59.870287",
+      "type": "blog",
+      "style": "card",
+      "template": 9,
+      "pin_url": "https://www.pinterest.com/pin/962222276663778819/",
+      "blog_url": "https://us.meeeshop.com/blogs/cardigans-sweaters-style-guide/how-to-style-fine-knit-cardigans-as-standalone-tops-with-tailored-trousers",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8825174818987,
+      "title": "Bibi 4th of July Stars and Stripes Patches Sweatshirt \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-09-05T06:51:35.251915",
+      "type": "carousel",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276663778835/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8782689927339,
+      "title": "Buki Sleeveless Turtleneck Shirt | MeeeShop US Boutique",
+      "board": "Chic & Effortless Styles",
+      "timestamp": "2026-09-05T06:52:44.495115",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276663778851/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8818157813931,
+      "title": "Emory Park Vale Mini Dress - Fall 2026 Labor Day Chic \u2014 MeeeShop",
+      "board": "Thanks giving Outfits",
+      "timestamp": "2026-09-05T06:53:54.686559",
+      "type": "carousel",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276663778860/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
@@ -3739,13 +3785,13 @@
     "Fashion Models": "2026-09-03T20:10:46.054458",
     "My Shop #1737732113": "2026-09-04T07:09:51.722709",
     "Shop For Holidays": "2026-09-04T15:34:26.849836",
-    "New": "2026-09-04T22:55:29.717892",
+    "New": "2026-09-05T06:51:35.251915",
     "American Bazi": "2026-09-04T22:56:36.790739",
     "Cool & Casual Styles": "2026-08-24T21:38:38.932637",
     "MeeeShop's Luxe Styles": "2026-09-04T22:58:06.656706",
     "Outerwear": "2026-08-15T21:27:33.722132",
     "Zenana Women's...": "2026-08-23T12:25:45.076583",
-    "Thanks giving Outfits": "2026-08-22T21:29:58.913873",
+    "Thanks giving Outfits": "2026-09-05T06:53:54.686559",
     "Weekend to Workwear": "2026-08-25T12:37:52.848459",
     "Effortless Looks": "2026-08-23T17:56:23.268603",
     "Vamp Romantic Styles": "2026-08-23T12:27:01.410872",
@@ -3753,7 +3799,7 @@
     "Poetcore Aesthetics": "2026-08-23T21:31:43.248240",
     "Emory Park Clothing": "2026-08-24T18:05:24.611418",
     "new products": "2026-09-01T20:12:59.976433",
-    "Chic & Effortless Styles": "2026-08-22T21:28:53.283779",
+    "Chic & Effortless Styles": "2026-09-05T06:52:44.495115",
     "Davi & Dani Womens...": "2026-08-25T03:06:55.517268",
     "Weekend to Workout": "2026-08-25T21:37:59.882401",
     "Gimme Gummy Playful Nostalgia": "2026-08-24T03:14:20.016270",
@@ -3796,9 +3842,9 @@
     "Fall outfits": "2026-09-02T23:11:31.652514",
     "Winter Outfits": "2026-09-03T15:38:46.303716"
   },
-  "daily_count": 16,
-  "last_post_time": "2026-09-04T22:58:06.656706",
+  "daily_count": 4,
+  "last_post_time": "2026-09-05T06:53:54.686559",
   "board_rotation_cursor": 0,
-  "last_image_style": "carousel",
-  "last_template_index": 16
+  "last_image_style": "collage",
+  "last_template_index": 17
 }
