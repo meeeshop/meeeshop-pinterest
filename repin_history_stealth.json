@@ -79,6 +79,36 @@
       "target_board_id": "962222345325046949",
       "live_url": "https://us.meeeshop.com/products/brinx-light-wash-oversized-denim-jacket",
       "timestamp": "2026-09-02T05:40:21.721760+00:00"
+    },
+    {
+      "pin_id": "4607323247804608576",
+      "product_title": "Flying Tomato Cedar Line Elegance Sweater Midi Dress",
+      "category_group": "dresses",
+      "source_board": "_products",
+      "target_board": "Short fall dresses",
+      "target_board_id": "962222345325607224",
+      "live_url": "https://www.pinterest.com/pin/4607323247804608576/",
+      "timestamp": "2026-09-05T04:03:35.491262+00:00"
+    },
+    {
+      "pin_id": "4607323234919706688",
+      "product_title": "Elastique Athletics Le Monde Leggings",
+      "category_group": "pants_denim",
+      "source_board": "_products",
+      "target_board": "Must-Have Fashion Picks",
+      "target_board_id": "962222345325701393",
+      "live_url": "https://www.pinterest.com/pin/4607323234919706688/",
+      "timestamp": "2026-09-05T04:04:07.962340+00:00"
+    },
+    {
+      "pin_id": "4610630561700176960",
+      "product_title": "Downeast Demure Denim Dress",
+      "category_group": "dresses",
+      "source_board": "_products",
+      "target_board": "Feminine & Flowy Fits",
+      "target_board_id": "962222345325696967",
+      "live_url": "https://www.pinterest.com/pin/4610630561700176960/",
+      "timestamp": "2026-09-05T04:04:27.899279+00:00"
     }
   ],
   "board_last_used": {
@@ -89,8 +119,11 @@
     "Sweaters": "2026-09-02T05:39:10.195999+00:00",
     "Dressy Outfits": "2026-09-02T05:39:38.279600+00:00",
     "Dress": "2026-09-02T05:39:58.782831+00:00",
-    "Outerwear": "2026-09-02T05:40:21.721760+00:00"
+    "Outerwear": "2026-09-02T05:40:21.721760+00:00",
+    "Short fall dresses": "2026-09-05T04:03:35.491262+00:00",
+    "Must-Have Fashion Picks": "2026-09-05T04:04:07.962340+00:00",
+    "Feminine & Flowy Fits": "2026-09-05T04:04:27.899279+00:00"
   },
-  "daily_count": 8,
-  "last_repin_time": "2026-09-02T05:40:21.721760+00:00"
+  "daily_count": 3,
+  "last_repin_time": "2026-09-05T04:04:27.899279+00:00"
 }
