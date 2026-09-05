@@ -559,6 +559,46 @@
       "target_board_id": "962222345325683655",
       "live_url": "https://www.pinterest.com/pin/4604649251062542400/",
       "timestamp": "2026-09-05T06:41:17.164562+00:00"
+    },
+    {
+      "pin_id": "4600708577104310336",
+      "product_title": "Jasmine Olive Ribbed Maxi Dress",
+      "category_group": "dresses",
+      "source_board": "_products",
+      "target_board": "Style Ideas",
+      "target_board_id": "962222345325426055",
+      "live_url": "https://www.pinterest.com/pin/4600708577104310336/",
+      "timestamp": "2026-09-05T14:45:22.668189+00:00"
+    },
+    {
+      "pin_id": "4593671754542111616",
+      "product_title": "Flying Tomato Fireside Charm Cinched Neck Sweater",
+      "category_group": "cardigans_sweaters",
+      "source_board": "_products",
+      "target_board": "Winter Outfits",
+      "target_board_id": "962222345325592377",
+      "live_url": "https://www.pinterest.com/pin/4593671754542111616/",
+      "timestamp": "2026-09-05T14:45:39.753022+00:00"
+    },
+    {
+      "pin_id": "4610208354855937088",
+      "product_title": "Goal Five Mesh It to Me Tank",
+      "category_group": "tops_tanks_blouses",
+      "source_board": "_products",
+      "target_board": "Ootd #ootd",
+      "target_board_id": "962222345325172804",
+      "live_url": "https://www.pinterest.com/pin/4610208354855937088/",
+      "timestamp": "2026-09-05T14:46:01.669772+00:00"
+    },
+    {
+      "pin_id": "4610208372035806272",
+      "product_title": "Flying Tomato Macadamia Draped Sweater Knit Top",
+      "category_group": "cardigans_sweaters",
+      "source_board": "_products",
+      "target_board": "Sweaters #Sweaters #WinterOutfits",
+      "target_board_id": "962222345325039751",
+      "live_url": "https://www.pinterest.com/pin/4610208372035806272/",
+      "timestamp": "2026-09-05T14:46:24.728209+00:00"
     }
   ],
   "board_last_used": {
@@ -617,8 +657,12 @@
     "Fall outfits": "2026-09-05T06:40:04.179589+00:00",
     "Puff Sleeve Tops": "2026-09-05T06:40:33.385819+00:00",
     "Outfit Ideas": "2026-09-05T06:40:50.565738+00:00",
-    "Flares Jeans": "2026-09-05T06:41:17.164562+00:00"
+    "Flares Jeans": "2026-09-05T06:41:17.164562+00:00",
+    "Style Ideas": "2026-09-05T14:45:22.668189+00:00",
+    "Winter Outfits": "2026-09-05T14:45:39.753022+00:00",
+    "Ootd #ootd": "2026-09-05T14:46:01.669772+00:00",
+    "Sweaters #Sweaters #WinterOutfits": "2026-09-05T14:46:24.728209+00:00"
   },
-  "daily_count": 4,
-  "last_repin_time": "2026-09-05T06:41:17.164562+00:00"
+  "daily_count": 8,
+  "last_repin_time": "2026-09-05T14:46:24.728209+00:00"
 }
