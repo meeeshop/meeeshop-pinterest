@@ -3769,11 +3769,55 @@
       "template": 17,
       "pin_url": "https://www.pinterest.com/pin/962222276663788522/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8897135935659,
+      "title": "Ymi Women's Mid Rise Tie Front Wide Leg Jeans | MeeeShop US Boutique",
+      "board": "Trends",
+      "timestamp": "2026-09-05T19:23:22.037300",
+      "type": "carousel",
+      "style": "collage",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276663796938/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8968032026795,
+      "title": "Kenedi Mulberry Athletic Sport Skirt - Perfect Labor Day & Fall Look \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-09-05T19:25:10.823527",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276663796984/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8968031961259,
+      "title": "Baylor Gray Ribbed T-shirt Dress | MeeeShop US Boutique",
+      "board": "Vamp Romantic Styles",
+      "timestamp": "2026-09-05T19:26:29.840004",
+      "type": "carousel",
+      "style": "collage",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276663797021/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8789756838059,
+      "title": "Noa High Rise Crop Palazzo Jeans | MeeeShop US Boutique",
+      "board": "Fitted Jeans",
+      "timestamp": "2026-09-05T19:28:56.742954",
+      "type": "video",
+      "style": "carousel",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276663797095/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-08-30T08:08:47.249630",
-    "Trends": "2026-09-05T14:19:23.791369",
+    "Trends": "2026-09-05T19:23:22.037300",
     "Dresses": "2026-08-30T20:04:32.519899",
     "Feminine & Flowy Fits": "2026-08-30T15:53:11.738550",
     "Short fall dresses": "2026-08-31T08:26:55.669324",
@@ -3803,7 +3847,7 @@
     "Festive Styles": "2026-09-04T19:55:11.548082",
     "Kancan USA Jeans": "2026-09-03T23:10:08.465682",
     "Footwear": "2026-08-14T17:46:13.419439",
-    "Fitted Jeans": "2026-08-20T18:03:57.898410",
+    "Fitted Jeans": "2026-09-05T19:28:56.742954",
     "Chic Looks": "2026-08-23T03:12:09.640252",
     "Straight Leg Jeans": "2026-08-21T21:32:10.936379",
     "Puff Sleeves Tops": "2026-09-03T15:37:38.191350",
@@ -3818,7 +3862,7 @@
     "Fashion Models": "2026-09-03T20:10:46.054458",
     "My Shop #1737732113": "2026-09-04T07:09:51.722709",
     "Shop For Holidays": "2026-09-04T15:34:26.849836",
-    "New": "2026-09-05T14:21:40.257108",
+    "New": "2026-09-05T19:25:10.823527",
     "American Bazi": "2026-09-04T22:56:36.790739",
     "Cool & Casual Styles": "2026-08-24T21:38:38.932637",
     "MeeeShop's Luxe Styles": "2026-09-04T22:58:06.656706",
@@ -3827,7 +3871,7 @@
     "Thanks giving Outfits": "2026-09-05T06:53:54.686559",
     "Weekend to Workwear": "2026-08-25T12:37:52.848459",
     "Effortless Looks": "2026-08-23T17:56:23.268603",
-    "Vamp Romantic Styles": "2026-08-23T12:27:01.410872",
+    "Vamp Romantic Styles": "2026-09-05T19:26:29.840004",
     "BFCM Deals": "2026-09-04T19:58:07.318666",
     "Poetcore Aesthetics": "2026-08-23T21:31:43.248240",
     "Emory Park Clothing": "2026-08-24T18:05:24.611418",
@@ -3875,9 +3919,9 @@
     "Fall outfits": "2026-09-02T23:11:31.652514",
     "Winter Outfits": "2026-09-03T15:38:46.303716"
   },
-  "daily_count": 7,
-  "last_post_time": "2026-09-05T14:22:53.769986",
+  "daily_count": 11,
+  "last_post_time": "2026-09-05T19:28:56.742954",
   "board_rotation_cursor": 0,
   "last_image_style": "carousel",
-  "last_template_index": 17
+  "last_template_index": 11
 }
