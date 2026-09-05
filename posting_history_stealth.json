@@ -3736,11 +3736,44 @@
       "template": 17,
       "pin_url": "https://www.pinterest.com/pin/962222276663778860/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8921414959275,
+      "title": "Full Size V-neck Drop Shoulder T-shirt and Shorts Set | MeeeShop US Boutique",
+      "board": "Trends",
+      "timestamp": "2026-09-05T14:19:23.791369",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276663788415/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8970893623467,
+      "title": "Cape Cod Top Ivory with Cheetah Embroidery - Perfect Labor Day & Fall Look \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-09-05T14:21:40.257108",
+      "type": "video",
+      "style": "collage",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276663788487/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8970888609963,
+      "title": "Emory Park Ivy Top: Fall 2026 Labor Day Must-Have \u2014 MeeeShop",
+      "board": "Zenana Women's...",
+      "timestamp": "2026-09-05T14:22:53.769986",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276663788522/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-08-30T08:08:47.249630",
-    "Trends": "2026-09-04T22:54:13.386785",
+    "Trends": "2026-09-05T14:19:23.791369",
     "Dresses": "2026-08-30T20:04:32.519899",
     "Feminine & Flowy Fits": "2026-08-30T15:53:11.738550",
     "Short fall dresses": "2026-08-31T08:26:55.669324",
@@ -3785,12 +3818,12 @@
     "Fashion Models": "2026-09-03T20:10:46.054458",
     "My Shop #1737732113": "2026-09-04T07:09:51.722709",
     "Shop For Holidays": "2026-09-04T15:34:26.849836",
-    "New": "2026-09-05T06:51:35.251915",
+    "New": "2026-09-05T14:21:40.257108",
     "American Bazi": "2026-09-04T22:56:36.790739",
     "Cool & Casual Styles": "2026-08-24T21:38:38.932637",
     "MeeeShop's Luxe Styles": "2026-09-04T22:58:06.656706",
     "Outerwear": "2026-08-15T21:27:33.722132",
-    "Zenana Women's...": "2026-08-23T12:25:45.076583",
+    "Zenana Women's...": "2026-09-05T14:22:53.769986",
     "Thanks giving Outfits": "2026-09-05T06:53:54.686559",
     "Weekend to Workwear": "2026-08-25T12:37:52.848459",
     "Effortless Looks": "2026-08-23T17:56:23.268603",
@@ -3842,9 +3875,9 @@
     "Fall outfits": "2026-09-02T23:11:31.652514",
     "Winter Outfits": "2026-09-03T15:38:46.303716"
   },
-  "daily_count": 4,
-  "last_post_time": "2026-09-05T06:53:54.686559",
+  "daily_count": 7,
+  "last_post_time": "2026-09-05T14:22:53.769986",
   "board_rotation_cursor": 0,
-  "last_image_style": "collage",
+  "last_image_style": "carousel",
   "last_template_index": 17
 }
