@@ -729,6 +729,36 @@
       "target_board_id": "962222345324807345",
       "live_url": "https://www.pinterest.com/pin/4602045603766628416/",
       "timestamp": "2026-09-06T15:06:15.165419+00:00"
+    },
+    {
+      "pin_id": "4599934566723913600",
+      "product_title": "Velvet Shirred Crop Top Made in USA",
+      "category_group": "tops_tanks_blouses",
+      "source_board": "_products",
+      "target_board": "Trendy & Timeless Fashion",
+      "target_board_id": "962222345325694325",
+      "live_url": "https://www.pinterest.com/pin/4599934566723913600/",
+      "timestamp": "2026-09-06T19:27:24.160994+00:00"
+    },
+    {
+      "pin_id": "4594516161114659712",
+      "product_title": "Buki Easy Street Stretch Chino Pant",
+      "category_group": "pants_denim",
+      "source_board": "_products",
+      "target_board": "Our Recommended Feminine Styles",
+      "target_board_id": "962222345324527791",
+      "live_url": "https://www.pinterest.com/pin/4594516161114659712/",
+      "timestamp": "2026-09-06T19:27:40.513403+00:00"
+    },
+    {
+      "pin_id": "4593882842184735616",
+      "product_title": "Downeast Pretty Sporty Tee",
+      "category_group": "tops_tanks_blouses",
+      "source_board": "_products",
+      "target_board": "Confident Looks",
+      "target_board_id": "962222345325695770",
+      "live_url": "https://www.pinterest.com/pin/4593882842184735616/",
+      "timestamp": "2026-09-06T19:28:09.896786+00:00"
     }
   ],
   "board_last_used": {
@@ -750,10 +780,10 @@
     "\"fashion models\"": "2026-09-06T15:05:43.123089+00:00",
     "Cocktail Dresses": "2026-09-02T20:03:52.186194+00:00",
     "Camis & Tanks": "2026-09-06T15:06:15.165419+00:00",
-    "Trendy & Timeless Fashion": "2026-09-02T20:04:40.999070+00:00",
-    "Our Recommended Feminine Styles": "2026-09-02T20:05:19.670011+00:00",
+    "Trendy & Timeless Fashion": "2026-09-06T19:27:24.160994+00:00",
+    "Our Recommended Feminine Styles": "2026-09-06T19:27:40.513403+00:00",
     "Rompers, Jumpsuits & Outfit Sets": "2026-09-03T06:50:06.733837+00:00",
-    "Confident Looks": "2026-09-03T06:50:29.112026+00:00",
+    "Confident Looks": "2026-09-06T19:28:09.896786+00:00",
     "Trends": "2026-09-03T06:51:03.427987+00:00",
     "Wardrobe Must-Haves": "2026-09-03T06:51:22.490210+00:00",
     "Casual": "2026-09-03T15:57:27.160394+00:00",
@@ -798,6 +828,6 @@
     "Stylish Finds": "2026-09-05T22:31:41.381714+00:00",
     "Straight Leg Jeans": "2026-09-06T06:50:56.796721+00:00"
   },
-  "daily_count": 8,
-  "last_repin_time": "2026-09-06T15:06:15.165419+00:00"
+  "daily_count": 11,
+  "last_repin_time": "2026-09-06T19:28:09.896786+00:00"
 }
