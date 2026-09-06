@@ -3903,11 +3903,55 @@
       "template": 11,
       "pin_url": "https://www.pinterest.com/pin/962222276663813566/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8933199642795,
+      "title": "Women's 100% Cotton Gauze Kira Top | MeeeShop US Boutique",
+      "board": "Trends",
+      "timestamp": "2026-09-06T14:43:11.579469",
+      "type": "carousel",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276663823105/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8825882673323,
+      "title": "Mkf Collection by Mia K. - Josephine Printed Flag Crossbody Bag | MeeeShop US Boutique",
+      "board": "New",
+      "timestamp": "2026-09-06T14:44:24.788445",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276663823133/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8921416466603,
+      "title": "Elastique Athletics Riviera Bodysuit Top | MeeeShop US Boutique",
+      "board": "New Trendy Woman...",
+      "timestamp": "2026-09-06T14:47:29.349429",
+      "type": "video",
+      "style": "collage",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276663823236/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8782622425259,
+      "title": "Retrolicious Floral Doris Skirt: Labor Day Chic Look for Fall 2026 \u2014 MeeeShop",
+      "board": "Chic Looks",
+      "timestamp": "2026-09-06T14:48:35.609030",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276663823263/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-08-30T08:08:47.249630",
-    "Trends": "2026-09-06T07:00:17.361067",
+    "Trends": "2026-09-06T14:43:11.579469",
     "Dresses": "2026-08-30T20:04:32.519899",
     "Feminine & Flowy Fits": "2026-08-30T15:53:11.738550",
     "Short fall dresses": "2026-08-31T08:26:55.669324",
@@ -3938,7 +3982,7 @@
     "Kancan USA Jeans": "2026-09-03T23:10:08.465682",
     "Footwear": "2026-08-14T17:46:13.419439",
     "Fitted Jeans": "2026-09-05T19:28:56.742954",
-    "Chic Looks": "2026-08-23T03:12:09.640252",
+    "Chic Looks": "2026-09-06T14:48:35.609030",
     "Straight Leg Jeans": "2026-09-06T07:06:32.233973",
     "Puff Sleeves Tops": "2026-09-03T15:37:38.191350",
     "Casual": "2026-09-02T15:52:11.741894",
@@ -3952,7 +3996,7 @@
     "Fashion Models": "2026-09-03T20:10:46.054458",
     "My Shop #1737732113": "2026-09-04T07:09:51.722709",
     "Shop For Holidays": "2026-09-04T15:34:26.849836",
-    "New": "2026-09-05T22:47:17.384821",
+    "New": "2026-09-06T14:44:24.788445",
     "American Bazi": "2026-09-04T22:56:36.790739",
     "Cool & Casual Styles": "2026-08-24T21:38:38.932637",
     "MeeeShop's Luxe Styles": "2026-09-04T22:58:06.656706",
@@ -3973,7 +4017,7 @@
     "Best selling products": "2026-09-06T07:04:14.001891",
     "Off-Duty Athlete Looks": "2026-08-27T00:38:02.753914",
     "LE LIS Womens Clothi...": "2026-08-25T18:04:35.754950",
-    "New Trendy Woman...": "2026-08-24T12:34:56.590981",
+    "New Trendy Woman...": "2026-09-06T14:47:29.349429",
     "Outfit Ideas": "2026-08-24T18:06:31.659367",
     "Late Summer to Fall Teacher Style": "2026-08-25T12:39:10.822926",
     "Ootd #ootd": "2026-08-24T21:37:31.637502",
@@ -4009,9 +4053,9 @@
     "Fall outfits": "2026-09-02T23:11:31.652514",
     "Winter Outfits": "2026-09-03T15:38:46.303716"
   },
-  "daily_count": 4,
-  "last_post_time": "2026-09-06T07:06:32.233973",
+  "daily_count": 8,
+  "last_post_time": "2026-09-06T14:48:35.609030",
   "board_rotation_cursor": 0,
   "last_image_style": "carousel",
-  "last_template_index": 11
+  "last_template_index": 17
 }
