@@ -759,13 +759,33 @@
       "target_board_id": "962222345325695770",
       "live_url": "https://www.pinterest.com/pin/4593882842184735616/",
       "timestamp": "2026-09-06T19:28:09.896786+00:00"
+    },
+    {
+      "pin_id": "4597471648001656704",
+      "product_title": "Susie Suede Bum Bag",
+      "category_group": "bags_accessories",
+      "source_board": "_products",
+      "target_board": "Handbags #handbags",
+      "target_board_id": "962222345324852891",
+      "live_url": "https://www.pinterest.com/pin/4597471648001656704/",
+      "timestamp": "2026-09-06T22:36:23.746942+00:00"
+    },
+    {
+      "pin_id": "4590716204930907008",
+      "product_title": "Retrolicious Santorini Collared Dress",
+      "category_group": "dresses",
+      "source_board": "_products",
+      "target_board": "Dresses",
+      "target_board_id": "962222345325006107",
+      "live_url": "https://www.pinterest.com/pin/4590716204930907008/",
+      "timestamp": "2026-09-06T22:36:40.309057+00:00"
     }
   ],
   "board_last_used": {
     "Women's Cardigans": "2026-09-06T06:51:18.568445+00:00",
     "Pants & Leggings": "2026-09-06T15:05:04.054824+00:00",
     "Skirts": "2026-09-05T22:32:05.672335+00:00",
-    "Dresses": "2026-09-02T05:22:37.829255+00:00",
+    "Dresses": "2026-09-06T22:36:40.309057+00:00",
     "Sweaters": "2026-09-02T05:39:10.195999+00:00",
     "Dressy Outfits": "2026-09-02T05:39:38.279600+00:00",
     "Dress": "2026-09-02T05:39:58.782831+00:00",
@@ -826,8 +846,9 @@
     "Fashion": "2026-09-05T19:21:50.729379+00:00",
     "Kancan USA Jeans": "2026-09-05T19:22:08.143342+00:00",
     "Stylish Finds": "2026-09-05T22:31:41.381714+00:00",
-    "Straight Leg Jeans": "2026-09-06T06:50:56.796721+00:00"
+    "Straight Leg Jeans": "2026-09-06T06:50:56.796721+00:00",
+    "Handbags #handbags": "2026-09-06T22:36:23.746942+00:00"
   },
-  "daily_count": 11,
-  "last_repin_time": "2026-09-06T19:28:09.896786+00:00"
+  "daily_count": 13,
+  "last_repin_time": "2026-09-06T22:36:40.309057+00:00"
 }
