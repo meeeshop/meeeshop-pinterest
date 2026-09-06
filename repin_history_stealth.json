@@ -689,11 +689,51 @@
       "target_board_id": "962222345325668653",
       "live_url": "https://www.pinterest.com/pin/4604438163662702656/",
       "timestamp": "2026-09-06T06:51:18.568445+00:00"
+    },
+    {
+      "pin_id": "4593812465716419456",
+      "product_title": "Ymi Women's Essential Flare Jeans",
+      "category_group": "pants_denim",
+      "source_board": "_products",
+      "target_board": "Pants & Leggings",
+      "target_board_id": "962222345325046951",
+      "live_url": "https://www.pinterest.com/pin/4593812465716419456/",
+      "timestamp": "2026-09-06T15:05:04.054824+00:00"
+    },
+    {
+      "pin_id": "4606901065023522880",
+      "product_title": "Side Split Crop Top \u2013 Four-way Stretch, Made in USA",
+      "category_group": "tops_tanks_blouses",
+      "source_board": "_products",
+      "target_board": "Blouses",
+      "target_board_id": "962222345324807344",
+      "live_url": "https://www.pinterest.com/pin/4606901065023522880/",
+      "timestamp": "2026-09-06T15:05:24.203999+00:00"
+    },
+    {
+      "pin_id": "4601060462138781760",
+      "product_title": "Romy Foldover Puffer Crossbody",
+      "category_group": "general_apparel",
+      "source_board": "_products",
+      "target_board": "\"fashion models\"",
+      "target_board_id": "962222345325427353",
+      "live_url": "https://www.pinterest.com/pin/4601060462138781760/",
+      "timestamp": "2026-09-06T15:05:43.123089+00:00"
+    },
+    {
+      "pin_id": "4602045603766628416",
+      "product_title": "Downeast Oxford Top",
+      "category_group": "tops_tanks_blouses",
+      "source_board": "_products",
+      "target_board": "Camis & Tanks",
+      "target_board_id": "962222345324807345",
+      "live_url": "https://www.pinterest.com/pin/4602045603766628416/",
+      "timestamp": "2026-09-06T15:06:15.165419+00:00"
     }
   ],
   "board_last_used": {
     "Women's Cardigans": "2026-09-06T06:51:18.568445+00:00",
-    "Pants & Leggings": "2026-09-02T05:21:52.139947+00:00",
+    "Pants & Leggings": "2026-09-06T15:05:04.054824+00:00",
     "Skirts": "2026-09-05T22:32:05.672335+00:00",
     "Dresses": "2026-09-02T05:22:37.829255+00:00",
     "Sweaters": "2026-09-02T05:39:10.195999+00:00",
@@ -705,11 +745,11 @@
     "Short fall dresses": "2026-09-02T06:49:08.822526+00:00",
     "Shirts & Tops": "2026-09-06T06:50:02.746783+00:00",
     "Feminine & Flowy Fits": "2026-09-02T16:08:22.819844+00:00",
-    "Blouses": "2026-09-02T16:08:56.050995+00:00",
+    "Blouses": "2026-09-06T15:05:24.203999+00:00",
     "Must-Have Fashion Picks": "2026-09-06T06:50:25.999064+00:00",
-    "\"fashion models\"": "2026-09-02T16:09:40.573680+00:00",
+    "\"fashion models\"": "2026-09-06T15:05:43.123089+00:00",
     "Cocktail Dresses": "2026-09-02T20:03:52.186194+00:00",
-    "Camis & Tanks": "2026-09-02T20:04:13.228858+00:00",
+    "Camis & Tanks": "2026-09-06T15:06:15.165419+00:00",
     "Trendy & Timeless Fashion": "2026-09-02T20:04:40.999070+00:00",
     "Our Recommended Feminine Styles": "2026-09-02T20:05:19.670011+00:00",
     "Rompers, Jumpsuits & Outfit Sets": "2026-09-03T06:50:06.733837+00:00",
@@ -758,6 +798,6 @@
     "Stylish Finds": "2026-09-05T22:31:41.381714+00:00",
     "Straight Leg Jeans": "2026-09-06T06:50:56.796721+00:00"
   },
-  "daily_count": 4,
-  "last_repin_time": "2026-09-06T06:51:18.568445+00:00"
+  "daily_count": 8,
+  "last_repin_time": "2026-09-06T15:06:15.165419+00:00"
 }
