@@ -649,10 +649,50 @@
       "target_board_id": "962222345325094365",
       "live_url": "https://www.pinterest.com/pin/4607956578312578112/",
       "timestamp": "2026-09-05T22:32:05.672335+00:00"
+    },
+    {
+      "pin_id": "4601904842943672384",
+      "product_title": "Camouflage Print Contrast Thumbhole Knit Top",
+      "category_group": "tops_tanks_blouses",
+      "source_board": "_products",
+      "target_board": "Shirts & Tops",
+      "target_board_id": "962222345325006413",
+      "live_url": "https://www.pinterest.com/pin/4601904842943672384/",
+      "timestamp": "2026-09-06T06:50:02.746783+00:00"
+    },
+    {
+      "pin_id": "4596697581629037440",
+      "product_title": "Elastique Athletics Iconic Compression Long Sleeve Bodysuit",
+      "category_group": "general_apparel",
+      "source_board": "_products",
+      "target_board": "Must-Have Fashion Picks",
+      "target_board_id": "962222345325701393",
+      "live_url": "https://www.pinterest.com/pin/4596697581629037440/",
+      "timestamp": "2026-09-06T06:50:25.999064+00:00"
+    },
+    {
+      "pin_id": "4596908718055819136",
+      "product_title": "Adjustable Waistband High Rise Baggy Wide Jeans",
+      "category_group": "pants_denim",
+      "source_board": "_products",
+      "target_board": "Straight Leg Jeans",
+      "target_board_id": "962222345325683657",
+      "live_url": "https://www.pinterest.com/pin/4596908718055819136/",
+      "timestamp": "2026-09-06T06:50:56.796721+00:00"
+    },
+    {
+      "pin_id": "4604438163662702656",
+      "product_title": "V Neck Sweater Tunic W/ Pockets",
+      "category_group": "cardigans_sweaters",
+      "source_board": "_products",
+      "target_board": "Women's Cardigans",
+      "target_board_id": "962222345325668653",
+      "live_url": "https://www.pinterest.com/pin/4604438163662702656/",
+      "timestamp": "2026-09-06T06:51:18.568445+00:00"
     }
   ],
   "board_last_used": {
-    "Women's Cardigans": "2026-09-02T05:21:17.281503+00:00",
+    "Women's Cardigans": "2026-09-06T06:51:18.568445+00:00",
     "Pants & Leggings": "2026-09-02T05:21:52.139947+00:00",
     "Skirts": "2026-09-05T22:32:05.672335+00:00",
     "Dresses": "2026-09-02T05:22:37.829255+00:00",
@@ -663,10 +703,10 @@
     "Chic & Cozy: Annie Wear Trends": "2026-09-02T06:48:19.431530+00:00",
     "Chic Looks": "2026-09-02T06:48:45.484377+00:00",
     "Short fall dresses": "2026-09-02T06:49:08.822526+00:00",
-    "Shirts & Tops": "2026-09-02T06:49:39.779102+00:00",
+    "Shirts & Tops": "2026-09-06T06:50:02.746783+00:00",
     "Feminine & Flowy Fits": "2026-09-02T16:08:22.819844+00:00",
     "Blouses": "2026-09-02T16:08:56.050995+00:00",
-    "Must-Have Fashion Picks": "2026-09-02T16:09:17.531120+00:00",
+    "Must-Have Fashion Picks": "2026-09-06T06:50:25.999064+00:00",
     "\"fashion models\"": "2026-09-02T16:09:40.573680+00:00",
     "Cocktail Dresses": "2026-09-02T20:03:52.186194+00:00",
     "Camis & Tanks": "2026-09-02T20:04:13.228858+00:00",
@@ -715,8 +755,9 @@
     "Everyday Style Essentials": "2026-09-05T19:21:32.920274+00:00",
     "Fashion": "2026-09-05T19:21:50.729379+00:00",
     "Kancan USA Jeans": "2026-09-05T19:22:08.143342+00:00",
-    "Stylish Finds": "2026-09-05T22:31:41.381714+00:00"
+    "Stylish Finds": "2026-09-05T22:31:41.381714+00:00",
+    "Straight Leg Jeans": "2026-09-06T06:50:56.796721+00:00"
   },
-  "daily_count": 13,
-  "last_repin_time": "2026-09-05T22:32:05.672335+00:00"
+  "daily_count": 4,
+  "last_repin_time": "2026-09-06T06:51:18.568445+00:00"
 }
