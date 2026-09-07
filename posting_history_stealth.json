@@ -4081,11 +4081,55 @@
       "template": 17,
       "pin_url": "https://www.pinterest.com/pin/962222276663846152/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8906719101099,
+      "title": "Collared Argyle Top | MeeeShop US Boutique",
+      "board": "Trends",
+      "timestamp": "2026-09-07T16:58:38.456920",
+      "type": "product",
+      "style": "carousel",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276663857565/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8928207700139,
+      "title": "Sovella Active Recovery Sandals Women's Pf Slide Black/leopard | MeeeShop US Boutique",
+      "board": "New",
+      "timestamp": "2026-09-07T17:01:13.375171",
+      "type": "video",
+      "style": "collage",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276663857629/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8897136918699,
+      "title": "Ymi Women's Adjustable Waist Cargo Straight Jeans | MeeeShop US Boutique",
+      "board": "Weekend to Workwear",
+      "timestamp": "2026-09-07T17:02:26.626944",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276663857661/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8897139310763,
+      "title": "Ymi Women's Mid Rise Belted Bootcut Jeans - Perfect for Labor Day & Fall \u2014 MeeeShop",
+      "board": "Weekend to Workout",
+      "timestamp": "2026-09-07T17:04:56.546210",
+      "type": "video",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276663857719/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-08-30T08:08:47.249630",
-    "Trends": "2026-09-06T22:49:41.381685",
+    "Trends": "2026-09-07T16:58:38.456920",
     "Dresses": "2026-08-30T20:04:32.519899",
     "Feminine & Flowy Fits": "2026-08-30T15:53:11.738550",
     "Short fall dresses": "2026-08-31T08:26:55.669324",
@@ -4130,14 +4174,14 @@
     "Fashion Models": "2026-09-03T20:10:46.054458",
     "My Shop #1737732113": "2026-09-04T07:09:51.722709",
     "Shop For Holidays": "2026-09-04T15:34:26.849836",
-    "New": "2026-09-07T07:13:17.864251",
+    "New": "2026-09-07T17:01:13.375171",
     "American Bazi": "2026-09-04T22:56:36.790739",
     "Cool & Casual Styles": "2026-09-06T22:53:02.817122",
     "MeeeShop's Luxe Styles": "2026-09-04T22:58:06.656706",
     "Outerwear": "2026-08-15T21:27:33.722132",
     "Zenana Women's...": "2026-09-05T14:22:53.769986",
     "Thanks giving Outfits": "2026-09-05T06:53:54.686559",
-    "Weekend to Workwear": "2026-08-25T12:37:52.848459",
+    "Weekend to Workwear": "2026-09-07T17:02:26.626944",
     "Effortless Looks": "2026-09-05T22:49:38.613066",
     "Vamp Romantic Styles": "2026-09-05T19:26:29.840004",
     "BFCM Deals": "2026-09-04T19:58:07.318666",
@@ -4146,7 +4190,7 @@
     "new products": "2026-09-01T20:12:59.976433",
     "Chic & Effortless Styles": "2026-09-05T06:52:44.495115",
     "Davi & Dani Womens...": "2026-08-25T03:06:55.517268",
-    "Weekend to Workout": "2026-08-25T21:37:59.882401",
+    "Weekend to Workout": "2026-09-07T17:04:56.546210",
     "Gimme Gummy Playful Nostalgia": "2026-08-24T03:14:20.016270",
     "Best selling products": "2026-09-06T07:04:14.001891",
     "Off-Duty Athlete Looks": "2026-08-27T00:38:02.753914",
@@ -4187,9 +4231,9 @@
     "Fall outfits": "2026-09-02T23:11:31.652514",
     "Winter Outfits": "2026-09-03T15:38:46.303716"
   },
-  "daily_count": 4,
-  "last_post_time": "2026-09-07T07:15:49.480042",
+  "daily_count": 8,
+  "last_post_time": "2026-09-07T17:04:56.546210",
   "board_rotation_cursor": 0,
   "last_image_style": "collage",
-  "last_template_index": 17
+  "last_template_index": 14
 }
