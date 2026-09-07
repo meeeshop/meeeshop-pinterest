@@ -4169,11 +4169,55 @@
       "template": 16,
       "pin_url": "https://www.pinterest.com/pin/962222276663863757/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8949213888683,
+      "title": "Women\u2019s Floral Print Jumpsuit \u2013 Elasticized Bust & Dreamy Wide-leg Cut | MeeeShop US Boutique",
+      "board": "Trends",
+      "timestamp": "2026-09-07T23:23:12.918143",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276663867038/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8970891493547,
+      "title": "Emory Park Inez Top - Labor Day Weekend & Fall 2026 Style \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-09-07T23:24:26.614458",
+      "type": "carousel",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276663867069/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8970889887915,
+      "title": "Emory Park Eloise Plaid Skirt | MeeeShop US Boutique",
+      "board": "Poetcore Aesthetics",
+      "timestamp": "2026-09-07T23:25:48.911417",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276663867096/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8928205504683,
+      "title": "Alma Booties Brown: Chic Fall Flats for Labor Day & Beyond \u2014 MeeeShop",
+      "board": "Footwear",
+      "timestamp": "2026-09-07T23:26:56.803572",
+      "type": "carousel",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276663867122/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-08-30T08:08:47.249630",
-    "Trends": "2026-09-07T20:47:16.358847",
+    "Trends": "2026-09-07T23:23:12.918143",
     "Dresses": "2026-08-30T20:04:32.519899",
     "Feminine & Flowy Fits": "2026-08-30T15:53:11.738550",
     "Short fall dresses": "2026-08-31T08:26:55.669324",
@@ -4202,7 +4246,7 @@
     "Trendy Backpacks": "2026-09-05T22:48:29.782327",
     "Festive Styles": "2026-09-04T19:55:11.548082",
     "Kancan USA Jeans": "2026-09-03T23:10:08.465682",
-    "Footwear": "2026-08-14T17:46:13.419439",
+    "Footwear": "2026-09-07T23:26:56.803572",
     "Fitted Jeans": "2026-09-05T19:28:56.742954",
     "Chic Looks": "2026-09-06T14:48:35.609030",
     "Straight Leg Jeans": "2026-09-06T07:06:32.233973",
@@ -4218,7 +4262,7 @@
     "Fashion Models": "2026-09-03T20:10:46.054458",
     "My Shop #1737732113": "2026-09-04T07:09:51.722709",
     "Shop For Holidays": "2026-09-04T15:34:26.849836",
-    "New": "2026-09-07T20:48:25.837075",
+    "New": "2026-09-07T23:24:26.614458",
     "American Bazi": "2026-09-04T22:56:36.790739",
     "Cool & Casual Styles": "2026-09-06T22:53:02.817122",
     "MeeeShop's Luxe Styles": "2026-09-04T22:58:06.656706",
@@ -4229,7 +4273,7 @@
     "Effortless Looks": "2026-09-05T22:49:38.613066",
     "Vamp Romantic Styles": "2026-09-05T19:26:29.840004",
     "BFCM Deals": "2026-09-04T19:58:07.318666",
-    "Poetcore Aesthetics": "2026-08-23T21:31:43.248240",
+    "Poetcore Aesthetics": "2026-09-07T23:25:48.911417",
     "Emory Park Clothing": "2026-08-24T18:05:24.611418",
     "new products": "2026-09-01T20:12:59.976433",
     "Chic & Effortless Styles": "2026-09-05T06:52:44.495115",
@@ -4275,9 +4319,9 @@
     "Fall outfits": "2026-09-02T23:11:31.652514",
     "Winter Outfits": "2026-09-03T15:38:46.303716"
   },
-  "daily_count": 12,
-  "last_post_time": "2026-09-07T20:51:16.110452",
+  "daily_count": 16,
+  "last_post_time": "2026-09-07T23:26:56.803572",
   "board_rotation_cursor": 0,
   "last_image_style": "collage",
-  "last_template_index": 16
+  "last_template_index": 17
 }
