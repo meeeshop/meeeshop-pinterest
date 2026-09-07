@@ -779,6 +779,36 @@
       "target_board_id": "962222345325006107",
       "live_url": "https://www.pinterest.com/pin/4590716204930907008/",
       "timestamp": "2026-09-06T22:36:40.309057+00:00"
+    },
+    {
+      "pin_id": "4599582731161012096",
+      "product_title": "Downeast Your Favorite Tee",
+      "category_group": "tops_tanks_blouses",
+      "source_board": "_products",
+      "target_board": "Trends",
+      "target_board_id": "962222345325426077",
+      "live_url": "https://www.pinterest.com/pin/4599582731161012096/",
+      "timestamp": "2026-09-07T06:59:03.235514+00:00"
+    },
+    {
+      "pin_id": "4607675103118136384",
+      "product_title": "Buki Resort Crop Pant",
+      "category_group": "pants_denim",
+      "source_board": "_products",
+      "target_board": "Wardrobe Must-Haves",
+      "target_board_id": "962222345325704400",
+      "live_url": "https://www.pinterest.com/pin/4607675103118136384/",
+      "timestamp": "2026-09-07T06:59:29.135247+00:00"
+    },
+    {
+      "pin_id": "4593671739096447872",
+      "product_title": "Solid Off Shoulder Bodycon Lace Maxi Dress",
+      "category_group": "dresses",
+      "source_board": "_products",
+      "target_board": "Dressy Outfits",
+      "target_board_id": "962222345325709865",
+      "live_url": "https://www.pinterest.com/pin/4593671739096447872/",
+      "timestamp": "2026-09-07T06:59:53.674567+00:00"
     }
   ],
   "board_last_used": {
@@ -787,7 +817,7 @@
     "Skirts": "2026-09-05T22:32:05.672335+00:00",
     "Dresses": "2026-09-06T22:36:40.309057+00:00",
     "Sweaters": "2026-09-02T05:39:10.195999+00:00",
-    "Dressy Outfits": "2026-09-02T05:39:38.279600+00:00",
+    "Dressy Outfits": "2026-09-07T06:59:53.674567+00:00",
     "Dress": "2026-09-02T05:39:58.782831+00:00",
     "Outerwear": "2026-09-02T05:40:21.721760+00:00",
     "Chic & Cozy: Annie Wear Trends": "2026-09-02T06:48:19.431530+00:00",
@@ -804,8 +834,8 @@
     "Our Recommended Feminine Styles": "2026-09-06T19:27:40.513403+00:00",
     "Rompers, Jumpsuits & Outfit Sets": "2026-09-03T06:50:06.733837+00:00",
     "Confident Looks": "2026-09-06T19:28:09.896786+00:00",
-    "Trends": "2026-09-03T06:51:03.427987+00:00",
-    "Wardrobe Must-Haves": "2026-09-03T06:51:22.490210+00:00",
+    "Trends": "2026-09-07T06:59:03.235514+00:00",
+    "Wardrobe Must-Haves": "2026-09-07T06:59:29.135247+00:00",
     "Casual": "2026-09-03T15:57:27.160394+00:00",
     "Farm clothes": "2026-09-03T15:57:58.021773+00:00",
     "New": "2026-09-03T15:58:19.089768+00:00",
@@ -849,6 +879,6 @@
     "Straight Leg Jeans": "2026-09-06T06:50:56.796721+00:00",
     "Handbags #handbags": "2026-09-06T22:36:23.746942+00:00"
   },
-  "daily_count": 13,
-  "last_repin_time": "2026-09-06T22:36:40.309057+00:00"
+  "daily_count": 3,
+  "last_repin_time": "2026-09-07T06:59:53.674567+00:00"
 }
