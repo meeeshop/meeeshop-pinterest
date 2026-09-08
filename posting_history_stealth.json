@@ -4213,6 +4213,52 @@
       "template": 17,
       "pin_url": "https://www.pinterest.com/pin/962222276663867122/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": "570411450539",
+      "article_id": "570411450539",
+      "title": "Decoding 2026 Fashion: Emerging Dress Styles You Need to Know.",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-09-08T07:04:50.739028",
+      "type": "blog",
+      "style": "card",
+      "template": 9,
+      "pin_url": "https://www.pinterest.com/pin/962222276663874867/",
+      "blog_url": "https://us.meeeshop.com/blogs/dresses-style-guide/decoding-2026-fashion-emerging-dress-styles-you-need-to-know",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8921411420331,
+      "title": "Retrolicious Harper Skater Skirt in Black - Perfect for Labor Day & Fall \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-09-08T07:06:54.843409",
+      "type": "video",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276663874882/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8782622818475,
+      "title": "Retrolicious Badger Fit & Flare Dress - Perfect Labor Day & Fall Look \u2014 MeeeShop",
+      "board": "Emory Park Clothing",
+      "timestamp": "2026-09-08T07:08:05.505773",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276663874897/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8841128181931,
+      "title": "Brooke 2-button High Waist Flared Bottom Jeans - Olive for Fall 2026 \u2014 MeeeShop",
+      "board": "Confidence Ladies",
+      "timestamp": "2026-09-08T07:10:44.481092",
+      "type": "video",
+      "style": "collage",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276663874925/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
@@ -4262,7 +4308,7 @@
     "Fashion Models": "2026-09-03T20:10:46.054458",
     "My Shop #1737732113": "2026-09-04T07:09:51.722709",
     "Shop For Holidays": "2026-09-04T15:34:26.849836",
-    "New": "2026-09-07T23:24:26.614458",
+    "New": "2026-09-08T07:06:54.843409",
     "American Bazi": "2026-09-04T22:56:36.790739",
     "Cool & Casual Styles": "2026-09-06T22:53:02.817122",
     "MeeeShop's Luxe Styles": "2026-09-04T22:58:06.656706",
@@ -4274,7 +4320,7 @@
     "Vamp Romantic Styles": "2026-09-05T19:26:29.840004",
     "BFCM Deals": "2026-09-04T19:58:07.318666",
     "Poetcore Aesthetics": "2026-09-07T23:25:48.911417",
-    "Emory Park Clothing": "2026-08-24T18:05:24.611418",
+    "Emory Park Clothing": "2026-09-08T07:08:05.505773",
     "new products": "2026-09-01T20:12:59.976433",
     "Chic & Effortless Styles": "2026-09-05T06:52:44.495115",
     "Davi & Dani Womens...": "2026-08-25T03:06:55.517268",
@@ -4291,7 +4337,7 @@
     "Mustard Seed Clothing": "2026-08-25T21:39:08.874432",
     "Woman Fashion!": "2026-09-07T07:15:49.480042",
     "Stylish Finds": "2026-09-07T20:51:16.110452",
-    "Confidence Ladies": "2026-08-26T03:16:12.976574",
+    "Confidence Ladies": "2026-09-08T07:10:44.481092",
     "Fresh Finds New...": "2026-08-26T12:39:26.417127",
     "Affordable Women's Fashion USA": "2026-08-26T12:40:43.339481",
     "Festive & Flora Fits": "2026-08-30T08:11:25.974711",
@@ -4319,9 +4365,9 @@
     "Fall outfits": "2026-09-02T23:11:31.652514",
     "Winter Outfits": "2026-09-03T15:38:46.303716"
   },
-  "daily_count": 16,
-  "last_post_time": "2026-09-07T23:26:56.803572",
+  "daily_count": 4,
+  "last_post_time": "2026-09-08T07:10:44.481092",
   "board_rotation_cursor": 0,
   "last_image_style": "collage",
-  "last_template_index": 17
+  "last_template_index": 11
 }
