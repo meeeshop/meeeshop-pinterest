@@ -4303,11 +4303,55 @@
       "template": 15,
       "pin_url": "https://www.pinterest.com/pin/962222276663886582/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8825883492523,
+      "title": "Mkf Collection by Mia K. - Medina Crossbody Bag: Labor Day Fall Trend \u2014 MeeeShop",
+      "board": "Trends",
+      "timestamp": "2026-09-08T20:13:15.167931",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276663893073/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8941766344875,
+      "title": "Emory Park Caris Top: Perfect Labor Day & Fall Outfit Inspiration \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-09-08T20:14:27.017046",
+      "type": "carousel",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276663893085/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8821453226155,
+      "title": "Retrolicious Winter Floral Vintage Dress - Perfect Labor Day & Fall Look \u2014 MeeeShop",
+      "board": "LE LIS Womens Clothi...",
+      "timestamp": "2026-09-08T20:15:39.787798",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276663893100/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8845244039339,
+      "title": "Flying Tomato Here Goes Nothing Sweater Top - Cozy Fall Labor Day Must-Have \u2014 MeeeShop",
+      "board": "Fall Outfits 2026",
+      "timestamp": "2026-09-08T20:17:06.586566",
+      "type": "carousel",
+      "style": "collage",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276663893120/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-08-30T08:08:47.249630",
-    "Trends": "2026-09-08T15:45:22.833413",
+    "Trends": "2026-09-08T20:13:15.167931",
     "Dresses": "2026-08-30T20:04:32.519899",
     "Feminine & Flowy Fits": "2026-08-30T15:53:11.738550",
     "Short fall dresses": "2026-08-31T08:26:55.669324",
@@ -4352,7 +4396,7 @@
     "Fashion Models": "2026-09-03T20:10:46.054458",
     "My Shop #1737732113": "2026-09-04T07:09:51.722709",
     "Shop For Holidays": "2026-09-04T15:34:26.849836",
-    "New": "2026-09-08T15:47:28.644760",
+    "New": "2026-09-08T20:14:27.017046",
     "American Bazi": "2026-09-04T22:56:36.790739",
     "Cool & Casual Styles": "2026-09-06T22:53:02.817122",
     "MeeeShop's Luxe Styles": "2026-09-04T22:58:06.656706",
@@ -4372,7 +4416,7 @@
     "Gimme Gummy Playful Nostalgia": "2026-08-24T03:14:20.016270",
     "Best selling products": "2026-09-06T07:04:14.001891",
     "Off-Duty Athlete Looks": "2026-08-27T00:38:02.753914",
-    "LE LIS Womens Clothi...": "2026-08-25T18:04:35.754950",
+    "LE LIS Womens Clothi...": "2026-09-08T20:15:39.787798",
     "New Trendy Woman...": "2026-09-06T14:47:29.349429",
     "Outfit Ideas": "2026-09-06T19:33:33.150795",
     "Late Summer to Fall Teacher Style": "2026-09-07T20:49:47.645148",
@@ -4408,11 +4452,12 @@
     "Chic & Cozy: Annie...": "2026-09-02T15:51:01.623160",
     "Fall outfits": "2026-09-02T23:11:31.652514",
     "Winter Outfits": "2026-09-03T15:38:46.303716",
-    "Women's shacket": "2026-09-08T15:50:34.046479"
+    "Women's shacket": "2026-09-08T15:50:34.046479",
+    "Fall Outfits 2026": "2026-09-08T20:17:06.586566"
   },
-  "daily_count": 8,
-  "last_post_time": "2026-09-08T15:50:34.046479",
+  "daily_count": 12,
+  "last_post_time": "2026-09-08T20:17:06.586566",
   "board_rotation_cursor": 0,
   "last_image_style": "collage",
-  "last_template_index": 15
+  "last_template_index": 16
 }
