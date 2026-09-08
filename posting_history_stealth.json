@@ -4259,11 +4259,55 @@
       "template": 11,
       "pin_url": "https://www.pinterest.com/pin/962222276663874925/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8883466338475,
+      "title": "Sassy Chic: Bubblegum Pink Graphic Baddies Jumpsuit Pajamas | MeeeShop US Boutique",
+      "board": "Trends",
+      "timestamp": "2026-09-08T15:45:22.833413",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276663886428/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8782620557483,
+      "title": "Retrolicious Fish A-line Skirt - Perfect for Labor Day & Fall Fashion \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-09-08T15:47:28.644760",
+      "type": "video",
+      "style": "collage",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276663886479/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8745259991211,
+      "title": "Flying Tomato Lost in the Details Woven Midi Dress - Fall 2026 Labor Day Chic",
+      "board": "Davi & Dani Womens...",
+      "timestamp": "2026-09-08T15:49:09.838138",
+      "type": "product",
+      "style": "carousel",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276663886532/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8970889724075,
+      "title": "Emory Park Paislee Jacket: Chic Fall Layering Style \u2014 MeeeShop",
+      "board": "Women's shacket",
+      "timestamp": "2026-09-08T15:50:34.046479",
+      "type": "carousel",
+      "style": "collage",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276663886582/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-08-30T08:08:47.249630",
-    "Trends": "2026-09-07T23:23:12.918143",
+    "Trends": "2026-09-08T15:45:22.833413",
     "Dresses": "2026-08-30T20:04:32.519899",
     "Feminine & Flowy Fits": "2026-08-30T15:53:11.738550",
     "Short fall dresses": "2026-08-31T08:26:55.669324",
@@ -4308,7 +4352,7 @@
     "Fashion Models": "2026-09-03T20:10:46.054458",
     "My Shop #1737732113": "2026-09-04T07:09:51.722709",
     "Shop For Holidays": "2026-09-04T15:34:26.849836",
-    "New": "2026-09-08T07:06:54.843409",
+    "New": "2026-09-08T15:47:28.644760",
     "American Bazi": "2026-09-04T22:56:36.790739",
     "Cool & Casual Styles": "2026-09-06T22:53:02.817122",
     "MeeeShop's Luxe Styles": "2026-09-04T22:58:06.656706",
@@ -4323,7 +4367,7 @@
     "Emory Park Clothing": "2026-09-08T07:08:05.505773",
     "new products": "2026-09-01T20:12:59.976433",
     "Chic & Effortless Styles": "2026-09-05T06:52:44.495115",
-    "Davi & Dani Womens...": "2026-08-25T03:06:55.517268",
+    "Davi & Dani Womens...": "2026-09-08T15:49:09.838138",
     "Weekend to Workout": "2026-09-07T17:04:56.546210",
     "Gimme Gummy Playful Nostalgia": "2026-08-24T03:14:20.016270",
     "Best selling products": "2026-09-06T07:04:14.001891",
@@ -4363,11 +4407,12 @@
     "Relaxed Yet Trendy...": "2026-09-01T15:54:13.191192",
     "Chic & Cozy: Annie...": "2026-09-02T15:51:01.623160",
     "Fall outfits": "2026-09-02T23:11:31.652514",
-    "Winter Outfits": "2026-09-03T15:38:46.303716"
+    "Winter Outfits": "2026-09-03T15:38:46.303716",
+    "Women's shacket": "2026-09-08T15:50:34.046479"
   },
-  "daily_count": 4,
-  "last_post_time": "2026-09-08T07:10:44.481092",
+  "daily_count": 8,
+  "last_post_time": "2026-09-08T15:50:34.046479",
   "board_rotation_cursor": 0,
   "last_image_style": "collage",
-  "last_template_index": 11
+  "last_template_index": 15
 }
