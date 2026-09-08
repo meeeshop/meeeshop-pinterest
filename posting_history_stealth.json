@@ -4347,11 +4347,55 @@
       "template": 16,
       "pin_url": "https://www.pinterest.com/pin/962222276663893120/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8949202682027,
+      "title": "Snuggle Chic Boucle Bliss Cardigan Top - Cozy Boho Fall Essential \u2014 MeeeShop",
+      "board": "Trends",
+      "timestamp": "2026-09-08T23:17:30.872376",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276663897207/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8818155815083,
+      "title": "Emory Park Julie Fitted Top | MeeeShop US Boutique",
+      "board": "New",
+      "timestamp": "2026-09-08T23:18:46.756790",
+      "type": "carousel",
+      "style": "collage",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276663897248/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8970891591851,
+      "title": "Emory Park Nora Halter Top | MeeeShop US Boutique",
+      "board": "Fresh Finds New...",
+      "timestamp": "2026-09-08T23:20:01.904577",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276663897283/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8782621737131,
+      "title": "Retrolicious Isabel Top in Peacock Blue - Trendy Fall Labor Day Blouse \u2014 MeeeShop",
+      "board": "Affordable Women's Fashion USA",
+      "timestamp": "2026-09-08T23:21:48.315063",
+      "type": "carousel",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276663897310/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-08-30T08:08:47.249630",
-    "Trends": "2026-09-08T20:13:15.167931",
+    "Trends": "2026-09-08T23:17:30.872376",
     "Dresses": "2026-08-30T20:04:32.519899",
     "Feminine & Flowy Fits": "2026-08-30T15:53:11.738550",
     "Short fall dresses": "2026-08-31T08:26:55.669324",
@@ -4396,7 +4440,7 @@
     "Fashion Models": "2026-09-03T20:10:46.054458",
     "My Shop #1737732113": "2026-09-04T07:09:51.722709",
     "Shop For Holidays": "2026-09-04T15:34:26.849836",
-    "New": "2026-09-08T20:14:27.017046",
+    "New": "2026-09-08T23:18:46.756790",
     "American Bazi": "2026-09-04T22:56:36.790739",
     "Cool & Casual Styles": "2026-09-06T22:53:02.817122",
     "MeeeShop's Luxe Styles": "2026-09-04T22:58:06.656706",
@@ -4426,8 +4470,8 @@
     "Woman Fashion!": "2026-09-07T07:15:49.480042",
     "Stylish Finds": "2026-09-07T20:51:16.110452",
     "Confidence Ladies": "2026-09-08T07:10:44.481092",
-    "Fresh Finds New...": "2026-08-26T12:39:26.417127",
-    "Affordable Women's Fashion USA": "2026-08-26T12:40:43.339481",
+    "Fresh Finds New...": "2026-09-08T23:20:01.904577",
+    "Affordable Women's Fashion USA": "2026-09-08T23:21:48.315063",
     "Festive & Flora Fits": "2026-08-30T08:11:25.974711",
     "Shop Responsibly": "2026-08-26T19:29:54.941489",
     "Social": "2026-08-26T19:31:10.927763",
@@ -4455,9 +4499,9 @@
     "Women's shacket": "2026-09-08T15:50:34.046479",
     "Fall Outfits 2026": "2026-09-08T20:17:06.586566"
   },
-  "daily_count": 12,
-  "last_post_time": "2026-09-08T20:17:06.586566",
+  "daily_count": 16,
+  "last_post_time": "2026-09-08T23:21:48.315063",
   "board_rotation_cursor": 0,
   "last_image_style": "collage",
-  "last_template_index": 16
+  "last_template_index": 17
 }
