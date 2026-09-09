@@ -4525,11 +4525,55 @@
       "template": 9,
       "pin_url": "https://www.pinterest.com/pin/962222276663924553/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8782638219435,
+      "title": "Montauk Dress Black and White Grid Dress | MeeeShop US Boutique",
+      "board": "Trends",
+      "timestamp": "2026-09-09T23:05:25.670270",
+      "type": "carousel",
+      "style": "collage",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276663928856/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8740283220139,
+      "title": "Risen Full Size Mid Rise Wide Leg Jeans with Flared Look plus Size | MeeeShop US Boutique",
+      "board": "New",
+      "timestamp": "2026-09-09T23:06:36.465672",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276663928873/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8936274854059,
+      "title": "Downeast Bluebell Dress - Perfect Labor Day & Fall 2026 Date Night Look \u2014 MeeeShop",
+      "board": "Must-Have Fashion...",
+      "timestamp": "2026-09-09T23:08:15.107660",
+      "type": "product",
+      "style": "collage",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276663928908/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8879311880363,
+      "title": "Cropped Frill Sweatpant | MeeeShop US Boutique",
+      "board": "All Pins",
+      "timestamp": "2026-09-09T23:09:37.069795",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276663928920/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-08-30T08:08:47.249630",
-    "Trends": "2026-09-09T20:01:02.330080",
+    "Trends": "2026-09-09T23:05:25.670270",
     "Dresses": "2026-08-30T20:04:32.519899",
     "Feminine & Flowy Fits": "2026-08-30T15:53:11.738550",
     "Short fall dresses": "2026-08-31T08:26:55.669324",
@@ -4540,7 +4584,7 @@
     "Jeans": "2026-08-31T08:25:40.341768",
     "Cocktail Dresses": "2026-09-01T23:13:33.653509",
     "Dressy Outfits": "2026-08-30T23:22:40.260253",
-    "Must-Have Fashion...": "2026-08-29T20:03:49.063922",
+    "Must-Have Fashion...": "2026-09-09T23:08:15.107660",
     "Flares Jeans": "2026-08-31T18:36:06.107736",
     "Short Tall dresses": "2026-09-03T07:07:40.471733",
     "Rompers, Jumpsuits &...": "2026-09-03T20:09:33.744091",
@@ -4574,7 +4618,7 @@
     "Fashion Models": "2026-09-03T20:10:46.054458",
     "My Shop #1737732113": "2026-09-04T07:09:51.722709",
     "Shop For Holidays": "2026-09-04T15:34:26.849836",
-    "New": "2026-09-09T20:02:17.284702",
+    "New": "2026-09-09T23:06:36.465672",
     "American Bazi": "2026-09-04T22:56:36.790739",
     "Cool & Casual Styles": "2026-09-06T22:53:02.817122",
     "MeeeShop's Luxe Styles": "2026-09-04T22:58:06.656706",
@@ -4610,7 +4654,7 @@
     "Shop Responsibly": "2026-09-09T07:17:20.653054",
     "Social": "2026-09-09T07:18:31.037493",
     "Blogs": "2026-09-09T20:04:50.572038",
-    "All Pins": "2026-08-29T23:12:18.367446",
+    "All Pins": "2026-09-09T23:09:37.069795",
     "Outer wear": "2026-08-18T03:05:47.307004",
     "Women's Cardigans": "2026-08-19T12:32:03.053992",
     "Loungewear": "2026-08-20T12:34:25.960617",
@@ -4633,9 +4677,9 @@
     "Women's shacket": "2026-09-08T15:50:34.046479",
     "Fall Outfits 2026": "2026-09-08T20:17:06.586566"
   },
-  "daily_count": 12,
-  "last_post_time": "2026-09-09T20:04:50.572038",
+  "daily_count": 16,
+  "last_post_time": "2026-09-09T23:09:37.069795",
   "board_rotation_cursor": 0,
-  "last_image_style": "card",
-  "last_template_index": 9
+  "last_image_style": "carousel",
+  "last_template_index": 17
 }
