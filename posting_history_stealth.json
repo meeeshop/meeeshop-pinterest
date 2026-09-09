@@ -4391,6 +4391,52 @@
       "template": 17,
       "pin_url": "https://www.pinterest.com/pin/962222276663897310/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": "570794082475",
+      "article_id": "570794082475",
+      "title": "Styling Tailored Coats for Polished Day-to-Night Looks",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-09-09T07:13:47.298335",
+      "type": "blog",
+      "style": "card",
+      "template": 9,
+      "pin_url": "https://www.pinterest.com/pin/962222276663905559/",
+      "blog_url": "https://us.meeeshop.com/blogs/coats-jackets-style-guide/styling-tailored-coats-for-polished-day-to-night-looks",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8981474869419,
+      "title": "Fortuna Crossbody Bag | MeeeShop US Boutique",
+      "board": "New",
+      "timestamp": "2026-09-09T07:14:53.903242",
+      "type": "carousel",
+      "style": "collage",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276663905564/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8931950887083,
+      "title": "Satin Stretch Shorts Made in USA | MeeeShop US Boutique",
+      "board": "Shop Responsibly",
+      "timestamp": "2026-09-09T07:17:20.653054",
+      "type": "video",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276663905578/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8869172936875,
+      "title": "Full Size Air Scuba Drawstring Long Sleeve Hoodie with Kangaroo Pocket Top | MeeeShop US Boutique",
+      "board": "Social",
+      "timestamp": "2026-09-09T07:18:31.037493",
+      "type": "carousel",
+      "style": "collage",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276663905583/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
@@ -4440,7 +4486,7 @@
     "Fashion Models": "2026-09-03T20:10:46.054458",
     "My Shop #1737732113": "2026-09-04T07:09:51.722709",
     "Shop For Holidays": "2026-09-04T15:34:26.849836",
-    "New": "2026-09-08T23:18:46.756790",
+    "New": "2026-09-09T07:14:53.903242",
     "American Bazi": "2026-09-04T22:56:36.790739",
     "Cool & Casual Styles": "2026-09-06T22:53:02.817122",
     "MeeeShop's Luxe Styles": "2026-09-04T22:58:06.656706",
@@ -4473,8 +4519,8 @@
     "Fresh Finds New...": "2026-09-08T23:20:01.904577",
     "Affordable Women's Fashion USA": "2026-09-08T23:21:48.315063",
     "Festive & Flora Fits": "2026-08-30T08:11:25.974711",
-    "Shop Responsibly": "2026-08-26T19:29:54.941489",
-    "Social": "2026-08-26T19:31:10.927763",
+    "Shop Responsibly": "2026-09-09T07:17:20.653054",
+    "Social": "2026-09-09T07:18:31.037493",
     "Blogs": "2026-08-27T00:39:36.807805",
     "All Pins": "2026-08-29T23:12:18.367446",
     "Outer wear": "2026-08-18T03:05:47.307004",
@@ -4499,9 +4545,9 @@
     "Women's shacket": "2026-09-08T15:50:34.046479",
     "Fall Outfits 2026": "2026-09-08T20:17:06.586566"
   },
-  "daily_count": 16,
-  "last_post_time": "2026-09-08T23:21:48.315063",
+  "daily_count": 4,
+  "last_post_time": "2026-09-09T07:18:31.037493",
   "board_rotation_cursor": 0,
   "last_image_style": "collage",
-  "last_template_index": 17
+  "last_template_index": 16
 }
