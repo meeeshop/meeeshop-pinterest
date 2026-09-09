@@ -1079,6 +1079,46 @@
       "target_board_id": "962222345325172804",
       "live_url": "https://www.pinterest.com/pin/4605141805964666944/",
       "timestamp": "2026-09-09T07:04:37.999508+00:00"
+    },
+    {
+      "pin_id": "4591279209926887296",
+      "product_title": "The Kathryn Button-up, Striped Pink Top",
+      "category_group": "tops_tanks_blouses",
+      "source_board": "_products",
+      "target_board": "Effortless Looks",
+      "target_board_id": "962222345325722853",
+      "live_url": "https://www.pinterest.com/pin/4591279209926887296/",
+      "timestamp": "2026-09-09T16:05:11.900914+00:00"
+    },
+    {
+      "pin_id": "4591279201336952704",
+      "product_title": "Peyton Dress 100% Cotton Gauze",
+      "category_group": "dresses",
+      "source_board": "_products",
+      "target_board": "Emory Park Clothing",
+      "target_board_id": "962222345325422828",
+      "live_url": "https://www.pinterest.com/pin/4591279201336952704/",
+      "timestamp": "2026-09-09T16:05:44.660791+00:00"
+    },
+    {
+      "pin_id": "4592123589741512576",
+      "product_title": "Front Twist Sweater Stripe Knit Top",
+      "category_group": "cardigans_sweaters",
+      "source_board": "_products",
+      "target_board": "Sweaters",
+      "target_board_id": "962222345325683648",
+      "live_url": "https://www.pinterest.com/pin/4592123589741512576/",
+      "timestamp": "2026-09-09T16:06:04.433912+00:00"
+    },
+    {
+      "pin_id": "4602960387452012608",
+      "product_title": "Indy Convertible Quilted Puffer Crossbody",
+      "category_group": "general_apparel",
+      "source_board": "_products",
+      "target_board": "Everyday Style Essentials",
+      "target_board_id": "962222345325698485",
+      "live_url": "https://www.pinterest.com/pin/4602960387452012608/",
+      "timestamp": "2026-09-09T16:06:20.266829+00:00"
     }
   ],
   "board_last_used": {
@@ -1086,7 +1126,7 @@
     "Pants & Leggings": "2026-09-06T15:05:04.054824+00:00",
     "Skirts": "2026-09-05T22:32:05.672335+00:00",
     "Dresses": "2026-09-06T22:36:40.309057+00:00",
-    "Sweaters": "2026-09-02T05:39:10.195999+00:00",
+    "Sweaters": "2026-09-09T16:06:04.433912+00:00",
     "Dressy Outfits": "2026-09-07T06:59:53.674567+00:00",
     "Dress": "2026-09-07T17:25:58.775690+00:00",
     "Outerwear": "2026-09-02T05:40:21.721760+00:00",
@@ -1116,7 +1156,7 @@
     "Thanks giving Outfits": "2026-09-09T07:03:49.102077+00:00",
     "Cool & Casual Styles": "2026-09-03T22:55:54.628926+00:00",
     "Wardrobe Goals": "2026-09-07T23:13:29.674941+00:00",
-    "Emory Park Clothing": "2026-09-03T22:56:57.051375+00:00",
+    "Emory Park Clothing": "2026-09-09T16:05:44.660791+00:00",
     "Shop For Holidays": "2026-09-07T23:13:52.845246+00:00",
     "Bags": "2026-09-04T06:55:27.438573+00:00",
     "MeeeShop's Luxe Styles": "2026-09-08T16:11:57.568603+00:00",
@@ -1128,7 +1168,7 @@
     "Jeans": "2026-09-04T15:55:55.973575+00:00",
     "Nylon backpack": "2026-09-04T19:49:53.799241+00:00",
     "Mustard Seed Clothing": "2026-09-04T19:50:17.170810+00:00",
-    "Effortless Looks": "2026-09-04T19:50:39.967919+00:00",
+    "Effortless Looks": "2026-09-09T16:05:11.900914+00:00",
     "best selling products": "2026-09-08T16:10:21.065882+00:00",
     "New Trendy Women Apparel, Shoes, Handbags & more": "2026-09-04T22:41:26.276552+00:00",
     "BFCM Deals": "2026-09-08T20:10:52.303748+00:00",
@@ -1142,7 +1182,7 @@
     "Winter Outfits": "2026-09-05T14:45:39.753022+00:00",
     "Ootd #ootd": "2026-09-09T07:04:37.999508+00:00",
     "Sweaters #Sweaters #WinterOutfits": "2026-09-05T14:46:24.728209+00:00",
-    "Everyday Style Essentials": "2026-09-05T19:21:32.920274+00:00",
+    "Everyday Style Essentials": "2026-09-09T16:06:20.266829+00:00",
     "Fashion": "2026-09-05T19:21:50.729379+00:00",
     "Kancan USA Jeans": "2026-09-05T19:22:08.143342+00:00",
     "Stylish Finds": "2026-09-05T22:31:41.381714+00:00",
@@ -1153,6 +1193,6 @@
     "Loungewear": "2026-09-08T16:11:29.494991+00:00",
     "Coats & Jackets": "2026-09-08T20:10:33.820520+00:00"
   },
-  "daily_count": 4,
-  "last_repin_time": "2026-09-09T07:04:37.999508+00:00"
+  "daily_count": 8,
+  "last_repin_time": "2026-09-09T16:06:20.266829+00:00"
 }
