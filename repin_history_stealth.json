@@ -1299,13 +1299,53 @@
       "target_board_id": "962222345324527791",
       "live_url": "https://www.pinterest.com/pin/4593038386609620864/",
       "timestamp": "2026-09-10T20:01:19.122689+00:00"
+    },
+    {
+      "pin_id": "4599160451743377280",
+      "product_title": "Brushed Commit Halter Tank",
+      "category_group": "tops_tanks_blouses",
+      "source_board": "_products",
+      "target_board": "Camis & Tanks",
+      "target_board_id": "962222345324807345",
+      "live_url": "https://www.pinterest.com/pin/4599160451743377280/",
+      "timestamp": "2026-09-10T22:53:28.381249+00:00"
+    },
+    {
+      "pin_id": "4599160465165150080",
+      "product_title": "High Rise Embroidered Modern Bootcut Jeans",
+      "category_group": "pants_denim",
+      "source_board": "_products",
+      "target_board": "Flares Jeans",
+      "target_board_id": "962222345325683655",
+      "live_url": "https://www.pinterest.com/pin/4599160465165150080/",
+      "timestamp": "2026-09-10T22:54:03.712013+00:00"
+    },
+    {
+      "pin_id": "4599160467312633728",
+      "product_title": "Ally",
+      "category_group": "general_apparel",
+      "source_board": "_products",
+      "target_board": "Confident Looks",
+      "target_board_id": "962222345325695770",
+      "live_url": "https://www.pinterest.com/pin/4599160467312633728/",
+      "timestamp": "2026-09-10T22:54:22.402573+00:00"
+    },
+    {
+      "pin_id": "4606267759565580352",
+      "product_title": "Downeast Seaside Stripe Dress",
+      "category_group": "dresses",
+      "source_board": "_products",
+      "target_board": "Dresses",
+      "target_board_id": "962222345325006107",
+      "live_url": "https://www.pinterest.com/pin/4606267759565580352/",
+      "timestamp": "2026-09-10T22:54:55.931875+00:00"
     }
   ],
   "board_last_used": {
     "Women's Cardigans": "2026-09-06T06:51:18.568445+00:00",
     "Pants & Leggings": "2026-09-06T15:05:04.054824+00:00",
     "Skirts": "2026-09-05T22:32:05.672335+00:00",
-    "Dresses": "2026-09-06T22:36:40.309057+00:00",
+    "Dresses": "2026-09-10T22:54:55.931875+00:00",
     "Sweaters": "2026-09-09T16:06:04.433912+00:00",
     "Dressy Outfits": "2026-09-07T06:59:53.674567+00:00",
     "Dress": "2026-09-07T17:25:58.775690+00:00",
@@ -1319,11 +1359,11 @@
     "Must-Have Fashion Picks": "2026-09-10T15:58:47.166342+00:00",
     "\"fashion models\"": "2026-09-10T15:59:43.496424+00:00",
     "Cocktail Dresses": "2026-09-07T23:12:56.814998+00:00",
-    "Camis & Tanks": "2026-09-06T15:06:15.165419+00:00",
+    "Camis & Tanks": "2026-09-10T22:53:28.381249+00:00",
     "Trendy & Timeless Fashion": "2026-09-10T16:00:16.789443+00:00",
     "Our Recommended Feminine Styles": "2026-09-10T20:01:19.122689+00:00",
     "Rompers, Jumpsuits & Outfit Sets": "2026-09-08T06:55:04.444305+00:00",
-    "Confident Looks": "2026-09-06T19:28:09.896786+00:00",
+    "Confident Looks": "2026-09-10T22:54:22.402573+00:00",
     "Trends": "2026-09-07T06:59:03.235514+00:00",
     "Wardrobe Must-Haves": "2026-09-07T06:59:29.135247+00:00",
     "Casual": "2026-09-07T20:46:14.650399+00:00",
@@ -1357,7 +1397,7 @@
     "Fall outfits": "2026-09-05T06:40:04.179589+00:00",
     "Puff Sleeve Tops": "2026-09-09T20:00:28.221728+00:00",
     "Outfit Ideas": "2026-09-09T07:03:21.707293+00:00",
-    "Flares Jeans": "2026-09-05T06:41:17.164562+00:00",
+    "Flares Jeans": "2026-09-10T22:54:03.712013+00:00",
     "Style Ideas": "2026-09-09T07:04:08.081753+00:00",
     "Winter Outfits": "2026-09-05T14:45:39.753022+00:00",
     "Ootd #ootd": "2026-09-09T07:04:37.999508+00:00",
@@ -1374,6 +1414,6 @@
     "Coats & Jackets": "2026-09-08T20:10:33.820520+00:00",
     "Umgee USA": "2026-09-09T20:00:06.716391+00:00"
   },
-  "daily_count": 10,
-  "last_repin_time": "2026-09-10T20:01:19.122689+00:00"
+  "daily_count": 14,
+  "last_repin_time": "2026-09-10T22:54:55.931875+00:00"
 }
