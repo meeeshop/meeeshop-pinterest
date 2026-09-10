@@ -1279,6 +1279,26 @@
       "target_board_id": "962222345325694325",
       "live_url": "https://www.pinterest.com/pin/4601201162976282688/",
       "timestamp": "2026-09-10T16:00:16.789443+00:00"
+    },
+    {
+      "pin_id": "4601201188746086464",
+      "product_title": "Isabella Corset Ultra High Rise Modern Wide Jeans",
+      "category_group": "pants_denim",
+      "source_board": "_products",
+      "target_board": "Jeans",
+      "target_board_id": "962222345325006084",
+      "live_url": "https://www.pinterest.com/pin/4601201188746086464/",
+      "timestamp": "2026-09-10T20:00:56.028894+00:00"
+    },
+    {
+      "pin_id": "4593038386609620864",
+      "product_title": "Bahama Breeze Fit All Sling Bag",
+      "category_group": "bags_accessories",
+      "source_board": "_products",
+      "target_board": "Our Recommended Feminine Styles",
+      "target_board_id": "962222345324527791",
+      "live_url": "https://www.pinterest.com/pin/4593038386609620864/",
+      "timestamp": "2026-09-10T20:01:19.122689+00:00"
     }
   ],
   "board_last_used": {
@@ -1301,7 +1321,7 @@
     "Cocktail Dresses": "2026-09-07T23:12:56.814998+00:00",
     "Camis & Tanks": "2026-09-06T15:06:15.165419+00:00",
     "Trendy & Timeless Fashion": "2026-09-10T16:00:16.789443+00:00",
-    "Our Recommended Feminine Styles": "2026-09-06T19:27:40.513403+00:00",
+    "Our Recommended Feminine Styles": "2026-09-10T20:01:19.122689+00:00",
     "Rompers, Jumpsuits & Outfit Sets": "2026-09-08T06:55:04.444305+00:00",
     "Confident Looks": "2026-09-06T19:28:09.896786+00:00",
     "Trends": "2026-09-07T06:59:03.235514+00:00",
@@ -1325,7 +1345,7 @@
     "Trendy Backpacks": "2026-09-09T22:53:27.340621+00:00",
     "LE LIS Womens Clothing | us.meeeshop": "2026-09-09T20:01:32.712763+00:00",
     "Chic & Effortless Styles": "2026-09-08T06:56:07.276074+00:00",
-    "Jeans": "2026-09-04T15:55:55.973575+00:00",
+    "Jeans": "2026-09-10T20:00:56.028894+00:00",
     "Nylon backpack": "2026-09-09T22:54:02.047443+00:00",
     "Mustard Seed Clothing": "2026-09-10T07:00:27.606005+00:00",
     "Effortless Looks": "2026-09-09T16:05:11.900914+00:00",
@@ -1354,6 +1374,6 @@
     "Coats & Jackets": "2026-09-08T20:10:33.820520+00:00",
     "Umgee USA": "2026-09-09T20:00:06.716391+00:00"
   },
-  "daily_count": 8,
-  "last_repin_time": "2026-09-10T16:00:16.789443+00:00"
+  "daily_count": 10,
+  "last_repin_time": "2026-09-10T20:01:19.122689+00:00"
 }
