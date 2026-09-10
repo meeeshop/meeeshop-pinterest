@@ -4703,11 +4703,55 @@
       "template": 17,
       "pin_url": "https://www.pinterest.com/pin/962222276663953362/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8930016493739,
+      "title": "Kathryn Classic Button-up, Rust Top | MeeeShop US Boutique",
+      "board": "Trends",
+      "timestamp": "2026-09-10T23:02:19.773332",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276663956923/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8782620459179,
+      "title": "Retrolicious Leaves Bow Top - Perfect Labor Day & Fall Casual Chic \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-09-10T23:03:51.592326",
+      "type": "carousel",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276663956946/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8949204615339,
+      "title": "Sweater Weather Roll-neck Poncho - Cozy Boho Cardigan for Labor Day \u2014 MeeeShop",
+      "board": "Women's Cardigans",
+      "timestamp": "2026-09-10T23:05:01.998901",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276663956960/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8897139474603,
+      "title": "Labor Day Ready: Ymi Women's Motto Pleather Jacket with Fur Lining \u2014 MeeeShop",
+      "board": "Outerwear",
+      "timestamp": "2026-09-10T23:06:16.590733",
+      "type": "carousel",
+      "style": "collage",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276663956981/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-08-30T08:08:47.249630",
-    "Trends": "2026-09-10T20:02:29.345407",
+    "Trends": "2026-09-10T23:02:19.773332",
     "Dresses": "2026-08-30T20:04:32.519899",
     "Feminine & Flowy Fits": "2026-09-10T15:40:12.756709",
     "Short fall dresses": "2026-08-31T08:26:55.669324",
@@ -4752,11 +4796,11 @@
     "Fashion Models": "2026-09-03T20:10:46.054458",
     "My Shop #1737732113": "2026-09-04T07:09:51.722709",
     "Shop For Holidays": "2026-09-04T15:34:26.849836",
-    "New": "2026-09-10T20:03:36.095455",
+    "New": "2026-09-10T23:03:51.592326",
     "American Bazi": "2026-09-04T22:56:36.790739",
     "Cool & Casual Styles": "2026-09-06T22:53:02.817122",
     "MeeeShop's Luxe Styles": "2026-09-04T22:58:06.656706",
-    "Outerwear": "2026-08-15T21:27:33.722132",
+    "Outerwear": "2026-09-10T23:06:16.590733",
     "Zenana Women's...": "2026-09-05T14:22:53.769986",
     "Thanks giving Outfits": "2026-09-05T06:53:54.686559",
     "Weekend to Workwear": "2026-09-07T17:02:26.626944",
@@ -4790,7 +4834,7 @@
     "Blogs": "2026-09-09T20:04:50.572038",
     "All Pins": "2026-09-09T23:09:37.069795",
     "Outer wear": "2026-08-18T03:05:47.307004",
-    "Women's Cardigans": "2026-08-19T12:32:03.053992",
+    "Women's Cardigans": "2026-09-10T23:05:01.998901",
     "Loungewear": "2026-08-20T12:34:25.960617",
     "Bow heels": "2026-08-20T18:00:36.882815",
     "Sweaters": "2026-08-20T21:32:57.133135",
@@ -4812,9 +4856,9 @@
     "Fall Outfits 2026": "2026-09-08T20:17:06.586566",
     "Womens shacket": "2026-09-10T07:14:20.412592"
   },
-  "daily_count": 12,
-  "last_post_time": "2026-09-10T20:07:09.122706",
+  "daily_count": 16,
+  "last_post_time": "2026-09-10T23:06:16.590733",
   "board_rotation_cursor": 0,
   "last_image_style": "collage",
-  "last_template_index": 17
+  "last_template_index": 15
 }
