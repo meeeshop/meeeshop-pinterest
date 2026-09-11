@@ -1389,16 +1389,36 @@
       "target_board_id": "962222345325709865",
       "live_url": "https://www.pinterest.com/pin/4597823479504103296/",
       "timestamp": "2026-09-11T16:02:33.871818+00:00"
+    },
+    {
+      "pin_id": "4597823495073359744",
+      "product_title": "Slope Curve Jeans",
+      "category_group": "pants_denim",
+      "source_board": "_products",
+      "target_board": "Pants & Leggings",
+      "target_board_id": "962222345325046951",
+      "live_url": "https://www.pinterest.com/pin/4597823495073359744/",
+      "timestamp": "2026-09-11T19:59:56.775028+00:00"
+    },
+    {
+      "pin_id": "4597823479504103296",
+      "product_title": "Scout Athletic Midi Dress",
+      "category_group": "dresses",
+      "source_board": "_products",
+      "target_board": "Dress",
+      "target_board_id": "962222345325683647",
+      "live_url": "https://www.pinterest.com/pin/4597823479504103296/",
+      "timestamp": "2026-09-11T20:00:24.186926+00:00"
     }
   ],
   "board_last_used": {
     "Women's Cardigans": "2026-09-06T06:51:18.568445+00:00",
-    "Pants & Leggings": "2026-09-06T15:05:04.054824+00:00",
+    "Pants & Leggings": "2026-09-11T19:59:56.775028+00:00",
     "Skirts": "2026-09-05T22:32:05.672335+00:00",
     "Dresses": "2026-09-10T22:54:55.931875+00:00",
     "Sweaters": "2026-09-09T16:06:04.433912+00:00",
     "Dressy Outfits": "2026-09-11T16:02:33.871818+00:00",
-    "Dress": "2026-09-07T17:25:58.775690+00:00",
+    "Dress": "2026-09-11T20:00:24.186926+00:00",
     "Outerwear": "2026-09-02T05:40:21.721760+00:00",
     "Chic & Cozy: Annie Wear Trends": "2026-09-02T06:48:19.431530+00:00",
     "Chic Looks": "2026-09-08T06:55:35.120672+00:00",
@@ -1464,6 +1484,6 @@
     "Coats & Jackets": "2026-09-08T20:10:33.820520+00:00",
     "Umgee USA": "2026-09-09T20:00:06.716391+00:00"
   },
-  "daily_count": 5,
-  "last_repin_time": "2026-09-11T16:02:33.871818+00:00"
+  "daily_count": 7,
+  "last_repin_time": "2026-09-11T20:00:24.186926+00:00"
 }
