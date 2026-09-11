@@ -4837,11 +4837,55 @@
       "template": 16,
       "pin_url": "https://www.pinterest.com/pin/962222276663976607/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8818157060267,
+      "title": "Emory Park Delaney Shorts - Labor Day Must-Have for Fall 2026 \u2014 MeeeShop",
+      "board": "Trends",
+      "timestamp": "2026-09-11T20:00:52.738007",
+      "type": "carousel",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276663983481/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8970888773803,
+      "title": "Emory Park Kenzie Pants - Labor Day & Fall 2026 Work-Ready Comfort \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-09-11T20:02:05.588645",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276663983501/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8869164744875,
+      "title": "Harem Jumpsuit: Effortless Fall 2026 Style for Labor Day \u2014 MeeeShop",
+      "board": "Confident Looks",
+      "timestamp": "2026-09-11T20:03:17.039395",
+      "type": "carousel",
+      "style": "collage",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276663983515/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8745259565227,
+      "title": "Flying Tomato Sweet Escape Stripe Woven Midi Dress - Fall Labor Day Chic \u2014 MeeeShop",
+      "board": "Festive & Flora Fits",
+      "timestamp": "2026-09-11T20:05:08.482642",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276663983535/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-08-30T08:08:47.249630",
-    "Trends": "2026-09-11T15:39:13.153468",
+    "Trends": "2026-09-11T20:00:52.738007",
     "Dresses": "2026-08-30T20:04:32.519899",
     "Feminine & Flowy Fits": "2026-09-10T15:40:12.756709",
     "Short fall dresses": "2026-08-31T08:26:55.669324",
@@ -4876,7 +4920,7 @@
     "Straight Leg Jeans": "2026-09-06T07:06:32.233973",
     "Puff Sleeves Tops": "2026-09-03T15:37:38.191350",
     "Casual": "2026-09-02T15:52:11.741894",
-    "Confident Looks": "2026-09-01T20:11:52.459154",
+    "Confident Looks": "2026-09-11T20:03:17.039395",
     "Casual Chic Style": "2026-09-01T23:12:31.420634",
     "Farm clothes": "2026-09-04T15:36:07.470809",
     "Kimchi USA Jeans": "2026-09-06T19:31:49.264541",
@@ -4886,7 +4930,7 @@
     "Fashion Models": "2026-09-03T20:10:46.054458",
     "My Shop #1737732113": "2026-09-04T07:09:51.722709",
     "Shop For Holidays": "2026-09-04T15:34:26.849836",
-    "New": "2026-09-11T15:40:24.183102",
+    "New": "2026-09-11T20:02:05.588645",
     "American Bazi": "2026-09-04T22:56:36.790739",
     "Cool & Casual Styles": "2026-09-06T22:53:02.817122",
     "MeeeShop's Luxe Styles": "2026-09-04T22:58:06.656706",
@@ -4918,7 +4962,7 @@
     "Confidence Ladies": "2026-09-08T07:10:44.481092",
     "Fresh Finds New...": "2026-09-08T23:20:01.904577",
     "Affordable Women's Fashion USA": "2026-09-08T23:21:48.315063",
-    "Festive & Flora Fits": "2026-08-30T08:11:25.974711",
+    "Festive & Flora Fits": "2026-09-11T20:05:08.482642",
     "Shop Responsibly": "2026-09-09T07:17:20.653054",
     "Social": "2026-09-09T07:18:31.037493",
     "Blogs": "2026-09-09T20:04:50.572038",
@@ -4946,9 +4990,9 @@
     "Fall Outfits 2026": "2026-09-08T20:17:06.586566",
     "Womens shacket": "2026-09-10T07:14:20.412592"
   },
-  "daily_count": 8,
-  "last_post_time": "2026-09-11T15:43:19.209422",
+  "daily_count": 12,
+  "last_post_time": "2026-09-11T20:05:08.482642",
   "board_rotation_cursor": 0,
   "last_image_style": "carousel",
-  "last_template_index": 16
+  "last_template_index": 17
 }
