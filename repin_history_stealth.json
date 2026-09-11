@@ -1339,6 +1339,36 @@
       "target_board_id": "962222345325006107",
       "live_url": "https://www.pinterest.com/pin/4606267759565580352/",
       "timestamp": "2026-09-10T22:54:55.931875+00:00"
+    },
+    {
+      "pin_id": "4597823495073359744",
+      "product_title": "Slope Curve Jeans",
+      "category_group": "pants_denim",
+      "source_board": "_products",
+      "target_board": "Kancan USA Jeans",
+      "target_board_id": "962222345325077882",
+      "live_url": "https://www.pinterest.com/pin/4597823495073359744/",
+      "timestamp": "2026-09-11T07:00:03.458003+00:00"
+    },
+    {
+      "pin_id": "4597823479504103296",
+      "product_title": "Scout Athletic Midi Dress",
+      "category_group": "dresses",
+      "source_board": "_products",
+      "target_board": "Trends",
+      "target_board_id": "962222345325426077",
+      "live_url": "https://www.pinterest.com/pin/4597823479504103296/",
+      "timestamp": "2026-09-11T07:00:34.810768+00:00"
+    },
+    {
+      "pin_id": "4595571675103201152",
+      "product_title": "Cape Cod Tunic Blue Medallions",
+      "category_group": "general_apparel",
+      "source_board": "_products",
+      "target_board": "Wardrobe Must-Haves",
+      "target_board_id": "962222345325704400",
+      "live_url": "https://www.pinterest.com/pin/4595571675103201152/",
+      "timestamp": "2026-09-11T07:00:59.369201+00:00"
     }
   ],
   "board_last_used": {
@@ -1364,8 +1394,8 @@
     "Our Recommended Feminine Styles": "2026-09-10T20:01:19.122689+00:00",
     "Rompers, Jumpsuits & Outfit Sets": "2026-09-08T06:55:04.444305+00:00",
     "Confident Looks": "2026-09-10T22:54:22.402573+00:00",
-    "Trends": "2026-09-07T06:59:03.235514+00:00",
-    "Wardrobe Must-Haves": "2026-09-07T06:59:29.135247+00:00",
+    "Trends": "2026-09-11T07:00:34.810768+00:00",
+    "Wardrobe Must-Haves": "2026-09-11T07:00:59.369201+00:00",
     "Casual": "2026-09-07T20:46:14.650399+00:00",
     "Farm clothes": "2026-09-07T20:46:31.132299+00:00",
     "New": "2026-09-07T20:46:53.095062+00:00",
@@ -1404,7 +1434,7 @@
     "Sweaters #Sweaters #WinterOutfits": "2026-09-05T14:46:24.728209+00:00",
     "Everyday Style Essentials": "2026-09-09T16:06:20.266829+00:00",
     "Fashion": "2026-09-09T22:52:31.477434+00:00",
-    "Kancan USA Jeans": "2026-09-05T19:22:08.143342+00:00",
+    "Kancan USA Jeans": "2026-09-11T07:00:03.458003+00:00",
     "Stylish Finds": "2026-09-10T07:01:10.906423+00:00",
     "Straight Leg Jeans": "2026-09-06T06:50:56.796721+00:00",
     "Handbags #handbags": "2026-09-06T22:36:23.746942+00:00",
@@ -1414,6 +1444,6 @@
     "Coats & Jackets": "2026-09-08T20:10:33.820520+00:00",
     "Umgee USA": "2026-09-09T20:00:06.716391+00:00"
   },
-  "daily_count": 14,
-  "last_repin_time": "2026-09-10T22:54:55.931875+00:00"
+  "daily_count": 3,
+  "last_repin_time": "2026-09-11T07:00:59.369201+00:00"
 }
