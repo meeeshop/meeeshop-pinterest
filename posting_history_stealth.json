@@ -4747,11 +4747,57 @@
       "template": 15,
       "pin_url": "https://www.pinterest.com/pin/962222276663956981/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8892151496875,
+      "title": "Cotton/viscose Popover Dress | MeeeShop US Boutique",
+      "board": "Trends",
+      "timestamp": "2026-09-11T07:10:57.618731",
+      "type": "video",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276663966103/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8789754642603,
+      "title": "Margaret Low Rise Stretch Vintage Flare Jeans (reg & Plus) | MeeeShop US Boutique",
+      "board": "New",
+      "timestamp": "2026-09-11T07:13:22.190070",
+      "type": "video",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276663966112/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8882871206059,
+      "title": "Lace Crochet Long Sleeve Jumpsuit - Chic Labor Day & Fall Outfit \u2014 MeeeShop",
+      "board": "Dressy Outfits",
+      "timestamp": "2026-09-11T07:15:27.452660",
+      "type": "product",
+      "style": "carousel",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276663966132/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": "570855456939",
+      "article_id": "570855456939",
+      "title": "How to Style High-Waisted Pants for an Elongated Silhouette",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-09-11T07:17:09.276550",
+      "type": "blog",
+      "style": "card",
+      "template": 9,
+      "pin_url": "https://www.pinterest.com/pin/962222276663966153/",
+      "blog_url": "https://us.meeeshop.com/blogs/womens-pants-style-guide/how-to-style-high-waisted-pants-for-an-elongated-silhouette",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-08-30T08:08:47.249630",
-    "Trends": "2026-09-10T23:02:19.773332",
+    "Trends": "2026-09-11T07:10:57.618731",
     "Dresses": "2026-08-30T20:04:32.519899",
     "Feminine & Flowy Fits": "2026-09-10T15:40:12.756709",
     "Short fall dresses": "2026-08-31T08:26:55.669324",
@@ -4761,7 +4807,7 @@
     "Bags": "2026-09-01T00:34:13.233766",
     "Jeans": "2026-08-31T08:25:40.341768",
     "Cocktail Dresses": "2026-09-01T23:13:33.653509",
-    "Dressy Outfits": "2026-08-30T23:22:40.260253",
+    "Dressy Outfits": "2026-09-11T07:15:27.452660",
     "Must-Have Fashion...": "2026-09-09T23:08:15.107660",
     "Flares Jeans": "2026-08-31T18:36:06.107736",
     "Short Tall dresses": "2026-09-03T07:07:40.471733",
@@ -4796,7 +4842,7 @@
     "Fashion Models": "2026-09-03T20:10:46.054458",
     "My Shop #1737732113": "2026-09-04T07:09:51.722709",
     "Shop For Holidays": "2026-09-04T15:34:26.849836",
-    "New": "2026-09-10T23:03:51.592326",
+    "New": "2026-09-11T07:13:22.190070",
     "American Bazi": "2026-09-04T22:56:36.790739",
     "Cool & Casual Styles": "2026-09-06T22:53:02.817122",
     "MeeeShop's Luxe Styles": "2026-09-04T22:58:06.656706",
@@ -4856,9 +4902,9 @@
     "Fall Outfits 2026": "2026-09-08T20:17:06.586566",
     "Womens shacket": "2026-09-10T07:14:20.412592"
   },
-  "daily_count": 16,
-  "last_post_time": "2026-09-10T23:06:16.590733",
+  "daily_count": 4,
+  "last_post_time": "2026-09-11T07:17:09.276550",
   "board_rotation_cursor": 0,
-  "last_image_style": "collage",
-  "last_template_index": 15
+  "last_image_style": "card",
+  "last_template_index": 9
 }
