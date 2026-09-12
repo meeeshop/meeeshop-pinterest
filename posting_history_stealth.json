@@ -5015,12 +5015,56 @@
       "template": 15,
       "pin_url": "https://www.pinterest.com/pin/962222276664006906/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8825418481835,
+      "title": "Flying Tomato Sweet Note Moment Woven Top | MeeeShop US Boutique",
+      "board": "Trends",
+      "timestamp": "2026-09-12T19:38:49.170493",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276664016183/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8936272101547,
+      "title": "Downeast Round Trip Pant | Fall 2026 Labor Day Style \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-09-12T19:40:09.348818",
+      "type": "carousel",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276664016227/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8879311749291,
+      "title": "High Rise Biker Short 7\" | MeeeShop US Boutique",
+      "board": "Casual Chic Style",
+      "timestamp": "2026-09-12T19:41:26.537962",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276664016282/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8882918883499,
+      "title": "Halter V Neck Solid High Slit Bow Tie Maxi Dress | MeeeShop US Boutique",
+      "board": "Dresses",
+      "timestamp": "2026-09-12T19:42:42.030242",
+      "type": "carousel",
+      "style": "collage",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276664016330/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-09-11T23:09:04.798079",
-    "Trends": "2026-09-12T14:43:51.116300",
-    "Dresses": "2026-08-30T20:04:32.519899",
+    "Trends": "2026-09-12T19:38:49.170493",
+    "Dresses": "2026-09-12T19:42:42.030242",
     "Feminine & Flowy Fits": "2026-09-10T15:40:12.756709",
     "Short fall dresses": "2026-08-31T08:26:55.669324",
     "Must-Have Fashion Picks": "2026-08-13T05:20:05.419233",
@@ -5055,7 +5099,7 @@
     "Puff Sleeves Tops": "2026-09-03T15:37:38.191350",
     "Casual": "2026-09-02T15:52:11.741894",
     "Confident Looks": "2026-09-11T20:03:17.039395",
-    "Casual Chic Style": "2026-09-01T23:12:31.420634",
+    "Casual Chic Style": "2026-09-12T19:41:26.537962",
     "Farm clothes": "2026-09-04T15:36:07.470809",
     "Kimchi USA Jeans": "2026-09-06T19:31:49.264541",
     "Wardrobe Goals": "2026-09-02T20:08:11.829837",
@@ -5064,7 +5108,7 @@
     "Fashion Models": "2026-09-03T20:10:46.054458",
     "My Shop #1737732113": "2026-09-04T07:09:51.722709",
     "Shop For Holidays": "2026-09-04T15:34:26.849836",
-    "New": "2026-09-12T14:46:23.248209",
+    "New": "2026-09-12T19:40:09.348818",
     "American Bazi": "2026-09-04T22:56:36.790739",
     "Cool & Casual Styles": "2026-09-06T22:53:02.817122",
     "MeeeShop's Luxe Styles": "2026-09-04T22:58:06.656706",
@@ -5125,9 +5169,9 @@
     "Womens shacket": "2026-09-10T07:14:20.412592",
     "Meshohn Luxe Styles": "2026-09-12T14:50:36.971883"
   },
-  "daily_count": 8,
-  "last_post_time": "2026-09-12T14:50:36.971883",
+  "daily_count": 12,
+  "last_post_time": "2026-09-12T19:42:42.030242",
   "board_rotation_cursor": 0,
   "last_image_style": "collage",
-  "last_template_index": 15
+  "last_template_index": 11
 }
