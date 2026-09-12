@@ -5059,11 +5059,55 @@
       "template": 11,
       "pin_url": "https://www.pinterest.com/pin/962222276664016330/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8970893066411,
+      "title": "Cape Cod Tunic Sea Creatures Print | MeeeShop US Boutique",
+      "board": "Trends",
+      "timestamp": "2026-09-12T22:56:04.230724",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276664020794/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8970893295787,
+      "title": "Chatham Dress Audrey Print - Perfect Labor Day Fall Look \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-09-12T22:58:44.974279",
+      "type": "video",
+      "style": "collage",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276664020842/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8786745884843,
+      "title": "Daphne Puffer Tote: Labor Day & Fall 2026 Must-Have Bag for Chic Everyday Style",
+      "board": "Wardrobe Goals",
+      "timestamp": "2026-09-12T22:59:51.883943",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276664020860/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8970893787307,
+      "title": "Cape Cod Tunic Blue Medallions: Cozy Fall Look for Labor Day \u2014 MeeeShop",
+      "board": "Everyday Style",
+      "timestamp": "2026-09-12T23:01:03.236775",
+      "type": "carousel",
+      "style": "collage",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276664020869/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-09-11T23:09:04.798079",
-    "Trends": "2026-09-12T19:38:49.170493",
+    "Trends": "2026-09-12T22:56:04.230724",
     "Dresses": "2026-09-12T19:42:42.030242",
     "Feminine & Flowy Fits": "2026-09-10T15:40:12.756709",
     "Short fall dresses": "2026-08-31T08:26:55.669324",
@@ -5102,13 +5146,13 @@
     "Casual Chic Style": "2026-09-12T19:41:26.537962",
     "Farm clothes": "2026-09-04T15:36:07.470809",
     "Kimchi USA Jeans": "2026-09-06T19:31:49.264541",
-    "Wardrobe Goals": "2026-09-02T20:08:11.829837",
+    "Wardrobe Goals": "2026-09-12T22:59:51.883943",
     "Nylon backpack": "2026-09-09T15:47:42.369670",
-    "Everyday Style": "2026-09-02T20:09:33.329091",
+    "Everyday Style": "2026-09-12T23:01:03.236775",
     "Fashion Models": "2026-09-03T20:10:46.054458",
     "My Shop #1737732113": "2026-09-04T07:09:51.722709",
     "Shop For Holidays": "2026-09-04T15:34:26.849836",
-    "New": "2026-09-12T19:40:09.348818",
+    "New": "2026-09-12T22:58:44.974279",
     "American Bazi": "2026-09-04T22:56:36.790739",
     "Cool & Casual Styles": "2026-09-06T22:53:02.817122",
     "MeeeShop's Luxe Styles": "2026-09-04T22:58:06.656706",
@@ -5169,9 +5213,9 @@
     "Womens shacket": "2026-09-10T07:14:20.412592",
     "Meshohn Luxe Styles": "2026-09-12T14:50:36.971883"
   },
-  "daily_count": 12,
-  "last_post_time": "2026-09-12T19:42:42.030242",
+  "daily_count": 16,
+  "last_post_time": "2026-09-12T23:01:03.236775",
   "board_rotation_cursor": 0,
   "last_image_style": "collage",
-  "last_template_index": 11
+  "last_template_index": 15
 }
