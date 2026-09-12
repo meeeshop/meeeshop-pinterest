@@ -1419,6 +1419,46 @@
       "target_board_id": "962222345325683653",
       "live_url": "https://www.pinterest.com/pin/4595642044534065024/",
       "timestamp": "2026-09-11T22:55:50.133990+00:00"
+    },
+    {
+      "pin_id": "4604790017700010048",
+      "product_title": "Christine Shoulder Bag and Wallet Set",
+      "category_group": "bags_accessories",
+      "source_board": "_products",
+      "target_board": "Handbags #handbags",
+      "target_board_id": "962222345324852891",
+      "live_url": "https://www.pinterest.com/pin/4604790017700010048/",
+      "timestamp": "2026-09-12T06:51:05.367327+00:00"
+    },
+    {
+      "pin_id": "4604789974750337088",
+      "product_title": "Flying Tomato Paradise Glow Power Mesh Midi Dress",
+      "category_group": "dresses",
+      "source_board": "_products",
+      "target_board": "Short fall dresses",
+      "target_board_id": "962222345325607224",
+      "live_url": "https://www.pinterest.com/pin/4604789974750337088/",
+      "timestamp": "2026-09-12T06:51:40.310100+00:00"
+    },
+    {
+      "pin_id": "4602327090090321984",
+      "product_title": "Ymi Women's Low Rise Relaxed Cargo Jeans",
+      "category_group": "pants_denim",
+      "source_board": "_products",
+      "target_board": "Farm clothes",
+      "target_board_id": "962222345325683654",
+      "live_url": "https://www.pinterest.com/pin/4602327090090321984/",
+      "timestamp": "2026-09-12T06:52:09.182693+00:00"
+    },
+    {
+      "pin_id": "4602327098680256576",
+      "product_title": "Andry Tote Bag",
+      "category_group": "bags_accessories",
+      "source_board": "_products",
+      "target_board": "New",
+      "target_board_id": "962222345325425838",
+      "live_url": "https://www.pinterest.com/pin/4602327098680256576/",
+      "timestamp": "2026-09-12T06:52:39.687281+00:00"
     }
   ],
   "board_last_used": {
@@ -1432,7 +1472,7 @@
     "Outerwear": "2026-09-02T05:40:21.721760+00:00",
     "Chic & Cozy: Annie Wear Trends": "2026-09-02T06:48:19.431530+00:00",
     "Chic Looks": "2026-09-08T06:55:35.120672+00:00",
-    "Short fall dresses": "2026-09-07T17:26:31.694430+00:00",
+    "Short fall dresses": "2026-09-12T06:51:40.310100+00:00",
     "Shirts & Tops": "2026-09-10T15:59:21.033014+00:00",
     "Feminine & Flowy Fits": "2026-09-07T20:47:10.664793+00:00",
     "Blouses": "2026-09-06T15:05:24.203999+00:00",
@@ -1447,8 +1487,8 @@
     "Trends": "2026-09-11T07:00:34.810768+00:00",
     "Wardrobe Must-Haves": "2026-09-11T07:00:59.369201+00:00",
     "Casual": "2026-09-11T22:55:50.133990+00:00",
-    "Farm clothes": "2026-09-07T20:46:31.132299+00:00",
-    "New": "2026-09-07T20:46:53.095062+00:00",
+    "Farm clothes": "2026-09-12T06:52:09.182693+00:00",
+    "New": "2026-09-12T06:52:39.687281+00:00",
     "Festive Styles": "2026-09-08T20:11:36.751935+00:00",
     "American Bazi": "2026-09-07T23:14:26.692755+00:00",
     "Edgy fashion": "2026-09-03T20:06:11.697348+00:00",
@@ -1487,13 +1527,13 @@
     "Kancan USA Jeans": "2026-09-11T07:00:03.458003+00:00",
     "Stylish Finds": "2026-09-10T07:01:10.906423+00:00",
     "Straight Leg Jeans": "2026-09-11T16:02:10.278484+00:00",
-    "Handbags #handbags": "2026-09-06T22:36:23.746942+00:00",
+    "Handbags #handbags": "2026-09-12T06:51:05.367327+00:00",
     "Weekend to Workwear": "2026-09-08T06:54:29.523123+00:00",
     "Luxe Clothing": "2026-09-08T16:10:56.074860+00:00",
     "Loungewear": "2026-09-08T16:11:29.494991+00:00",
     "Coats & Jackets": "2026-09-08T20:10:33.820520+00:00",
     "Umgee USA": "2026-09-09T20:00:06.716391+00:00"
   },
-  "daily_count": 8,
-  "last_repin_time": "2026-09-11T22:55:50.133990+00:00"
+  "daily_count": 4,
+  "last_repin_time": "2026-09-12T06:52:39.687281+00:00"
 }
