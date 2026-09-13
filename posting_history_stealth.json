@@ -5103,6 +5103,52 @@
       "template": 15,
       "pin_url": "https://www.pinterest.com/pin/962222276664020869/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": "570889306283",
+      "article_id": "570889306283",
+      "title": "Wrap Tops and A-Line Dresses: Defining Proportions Effortlessly",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-09-13T07:20:23.769902",
+      "type": "blog",
+      "style": "card",
+      "template": 9,
+      "pin_url": "https://www.pinterest.com/pin/962222276664030883/",
+      "blog_url": "https://us.meeeshop.com/blogs/plus-size-curvy-clothing/wrap-tops-and-a-line-dresses-defining-proportions-effortlessly",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8745259270315,
+      "title": "Flying Tomato Natural Instinct Woven Midi Dress - Labor Day Fall Look \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-09-13T07:21:50.584731",
+      "type": "carousel",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276664030941/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8985003819179,
+      "title": "Mkf Collection by Mia K. - Kenya Crossbody Bag | MeeeShop US Boutique",
+      "board": "Handbag #handsips",
+      "timestamp": "2026-09-13T07:24:48.229657",
+      "type": "video",
+      "style": "carousel",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276664031027/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8820880474283,
+      "title": "Bekah Convertible Backpack Sling - Labor Day Must-Have \u2014 MeeeShop",
+      "board": "Fashion Models",
+      "timestamp": "2026-09-13T07:27:26.399942",
+      "type": "video",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276664031086/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
@@ -5126,7 +5172,7 @@
     "Shirts & Tops": "2026-09-10T20:07:09.122706",
     "Blouses": "2026-09-12T07:05:43.802114",
     "Rompers_Jumpsuits &...": "2026-09-03T23:08:55.772037",
-    "Handbag #handsips": "2026-09-02T07:03:56.808823",
+    "Handbag #handsips": "2026-09-13T07:24:48.229657",
     "Trendy & Timeless...": "2026-09-10T07:16:06.226498",
     "Our Recommended...": "2026-09-10T15:37:54.905426",
     "Blouse": "2026-09-02T07:02:11.433507",
@@ -5149,10 +5195,10 @@
     "Wardrobe Goals": "2026-09-12T22:59:51.883943",
     "Nylon backpack": "2026-09-09T15:47:42.369670",
     "Everyday Style": "2026-09-12T23:01:03.236775",
-    "Fashion Models": "2026-09-03T20:10:46.054458",
+    "Fashion Models": "2026-09-13T07:27:26.399942",
     "My Shop #1737732113": "2026-09-04T07:09:51.722709",
     "Shop For Holidays": "2026-09-04T15:34:26.849836",
-    "New": "2026-09-12T22:58:44.974279",
+    "New": "2026-09-13T07:21:50.584731",
     "American Bazi": "2026-09-04T22:56:36.790739",
     "Cool & Casual Styles": "2026-09-06T22:53:02.817122",
     "MeeeShop's Luxe Styles": "2026-09-04T22:58:06.656706",
@@ -5213,9 +5259,9 @@
     "Womens shacket": "2026-09-10T07:14:20.412592",
     "Meshohn Luxe Styles": "2026-09-12T14:50:36.971883"
   },
-  "daily_count": 16,
-  "last_post_time": "2026-09-12T23:01:03.236775",
+  "daily_count": 4,
+  "last_post_time": "2026-09-13T07:27:26.399942",
   "board_rotation_cursor": 0,
   "last_image_style": "collage",
-  "last_template_index": 15
+  "last_template_index": 14
 }
