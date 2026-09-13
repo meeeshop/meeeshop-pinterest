@@ -5193,11 +5193,55 @@
       "template": 14,
       "pin_url": "https://www.pinterest.com/pin/962222276664041037/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8782659977387,
+      "title": "Flying Tomato Purely Romantic Woven Lace Cami Top | MeeeShop US Boutique",
+      "board": "Trends",
+      "timestamp": "2026-09-13T19:44:11.033025",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276664048963/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8897136099499,
+      "title": "Ymi Women's High Rise Wide Leg Jeans with Elastic Back | MeeeShop US Boutique",
+      "board": "New",
+      "timestamp": "2026-09-13T19:45:28.278523",
+      "type": "carousel",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276664049013/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8981451571371,
+      "title": "Andra Crossbody Bag - Perfect Fall 2026 Labor Day Essential \u2014 MeeeShop",
+      "board": "My Shop #1737732113",
+      "timestamp": "2026-09-13T19:47:08.597387",
+      "type": "product",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276664049073/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8782621081771,
+      "title": "Retrolicious Snacks Shorter Length Fit & Flare Dress - Labor Day Cocktail \u2014 MeeeShop",
+      "board": "Cocktail Dresses",
+      "timestamp": "2026-09-13T19:48:16.352328",
+      "type": "carousel",
+      "style": "collage",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276664049123/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-09-11T23:09:04.798079",
-    "Trends": "2026-09-13T15:25:18.241496",
+    "Trends": "2026-09-13T19:44:11.033025",
     "Dresses": "2026-09-12T19:42:42.030242",
     "Feminine & Flowy Fits": "2026-09-10T15:40:12.756709",
     "Short fall dresses": "2026-09-13T15:27:28.998743",
@@ -5206,7 +5250,7 @@
     "Dress": "2026-09-03T07:06:25.677779",
     "Bags": "2026-09-11T23:10:09.103284",
     "Jeans": "2026-08-31T08:25:40.341768",
-    "Cocktail Dresses": "2026-09-01T23:13:33.653509",
+    "Cocktail Dresses": "2026-09-13T19:48:16.352328",
     "Dressy Outfits": "2026-09-11T07:15:27.452660",
     "Must-Have Fashion...": "2026-09-09T23:08:15.107660",
     "Flares Jeans": "2026-08-31T18:36:06.107736",
@@ -5240,9 +5284,9 @@
     "Nylon backpack": "2026-09-09T15:47:42.369670",
     "Everyday Style": "2026-09-12T23:01:03.236775",
     "Fashion Models": "2026-09-13T07:27:26.399942",
-    "My Shop #1737732113": "2026-09-04T07:09:51.722709",
+    "My Shop #1737732113": "2026-09-13T19:47:08.597387",
     "Shop For Holidays": "2026-09-04T15:34:26.849836",
-    "New": "2026-09-13T15:26:22.205782",
+    "New": "2026-09-13T19:45:28.278523",
     "American Bazi": "2026-09-04T22:56:36.790739",
     "Cool & Casual Styles": "2026-09-06T22:53:02.817122",
     "MeeeShop's Luxe Styles": "2026-09-04T22:58:06.656706",
@@ -5303,9 +5347,9 @@
     "Womens shacket": "2026-09-10T07:14:20.412592",
     "Meshohn Luxe Styles": "2026-09-12T14:50:36.971883"
   },
-  "daily_count": 8,
-  "last_post_time": "2026-09-13T15:28:37.834519",
+  "daily_count": 12,
+  "last_post_time": "2026-09-13T19:48:16.352328",
   "board_rotation_cursor": 0,
   "last_image_style": "collage",
-  "last_template_index": 14
+  "last_template_index": 11
 }
