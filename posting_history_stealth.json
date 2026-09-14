@@ -5281,6 +5281,52 @@
       "template": 16,
       "pin_url": "https://www.pinterest.com/pin/962222276664053430/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": "570900578475",
+      "article_id": "570900578475",
+      "title": "Denim Jacket Styling Formulas Across Seasons",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-09-14T07:44:43.199865",
+      "type": "blog",
+      "style": "card",
+      "template": 9,
+      "pin_url": "https://www.pinterest.com/pin/962222276664062408/",
+      "blog_url": "https://us.meeeshop.com/blogs/coats-jackets-style-guide/denim-jacket-styling-formulas-across-seasons",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8933161992363,
+      "title": "Gravity Strength Built-in Tank: Perfect Labor Day & Fall Look \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-09-14T07:45:49.455786",
+      "type": "carousel",
+      "style": "collage",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276664062427/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8883466633387,
+      "title": "Sunset Breeze Tiered Maxi Dress - Perfect Labor Day & Fall Outfit \u2014 MeeeShop",
+      "board": "Short Tall dresses",
+      "timestamp": "2026-09-14T07:48:24.937691",
+      "type": "video",
+      "style": "carousel",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276664062490/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8916763312299,
+      "title": "Nova Oversize Canvas Messenger Bag | MeeeShop US Boutique",
+      "board": "Shop For Holidays",
+      "timestamp": "2026-09-14T07:49:34.615574",
+      "type": "carousel",
+      "style": "collage",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276664062513/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
@@ -5298,7 +5344,7 @@
     "Dressy Outfits": "2026-09-11T07:15:27.452660",
     "Must-Have Fashion...": "2026-09-09T23:08:15.107660",
     "Flares Jeans": "2026-08-31T18:36:06.107736",
-    "Short Tall dresses": "2026-09-03T07:07:40.471733",
+    "Short Tall dresses": "2026-09-14T07:48:24.937691",
     "Rompers, Jumpsuits &...": "2026-09-03T20:09:33.744091",
     "Skirts": "2026-09-13T15:28:37.834519",
     "Shirts & Tops": "2026-09-10T20:07:09.122706",
@@ -5329,8 +5375,8 @@
     "Everyday Style": "2026-09-12T23:01:03.236775",
     "Fashion Models": "2026-09-13T07:27:26.399942",
     "My Shop #1737732113": "2026-09-13T19:47:08.597387",
-    "Shop For Holidays": "2026-09-04T15:34:26.849836",
-    "New": "2026-09-13T23:03:42.121261",
+    "Shop For Holidays": "2026-09-14T07:49:34.615574",
+    "New": "2026-09-14T07:45:49.455786",
     "American Bazi": "2026-09-04T22:56:36.790739",
     "Cool & Casual Styles": "2026-09-06T22:53:02.817122",
     "MeeeShop's Luxe Styles": "2026-09-04T22:58:06.656706",
@@ -5391,9 +5437,9 @@
     "Womens shacket": "2026-09-10T07:14:20.412592",
     "Meshohn Luxe Styles": "2026-09-12T14:50:36.971883"
   },
-  "daily_count": 16,
-  "last_post_time": "2026-09-13T23:06:01.709479",
+  "daily_count": 4,
+  "last_post_time": "2026-09-14T07:49:34.615574",
   "board_rotation_cursor": 0,
   "last_image_style": "collage",
-  "last_template_index": 16
+  "last_template_index": 11
 }
