@@ -5415,11 +5415,55 @@
       "template": 11,
       "pin_url": "https://www.pinterest.com/pin/962222276664080853/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8949201338539,
+      "title": "Cozy Open-front Waffle Knit Long Cardigan - Winter Staple \u26c4 Top | MeeeShop US Boutique",
+      "board": "Trends",
+      "timestamp": "2026-09-14T23:46:34.028735",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276664084024/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8818155978923,
+      "title": "Emory Park Yvonne Midi Dress: Perfect Labor Day & Fall Look \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-09-14T23:48:15.494693",
+      "type": "product",
+      "style": "collage",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276664084053/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8968032911531,
+      "title": "Kylin Open Front Cardigan Top | MeeeShop US Boutique",
+      "board": "Sweaters",
+      "timestamp": "2026-09-14T23:49:36.672933",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276664084078/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8818148868267,
+      "title": "Emory Park Pia Mini Dress - Perfect Labor Day & Fall Outfit \u2014 MeeeShop",
+      "board": "Rompers_Jumpsuits &...",
+      "timestamp": "2026-09-14T23:50:58.790872",
+      "type": "carousel",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276664084095/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-09-11T23:09:04.798079",
-    "Trends": "2026-09-14T21:04:11.291193",
+    "Trends": "2026-09-14T23:46:34.028735",
     "Dresses": "2026-09-12T19:42:42.030242",
     "Feminine & Flowy Fits": "2026-09-10T15:40:12.756709",
     "Short fall dresses": "2026-09-13T15:27:28.998743",
@@ -5437,7 +5481,7 @@
     "Skirts": "2026-09-13T15:28:37.834519",
     "Shirts & Tops": "2026-09-10T20:07:09.122706",
     "Blouses": "2026-09-12T07:05:43.802114",
-    "Rompers_Jumpsuits &...": "2026-09-03T23:08:55.772037",
+    "Rompers_Jumpsuits &...": "2026-09-14T23:50:58.790872",
     "Handbag #handsips": "2026-09-13T07:24:48.229657",
     "Trendy & Timeless...": "2026-09-10T07:16:06.226498",
     "Our Recommended...": "2026-09-10T15:37:54.905426",
@@ -5464,7 +5508,7 @@
     "Fashion Models": "2026-09-13T07:27:26.399942",
     "My Shop #1737732113": "2026-09-13T19:47:08.597387",
     "Shop For Holidays": "2026-09-14T07:49:34.615574",
-    "New": "2026-09-14T21:06:45.433248",
+    "New": "2026-09-14T23:48:15.494693",
     "American Bazi": "2026-09-04T22:56:36.790739",
     "Cool & Casual Styles": "2026-09-06T22:53:02.817122",
     "MeeeShop's Luxe Styles": "2026-09-04T22:58:06.656706",
@@ -5505,7 +5549,7 @@
     "Women's Cardigans": "2026-09-10T23:05:01.998901",
     "Loungewear": "2026-08-20T12:34:25.960617",
     "Bow heels": "2026-08-20T18:00:36.882815",
-    "Sweaters": "2026-08-20T21:32:57.133135",
+    "Sweaters": "2026-09-14T23:49:36.672933",
     "Luxe Clothing": "2026-08-21T18:05:31.547180",
     "Chic & Cozy Anim...": "2026-08-22T03:01:41.947147",
     "Coats & Jackets": "2026-08-22T12:29:02.791992",
@@ -5525,9 +5569,9 @@
     "Womens shacket": "2026-09-10T07:14:20.412592",
     "Meshohn Luxe Styles": "2026-09-12T14:50:36.971883"
   },
-  "daily_count": 12,
-  "last_post_time": "2026-09-14T21:09:12.884755",
+  "daily_count": 16,
+  "last_post_time": "2026-09-14T23:50:58.790872",
   "board_rotation_cursor": 0,
   "last_image_style": "collage",
-  "last_template_index": 11
+  "last_template_index": 17
 }
