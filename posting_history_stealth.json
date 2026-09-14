@@ -5327,11 +5327,55 @@
       "template": 11,
       "pin_url": "https://www.pinterest.com/pin/962222276664062513/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8970893033643,
+      "title": "Woodstock Skirt Green 100% Cotton Voile Dragon Print | MeeeShop US Boutique",
+      "board": "Trends",
+      "timestamp": "2026-09-14T17:21:40.287791",
+      "type": "video",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276664074417/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8883469222059,
+      "title": "Desert Rose: Cinched Waist Windbreaker and Tassel Skirt Set | MeeeShop US Boutique",
+      "board": "New",
+      "timestamp": "2026-09-14T17:23:02.388636",
+      "type": "carousel",
+      "style": "collage",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276664074468/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8970891821227,
+      "title": "Emory Park Alivia Halter Top - Perfect Labor Day & Fall Look \u2014 MeeeShop",
+      "board": "Camis & Tanks",
+      "timestamp": "2026-09-14T17:24:24.092063",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276664074505/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8911379726507,
+      "title": "Mkf Collection by Mia K. - Shonda Signature Tote Bag and Set: Fashion Must-Have",
+      "board": "BFCM Deals",
+      "timestamp": "2026-09-14T17:25:37.309188",
+      "type": "carousel",
+      "style": "collage",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276664074534/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-09-11T23:09:04.798079",
-    "Trends": "2026-09-13T23:02:26.650615",
+    "Trends": "2026-09-14T17:21:40.287791",
     "Dresses": "2026-09-12T19:42:42.030242",
     "Feminine & Flowy Fits": "2026-09-10T15:40:12.756709",
     "Short fall dresses": "2026-09-13T15:27:28.998743",
@@ -5355,7 +5399,7 @@
     "Our Recommended...": "2026-09-10T15:37:54.905426",
     "Blouse": "2026-09-13T23:04:53.123923",
     "Wardrobe Must-Hav...": "2026-09-10T20:04:48.095837",
-    "Camis & Tanks": "2026-09-02T23:12:37.424489",
+    "Camis & Tanks": "2026-09-14T17:24:24.092063",
     "Wardrobe Must Haves": "2026-09-11T15:43:19.209422",
     "Trendy Backpacks": "2026-09-05T22:48:29.782327",
     "Festive Styles": "2026-09-04T19:55:11.548082",
@@ -5376,7 +5420,7 @@
     "Fashion Models": "2026-09-13T07:27:26.399942",
     "My Shop #1737732113": "2026-09-13T19:47:08.597387",
     "Shop For Holidays": "2026-09-14T07:49:34.615574",
-    "New": "2026-09-14T07:45:49.455786",
+    "New": "2026-09-14T17:23:02.388636",
     "American Bazi": "2026-09-04T22:56:36.790739",
     "Cool & Casual Styles": "2026-09-06T22:53:02.817122",
     "MeeeShop's Luxe Styles": "2026-09-04T22:58:06.656706",
@@ -5386,7 +5430,7 @@
     "Weekend to Workwear": "2026-09-07T17:02:26.626944",
     "Effortless Looks": "2026-09-05T22:49:38.613066",
     "Vamp Romantic Styles": "2026-09-05T19:26:29.840004",
-    "BFCM Deals": "2026-09-04T19:58:07.318666",
+    "BFCM Deals": "2026-09-14T17:25:37.309188",
     "Poetcore Aesthetics": "2026-09-07T23:25:48.911417",
     "Emory Park Clothing": "2026-09-08T07:08:05.505773",
     "new products": "2026-09-12T07:04:02.802761",
@@ -5437,9 +5481,9 @@
     "Womens shacket": "2026-09-10T07:14:20.412592",
     "Meshohn Luxe Styles": "2026-09-12T14:50:36.971883"
   },
-  "daily_count": 4,
-  "last_post_time": "2026-09-14T07:49:34.615574",
+  "daily_count": 8,
+  "last_post_time": "2026-09-14T17:25:37.309188",
   "board_rotation_cursor": 0,
   "last_image_style": "collage",
-  "last_template_index": 11
+  "last_template_index": 16
 }
