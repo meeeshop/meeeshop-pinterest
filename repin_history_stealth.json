@@ -1779,6 +1779,46 @@
       "target_board_id": "962222345325701393",
       "live_url": "https://www.pinterest.com/pin/4591771790209574784/",
       "timestamp": "2026-09-14T21:03:40.844933+00:00"
+    },
+    {
+      "pin_id": "4611545403767571776",
+      "product_title": "Lily Drawstring Pant Set",
+      "category_group": "pants_denim",
+      "source_board": "_products",
+      "target_board": "\"fashion models\"",
+      "target_board_id": "962222345325427353",
+      "live_url": "https://www.pinterest.com/pin/4611545403767571776/",
+      "timestamp": "2026-09-14T23:38:43.335233+00:00"
+    },
+    {
+      "pin_id": "4611545397325120832",
+      "product_title": "Pu Vegan Leather 2 in 1 Tote Crossbody Handbag",
+      "category_group": "bags_accessories",
+      "source_board": "_products",
+      "target_board": "Bags",
+      "target_board_id": "962222345325683645",
+      "live_url": "https://www.pinterest.com/pin/4611545397325120832/",
+      "timestamp": "2026-09-14T23:39:14.846378+00:00"
+    },
+    {
+      "pin_id": "4597964220399105920",
+      "product_title": "Structured Top Handle Handbag with Zipper Closures",
+      "category_group": "tops_tanks_blouses",
+      "source_board": "_products",
+      "target_board": "Trendy Backpacks",
+      "target_board_id": "962222345325574751",
+      "live_url": "https://www.pinterest.com/pin/4597964220399105920/",
+      "timestamp": "2026-09-14T23:39:45.588736+00:00"
+    },
+    {
+      "pin_id": "4611545386587702592",
+      "product_title": "Elastique Athletics L'original Lymphatic Leggings",
+      "category_group": "pants_denim",
+      "source_board": "_products",
+      "target_board": "Trendy & Timeless Fashion",
+      "target_board_id": "962222345325694325",
+      "live_url": "https://www.pinterest.com/pin/4611545386587702592/",
+      "timestamp": "2026-09-14T23:40:17.978239+00:00"
     }
   ],
   "board_last_used": {
@@ -1797,10 +1837,10 @@
     "Feminine & Flowy Fits": "2026-09-12T15:10:56.683546+00:00",
     "Blouses": "2026-09-12T19:36:39.782810+00:00",
     "Must-Have Fashion Picks": "2026-09-14T21:03:40.844933+00:00",
-    "\"fashion models\"": "2026-09-10T15:59:43.496424+00:00",
+    "\"fashion models\"": "2026-09-14T23:38:43.335233+00:00",
     "Cocktail Dresses": "2026-09-13T15:46:22.055669+00:00",
     "Camis & Tanks": "2026-09-10T22:53:28.381249+00:00",
-    "Trendy & Timeless Fashion": "2026-09-10T16:00:16.789443+00:00",
+    "Trendy & Timeless Fashion": "2026-09-14T23:40:17.978239+00:00",
     "Our Recommended Feminine Styles": "2026-09-10T20:01:19.122689+00:00",
     "Rompers, Jumpsuits & Outfit Sets": "2026-09-13T15:46:56.918496+00:00",
     "Confident Looks": "2026-09-10T22:54:22.402573+00:00",
@@ -1818,11 +1858,11 @@
     "Wardrobe Goals": "2026-09-12T15:09:53.770667+00:00",
     "Emory Park Clothing": "2026-09-14T07:34:04.302867+00:00",
     "Shop For Holidays": "2026-09-12T15:10:39.447812+00:00",
-    "Bags": "2026-09-09T22:52:53.160639+00:00",
+    "Bags": "2026-09-14T23:39:14.846378+00:00",
     "MeeeShop's Luxe Styles": "2026-09-13T22:45:40.347155+00:00",
     "Davi & Dani Womens Clothing | us.meeeshop.com": "2026-09-09T20:01:01.189763+00:00",
     "Zenana Women's Clothing, Dresses, Tops, Pants": "2026-09-13T22:46:08.227341+00:00",
-    "Trendy Backpacks": "2026-09-09T22:53:27.340621+00:00",
+    "Trendy Backpacks": "2026-09-14T23:39:45.588736+00:00",
     "LE LIS Womens Clothing | us.meeeshop": "2026-09-09T20:01:32.712763+00:00",
     "Chic & Effortless Styles": "2026-09-12T19:37:06.018227+00:00",
     "Jeans": "2026-09-10T20:00:56.028894+00:00",
@@ -1857,6 +1897,6 @@
     "Relaxed Yet Trendy Fashion": "2026-09-13T07:09:19.789182+00:00",
     "Simple Outfits": "2026-09-14T07:33:46.407531+00:00"
   },
-  "daily_count": 10,
-  "last_repin_time": "2026-09-14T21:03:40.844933+00:00"
+  "daily_count": 14,
+  "last_repin_time": "2026-09-14T23:40:17.978239+00:00"
 }
