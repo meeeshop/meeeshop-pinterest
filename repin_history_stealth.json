@@ -1899,6 +1899,46 @@
       "target_board_id": "962222345325683646",
       "live_url": "https://www.pinterest.com/pin/4595149457412548480/",
       "timestamp": "2026-09-15T16:29:53.072171+00:00"
+    },
+    {
+      "pin_id": "4594375413558339456",
+      "product_title": "Collins Drawstring Elastic Waistband Pocketed Barrel Jeans",
+      "category_group": "pants_denim",
+      "source_board": "_products",
+      "target_board": "Kancan USA Jeans",
+      "target_board_id": "962222345325077882",
+      "live_url": "https://www.pinterest.com/pin/4594375413558339456/",
+      "timestamp": "2026-09-15T20:25:14.873511+00:00"
+    },
+    {
+      "pin_id": "4594375442549368704",
+      "product_title": "Willow Cropped High Rise Wide Leg Jeans",
+      "category_group": "pants_denim",
+      "source_board": "_products",
+      "target_board": "Trends",
+      "target_board_id": "962222345325426077",
+      "live_url": "https://www.pinterest.com/pin/4594375442549368704/",
+      "timestamp": "2026-09-15T20:25:45.466391+00:00"
+    },
+    {
+      "pin_id": "4594375433959434112",
+      "product_title": "Brooke High Waist Wide Leg Jeans",
+      "category_group": "pants_denim",
+      "source_board": "_products",
+      "target_board": "Wardrobe Must-Haves",
+      "target_board_id": "962222345325704400",
+      "live_url": "https://www.pinterest.com/pin/4594375433959434112/",
+      "timestamp": "2026-09-15T20:26:11.159503+00:00"
+    },
+    {
+      "pin_id": "4608238056267656256",
+      "product_title": "Ymi Women\u2019s Wannabettabutt Cuffed Denim Shorts",
+      "category_group": "pants_denim",
+      "source_board": "_products",
+      "target_board": "Casual",
+      "target_board_id": "962222345325683653",
+      "live_url": "https://www.pinterest.com/pin/4608238056267656256/",
+      "timestamp": "2026-09-15T20:26:39.956898+00:00"
     }
   ],
   "board_last_used": {
@@ -1924,9 +1964,9 @@
     "Our Recommended Feminine Styles": "2026-09-15T07:09:41.104433+00:00",
     "Rompers, Jumpsuits & Outfit Sets": "2026-09-13T15:46:56.918496+00:00",
     "Confident Looks": "2026-09-15T16:28:37.569562+00:00",
-    "Trends": "2026-09-11T07:00:34.810768+00:00",
-    "Wardrobe Must-Haves": "2026-09-11T07:00:59.369201+00:00",
-    "Casual": "2026-09-11T22:55:50.133990+00:00",
+    "Trends": "2026-09-15T20:25:45.466391+00:00",
+    "Wardrobe Must-Haves": "2026-09-15T20:26:11.159503+00:00",
+    "Casual": "2026-09-15T20:26:39.956898+00:00",
     "Farm clothes": "2026-09-12T06:52:09.182693+00:00",
     "New": "2026-09-12T06:52:39.687281+00:00",
     "Festive Styles": "2026-09-13T19:42:34.304087+00:00",
@@ -1964,7 +2004,7 @@
     "Sweaters #Sweaters #WinterOutfits": "2026-09-05T14:46:24.728209+00:00",
     "Everyday Style Essentials": "2026-09-14T17:52:00.415804+00:00",
     "Fashion": "2026-09-14T17:52:22.617397+00:00",
-    "Kancan USA Jeans": "2026-09-11T07:00:03.458003+00:00",
+    "Kancan USA Jeans": "2026-09-15T20:25:14.873511+00:00",
     "Stylish Finds": "2026-09-14T17:53:08.649546+00:00",
     "Straight Leg Jeans": "2026-09-11T16:02:10.278484+00:00",
     "Handbags #handbags": "2026-09-12T06:51:05.367327+00:00",
@@ -1977,6 +2017,6 @@
     "Relaxed Yet Trendy Fashion": "2026-09-13T07:09:19.789182+00:00",
     "Simple Outfits": "2026-09-14T07:33:46.407531+00:00"
   },
-  "daily_count": 8,
-  "last_repin_time": "2026-09-15T16:29:53.072171+00:00"
+  "daily_count": 12,
+  "last_repin_time": "2026-09-15T20:26:39.956898+00:00"
 }
