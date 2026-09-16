@@ -2049,11 +2049,51 @@
       "target_board_id": "962222345325692903",
       "live_url": "https://www.pinterest.com/pin/4600849362182625344/",
       "timestamp": "2026-09-16T20:24:56.230994+00:00"
+    },
+    {
+      "pin_id": "4597260546792470400",
+      "product_title": "Collins Drawstring Elastic Waistband Pocketed Barrel Jeans",
+      "category_group": "pants_denim",
+      "source_board": "_products",
+      "target_board": "Pants & Leggings",
+      "target_board_id": "962222345325046951",
+      "live_url": "https://www.pinterest.com/pin/4597260546792470400/",
+      "timestamp": "2026-09-16T23:27:31.579100+00:00"
+    },
+    {
+      "pin_id": "4597260551087437696",
+      "product_title": "Emma Woven Clutch Wristlet",
+      "category_group": "general_apparel",
+      "source_board": "_products",
+      "target_board": "best selling products",
+      "target_board_id": "962222345325596670",
+      "live_url": "https://www.pinterest.com/pin/4597260551087437696/",
+      "timestamp": "2026-09-16T23:28:01.579400+00:00"
+    },
+    {
+      "pin_id": "4597260512432732032",
+      "product_title": "Plaid Print Button Down Hoodie Top",
+      "category_group": "tops_tanks_blouses",
+      "source_board": "_products",
+      "target_board": "Farm clothes",
+      "target_board_id": "962222345325683654",
+      "live_url": "https://www.pinterest.com/pin/4597260512432732032/",
+      "timestamp": "2026-09-16T23:28:36.859911+00:00"
+    },
+    {
+      "pin_id": "4597260525317633920",
+      "product_title": "Lina Shoulder Bag and Wallet Set",
+      "category_group": "bags_accessories",
+      "source_board": "_products",
+      "target_board": "BFCM Deals",
+      "target_board_id": "962222345325599496",
+      "live_url": "https://www.pinterest.com/pin/4597260525317633920/",
+      "timestamp": "2026-09-16T23:29:05.396641+00:00"
     }
   ],
   "board_last_used": {
     "Women's Cardigans": "2026-09-06T06:51:18.568445+00:00",
-    "Pants & Leggings": "2026-09-11T19:59:56.775028+00:00",
+    "Pants & Leggings": "2026-09-16T23:27:31.579100+00:00",
     "Skirts": "2026-09-15T07:10:04.242447+00:00",
     "Dresses": "2026-09-10T22:54:55.931875+00:00",
     "Sweaters": "2026-09-09T16:06:04.433912+00:00",
@@ -2077,7 +2117,7 @@
     "Trends": "2026-09-15T20:25:45.466391+00:00",
     "Wardrobe Must-Haves": "2026-09-15T20:26:11.159503+00:00",
     "Casual": "2026-09-15T20:26:39.956898+00:00",
-    "Farm clothes": "2026-09-12T06:52:09.182693+00:00",
+    "Farm clothes": "2026-09-16T23:28:36.859911+00:00",
     "New": "2026-09-16T07:11:00.150614+00:00",
     "Festive Styles": "2026-09-13T19:42:34.304087+00:00",
     "American Bazi": "2026-09-13T07:10:17.240626+00:00",
@@ -2099,9 +2139,9 @@
     "Nylon backpack": "2026-09-15T16:29:53.072171+00:00",
     "Mustard Seed Clothing": "2026-09-10T07:00:27.606005+00:00",
     "Effortless Looks": "2026-09-14T07:32:54.798562+00:00",
-    "best selling products": "2026-09-12T22:44:51.384716+00:00",
+    "best selling products": "2026-09-16T23:28:01.579400+00:00",
     "New Trendy Women Apparel, Shoes, Handbags & more": "2026-09-16T07:11:21.776188+00:00",
-    "BFCM Deals": "2026-09-12T22:45:12.777465+00:00",
+    "BFCM Deals": "2026-09-16T23:29:05.396641+00:00",
     "Sweaters for women": "2026-09-04T22:42:22.662581+00:00",
     "new products": "2026-09-13T07:09:43.260430+00:00",
     "Fall outfits": "2026-09-05T06:40:04.179589+00:00",
@@ -2127,6 +2167,6 @@
     "Relaxed Yet Trendy Fashion": "2026-09-13T07:09:19.789182+00:00",
     "Simple Outfits": "2026-09-14T07:33:46.407531+00:00"
   },
-  "daily_count": 10,
-  "last_repin_time": "2026-09-16T20:24:56.230994+00:00"
+  "daily_count": 14,
+  "last_repin_time": "2026-09-16T23:29:05.396641+00:00"
 }
