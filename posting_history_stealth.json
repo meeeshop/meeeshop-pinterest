@@ -5815,6 +5815,52 @@
       "template": 17,
       "pin_url": "https://www.pinterest.com/pin/962222276664140444/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": "570810433707",
+      "article_id": "570810433707",
+      "title": "Finding Comfortable Pants That Look Structured and Tailored",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-09-17T07:23:52.556252",
+      "type": "blog",
+      "style": "card",
+      "template": 9,
+      "pin_url": "https://www.pinterest.com/pin/962222276664148881/",
+      "blog_url": "https://us.meeeshop.com/blogs/womens-pants-style-guide/finding-comfortable-pants-that-look-structured-and-tailored",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8976562192555,
+      "title": "Carry All Quilted Cross Body Bag | MeeeShop US Boutique",
+      "board": "New",
+      "timestamp": "2026-09-17T07:26:28.232726",
+      "type": "video",
+      "style": "collage",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276664148918/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8930016624811,
+      "title": "Kathryn Classic Button-up, Forest Green Top - Perfect Labor Day & Fall Look \u2014 MeeeShop",
+      "board": "American Bazi",
+      "timestamp": "2026-09-17T07:28:51.564257",
+      "type": "video",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276664148979/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8825276235947,
+      "title": "Smocked Front Tank Top - Effortless Fall Style for Labor Day \u2014 MeeeShop",
+      "board": "MeeeShop's Luxe Styles",
+      "timestamp": "2026-09-17T07:29:59.068289",
+      "type": "carousel",
+      "style": "collage",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276664149007/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
@@ -5864,10 +5910,10 @@
     "Fashion Models": "2026-09-13T07:27:26.399942",
     "My Shop #1737732113": "2026-09-13T19:47:08.597387",
     "Shop For Holidays": "2026-09-14T07:49:34.615574",
-    "New": "2026-09-16T23:38:38.834826",
-    "American Bazi": "2026-09-04T22:56:36.790739",
+    "New": "2026-09-17T07:26:28.232726",
+    "American Bazi": "2026-09-17T07:28:51.564257",
     "Cool & Casual Styles": "2026-09-06T22:53:02.817122",
-    "MeeeShop's Luxe Styles": "2026-09-04T22:58:06.656706",
+    "MeeeShop's Luxe Styles": "2026-09-17T07:29:59.068289",
     "Outerwear": "2026-09-10T23:06:16.590733",
     "Zenana Women's...": "2026-09-05T14:22:53.769986",
     "Thanks giving Outfits": "2026-09-05T06:53:54.686559",
@@ -5925,9 +5971,9 @@
     "Womens shacket": "2026-09-10T07:14:20.412592",
     "Meshohn Luxe Styles": "2026-09-12T14:50:36.971883"
   },
-  "daily_count": 16,
-  "last_post_time": "2026-09-16T23:41:09.390619",
+  "daily_count": 4,
+  "last_post_time": "2026-09-17T07:29:59.068289",
   "board_rotation_cursor": 0,
   "last_image_style": "collage",
-  "last_template_index": 17
+  "last_template_index": 15
 }
