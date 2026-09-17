@@ -5861,11 +5861,55 @@
       "template": 15,
       "pin_url": "https://www.pinterest.com/pin/962222276664149007/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8818153259179,
+      "title": "Emory Park Niamh Blouse: Fall 2026 Labor Day Must-Have \u2014 MeeeShop",
+      "board": "Trends",
+      "timestamp": "2026-09-17T15:59:22.435957",
+      "type": "video",
+      "style": "carousel",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276664159020/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8931951247531,
+      "title": "Built-in Pocket Short Tennis Skirt Made in USA - Perfect for Labor Day \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-09-17T16:00:31.911976",
+      "type": "carousel",
+      "style": "collage",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276664159056/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8782620590251,
+      "title": "Retrolicious Pink Dot Bow Top - Perfect Labor Day & Fall Fashion Blouse \u2014 MeeeShop",
+      "board": "Zenana Women's...",
+      "timestamp": "2026-09-17T16:02:47.073878",
+      "type": "product",
+      "style": "carousel",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276664159121/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8897141801131,
+      "title": "Ymi Women's Britney Wide Leg Cuff Jeans - Labor Day & Fall Must-Have \u2014 MeeeShop",
+      "board": "Casual",
+      "timestamp": "2026-09-17T16:04:16.828060",
+      "type": "carousel",
+      "style": "collage",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276664159162/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-09-11T23:09:04.798079",
-    "Trends": "2026-09-16T23:37:35.609025",
+    "Trends": "2026-09-17T15:59:22.435957",
     "Dresses": "2026-09-12T19:42:42.030242",
     "Feminine & Flowy Fits": "2026-09-10T15:40:12.756709",
     "Short fall dresses": "2026-09-13T15:27:28.998743",
@@ -5899,7 +5943,7 @@
     "Chic Looks": "2026-09-06T14:48:35.609030",
     "Straight Leg Jeans": "2026-09-06T07:06:32.233973",
     "Puff Sleeves Tops": "2026-09-15T16:04:34.730952",
-    "Casual": "2026-09-02T15:52:11.741894",
+    "Casual": "2026-09-17T16:04:16.828060",
     "Confident Looks": "2026-09-11T20:03:17.039395",
     "Casual Chic Style": "2026-09-12T19:41:26.537962",
     "Farm clothes": "2026-09-16T23:41:09.390619",
@@ -5910,12 +5954,12 @@
     "Fashion Models": "2026-09-13T07:27:26.399942",
     "My Shop #1737732113": "2026-09-13T19:47:08.597387",
     "Shop For Holidays": "2026-09-14T07:49:34.615574",
-    "New": "2026-09-17T07:26:28.232726",
+    "New": "2026-09-17T16:00:31.911976",
     "American Bazi": "2026-09-17T07:28:51.564257",
     "Cool & Casual Styles": "2026-09-06T22:53:02.817122",
     "MeeeShop's Luxe Styles": "2026-09-17T07:29:59.068289",
     "Outerwear": "2026-09-10T23:06:16.590733",
-    "Zenana Women's...": "2026-09-05T14:22:53.769986",
+    "Zenana Women's...": "2026-09-17T16:02:47.073878",
     "Thanks giving Outfits": "2026-09-05T06:53:54.686559",
     "Weekend to Workwear": "2026-09-07T17:02:26.626944",
     "Effortless Looks": "2026-09-05T22:49:38.613066",
@@ -5971,9 +6015,9 @@
     "Womens shacket": "2026-09-10T07:14:20.412592",
     "Meshohn Luxe Styles": "2026-09-12T14:50:36.971883"
   },
-  "daily_count": 4,
-  "last_post_time": "2026-09-17T07:29:59.068289",
+  "daily_count": 8,
+  "last_post_time": "2026-09-17T16:04:16.828060",
   "board_rotation_cursor": 0,
   "last_image_style": "collage",
-  "last_template_index": 15
+  "last_template_index": 16
 }
