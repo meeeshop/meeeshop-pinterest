@@ -5993,11 +5993,57 @@
       "template": 15,
       "pin_url": "https://www.pinterest.com/pin/962222276664168859/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8931950821547,
+      "title": "High Waisted Yoga Leggings Made in USA - Perfect Labor Day & Fall 2026 Outfit",
+      "board": "Trends",
+      "timestamp": "2026-09-18T07:15:21.607551",
+      "type": "video",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276664177793/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": "570914635947",
+      "article_id": "570914635947",
+      "title": "Styling Denim and Knit Skirts for Daytime Looks",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-09-18T07:16:53.159260",
+      "type": "blog",
+      "style": "card",
+      "template": 9,
+      "pin_url": "https://www.pinterest.com/pin/962222276664177801/",
+      "blog_url": "https://us.meeeshop.com/blogs/womens-skirts-style-guide/styling-denim-and-knit-skirts-for-daytime-looks",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8786744541355,
+      "title": "Liv Convertible Compact Crossbody - Perfect Labor Day & Fall Style \u2014 MeeeShop",
+      "board": "Style Ideas",
+      "timestamp": "2026-09-18T07:18:01.827535",
+      "type": "carousel",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276664177812/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8928275300523,
+      "title": "Howdy Boot Coziest Lounge Slippers - Perfect for Labor Day & Fall Comfort \u2014 MeeeShop",
+      "board": "Look casual...",
+      "timestamp": "2026-09-18T07:19:12.747094",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/795659459211587011/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-09-11T23:09:04.798079",
-    "Trends": "2026-09-17T23:28:52.843944",
+    "Trends": "2026-09-18T07:15:21.607551",
     "Dresses": "2026-09-12T19:42:42.030242",
     "Feminine & Flowy Fits": "2026-09-10T15:40:12.756709",
     "Short fall dresses": "2026-09-13T15:27:28.998743",
@@ -6067,7 +6113,7 @@
     "Outfit Ideas": "2026-09-16T20:29:01.412536",
     "Late Summer to Fall Teacher Style": "2026-09-07T20:49:47.645148",
     "Ootd #ootd": "2026-09-17T20:35:16.143857",
-    "Style Ideas": "2026-09-07T07:14:33.064276",
+    "Style Ideas": "2026-09-18T07:18:01.827535",
     "Mustard Seed Clothing": "2026-09-09T20:03:31.971091",
     "Woman Fashion!": "2026-09-07T07:15:49.480042",
     "Stylish Finds": "2026-09-07T20:51:16.110452",
@@ -6101,11 +6147,12 @@
     "Women's shacket": "2026-09-08T15:50:34.046479",
     "Fall Outfits 2026": "2026-09-08T20:17:06.586566",
     "Womens shacket": "2026-09-10T07:14:20.412592",
-    "Meshohn Luxe Styles": "2026-09-12T14:50:36.971883"
+    "Meshohn Luxe Styles": "2026-09-12T14:50:36.971883",
+    "Look casual...": "2026-09-18T07:19:12.747094"
   },
-  "daily_count": 16,
-  "last_post_time": "2026-09-17T23:32:49.737756",
+  "daily_count": 4,
+  "last_post_time": "2026-09-18T07:19:12.747094",
   "board_rotation_cursor": 0,
-  "last_image_style": "collage",
-  "last_template_index": 15
+  "last_image_style": "carousel",
+  "last_template_index": 16
 }
