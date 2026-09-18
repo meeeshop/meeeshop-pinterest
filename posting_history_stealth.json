@@ -6039,11 +6039,55 @@
       "template": 16,
       "pin_url": "https://www.pinterest.com/pin/795659459211587011/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8911380054187,
+      "title": "Mkf Collection by Mia K. - Nora Shoulder Bag: Labor Day Fall Trend \u2014 MeeeShop",
+      "board": "Trends",
+      "timestamp": "2026-09-18T15:32:56.528271",
+      "type": "carousel",
+      "style": "collage",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276664188379/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8825883984043,
+      "title": "Mkf Collection by Mia K. - Beatrice Signature Crossbody Bag for Labor Day Fall",
+      "board": "New",
+      "timestamp": "2026-09-18T15:34:44.938092",
+      "type": "product",
+      "style": "carousel",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276664188447/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8933161631915,
+      "title": "Powerful Shorts: Labor Day Weekend Must-Have for Fall 2026 \u2014 MeeeShop",
+      "board": "Woman Fashion!",
+      "timestamp": "2026-09-18T15:37:46.592319",
+      "type": "video",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276664188588/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8789759230123,
+      "title": "Leilani Tummy Control High Rise Holly Flare Jeans - Perfect Labor Day & Fall Look",
+      "board": "Fitted Jeans",
+      "timestamp": "2026-09-18T15:40:13.085953",
+      "type": "video",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276664188661/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-09-11T23:09:04.798079",
-    "Trends": "2026-09-18T07:15:21.607551",
+    "Trends": "2026-09-18T15:32:56.528271",
     "Dresses": "2026-09-12T19:42:42.030242",
     "Feminine & Flowy Fits": "2026-09-10T15:40:12.756709",
     "Short fall dresses": "2026-09-13T15:27:28.998743",
@@ -6073,7 +6117,7 @@
     "Festive Styles": "2026-09-15T23:33:56.941220",
     "Kancan USA Jeans": "2026-09-16T07:32:48.977827",
     "Footwear": "2026-09-07T23:26:56.803572",
-    "Fitted Jeans": "2026-09-05T19:28:56.742954",
+    "Fitted Jeans": "2026-09-18T15:40:13.085953",
     "Chic Looks": "2026-09-06T14:48:35.609030",
     "Straight Leg Jeans": "2026-09-06T07:06:32.233973",
     "Puff Sleeves Tops": "2026-09-15T16:04:34.730952",
@@ -6088,7 +6132,7 @@
     "Fashion Models": "2026-09-13T07:27:26.399942",
     "My Shop #1737732113": "2026-09-13T19:47:08.597387",
     "Shop For Holidays": "2026-09-14T07:49:34.615574",
-    "New": "2026-09-17T23:30:16.423999",
+    "New": "2026-09-18T15:34:44.938092",
     "American Bazi": "2026-09-17T07:28:51.564257",
     "Cool & Casual Styles": "2026-09-17T20:36:32.448629",
     "MeeeShop's Luxe Styles": "2026-09-17T07:29:59.068289",
@@ -6115,7 +6159,7 @@
     "Ootd #ootd": "2026-09-17T20:35:16.143857",
     "Style Ideas": "2026-09-18T07:18:01.827535",
     "Mustard Seed Clothing": "2026-09-09T20:03:31.971091",
-    "Woman Fashion!": "2026-09-07T07:15:49.480042",
+    "Woman Fashion!": "2026-09-18T15:37:46.592319",
     "Stylish Finds": "2026-09-07T20:51:16.110452",
     "Confidence Ladies": "2026-09-08T07:10:44.481092",
     "Fresh Finds New...": "2026-09-08T23:20:01.904577",
@@ -6150,9 +6194,9 @@
     "Meshohn Luxe Styles": "2026-09-12T14:50:36.971883",
     "Look casual...": "2026-09-18T07:19:12.747094"
   },
-  "daily_count": 4,
-  "last_post_time": "2026-09-18T07:19:12.747094",
+  "daily_count": 8,
+  "last_post_time": "2026-09-18T15:40:13.085953",
   "board_rotation_cursor": 0,
   "last_image_style": "carousel",
-  "last_template_index": 16
+  "last_template_index": 17
 }
