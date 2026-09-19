@@ -2429,13 +2429,43 @@
       "target_board_id": "962222345325596670",
       "live_url": "https://www.pinterest.com/pin/4592475423274989440/",
       "timestamp": "2026-09-19T19:32:54.124765+00:00"
+    },
+    {
+      "pin_id": "4603312249944143936",
+      "product_title": "Ymi Women's Luxe Bella Wide Leg Jeans",
+      "category_group": "pants_denim",
+      "source_board": "_products",
+      "target_board": "Umgee USA",
+      "target_board_id": "962222345325611271",
+      "live_url": "https://www.pinterest.com/pin/4603312249944143936/",
+      "timestamp": "2026-09-19T22:36:53.299007+00:00"
+    },
+    {
+      "pin_id": "4604156646852740160",
+      "product_title": "Cape Cod Top Ivory with Cheetah Embroidery",
+      "category_group": "tops_tanks_blouses",
+      "source_board": "_products",
+      "target_board": "Camis & Tanks",
+      "target_board_id": "962222345324807345",
+      "live_url": "https://www.pinterest.com/pin/4604156646852740160/",
+      "timestamp": "2026-09-19T22:37:16.514128+00:00"
+    },
+    {
+      "pin_id": "4604156664032609344",
+      "product_title": "Emory Park Adelisa Maxi Dress",
+      "category_group": "dresses",
+      "source_board": "_products",
+      "target_board": "Dresses",
+      "target_board_id": "962222345325006107",
+      "live_url": "https://www.pinterest.com/pin/4604156664032609344/",
+      "timestamp": "2026-09-19T22:37:44.246510+00:00"
     }
   ],
   "board_last_used": {
     "Women's Cardigans": "2026-09-06T06:51:18.568445+00:00",
     "Pants & Leggings": "2026-09-16T23:27:31.579100+00:00",
     "Skirts": "2026-09-15T07:10:04.242447+00:00",
-    "Dresses": "2026-09-10T22:54:55.931875+00:00",
+    "Dresses": "2026-09-19T22:37:44.246510+00:00",
     "Sweaters": "2026-09-09T16:06:04.433912+00:00",
     "Dressy Outfits": "2026-09-17T07:09:34.223046+00:00",
     "Dress": "2026-09-11T20:00:24.186926+00:00",
@@ -2449,7 +2479,7 @@
     "Must-Have Fashion Picks": "2026-09-17T20:31:50.550810+00:00",
     "\"fashion models\"": "2026-09-17T23:19:24.418672+00:00",
     "Cocktail Dresses": "2026-09-13T15:46:22.055669+00:00",
-    "Camis & Tanks": "2026-09-16T16:19:20.433369+00:00",
+    "Camis & Tanks": "2026-09-19T22:37:16.514128+00:00",
     "Trendy & Timeless Fashion": "2026-09-18T07:01:24.626439+00:00",
     "Our Recommended Feminine Styles": "2026-09-18T19:55:27.645745+00:00",
     "Rompers, Jumpsuits & Outfit Sets": "2026-09-13T15:46:56.918496+00:00",
@@ -2502,11 +2532,11 @@
     "Luxe Clothing": "2026-09-16T16:19:52.173449+00:00",
     "Loungewear": "2026-09-08T16:11:29.494991+00:00",
     "Coats & Jackets": "2026-09-08T20:10:33.820520+00:00",
-    "Umgee USA": "2026-09-09T20:00:06.716391+00:00",
+    "Umgee USA": "2026-09-19T22:36:53.299007+00:00",
     "Look casual elegante": "2026-09-19T07:00:34.406195+00:00",
     "Relaxed Yet Trendy Fashion": "2026-09-13T07:09:19.789182+00:00",
     "Simple Outfits": "2026-09-14T07:33:46.407531+00:00"
   },
-  "daily_count": 10,
-  "last_repin_time": "2026-09-19T19:32:54.124765+00:00"
+  "daily_count": 13,
+  "last_repin_time": "2026-09-19T22:37:44.246510+00:00"
 }
