@@ -6305,11 +6305,55 @@
       "template": 11,
       "pin_url": "https://www.pinterest.com/pin/962222276664226652/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8818158174379,
+      "title": "Emory Park Riley Denim Shorts: Labor Day & Fall 2026 Trendy Look \u2014 MeeeShop",
+      "board": "Trends",
+      "timestamp": "2026-09-19T22:47:39.720437",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276664231078/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8933162090667,
+      "title": "Gravity Strength Stayform Legging: Fall 2026 Labor Day Must-Have \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-09-19T22:48:53.025238",
+      "type": "carousel",
+      "style": "collage",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276664231122/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8825883426987,
+      "title": "Mkf Collection by Mia K. - Nadien Signature Crossbody Bag: Labor Day Chic \u2014 MeeeShop",
+      "board": "Shop Responsibly",
+      "timestamp": "2026-09-19T22:50:04.361409",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276664231151/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8970889822379,
+      "title": "Emory Park Lilah Top - Perfect Labor Day & Fall Outfit \u2014 MeeeShop",
+      "board": "Social",
+      "timestamp": "2026-09-19T22:51:27.677872",
+      "type": "carousel",
+      "style": "collage",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276664231181/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-09-11T23:09:04.798079",
-    "Trends": "2026-09-19T19:35:07.355836",
+    "Trends": "2026-09-19T22:47:39.720437",
     "Dresses": "2026-09-12T19:42:42.030242",
     "Feminine & Flowy Fits": "2026-09-10T15:40:12.756709",
     "Short fall dresses": "2026-09-13T15:27:28.998743",
@@ -6354,7 +6398,7 @@
     "Fashion Models": "2026-09-13T07:27:26.399942",
     "My Shop #1737732113": "2026-09-13T19:47:08.597387",
     "Shop For Holidays": "2026-09-14T07:49:34.615574",
-    "New": "2026-09-19T19:36:18.807895",
+    "New": "2026-09-19T22:48:53.025238",
     "American Bazi": "2026-09-17T07:28:51.564257",
     "Cool & Casual Styles": "2026-09-17T20:36:32.448629",
     "MeeeShop's Luxe Styles": "2026-09-17T07:29:59.068289",
@@ -6387,8 +6431,8 @@
     "Fresh Finds New...": "2026-09-19T15:11:19.351999",
     "Affordable Women's Fashion USA": "2026-09-19T19:39:57.107432",
     "Festive & Flora Fits": "2026-09-11T20:05:08.482642",
-    "Shop Responsibly": "2026-09-09T07:17:20.653054",
-    "Social": "2026-09-09T07:18:31.037493",
+    "Shop Responsibly": "2026-09-19T22:50:04.361409",
+    "Social": "2026-09-19T22:51:27.677872",
     "Blogs": "2026-09-09T20:04:50.572038",
     "All Pins": "2026-09-09T23:09:37.069795",
     "Outer wear": "2026-09-15T07:32:22.556924",
@@ -6416,9 +6460,9 @@
     "Meshohn Luxe Styles": "2026-09-12T14:50:36.971883",
     "Look casual...": "2026-09-18T07:19:12.747094"
   },
-  "daily_count": 12,
-  "last_post_time": "2026-09-19T19:39:57.107432",
+  "daily_count": 16,
+  "last_post_time": "2026-09-19T22:51:27.677872",
   "board_rotation_cursor": 0,
   "last_image_style": "collage",
-  "last_template_index": 11
+  "last_template_index": 15
 }
