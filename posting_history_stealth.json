@@ -6171,6 +6171,52 @@
       "template": 17,
       "pin_url": "https://www.pinterest.com/pin/962222276664200259/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": "570925383851",
+      "article_id": "570925383851",
+      "title": "How to Layer Lightweight Knit Tops Under Blazers and Jackets",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-09-19T07:12:04.105409",
+      "type": "blog",
+      "style": "card",
+      "template": 9,
+      "pin_url": "https://www.pinterest.com/pin/962222276664207870/",
+      "blog_url": "https://us.meeeshop.com/blogs/womens-shirts-tops-style-guide/how-to-layer-lightweight-knit-tops-under-blazers-and-jackets",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8897138786475,
+      "title": "Ymi Women's Hyperstretch Cropped Straight Pants - Labor Day & Fall Must-Have",
+      "board": "New",
+      "timestamp": "2026-09-19T07:13:53.396668",
+      "type": "product",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276664207901/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8819278774443,
+      "title": "Downeast Sail Away Skirt | MeeeShop US Boutique",
+      "board": "Chic Looks",
+      "timestamp": "2026-09-19T07:16:01.608101",
+      "type": "video",
+      "style": "carousel",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276664207943/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8970889232555,
+      "title": "Emory Park Karissa Top - Labor Day & Fall Style Essential \u2014 MeeeShop",
+      "board": "Late Summer to Fall Teacher Style",
+      "timestamp": "2026-09-19T07:17:31.457640",
+      "type": "carousel",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276664207980/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
@@ -6206,7 +6252,7 @@
     "Kancan USA Jeans": "2026-09-16T07:32:48.977827",
     "Footwear": "2026-09-07T23:26:56.803572",
     "Fitted Jeans": "2026-09-18T15:40:13.085953",
-    "Chic Looks": "2026-09-06T14:48:35.609030",
+    "Chic Looks": "2026-09-19T07:16:01.608101",
     "Straight Leg Jeans": "2026-09-06T07:06:32.233973",
     "Puff Sleeves Tops": "2026-09-15T16:04:34.730952",
     "Casual": "2026-09-17T16:04:16.828060",
@@ -6220,7 +6266,7 @@
     "Fashion Models": "2026-09-13T07:27:26.399942",
     "My Shop #1737732113": "2026-09-13T19:47:08.597387",
     "Shop For Holidays": "2026-09-14T07:49:34.615574",
-    "New": "2026-09-18T23:11:12.760407",
+    "New": "2026-09-19T07:13:53.396668",
     "American Bazi": "2026-09-17T07:28:51.564257",
     "Cool & Casual Styles": "2026-09-17T20:36:32.448629",
     "MeeeShop's Luxe Styles": "2026-09-17T07:29:59.068289",
@@ -6243,7 +6289,7 @@
     "LE LIS Womens Clothi...": "2026-09-08T20:15:39.787798",
     "New Trendy Woman...": "2026-09-16T15:54:45.584179",
     "Outfit Ideas": "2026-09-16T20:29:01.412536",
-    "Late Summer to Fall Teacher Style": "2026-09-07T20:49:47.645148",
+    "Late Summer to Fall Teacher Style": "2026-09-19T07:17:31.457640",
     "Ootd #ootd": "2026-09-17T20:35:16.143857",
     "Style Ideas": "2026-09-18T07:18:01.827535",
     "Mustard Seed Clothing": "2026-09-09T20:03:31.971091",
@@ -6282,9 +6328,9 @@
     "Meshohn Luxe Styles": "2026-09-12T14:50:36.971883",
     "Look casual...": "2026-09-18T07:19:12.747094"
   },
-  "daily_count": 16,
-  "last_post_time": "2026-09-18T23:14:02.820930",
+  "daily_count": 4,
+  "last_post_time": "2026-09-19T07:17:31.457640",
   "board_rotation_cursor": 0,
-  "last_image_style": "carousel",
-  "last_template_index": 17
+  "last_image_style": "collage",
+  "last_template_index": 14
 }
