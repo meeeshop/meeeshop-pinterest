@@ -2559,19 +2559,49 @@
       "target_board_id": "962222345325172804",
       "live_url": "https://www.pinterest.com/pin/4605423299829572672/",
       "timestamp": "2026-09-20T19:42:12.460947+00:00"
+    },
+    {
+      "pin_id": "4595712406920198016",
+      "product_title": "Gravity Legacy Tennis Skirt",
+      "category_group": "skirts",
+      "source_board": "_products",
+      "target_board": "Chic Looks",
+      "target_board_id": "962222345325728634",
+      "live_url": "https://www.pinterest.com/pin/4595712406920198016/",
+      "timestamp": "2026-09-20T22:50:11.144317+00:00"
+    },
+    {
+      "pin_id": "4595712411215165312",
+      "product_title": "Downeast Heirloom Dress",
+      "category_group": "dresses",
+      "source_board": "_products",
+      "target_board": "Dress",
+      "target_board_id": "962222345325683647",
+      "live_url": "https://www.pinterest.com/pin/4595712411215165312/",
+      "timestamp": "2026-09-20T22:50:31.649953+00:00"
+    },
+    {
+      "pin_id": "4605212220946629696",
+      "product_title": "Goal Five Excel Jogger 7/8 Length 28\" Pant",
+      "category_group": "pants_denim",
+      "source_board": "_products",
+      "target_board": "Pants & Leggings",
+      "target_board_id": "962222345325046951",
+      "live_url": "https://www.pinterest.com/pin/4605212220946629696/",
+      "timestamp": "2026-09-20T22:50:51.063676+00:00"
     }
   ],
   "board_last_used": {
     "Women's Cardigans": "2026-09-06T06:51:18.568445+00:00",
-    "Pants & Leggings": "2026-09-16T23:27:31.579100+00:00",
+    "Pants & Leggings": "2026-09-20T22:50:51.063676+00:00",
     "Skirts": "2026-09-20T07:25:49.678963+00:00",
     "Dresses": "2026-09-19T22:37:44.246510+00:00",
     "Sweaters": "2026-09-09T16:06:04.433912+00:00",
     "Dressy Outfits": "2026-09-17T07:09:34.223046+00:00",
-    "Dress": "2026-09-11T20:00:24.186926+00:00",
+    "Dress": "2026-09-20T22:50:31.649953+00:00",
     "Outerwear": "2026-09-02T05:40:21.721760+00:00",
     "Chic & Cozy: Annie Wear Trends": "2026-09-12T15:10:17.530761+00:00",
-    "Chic Looks": "2026-09-15T16:29:25.535542+00:00",
+    "Chic Looks": "2026-09-20T22:50:11.144317+00:00",
     "Short fall dresses": "2026-09-12T06:51:40.310100+00:00",
     "Shirts & Tops": "2026-09-19T15:31:59.705090+00:00",
     "Feminine & Flowy Fits": "2026-09-18T07:02:03.590871+00:00",
@@ -2637,6 +2667,6 @@
     "Relaxed Yet Trendy Fashion": "2026-09-13T07:09:19.789182+00:00",
     "Simple Outfits": "2026-09-14T07:33:46.407531+00:00"
   },
-  "daily_count": 10,
-  "last_repin_time": "2026-09-20T19:42:12.460947+00:00"
+  "daily_count": 13,
+  "last_repin_time": "2026-09-20T22:50:51.063676+00:00"
 }
