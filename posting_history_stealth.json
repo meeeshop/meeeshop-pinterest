@@ -6349,6 +6349,52 @@
       "template": 15,
       "pin_url": "https://www.pinterest.com/pin/962222276664231181/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": "570937933995",
+      "article_id": "570937933995",
+      "title": "Straight-Leg Jeans Outfit Formulas for Every Body Shape",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-09-20T07:36:21.630880",
+      "type": "blog",
+      "style": "card",
+      "template": 9,
+      "pin_url": "https://www.pinterest.com/pin/962222276664241068/",
+      "blog_url": "https://us.meeeshop.com/blogs/jeans-style-guide/straight-leg-jeans-outfit-formulas-for-every-body-shape",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8789754904747,
+      "title": "Stellar High Rise Flare Jeans - Perfect for Labor Day & Fall Fashion \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-09-20T07:38:39.608363",
+      "type": "video",
+      "style": "collage",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276664241131/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8988055142571,
+      "title": "Scottie Ribbed Knit Collar Button Front Long Sleeve Cardigan Top Fall Labor Day",
+      "board": "Womens Cardigans",
+      "timestamp": "2026-09-20T07:41:08.424283",
+      "type": "video",
+      "style": "carousel",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276664241207/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8885871837355,
+      "title": "Kathryn Classic Button-up, Ivory Polka-dot Top - Labor Day & Fall Must-Have \u2014 MeeeShop",
+      "board": "Blogs",
+      "timestamp": "2026-09-20T07:42:30.025411",
+      "type": "carousel",
+      "style": "card",
+      "template": 9,
+      "pin_url": "https://www.pinterest.com/pin/962222276664241247/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
@@ -6398,7 +6444,7 @@
     "Fashion Models": "2026-09-13T07:27:26.399942",
     "My Shop #1737732113": "2026-09-13T19:47:08.597387",
     "Shop For Holidays": "2026-09-14T07:49:34.615574",
-    "New": "2026-09-19T22:48:53.025238",
+    "New": "2026-09-20T07:38:39.608363",
     "American Bazi": "2026-09-17T07:28:51.564257",
     "Cool & Casual Styles": "2026-09-17T20:36:32.448629",
     "MeeeShop's Luxe Styles": "2026-09-17T07:29:59.068289",
@@ -6433,7 +6479,7 @@
     "Festive & Flora Fits": "2026-09-11T20:05:08.482642",
     "Shop Responsibly": "2026-09-19T22:50:04.361409",
     "Social": "2026-09-19T22:51:27.677872",
-    "Blogs": "2026-09-09T20:04:50.572038",
+    "Blogs": "2026-09-20T07:42:30.025411",
     "All Pins": "2026-09-09T23:09:37.069795",
     "Outer wear": "2026-09-15T07:32:22.556924",
     "Women's Cardigans": "2026-09-10T23:05:01.998901",
@@ -6447,7 +6493,7 @@
     "Sweaters & Sweater...": "2026-09-16T23:39:58.776363",
     "Boat Shoes": "2026-08-24T12:37:33.243466",
     "Sweaters for women": "2026-08-30T15:52:01.145594",
-    "Womens Cardigans": "2026-08-30T23:24:00.172742",
+    "Womens Cardigans": "2026-09-20T07:41:08.424283",
     "comfy fall outfits": "2026-09-01T00:35:22.197797",
     "Ankle Strap Flats": "2026-09-01T07:39:15.343019",
     "Relaxed Yet Trendy...": "2026-09-01T15:54:13.191192",
@@ -6460,9 +6506,9 @@
     "Meshohn Luxe Styles": "2026-09-12T14:50:36.971883",
     "Look casual...": "2026-09-18T07:19:12.747094"
   },
-  "daily_count": 16,
-  "last_post_time": "2026-09-19T22:51:27.677872",
+  "daily_count": 4,
+  "last_post_time": "2026-09-20T07:42:30.025411",
   "board_rotation_cursor": 0,
-  "last_image_style": "collage",
-  "last_template_index": 15
+  "last_image_style": "card",
+  "last_template_index": 9
 }
