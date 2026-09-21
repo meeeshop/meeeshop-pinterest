@@ -6617,13 +6617,57 @@
       "template": 11,
       "pin_url": "https://www.pinterest.com/pin/962222276664284497/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8818151686315,
+      "title": "Emory Park Selkie Crop Top for Fall \u2014 MeeeShop",
+      "board": "Trends",
+      "timestamp": "2026-09-21T21:14:54.029781",
+      "type": "carousel",
+      "style": "collage",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276664290062/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8988049408171,
+      "title": "Lottie Stripe Drawstring Elastic Waist Casual Denim Shorts for Labor Day & Fall",
+      "board": "New",
+      "timestamp": "2026-09-21T21:15:58.421082",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276664290087/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8950655484075,
+      "title": "Heart of the City Lounge Wear Set | MeeeShop US Boutique",
+      "board": "Simple Outfits",
+      "timestamp": "2026-09-21T21:17:08.897037",
+      "type": "carousel",
+      "style": "collage",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276664290120/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8931951083691,
+      "title": "Built-in Shorts Golf Skirt Made in USA - Labor Day & Fall Ready \u2014 MeeeShop",
+      "board": "Feminine & Flowy Fits",
+      "timestamp": "2026-09-21T21:18:32.996526",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276664290170/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-09-11T23:09:04.798079",
-    "Trends": "2026-09-21T17:33:57.181323",
+    "Trends": "2026-09-21T21:14:54.029781",
     "Dresses": "2026-09-12T19:42:42.030242",
-    "Feminine & Flowy Fits": "2026-09-10T15:40:12.756709",
+    "Feminine & Flowy Fits": "2026-09-21T21:18:32.996526",
     "Short fall dresses": "2026-09-13T15:27:28.998743",
     "Must-Have Fashion Picks": "2026-08-13T05:20:05.419233",
     "Trendy & Timeless Fashion": "2026-08-13T05:29:39.715837",
@@ -6666,7 +6710,7 @@
     "Fashion Models": "2026-09-13T07:27:26.399942",
     "My Shop #1737732113": "2026-09-13T19:47:08.597387",
     "Shop For Holidays": "2026-09-14T07:49:34.615574",
-    "New": "2026-09-21T17:35:11.386932",
+    "New": "2026-09-21T21:15:58.421082",
     "American Bazi": "2026-09-17T07:28:51.564257",
     "Cool & Casual Styles": "2026-09-17T20:36:32.448629",
     "MeeeShop's Luxe Styles": "2026-09-17T07:29:59.068289",
@@ -6726,11 +6770,12 @@
     "Fall Outfits 2026": "2026-09-08T20:17:06.586566",
     "Womens shacket": "2026-09-10T07:14:20.412592",
     "Meshohn Luxe Styles": "2026-09-12T14:50:36.971883",
-    "Look casual...": "2026-09-18T07:19:12.747094"
+    "Look casual...": "2026-09-18T07:19:12.747094",
+    "Simple Outfits": "2026-09-21T21:17:08.897037"
   },
-  "daily_count": 8,
-  "last_post_time": "2026-09-21T17:38:21.993884",
+  "daily_count": 12,
+  "last_post_time": "2026-09-21T21:18:32.996526",
   "board_rotation_cursor": 0,
   "last_image_style": "carousel",
-  "last_template_index": 11
+  "last_template_index": 17
 }
