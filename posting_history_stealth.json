@@ -6573,11 +6573,55 @@
       "pin_url": "https://www.pinterest.com/pin/962222276664272363/",
       "blog_url": "https://us.meeeshop.com/blogs/womens-pants-style-guide/chic-linen-and-lightweight-pants-for-warm-weather",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8983336976555,
+      "title": "Emory Park Evora Cardigan Top: Labor Day & Fall Trend \u2014 MeeeShop",
+      "board": "Trends",
+      "timestamp": "2026-09-21T17:33:57.181323",
+      "type": "video",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276664284356/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8970890084523,
+      "title": "Emory Park Cecily Top: Labor Day & Fall 2026 Must-Have Blouse \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-09-21T17:35:11.386932",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276664284375/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8911379988651,
+      "title": "Mkf Collection by Mia K. - Jamilah Shoulder Bag: Labor Day Fall Must-Have \u2014 MeeeShop",
+      "board": "Nylon backpack",
+      "timestamp": "2026-09-21T17:36:58.965673",
+      "type": "carousel",
+      "style": "collage",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276664284440/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8985002737835,
+      "title": "Christine Shoulder Bag and Wallet Set - Fall Labor Day Must-Have \u2014 MeeeShop",
+      "board": "Our Recommended...",
+      "timestamp": "2026-09-21T17:38:21.993884",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276664284497/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-09-11T23:09:04.798079",
-    "Trends": "2026-09-21T07:48:20.365985",
+    "Trends": "2026-09-21T17:33:57.181323",
     "Dresses": "2026-09-12T19:42:42.030242",
     "Feminine & Flowy Fits": "2026-09-10T15:40:12.756709",
     "Short fall dresses": "2026-09-13T15:27:28.998743",
@@ -6598,7 +6642,7 @@
     "Rompers_Jumpsuits &...": "2026-09-14T23:50:58.790872",
     "Handbag #handsips": "2026-09-13T07:24:48.229657",
     "Trendy & Timeless...": "2026-09-20T23:12:45.049804",
-    "Our Recommended...": "2026-09-10T15:37:54.905426",
+    "Our Recommended...": "2026-09-21T17:38:21.993884",
     "Blouse": "2026-09-13T23:04:53.123923",
     "Wardrobe Must-Hav...": "2026-09-10T20:04:48.095837",
     "Camis & Tanks": "2026-09-14T17:24:24.092063",
@@ -6617,12 +6661,12 @@
     "Farm clothes": "2026-09-16T23:41:09.390619",
     "Kimchi USA Jeans": "2026-09-06T19:31:49.264541",
     "Wardrobe Goals": "2026-09-12T22:59:51.883943",
-    "Nylon backpack": "2026-09-09T15:47:42.369670",
+    "Nylon backpack": "2026-09-21T17:36:58.965673",
     "Everyday Style": "2026-09-12T23:01:03.236775",
     "Fashion Models": "2026-09-13T07:27:26.399942",
     "My Shop #1737732113": "2026-09-13T19:47:08.597387",
     "Shop For Holidays": "2026-09-14T07:49:34.615574",
-    "New": "2026-09-21T07:50:44.038903",
+    "New": "2026-09-21T17:35:11.386932",
     "American Bazi": "2026-09-17T07:28:51.564257",
     "Cool & Casual Styles": "2026-09-17T20:36:32.448629",
     "MeeeShop's Luxe Styles": "2026-09-17T07:29:59.068289",
@@ -6684,9 +6728,9 @@
     "Meshohn Luxe Styles": "2026-09-12T14:50:36.971883",
     "Look casual...": "2026-09-18T07:19:12.747094"
   },
-  "daily_count": 4,
-  "last_post_time": "2026-09-21T07:54:47.069328",
+  "daily_count": 8,
+  "last_post_time": "2026-09-21T17:38:21.993884",
   "board_rotation_cursor": 0,
-  "last_image_style": "card",
-  "last_template_index": 9
+  "last_image_style": "carousel",
+  "last_template_index": 11
 }
