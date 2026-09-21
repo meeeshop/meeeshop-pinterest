@@ -2659,6 +2659,46 @@
       "target_board_id": "962222345325605900",
       "live_url": "https://www.pinterest.com/pin/4600708565552809024/",
       "timestamp": "2026-09-21T17:59:46.252221+00:00"
+    },
+    {
+      "pin_id": "4608308399653108800",
+      "product_title": "Ashleigh Ruffled Short Sleeve Floral Denim Top",
+      "category_group": "tops_tanks_blouses",
+      "source_board": "_products",
+      "target_board": "Fashion",
+      "target_board_id": "574420196161243696",
+      "live_url": "https://www.pinterest.com/pin/4608308399653108800/",
+      "timestamp": "2026-09-21T21:13:51.255036+00:00"
+    },
+    {
+      "pin_id": "4598878977525264256",
+      "product_title": "Ymi Women's High Rise Cropped Wide Leg",
+      "category_group": "pants_denim",
+      "source_board": "_products",
+      "target_board": "Stylish Finds",
+      "target_board_id": "962222345325699951",
+      "live_url": "https://www.pinterest.com/pin/4598878977525264256/",
+      "timestamp": "2026-09-21T21:14:17.598819+00:00"
+    },
+    {
+      "pin_id": "4598808630516805504",
+      "product_title": "Vesper Mini Shoulder Bag",
+      "category_group": "bags_accessories",
+      "source_board": "_products",
+      "target_board": "Nylon backpack",
+      "target_board_id": "962222345325683646",
+      "live_url": "https://www.pinterest.com/pin/4598808630516805504/",
+      "timestamp": "2026-09-21T21:14:44.530566+00:00"
+    },
+    {
+      "pin_id": "4598808664876543872",
+      "product_title": "Rowan Woven Tote Bag",
+      "category_group": "bags_accessories",
+      "source_board": "_products",
+      "target_board": "New Trendy Women Apparel, Shoes, Handbags & more",
+      "target_board_id": "962222345325172900",
+      "live_url": "https://www.pinterest.com/pin/4598808664876543872/",
+      "timestamp": "2026-09-21T21:15:18.011139+00:00"
     }
   ],
   "board_last_used": {
@@ -2706,11 +2746,11 @@
     "LE LIS Womens Clothing | us.meeeshop": "2026-09-15T23:21:33.703400+00:00",
     "Chic & Effortless Styles": "2026-09-19T19:32:29.179980+00:00",
     "Jeans": "2026-09-20T19:41:47.168120+00:00",
-    "Nylon backpack": "2026-09-15T16:29:53.072171+00:00",
+    "Nylon backpack": "2026-09-21T21:14:44.530566+00:00",
     "Mustard Seed Clothing": "2026-09-19T15:31:34.240249+00:00",
     "Effortless Looks": "2026-09-18T07:02:30.758806+00:00",
     "best selling products": "2026-09-19T19:32:54.124765+00:00",
-    "New Trendy Women Apparel, Shoes, Handbags & more": "2026-09-16T07:11:21.776188+00:00",
+    "New Trendy Women Apparel, Shoes, Handbags & more": "2026-09-21T21:15:18.011139+00:00",
     "BFCM Deals": "2026-09-20T07:26:19.245743+00:00",
     "Sweaters for women": "2026-09-21T17:59:46.252221+00:00",
     "new products": "2026-09-20T07:26:44.058806+00:00",
@@ -2723,9 +2763,9 @@
     "Ootd #ootd": "2026-09-20T19:42:12.460947+00:00",
     "Sweaters #Sweaters #WinterOutfits": "2026-09-05T14:46:24.728209+00:00",
     "Everyday Style Essentials": "2026-09-21T07:36:26.157192+00:00",
-    "Fashion": "2026-09-17T16:27:52.031293+00:00",
+    "Fashion": "2026-09-21T21:13:51.255036+00:00",
     "Kancan USA Jeans": "2026-09-15T20:25:14.873511+00:00",
-    "Stylish Finds": "2026-09-17T20:31:18.075418+00:00",
+    "Stylish Finds": "2026-09-21T21:14:17.598819+00:00",
     "Straight Leg Jeans": "2026-09-16T07:11:53.091159+00:00",
     "Handbags #handbags": "2026-09-16T20:24:21.618996+00:00",
     "Weekend to Workwear": "2026-09-13T15:47:26.713947+00:00",
@@ -2737,6 +2777,6 @@
     "Relaxed Yet Trendy Fashion": "2026-09-13T07:09:19.789182+00:00",
     "Simple Outfits": "2026-09-14T07:33:46.407531+00:00"
   },
-  "daily_count": 7,
-  "last_repin_time": "2026-09-21T17:59:46.252221+00:00"
+  "daily_count": 11,
+  "last_repin_time": "2026-09-21T21:15:18.011139+00:00"
 }
