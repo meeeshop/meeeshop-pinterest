@@ -6751,11 +6751,44 @@
       "template": 16,
       "pin_url": "https://www.pinterest.com/pin/962222276664300997/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8988053471403,
+      "title": "Teagan Raw Seam Color Block Detail Buttoned Henley Tee - Labor Day Weekend Top",
+      "board": "Trends",
+      "timestamp": "2026-09-22T16:02:07.675811",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276664312327/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8988054716587,
+      "title": "Luna Lounge Set | MeeeShop US Boutique",
+      "board": "New",
+      "timestamp": "2026-09-22T16:03:17.890783",
+      "type": "carousel",
+      "style": "collage",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276664312384/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8825418154155,
+      "title": "Flying Tomato Forever Impressed Sweater Midi Dress - Labor Day Chic \u2014 MeeeShop",
+      "board": "Sweaters for women",
+      "timestamp": "2026-09-22T16:04:26.733981",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276664312435/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-09-11T23:09:04.798079",
-    "Trends": "2026-09-22T07:32:29.759955",
+    "Trends": "2026-09-22T16:02:07.675811",
     "Dresses": "2026-09-12T19:42:42.030242",
     "Feminine & Flowy Fits": "2026-09-21T21:18:32.996526",
     "Short fall dresses": "2026-09-13T15:27:28.998743",
@@ -6800,7 +6833,7 @@
     "Fashion Models": "2026-09-13T07:27:26.399942",
     "My Shop #1737732113": "2026-09-13T19:47:08.597387",
     "Shop For Holidays": "2026-09-14T07:49:34.615574",
-    "New": "2026-09-22T07:34:27.586609",
+    "New": "2026-09-22T16:03:17.890783",
     "American Bazi": "2026-09-17T07:28:51.564257",
     "Cool & Casual Styles": "2026-09-17T20:36:32.448629",
     "MeeeShop's Luxe Styles": "2026-09-17T07:29:59.068289",
@@ -6848,7 +6881,7 @@
     "Sweaters #Sweaters...": "2026-09-16T20:30:12.116926",
     "Sweaters & Sweater...": "2026-09-16T23:39:58.776363",
     "Boat Shoes": "2026-08-24T12:37:33.243466",
-    "Sweaters for women": "2026-08-30T15:52:01.145594",
+    "Sweaters for women": "2026-09-22T16:04:26.733981",
     "Womens Cardigans": "2026-09-20T07:41:08.424283",
     "comfy fall outfits": "2026-09-22T07:38:35.882823",
     "Ankle Strap Flats": "2026-09-01T07:39:15.343019",
@@ -6863,9 +6896,9 @@
     "Look casual...": "2026-09-18T07:19:12.747094",
     "Simple Outfits": "2026-09-21T21:17:08.897037"
   },
-  "daily_count": 20,
-  "last_post_time": "2026-09-22T07:38:35.882823",
+  "daily_count": 23,
+  "last_post_time": "2026-09-22T16:04:26.733981",
   "board_rotation_cursor": 0,
-  "last_image_style": "collage",
-  "last_template_index": 16
+  "last_image_style": "carousel",
+  "last_template_index": 17
 }
