@@ -6927,11 +6927,57 @@
       "template": 17,
       "pin_url": "https://www.pinterest.com/pin/962222276664349830/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8933161500843,
+      "title": "Determined Hooded Sleeveless: Trendy Fall 2026 Active Shirt \u2014 MeeeShop",
+      "board": "Trends",
+      "timestamp": "2026-09-23T23:30:10.991195",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276664352981/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": "570874986667",
+      "article_id": "570874986667",
+      "title": "The Classic Denim Jacket: Modern Styling Rules for This Year",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-09-23T23:31:46.238431",
+      "type": "blog",
+      "style": "card",
+      "template": 9,
+      "pin_url": "https://www.pinterest.com/pin/962222276664353007/",
+      "blog_url": "https://us.meeeshop.com/blogs/coats-jackets-style-guide/the-classic-denim-jacket-modern-styling-rules-for-this-year",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8949204615339,
+      "title": "Sweater Weather Roll-neck Poncho - Boho Chic for Labor Day & Fall \u2014 MeeeShop",
+      "board": "Chic & Cozy: Annie...",
+      "timestamp": "2026-09-23T23:32:59.222690",
+      "type": "carousel",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276664353037/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8786745426091,
+      "title": "Myra Quilted Crescent Sling: Cozy Fall Sling for Labor Day & Autumn \u2014 MeeeShop",
+      "board": "new products",
+      "timestamp": "2026-09-23T23:35:47.201784",
+      "type": "video",
+      "style": "carousel",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276664353094/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-09-11T23:09:04.798079",
-    "Trends": "2026-09-23T20:41:01.666522",
+    "Trends": "2026-09-23T23:30:10.991195",
     "Dresses": "2026-09-12T19:42:42.030242",
     "Feminine & Flowy Fits": "2026-09-21T21:18:32.996526",
     "Short fall dresses": "2026-09-13T15:27:28.998743",
@@ -6989,7 +7035,7 @@
     "BFCM Deals": "2026-09-14T17:25:37.309188",
     "Poetcore Aesthetics": "2026-09-20T15:15:20.510508",
     "Emory Park Clothing": "2026-09-20T19:45:34.586852",
-    "new products": "2026-09-12T07:04:02.802761",
+    "new products": "2026-09-23T23:35:47.201784",
     "Chic & Effortless Styles": "2026-09-14T21:09:12.884755",
     "Davi & Dani Womens...": "2026-09-20T19:46:39.660035",
     "Weekend to Workout": "2026-09-07T17:04:56.546210",
@@ -7029,7 +7075,7 @@
     "comfy fall outfits": "2026-09-22T07:38:35.882823",
     "Ankle Strap Flats": "2026-09-01T07:39:15.343019",
     "Relaxed Yet Trendy...": "2026-09-01T15:54:13.191192",
-    "Chic & Cozy: Annie...": "2026-09-02T15:51:01.623160",
+    "Chic & Cozy: Annie...": "2026-09-23T23:32:59.222690",
     "Fall outfits": "2026-09-02T23:11:31.652514",
     "Winter Outfits": "2026-09-22T00:01:02.289587",
     "Women's shacket": "2026-09-08T15:50:34.046479",
@@ -7039,9 +7085,9 @@
     "Look casual...": "2026-09-18T07:19:12.747094",
     "Simple Outfits": "2026-09-21T21:17:08.897037"
   },
-  "daily_count": 12,
-  "last_post_time": "2026-09-23T20:45:16.359362",
+  "daily_count": 16,
+  "last_post_time": "2026-09-23T23:35:47.201784",
   "board_rotation_cursor": 0,
-  "last_image_style": "collage",
-  "last_template_index": 17
+  "last_image_style": "carousel",
+  "last_template_index": 11
 }
