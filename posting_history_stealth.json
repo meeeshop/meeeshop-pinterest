@@ -6839,11 +6839,55 @@
       "template": 15,
       "pin_url": "https://www.pinterest.com/pin/962222276664331858/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8820880507051,
+      "title": "Drew Mini Bucket Crossbody Tote - Fall 2026 Labor Day Must-Have \u2014 MeeeShop",
+      "board": "Trends",
+      "timestamp": "2026-09-23T15:52:48.931916",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276664342031/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8818158272683,
+      "title": "Emory Park Dione Mini Dress: Labor Day & Fall Chic Outfit Idea \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-09-23T15:53:54.112482",
+      "type": "carousel",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276664342071/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8933199970475,
+      "title": "Women's Cotton Gauze Cynthia Top for Labor Day & Fall Outfits \u2014 MeeeShop",
+      "board": "Shirts & Tops",
+      "timestamp": "2026-09-23T16:00:03.877123",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276664342192/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8970890707115,
+      "title": "Emory Park Ruby Mini Skirt - Perfect Labor Day & Fall Fashion Staple \u2014 MeeeShop",
+      "board": "Wardrobe Must Haves",
+      "timestamp": "2026-09-23T16:02:45.460694",
+      "type": "video",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276664342261/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-09-11T23:09:04.798079",
-    "Trends": "2026-09-23T07:33:35.106402",
+    "Trends": "2026-09-23T15:52:48.931916",
     "Dresses": "2026-09-12T19:42:42.030242",
     "Feminine & Flowy Fits": "2026-09-21T21:18:32.996526",
     "Short fall dresses": "2026-09-13T15:27:28.998743",
@@ -6859,7 +6903,7 @@
     "Short Tall dresses": "2026-09-14T07:48:24.937691",
     "Rompers, Jumpsuits &...": "2026-09-14T21:07:52.214930",
     "Skirts": "2026-09-13T15:28:37.834519",
-    "Shirts & Tops": "2026-09-10T20:07:09.122706",
+    "Shirts & Tops": "2026-09-23T16:00:03.877123",
     "Blouses": "2026-09-12T07:05:43.802114",
     "Rompers_Jumpsuits &...": "2026-09-14T23:50:58.790872",
     "Handbag #handsips": "2026-09-13T07:24:48.229657",
@@ -6868,7 +6912,7 @@
     "Blouse": "2026-09-13T23:04:53.123923",
     "Wardrobe Must-Hav...": "2026-09-23T07:36:41.106211",
     "Camis & Tanks": "2026-09-14T17:24:24.092063",
-    "Wardrobe Must Haves": "2026-09-11T15:43:19.209422",
+    "Wardrobe Must Haves": "2026-09-23T16:02:45.460694",
     "Trendy Backpacks": "2026-09-15T16:07:23.785152",
     "Festive Styles": "2026-09-15T23:33:56.941220",
     "Kancan USA Jeans": "2026-09-16T07:32:48.977827",
@@ -6888,7 +6932,7 @@
     "Fashion Models": "2026-09-13T07:27:26.399942",
     "My Shop #1737732113": "2026-09-13T19:47:08.597387",
     "Shop For Holidays": "2026-09-14T07:49:34.615574",
-    "New": "2026-09-23T07:35:12.658306",
+    "New": "2026-09-23T15:53:54.112482",
     "American Bazi": "2026-09-17T07:28:51.564257",
     "Cool & Casual Styles": "2026-09-17T20:36:32.448629",
     "MeeeShop's Luxe Styles": "2026-09-17T07:29:59.068289",
@@ -6951,9 +6995,9 @@
     "Look casual...": "2026-09-18T07:19:12.747094",
     "Simple Outfits": "2026-09-21T21:17:08.897037"
   },
-  "daily_count": 4,
-  "last_post_time": "2026-09-23T07:37:48.101136",
+  "daily_count": 8,
+  "last_post_time": "2026-09-23T16:02:45.460694",
   "board_rotation_cursor": 0,
   "last_image_style": "collage",
-  "last_template_index": 15
+  "last_template_index": 17
 }
