@@ -231,13 +231,69 @@ def save_tagged_history(history: Dict[str, Any]) -> None:
 
 # ── Step 4: Attach Tagged Products to Pin Image (Visual Tagging Only) ─────────
 
-def tag_pin_visually_with_playwright(pin_id: str, search_keyword: str = "Top", max_tags: int = 10) -> bool:
+def get_candidate_search_queries(
+    product: Dict[str, Any],
+    pin_title: str = "",
+    pin_desc: str = "",
+    orig_link: str = ""
+) -> List[str]:
+    """Generates an ordered list of search queries to find matching store Pins."""
+    combined_text = f"{orig_link} {pin_title} {pin_desc} {product.get('title', '')} {product.get('product_type', '')}".lower()
+
+    category_map = {
+        "shorts": ["Shorts", "Denim", "Bottoms", "Pants"],
+        "denim": ["Denim", "Shorts", "Jeans", "Pants"],
+        "jeans": ["Jeans", "Denim", "Pants"],
+        "pants": ["Pants", "Bottoms", "Trousers"],
+        "dress": ["Dress", "Maxi", "Midi", "Gown"],
+        "sweater": ["Sweater", "Cardigan", "Knit", "Pullover"],
+        "cardigan": ["Cardigan", "Sweater", "Top"],
+        "top": ["Top", "Blouse", "Shirt", "Tee"],
+        "skirt": ["Skirt", "Midi"],
+        "bag": ["Tote", "Bag", "Handbag"],
+        "activewear": ["Shorts", "Leggings", "Activewear", "Top"]
+    }
+
+    queries: List[str] = []
+
+    # 1. Match specific category keywords
+    for cat, kws in category_map.items():
+        if cat in combined_text:
+            for kw in kws:
+                if kw not in queries:
+                    queries.append(kw)
+
+    # 2. Add product type
+    ptype = product.get("product_type", "").strip()
+    if ptype and ptype.capitalize() not in queries:
+        queries.append(ptype.capitalize())
+
+    # 3. Add meaningful title words
+    for w in re.findall(r'[a-zA-Z]+', product.get("title", "")):
+        if len(w) > 3 and w.lower() not in {"women", "womens", "shop", "meeeshop", "fashion", "with", "waist", "asymmetrical", "print", "color"}:
+            w_cap = w.capitalize()
+            if w_cap not in queries:
+                queries.append(w_cap)
+
+    # Fallback default queries
+    for fallback in ["Shorts", "Top", "Dress", "Sweater"]:
+        if fallback not in queries:
+            queries.append(fallback)
+
+    return queries
+
+
+def tag_pin_visually_with_playwright(
+    pin_id: str,
+    candidate_queries: List[str],
+    max_tags: int = 10
+) -> bool:
     """
     Automates visual product tagging directly via Playwright UI without modifying title, description, or URL:
     1. Loads https://www.pinterest.com/pin/{pin_id}/
     2. Hovers image and clicks 'Tag products' (shopping bag icon)
     3. Clicks '+' in tagged-items-grid
-    4. Searches product category in 'Use your Pins' modal
+    4. Searches candidate categories in 'Use your Pins' modal with automatic fallbacks
     5. Selects up to 10 relevant product cards (with horizontal scrolling)
     6. Clicks 'Save products'
     7. Clicks 'Done' button to save tags live on the Pin!
@@ -300,58 +356,77 @@ def tag_pin_visually_with_playwright(pin_id: str, search_keyword: str = "Top", m
             dialog = page.locator('[role="dialog"]')
             search = page.locator("input[placeholder*='Search']").first
 
-            # Step 4: Search product category
-            logger.info(f"  [Playwright] 4. Searching '{search_keyword}' in 'Use your Pins'...")
-            if search.count() > 0:
-                search.fill(search_keyword)
-                search.press("Enter")
-                page.wait_for_timeout(3000)
-
-            # Step 5: Select up to 10 relevant product cards
-            logger.info(f"  [Playwright] 5. Selecting up to {max_tags} relevant product cards...")
+            # Step 4 & 5: Try candidate queries until we select up to max_tags products
             clicked = 0
+            queries_to_try = candidate_queries + [""]
 
-            # Initial visible product images
-            imgs = dialog.locator('img[src*="pinimg"]').all()
-            for img_el in imgs:
+            for q in queries_to_try:
                 if clicked >= max_tags:
                     break
-                try:
-                    box = img_el.bounding_box()
-                    if box and box['width'] > 50 and box['height'] > 50:
+
+                q_display = q if q else "<All Store Pins>"
+                logger.info(f"  [Playwright] 4. Searching '{q_display}' in 'Use your Pins'...")
+                if search.count() > 0:
+                    search.fill(q)
+                    search.press("Enter")
+                    page.wait_for_timeout(2500)
+
+                # Collect product images
+                imgs = dialog.locator('img[src*="pinimg"]').all()
+                valid_imgs = []
+                for img_el in imgs:
+                    try:
+                        box = img_el.bounding_box()
+                        if box and box['width'] > 50 and box['height'] > 50:
+                            valid_imgs.append(img_el)
+                    except Exception:
+                        pass
+
+                if not valid_imgs:
+                    logger.info(f"    Query '{q_display}' returned 0 product cards. Trying next fallback...")
+                    continue
+
+                logger.info(f"    Query '{q_display}' found {len(valid_imgs)} product cards. Selecting up to {max_tags}...")
+                for img_el in valid_imgs:
+                    if clicked >= max_tags:
+                        break
+                    try:
                         img_el.click()
                         clicked += 1
-                        logger.info(f"    Selected product #{clicked}")
+                        logger.info(f"      Selected product #{clicked}")
                         page.wait_for_timeout(300)
-                except Exception:
-                    pass
+                    except Exception as e:
+                        logger.debug(f"Click notice: {e}")
 
-            # Scroll horizontally to select more if under max_tags
-            if clicked < max_tags:
-                scrollable = dialog.locator('div[style*="overflow"]').first
-                if scrollable.count() > 0:
-                    scrollable.evaluate("e => e.scrollLeft += 800")
-                    page.wait_for_timeout(1500)
-                    more_imgs = dialog.locator('img[src*="pinimg"]').all()
-                    for img_el in more_imgs:
-                        if clicked >= max_tags:
-                            break
-                        try:
-                            box = img_el.bounding_box()
-                            if box and box['width'] > 50 and box['height'] > 50:
-                                img_el.click()
-                                clicked += 1
-                                logger.info(f"    Selected product #{clicked} (from scroll)")
-                                page.wait_for_timeout(300)
-                        except Exception:
-                            pass
+                # If still under max_tags and there's horizontal scroll, scroll right to get more
+                if clicked < max_tags:
+                    scrollable = dialog.locator('div[style*="overflow"]').first
+                    if scrollable.count() > 0:
+                        scrollable.evaluate("e => e.scrollLeft += 800")
+                        page.wait_for_timeout(1500)
+                        more_imgs = dialog.locator('img[src*="pinimg"]').all()
+                        for img_el in more_imgs:
+                            if clicked >= max_tags:
+                                break
+                            try:
+                                box = img_el.bounding_box()
+                                if box and box['width'] > 50 and box['height'] > 50:
+                                    img_el.click()
+                                    clicked += 1
+                                    logger.info(f"      Selected product #{clicked} (from scroll)")
+                                    page.wait_for_timeout(300)
+                            except Exception:
+                                pass
+
+                if clicked > 0:
+                    break
 
             if clicked == 0:
-                logger.warning("  [Playwright] No product cards were selected.")
+                logger.warning(f"  [Playwright] No product cards were selected across queries: {candidate_queries}")
                 browser.close()
                 return False
 
-            logger.info(f"  [Playwright] Successfully selected {clicked} products.")
+            logger.info(f"  [Playwright] Successfully selected {clicked} products. Saving...")
 
             # Step 6: Click "Save products" / "Save product"
             logger.info("  [Playwright] 6. Clicking 'Save products'...")
@@ -403,11 +478,9 @@ def attach_tagged_product_to_pin(
     logger.info(f"  Target In-Stock Product Category         : {product['title']} (${product['price']})")
 
     if apply_live:
-        # Determine best search category from product title or type
-        words = [w for w in re.findall(r'[a-zA-Z]+', product["title"]) if len(w) > 3 and w.lower() not in {"women", "womens", "shop", "meeeshop", "fashion"}]
-        search_kw = words[0] if words else product.get("product_type", "Top")
-
-        visual_success = tag_pin_visually_with_playwright(pin_id, search_kw, max_tags=10)
+        queries = get_candidate_search_queries(product, pin_title=pin_title, pin_desc=pin_desc, orig_link=orig_link)
+        logger.info(f"  Candidate Search Queries Generated       : {queries}")
+        visual_success = tag_pin_visually_with_playwright(pin_id, queries, max_tags=10)
         return visual_success
     else:
         logger.info("  [TEST / DRY-RUN MODE] Visual tagging simulated for up to 10 products (No live edit made).")
@@ -715,11 +788,21 @@ def main():
     # If --apply is specified without --dry-run, execute live API updates
     apply_live = bool(args.apply and not args.dry_run)
 
-    process_and_tag_popular_pins(
+    res = process_and_tag_popular_pins(
         max_pins=args.max_pins,
         test_pin_id=args.test_pin_id,
         apply_live=apply_live
     )
+
+    if apply_live:
+        if args.test_pin_id:
+            if not res or not res.get("live_applied", False):
+                logger.error(f"[FAILURE] Live tagging failed for test Pin #{args.test_pin_id}.")
+                sys.exit(1)
+        else:
+            if not res or res.get("status") == "error":
+                logger.error("[FAILURE] Live tagging encountered an error.")
+                sys.exit(1)
 
 
 if __name__ == "__main__":
