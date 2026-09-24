@@ -3690,11 +3690,55 @@
       "template": 16,
       "pin_url": "https://www.pinterest.com/pin/962222276663769275/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8821453717675,
+      "title": "Retrolicious Floral Cats Fit & Flare Dress - Labor Day & Fall 2026 Must-Have",
+      "board": "Trends",
+      "timestamp": "2026-09-24T16:15:17.801482",
+      "type": "video",
+      "style": "collage",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276664371859/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8970887233707,
+      "title": "Emory Park Ellie Cardigan Top: Fall Labor Day Must-Have \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-09-24T16:16:25.067684",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276664371894/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8786745589931,
+      "title": "Sylvie Foldover Crochet Woven Crossbody - Effortless Labor Day & Fall Style \u2014 MeeeShop",
+      "board": "Chic & Effortless Styles",
+      "timestamp": "2026-09-24T16:17:30.284514",
+      "type": "carousel",
+      "style": "collage",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276664371940/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8825275383979,
+      "title": "Wide Leg Jumpsuit with Side Pockets - Effortless Fall Labor Day Style \u2014 MeeeShop",
+      "board": "Best selling products",
+      "timestamp": "2026-09-24T16:19:51.421540",
+      "type": "video",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276664372038/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-08-30T08:08:47.249630",
-    "Trends": "2026-09-04T22:54:13.386785",
+    "Trends": "2026-09-24T16:15:17.801482",
     "Dresses": "2026-08-30T20:04:32.519899",
     "Feminine & Flowy Fits": "2026-08-30T15:53:11.738550",
     "Short fall dresses": "2026-08-31T08:26:55.669324",
@@ -3739,7 +3783,7 @@
     "Fashion Models": "2026-09-03T20:10:46.054458",
     "My Shop #1737732113": "2026-09-04T07:09:51.722709",
     "Shop For Holidays": "2026-09-04T15:34:26.849836",
-    "New": "2026-09-04T22:55:29.717892",
+    "New": "2026-09-24T16:16:25.067684",
     "American Bazi": "2026-09-04T22:56:36.790739",
     "Cool & Casual Styles": "2026-08-24T21:38:38.932637",
     "MeeeShop's Luxe Styles": "2026-09-04T22:58:06.656706",
@@ -3753,11 +3797,11 @@
     "Poetcore Aesthetics": "2026-08-23T21:31:43.248240",
     "Emory Park Clothing": "2026-08-24T18:05:24.611418",
     "new products": "2026-09-01T20:12:59.976433",
-    "Chic & Effortless Styles": "2026-08-22T21:28:53.283779",
+    "Chic & Effortless Styles": "2026-09-24T16:17:30.284514",
     "Davi & Dani Womens...": "2026-08-25T03:06:55.517268",
     "Weekend to Workout": "2026-08-25T21:37:59.882401",
     "Gimme Gummy Playful Nostalgia": "2026-08-24T03:14:20.016270",
-    "Best selling products": "2026-08-23T17:57:29.427287",
+    "Best selling products": "2026-09-24T16:19:51.421540",
     "Off-Duty Athlete Looks": "2026-08-27T00:38:02.753914",
     "LE LIS Womens Clothi...": "2026-08-25T18:04:35.754950",
     "New Trendy Woman...": "2026-08-24T12:34:56.590981",
@@ -3796,9 +3840,9 @@
     "Fall outfits": "2026-09-02T23:11:31.652514",
     "Winter Outfits": "2026-09-03T15:38:46.303716"
   },
-  "daily_count": 16,
-  "last_post_time": "2026-09-04T22:58:06.656706",
+  "daily_count": 4,
+  "last_post_time": "2026-09-24T16:19:51.421540",
   "board_rotation_cursor": 0,
   "last_image_style": "carousel",
-  "last_template_index": 16
+  "last_template_index": 17
 }
