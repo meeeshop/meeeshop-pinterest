@@ -231,10 +231,19 @@ def save_tagged_history(history: Dict[str, Any]) -> None:
 
 # ── Step 4: Attach Tagged Product to Pin Image (Original Link Intact) ─────────
 
-def attach_tagged_product_to_pin(pclient: Any, pin_id: str, orig_link: str, product: Dict[str, Any], apply_live: bool = False) -> bool:
+def attach_tagged_product_to_pin(
+    pclient: Any,
+    pin_id: str,
+    orig_link: str,
+    product: Dict[str, Any],
+    pin_title: str = "",
+    pin_desc: str = "",
+    apply_live: bool = False
+) -> bool:
     """
     Attaches a Shoppable Product Tag onto the Pin.
-    IMPORTANT: Preserves the Pin's original destination URL completely intact!
+    IMPORTANT: Preserves the Pin's original destination URL completely intact,
+    and updates the Pin description on Pinterest live with the in-stock product tag!
     """
     logger.info(f"\n[PRODUCT TAG MATCHED FOR PIN #{pin_id}]")
     logger.info(f"  Original Redirection URL (PRESERVED) : {orig_link or 'https://us.meeeshop.com'}")
@@ -251,19 +260,26 @@ def attach_tagged_product_to_pin(pclient: Any, pin_id: str, orig_link: str, prod
     }
     logger.info(f"  Product Tag Payload: {json.dumps(tag_payload)}")
 
-    if apply_live and pclient and hasattr(pclient, 'client'):
+    if apply_live and pclient and hasattr(pclient, 'client') and pclient.client:
         try:
-            if hasattr(pclient.client, 'update_pin'):
-                pclient.client.update_pin(
-                    pin_id=pin_id,
-                    link=orig_link if orig_link else product["url"],
-                    tagged_products=[tag_payload]
-                )
-                logger.info("  ✓ LIVE UPDATE: Pushed Shoppable Product Tag to Pinterest API!")
+            base_text = (pin_desc or pin_title or "MeeeShop Fashion").split(" | Similar In-Stock Style:")[0].strip()
+            updated_desc = f"{base_text} | Similar In-Stock Style: {product['title']} (${product['price']:.2f}) at us.meeeshop.com"
+            options = {
+                "id": str(pin_id),
+                "description": updated_desc
+            }
+            data = pclient.client.req_builder.buildPost(options=options, source_url=f"/pin/{pin_id}/")
+            resp = pclient.client.post(url="https://www.pinterest.com/resource/PinResource/update/", data=data)
+            if resp.status_code == 200:
+                logger.info(f"  [SUCCESS] LIVE UPDATE SUCCESS: Pinterest Pin #{pin_id} updated with in-stock product tag!")
+                logger.info(f"  [SUCCESS] Live Description: {updated_desc}")
                 return True
+            else:
+                logger.warning(f"  Pinterest API returned status {resp.status_code}: {resp.text[:200]}")
+                return False
         except Exception as e:
-            logger.warning(f"  Pinterest API update notice: {e}")
-            return True
+            logger.error(f"  Pinterest API update exception: {e}")
+            return False
     else:
         logger.info("  [TEST / DRY-RUN MODE] Visual product tag payload validated successfully (No live edit made).")
 
@@ -321,13 +337,21 @@ def process_and_tag_popular_pins(
         }
 
         # Attempt to fetch exact pin details if client active
-        if pclient and hasattr(pclient.client, 'get_pin'):
+        if pclient and hasattr(pclient, 'client') and pclient.client:
             try:
-                p_data = pclient.client.get_pin(pin_id=test_pin_id)
-                if p_data and isinstance(p_data, dict):
+                options = {"id": str(test_pin_id)}
+                url = pclient.client.req_builder.buildGet(
+                    url="https://www.pinterest.com/resource/PinResource/get/",
+                    options=options,
+                    source_url=f"/pin/{test_pin_id}/"
+                )
+                p_resp = pclient.client.get(url=url).json()
+                p_data = p_resp.get("resource_response", {}).get("data", {})
+                if p_data:
                     pin_context["title"] = str(p_data.get('title') or p_data.get('grid_title') or pin_context["title"])
                     pin_context["desc"] = str(p_data.get('description') or pin_context["desc"])
                     pin_context["link"] = str(p_data.get('link') or pin_context["link"])
+                    logger.info(f"Retrieved exact live details for Pin #{test_pin_id}: title='{pin_context['title']}', link='{pin_context['link']}'")
             except Exception as ex:
                 logger.debug(f"Fetch exact pin details notice: {ex}")
 
@@ -336,7 +360,15 @@ def process_and_tag_popular_pins(
             logger.error("Could not find matching product for test pin.")
             return {"status": "error", "message": "No match found"}
 
-        success = attach_tagged_product_to_pin(pclient, test_pin_id, pin_context["link"], matched_prod, apply_live=apply_live)
+        success = attach_tagged_product_to_pin(
+            pclient,
+            test_pin_id,
+            pin_context["link"],
+            matched_prod,
+            pin_title=pin_context["title"],
+            pin_desc=pin_context["desc"],
+            apply_live=apply_live
+        )
 
         test_result = {
             "pin_id": test_pin_id,
@@ -345,8 +377,30 @@ def process_and_tag_popular_pins(
             "target_url": matched_prod["url"],
             "image_url": matched_prod["image_url"],
             "price": matched_prod["price"],
+            "live_applied": success if apply_live else False,
             "mode": mode_str
         }
+
+        if apply_live and success:
+            record = {
+                "pin_id": test_pin_id,
+                "pin_title": pin_context["title"],
+                "original_link": pin_context["link"],
+                "tagged_product": {
+                    "id": matched_prod["id"],
+                    "handle": matched_prod["handle"],
+                    "title": matched_prod["title"],
+                    "price": matched_prod["price"],
+                    "url": matched_prod["url"],
+                    "image_url": matched_prod["image_url"]
+                },
+                "tagged_at": datetime.now(timezone.utc).isoformat(),
+                "verified_at": datetime.now(timezone.utc).isoformat()
+            }
+            tagged_map[test_pin_id] = record
+            history["tagged_pins"] = tagged_map
+            save_tagged_history(history)
+            logger.info(f"[SUCCESS] Saved Pin #{test_pin_id} to tagged popular pins history!")
 
         logger.info(f"\n--- SINGLE PIN TEST COMPLETE ---")
         logger.info(json.dumps(test_result, indent=2))
@@ -367,10 +421,16 @@ def process_and_tag_popular_pins(
         if not still_in_stock:
             logger.info(f"⚠️ Tagged product '{tagged_prod_title}' on Pin #{pid} is now OUT-OF-STOCK!")
             logger.info("   Searching for similar in-stock replacement item...")
-            
             replacement = find_best_matching_product(str(rec.get("pin_title") or ""), "", "", products)
             if replacement:
-                attach_tagged_product_to_pin(pclient, pid, orig_pin_link, replacement, apply_live=apply_live)
+                attach_tagged_product_to_pin(
+                    pclient,
+                    pid,
+                    orig_pin_link,
+                    replacement,
+                    pin_title=str(rec.get("pin_title") or ""),
+                    apply_live=apply_live
+                )
                 
                 rec["tagged_product"] = {
                     "id": replacement["id"],
@@ -383,7 +443,7 @@ def process_and_tag_popular_pins(
                 rec["replaced_at"] = datetime.now(timezone.utc).isoformat()
                 rec["verified_at"] = datetime.now(timezone.utc).isoformat()
                 replaced_count += 1
-                logger.info(f"  ✓ Tagged product REPLACED with: '{replacement['title']}' (${replacement['price']})")
+                logger.info(f"  [SUCCESS] Tagged product REPLACED with: '{replacement['title']}' (${replacement['price']})")
         else:
             rec["verified_at"] = datetime.now(timezone.utc).isoformat()
             reverified_count += 1
@@ -465,7 +525,15 @@ def process_and_tag_popular_pins(
         if not matched_prod:
             continue
 
-        success = attach_tagged_product_to_pin(pclient, pin_id, orig_link, matched_prod, apply_live=apply_live)
+        success = attach_tagged_product_to_pin(
+            pclient,
+            pin_id,
+            orig_link,
+            matched_prod,
+            pin_title=pin_title_str,
+            pin_desc=pin_desc_str,
+            apply_live=apply_live
+        )
 
         if success:
             record = {
@@ -510,12 +578,13 @@ def process_and_tag_popular_pins(
 def main():
     parser = argparse.ArgumentParser(description="Tag popular saved Pinterest Pins with similar in-stock Shopify products.")
     parser.add_argument("--test-pin-id", type=str, default=None, help="Test product matching & tag payload on a SINGLE Pinterest Pin ID (e.g. 962222276632068955).")
-    parser.add_argument("--dry-run", action="store_true", default=True, help="Preview product matching & tag payload without modifying Pinterest.")
     parser.add_argument("--apply", action="store_true", default=False, help="Execute live product tag updates on Pinterest API.")
+    parser.add_argument("--dry-run", action="store_true", default=False, help="Preview product matching without modifying Pinterest.")
     parser.add_argument("--max-pins", type=int, default=5, help="Maximum number of popular pins to tag per batch run.")
     args = parser.parse_args()
 
-    apply_live = args.apply and not args.dry_run
+    # If --apply is specified without --dry-run, execute live API updates
+    apply_live = bool(args.apply and not args.dry_run)
 
     process_and_tag_popular_pins(
         max_pins=args.max_pins,
