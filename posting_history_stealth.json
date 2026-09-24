@@ -3734,11 +3734,57 @@
       "template": 17,
       "pin_url": "https://www.pinterest.com/pin/962222276664372038/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8782689992875,
+      "title": "Buki Resort Vee Long Sleeve Popover Shirt - Navy | MeeeShop US Boutique",
+      "board": "Trends",
+      "timestamp": "2026-09-24T20:44:52.033901",
+      "type": "carousel",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276664378749/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": "570963165355",
+      "article_id": "570963165355",
+      "title": "How to Style Tailored Trousers for Everyday Casual Looks",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-09-24T20:46:24.496216",
+      "type": "blog",
+      "style": "card",
+      "template": 9,
+      "pin_url": "https://www.pinterest.com/pin/962222276664378762/",
+      "blog_url": "https://us.meeeshop.com/blogs/womens-pants-style-guide/how-to-style-tailored-trousers-for-everyday-casual-looks",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8988052979883,
+      "title": "Sophia Button Placket Drop Shoulder Long Sleeve Sweater: Labor Day Essential",
+      "board": "Fall Outfits 2026",
+      "timestamp": "2026-09-24T20:48:55.375699",
+      "type": "video",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276664378800/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8745260089515,
+      "title": "Flying Tomato Garden Veil Sunset Woven Top & Mini Skirt Set - Labor Day Chic",
+      "board": "Chic Looks",
+      "timestamp": "2026-09-24T20:50:04.338495",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276664378830/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-08-30T08:08:47.249630",
-    "Trends": "2026-09-24T16:15:17.801482",
+    "Trends": "2026-09-24T20:44:52.033901",
     "Dresses": "2026-08-30T20:04:32.519899",
     "Feminine & Flowy Fits": "2026-08-30T15:53:11.738550",
     "Short fall dresses": "2026-08-31T08:26:55.669324",
@@ -3769,7 +3815,7 @@
     "Kancan USA Jeans": "2026-09-03T23:10:08.465682",
     "Footwear": "2026-08-14T17:46:13.419439",
     "Fitted Jeans": "2026-08-20T18:03:57.898410",
-    "Chic Looks": "2026-08-23T03:12:09.640252",
+    "Chic Looks": "2026-09-24T20:50:04.338495",
     "Straight Leg Jeans": "2026-08-21T21:32:10.936379",
     "Puff Sleeves Tops": "2026-09-03T15:37:38.191350",
     "Casual": "2026-09-02T15:52:11.741894",
@@ -3838,11 +3884,12 @@
     "Relaxed Yet Trendy...": "2026-09-01T15:54:13.191192",
     "Chic & Cozy: Annie...": "2026-09-02T15:51:01.623160",
     "Fall outfits": "2026-09-02T23:11:31.652514",
-    "Winter Outfits": "2026-09-03T15:38:46.303716"
+    "Winter Outfits": "2026-09-03T15:38:46.303716",
+    "Fall Outfits 2026": "2026-09-24T20:48:55.375699"
   },
-  "daily_count": 4,
-  "last_post_time": "2026-09-24T16:19:51.421540",
+  "daily_count": 8,
+  "last_post_time": "2026-09-24T20:50:04.338495",
   "board_rotation_cursor": 0,
   "last_image_style": "carousel",
-  "last_template_index": 17
+  "last_template_index": 11
 }
