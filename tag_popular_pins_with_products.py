@@ -229,17 +229,17 @@ def save_tagged_history(history: Dict[str, Any]) -> None:
         json.dump(history, f, indent=2)
 
 
-# ── Step 4: Attach Tagged Product to Pin Image (Visual Tagging & SEO) ─────────
+# ── Step 4: Attach Tagged Products to Pin Image (Visual Tagging Only) ─────────
 
-def tag_pin_visually_with_playwright(pin_id: str, product_keyword: str) -> bool:
+def tag_pin_visually_with_playwright(pin_id: str, search_keyword: str = "Top", max_tags: int = 10) -> bool:
     """
-    Automates the visual product tagging flow directly via Playwright:
+    Automates visual product tagging directly via Playwright UI without modifying title, description, or URL:
     1. Loads https://www.pinterest.com/pin/{pin_id}/
     2. Hovers image and clicks 'Tag products' (shopping bag icon)
     3. Clicks '+' in tagged-items-grid
-    4. Searches product keyword in 'Use your Pins' modal
-    5. Selects matching product card
-    6. Clicks 'Save product' / 'Save products'
+    4. Searches product category in 'Use your Pins' modal
+    5. Selects up to 10 relevant product cards (with horizontal scrolling)
+    6. Clicks 'Save products'
     7. Clicks 'Done' button to save tags live on the Pin!
     """
     try:
@@ -297,40 +297,69 @@ def tag_pin_visually_with_playwright(pin_id: str, product_keyword: str) -> bool:
             add_btn.click()
             page.wait_for_timeout(3000)
 
-            # Step 4: Search product keyword
-            logger.info(f"  [Playwright] 4. Searching '{product_keyword}' in 'Use your Pins'...")
+            dialog = page.locator('[role="dialog"]')
             search = page.locator("input[placeholder*='Search']").first
+
+            # Step 4: Search product category
+            logger.info(f"  [Playwright] 4. Searching '{search_keyword}' in 'Use your Pins'...")
             if search.count() > 0:
-                search.fill(product_keyword)
+                search.fill(search_keyword)
                 search.press("Enter")
-                page.wait_for_timeout(2500)
+                page.wait_for_timeout(3000)
 
-            # Step 5: Select first matching product card
-            logger.info("  [Playwright] 5. Selecting product card from results...")
-            item = page.locator("[data-test-id='asset-picker-view-item'], div[role='listitem']").first
-            if item.count() == 0:
-                logger.warning(f"  [Playwright] No product cards found for '{product_keyword}'. Retrying with empty search...")
-                if search.count() > 0:
-                    search.fill("")
-                    search.press("Enter")
-                    page.wait_for_timeout(2000)
-                    item = page.locator("[data-test-id='asset-picker-view-item'], div[role='listitem']").first
+            # Step 5: Select up to 10 relevant product cards
+            logger.info(f"  [Playwright] 5. Selecting up to {max_tags} relevant product cards...")
+            clicked = 0
 
-            if item.count() == 0:
-                logger.warning("  [Playwright] No product cards found in store.")
+            # Initial visible product images
+            imgs = dialog.locator('img[src*="pinimg"]').all()
+            for img_el in imgs:
+                if clicked >= max_tags:
+                    break
+                try:
+                    box = img_el.bounding_box()
+                    if box and box['width'] > 50 and box['height'] > 50:
+                        img_el.click()
+                        clicked += 1
+                        logger.info(f"    Selected product #{clicked}")
+                        page.wait_for_timeout(300)
+                except Exception:
+                    pass
+
+            # Scroll horizontally to select more if under max_tags
+            if clicked < max_tags:
+                scrollable = dialog.locator('div[style*="overflow"]').first
+                if scrollable.count() > 0:
+                    scrollable.evaluate("e => e.scrollLeft += 800")
+                    page.wait_for_timeout(1500)
+                    more_imgs = dialog.locator('img[src*="pinimg"]').all()
+                    for img_el in more_imgs:
+                        if clicked >= max_tags:
+                            break
+                        try:
+                            box = img_el.bounding_box()
+                            if box and box['width'] > 50 and box['height'] > 50:
+                                img_el.click()
+                                clicked += 1
+                                logger.info(f"    Selected product #{clicked} (from scroll)")
+                                page.wait_for_timeout(300)
+                        except Exception:
+                            pass
+
+            if clicked == 0:
+                logger.warning("  [Playwright] No product cards were selected.")
                 browser.close()
                 return False
 
-            item.click()
-            page.wait_for_timeout(1500)
+            logger.info(f"  [Playwright] Successfully selected {clicked} products.")
 
-            # Step 6: Click "Save product" / "Save products"
-            logger.info("  [Playwright] 6. Clicking 'Save product'...")
-            save_btn = page.locator("button:has-text('Save product')").first
+            # Step 6: Click "Save products" / "Save product"
+            logger.info("  [Playwright] 6. Clicking 'Save products'...")
+            save_btn = page.locator("button:has-text('Save products')").first
             if save_btn.count() == 0:
-                save_btn = page.locator("button:has-text('Save products')").first
+                save_btn = page.locator("button:has-text('Save product')").first
 
-            if save_btn.count() > 0:
+            if save_btn.count() > 0 and save_btn.is_enabled():
                 save_btn.click()
                 page.wait_for_timeout(3000)
 
@@ -340,7 +369,7 @@ def tag_pin_visually_with_playwright(pin_id: str, product_keyword: str) -> bool:
             if done_btn.count() > 0:
                 done_btn.click()
                 page.wait_for_timeout(4000)
-                logger.info(f"  [SUCCESS] [Playwright] Visual product tagging completed and saved for Pin #{pin_id}!")
+                logger.info(f"  [SUCCESS] [Playwright] Successfully tagged {clicked} products onto Pin #{pin_id} (title, desc & URL 100% untouched)!")
                 browser.close()
                 return True
             else:
@@ -363,57 +392,25 @@ def attach_tagged_product_to_pin(
     apply_live: bool = False
 ) -> bool:
     """
-    Attaches a Shoppable Product Tag onto the Pin.
+    Attaches up to 10 relevant Shoppable Products to the Pin image.
     IMPORTANT:
-    1. Preserves the Pin's original destination URL completely intact.
-    2. Tags the shoppable product visually onto the Pin image via Playwright web UI!
-    3. Updates Pin description with similar in-stock product recommendation.
+    1. Does NOT edit the Pin title, description, or URL. All remain 100% UNTOUCHED!
+    2. Tags up to 10 relevant in-stock products visually via Playwright web UI.
     """
     logger.info(f"\n[PRODUCT TAG MATCHED FOR PIN #{pin_id}]")
-    logger.info(f"  Original Redirection URL (PRESERVED) : {orig_link or 'https://us.meeeshop.com'}")
-    logger.info(f"  Tagged Product Item                 : {product['title']} (${product['price']})")
-    logger.info(f"  Tagged Product Checkout Link        : {product['url']}")
-    logger.info(f"  Tagged Product Image                : {product['image_url']}")
-
-    tag_payload = {
-        "link": product["url"],
-        "title": product["title"],
-        "price": f"${product['price']:.2f}",
-        "x": 0.5,
-        "y": 0.5
-    }
-    logger.info(f"  Product Tag Payload: {json.dumps(tag_payload)}")
+    logger.info(f"  Original Redirection URL (100% UNTOUCHED) : {orig_link or 'https://us.meeeshop.com'}")
+    logger.info(f"  Pin Title & Description (100% UNTOUCHED)  : Preserved intact")
+    logger.info(f"  Target In-Stock Product Category         : {product['title']} (${product['price']})")
 
     if apply_live:
-        # Determine best search keyword from product title or type
+        # Determine best search category from product title or type
         words = [w for w in re.findall(r'[a-zA-Z]+', product["title"]) if len(w) > 3 and w.lower() not in {"women", "womens", "shop", "meeeshop", "fashion"}]
-        search_kw = words[0] if words else product.get("product_type", "Sweater")
+        search_kw = words[0] if words else product.get("product_type", "Top")
 
-        visual_success = tag_pin_visually_with_playwright(pin_id, search_kw)
-
-        # Update Pin description live as well
-        desc_success = False
-        if pclient and hasattr(pclient, 'client') and pclient.client:
-            try:
-                base_text = (pin_desc or pin_title or "MeeeShop Fashion").split(" | Similar In-Stock Style:")[0].strip()
-                updated_desc = f"{base_text} | Similar In-Stock Style: {product['title']} (${product['price']:.2f}) at us.meeeshop.com"
-                options = {
-                    "id": str(pin_id),
-                    "description": updated_desc
-                }
-                data = pclient.client.req_builder.buildPost(options=options, source_url=f"/pin/{pin_id}/")
-                resp = pclient.client.post(url="https://www.pinterest.com/resource/PinResource/update/", data=data)
-                if resp.status_code == 200:
-                    logger.info(f"  [SUCCESS] Live Pin Description updated with in-stock product style!")
-                    desc_success = True
-                else:
-                    logger.warning(f"  Pinterest API returned status {resp.status_code}: {resp.text[:200]}")
-            except Exception as e:
-                logger.error(f"  Pinterest API update exception: {e}")
-
-        return visual_success or desc_success
+        visual_success = tag_pin_visually_with_playwright(pin_id, search_kw, max_tags=10)
+        return visual_success
     else:
-        logger.info("  [TEST / DRY-RUN MODE] Visual product tag payload validated successfully (No live edit made).")
+        logger.info("  [TEST / DRY-RUN MODE] Visual tagging simulated for up to 10 products (No live edit made).")
 
     return True
 
