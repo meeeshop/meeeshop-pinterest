@@ -3,7 +3,26 @@ name: Tag Popular Pins with In-Stock Products
 on:
   schedule:
     - cron: '0 16 * * *'  # Runs daily at 16:00 UTC (11:00 AM EST)
-  workflow_dispatch:      # Manual trigger from GitHub Actions tab
+  workflow_dispatch:
+    inputs:
+      test_pin_id:
+        description: 'Single Pinterest Pin ID to test (e.g. 962222276632068955). Leave blank for batch mode.'
+        required: false
+        default: ''
+        type: string
+      mode:
+        description: 'Execution Mode (dry-run = Preview only, apply = Live update on Pinterest)'
+        required: true
+        default: 'dry-run'
+        type: choice
+        options:
+          - dry-run
+          - apply
+      max_pins:
+        description: 'Maximum number of pins to process per batch run'
+        required: false
+        default: '10'
+        type: string
 
 jobs:
   tag_popular_pins:
@@ -35,7 +54,20 @@ jobs:
           PINTEREST_EMAIL: ${{ secrets.PINTEREST_EMAIL }}
           PINTEREST_PASSWORD: ${{ secrets.PINTEREST_PASSWORD }}
         run: |
-          python tag_popular_pins_with_products.py --max-pins 10
+          CMD="python tag_popular_pins_with_products.py --max-pins ${{ inputs.max_pins || '10' }}"
+
+          if [ "${{ inputs.mode }}" = "apply" ]; then
+            CMD="$CMD --apply"
+          else
+            CMD="$CMD --dry-run"
+          fi
+
+          if [ -n "${{ inputs.test_pin_id }}" ]; then
+            CMD="$CMD --test-pin-id ${{ inputs.test_pin_id }}"
+          fi
+
+          echo "Executing command: $CMD"
+          eval $CMD
 
       - name: Commit and Push Updated History
         run: |
