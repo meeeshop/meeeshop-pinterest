@@ -119,6 +119,7 @@ def fetch_instock_shopify_products() -> Tuple[List[Dict[str, Any]], Set[str]]:
 
             valid_products.append({
                 "id": str(p.get("id")),
+                "variant_id": str(first_variant.get("id")),
                 "handle": handle,
                 "title": title,
                 "price": price,
@@ -229,74 +230,127 @@ def save_tagged_history(history: Dict[str, Any]) -> None:
         json.dump(history, f, indent=2)
 
 
-# ── Step 4: Attach Tagged Products to Pin Image (Visual Tagging Only) ─────────
+# ── Step 4: Attach Relevant Tagged Products via Shopify Catalog Variant IDs ────
 
-def get_candidate_search_queries(
-    product: Dict[str, Any],
-    pin_title: str = "",
-    pin_desc: str = "",
-    orig_link: str = ""
-) -> List[str]:
-    """Generates an ordered list of search queries to find matching store Pins."""
-    combined_text = f"{orig_link} {pin_title} {pin_desc} {product.get('title', '')} {product.get('product_type', '')}".lower()
+def find_relevant_shopify_products_for_pin(
+    pin_title: str,
+    pin_desc: str,
+    board_name: str,
+    pin_link: str,
+    products: List[Dict[str, Any]],
+    target_count: int = 10
+) -> List[Dict[str, Any]]:
+    """
+    Finds up to 10 highly relevant, unique in-stock Shopify products for a specific Pin.
+    Intelligently categorizes the Pin context into specific niches:
+    - footwear / shoes / sandals / slippers
+    - dresses / gowns / rompers / jumpsuits
+    - shorts / activewear / workout / gym
+    - sweaters / cardigans / knits / outerwear / pullovers
+    - jeans / denim / pants / trousers / bottoms
+    - tops / blouses / shirts / tees / tanks
+    - bags / handbags / totes / purses / backpacks
+    """
+    combined_pin_text = f"{pin_link} {pin_title} {pin_desc} {board_name}".lower()
 
-    category_map = {
-        "shorts": ["Shorts", "Denim", "Bottoms", "Pants"],
-        "denim": ["Denim", "Shorts", "Jeans", "Pants"],
-        "jeans": ["Jeans", "Denim", "Pants"],
-        "pants": ["Pants", "Bottoms", "Trousers"],
-        "dress": ["Dress", "Maxi", "Midi", "Gown"],
-        "sweater": ["Sweater", "Cardigan", "Knit", "Pullover"],
-        "cardigan": ["Cardigan", "Sweater", "Top"],
-        "top": ["Top", "Blouse", "Shirt", "Tee"],
-        "skirt": ["Skirt", "Midi"],
-        "bag": ["Tote", "Bag", "Handbag"],
-        "activewear": ["Shorts", "Leggings", "Activewear", "Top"]
+    category_definitions = {
+        "footwear": {
+            "triggers": ["shoe", "footwear", "boot", "sneaker", "heel", "sandal", "slipper", "loafer", "flat", "slides"],
+            "product_keywords": ["slipper", "shoe", "boot", "sandal", "footwear", "sneaker", "flat", "heel", "jogger", "pants"]
+        },
+        "dress": {
+            "triggers": ["dress", "maxi", "midi", "mini", "gown", "sundress", "romper", "jumpsuit", "bodycon"],
+            "product_keywords": ["dress", "gown", "romper", "jumpsuit", "maxi", "midi", "tunic"]
+        },
+        "shorts_activewear": {
+            "triggers": ["short", "biker", "drawstring", "activewear", "workout", "gym", "athletic", "running"],
+            "product_keywords": ["short", "active", "legging", "jogger", "bra", "tank", "tee", "pant", "bottom"]
+        },
+        "sweater_knit": {
+            "triggers": ["sweater", "cardigan", "knit", "pullover", "poncho", "turtleneck", "hoodie", "sweatshirt"],
+            "product_keywords": ["sweater", "cardigan", "knit", "pullover", "poncho", "sweatshirt", "jacket"]
+        },
+        "denim_pants": {
+            "triggers": ["jean", "denim", "pant", "trouser", "bottom", "cargo", "flare", "wide leg"],
+            "product_keywords": ["denim", "jean", "pant", "trouser", "bottom", "legging"]
+        },
+        "bags_accessories": {
+            "triggers": ["bag", "tote", "handbag", "purse", "shoulder", "crossbody", "clutch", "backpack", "wallet"],
+            "product_keywords": ["handbag", "bag", "tote", "backpack", "pouch", "clutch", "purse", "accessories"]
+        },
+        "tops_blouses": {
+            "triggers": ["top", "shirt", "blouse", "tee", "t-shirt", "tank", "camisole", "crop", "tunic"],
+            "product_keywords": ["top", "shirt", "blouse", "tee", "tank", "tunic", "camisole"]
+        }
     }
 
-    queries: List[str] = []
+    matched_categories = []
+    for cat_name, cat_data in category_definitions.items():
+        if any(trig in combined_pin_text for trig in cat_data["triggers"]):
+            matched_categories.append(cat_name)
 
-    # 1. Match specific category keywords
-    for cat, kws in category_map.items():
-        if cat in combined_text:
-            for kw in kws:
-                if kw not in queries:
-                    queries.append(kw)
+    if not matched_categories:
+        matched_categories = ["tops_blouses", "dress"]
 
-    # 2. Add product type
-    ptype = product.get("product_type", "").strip()
-    if ptype and ptype.capitalize() not in queries:
-        queries.append(ptype.capitalize())
+    scored_products = []
+    seen_ids = set()
 
-    # 3. Add meaningful title words
-    for w in re.findall(r'[a-zA-Z]+', product.get("title", "")):
-        if len(w) > 3 and w.lower() not in {"women", "womens", "shop", "meeeshop", "fashion", "with", "waist", "asymmetrical", "print", "color"}:
-            w_cap = w.capitalize()
-            if w_cap not in queries:
-                queries.append(w_cap)
+    for p in products:
+        p_id = p.get("id")
+        if p_id in seen_ids:
+            continue
 
-    # Fallback default queries
-    for fallback in ["Shorts", "Top", "Dress", "Sweater"]:
-        if fallback not in queries:
-            queries.append(fallback)
+        p_text = f"{p.get('title', '')} {p.get('product_type', '')} {p.get('tags', '')}".lower()
+        score = 0
 
-    return queries
+        # High weight for matching targeted niche category
+        for cat_name in matched_categories:
+            cat_keywords = category_definitions[cat_name]["product_keywords"]
+            for kw in cat_keywords:
+                if kw in p_text:
+                    score += 15
+
+        # Word overlaps from pin title, description, and URL handle
+        for word in combined_pin_text.split():
+            clean_word = re.sub(r'[^a-z]', '', word)
+            if len(clean_word) > 3 and clean_word in p_text:
+                score += 3
+
+        if score > 0:
+            scored_products.append((score, p))
+            seen_ids.add(p_id)
+
+    # Sort descending by relevance score
+    scored_products.sort(key=lambda x: x[0], reverse=True)
+    selected = [p for _, p in scored_products[:target_count]]
+
+    # If fewer than target_count, fill with remaining in-stock items
+    if len(selected) < target_count:
+        for p in products:
+            if len(selected) >= target_count:
+                break
+            if p.get("id") not in seen_ids:
+                selected.append(p)
+                seen_ids.add(p.get("id"))
+
+    return selected
 
 
 def tag_pin_visually_with_playwright(
     pin_id: str,
-    candidate_queries: List[str],
+    relevant_products: List[Dict[str, Any]],
     max_tags: int = 10
 ) -> bool:
     """
-    Automates visual product tagging directly via Playwright UI without modifying title, description, or URL:
+    Automates visual product tagging directly via the Pinterest 'Catalog' tab:
     1. Loads https://www.pinterest.com/pin/{pin_id}/
     2. Hovers image and clicks 'Tag products' (shopping bag icon)
     3. Clicks '+' in tagged-items-grid
-    4. Searches candidate categories in 'Use your Pins' modal with automatic fallbacks
-    5. Selects up to 10 relevant product cards (with horizontal scrolling)
-    6. Clicks 'Save products'
-    7. Clicks 'Done' button to save tags live on the Pin!
+    4. Clicks the 'Catalog' tab
+    5. For each relevant Shopify product, inputs its exact Shopify variant_id to fetch the synced product card
+    6. Clicks the product card to add it to the Pin (up to 10 products)
+    7. Clicks 'Save products'
+    8. Clicks 'Done' button to save tags live on the Pin!
     """
     try:
         from stealth_pinterest_poster import StealthPinterestPoster
@@ -354,79 +408,59 @@ def tag_pin_visually_with_playwright(
             page.wait_for_timeout(3000)
 
             dialog = page.locator('[role="dialog"]')
-            search = page.locator("input[placeholder*='Search']").first
 
-            # Step 4 & 5: Try candidate queries until we select up to max_tags products
-            clicked = 0
-            queries_to_try = candidate_queries + [""]
-
-            for q in queries_to_try:
-                if clicked >= max_tags:
-                    break
-
-                q_display = q if q else "<All Store Pins>"
-                logger.info(f"  [Playwright] 4. Searching '{q_display}' in 'Use your Pins'...")
-                if search.count() > 0:
-                    search.fill(q)
-                    search.press("Enter")
-                    page.wait_for_timeout(2500)
-
-                # Collect product images
-                imgs = dialog.locator('img[src*="pinimg"]').all()
-                valid_imgs = []
-                for img_el in imgs:
-                    try:
-                        box = img_el.bounding_box()
-                        if box and box['width'] > 50 and box['height'] > 50:
-                            valid_imgs.append(img_el)
-                    except Exception:
-                        pass
-
-                if not valid_imgs:
-                    logger.info(f"    Query '{q_display}' returned 0 product cards. Trying next fallback...")
-                    continue
-
-                logger.info(f"    Query '{q_display}' found {len(valid_imgs)} product cards. Selecting up to {max_tags}...")
-                for img_el in valid_imgs:
-                    if clicked >= max_tags:
-                        break
-                    try:
-                        img_el.click()
-                        clicked += 1
-                        logger.info(f"      Selected product #{clicked}")
-                        page.wait_for_timeout(300)
-                    except Exception as e:
-                        logger.debug(f"Click notice: {e}")
-
-                # If still under max_tags and there's horizontal scroll, scroll right to get more
-                if clicked < max_tags:
-                    scrollable = dialog.locator('div[style*="overflow"]').first
-                    if scrollable.count() > 0:
-                        scrollable.evaluate("e => e.scrollLeft += 800")
-                        page.wait_for_timeout(1500)
-                        more_imgs = dialog.locator('img[src*="pinimg"]').all()
-                        for img_el in more_imgs:
-                            if clicked >= max_tags:
-                                break
-                            try:
-                                box = img_el.bounding_box()
-                                if box and box['width'] > 50 and box['height'] > 50:
-                                    img_el.click()
-                                    clicked += 1
-                                    logger.info(f"      Selected product #{clicked} (from scroll)")
-                                    page.wait_for_timeout(300)
-                            except Exception:
-                                pass
-
-                if clicked > 0:
-                    break
-
-            if clicked == 0:
-                logger.warning(f"  [Playwright] No product cards were selected across queries: {candidate_queries}")
+            # Step 4: Navigate to 'Catalog' tab
+            logger.info("  [Playwright] 4. Switching to 'Catalog' tab for exact variant ID lookup...")
+            catalog_tab = dialog.locator('button:has-text("Catalog"), div:has-text("Catalog")').last
+            if catalog_tab.count() == 0:
+                logger.warning("  [Playwright] 'Catalog' tab not found in modal.")
                 browser.close()
                 return False
 
-            logger.info(f"  [Playwright] Successfully selected {clicked} products. Saving...")
+            catalog_tab.click()
+            page.wait_for_timeout(2000)
+
+            inp = dialog.locator('input[placeholder*="Enter product item ID"]').first
+            if inp.count() == 0:
+                logger.warning("  [Playwright] 'Enter product item ID' input field not found.")
+                browser.close()
+                return False
+
+            # Step 5: For each relevant product, enter variant_id and click the card
+            logger.info(f"  [Playwright] 5. Tagging up to {max_tags} relevant Shopify products via variant IDs...")
+            added_count = 0
+
+            for i, prod in enumerate(relevant_products[:max_tags]):
+                vid = str(prod.get('variant_id', '')).strip()
+                if not vid:
+                    continue
+
+                safe_title = prod.get('title', '').encode('ascii', 'ignore').decode()[:35]
+                logger.info(f"    Adding product #{added_count+1}: '{safe_title}' (variant ID: {vid})...")
+
+                inp.fill(vid)
+                inp.press("Enter")
+                page.wait_for_timeout(2200)
+
+                # Find the matched catalog card
+                card = dialog.locator('img[src*="pinimg"]').last
+                if card.count() > 0:
+                    try:
+                        card.click()
+                        added_count += 1
+                        logger.info(f"      Successfully added product #{added_count}")
+                        page.wait_for_timeout(600)
+                    except Exception as e:
+                        logger.debug(f"Click card notice: {e}")
+                else:
+                    logger.warning(f"      Product card not found for variant ID {vid}")
+
+            if added_count == 0:
+                logger.warning("  [Playwright] 0 products were added via Catalog variant IDs.")
+                browser.close()
+                return False
+
+            logger.info(f"  [Playwright] Successfully added {added_count} relevant products from Catalog.")
 
             # Step 6: Click "Save products" / "Save product"
             logger.info("  [Playwright] 6. Clicking 'Save products'...")
@@ -444,7 +478,7 @@ def tag_pin_visually_with_playwright(
             if done_btn.count() > 0:
                 done_btn.click()
                 page.wait_for_timeout(4000)
-                logger.info(f"  [SUCCESS] [Playwright] Successfully tagged {clicked} products onto Pin #{pin_id} (title, desc & URL 100% untouched)!")
+                logger.info(f"  [SUCCESS] [Playwright] Successfully tagged {added_count} relevant products onto Pin #{pin_id} (title, desc & URL 100% untouched)!")
                 browser.close()
                 return True
             else:
@@ -461,26 +495,27 @@ def attach_tagged_product_to_pin(
     pclient: Any,
     pin_id: str,
     orig_link: str,
-    product: Dict[str, Any],
+    relevant_products: List[Dict[str, Any]],
     pin_title: str = "",
     pin_desc: str = "",
     apply_live: bool = False
 ) -> bool:
     """
-    Attaches up to 10 relevant Shoppable Products to the Pin image.
+    Attaches up to 10 relevant Shoppable Products to the Pin image via Catalog variant IDs.
     IMPORTANT:
     1. Does NOT edit the Pin title, description, or URL. All remain 100% UNTOUCHED!
-    2. Tags up to 10 relevant in-stock products visually via Playwright web UI.
+    2. Tags up to 10 relevant in-stock products visually via Catalog variant IDs.
     """
-    logger.info(f"\n[PRODUCT TAG MATCHED FOR PIN #{pin_id}]")
+    first_prod = relevant_products[0] if relevant_products else {}
+    logger.info(f"\n[TAGGING RELEVANT SHOPIFY PRODUCTS FOR PIN #{pin_id}]")
     logger.info(f"  Original Redirection URL (100% UNTOUCHED) : {orig_link or 'https://us.meeeshop.com'}")
     logger.info(f"  Pin Title & Description (100% UNTOUCHED)  : Preserved intact")
-    logger.info(f"  Target In-Stock Product Category         : {product['title']} (${product['price']})")
+    logger.info(f"  Total Relevant In-Stock Products Found   : {len(relevant_products)}")
+    for idx, p in enumerate(relevant_products[:5]):
+        logger.info(f"    Item #{idx+1}: {p.get('title')} (${p.get('price')}) | Variant ID: {p.get('variant_id')}")
 
     if apply_live:
-        queries = get_candidate_search_queries(product, pin_title=pin_title, pin_desc=pin_desc, orig_link=orig_link)
-        logger.info(f"  Candidate Search Queries Generated       : {queries}")
-        visual_success = tag_pin_visually_with_playwright(pin_id, queries, max_tags=10)
+        visual_success = tag_pin_visually_with_playwright(pin_id, relevant_products, max_tags=10)
         return visual_success
     else:
         logger.info("  [TEST / DRY-RUN MODE] Visual tagging simulated for up to 10 products (No live edit made).")
@@ -557,16 +592,25 @@ def process_and_tag_popular_pins(
             except Exception as ex:
                 logger.debug(f"Fetch exact pin details notice: {ex}")
 
-        matched_prod = find_best_matching_product(pin_context["title"], pin_context["desc"], pin_context["board_name"], products)
-        if not matched_prod:
-            logger.error("Could not find matching product for test pin.")
+        relevant_prods = find_relevant_shopify_products_for_pin(
+            pin_context["title"],
+            pin_context["desc"],
+            pin_context["board_name"],
+            pin_context["link"],
+            products,
+            target_count=10
+        )
+        if not relevant_prods:
+            logger.error("Could not find matching products for test pin.")
             return {"status": "error", "message": "No match found"}
+
+        first_prod = relevant_prods[0]
 
         success = attach_tagged_product_to_pin(
             pclient,
             test_pin_id,
             pin_context["link"],
-            matched_prod,
+            relevant_prods,
             pin_title=pin_context["title"],
             pin_desc=pin_context["desc"],
             apply_live=apply_live
@@ -575,10 +619,12 @@ def process_and_tag_popular_pins(
         test_result = {
             "pin_id": test_pin_id,
             "original_link": pin_context["link"],
-            "matched_product": matched_prod["title"],
-            "target_url": matched_prod["url"],
-            "image_url": matched_prod["image_url"],
-            "price": matched_prod["price"],
+            "primary_matched_product": first_prod["title"],
+            "tagged_products_count": len(relevant_prods),
+            "tagged_products": [
+                {"title": p["title"], "price": p["price"], "variant_id": p.get("variant_id"), "url": p["url"]}
+                for p in relevant_prods
+            ],
             "live_applied": success if apply_live else False,
             "mode": mode_str
         }
@@ -588,21 +634,25 @@ def process_and_tag_popular_pins(
                 "pin_id": test_pin_id,
                 "pin_title": pin_context["title"],
                 "original_link": pin_context["link"],
-                "tagged_product": {
-                    "id": matched_prod["id"],
-                    "handle": matched_prod["handle"],
-                    "title": matched_prod["title"],
-                    "price": matched_prod["price"],
-                    "url": matched_prod["url"],
-                    "image_url": matched_prod["image_url"]
-                },
+                "tagged_products": [
+                    {
+                        "id": p["id"],
+                        "variant_id": p.get("variant_id"),
+                        "handle": p["handle"],
+                        "title": p["title"],
+                        "price": p["price"],
+                        "url": p["url"],
+                        "image_url": p["image_url"]
+                    }
+                    for p in relevant_prods
+                ],
                 "tagged_at": datetime.now(timezone.utc).isoformat(),
                 "verified_at": datetime.now(timezone.utc).isoformat()
             }
             tagged_map[test_pin_id] = record
             history["tagged_pins"] = tagged_map
             save_tagged_history(history)
-            logger.info(f"[SUCCESS] Saved Pin #{test_pin_id} to tagged popular pins history!")
+            logger.info(f"[SUCCESS] Saved Pin #{test_pin_id} with {len(relevant_prods)} tagged products to history!")
 
         logger.info(f"\n--- SINGLE PIN TEST COMPLETE ---")
         logger.info(json.dumps(test_result, indent=2))
@@ -723,15 +773,24 @@ def process_and_tag_popular_pins(
             else:
                 logger.info(f"Pin #{pin_id} original item '{orig_link}' is OUT-OF-STOCK or 404! Tagging similar in-stock product.")
 
-        matched_prod = find_best_matching_product(pin_title_str, pin_desc_str, pin_board_str, products)
-        if not matched_prod:
+        relevant_prods = find_relevant_shopify_products_for_pin(
+            pin_title_str,
+            pin_desc_str,
+            pin_board_str,
+            orig_link,
+            products,
+            target_count=10
+        )
+        if not relevant_prods:
             continue
+
+        first_prod = relevant_prods[0]
 
         success = attach_tagged_product_to_pin(
             pclient,
             pin_id,
             orig_link,
-            matched_prod,
+            relevant_prods,
             pin_title=pin_title_str,
             pin_desc=pin_desc_str,
             apply_live=apply_live
@@ -742,14 +801,18 @@ def process_and_tag_popular_pins(
                 "pin_id": pin_id,
                 "pin_title": pin_title_str,
                 "original_link": orig_link,
-                "tagged_product": {
-                    "id": matched_prod["id"],
-                    "handle": matched_prod["handle"],
-                    "title": matched_prod["title"],
-                    "price": matched_prod["price"],
-                    "url": matched_prod["url"],
-                    "image_url": matched_prod["image_url"]
-                },
+                "tagged_products": [
+                    {
+                        "id": p["id"],
+                        "variant_id": p.get("variant_id"),
+                        "handle": p["handle"],
+                        "title": p["title"],
+                        "price": p["price"],
+                        "url": p["url"],
+                        "image_url": p["image_url"]
+                    }
+                    for p in relevant_prods
+                ],
                 "tagged_at": datetime.now(timezone.utc).isoformat(),
                 "verified_at": datetime.now(timezone.utc).isoformat()
             }
