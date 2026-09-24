@@ -1,0 +1,45 @@
+name: Tag Popular Pins with In-Stock Products
+
+on:
+  schedule:
+    - cron: '0 16 * * *'  # Runs daily at 16:00 UTC (11:00 AM EST)
+  workflow_dispatch:      # Manual trigger from GitHub Actions tab
+
+jobs:
+  tag_popular_pins:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+          cache: 'pip'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests cryptography py3pin python-dotenv
+
+      - name: Execute Tag Popular Pins Automation
+        env:
+          ENCRYPTION_KEY_PRIMARY: ${{ secrets.ENCRYPTION_KEY_PRIMARY }}
+          ENCRYPTION_KEY_FALLBACK: ${{ secrets.ENCRYPTION_KEY_FALLBACK }}
+          SHOPIFY_STORE: ${{ secrets.SHOPIFY_STORE }}
+          SHOPIFY_ACCESS_TOKEN: ${{ secrets.SHOPIFY_ACCESS_TOKEN }}
+          PINTEREST_COOKIES_B64: ${{ secrets.PINTEREST_COOKIES_B64 }}
+          PINTEREST_USERNAME: ${{ secrets.PINTEREST_USERNAME }}
+          PINTEREST_EMAIL: ${{ secrets.PINTEREST_EMAIL }}
+          PINTEREST_PASSWORD: ${{ secrets.PINTEREST_PASSWORD }}
+        run: |
+          python tag_popular_pins_with_products.py --max-pins 10
+
+      - name: Commit and Push Updated History
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action Bot"
+          git add tagged_popular_pins_history.json
+          git diff --quiet && git diff --staged --quiet || (git commit -m "chore(pinterest): tag popular pins with in-stock products [skip ci]" && git push)
