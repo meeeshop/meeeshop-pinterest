@@ -352,7 +352,106 @@
       ],
       "tagged_at": "2026-09-24T13:21:31.053489+00:00",
       "verified_at": "2026-09-24T13:21:31.053503+00:00"
+    },
+    "962222276633960536": {
+      "pin_id": "962222276633960536",
+      "pin_title": "MeeeShop: Shop Dresses, Jeans, Clothes, Shoes, & Accessories For Women",
+      "original_link": "https://us.meeeshop.com/products/womens-american-bazi-high-waist-pull-on-flare-jeans-in-blue",
+      "tagged_products": [
+        {
+          "id": "8930417672363",
+          "variant_id": "47612246491307",
+          "handle": "bytos-raw-hem-distressed-mid-rise-crop-jeans",
+          "title": "Bytos Raw Hem Distressed Mid Rise Crop Jeans",
+          "price": 114.99,
+          "url": "https://us.meeeshop.com/products/bytos-raw-hem-distressed-mid-rise-crop-jeans?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/bytos-raw-hem-distressed-mid-rise-crop-jeans-1.webp?v=1787717828"
+        },
+        {
+          "id": "8789756969131",
+          "variant_id": "47130839974059",
+          "handle": "adjustable-hem-knit-band-wide-leg-jeans",
+          "title": "Adjustable Hem Knit Band Wide Leg Jeans",
+          "price": 134.99,
+          "url": "https://us.meeeshop.com/products/adjustable-hem-knit-band-wide-leg-jeans?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/adjustable-hem-knit-band-wide-leg-jeans-1.jpg?v=1787715823"
+        },
+        {
+          "id": "8930417049771",
+          "variant_id": "47612243574955",
+          "handle": "bytos-full-size-distressed-high-rise-jeans-with-pockets",
+          "title": "Bytos Full Size Distressed High Rise Jeans with Pockets",
+          "price": 114.99,
+          "url": "https://us.meeeshop.com/products/bytos-full-size-distressed-high-rise-jeans-with-pockets?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/bytos-full-size-distressed-high-rise-jeans-with-pockets-1.webp?v=1787717815"
+        },
+        {
+          "id": "8930416984235",
+          "variant_id": "47612243050667",
+          "handle": "bytos-full-size-distressed-high-rise-straight-jeans",
+          "title": "Bytos Full Size Distressed High Rise Straight Jeans",
+          "price": 119.99,
+          "url": "https://us.meeeshop.com/products/bytos-full-size-distressed-high-rise-straight-jeans?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/bytos-full-size-distressed-high-rise-straight-jeans-1.webp?v=1787717813"
+        },
+        {
+          "id": "8930417770667",
+          "variant_id": "47612246950059",
+          "handle": "bytos-full-size-high-rise-bootcut-jeans-with-pockets",
+          "title": "Bytos Full Size High Rise Bootcut Jeans with Pockets",
+          "price": 114.99,
+          "url": "https://us.meeeshop.com/products/bytos-full-size-high-rise-bootcut-jeans-with-pockets?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/bytos-full-size-high-rise-bootcut-jeans-with-pockets-1.webp?v=1787717832"
+        },
+        {
+          "id": "8930417475755",
+          "variant_id": "47612245770411",
+          "handle": "bytos-full-size-raw-hem-distressed-high-rise-bootcut-jeans",
+          "title": "Bytos Full Size Raw Hem Distressed High Rise Bootcut Jeans",
+          "price": 114.99,
+          "url": "https://us.meeeshop.com/products/bytos-full-size-raw-hem-distressed-high-rise-bootcut-jeans?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/bytos-full-size-raw-hem-distressed-high-rise-bootcut-jeans-1.webp?v=1787717825"
+        },
+        {
+          "id": "8782690123947",
+          "variant_id": "47103632736427",
+          "handle": "buki-ginza-jogger-pant",
+          "title": "Buki Ginza Jogger Pant",
+          "price": 189.99,
+          "url": "https://us.meeeshop.com/products/buki-ginza-jogger-pant?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/buki-ginza-jogger-pant-1.webp?v=1787675838"
+        },
+        {
+          "id": "8988058550443",
+          "variant_id": "47790532296875",
+          "handle": "adeline-exposed-stitching-high-waist-barrel-jeans",
+          "title": "Adeline Exposed Stitching High Waist Barrel Jeans",
+          "price": 109.99,
+          "url": "https://us.meeeshop.com/products/adeline-exposed-stitching-high-waist-barrel-jeans?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/adeline-exposed-stitching-high-waist-barrel-jeans-603819.png?v=1789188486"
+        },
+        {
+          "id": "8811044241579",
+          "variant_id": "47176714092715",
+          "handle": "amelie-tummy-control-high-rise-bootcut-jeans",
+          "title": "Amelie Tummy Control High Rise Bootcut Jeans",
+          "price": 129.99,
+          "url": "https://us.meeeshop.com/products/amelie-tummy-control-high-rise-bootcut-jeans?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/amelie-tummy-control-high-rise-bootcut-jeans-1.png?v=1787715889"
+        },
+        {
+          "id": "8988055699627",
+          "variant_id": "47790521057451",
+          "handle": "aspen-grommet-knot-waist-floral-barrel-leg-jeans",
+          "title": "Aspen Grommet Knot Waist Floral Barrel Leg Jeans",
+          "price": 109.99,
+          "url": "https://us.meeeshop.com/products/aspen-grommet-knot-waist-floral-barrel-leg-jeans?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/aspen-grommet-knot-waist-floral-barrel-leg-jeans-i-153131.png?v=1789187831"
+        }
+      ],
+      "tagged_at": "2026-09-24T13:25:04.056657+00:00",
+      "verified_at": "2026-09-24T13:25:04.056674+00:00"
     }
   },
-  "last_run": "2026-09-24T13:21:31.053508+00:00"
+  "last_run": "2026-09-24T13:25:04.056679+00:00"
 }
