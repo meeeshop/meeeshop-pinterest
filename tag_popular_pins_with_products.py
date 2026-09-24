@@ -229,7 +229,129 @@ def save_tagged_history(history: Dict[str, Any]) -> None:
         json.dump(history, f, indent=2)
 
 
-# ── Step 4: Attach Tagged Product to Pin Image (Original Link Intact) ─────────
+# ── Step 4: Attach Tagged Product to Pin Image (Visual Tagging & SEO) ─────────
+
+def tag_pin_visually_with_playwright(pin_id: str, product_keyword: str) -> bool:
+    """
+    Automates the visual product tagging flow directly via Playwright:
+    1. Loads https://www.pinterest.com/pin/{pin_id}/
+    2. Hovers image and clicks 'Tag products' (shopping bag icon)
+    3. Clicks '+' in tagged-items-grid
+    4. Searches product keyword in 'Use your Pins' modal
+    5. Selects matching product card
+    6. Clicks 'Save product' / 'Save products'
+    7. Clicks 'Done' button to save tags live on the Pin!
+    """
+    try:
+        from stealth_pinterest_poster import StealthPinterestPoster
+        from playwright.sync_api import sync_playwright
+    except ImportError as e:
+        logger.warning(f"  [Playwright] Playwright or StealthPinterestPoster not installed: {e}")
+        return False
+
+    try:
+        poster = StealthPinterestPoster(headless=True)
+        cookies = poster._get_cookies_dict()
+        if not cookies:
+            logger.warning("  [Playwright] No Pinterest cookies found for visual tagging.")
+            return False
+
+        with sync_playwright() as p:
+            browser = p.chromium.launch(
+                headless=True,
+                args=['--no-sandbox', '--disable-blink-features=AutomationControlled', '--disable-dev-shm-usage']
+            )
+            ctx = browser.new_context(viewport={'width': 1280, 'height': 900})
+            ctx.add_cookies(cookies)
+            page = ctx.new_page()
+
+            logger.info(f"  [Playwright] 1. Loading Pin page: https://www.pinterest.com/pin/{pin_id}/")
+            page.goto(f'https://www.pinterest.com/pin/{pin_id}/', wait_until='domcontentloaded')
+            page.wait_for_timeout(3000)
+
+            # Step 2: Hover over image and click "Tag products"
+            logger.info("  [Playwright] 2. Hovering pin image to reveal 'Tag products' button...")
+            img = page.locator("img").first
+            if img.count() > 0:
+                img.hover()
+                page.wait_for_timeout(1000)
+
+            tag_btn = page.locator("button[aria-label='Tag products']").first
+            if tag_btn.count() == 0:
+                logger.warning("  [Playwright] 'Tag products' button not found on Pin image.")
+                browser.close()
+                return False
+
+            tag_btn.click()
+            page.wait_for_timeout(3000)
+
+            # Step 3: Click '+' in tagged-items-grid
+            logger.info("  [Playwright] 3. Clicking '+' in tagged-items-grid...")
+            grid = page.locator("[data-test-id='tagged-items-grid']")
+            add_btn = grid.locator("div[role='button'], button, div[tabindex='0']").first
+            if add_btn.count() == 0:
+                logger.warning("  [Playwright] '+' button not found in tagged-items-grid.")
+                browser.close()
+                return False
+
+            add_btn.click()
+            page.wait_for_timeout(3000)
+
+            # Step 4: Search product keyword
+            logger.info(f"  [Playwright] 4. Searching '{product_keyword}' in 'Use your Pins'...")
+            search = page.locator("input[placeholder*='Search']").first
+            if search.count() > 0:
+                search.fill(product_keyword)
+                search.press("Enter")
+                page.wait_for_timeout(2500)
+
+            # Step 5: Select first matching product card
+            logger.info("  [Playwright] 5. Selecting product card from results...")
+            item = page.locator("[data-test-id='asset-picker-view-item'], div[role='listitem']").first
+            if item.count() == 0:
+                logger.warning(f"  [Playwright] No product cards found for '{product_keyword}'. Retrying with empty search...")
+                if search.count() > 0:
+                    search.fill("")
+                    search.press("Enter")
+                    page.wait_for_timeout(2000)
+                    item = page.locator("[data-test-id='asset-picker-view-item'], div[role='listitem']").first
+
+            if item.count() == 0:
+                logger.warning("  [Playwright] No product cards found in store.")
+                browser.close()
+                return False
+
+            item.click()
+            page.wait_for_timeout(1500)
+
+            # Step 6: Click "Save product" / "Save products"
+            logger.info("  [Playwright] 6. Clicking 'Save product'...")
+            save_btn = page.locator("button:has-text('Save product')").first
+            if save_btn.count() == 0:
+                save_btn = page.locator("button:has-text('Save products')").first
+
+            if save_btn.count() > 0:
+                save_btn.click()
+                page.wait_for_timeout(3000)
+
+            # Step 7: Click "Done" button to save tags on Pin
+            logger.info("  [Playwright] 7. Clicking 'Done' button to save tags on Pin...")
+            done_btn = page.locator("button:has-text('Done')").first
+            if done_btn.count() > 0:
+                done_btn.click()
+                page.wait_for_timeout(4000)
+                logger.info(f"  [SUCCESS] [Playwright] Visual product tagging completed and saved for Pin #{pin_id}!")
+                browser.close()
+                return True
+            else:
+                logger.warning("  [Playwright] 'Done' button not found.")
+                browser.close()
+                return False
+
+    except Exception as e:
+        logger.error(f"  [Playwright] Visual tagging exception: {e}")
+        return False
+
 
 def attach_tagged_product_to_pin(
     pclient: Any,
@@ -242,8 +364,10 @@ def attach_tagged_product_to_pin(
 ) -> bool:
     """
     Attaches a Shoppable Product Tag onto the Pin.
-    IMPORTANT: Preserves the Pin's original destination URL completely intact,
-    and updates the Pin description on Pinterest live with the in-stock product tag!
+    IMPORTANT:
+    1. Preserves the Pin's original destination URL completely intact.
+    2. Tags the shoppable product visually onto the Pin image via Playwright web UI!
+    3. Updates Pin description with similar in-stock product recommendation.
     """
     logger.info(f"\n[PRODUCT TAG MATCHED FOR PIN #{pin_id}]")
     logger.info(f"  Original Redirection URL (PRESERVED) : {orig_link or 'https://us.meeeshop.com'}")
@@ -260,26 +384,34 @@ def attach_tagged_product_to_pin(
     }
     logger.info(f"  Product Tag Payload: {json.dumps(tag_payload)}")
 
-    if apply_live and pclient and hasattr(pclient, 'client') and pclient.client:
-        try:
-            base_text = (pin_desc or pin_title or "MeeeShop Fashion").split(" | Similar In-Stock Style:")[0].strip()
-            updated_desc = f"{base_text} | Similar In-Stock Style: {product['title']} (${product['price']:.2f}) at us.meeeshop.com"
-            options = {
-                "id": str(pin_id),
-                "description": updated_desc
-            }
-            data = pclient.client.req_builder.buildPost(options=options, source_url=f"/pin/{pin_id}/")
-            resp = pclient.client.post(url="https://www.pinterest.com/resource/PinResource/update/", data=data)
-            if resp.status_code == 200:
-                logger.info(f"  [SUCCESS] LIVE UPDATE SUCCESS: Pinterest Pin #{pin_id} updated with in-stock product tag!")
-                logger.info(f"  [SUCCESS] Live Description: {updated_desc}")
-                return True
-            else:
-                logger.warning(f"  Pinterest API returned status {resp.status_code}: {resp.text[:200]}")
-                return False
-        except Exception as e:
-            logger.error(f"  Pinterest API update exception: {e}")
-            return False
+    if apply_live:
+        # Determine best search keyword from product title or type
+        words = [w for w in re.findall(r'[a-zA-Z]+', product["title"]) if len(w) > 3 and w.lower() not in {"women", "womens", "shop", "meeeshop", "fashion"}]
+        search_kw = words[0] if words else product.get("product_type", "Sweater")
+
+        visual_success = tag_pin_visually_with_playwright(pin_id, search_kw)
+
+        # Update Pin description live as well
+        desc_success = False
+        if pclient and hasattr(pclient, 'client') and pclient.client:
+            try:
+                base_text = (pin_desc or pin_title or "MeeeShop Fashion").split(" | Similar In-Stock Style:")[0].strip()
+                updated_desc = f"{base_text} | Similar In-Stock Style: {product['title']} (${product['price']:.2f}) at us.meeeshop.com"
+                options = {
+                    "id": str(pin_id),
+                    "description": updated_desc
+                }
+                data = pclient.client.req_builder.buildPost(options=options, source_url=f"/pin/{pin_id}/")
+                resp = pclient.client.post(url="https://www.pinterest.com/resource/PinResource/update/", data=data)
+                if resp.status_code == 200:
+                    logger.info(f"  [SUCCESS] Live Pin Description updated with in-stock product style!")
+                    desc_success = True
+                else:
+                    logger.warning(f"  Pinterest API returned status {resp.status_code}: {resp.text[:200]}")
+            except Exception as e:
+                logger.error(f"  Pinterest API update exception: {e}")
+
+        return visual_success or desc_success
     else:
         logger.info("  [TEST / DRY-RUN MODE] Visual product tag payload validated successfully (No live edit made).")
 
