@@ -7109,11 +7109,55 @@
       "pin_url": "https://www.pinterest.com/pin/962222276664401517/",
       "blog_url": "https://us.meeeshop.com/blogs/cardigans-sweaters-style-guide/how-to-style-cardigans-for-modern-tailored-outfits",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8985000411307,
+      "title": "Graciela Hobo Bag and Set | MeeeShop US Boutique",
+      "board": "Trends",
+      "timestamp": "2026-09-25T20:43:44.982811",
+      "type": "carousel",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276664408761/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8828889399467,
+      "title": "Flying Tomato the Weekend Estate Sweater Knit Mini Dress - Labor Day Must-Have",
+      "board": "New",
+      "timestamp": "2026-09-25T20:46:21.519981",
+      "type": "video",
+      "style": "carousel",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276664408832/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8818153914539,
+      "title": "Emory Park Naomi Knit Shorts - Casual Chic for Labor Day & Fall \u2014 MeeeShop",
+      "board": "Casual Chic Style",
+      "timestamp": "2026-09-25T20:47:37.874607",
+      "type": "carousel",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276664408866/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8825884410027,
+      "title": "Mkf Collection by Mia K. - Heartly Crossbody Bag | MeeeShop US Boutique",
+      "board": "Wardrobe Goals",
+      "timestamp": "2026-09-25T20:48:45.581112",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276664408898/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-09-11T23:09:04.798079",
-    "Trends": "2026-09-25T16:15:44.106902",
+    "Trends": "2026-09-25T20:43:44.982811",
     "Dresses": "2026-09-12T19:42:42.030242",
     "Feminine & Flowy Fits": "2026-09-21T21:18:32.996526",
     "Short fall dresses": "2026-09-13T15:27:28.998743",
@@ -7149,16 +7193,16 @@
     "Puff Sleeves Tops": "2026-09-15T16:04:34.730952",
     "Casual": "2026-09-17T16:04:16.828060",
     "Confident Looks": "2026-09-23T20:43:27.306471",
-    "Casual Chic Style": "2026-09-12T19:41:26.537962",
+    "Casual Chic Style": "2026-09-25T20:47:37.874607",
     "Farm clothes": "2026-09-16T23:41:09.390619",
     "Kimchi USA Jeans": "2026-09-25T16:20:55.173067",
-    "Wardrobe Goals": "2026-09-12T22:59:51.883943",
+    "Wardrobe Goals": "2026-09-25T20:48:45.581112",
     "Nylon backpack": "2026-09-21T17:36:58.965673",
     "Everyday Style": "2026-09-12T23:01:03.236775",
     "Fashion Models": "2026-09-13T07:27:26.399942",
     "My Shop #1737732113": "2026-09-13T19:47:08.597387",
     "Shop For Holidays": "2026-09-14T07:49:34.615574",
-    "New": "2026-09-25T16:19:36.968674",
+    "New": "2026-09-25T20:46:21.519981",
     "American Bazi": "2026-09-17T07:28:51.564257",
     "Cool & Casual Styles": "2026-09-17T20:36:32.448629",
     "MeeeShop's Luxe Styles": "2026-09-17T07:29:59.068289",
@@ -7221,9 +7265,9 @@
     "Look casual...": "2026-09-18T07:19:12.747094",
     "Simple Outfits": "2026-09-21T21:17:08.897037"
   },
-  "daily_count": 8,
-  "last_post_time": "2026-09-25T16:22:31.920466",
+  "daily_count": 12,
+  "last_post_time": "2026-09-25T20:48:45.581112",
   "board_rotation_cursor": 0,
-  "last_image_style": "card",
-  "last_template_index": 9
+  "last_image_style": "carousel",
+  "last_template_index": 15
 }
