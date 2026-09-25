@@ -146,8 +146,17 @@ def extract_product_keywords(title: str, ptype: str, tags: str) -> List[str]:
     return list(set([w for w in words if w not in stopwords]))
 
 
+_browsable_cache: Dict[str, bool] = {}
+
+
 def is_product_url_in_stock(url: str, instock_handles: Set[str]) -> bool:
-    """Check if a product URL is currently in-stock."""
+    """
+    Check if a product URL is currently in-stock and browsable without redirecting.
+    User Rule: If the product in the pin is in-stock AND able to browse the product URL handle
+    without redirecting (to homepage, collections, or another product), return True (ignore pin, leave intact).
+    If out-of-stock, 404, or redirects away, return False (proceed with tagging similar in-stock products).
+    """
+    global _browsable_cache
     if not url or "/products/" not in url:
         return False
 
@@ -155,19 +164,51 @@ def is_product_url_in_stock(url: str, instock_handles: Set[str]) -> bool:
     if not match:
         return False
 
-    handle = match.group(1).split('?')[0]
-    if handle in instock_handles:
-        return True
+    handle = match.group(1).split('?')[0].lower()
 
-    try:
-        js_url = f"https://us.meeeshop.com/products/{handle}.js"
-        resp = requests.get(js_url, timeout=5, headers={"User-Agent": "Mozilla/5.0"})
-        if resp.status_code == 200:
+    if handle in _browsable_cache:
+        return _browsable_cache[handle]
+
+    # If handle not in active Shopify in-stock handles, check Shopify JS API for any live stock
+    if handle not in instock_handles:
+        try:
+            js_url = f"https://us.meeeshop.com/products/{handle}.js"
+            resp = requests.get(js_url, timeout=5, headers={"User-Agent": "Mozilla/5.0"})
+            if resp.status_code != 200:
+                _browsable_cache[handle] = False
+                return False
             data = resp.json()
-            return data.get("available", False)
-    except Exception:
-        pass
-    return False
+            if not data.get("available", False):
+                _browsable_cache[handle] = False
+                return False
+        except Exception:
+            _browsable_cache[handle] = False
+            return False
+
+    # Check live URL browsability: must browse the product URL handle without redirecting
+    try:
+        check_url = f"https://us.meeeshop.com/products/{handle}"
+        headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
+        resp = requests.get(check_url, headers=headers, allow_redirects=False, timeout=8)
+
+        # If it returns a 301, 302, 303, 307, 308 redirect, it redirects away (not browsable directly)
+        if resp.status_code in (301, 302, 303, 307, 308):
+            _browsable_cache[handle] = False
+            return False
+
+        # If it returns 404, 500, or non-200
+        if resp.status_code != 200:
+            _browsable_cache[handle] = False
+            return False
+
+        _browsable_cache[handle] = True
+        return True
+    except Exception as e:
+        logger.debug(f"Browsability check error for {handle}: {e}")
+        is_in = handle in instock_handles
+        _browsable_cache[handle] = is_in
+        return is_in
+
 
 
 # ── Step 2: Product Matching Engine ───────────────────────────────────────────
@@ -240,6 +281,39 @@ def save_tagged_history(history: Dict[str, Any]) -> None:
         json.dump(history, f, indent=2)
 
 
+def get_recently_tagged_product_ids(history: Dict[str, Any], days: int = 4) -> Set[str]:
+    """
+    Collect all product IDs, variant IDs, and handles used in tagged pins within the last `days` days.
+    Used to rotate products so the same items aren't repeatedly tagged across pins.
+    """
+    cutoff = datetime.now(timezone.utc) - timedelta(days=days)
+    recent_ids = set()
+    for pid, rec in history.get("tagged_pins", {}).items():
+        tagged_at_str = rec.get("tagged_at")
+        if tagged_at_str:
+            try:
+                tagged_dt = datetime.fromisoformat(tagged_at_str)
+                if tagged_dt < cutoff:
+                    continue
+            except Exception:
+                pass
+
+        for item in rec.get("tagged_products", []):
+            if item.get("id"): recent_ids.add(str(item["id"]))
+            if item.get("variant_id"): recent_ids.add(str(item["variant_id"]))
+            if item.get("handle"): recent_ids.add(str(item["handle"]).lower())
+
+        tp = rec.get("tagged_product", {})
+        if tp.get("id"): recent_ids.add(str(tp["id"]))
+        if tp.get("variant_id"): recent_ids.add(str(tp["variant_id"]))
+        if tp.get("handle"): recent_ids.add(str(tp["handle"]).lower())
+
+        if rec.get("product_id"): recent_ids.add(str(rec["product_id"]))
+        if rec.get("product_handle"): recent_ids.add(str(rec["product_handle"]).lower())
+
+    return recent_ids
+
+
 # ── Step 4: Attach Relevant Tagged Products via Shopify Catalog Variant IDs ────
 
 def find_relevant_shopify_products_for_pin(
@@ -248,19 +322,17 @@ def find_relevant_shopify_products_for_pin(
     board_name: str,
     pin_link: str,
     products: List[Dict[str, Any]],
-    target_count: int = 10
+    target_count: int = 10,
+    excluded_ids: Optional[Set[str]] = None
 ) -> List[Dict[str, Any]]:
     """
-    Finds up to 10 highly relevant, unique in-stock Shopify products for a specific Pin.
-    Intelligently categorizes the Pin context into specific niches:
-    - footwear / shoes / sandals / slippers
-    - dresses / gowns / rompers / jumpsuits
-    - shorts / activewear / workout / gym
-    - sweaters / cardigans / knits / outerwear / pullovers
-    - jeans / denim / pants / trousers / bottoms
-    - tops / blouses / shirts / tees / tanks
-    - bags / handbags / totes / purses / backpacks
+    Finds up to target_count highly relevant, unique in-stock Shopify products for a specific Pin.
+    Categorizes the Pin context into specific niches and rotates among products of the same type.
+    Prioritizes fresh products not used in the last 3-4 days (not in excluded_ids).
     """
+    if excluded_ids is None:
+        excluded_ids = set()
+
     combined_pin_text = f"{pin_link} {pin_title} {pin_desc} {board_name}".lower()
 
     category_definitions = {
@@ -302,11 +374,15 @@ def find_relevant_shopify_products_for_pin(
     if not matched_categories:
         matched_categories = ["tops_blouses", "dress"]
 
-    scored_products = []
+    fresh_candidates = []
+    recent_candidates = []
     seen_ids = set()
 
     for p in products:
-        p_id = p.get("id")
+        p_id = str(p.get("id", ""))
+        v_id = str(p.get("variant_id", ""))
+        p_handle = str(p.get("handle", "")).lower()
+
         if p_id in seen_ids:
             continue
 
@@ -327,23 +403,48 @@ def find_relevant_shopify_products_for_pin(
                 score += 3
 
         if score > 0:
-            scored_products.append((score, p))
             seen_ids.add(p_id)
+            is_recent = (p_id in excluded_ids) or (v_id in excluded_ids) or (p_handle in excluded_ids)
+            if is_recent:
+                recent_candidates.append((score, p))
+            else:
+                fresh_candidates.append((score, p))
 
-    # Sort descending by relevance score
-    scored_products.sort(key=lambda x: x[0], reverse=True)
-    selected = [p for _, p in scored_products[:target_count]]
+    # Rotation: Group candidates by score tier and shuffle within each tier
+    from collections import defaultdict
+    def select_from_tiers(candidates: List[Tuple[int, Dict[str, Any]]], needed: int) -> List[Dict[str, Any]]:
+        tier_map = defaultdict(list)
+        for s, prod in candidates:
+            tier_map[s].append(prod)
+        chosen = []
+        for s in sorted(tier_map.keys(), reverse=True):
+            items = tier_map[s]
+            random.shuffle(items)  # Rotate different products of same relevance/type
+            for item in items:
+                if len(chosen) < needed:
+                    chosen.append(item)
+        return chosen
 
-    # If fewer than target_count, fill with remaining in-stock items
+    # 1. First pick from fresh products (not used in last 3-4 days or current batch)
+    selected = select_from_tiers(fresh_candidates, target_count)
+
+    # 2. If needed, backfill from recent products of the same type
     if len(selected) < target_count:
-        for p in products:
+        recent_needed = target_count - len(selected)
+        recent_selected = select_from_tiers(recent_candidates, recent_needed)
+        selected.extend(recent_selected)
+
+    # 3. If still needed, fill with remaining in-stock products, shuffled
+    if len(selected) < target_count:
+        selected_ids = {str(p.get("id")) for p in selected}
+        remaining_pool = [p for p in products if str(p.get("id")) not in selected_ids]
+        random.shuffle(remaining_pool)
+        for p in remaining_pool:
             if len(selected) >= target_count:
                 break
-            if p.get("id") not in seen_ids:
-                selected.append(p)
-                seen_ids.add(p.get("id"))
+            selected.append(p)
 
-    return selected
+    return selected[:target_count]
 
 
 def tag_pin_visually_with_playwright(
@@ -440,7 +541,10 @@ def tag_pin_visually_with_playwright(
             logger.info(f"  [Playwright] 5. Tagging up to {max_tags} relevant Shopify products via variant IDs...")
             added_count = 0
 
-            for i, prod in enumerate(relevant_products[:max_tags]):
+            for i, prod in enumerate(relevant_products):
+                if added_count >= max_tags:
+                    break
+
                 vid = str(prod.get('variant_id', '')).strip()
                 if not vid:
                     continue
@@ -448,22 +552,39 @@ def tag_pin_visually_with_playwright(
                 safe_title = prod.get('title', '').encode('ascii', 'ignore').decode()[:35]
                 logger.info(f"    Adding product #{added_count+1}: '{safe_title}' (variant ID: {vid})...")
 
+                inp.click()
+                inp.fill("")
                 inp.fill(vid)
                 inp.press("Enter")
                 page.wait_for_timeout(2200)
 
-                # Find the matched catalog card
-                card = dialog.locator('img[src*="pinimg"]').last
-                if card.count() > 0:
+                # Check if catalog search returned no results
+                modal_text = dialog.inner_text().lower()
+                if "couldn't find" in modal_text or "no pin for that" in modal_text:
+                    logger.warning(f"      Variant ID {vid} not found in catalog, skipping.")
+                    continue
+
+                # Find the matched catalog card in the main search grid (NOT in bottom selection tray!)
+                # Search result cards are in dialog with y between 200 and 660, width >= 80
+                card = None
+                imgs = dialog.locator('img[src*="pinimg"]')
+                for idx in range(imgs.count()):
+                    cand = imgs.nth(idx)
+                    box = cand.bounding_box()
+                    if box and 200 < box['y'] < 660 and box['width'] >= 80:
+                        card = cand
+                        break
+
+                if card:
                     try:
                         card.click()
                         added_count += 1
                         logger.info(f"      Successfully added product #{added_count}")
-                        page.wait_for_timeout(600)
+                        page.wait_for_timeout(800)
                     except Exception as e:
-                        logger.debug(f"Click card notice: {e}")
+                        logger.warning(f"      Click notice for variant ID {vid}: {e}")
                 else:
-                    logger.warning(f"      Product card not found for variant ID {vid}")
+                    logger.warning(f"      Product card image not found for variant ID {vid}")
 
             if added_count == 0:
                 logger.warning("  [Playwright] 0 products were added via Catalog variant IDs.")
@@ -565,6 +686,11 @@ def process_and_tag_popular_pins(
     history = load_tagged_history()
     tagged_map = history.get("tagged_pins", {})
 
+    # Product rotation: Collect IDs tagged in the last 4 days and track batch usage
+    recently_tagged_ids = get_recently_tagged_product_ids(history, days=4)
+    logger.info(f"Loaded {len(recently_tagged_ids)} product identifiers tagged in the last 4 days (for rotation).")
+    batch_used_ids = set(recently_tagged_ids)
+
     logger.info("Initializing Pinterest API Client...")
     pclient = None
     if PinterestClient:
@@ -613,7 +739,8 @@ def process_and_tag_popular_pins(
             pin_context["board_name"],
             pin_context["link"],
             products,
-            target_count=10
+            target_count=15,
+            excluded_ids=batch_used_ids
         )
         if not relevant_prods:
             logger.error("Could not find matching products for test pin.")
@@ -698,15 +825,16 @@ def process_and_tag_popular_pins(
 
         still_in_stock = is_product_url_in_stock(tagged_prod_url, instock_handles)
         if not still_in_stock:
-            logger.info(f"⚠️ Tagged product '{tagged_prod_title}' on Pin #{pid} is now OUT-OF-STOCK!")
-            logger.info("   Searching for similar in-stock replacement items...")
+            logger.info(f"⚠️ Tagged product '{tagged_prod_title}' on Pin #{pid} is now OUT-OF-STOCK or redirects!")
+            logger.info("   Searching for fresh in-stock replacement items (rotated)...")
             replacement_prods = find_relevant_shopify_products_for_pin(
                 pin_title=str(rec.get("pin_title") or ""),
                 pin_desc=str(rec.get("pin_description") or ""),
                 board_name="",
                 pin_link=orig_pin_link,
                 products=products,
-                target_count=10
+                target_count=15,
+                excluded_ids=batch_used_ids
             )
             if replacement_prods:
                 attach_tagged_product_to_pin(
@@ -743,6 +871,10 @@ def process_and_tag_popular_pins(
                 rec["replaced_at"] = datetime.now(timezone.utc).isoformat()
                 rec["verified_at"] = datetime.now(timezone.utc).isoformat()
                 replaced_count += 1
+                for p in replacement_prods[:10]:
+                    if p.get("id"): batch_used_ids.add(str(p["id"]))
+                    if p.get("variant_id"): batch_used_ids.add(str(p["variant_id"]))
+                    if p.get("handle"): batch_used_ids.add(str(p["handle"]).lower())
                 logger.info(f"  [SUCCESS] Tagged products REPLACED with: '{first_item.get('title')}' (${first_item.get('price')}) + {len(replacement_prods)-1} more items")
         else:
             rec["verified_at"] = datetime.now(timezone.utc).isoformat()
@@ -750,14 +882,79 @@ def process_and_tag_popular_pins(
 
     logger.info(f"Re-verification complete: {reverified_count} Tagged Products verified IN-STOCK, {replaced_count} REPLACED out-of-stock products.\n")
 
-    # Discover & Tag Popular Pins
-    target_pin_ids = ["962222276632068955"]
+    # Discover & Tag Popular Pins from Account Analytics & Activity
     discovered_pins = []
 
-    if pclient and hasattr(pclient, 'fetch_boards'):
+    if pclient and hasattr(pclient, 'client') and pclient.client:
+        try:
+            logger.info("Fetching account pins with live analytics and engagement data...")
+            user_pins = pclient.client.get_user_pins(username=pclient.username) or []
+            logger.info(f"Retrieved {len(user_pins)} pins directly from user account.")
+
+            for pin in user_pins:
+                if not isinstance(pin, dict) or pin.get('type') != 'pin':
+                    continue
+
+                pid = str(pin.get('id', '')).strip()
+                if not pid.isdigit() or len(pid) < 15:
+                    continue
+
+                if pid in tagged_map:
+                    continue
+
+                p_title = pin.get('title') or pin.get('grid_title') or ''
+                if isinstance(p_title, dict):
+                    p_title = p_title.get('text') or ''
+                p_title = str(p_title).strip()
+                if not p_title or p_title.lower().startswith("find some ideas"):
+                    continue
+
+                p_desc = pin.get('description') or ''
+                if isinstance(p_desc, dict):
+                    p_desc = p_desc.get('text') or ''
+                p_desc = str(p_desc).strip()
+
+                p_link = str(pin.get('link') or pin.get('url') or 'https://us.meeeshop.com').strip()
+                board_name = (pin.get('board') or {}).get('name', 'General')
+
+                # Calculate live analytics engagement metrics
+                ca = pin.get('creator_analytics') or {}
+                at = ca.get('all_time') or ca.get('all_time_realtime') or {}
+                agg = pin.get('aggregated_pin_data') or {}
+                agg_stats = agg.get('aggregated_stats') or {}
+
+                saves = max(
+                    int(at.get('save', 0) or 0),
+                    int(agg_stats.get('saves', 0) or 0),
+                    int(pin.get('repin_count', 0) or 0),
+                    int(pin.get('save_count', 0) or 0)
+                )
+                clicks = int(at.get('pin_click', 0) or 0) + int(at.get('outbound_click', 0) or 0)
+                impressions = int(at.get('impression', 0) or 0)
+
+                # Overall score heavily prioritizes saves and clicks
+                analytics_score = saves * 25 + clicks * 5 + impressions
+
+                discovered_pins.append({
+                    "id": pid,
+                    "title": p_title or board_name,
+                    "desc": p_desc,
+                    "board_name": board_name,
+                    "link": p_link,
+                    "saves": saves,
+                    "clicks": clicks,
+                    "impressions": impressions,
+                    "score": analytics_score
+                })
+
+        except Exception as e:
+            logger.warning(f"Error fetching account pins via analytics: {e}")
+
+    # Fallback to boards only if get_user_pins returned nothing
+    if not discovered_pins and pclient and hasattr(pclient, 'fetch_boards'):
         try:
             boards = pclient.fetch_boards() or []
-            logger.info(f"Found {len(boards)} Pinterest boards on account.")
+            logger.info(f"Fallback: scanning {len(boards)} Pinterest boards on account.")
             for b in boards:
                 bid = b.get('id')
                 bname = b.get('name', 'General')
@@ -766,18 +963,11 @@ def process_and_tag_popular_pins(
                 try:
                     bpins = pclient.client.board_feed(board_id=bid, page_size=20)
                     for pin in (bpins or []):
-                        if not isinstance(pin, dict):
-                            continue
-                        # CRITICAL: Only process real Pins (skip story cards, idea modules, and placeholders)
-                        if pin.get('type') != 'pin':
+                        if not isinstance(pin, dict) or pin.get('type') != 'pin':
                             continue
 
                         pid = str(pin.get('id', '')).strip()
-                        # Pinterest Pin IDs are positive numeric strings of 15+ digits
-                        if not pid.isdigit() or pid.startswith('-') or len(pid) < 15:
-                            continue
-
-                        if pid in target_pin_ids or pid in tagged_map:
+                        if not pid.isdigit() or len(pid) < 15 or pid in tagged_map:
                             continue
 
                         p_title = pin.get('title') or pin.get('grid_title') or ''
@@ -794,7 +984,6 @@ def process_and_tag_popular_pins(
 
                         p_link = str(pin.get('link') or pin.get('url') or 'https://us.meeeshop.com').strip()
 
-                        # Prevent duplicate pin entries across boards
                         if any(dp['id'] == pid for dp in discovered_pins):
                             continue
 
@@ -804,7 +993,10 @@ def process_and_tag_popular_pins(
                             "desc": p_desc,
                             "board_name": bname,
                             "link": p_link,
-                            "save_count": pin.get('save_count', 0) or pin.get('repin_count', 0) or 0
+                            "saves": pin.get('save_count', 0) or pin.get('repin_count', 0) or 0,
+                            "clicks": 0,
+                            "impressions": 0,
+                            "score": pin.get('save_count', 0) or pin.get('repin_count', 0) or 0
                         })
 
                     if len(discovered_pins) >= 40:
@@ -814,19 +1006,8 @@ def process_and_tag_popular_pins(
         except Exception as e:
             logger.warning(f"Error iterating boards: {e}")
 
-    for t_id in target_pin_ids:
-        if t_id not in tagged_map and not any(p['id'] == t_id for p in discovered_pins):
-            discovered_pins.insert(0, {
-                "id": t_id,
-                "title": "MeeeShop: Shop Dresses, Jeans, Clothes, Shoes, & Accessories For Women",
-                "desc": "Shop high quality women's clothing, slouchy tote bags, shapewear dresses, and jeans.",
-                "board_name": "My Shop",
-                "link": "https://www.pinterest.com/pin/962222276632068955/",
-                "save_count": 999
-            })
-
-    discovered_pins.sort(key=lambda x: x.get("save_count", 0), reverse=True)
-    logger.info(f"Total candidate popular Pins ready for evaluation: {len(discovered_pins)}")
+    discovered_pins.sort(key=lambda x: (x.get("saves", 0), x.get("score", 0)), reverse=True)
+    logger.info(f"Total candidate popular Pins ranked by analytics: {len(discovered_pins)}")
 
     results = []
     count = 0
@@ -836,10 +1017,7 @@ def process_and_tag_popular_pins(
             break
 
         pin_id = str(pin.get("id") or "")
-        if not pin_id:
-            continue
-
-        if pin_id in tagged_map:
+        if not pin_id or pin_id in tagged_map:
             continue
 
         pin_title_str = str(pin.get("title") or "")
@@ -849,10 +1027,10 @@ def process_and_tag_popular_pins(
 
         if orig_link and "/products/" in orig_link:
             if is_product_url_in_stock(orig_link, instock_handles):
-                logger.info(f"Pin #{pin_id} original item '{orig_link}' is ALREADY IN-STOCK. Ignoring pin (leaving intact).")
+                logger.info(f"Pin #{pin_id} original item '{orig_link}' is IN-STOCK & browsable without redirect. Ignoring pin (leaving intact).")
                 continue
             else:
-                logger.info(f"Pin #{pin_id} original item '{orig_link}' is OUT-OF-STOCK or 404! Tagging similar in-stock product.")
+                logger.info(f"Pin #{pin_id} original item '{orig_link}' is OUT-OF-STOCK, 404, or redirects. Tagging similar in-stock products.")
 
         relevant_prods = find_relevant_shopify_products_for_pin(
             pin_title_str,
@@ -860,7 +1038,8 @@ def process_and_tag_popular_pins(
             pin_board_str,
             orig_link,
             products,
-            target_count=10
+            target_count=15,
+            excluded_ids=batch_used_ids
         )
         if not relevant_prods:
             continue
@@ -878,6 +1057,11 @@ def process_and_tag_popular_pins(
         )
 
         if success:
+            # Track products in batch_used_ids for subsequent pin rotation
+            for p in relevant_prods[:10]:
+                if p.get("id"): batch_used_ids.add(str(p["id"]))
+                if p.get("variant_id"): batch_used_ids.add(str(p["variant_id"]))
+                if p.get("handle"): batch_used_ids.add(str(p["handle"]).lower())
             record = {
                 "pin_id": pin_id,
                 "pin_title": pin_title_str,
