@@ -218,7 +218,17 @@ def load_tagged_history() -> Dict[str, Any]:
     if HISTORY_FILE.exists():
         try:
             with open(HISTORY_FILE, "r", encoding="utf-8") as f:
-                return json.load(f)
+                data = json.load(f)
+                # Purge non-pin artifact entries from previous versions
+                if "tagged_pins" in data and isinstance(data["tagged_pins"], dict):
+                    valid_pins = {}
+                    for pid, rec in data["tagged_pins"].items():
+                        s_pid = str(pid).strip()
+                        if s_pid.isdigit() and not s_pid.startswith('-') and len(s_pid) >= 15:
+                            if not isinstance(rec.get("pin_title"), dict):
+                                valid_pins[s_pid] = rec
+                    data["tagged_pins"] = valid_pins
+                return data
         except Exception:
             pass
     return {"tagged_pins": {}, "last_run": None}
@@ -748,31 +758,64 @@ def process_and_tag_popular_pins(
         try:
             boards = pclient.fetch_boards() or []
             logger.info(f"Found {len(boards)} Pinterest boards on account.")
-            for b in boards[:10]:
+            for b in boards:
                 bid = b.get('id')
                 bname = b.get('name', 'General')
                 if not bid:
                     continue
                 try:
-                    bpins = pclient.client.board_feed(board_id=bid, page_size=15)
+                    bpins = pclient.client.board_feed(board_id=bid, page_size=20)
                     for pin in (bpins or []):
-                        pid = str(pin.get('id', ''))
-                        if pid and pid not in target_pin_ids:
-                            discovered_pins.append({
-                                "id": pid,
-                                "title": str(pin.get('title') or pin.get('grid_title') or bname),
-                                "desc": str(pin.get('description') or ''),
-                                "board_name": bname,
-                                "link": str(pin.get('link') or 'https://us.meeeshop.com'),
-                                "save_count": pin.get('save_count', 0) or pin.get('repin_count', 0) or 0
-                            })
+                        if not isinstance(pin, dict):
+                            continue
+                        # CRITICAL: Only process real Pins (skip story cards, idea modules, and placeholders)
+                        if pin.get('type') != 'pin':
+                            continue
+
+                        pid = str(pin.get('id', '')).strip()
+                        # Pinterest Pin IDs are positive numeric strings of 15+ digits
+                        if not pid.isdigit() or pid.startswith('-') or len(pid) < 15:
+                            continue
+
+                        if pid in target_pin_ids or pid in tagged_map:
+                            continue
+
+                        p_title = pin.get('title') or pin.get('grid_title') or ''
+                        if isinstance(p_title, dict):
+                            p_title = p_title.get('text') or ''
+                        p_title = str(p_title).strip()
+                        if not p_title or p_title.lower().startswith("find some ideas"):
+                            continue
+
+                        p_desc = pin.get('description') or ''
+                        if isinstance(p_desc, dict):
+                            p_desc = p_desc.get('text') or ''
+                        p_desc = str(p_desc).strip()
+
+                        p_link = str(pin.get('link') or pin.get('url') or 'https://us.meeeshop.com').strip()
+
+                        # Prevent duplicate pin entries across boards
+                        if any(dp['id'] == pid for dp in discovered_pins):
+                            continue
+
+                        discovered_pins.append({
+                            "id": pid,
+                            "title": p_title or bname,
+                            "desc": p_desc,
+                            "board_name": bname,
+                            "link": p_link,
+                            "save_count": pin.get('save_count', 0) or pin.get('repin_count', 0) or 0
+                        })
+
+                    if len(discovered_pins) >= 40:
+                        break
                 except Exception as ex:
                     logger.debug(f"Error fetching board {bname}: {ex}")
         except Exception as e:
             logger.warning(f"Error iterating boards: {e}")
 
     for t_id in target_pin_ids:
-        if not any(p['id'] == t_id for p in discovered_pins):
+        if t_id not in tagged_map and not any(p['id'] == t_id for p in discovered_pins):
             discovered_pins.insert(0, {
                 "id": t_id,
                 "title": "MeeeShop: Shop Dresses, Jeans, Clothes, Shoes, & Accessories For Women",
@@ -859,8 +902,9 @@ def process_and_tag_popular_pins(
             count += 1
             time.sleep(random.uniform(1.5, 3.0))
 
-    history["tagged_pins"] = tagged_map
-    save_tagged_history(history)
+    if apply_live:
+        history["tagged_pins"] = tagged_map
+        save_tagged_history(history)
 
     logger.info(f"\n=================================================================")
     logger.info(f"  Execution Complete: {len(results)} new Pins tagged with Shoppable products.")
