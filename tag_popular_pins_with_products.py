@@ -495,7 +495,7 @@ def attach_tagged_product_to_pin(
     pclient: Any,
     pin_id: str,
     orig_link: str,
-    relevant_products: List[Dict[str, Any]],
+    relevant_products: Any,
     pin_title: str = "",
     pin_desc: str = "",
     apply_live: bool = False
@@ -506,6 +506,11 @@ def attach_tagged_product_to_pin(
     1. Does NOT edit the Pin title, description, or URL. All remain 100% UNTOUCHED!
     2. Tags up to 10 relevant in-stock products visually via Catalog variant IDs.
     """
+    if isinstance(relevant_products, dict):
+        relevant_products = [relevant_products]
+    elif not isinstance(relevant_products, list):
+        relevant_products = list(relevant_products) if relevant_products else []
+
     first_prod = relevant_products[0] if relevant_products else {}
     logger.info(f"\n[TAGGING RELEVANT SHOPIFY PRODUCTS FOR PIN #{pin_id}]")
     logger.info(f"  Original Redirection URL (100% UNTOUCHED) : {orig_link or 'https://us.meeeshop.com'}")
@@ -665,37 +670,70 @@ def process_and_tag_popular_pins(
     replaced_count = 0
 
     for pid, rec in list(tagged_map.items()):
-        tagged_prod_url = rec.get("tagged_product", {}).get("url") or rec.get("target_url", "")
-        tagged_prod_title = rec.get("tagged_product", {}).get("title") or rec.get("product_title", "Item")
+        # Check tagged_products (list), tagged_product (dict), or legacy target_url
+        tagged_items = rec.get("tagged_products") or []
+        if isinstance(tagged_items, list) and len(tagged_items) > 0:
+            first_item = tagged_items[0]
+            tagged_prod_url = first_item.get("url") or ""
+            tagged_prod_title = first_item.get("title") or "Item"
+        else:
+            tagged_prod_url = rec.get("tagged_product", {}).get("url") or rec.get("target_url", "")
+            tagged_prod_title = rec.get("tagged_product", {}).get("title") or rec.get("product_title", "Item")
         orig_pin_link = rec.get("original_link") or "https://us.meeeshop.com"
+
+        if not tagged_prod_url:
+            rec["verified_at"] = datetime.now(timezone.utc).isoformat()
+            reverified_count += 1
+            continue
 
         still_in_stock = is_product_url_in_stock(tagged_prod_url, instock_handles)
         if not still_in_stock:
             logger.info(f"⚠️ Tagged product '{tagged_prod_title}' on Pin #{pid} is now OUT-OF-STOCK!")
-            logger.info("   Searching for similar in-stock replacement item...")
-            replacement = find_best_matching_product(str(rec.get("pin_title") or ""), "", "", products)
-            if replacement:
+            logger.info("   Searching for similar in-stock replacement items...")
+            replacement_prods = find_relevant_shopify_products_for_pin(
+                pin_title=str(rec.get("pin_title") or ""),
+                pin_desc=str(rec.get("pin_description") or ""),
+                board_name="",
+                pin_link=orig_pin_link,
+                products=products,
+                target_count=10
+            )
+            if replacement_prods:
                 attach_tagged_product_to_pin(
                     pclient,
                     pid,
                     orig_pin_link,
-                    replacement,
+                    replacement_prods,
                     pin_title=str(rec.get("pin_title") or ""),
+                    pin_desc=str(rec.get("pin_description") or ""),
                     apply_live=apply_live
                 )
-                
+                first_item = replacement_prods[0]
                 rec["tagged_product"] = {
-                    "id": replacement["id"],
-                    "handle": replacement["handle"],
-                    "title": replacement["title"],
-                    "price": replacement["price"],
-                    "url": replacement["url"],
-                    "image_url": replacement["image_url"]
+                    "id": first_item.get("id"),
+                    "handle": first_item.get("handle"),
+                    "title": first_item.get("title"),
+                    "price": first_item.get("price"),
+                    "url": first_item.get("url"),
+                    "image_url": first_item.get("image_url"),
+                    "variant_id": first_item.get("variant_id")
                 }
+                rec["tagged_products"] = [
+                    {
+                        "id": p.get("id"),
+                        "variant_id": p.get("variant_id"),
+                        "handle": p.get("handle"),
+                        "title": p.get("title"),
+                        "price": p.get("price"),
+                        "url": p.get("url"),
+                        "image_url": p.get("image_url")
+                    }
+                    for p in replacement_prods
+                ]
                 rec["replaced_at"] = datetime.now(timezone.utc).isoformat()
                 rec["verified_at"] = datetime.now(timezone.utc).isoformat()
                 replaced_count += 1
-                logger.info(f"  [SUCCESS] Tagged product REPLACED with: '{replacement['title']}' (${replacement['price']})")
+                logger.info(f"  [SUCCESS] Tagged products REPLACED with: '{first_item.get('title')}' (${first_item.get('price')}) + {len(replacement_prods)-1} more items")
         else:
             rec["verified_at"] = datetime.now(timezone.utc).isoformat()
             reverified_count += 1
