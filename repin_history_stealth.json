@@ -619,13 +619,53 @@
       "target_board_id": "962222345325699951",
       "live_url": "https://www.pinterest.com/pin/4590997690637954944/",
       "timestamp": "2026-09-24T23:44:10.682987+00:00"
+    },
+    {
+      "pin_id": "4595290206699630464",
+      "product_title": "Kenedi Mulberry Athletic Sport Skirt",
+      "category_group": "skirts",
+      "source_board": "_products",
+      "target_board": "Skirts",
+      "target_board_id": "962222345325094365",
+      "live_url": "https://www.pinterest.com/pin/4595290206699630464/",
+      "timestamp": "2026-09-25T07:06:00.010089+00:00"
+    },
+    {
+      "pin_id": "4595290238106578816",
+      "product_title": "High Rise Relaxed Tapered Dark Wash Barrel Jeans",
+      "category_group": "pants_denim",
+      "source_board": "_products",
+      "target_board": "Straight Leg Jeans",
+      "target_board_id": "962222345325683657",
+      "live_url": "https://www.pinterest.com/pin/4595290238106578816/",
+      "timestamp": "2026-09-25T07:06:22.449600+00:00"
+    },
+    {
+      "pin_id": "4595290232469434240",
+      "product_title": "Mason Red Button up Cardigan Top",
+      "category_group": "cardigans_sweaters",
+      "source_board": "_products",
+      "target_board": "Puff Sleeve Tops",
+      "target_board_id": "962222345325585624",
+      "live_url": "https://www.pinterest.com/pin/4595290232469434240/",
+      "timestamp": "2026-09-25T07:06:53.637266+00:00"
+    },
+    {
+      "pin_id": "4596697580210958208",
+      "product_title": "Parker V Neck Long Dress",
+      "category_group": "dresses",
+      "source_board": "_products",
+      "target_board": "Dresses",
+      "target_board_id": "962222345325006107",
+      "live_url": "https://www.pinterest.com/pin/4596697580210958208/",
+      "timestamp": "2026-09-25T07:07:27.386026+00:00"
     }
   ],
   "board_last_used": {
     "Women's Cardigans": "2026-09-02T05:21:17.281503+00:00",
     "Pants & Leggings": "2026-09-02T05:21:52.139947+00:00",
-    "Skirts": "2026-09-02T05:22:16.993853+00:00",
-    "Dresses": "2026-09-02T05:22:37.829255+00:00",
+    "Skirts": "2026-09-25T07:06:00.010089+00:00",
+    "Dresses": "2026-09-25T07:07:27.386026+00:00",
     "Sweaters": "2026-09-02T05:39:10.195999+00:00",
     "Dressy Outfits": "2026-09-02T05:39:38.279600+00:00",
     "Dress": "2026-09-02T05:39:58.782831+00:00",
@@ -683,8 +723,10 @@
     "Fall outfits": "2026-09-24T20:44:03.155246+00:00",
     "Kancan USA Jeans": "2026-09-24T23:43:28.771895+00:00",
     "Fashion": "2026-09-24T23:43:44.847387+00:00",
-    "Stylish Finds": "2026-09-24T23:44:10.682987+00:00"
+    "Stylish Finds": "2026-09-24T23:44:10.682987+00:00",
+    "Straight Leg Jeans": "2026-09-25T07:06:22.449600+00:00",
+    "Puff Sleeve Tops": "2026-09-25T07:06:53.637266+00:00"
   },
-  "daily_count": 10,
-  "last_repin_time": "2026-09-24T23:44:10.682987+00:00"
+  "daily_count": 4,
+  "last_repin_time": "2026-09-25T07:07:27.386026+00:00"
 }
