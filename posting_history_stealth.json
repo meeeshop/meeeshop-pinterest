@@ -7287,11 +7287,22 @@
       "template": 17,
       "pin_url": "https://www.pinterest.com/pin/962222276664440816/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8767256723627,
+      "title": "Risen Full Size Slouchy Crop Barrel Cuffed Jeans plus Size | MeeeShop US Boutique",
+      "board": "Trends",
+      "timestamp": "2026-09-26T23:27:28.938353",
+      "type": "carousel",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276664445643/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-09-11T23:09:04.798079",
-    "Trends": "2026-09-26T20:07:45.804492",
+    "Trends": "2026-09-26T23:27:28.938353",
     "Dresses": "2026-09-12T19:42:42.030242",
     "Feminine & Flowy Fits": "2026-09-21T21:18:32.996526",
     "Short fall dresses": "2026-09-13T15:27:28.998743",
@@ -7399,9 +7410,9 @@
     "Look casual...": "2026-09-18T07:19:12.747094",
     "Simple Outfits": "2026-09-21T21:17:08.897037"
   },
-  "daily_count": 24,
-  "last_post_time": "2026-09-26T20:07:45.804492",
+  "daily_count": 25,
+  "last_post_time": "2026-09-26T23:27:28.938353",
   "board_rotation_cursor": 0,
-  "last_image_style": "carousel",
-  "last_template_index": 17
+  "last_image_style": "collage",
+  "last_template_index": 14
 }
