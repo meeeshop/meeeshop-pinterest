@@ -3159,11 +3159,41 @@
       "target_board_id": "962222345325683654",
       "live_url": "https://www.pinterest.com/pin/4603312255313286208/",
       "timestamp": "2026-09-26T07:03:30.257548+00:00"
+    },
+    {
+      "pin_id": "4591279151647825792",
+      "product_title": "Fine Twill Bootcut Legging",
+      "category_group": "pants_denim",
+      "source_board": "_products",
+      "target_board": "Everyday Style Essentials",
+      "target_board_id": "962222345325698485",
+      "live_url": "https://www.pinterest.com/pin/4591279151647825792/",
+      "timestamp": "2026-09-26T15:57:28.571500+00:00"
+    },
+    {
+      "pin_id": "4591279157284970368",
+      "product_title": "Flying Tomato Chocolate City Stretch Woven Pants",
+      "category_group": "pants_denim",
+      "source_board": "_products",
+      "target_board": "Jeans",
+      "target_board_id": "962222345325006084",
+      "live_url": "https://www.pinterest.com/pin/4591279157284970368/",
+      "timestamp": "2026-09-26T15:58:03.863106+00:00"
+    },
+    {
+      "pin_id": "4606478856213222464",
+      "product_title": "High Rise Relaxed Tapered Jorts Jeans",
+      "category_group": "pants_denim",
+      "source_board": "_products",
+      "target_board": "Pants & Leggings",
+      "target_board_id": "962222345325046951",
+      "live_url": "https://www.pinterest.com/pin/4606478856213222464/",
+      "timestamp": "2026-09-26T15:58:30.807216+00:00"
     }
   ],
   "board_last_used": {
     "Women's Cardigans": "2026-09-24T07:09:43.711832+00:00",
-    "Pants & Leggings": "2026-09-20T22:50:51.063676+00:00",
+    "Pants & Leggings": "2026-09-26T15:58:30.807216+00:00",
     "Skirts": "2026-09-25T20:42:55.057084+00:00",
     "Dresses": "2026-09-25T20:43:49.921872+00:00",
     "Sweaters": "2026-09-25T20:43:30.174405+00:00",
@@ -3205,7 +3235,7 @@
     "Trendy Backpacks": "2026-09-22T20:28:36.560310+00:00",
     "LE LIS Womens Clothing | us.meeeshop": "2026-09-23T20:39:29.171842+00:00",
     "Chic & Effortless Styles": "2026-09-23T20:40:36.162522+00:00",
-    "Jeans": "2026-09-20T19:41:47.168120+00:00",
+    "Jeans": "2026-09-26T15:58:03.863106+00:00",
     "Nylon backpack": "2026-09-21T21:14:44.530566+00:00",
     "Mustard Seed Clothing": "2026-09-25T16:46:03.390929+00:00",
     "Effortless Looks": "2026-09-18T07:02:30.758806+00:00",
@@ -3222,7 +3252,7 @@
     "Winter Outfits": "2026-09-22T23:24:47.238374+00:00",
     "Ootd #ootd": "2026-09-26T07:03:08.946088+00:00",
     "Sweaters #Sweaters #WinterOutfits": "2026-09-25T16:45:42.702209+00:00",
-    "Everyday Style Essentials": "2026-09-21T07:36:26.157192+00:00",
+    "Everyday Style Essentials": "2026-09-26T15:57:28.571500+00:00",
     "Fashion": "2026-09-21T21:13:51.255036+00:00",
     "Kancan USA Jeans": "2026-09-22T16:28:46.360414+00:00",
     "Stylish Finds": "2026-09-21T21:14:17.598819+00:00",
@@ -3238,6 +3268,6 @@
     "Simple Outfits": "2026-09-14T07:33:46.407531+00:00",
     "Women's shacket": "2026-09-23T23:24:09.009069+00:00"
   },
-  "daily_count": 2,
-  "last_repin_time": "2026-09-26T07:03:30.257548+00:00"
+  "daily_count": 5,
+  "last_repin_time": "2026-09-26T15:58:30.807216+00:00"
 }
