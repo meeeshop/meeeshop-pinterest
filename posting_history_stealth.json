@@ -7197,11 +7197,57 @@
       "template": 16,
       "pin_url": "https://www.pinterest.com/pin/962222276664412342/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8981451276459,
+      "title": "Ivanna Oversized Backpack Handbag - Trendy Fall 2026 Must-Have \u2014 MeeeShop",
+      "board": "Trends",
+      "timestamp": "2026-09-26T07:17:24.851988",
+      "type": "carousel",
+      "style": "collage",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276664420442/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": "570947666091",
+      "article_id": "570947666091",
+      "title": "How to Style Midi Skirts for Versatile Year-Round Outfits",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-09-26T07:18:56.245986",
+      "type": "blog",
+      "style": "card",
+      "template": 9,
+      "pin_url": "https://www.pinterest.com/pin/962222276664420470/",
+      "blog_url": "https://us.meeeshop.com/blogs/womens-skirts-style-guide/how-to-style-midi-skirts-for-versatile-year-round-outfits",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8879310733483,
+      "title": "Linen Button Back Tank | MeeeShop US Boutique",
+      "board": "Weekend to Workout",
+      "timestamp": "2026-09-26T07:21:29.258918",
+      "type": "video",
+      "style": "collage",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276664420553/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8879307292843,
+      "title": "Lilith Long Sleeve Top - Cozy Fall Work & Weekend Wear \u2014 MeeeShop",
+      "board": "Fashion Models",
+      "timestamp": "2026-09-26T07:23:52.358528",
+      "type": "video",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276664420609/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-09-11T23:09:04.798079",
-    "Trends": "2026-09-25T23:55:30.327788",
+    "Trends": "2026-09-26T07:17:24.851988",
     "Dresses": "2026-09-12T19:42:42.030242",
     "Feminine & Flowy Fits": "2026-09-21T21:18:32.996526",
     "Short fall dresses": "2026-09-13T15:27:28.998743",
@@ -7243,7 +7289,7 @@
     "Wardrobe Goals": "2026-09-25T20:48:45.581112",
     "Nylon backpack": "2026-09-21T17:36:58.965673",
     "Everyday Style": "2026-09-25T23:58:53.149432",
-    "Fashion Models": "2026-09-13T07:27:26.399942",
+    "Fashion Models": "2026-09-26T07:23:52.358528",
     "My Shop #1737732113": "2026-09-13T19:47:08.597387",
     "Shop For Holidays": "2026-09-14T07:49:34.615574",
     "New": "2026-09-25T23:56:46.259793",
@@ -7262,7 +7308,7 @@
     "new products": "2026-09-23T23:35:47.201784",
     "Chic & Effortless Styles": "2026-09-14T21:09:12.884755",
     "Davi & Dani Womens...": "2026-09-20T19:46:39.660035",
-    "Weekend to Workout": "2026-09-07T17:04:56.546210",
+    "Weekend to Workout": "2026-09-26T07:21:29.258918",
     "Gimme Gummy Playful Nostalgia": "2026-09-23T20:45:16.359362",
     "Best selling products": "2026-09-15T20:29:19.712663",
     "Off-Duty Athlete Looks": "2026-09-09T15:45:15.298969",
@@ -7309,9 +7355,9 @@
     "Look casual...": "2026-09-18T07:19:12.747094",
     "Simple Outfits": "2026-09-21T21:17:08.897037"
   },
-  "daily_count": 16,
-  "last_post_time": "2026-09-26T00:00:22.201153",
+  "daily_count": 20,
+  "last_post_time": "2026-09-26T07:23:52.358528",
   "board_rotation_cursor": 0,
   "last_image_style": "carousel",
-  "last_template_index": 16
+  "last_template_index": 17
 }
