@@ -7243,11 +7243,44 @@
       "template": 17,
       "pin_url": "https://www.pinterest.com/pin/962222276664420609/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8970885005483,
+      "title": "Emory Park Willow Top: Fall Labor Day Chic & Casual Workwear \u2014 MeeeShop",
+      "board": "Trends",
+      "timestamp": "2026-09-26T15:28:27.197015",
+      "type": "product",
+      "style": "collage",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276664431639/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8818153849003,
+      "title": "Emory Park Kyleigh Top - Perfect for Labor Day & Fall Fashion \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-09-26T15:29:50.041165",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276664431689/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8818151522475,
+      "title": "Emory Park Cassia Maxi Skirt: Effortless Fall Labor Day Look \u2014 MeeeShop",
+      "board": "Skirts",
+      "timestamp": "2026-09-26T15:32:13.787098",
+      "type": "video",
+      "style": "collage",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276664431770/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-09-11T23:09:04.798079",
-    "Trends": "2026-09-26T07:17:24.851988",
+    "Trends": "2026-09-26T15:28:27.197015",
     "Dresses": "2026-09-12T19:42:42.030242",
     "Feminine & Flowy Fits": "2026-09-21T21:18:32.996526",
     "Short fall dresses": "2026-09-13T15:27:28.998743",
@@ -7262,7 +7295,7 @@
     "Flares Jeans": "2026-09-16T15:57:06.636246",
     "Short Tall dresses": "2026-09-14T07:48:24.937691",
     "Rompers, Jumpsuits &...": "2026-09-14T21:07:52.214930",
-    "Skirts": "2026-09-13T15:28:37.834519",
+    "Skirts": "2026-09-26T15:32:13.787098",
     "Shirts & Tops": "2026-09-23T16:00:03.877123",
     "Blouses": "2026-09-25T07:24:52.128751",
     "Rompers_Jumpsuits &...": "2026-09-14T23:50:58.790872",
@@ -7292,7 +7325,7 @@
     "Fashion Models": "2026-09-26T07:23:52.358528",
     "My Shop #1737732113": "2026-09-13T19:47:08.597387",
     "Shop For Holidays": "2026-09-14T07:49:34.615574",
-    "New": "2026-09-25T23:56:46.259793",
+    "New": "2026-09-26T15:29:50.041165",
     "American Bazi": "2026-09-17T07:28:51.564257",
     "Cool & Casual Styles": "2026-09-17T20:36:32.448629",
     "MeeeShop's Luxe Styles": "2026-09-17T07:29:59.068289",
@@ -7355,9 +7388,9 @@
     "Look casual...": "2026-09-18T07:19:12.747094",
     "Simple Outfits": "2026-09-21T21:17:08.897037"
   },
-  "daily_count": 20,
-  "last_post_time": "2026-09-26T07:23:52.358528",
+  "daily_count": 23,
+  "last_post_time": "2026-09-26T15:32:13.787098",
   "board_rotation_cursor": 0,
-  "last_image_style": "carousel",
-  "last_template_index": 17
+  "last_image_style": "collage",
+  "last_template_index": 15
 }
