@@ -7298,11 +7298,57 @@
       "template": 14,
       "pin_url": "https://www.pinterest.com/pin/962222276664445643/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8882913411243,
+      "title": "Two Pieces Floral Print Button Down Sets - Perfect Labor Day Weekend Outfit!",
+      "board": "Trends",
+      "timestamp": "2026-09-27T07:50:31.988755",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276664455115/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8825418383531,
+      "title": "Flying Tomato Call My Lovely Pants - Labor Day & Fall 2026 Must-Have \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-09-27T07:51:45.621490",
+      "type": "carousel",
+      "style": "collage",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276664455128/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8818152341675,
+      "title": "Emory Park Anastasia Mini Skort - Labor Day Ready Denim Skort Look \u2014 MeeeShop",
+      "board": "My Shop #1737732113",
+      "timestamp": "2026-09-27T07:52:58.867216",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276664455143/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": "570907689131",
+      "article_id": "570907689131",
+      "title": "Effortless Day-to-Evening Transitions with Minimal Changes",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-09-27T07:54:37.039804",
+      "type": "blog",
+      "style": "card",
+      "template": 9,
+      "pin_url": "https://www.pinterest.com/pin/962222276664455157/",
+      "blog_url": "https://us.meeeshop.com/blogs/womens-clothing/effortless-day-to-evening-transitions-with-minimal-changes",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-09-11T23:09:04.798079",
-    "Trends": "2026-09-26T23:27:28.938353",
+    "Trends": "2026-09-27T07:50:31.988755",
     "Dresses": "2026-09-12T19:42:42.030242",
     "Feminine & Flowy Fits": "2026-09-21T21:18:32.996526",
     "Short fall dresses": "2026-09-13T15:27:28.998743",
@@ -7345,9 +7391,9 @@
     "Nylon backpack": "2026-09-21T17:36:58.965673",
     "Everyday Style": "2026-09-25T23:58:53.149432",
     "Fashion Models": "2026-09-26T07:23:52.358528",
-    "My Shop #1737732113": "2026-09-13T19:47:08.597387",
+    "My Shop #1737732113": "2026-09-27T07:52:58.867216",
     "Shop For Holidays": "2026-09-14T07:49:34.615574",
-    "New": "2026-09-26T15:29:50.041165",
+    "New": "2026-09-27T07:51:45.621490",
     "American Bazi": "2026-09-17T07:28:51.564257",
     "Cool & Casual Styles": "2026-09-17T20:36:32.448629",
     "MeeeShop's Luxe Styles": "2026-09-17T07:29:59.068289",
@@ -7410,9 +7456,9 @@
     "Look casual...": "2026-09-18T07:19:12.747094",
     "Simple Outfits": "2026-09-21T21:17:08.897037"
   },
-  "daily_count": 25,
-  "last_post_time": "2026-09-26T23:27:28.938353",
+  "daily_count": 4,
+  "last_post_time": "2026-09-27T07:54:37.039804",
   "board_rotation_cursor": 0,
-  "last_image_style": "collage",
-  "last_template_index": 14
+  "last_image_style": "card",
+  "last_template_index": 9
 }
