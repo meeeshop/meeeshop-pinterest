@@ -7566,11 +7566,55 @@
       "template": 15,
       "pin_url": "https://www.pinterest.com/pin/962222276664501858/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8897138524331,
+      "title": "Ymi Women's plus Curve Seam Flare Jeans - Labor Day & Fall Chic Look \u2014 MeeeShop",
+      "board": "Trends",
+      "timestamp": "2026-09-28T22:39:55.869653",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276664506965/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8825883263147,
+      "title": "Mkf Collection by Mia K. - Aubrey Shoulder Bag: Labor Day & Fall Must-Have \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-09-28T22:41:00.469245",
+      "type": "carousel",
+      "style": "collage",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276664506977/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8825275580587,
+      "title": "Swiss Dot Floral Print Split Sleeve Blouse | MeeeShop US Boutique",
+      "board": "Blouse",
+      "timestamp": "2026-09-28T22:42:10.418108",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276664507006/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8848879747243,
+      "title": "Lace Crochet Long Sleeve Jumpsuit - Effortless Fall Chic for Labor Day \u2014 MeeeShop",
+      "board": "Rompers, Jumpsuits &...",
+      "timestamp": "2026-09-28T22:44:10.280293",
+      "type": "video",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276664507035/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-09-11T23:09:04.798079",
-    "Trends": "2026-09-28T19:03:57.893069",
+    "Trends": "2026-09-28T22:39:55.869653",
     "Dresses": "2026-09-27T16:12:10.740177",
     "Feminine & Flowy Fits": "2026-09-21T21:18:32.996526",
     "Short fall dresses": "2026-09-27T20:28:30.955145",
@@ -7584,7 +7628,7 @@
     "Must-Have Fashion...": "2026-09-20T15:16:30.142538",
     "Flares Jeans": "2026-09-16T15:57:06.636246",
     "Short Tall dresses": "2026-09-28T19:06:30.836754",
-    "Rompers, Jumpsuits &...": "2026-09-14T21:07:52.214930",
+    "Rompers, Jumpsuits &...": "2026-09-28T22:44:10.280293",
     "Skirts": "2026-09-26T15:32:13.787098",
     "Shirts & Tops": "2026-09-23T16:00:03.877123",
     "Blouses": "2026-09-25T07:24:52.128751",
@@ -7592,7 +7636,7 @@
     "Handbag #handsips": "2026-09-27T16:13:26.990501",
     "Trendy & Timeless...": "2026-09-20T23:12:45.049804",
     "Our Recommended...": "2026-09-21T17:38:21.993884",
-    "Blouse": "2026-09-13T23:04:53.123923",
+    "Blouse": "2026-09-28T22:42:10.418108",
     "Wardrobe Must-Hav...": "2026-09-23T07:36:41.106211",
     "Camis & Tanks": "2026-09-14T17:24:24.092063",
     "Wardrobe Must Haves": "2026-09-23T16:02:45.460694",
@@ -7615,7 +7659,7 @@
     "Fashion Models": "2026-09-26T07:23:52.358528",
     "My Shop #1737732113": "2026-09-27T07:52:58.867216",
     "Shop For Holidays": "2026-09-27T20:25:54.302856",
-    "New": "2026-09-28T19:05:07.703965",
+    "New": "2026-09-28T22:41:00.469245",
     "American Bazi": "2026-09-17T07:28:51.564257",
     "Cool & Casual Styles": "2026-09-17T20:36:32.448629",
     "MeeeShop's Luxe Styles": "2026-09-17T07:29:59.068289",
@@ -7678,9 +7722,9 @@
     "Look casual...": "2026-09-18T07:19:12.747094",
     "Simple Outfits": "2026-09-21T21:17:08.897037"
   },
-  "daily_count": 8,
-  "last_post_time": "2026-09-28T19:08:58.253977",
+  "daily_count": 12,
+  "last_post_time": "2026-09-28T22:44:10.280293",
   "board_rotation_cursor": 0,
   "last_image_style": "collage",
-  "last_template_index": 15
+  "last_template_index": 17
 }
