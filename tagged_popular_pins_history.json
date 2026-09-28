@@ -2986,7 +2986,151 @@
       ],
       "tagged_at": "2026-09-28T03:54:34.637103+00:00",
       "verified_at": "2026-09-28T03:54:34.637115+00:00"
+    },
+    "962222276625816139": {
+      "pin_id": "962222276625816139",
+      "pin_title": "MeeeShop: Shop Dresses, Jeans, Clothes, Shoes, & Accessories For Women",
+      "original_link": "https://us.meeeshop.com/products/touch-s-crisscross-sandal-heels",
+      "tagged_products": [
+        {
+          "id": "8930417672363",
+          "variant_id": "47612246491307",
+          "handle": "bytos-raw-hem-distressed-mid-rise-crop-jeans",
+          "title": "Bytos Raw Hem Distressed Mid Rise Crop Jeans",
+          "price": 114.99,
+          "url": "https://us.meeeshop.com/products/bytos-raw-hem-distressed-mid-rise-crop-jeans?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/bytos-raw-hem-distressed-mid-rise-crop-jeans-1.webp?v=1787717828"
+        },
+        {
+          "id": "8789756969131",
+          "variant_id": "47130839974059",
+          "handle": "adjustable-hem-knit-band-wide-leg-jeans",
+          "title": "Adjustable Hem Knit Band Wide Leg Jeans",
+          "price": 134.99,
+          "url": "https://us.meeeshop.com/products/adjustable-hem-knit-band-wide-leg-jeans?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/adjustable-hem-knit-band-wide-leg-jeans-1.jpg?v=1787715823"
+        },
+        {
+          "id": "8930416984235",
+          "variant_id": "47612243050667",
+          "handle": "bytos-full-size-distressed-high-rise-straight-jeans",
+          "title": "Bytos Full Size Distressed High Rise Straight Jeans",
+          "price": 119.99,
+          "url": "https://us.meeeshop.com/products/bytos-full-size-distressed-high-rise-straight-jeans?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/bytos-full-size-distressed-high-rise-straight-jeans-1.webp?v=1787717813"
+        },
+        {
+          "id": "8930417475755",
+          "variant_id": "47612245770411",
+          "handle": "bytos-full-size-raw-hem-distressed-high-rise-bootcut-jeans",
+          "title": "Bytos Full Size Raw Hem Distressed High Rise Bootcut Jeans",
+          "price": 114.99,
+          "url": "https://us.meeeshop.com/products/bytos-full-size-raw-hem-distressed-high-rise-bootcut-jeans?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/bytos-full-size-raw-hem-distressed-high-rise-bootcut-jeans-1.webp?v=1787717825"
+        },
+        {
+          "id": "8930417049771",
+          "variant_id": "47612243574955",
+          "handle": "bytos-full-size-distressed-high-rise-jeans-with-pockets",
+          "title": "Bytos Full Size Distressed High Rise Jeans with Pockets",
+          "price": 114.99,
+          "url": "https://us.meeeshop.com/products/bytos-full-size-distressed-high-rise-jeans-with-pockets?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/bytos-full-size-distressed-high-rise-jeans-with-pockets-1.webp?v=1787717815"
+        },
+        {
+          "id": "8930417770667",
+          "variant_id": "47612246950059",
+          "handle": "bytos-full-size-high-rise-bootcut-jeans-with-pockets",
+          "title": "Bytos Full Size High Rise Bootcut Jeans with Pockets",
+          "price": 114.99,
+          "url": "https://us.meeeshop.com/products/bytos-full-size-high-rise-bootcut-jeans-with-pockets?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/bytos-full-size-high-rise-bootcut-jeans-with-pockets-1.webp?v=1787717832"
+        },
+        {
+          "id": "8782690123947",
+          "variant_id": "47103632736427",
+          "handle": "buki-ginza-jogger-pant",
+          "title": "Buki Ginza Jogger Pant",
+          "price": 189.99,
+          "url": "https://us.meeeshop.com/products/buki-ginza-jogger-pant?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/buki-ginza-jogger-pant-1.webp?v=1787675838"
+        },
+        {
+          "id": "8988054618283",
+          "variant_id": "47790514340011",
+          "handle": "brown-cow-spot-jeans",
+          "title": "Brown Cow Spot Jeans",
+          "price": 114.99,
+          "url": "https://us.meeeshop.com/products/brown-cow-spot-jeans?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/brown-cow-spot-jeans-in-4-brown-cow-pants-bottom-911403.png?v=1789187475"
+        },
+        {
+          "id": "8988058550443",
+          "variant_id": "47790532296875",
+          "handle": "adeline-exposed-stitching-high-waist-barrel-jeans",
+          "title": "Adeline Exposed Stitching High Waist Barrel Jeans",
+          "price": 109.99,
+          "url": "https://us.meeeshop.com/products/adeline-exposed-stitching-high-waist-barrel-jeans?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/adeline-exposed-stitching-high-waist-barrel-jeans-603819.png?v=1789188486"
+        },
+        {
+          "id": "8811044241579",
+          "variant_id": "47176714092715",
+          "handle": "amelie-tummy-control-high-rise-bootcut-jeans",
+          "title": "Amelie Tummy Control High Rise Bootcut Jeans",
+          "price": 129.99,
+          "url": "https://us.meeeshop.com/products/amelie-tummy-control-high-rise-bootcut-jeans?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/amelie-tummy-control-high-rise-bootcut-jeans-1.png?v=1787715889"
+        },
+        {
+          "id": "8933199839403",
+          "variant_id": "47624632664235",
+          "handle": "anjanette-dress-100-cotton-gauze",
+          "title": "Anjanette Dress - 100% Cotton Gauze",
+          "price": 89.99,
+          "url": "https://us.meeeshop.com/products/anjanette-dress-100-cotton-gauze?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/anjanette-dress-100-cotton-gauze-1.jpg?v=1787675606"
+        },
+        {
+          "id": "8988055699627",
+          "variant_id": "47790521057451",
+          "handle": "aspen-grommet-knot-waist-floral-barrel-leg-jeans",
+          "title": "Aspen Grommet Knot Waist Floral Barrel Leg Jeans",
+          "price": 109.99,
+          "url": "https://us.meeeshop.com/products/aspen-grommet-knot-waist-floral-barrel-leg-jeans?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/aspen-grommet-knot-waist-floral-barrel-leg-jeans-i-153131.png?v=1789187831"
+        },
+        {
+          "id": "8988051931307",
+          "variant_id": "47790503559339",
+          "handle": "bailey-leopard-print-barrel-jeans",
+          "title": "Bailey Leopard Print Barrel Jeans",
+          "price": 109.99,
+          "url": "https://us.meeeshop.com/products/bailey-leopard-print-barrel-jeans?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/bailey-leopard-print-barrel-jeans-in-4-bottom-985003.png?v=1789186915"
+        },
+        {
+          "id": "8841417293995",
+          "variant_id": "47283202850987",
+          "handle": "black-taylor-washed-distressed-jean",
+          "title": "Black Taylor Washed Distressed Jean",
+          "price": 164.99,
+          "url": "https://us.meeeshop.com/products/black-taylor-washed-distressed-jean?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/black-taylor-washed-distressed-jean-1.jpg?v=1787675157"
+        },
+        {
+          "id": "8988052947115",
+          "variant_id": "47790509359275",
+          "handle": "camille-stripe-button-flap-pocket-cuffed-hem-wide-leg-jeans",
+          "title": "Camille Stripe Button Flap Pocket Cuffed Hem Wide Leg Jeans",
+          "price": 109.99,
+          "url": "https://us.meeeshop.com/products/camille-stripe-button-flap-pocket-cuffed-hem-wide-leg-jeans?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/camille-stripe-button-flap-pocket-cuffed-hem-wide-931819.png?v=1789187246"
+        }
+      ],
+      "tagged_at": "2026-09-28T03:57:37.087628+00:00",
+      "verified_at": "2026-09-28T03:57:37.087638+00:00"
     }
   },
-  "last_run": "2026-09-28T03:54:34.637127+00:00"
+  "last_run": "2026-09-28T03:57:37.087647+00:00"
 }
