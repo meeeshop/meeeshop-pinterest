@@ -7610,11 +7610,57 @@
       "template": 17,
       "pin_url": "https://www.pinterest.com/pin/962222276664507035/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8888481218731,
+      "title": "Mittoshop Smocked Ruffled Hem Half Sleeve Mini Dress - Labor Day & Fall Chic",
+      "board": "Trends",
+      "timestamp": "2026-09-29T00:56:20.830194",
+      "type": "video",
+      "style": "carousel",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276664509302/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": "570988921003",
+      "article_id": "570988921003",
+      "title": "Natural Dye and Organic Cotton Styling for Mindful Fashion",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-09-29T00:57:53.821195",
+      "type": "blog",
+      "style": "card",
+      "template": 9,
+      "pin_url": "https://www.pinterest.com/pin/962222276664509330/",
+      "blog_url": "https://us.meeeshop.com/blogs/everything-anything-about-vegan/natural-dye-and-organic-cotton-styling-for-mindful-fashion",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8905531326635,
+      "title": "Trouser Shorts, Black Linen - Chic Labor Day & Fall Look \u2014 MeeeShop",
+      "board": "Best selling products",
+      "timestamp": "2026-09-29T01:00:22.058148",
+      "type": "video",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276664509387/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8949221228715,
+      "title": "Mini Faux Leather Belt Bag - Chic with Gold Link Chain: Fall 2026 Boho Trend",
+      "board": "Trendy Backpacks",
+      "timestamp": "2026-09-29T01:02:56.591921",
+      "type": "video",
+      "style": "carousel",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276664509438/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-09-11T23:09:04.798079",
-    "Trends": "2026-09-28T22:39:55.869653",
+    "Trends": "2026-09-29T00:56:20.830194",
     "Dresses": "2026-09-27T16:12:10.740177",
     "Feminine & Flowy Fits": "2026-09-21T21:18:32.996526",
     "Short fall dresses": "2026-09-27T20:28:30.955145",
@@ -7640,7 +7686,7 @@
     "Wardrobe Must-Hav...": "2026-09-23T07:36:41.106211",
     "Camis & Tanks": "2026-09-14T17:24:24.092063",
     "Wardrobe Must Haves": "2026-09-23T16:02:45.460694",
-    "Trendy Backpacks": "2026-09-15T16:07:23.785152",
+    "Trendy Backpacks": "2026-09-29T01:02:56.591921",
     "Festive Styles": "2026-09-15T23:33:56.941220",
     "Kancan USA Jeans": "2026-09-16T07:32:48.977827",
     "Footwear": "2026-09-07T23:26:56.803572",
@@ -7677,7 +7723,7 @@
     "Davi & Dani Womens...": "2026-09-20T19:46:39.660035",
     "Weekend to Workout": "2026-09-26T07:21:29.258918",
     "Gimme Gummy Playful Nostalgia": "2026-09-23T20:45:16.359362",
-    "Best selling products": "2026-09-15T20:29:19.712663",
+    "Best selling products": "2026-09-29T01:00:22.058148",
     "Off-Duty Athlete Looks": "2026-09-09T15:45:15.298969",
     "LE LIS Womens Clothi...": "2026-09-21T07:53:10.745620",
     "New Trendy Woman...": "2026-09-16T15:54:45.584179",
@@ -7722,9 +7768,9 @@
     "Look casual...": "2026-09-18T07:19:12.747094",
     "Simple Outfits": "2026-09-21T21:17:08.897037"
   },
-  "daily_count": 12,
-  "last_post_time": "2026-09-28T22:44:10.280293",
+  "daily_count": 4,
+  "last_post_time": "2026-09-29T01:02:56.591921",
   "board_rotation_cursor": 0,
-  "last_image_style": "collage",
-  "last_template_index": 17
+  "last_image_style": "carousel",
+  "last_template_index": 15
 }
