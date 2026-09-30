@@ -7878,11 +7878,55 @@
       "template": 11,
       "pin_url": "https://www.pinterest.com/pin/962222276664546435/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 9041683447979,
+      "title": "Grateful Dead Outliner Men's Long Sleeve - Fall Labor Day Style \u2014 MeeeShop",
+      "board": "Trends",
+      "timestamp": "2026-09-30T17:21:37.285589",
+      "type": "carousel",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276664558082/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8970884612267,
+      "title": "Labor Day Must-Have: Emory Park Aria Cami Top for Fall 2026 \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-09-30T17:22:55.996109",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276664558124/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8879309029547,
+      "title": "Ruched Ribbed Crop Tee - Perfect for Labor Day & Fall Fashion \u2014 MeeeShop",
+      "board": "Style Ideas",
+      "timestamp": "2026-09-30T17:24:11.723157",
+      "type": "carousel",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276664558160/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8876279627947,
+      "title": "Flying Tomato Soft Girl Sweater Knit Top - Cozy Fall Look for Labor Day \u2014 MeeeShop",
+      "board": "Fall Outfits 2026",
+      "timestamp": "2026-09-30T17:25:44.491082",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276664558202/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-09-30T00:14:02.173306",
-    "Trends": "2026-09-30T08:12:53.343960",
+    "Trends": "2026-09-30T17:21:37.285589",
     "Dresses": "2026-09-27T16:12:10.740177",
     "Feminine & Flowy Fits": "2026-09-21T21:18:32.996526",
     "Short fall dresses": "2026-09-27T20:28:30.955145",
@@ -7927,7 +7971,7 @@
     "Fashion Models": "2026-09-26T07:23:52.358528",
     "My Shop #1737732113": "2026-09-27T07:52:58.867216",
     "Shop For Holidays": "2026-09-27T20:25:54.302856",
-    "New": "2026-09-30T08:15:14.047304",
+    "New": "2026-09-30T17:22:55.996109",
     "American Bazi": "2026-09-17T07:28:51.564257",
     "Cool & Casual Styles": "2026-09-17T20:36:32.448629",
     "MeeeShop's Luxe Styles": "2026-09-17T07:29:59.068289",
@@ -7952,7 +7996,7 @@
     "Outfit Ideas": "2026-09-29T17:25:47.103731",
     "Late Summer to Fall Teacher Style": "2026-09-19T07:17:31.457640",
     "Ootd #ootd": "2026-09-30T08:17:26.836298",
-    "Style Ideas": "2026-09-18T07:18:01.827535",
+    "Style Ideas": "2026-09-30T17:24:11.723157",
     "Mustard Seed Clothing": "2026-09-21T23:59:51.860855",
     "Woman Fashion!": "2026-09-18T15:37:46.592319",
     "Stylish Finds": "2026-09-18T20:00:00.776718",
@@ -7984,15 +8028,15 @@
     "Fall outfits": "2026-09-30T08:18:32.567692",
     "Winter Outfits": "2026-09-22T00:01:02.289587",
     "Women's shacket": "2026-09-08T15:50:34.046479",
-    "Fall Outfits 2026": "2026-09-08T20:17:06.586566",
+    "Fall Outfits 2026": "2026-09-30T17:25:44.491082",
     "Womens shacket": "2026-09-10T07:14:20.412592",
     "Meshohn Luxe Styles": "2026-09-12T14:50:36.971883",
     "Look casual...": "2026-09-18T07:19:12.747094",
     "Simple Outfits": "2026-09-21T21:17:08.897037"
   },
-  "daily_count": 8,
-  "last_post_time": "2026-09-30T08:18:32.567692",
+  "daily_count": 12,
+  "last_post_time": "2026-09-30T17:25:44.491082",
   "board_rotation_cursor": 0,
   "last_image_style": "carousel",
-  "last_template_index": 11
+  "last_template_index": 17
 }
