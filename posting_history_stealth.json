@@ -8056,11 +8056,55 @@
       "template": 14,
       "pin_url": "https://www.pinterest.com/pin/962222276664577225/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8786744246443,
+      "title": "Straw Foldover Convertible Clutch - Autumn Chic for Halloween & Cozy Fall \u2014 MeeeShop",
+      "board": "Trends",
+      "timestamp": "2026-10-01T22:00:24.715086",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276664597242/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8786745688235,
+      "title": "Frankie Oversize Double Zip Print Crescent Sling - Cozy Fall Must-Have \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-10-01T22:01:37.106725",
+      "type": "carousel",
+      "style": "collage",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276664597262/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8930016592043,
+      "title": "Kathryn Classic Button-up, Blush Pink Top - Cozy Fall & Halloween Must-Have \u2014 MeeeShop",
+      "board": "Zenana Women's...",
+      "timestamp": "2026-10-01T22:02:58.445673",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276664597291/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 9041685577899,
+      "title": "Grateful Dead Bertha Baby Tee - Cozy Fall Graphic Tee for Halloween Vibes \u2014 MeeeShop",
+      "board": "Stylish Finds",
+      "timestamp": "2026-10-01T22:04:03.170051",
+      "type": "carousel",
+      "style": "collage",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276664597305/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-09-30T00:14:02.173306",
-    "Trends": "2026-10-01T08:34:07.746945",
+    "Trends": "2026-10-01T22:00:24.715086",
     "Dresses": "2026-09-27T16:12:10.740177",
     "Feminine & Flowy Fits": "2026-09-21T21:18:32.996526",
     "Short fall dresses": "2026-09-27T20:28:30.955145",
@@ -8105,12 +8149,12 @@
     "Fashion Models": "2026-09-26T07:23:52.358528",
     "My Shop #1737732113": "2026-09-27T07:52:58.867216",
     "Shop For Holidays": "2026-09-27T20:25:54.302856",
-    "New": "2026-10-01T08:35:18.138652",
+    "New": "2026-10-01T22:01:37.106725",
     "American Bazi": "2026-10-01T00:30:42.549462",
     "Cool & Casual Styles": "2026-09-17T20:36:32.448629",
     "MeeeShop's Luxe Styles": "2026-10-01T08:37:57.461950",
     "Outerwear": "2026-09-10T23:06:16.590733",
-    "Zenana Women's...": "2026-09-17T16:02:47.073878",
+    "Zenana Women's...": "2026-10-01T22:02:58.445673",
     "Thanks giving Outfits": "2026-09-17T23:31:28.944188",
     "Weekend to Workwear": "2026-09-19T15:12:31.952985",
     "Effortless Looks": "2026-09-17T23:32:49.737756",
@@ -8133,7 +8177,7 @@
     "Style Ideas": "2026-09-30T17:24:11.723157",
     "Mustard Seed Clothing": "2026-09-21T23:59:51.860855",
     "Woman Fashion!": "2026-10-01T00:32:03.418876",
-    "Stylish Finds": "2026-09-18T20:00:00.776718",
+    "Stylish Finds": "2026-10-01T22:04:03.170051",
     "Confidence Ladies": "2026-09-18T23:14:02.820930",
     "Fresh Finds New...": "2026-09-19T15:11:19.351999",
     "Affordable Women's Fashion USA": "2026-09-19T19:39:57.107432",
@@ -8169,9 +8213,9 @@
     "Simple Outfits": "2026-09-21T21:17:08.897037",
     "Wardrobe Oozes": "2026-09-30T21:39:05.673247"
   },
-  "daily_count": 8,
-  "last_post_time": "2026-10-01T08:37:57.461950",
+  "daily_count": 12,
+  "last_post_time": "2026-10-01T22:04:03.170051",
   "board_rotation_cursor": 0,
   "last_image_style": "collage",
-  "last_template_index": 14
+  "last_template_index": 16
 }
