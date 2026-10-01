@@ -7966,6 +7966,52 @@
       "template": 17,
       "pin_url": "https://www.pinterest.com/pin/962222276664564589/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": "570980827307",
+      "article_id": "570980827307",
+      "title": "How to Style an Oversized Blazer for Modern Outfits",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-10-01T00:28:21.134171",
+      "type": "blog",
+      "style": "card",
+      "template": 9,
+      "pin_url": "https://www.pinterest.com/pin/962222276664567988/",
+      "blog_url": "https://us.meeeshop.com/blogs/coats-jackets-style-guide/how-to-style-an-oversized-blazer-for-modern-outfits",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8818153095339,
+      "title": "Emory Park Alexandra Mini Dress - Cozy Fall & Halloween Chic \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-10-01T00:29:32.519567",
+      "type": "carousel",
+      "style": "collage",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276664568019/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8818153717931,
+      "title": "Emory Park Olivia Top - Cozy Fall Essential for Halloween & Work \u2014 MeeeShop",
+      "board": "American Bazi",
+      "timestamp": "2026-10-01T00:30:42.549462",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276664568065/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8974540832939,
+      "title": "Retrolicious Green Plaid Doris Skirt - Cozy Fall & Halloween Style \u2014 MeeeShop",
+      "board": "Woman Fashion!",
+      "timestamp": "2026-10-01T00:32:03.418876",
+      "type": "carousel",
+      "style": "collage",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276664568110/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
@@ -8015,8 +8061,8 @@
     "Fashion Models": "2026-09-26T07:23:52.358528",
     "My Shop #1737732113": "2026-09-27T07:52:58.867216",
     "Shop For Holidays": "2026-09-27T20:25:54.302856",
-    "New": "2026-09-30T21:36:33.247389",
-    "American Bazi": "2026-09-17T07:28:51.564257",
+    "New": "2026-10-01T00:29:32.519567",
+    "American Bazi": "2026-10-01T00:30:42.549462",
     "Cool & Casual Styles": "2026-09-17T20:36:32.448629",
     "MeeeShop's Luxe Styles": "2026-09-17T07:29:59.068289",
     "Outerwear": "2026-09-10T23:06:16.590733",
@@ -8042,7 +8088,7 @@
     "Ootd #ootd": "2026-09-30T08:17:26.836298",
     "Style Ideas": "2026-09-30T17:24:11.723157",
     "Mustard Seed Clothing": "2026-09-21T23:59:51.860855",
-    "Woman Fashion!": "2026-09-18T15:37:46.592319",
+    "Woman Fashion!": "2026-10-01T00:32:03.418876",
     "Stylish Finds": "2026-09-18T20:00:00.776718",
     "Confidence Ladies": "2026-09-18T23:14:02.820930",
     "Fresh Finds New...": "2026-09-19T15:11:19.351999",
@@ -8079,9 +8125,9 @@
     "Simple Outfits": "2026-09-21T21:17:08.897037",
     "Wardrobe Oozes": "2026-09-30T21:39:05.673247"
   },
-  "daily_count": 16,
-  "last_post_time": "2026-09-30T21:40:21.762619",
+  "daily_count": 4,
+  "last_post_time": "2026-10-01T00:32:03.418876",
   "board_rotation_cursor": 0,
-  "last_image_style": "carousel",
-  "last_template_index": 17
+  "last_image_style": "collage",
+  "last_template_index": 15
 }
