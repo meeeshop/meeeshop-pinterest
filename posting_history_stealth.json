@@ -8278,6 +8278,52 @@
       "template": 11,
       "pin_url": "https://www.pinterest.com/pin/962222276664628398/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": "571042431147",
+      "article_id": "571042431147",
+      "title": "A-Line vs Pencil Skirts: Silhouette Guide for Every Body Proportion",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-10-03T00:18:19.649789",
+      "type": "blog",
+      "style": "card",
+      "template": 9,
+      "pin_url": "https://www.pinterest.com/pin/962222276664631952/",
+      "blog_url": "https://us.meeeshop.com/blogs/womens-skirts-style-guide/a-line-vs-pencil-skirts-silhouette-guide-for-every-body-proportion",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8818148442283,
+      "title": "Emory Park Blythe Shorts: Cozy Fall & Halloween Style Must-Have \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-10-03T00:20:34.280450",
+      "type": "video",
+      "style": "collage",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276664631995/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 9041690591403,
+      "title": "Willie Nelson on the Road Heather Tee - Cozy Fall Graphic Tee \u2014 MeeeShop",
+      "board": "Shop Responsibly",
+      "timestamp": "2026-10-03T00:21:39.108297",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276664632004/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8970890313899,
+      "title": "Emory Park Sasha Mini Dress - Cozy Fall Halloween Chic \u2014 MeeeShop",
+      "board": "Social",
+      "timestamp": "2026-10-03T00:23:59.325740",
+      "type": "video",
+      "style": "collage",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276664632062/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
@@ -8327,7 +8373,7 @@
     "Fashion Models": "2026-09-26T07:23:52.358528",
     "My Shop #1737732113": "2026-09-27T07:52:58.867216",
     "Shop For Holidays": "2026-09-27T20:25:54.302856",
-    "New": "2026-10-02T21:29:13.399177",
+    "New": "2026-10-03T00:20:34.280450",
     "American Bazi": "2026-10-01T00:30:42.549462",
     "Cool & Casual Styles": "2026-09-17T20:36:32.448629",
     "MeeeShop's Luxe Styles": "2026-10-01T08:37:57.461950",
@@ -8360,8 +8406,8 @@
     "Fresh Finds New...": "2026-10-02T17:12:21.763155",
     "Affordable Women's Fashion USA": "2026-10-02T21:31:53.502629",
     "Festive & Flora Fits": "2026-09-26T00:00:22.201153",
-    "Shop Responsibly": "2026-09-19T22:50:04.361409",
-    "Social": "2026-09-19T22:51:27.677872",
+    "Shop Responsibly": "2026-10-03T00:21:39.108297",
+    "Social": "2026-10-03T00:23:59.325740",
     "Blogs": "2026-09-20T07:42:30.025411",
     "All Pins": "2026-09-20T23:09:46.621937",
     "Outer wear": "2026-09-15T07:32:22.556924",
@@ -8391,9 +8437,9 @@
     "Simple Outfits": "2026-09-21T21:17:08.897037",
     "Wardrobe Oozes": "2026-09-30T21:39:05.673247"
   },
-  "daily_count": 16,
-  "last_post_time": "2026-10-02T21:31:53.502629",
+  "daily_count": 4,
+  "last_post_time": "2026-10-03T00:23:59.325740",
   "board_rotation_cursor": 0,
-  "last_image_style": "carousel",
-  "last_template_index": 11
+  "last_image_style": "collage",
+  "last_template_index": 15
 }
