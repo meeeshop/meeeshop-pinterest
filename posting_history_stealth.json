@@ -8368,11 +8368,55 @@
       "template": 11,
       "pin_url": "https://www.pinterest.com/pin/962222276664640015/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8897140719787,
+      "title": "Ymi Women's Luxe Mid Rise 3-button Wannabettabutt Skinny Jeans | MeeeShop US Boutique",
+      "board": "Trends",
+      "timestamp": "2026-10-03T15:29:46.176817",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276664649962/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8911380381867,
+      "title": "Mkf Collection by Mia K. - Wally Shoulder Bag: Cozy Fall & Halloween Must-Have",
+      "board": "New",
+      "timestamp": "2026-10-03T15:31:27.538098",
+      "type": "product",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276664650016/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8921414893739,
+      "title": "Full Size Ribbed Round Neck Long Sleeve T-shirt - Cozy Fall & Halloween Style",
+      "board": "Blogs",
+      "timestamp": "2026-10-03T15:32:35.065712",
+      "type": "carousel",
+      "style": "card",
+      "template": 9,
+      "pin_url": "https://www.pinterest.com/pin/962222276664650048/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8936272625835,
+      "title": "Downeast Academy Cable Skirt - Cozy Fall & Halloween Vibes \u2014 MeeeShop",
+      "board": "Poetcore Aesthetics",
+      "timestamp": "2026-10-03T15:33:52.654769",
+      "type": "carousel",
+      "style": "collage",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276664650088/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-09-30T00:14:02.173306",
-    "Trends": "2026-10-03T07:49:07.362031",
+    "Trends": "2026-10-03T15:29:46.176817",
     "Dresses": "2026-09-27T16:12:10.740177",
     "Feminine & Flowy Fits": "2026-09-21T21:18:32.996526",
     "Short fall dresses": "2026-09-27T20:28:30.955145",
@@ -8417,7 +8461,7 @@
     "Fashion Models": "2026-09-26T07:23:52.358528",
     "My Shop #1737732113": "2026-09-27T07:52:58.867216",
     "Shop For Holidays": "2026-09-27T20:25:54.302856",
-    "New": "2026-10-03T07:50:18.391761",
+    "New": "2026-10-03T15:31:27.538098",
     "American Bazi": "2026-10-01T00:30:42.549462",
     "Cool & Casual Styles": "2026-09-17T20:36:32.448629",
     "MeeeShop's Luxe Styles": "2026-10-01T08:37:57.461950",
@@ -8428,7 +8472,7 @@
     "Effortless Looks": "2026-10-02T00:42:21.029386",
     "Vamp Romantic Styles": "2026-10-02T08:13:36.748078",
     "BFCM Deals": "2026-09-27T23:47:03.148769",
-    "Poetcore Aesthetics": "2026-09-20T15:15:20.510508",
+    "Poetcore Aesthetics": "2026-10-03T15:33:52.654769",
     "Emory Park Clothing": "2026-09-20T19:45:34.586852",
     "new products": "2026-09-23T23:35:47.201784",
     "Chic & Effortless Styles": "2026-09-28T19:08:58.253977",
@@ -8452,7 +8496,7 @@
     "Festive & Flora Fits": "2026-09-26T00:00:22.201153",
     "Shop Responsibly": "2026-10-03T00:21:39.108297",
     "Social": "2026-10-03T00:23:59.325740",
-    "Blogs": "2026-09-20T07:42:30.025411",
+    "Blogs": "2026-10-03T15:32:35.065712",
     "All Pins": "2026-09-20T23:09:46.621937",
     "Outer wear": "2026-09-15T07:32:22.556924",
     "Women's Cardigans": "2026-09-30T21:40:21.762619",
@@ -8481,9 +8525,9 @@
     "Simple Outfits": "2026-09-21T21:17:08.897037",
     "Wardrobe Oozes": "2026-09-30T21:39:05.673247"
   },
-  "daily_count": 8,
-  "last_post_time": "2026-10-03T07:54:06.931497",
+  "daily_count": 12,
+  "last_post_time": "2026-10-03T15:33:52.654769",
   "board_rotation_cursor": 0,
   "last_image_style": "collage",
-  "last_template_index": 11
+  "last_template_index": 15
 }
