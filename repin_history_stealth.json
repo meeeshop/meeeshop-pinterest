@@ -4239,6 +4239,46 @@
       "target_board_id": "962222345325694325",
       "live_url": "https://www.pinterest.com/pin/4595149436861562944/",
       "timestamp": "2026-10-04T07:46:19.859009+00:00"
+    },
+    {
+      "pin_id": "4599090125459230784",
+      "product_title": "Flying Tomato Gilded Drape Satin One-shoulder Maxi Dress",
+      "category_group": "dresses",
+      "source_board": "_products",
+      "target_board": "Short fall dresses",
+      "target_board_id": "962222345325607224",
+      "live_url": "https://www.pinterest.com/pin/4599090125459230784/",
+      "timestamp": "2026-10-04T16:34:31.792639+00:00"
+    },
+    {
+      "pin_id": "4599090101836910656",
+      "product_title": "Flying Tomato Ivory Fringe Off White Sequin Sleeveless Top",
+      "category_group": "tops_tanks_blouses",
+      "source_board": "_products",
+      "target_board": "Farm clothes",
+      "target_board_id": "962222345325683654",
+      "live_url": "https://www.pinterest.com/pin/4599090101836910656/",
+      "timestamp": "2026-10-04T16:35:04.581522+00:00"
+    },
+    {
+      "pin_id": "4608026960345428544",
+      "product_title": "Peanuts Surf",
+      "category_group": "general_apparel",
+      "source_board": "_products",
+      "target_board": "Our Recommended Feminine Styles",
+      "target_board_id": "962222345324527791",
+      "live_url": "https://www.pinterest.com/pin/4608026960345428544/",
+      "timestamp": "2026-10-04T16:35:26.345417+00:00"
+    },
+    {
+      "pin_id": "4608026925985690176",
+      "product_title": "Flying Tomato Coy Charm Velvet Pants",
+      "category_group": "pants_denim",
+      "source_board": "_products",
+      "target_board": "Zenana Women's Clothing, Dresses, Tops, Pants",
+      "target_board_id": "962222345324791236",
+      "live_url": "https://www.pinterest.com/pin/4608026925985690176/",
+      "timestamp": "2026-10-04T16:35:47.576285+00:00"
     }
   ],
   "board_last_used": {
@@ -4252,7 +4292,7 @@
     "Outerwear": "2026-09-30T00:01:52.269089+00:00",
     "Chic & Cozy: Annie Wear Trends": "2026-09-25T23:45:10.564102+00:00",
     "Chic Looks": "2026-10-02T21:27:36.403164+00:00",
-    "Short fall dresses": "2026-09-26T20:07:17.116180+00:00",
+    "Short fall dresses": "2026-10-04T16:34:31.792639+00:00",
     "Shirts & Tops": "2026-10-03T07:33:50.132616+00:00",
     "Feminine & Flowy Fits": "2026-10-01T21:58:52.204877+00:00",
     "Blouses": "2026-10-03T20:09:43.329353+00:00",
@@ -4261,13 +4301,13 @@
     "Cocktail Dresses": "2026-09-26T23:18:01.090714+00:00",
     "Camis & Tanks": "2026-10-03T15:53:08.023881+00:00",
     "Trendy & Timeless Fashion": "2026-10-04T07:46:19.859009+00:00",
-    "Our Recommended Feminine Styles": "2026-09-30T21:34:42.140014+00:00",
+    "Our Recommended Feminine Styles": "2026-10-04T16:35:26.345417+00:00",
     "Rompers, Jumpsuits & Outfit Sets": "2026-09-29T00:46:47.824767+00:00",
     "Confident Looks": "2026-10-01T00:18:30.583018+00:00",
     "Trends": "2026-10-01T00:18:48.064776+00:00",
     "Wardrobe Must-Haves": "2026-10-01T00:19:38.623355+00:00",
     "Casual": "2026-10-01T18:12:51.376442+00:00",
-    "Farm clothes": "2026-09-30T07:55:42.010218+00:00",
+    "Farm clothes": "2026-10-04T16:35:04.581522+00:00",
     "New": "2026-10-01T21:58:31.262934+00:00",
     "Festive Styles": "2026-09-29T07:52:38.635155+00:00",
     "American Bazi": "2026-10-04T07:45:45.373466+00:00",
@@ -4281,7 +4321,7 @@
     "Bags": "2026-09-28T08:12:23.494163+00:00",
     "MeeeShop's Luxe Styles": "2026-09-30T21:34:25.599846+00:00",
     "Davi & Dani Womens Clothing | us.meeeshop.com": "2026-10-01T00:19:22.235691+00:00",
-    "Zenana Women's Clothing, Dresses, Tops, Pants": "2026-09-30T07:56:57.649630+00:00",
+    "Zenana Women's Clothing, Dresses, Tops, Pants": "2026-10-04T16:35:47.576285+00:00",
     "Trendy Backpacks": "2026-09-28T19:23:11.346730+00:00",
     "LE LIS Womens Clothing | us.meeeshop": "2026-10-03T00:06:00.987240+00:00",
     "Chic & Effortless Styles": "2026-10-02T00:23:41.628103+00:00",
@@ -4318,6 +4358,6 @@
     "Simple Outfits": "2026-09-14T07:33:46.407531+00:00",
     "Women's shacket": "2026-09-23T23:24:09.009069+00:00"
   },
-  "daily_count": 4,
-  "last_repin_time": "2026-10-04T07:46:19.859009+00:00"
+  "daily_count": 8,
+  "last_repin_time": "2026-10-04T16:35:47.576285+00:00"
 }
