@@ -4199,16 +4199,56 @@
       "target_board_id": "962222345325422828",
       "live_url": "https://www.pinterest.com/pin/4610841721945092672/",
       "timestamp": "2026-10-03T23:28:14.350608+00:00"
+    },
+    {
+      "pin_id": "4590856941087539264",
+      "product_title": "Downeast First Love Dress",
+      "category_group": "dresses",
+      "source_board": "_products",
+      "target_board": "Dress",
+      "target_board_id": "962222345325683647",
+      "live_url": "https://www.pinterest.com/pin/4590856941087539264/",
+      "timestamp": "2026-10-04T07:44:53.903864+00:00"
+    },
+    {
+      "pin_id": "4590856969004826688",
+      "product_title": "Flying Tomato Polished Moments Cropped Cardigan Top",
+      "category_group": "cardigans_sweaters",
+      "source_board": "_products",
+      "target_board": "Women's Cardigans",
+      "target_board_id": "962222345325668653",
+      "live_url": "https://www.pinterest.com/pin/4590856969004826688/",
+      "timestamp": "2026-10-04T07:45:10.499321+00:00"
+    },
+    {
+      "pin_id": "4607675136736358976",
+      "product_title": "Downeast Hometown Hoodie Top",
+      "category_group": "tops_tanks_blouses",
+      "source_board": "_products",
+      "target_board": "American Bazi",
+      "target_board_id": "962222345325578167",
+      "live_url": "https://www.pinterest.com/pin/4607675136736358976/",
+      "timestamp": "2026-10-04T07:45:45.373466+00:00"
+    },
+    {
+      "pin_id": "4595149436861562944",
+      "product_title": "Rolling Stones Black Raglan Tee",
+      "category_group": "tops_tanks_blouses",
+      "source_board": "_products",
+      "target_board": "Trendy & Timeless Fashion",
+      "target_board_id": "962222345325694325",
+      "live_url": "https://www.pinterest.com/pin/4595149436861562944/",
+      "timestamp": "2026-10-04T07:46:19.859009+00:00"
     }
   ],
   "board_last_used": {
-    "Women's Cardigans": "2026-09-24T07:09:43.711832+00:00",
+    "Women's Cardigans": "2026-10-04T07:45:10.499321+00:00",
     "Pants & Leggings": "2026-10-01T08:18:28.691662+00:00",
     "Skirts": "2026-09-25T20:42:55.057084+00:00",
     "Dresses": "2026-10-03T20:08:51.233458+00:00",
     "Sweaters": "2026-09-25T20:43:30.174405+00:00",
     "Dressy Outfits": "2026-09-29T21:32:41.454673+00:00",
-    "Dress": "2026-09-26T20:06:36.814255+00:00",
+    "Dress": "2026-10-04T07:44:53.903864+00:00",
     "Outerwear": "2026-09-30T00:01:52.269089+00:00",
     "Chic & Cozy: Annie Wear Trends": "2026-09-25T23:45:10.564102+00:00",
     "Chic Looks": "2026-10-02T21:27:36.403164+00:00",
@@ -4220,7 +4260,7 @@
     "\"fashion models\"": "2026-10-03T07:35:21.622588+00:00",
     "Cocktail Dresses": "2026-09-26T23:18:01.090714+00:00",
     "Camis & Tanks": "2026-10-03T15:53:08.023881+00:00",
-    "Trendy & Timeless Fashion": "2026-09-30T17:44:46.192103+00:00",
+    "Trendy & Timeless Fashion": "2026-10-04T07:46:19.859009+00:00",
     "Our Recommended Feminine Styles": "2026-09-30T21:34:42.140014+00:00",
     "Rompers, Jumpsuits & Outfit Sets": "2026-09-29T00:46:47.824767+00:00",
     "Confident Looks": "2026-10-01T00:18:30.583018+00:00",
@@ -4230,7 +4270,7 @@
     "Farm clothes": "2026-09-30T07:55:42.010218+00:00",
     "New": "2026-10-01T21:58:31.262934+00:00",
     "Festive Styles": "2026-09-29T07:52:38.635155+00:00",
-    "American Bazi": "2026-09-30T00:03:01.038201+00:00",
+    "American Bazi": "2026-10-04T07:45:45.373466+00:00",
     "Edgy fashion": "2026-09-20T15:37:19.620247+00:00",
     "comfy fall outfits": "2026-09-30T17:45:20.967666+00:00",
     "Thanks giving Outfits": "2026-10-03T07:34:22.582734+00:00",
@@ -4278,6 +4318,6 @@
     "Simple Outfits": "2026-09-14T07:33:46.407531+00:00",
     "Women's shacket": "2026-09-23T23:24:09.009069+00:00"
   },
-  "daily_count": 14,
-  "last_repin_time": "2026-10-03T23:28:14.350608+00:00"
+  "daily_count": 4,
+  "last_repin_time": "2026-10-04T07:46:19.859009+00:00"
 }
