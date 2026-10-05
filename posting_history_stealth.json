@@ -8678,13 +8678,59 @@
       "template": 16,
       "pin_url": "https://www.pinterest.com/pin/962222276664697126/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": "571018838187",
+      "article_id": "571018838187",
+      "title": "How to Prevent Sweater Pilling and Maintain Knitwear",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-10-05T08:39:55.741815",
+      "type": "blog",
+      "style": "card",
+      "template": 9,
+      "pin_url": "https://www.pinterest.com/pin/962222276664705314/",
+      "blog_url": "https://us.meeeshop.com/blogs/cardigans-sweaters-style-guide/how-to-prevent-sweater-pilling-and-maintain-knitwear",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8988049440939,
+      "title": "Willow Cropped High Rise Wide Leg Jeans | MeeeShop US Boutique",
+      "board": "New",
+      "timestamp": "2026-10-05T08:41:14.836016",
+      "type": "carousel",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276664705342/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8892151464107,
+      "title": "Embroidered Denim Vest - Cozy Fall & Halloween Must-Have Style \u2014 MeeeShop",
+      "board": "Wardrobe Must Haves",
+      "timestamp": "2026-10-05T08:43:06.250894",
+      "type": "product",
+      "style": "carousel",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276664705369/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8882913771691,
+      "title": "Allover Print Sleeveless Cross Back Cut Out Dress | MeeeShop US Boutique",
+      "board": "Feminine & Flowy Fits",
+      "timestamp": "2026-10-05T08:44:16.555889",
+      "type": "carousel",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276664705385/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-09-30T00:14:02.173306",
     "Trends": "2026-10-04T23:54:57.929852",
     "Dresses": "2026-09-27T16:12:10.740177",
-    "Feminine & Flowy Fits": "2026-09-21T21:18:32.996526",
+    "Feminine & Flowy Fits": "2026-10-05T08:44:16.555889",
     "Short fall dresses": "2026-09-27T20:28:30.955145",
     "Must-Have Fashion Picks": "2026-08-13T05:20:05.419233",
     "Trendy & Timeless Fashion": "2026-08-13T05:29:39.715837",
@@ -8707,7 +8753,7 @@
     "Blouse": "2026-09-28T22:42:10.418108",
     "Wardrobe Must-Hav...": "2026-10-04T23:58:44.007127",
     "Camis & Tanks": "2026-09-29T17:24:37.213227",
-    "Wardrobe Must Haves": "2026-09-23T16:02:45.460694",
+    "Wardrobe Must Haves": "2026-10-05T08:43:06.250894",
     "Trendy Backpacks": "2026-09-29T01:02:56.591921",
     "Festive Styles": "2026-10-01T08:36:54.596284",
     "Kancan USA Jeans": "2026-09-16T07:32:48.977827",
@@ -8727,7 +8773,7 @@
     "Fashion Models": "2026-09-26T07:23:52.358528",
     "My Shop #1737732113": "2026-09-27T07:52:58.867216",
     "Shop For Holidays": "2026-09-27T20:25:54.302856",
-    "New": "2026-10-04T23:56:08.212132",
+    "New": "2026-10-05T08:41:14.836016",
     "American Bazi": "2026-10-01T00:30:42.549462",
     "Cool & Casual Styles": "2026-09-17T20:36:32.448629",
     "MeeeShop's Luxe Styles": "2026-10-01T08:37:57.461950",
@@ -8791,9 +8837,9 @@
     "Simple Outfits": "2026-09-21T21:17:08.897037",
     "Wardrobe Oozes": "2026-09-30T21:39:05.673247"
   },
-  "daily_count": 16,
-  "last_post_time": "2026-10-04T23:58:44.007127",
+  "daily_count": 4,
+  "last_post_time": "2026-10-05T08:44:16.555889",
   "board_rotation_cursor": 0,
   "last_image_style": "collage",
-  "last_template_index": 16
+  "last_template_index": 14
 }
