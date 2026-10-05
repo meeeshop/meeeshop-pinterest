@@ -8724,11 +8724,55 @@
       "template": 14,
       "pin_url": "https://www.pinterest.com/pin/962222276664705385/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8745259139243,
+      "title": "Flying Tomato Mocha Muse Moment Woven Midi Dress: Cozy Fall Halloween Chic \u2014 MeeeShop",
+      "board": "Trends",
+      "timestamp": "2026-10-05T20:07:01.092040",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276664721773/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8818158895275,
+      "title": "Emory Park Laurel Overall Dress: Cozy Fall & Halloween Chic \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-10-05T20:08:14.253712",
+      "type": "carousel",
+      "style": "collage",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276664721797/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8988058452139,
+      "title": "Ariana Button Front Ribbed Trim Short Cardigan Top | MeeeShop US Boutique",
+      "board": "Chic & Cozy Anim...",
+      "timestamp": "2026-10-05T20:11:06.424521",
+      "type": "video",
+      "style": "carousel",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276664721871/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8897140588715,
+      "title": "Ymi Women's Luxe Mid Rise Wannabettabutt Skinny Jeans | MeeeShop US Boutique",
+      "board": "Zenana Womens...",
+      "timestamp": "2026-10-05T20:13:39.727847",
+      "type": "carousel",
+      "style": "collage",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276664721946/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-09-30T00:14:02.173306",
-    "Trends": "2026-10-04T23:54:57.929852",
+    "Trends": "2026-10-05T20:07:01.092040",
     "Dresses": "2026-09-27T16:12:10.740177",
     "Feminine & Flowy Fits": "2026-10-05T08:44:16.555889",
     "Short fall dresses": "2026-09-27T20:28:30.955145",
@@ -8773,7 +8817,7 @@
     "Fashion Models": "2026-09-26T07:23:52.358528",
     "My Shop #1737732113": "2026-09-27T07:52:58.867216",
     "Shop For Holidays": "2026-09-27T20:25:54.302856",
-    "New": "2026-10-05T08:41:14.836016",
+    "New": "2026-10-05T20:08:14.253712",
     "American Bazi": "2026-10-01T00:30:42.549462",
     "Cool & Casual Styles": "2026-09-17T20:36:32.448629",
     "MeeeShop's Luxe Styles": "2026-10-01T08:37:57.461950",
@@ -8816,7 +8860,7 @@
     "Bow heels": "2026-09-24T07:28:41.663446",
     "Sweaters": "2026-10-04T20:28:39.858979",
     "Luxe Clothing": "2026-08-21T18:05:31.547180",
-    "Chic & Cozy Anim...": "2026-09-15T20:30:36.807733",
+    "Chic & Cozy Anim...": "2026-10-05T20:11:06.424521",
     "Coats & Jackets": "2026-09-18T23:12:40.092332",
     "Sweaters #Sweaters...": "2026-09-16T20:30:12.116926",
     "Sweaters & Sweater...": "2026-09-16T23:39:58.776363",
@@ -8835,11 +8879,12 @@
     "Meshohn Luxe Styles": "2026-09-12T14:50:36.971883",
     "Look casual...": "2026-09-18T07:19:12.747094",
     "Simple Outfits": "2026-09-21T21:17:08.897037",
-    "Wardrobe Oozes": "2026-09-30T21:39:05.673247"
+    "Wardrobe Oozes": "2026-09-30T21:39:05.673247",
+    "Zenana Womens...": "2026-10-05T20:13:39.727847"
   },
-  "daily_count": 4,
-  "last_post_time": "2026-10-05T08:44:16.555889",
+  "daily_count": 8,
+  "last_post_time": "2026-10-05T20:13:39.727847",
   "board_rotation_cursor": 0,
   "last_image_style": "collage",
-  "last_template_index": 14
+  "last_template_index": 11
 }
