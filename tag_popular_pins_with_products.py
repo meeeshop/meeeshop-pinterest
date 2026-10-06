@@ -841,7 +841,8 @@ def attach_tagged_product_to_pin(
     relevant_products: Any,
     pin_title: str = "",
     pin_desc: str = "",
-    apply_live: bool = False
+    apply_live: bool = False,
+    is_story_pin: bool = False
 ) -> bool:
     """
     Attaches up to 10 relevant Shoppable Products to the Pin image via Catalog variant IDs.
@@ -861,6 +862,22 @@ def attach_tagged_product_to_pin(
     logger.info(f"  Total Relevant In-Stock Products Found   : {len(relevant_products)}")
     for idx, p in enumerate(relevant_products[:5]):
         logger.info(f"    Item #{idx+1}: {p.get('title')} (${p.get('price')}) | Variant ID: {p.get('variant_id')}")
+
+    if is_story_pin:
+        logger.warning(f"  [SKIPPED VISUAL TAGGING] Pin #{pin_id} is an Idea/Story Pin (carousel/pages format). Pinterest web UI only supports visual 'Tag products' shopping bag overlay on Standard Pins.")
+        if apply_live and pclient and hasattr(pclient, 'client') and pclient.client:
+            try:
+                base_text = (pin_desc or pin_title or "MeeeShop Fashion").split(" | Similar In-Stock Style:")[0].strip()
+                updated_desc = f"{base_text} | Similar In-Stock Style: {first_prod.get('title', '')} (${first_prod.get('price', '')}) at us.meeeshop.com"
+                options = {"id": str(pin_id), "description": updated_desc}
+                data = pclient.client.req_builder.buildPost(options=options, source_url=f"/pin/{pin_id}/")
+                resp = pclient.client.post(url="https://www.pinterest.com/resource/PinResource/update/", data=data)
+                if resp.status_code == 200:
+                    logger.info(f"  [SUCCESS] Story Pin #{pin_id} description updated with in-stock style recommendations via Pinterest API!")
+                    return True
+            except Exception as e:
+                logger.error(f"  Pinterest API update exception: {e}")
+        return False
 
     if apply_live:
         visual_success = tag_pin_visually_with_playwright(pin_id, relevant_products, max_tags=10)
@@ -927,6 +944,7 @@ def process_and_tag_popular_pins(
         }
 
         # Attempt to fetch exact pin details if client active
+        is_story_pin = False
         if pclient and hasattr(pclient, 'client') and pclient.client:
             try:
                 options = {"id": str(test_pin_id)}
@@ -941,7 +959,10 @@ def process_and_tag_popular_pins(
                     pin_context["title"] = str(p_data.get('title') or p_data.get('grid_title') or pin_context["title"])
                     pin_context["desc"] = str(p_data.get('description') or pin_context["desc"])
                     pin_context["link"] = str(p_data.get('link') or pin_context["link"])
-                    logger.info(f"Retrieved exact live details for Pin #{test_pin_id}: title='{pin_context['title']}', link='{pin_context['link']}'")
+                    is_story_pin = bool(p_data.get('story_pin_data') or p_data.get('is_story') or p_data.get('has_story_pin_data'))
+                    if is_story_pin:
+                        logger.warning(f"Pin #{test_pin_id} detected as an Idea/Story Pin (carousel). Pinterest only supports visual shopping bag tagging on Standard Pins.")
+                    logger.info(f"Retrieved exact live details for Pin #{test_pin_id}: title='{pin_context['title']}', link='{pin_context['link']}', is_story_pin={is_story_pin}")
             except Exception as ex:
                 logger.debug(f"Fetch exact pin details notice: {ex}")
 
@@ -967,7 +988,8 @@ def process_and_tag_popular_pins(
             relevant_prods,
             pin_title=pin_context["title"],
             pin_desc=pin_context["desc"],
-            apply_live=apply_live
+            apply_live=apply_live,
+            is_story_pin=is_story_pin
         )
 
         test_result = {
@@ -979,6 +1001,7 @@ def process_and_tag_popular_pins(
                 {"title": p["title"], "price": p["price"], "variant_id": p.get("variant_id"), "url": p["url"]}
                 for p in relevant_prods
             ],
+            "is_story_pin": is_story_pin,
             "live_applied": success if apply_live else False,
             "mode": mode_str
         }
@@ -1107,6 +1130,10 @@ def process_and_tag_popular_pins(
                 if not isinstance(pin, dict) or pin.get('type') != 'pin':
                     continue
 
+                # Skip Idea/Story Pins (carousel format) since Pinterest only supports visual shopping bag tagging on Standard Pins
+                if bool(pin.get('story_pin_data')) or bool(pin.get('has_story_pin_data')) or pin.get('is_story'):
+                    continue
+
                 pid = str(pin.get('id', '')).strip()
                 if not pid.isdigit() or len(pid) < 15:
                     continue
@@ -1176,6 +1203,10 @@ def process_and_tag_popular_pins(
                     bpins = pclient.client.board_feed(board_id=bid, page_size=20)
                     for pin in (bpins or []):
                         if not isinstance(pin, dict) or pin.get('type') != 'pin':
+                            continue
+
+                        # Skip Idea/Story Pins (carousel format)
+                        if bool(pin.get('story_pin_data')) or bool(pin.get('has_story_pin_data')) or pin.get('is_story'):
                             continue
 
                         pid = str(pin.get('id', '')).strip()
@@ -1338,8 +1369,15 @@ def main():
     if apply_live:
         if args.test_pin_id:
             if not res or not res.get("live_applied", False):
-                logger.error(f"[FAILURE] Live tagging failed for test Pin #{args.test_pin_id}.")
-                sys.exit(1)
+                if res and res.get("is_story_pin"):
+                    logger.warning(
+                        f"[NOTICE] Pin #{args.test_pin_id} is an Idea/Story Pin (carousel format). "
+                        "Pinterest web UI does not support visual shopping bag product tagging on Story/Carousel Pins (only on Standard Pins). "
+                        "To test visual product tagging, please specify a Standard Pin ID (e.g. 962222276664727672) or run in batch mode."
+                    )
+                else:
+                    logger.error(f"[FAILURE] Live tagging failed for test Pin #{args.test_pin_id}.")
+                    sys.exit(1)
         else:
             if not res or res.get("status") == "error":
                 logger.error("[FAILURE] Live tagging encountered an error.")
