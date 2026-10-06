@@ -8812,6 +8812,52 @@
       "template": 16,
       "pin_url": "https://www.pinterest.com/pin/962222276664727753/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": "571066450091",
+      "article_id": "571066450091",
+      "title": "Casual Sunday Outfit Formulas Around Classic Medium Wash Jeans",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-10-06T01:44:38.736863",
+      "type": "blog",
+      "style": "card",
+      "template": 9,
+      "pin_url": "https://www.pinterest.com/pin/962222276664730514/",
+      "blog_url": "https://us.meeeshop.com/blogs/jeans-style-guide/casual-sunday-outfit-formulas-around-classic-medium-wash-jeans",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8897140359339,
+      "title": "Ymi Women's Luxe High Rise Wannabettabutt Straight Jeans | MeeeShop US Boutique",
+      "board": "New",
+      "timestamp": "2026-10-06T01:45:43.715162",
+      "type": "carousel",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276664730539/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8885502410923,
+      "title": "Judy Blue Full Size Side Seam Detail Straight Jeans with Pockets - Fall Ready",
+      "board": "Kancan USA Jeans",
+      "timestamp": "2026-10-06T01:46:48.693110",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276664730553/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8933199315115,
+      "title": "Women's Cotton Gauze Angela Top - Cozy Fall Shirt for Halloween & Work \u2014 MeeeShop",
+      "board": "Shirts & Tops",
+      "timestamp": "2026-10-06T01:49:38.556851",
+      "type": "video",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276664730606/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
@@ -8832,7 +8878,7 @@
     "Short Tall dresses": "2026-09-28T19:06:30.836754",
     "Rompers, Jumpsuits &...": "2026-09-28T22:44:10.280293",
     "Skirts": "2026-09-26T15:32:13.787098",
-    "Shirts & Tops": "2026-09-23T16:00:03.877123",
+    "Shirts & Tops": "2026-10-06T01:49:38.556851",
     "Blouses": "2026-09-25T07:24:52.128751",
     "Rompers_Jumpsuits &...": "2026-09-29T21:36:35.738149",
     "Handbag #handsips": "2026-09-27T16:13:26.990501",
@@ -8844,7 +8890,7 @@
     "Wardrobe Must Haves": "2026-10-05T08:43:06.250894",
     "Trendy Backpacks": "2026-09-29T01:02:56.591921",
     "Festive Styles": "2026-10-01T08:36:54.596284",
-    "Kancan USA Jeans": "2026-09-16T07:32:48.977827",
+    "Kancan USA Jeans": "2026-10-06T01:46:48.693110",
     "Footwear": "2026-09-07T23:26:56.803572",
     "Fitted Jeans": "2026-09-18T15:40:13.085953",
     "Chic Looks": "2026-10-03T07:52:51.341640",
@@ -8861,7 +8907,7 @@
     "Fashion Models": "2026-09-26T07:23:52.358528",
     "My Shop #1737732113": "2026-09-27T07:52:58.867216",
     "Shop For Holidays": "2026-09-27T20:25:54.302856",
-    "New": "2026-10-05T23:23:57.655275",
+    "New": "2026-10-06T01:45:43.715162",
     "American Bazi": "2026-10-01T00:30:42.549462",
     "Cool & Casual Styles": "2026-09-17T20:36:32.448629",
     "MeeeShop's Luxe Styles": "2026-10-01T08:37:57.461950",
@@ -8926,9 +8972,9 @@
     "Wardrobe Oozes": "2026-09-30T21:39:05.673247",
     "Zenana Womens...": "2026-10-05T20:13:39.727847"
   },
-  "daily_count": 12,
-  "last_post_time": "2026-10-05T23:26:11.342404",
+  "daily_count": 4,
+  "last_post_time": "2026-10-06T01:49:38.556851",
   "board_rotation_cursor": 0,
   "last_image_style": "collage",
-  "last_template_index": 16
+  "last_template_index": 14
 }
