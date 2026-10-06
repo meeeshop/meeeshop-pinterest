@@ -451,20 +451,20 @@ def _tag_pin_via_edit_modal_flow(
     page: Any,
     pin_id: str,
     relevant_products: List[Dict[str, Any]],
-    max_tags: int = 5,
+    max_tags: int = 10,
     take_screenshot: Any = None
 ) -> bool:
     """
     Fallback tagging flow via the Pin's 'Edit Pin' modal:
     1. Opens 'More actions' (...) menu on the pin.
     2. Clicks 'Edit Pin'.
-    3. In the Edit Pin modal under 'Tag Products', clicks 'Add products'.
+    3. In the Edit Pin modal under 'Tag Products', clicks 'Add products' (or (+) button if products already present).
     4. Clicks the 'Use a Link' tab.
-    5. For each relevant Shopify product, enters its product URL to scrape live details.
+    5. Sequentially enters each Shopify product URL to scrape live details.
     6. Clicks the scraped product image card to tag it.
-    7. For subsequent products, clicks (+) to add more links.
-    8. Clicks the red 'Save' button in the Edit Pin modal.
-    9. Confirms the pin was updated with live tags.
+    7. Uses the (+) 'Add product tag' button to add subsequent products (up to max_tags / 10 products).
+    8. Waits until at least 10 products (or all available products) are added.
+    9. Clicks the red 'Save' button in the Edit Pin modal to persist all tagged products live!
     """
     try:
         # Step A: More actions (...)
@@ -491,19 +491,31 @@ def _tag_pin_via_edit_modal_flow(
         page.wait_for_timeout(3000)
         if take_screenshot: take_screenshot("playwright_edit_modal_opened.png")
 
-        # Step C: Click 'Add products' under Tag Products
+        # Step C: Click 'Add products' or (+) under Tag Products
         add_prods_btn = page.get_by_text("Add products", exact=False).first
         if add_prods_btn.count() == 0 or not add_prods_btn.is_visible():
             add_prods_btn = page.locator("button:has-text('Add products'), div[role='button']:has-text('Add products')").first
 
-        if add_prods_btn.count() == 0:
-            logger.warning("    [Fallback Edit Flow] 'Add products' button not found in Edit Pin modal.")
-            return False
+        if add_prods_btn.count() > 0 and add_prods_btn.is_visible():
+            logger.info("    [Fallback Edit Flow] 3. Clicking 'Add products'...")
+            add_prods_btn.scroll_into_view_if_needed()
+            add_prods_btn.click(force=True, timeout=4000)
+            page.wait_for_timeout(3000)
+        else:
+            plus_entry = page.locator(
+                "svg[aria-label='Add product tag'], "
+                "[aria-label='Add product tag'], "
+                "div[role='button']:has(svg[aria-label='Add product tag'])"
+            ).first
+            if plus_entry.count() > 0 and plus_entry.is_visible():
+                logger.info("    [Fallback Edit Flow] 3. Products already present on pin. Clicking (+) 'Add product tag'...")
+                plus_entry.scroll_into_view_if_needed()
+                plus_entry.click(force=True, timeout=4000)
+                page.wait_for_timeout(3000)
+            else:
+                logger.warning("    [Fallback Edit Flow] Neither 'Add products' nor (+) button found in Edit Pin modal.")
+                return False
 
-        logger.info("    [Fallback Edit Flow] 3. Clicking 'Add products'...")
-        add_prods_btn.scroll_into_view_if_needed()
-        add_prods_btn.click(force=True, timeout=4000)
-        page.wait_for_timeout(3000)
         if take_screenshot: take_screenshot("playwright_tag_dialog_opened.png")
 
         # Step D: Click 'Use a Link' tab
@@ -511,7 +523,7 @@ def _tag_pin_via_edit_modal_flow(
         if use_link_tab.count() == 0:
             use_link_tab = page.locator("button:has-text('Use a Link'), div[role='tab']:has-text('Use a Link')").first
 
-        if use_link_tab.count() > 0:
+        if use_link_tab.count() > 0 and use_link_tab.is_visible():
             logger.info("    [Fallback Edit Flow] 4. Switching to 'Use a Link' tab...")
             use_link_tab.click(force=True, timeout=3000)
             page.wait_for_timeout(2000)
@@ -522,6 +534,7 @@ def _tag_pin_via_edit_modal_flow(
 
         for idx, prod in enumerate(relevant_products):
             if added_count >= max_tags:
+                logger.info(f"    [Fallback Edit Flow] Target of {max_tags} tagged products reached.")
                 break
 
             prod_url = str(prod.get('url', '')).split('?')[0].strip()
@@ -530,29 +543,43 @@ def _tag_pin_via_edit_modal_flow(
 
             safe_title = str(prod.get('title', '')).encode('ascii', 'ignore').decode()[:35]
 
-            # If this is product #2+, we might need to click (+) in the Tag Products tray if returned to edit modal
+            # If input is not visible, click (+) in the Tag Products section to reopen
             inp = page.locator("input[placeholder*='product link' i]").first
             if inp.count() == 0 or not inp.is_visible():
                 plus_btn = page.locator(
+                    "svg[aria-label='Add product tag'], "
+                    "[aria-label='Add product tag'], "
+                    "div[role='button']:has(svg[aria-label='Add product tag']), "
+                    "button[aria-label='Add product tag'], "
                     "div[role='button']:has([data-test-id='plus-icon']), "
                     "button:has([data-test-id='plus-icon']), "
-                    "div[aria-label*='Tag products' i] button, "
                     "button:has-text('+')"
                 ).first
                 if plus_btn.count() > 0 and plus_btn.is_visible():
-                    logger.info("    [Fallback Edit Flow] Clicking (+) to add next product tag...")
+                    logger.info(f"    [Fallback Edit Flow] Clicking (+) to open link input for product #{added_count+1}...")
                     plus_btn.click(force=True, timeout=3000)
-                    page.wait_for_timeout(2000)
+                    page.wait_for_timeout(2500)
                     if use_link_tab.count() > 0 and use_link_tab.is_visible():
                         use_link_tab.click(force=True, timeout=2000)
                         page.wait_for_timeout(1500)
                     inp = page.locator("input[placeholder*='product link' i]").first
 
             if inp.count() == 0 or not inp.is_visible():
-                logger.info(f"    [Fallback Edit Flow] Product link input not available for product #{idx+1}. Stopping tag additions.")
+                logger.info(f"    [Fallback Edit Flow] Product link input not available for product #{idx+1}. Retrying plus button...")
+                plus_btn = page.locator("svg[aria-label='Add product tag'], [aria-label='Add product tag']").first
+                if plus_btn.count() > 0:
+                    plus_btn.click(force=True, timeout=3000)
+                    page.wait_for_timeout(2500)
+                    if use_link_tab.count() > 0 and use_link_tab.is_visible():
+                        use_link_tab.click(force=True, timeout=2000)
+                        page.wait_for_timeout(1500)
+                    inp = page.locator("input[placeholder*='product link' i]").first
+
+            if inp.count() == 0 or not inp.is_visible():
+                logger.info(f"    [Fallback Edit Flow] Product link input could not be reopened. Stopping tag additions at {added_count} products.")
                 break
 
-            logger.info(f"    [Fallback Edit Flow] Submitting URL for '{safe_title}': {prod_url}...")
+            logger.info(f"    [Fallback Edit Flow] Submitting URL for product #{added_count+1}/{max_tags} '{safe_title}': {prod_url}...")
             inp.click()
             inp.fill(prod_url)
             inp.press("Enter")
@@ -560,7 +587,11 @@ def _tag_pin_via_edit_modal_flow(
 
             # Click the scraped product image card
             target_img = page.locator("img[src*='cdn/shop'], img[src*='shopify'], img[src*='meeeshop']").first
-            if target_img.count() == 0:
+            if target_img.count() == 0 or not target_img.is_visible():
+                page.wait_for_timeout(2500)
+                target_img = page.locator("img[src*='cdn/shop'], img[src*='shopify'], img[src*='meeeshop']").first
+
+            if target_img.count() == 0 or not target_img.is_visible():
                 # Fallback to the first image card below the input in the Product Tags sidebar
                 inp_box = inp.bounding_box()
                 cand_imgs = page.locator("img")
@@ -571,11 +602,11 @@ def _tag_pin_via_edit_modal_flow(
                         target_img = im
                         break
 
-            if target_img and target_img.count() > 0:
+            if target_img and target_img.count() > 0 and target_img.is_visible():
                 try:
                     target_img.click(force=True, timeout=4000)
                     added_count += 1
-                    logger.info(f"    [Fallback Edit Flow] ✓ Successfully added product tag #{added_count}: '{safe_title}'")
+                    logger.info(f"    [Fallback Edit Flow] [OK] Successfully added product tag #{added_count}/{max_tags}: '{safe_title}'")
                     page.wait_for_timeout(2500)
                 except Exception as ce:
                     logger.warning(f"    [Fallback Edit Flow] Card click notice: {ce}")
@@ -586,15 +617,17 @@ def _tag_pin_via_edit_modal_flow(
             logger.warning("    [Fallback Edit Flow] 0 products could be tagged via product links.")
             return False
 
+        logger.info(f"    [Fallback Edit Flow] Tagging cycle complete. Total products added: {added_count}. Waiting for UI state before saving...")
+        page.wait_for_timeout(2000)
         if take_screenshot: take_screenshot("playwright_edit_modal_tags_added.png")
 
         # Step F: Click the red 'Save' button in the Edit Pin modal
-        logger.info("    [Fallback Edit Flow] 6. Saving Edit Pin modal with updated tags...")
+        logger.info(f"    [Fallback Edit Flow] 6. Clicking red 'Save' button to persist all {added_count} tagged products...")
         save_btn = page.locator("button:has-text('Save'), div[role='button']:has-text('Save'), [data-test-id='save-pin-button']").last
         if save_btn.count() > 0:
             save_btn.scroll_into_view_if_needed()
             save_btn.click(force=True, timeout=5000)
-            page.wait_for_timeout(4000)
+            page.wait_for_timeout(5000)
             if take_screenshot: take_screenshot("playwright_final_tagged_pin.png")
             logger.info(f"  [SUCCESS] [Playwright] Successfully tagged {added_count} products onto Pin #{pin_id} via 'Edit Pin' -> 'Use a Link' flow (URL, title & desc 100% intact)!")
             return True
