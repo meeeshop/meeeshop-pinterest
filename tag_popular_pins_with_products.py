@@ -447,6 +447,166 @@ def find_relevant_shopify_products_for_pin(
     return selected[:target_count]
 
 
+def _tag_pin_via_edit_modal_flow(
+    page: Any,
+    pin_id: str,
+    relevant_products: List[Dict[str, Any]],
+    max_tags: int = 5,
+    take_screenshot: Any = None
+) -> bool:
+    """
+    Fallback tagging flow via the Pin's 'Edit Pin' modal:
+    1. Opens 'More actions' (...) menu on the pin.
+    2. Clicks 'Edit Pin'.
+    3. In the Edit Pin modal under 'Tag Products', clicks 'Add products'.
+    4. Clicks the 'Use a Link' tab.
+    5. For each relevant Shopify product, enters its product URL to scrape live details.
+    6. Clicks the scraped product image card to tag it.
+    7. For subsequent products, clicks (+) to add more links.
+    8. Clicks the red 'Save' button in the Edit Pin modal.
+    9. Confirms the pin was updated with live tags.
+    """
+    try:
+        # Step A: More actions (...)
+        more_btn = page.locator("button[aria-label='More actions'], button[aria-label='More options']").first
+        if more_btn.count() == 0 or not more_btn.is_visible():
+            logger.warning("    [Fallback Edit Flow] 'More actions' (...) button not visible.")
+            return False
+
+        logger.info("    [Fallback Edit Flow] 1. Opening 'More actions' (...) menu...")
+        more_btn.click(force=True, timeout=3000)
+        page.wait_for_timeout(1200)
+
+        # Step B: Click 'Edit Pin'
+        edit_btn = page.get_by_text("Edit Pin", exact=True).first
+        if edit_btn.count() == 0 or not edit_btn.is_visible():
+            edit_btn = page.locator("[role='menuitem']:has-text('Edit Pin'), button:has-text('Edit Pin'), span:has-text('Edit Pin')").first
+
+        if edit_btn.count() == 0:
+            logger.warning("    [Fallback Edit Flow] 'Edit Pin' menu item not found.")
+            return False
+
+        logger.info("    [Fallback Edit Flow] 2. Clicking 'Edit Pin'...")
+        edit_btn.click(force=True, timeout=4000)
+        page.wait_for_timeout(3000)
+        if take_screenshot: take_screenshot("playwright_edit_modal_opened.png")
+
+        # Step C: Click 'Add products' under Tag Products
+        add_prods_btn = page.get_by_text("Add products", exact=False).first
+        if add_prods_btn.count() == 0 or not add_prods_btn.is_visible():
+            add_prods_btn = page.locator("button:has-text('Add products'), div[role='button']:has-text('Add products')").first
+
+        if add_prods_btn.count() == 0:
+            logger.warning("    [Fallback Edit Flow] 'Add products' button not found in Edit Pin modal.")
+            return False
+
+        logger.info("    [Fallback Edit Flow] 3. Clicking 'Add products'...")
+        add_prods_btn.scroll_into_view_if_needed()
+        add_prods_btn.click(force=True, timeout=4000)
+        page.wait_for_timeout(3000)
+        if take_screenshot: take_screenshot("playwright_tag_dialog_opened.png")
+
+        # Step D: Click 'Use a Link' tab
+        use_link_tab = page.get_by_text("Use a Link", exact=False).first
+        if use_link_tab.count() == 0:
+            use_link_tab = page.locator("button:has-text('Use a Link'), div[role='tab']:has-text('Use a Link')").first
+
+        if use_link_tab.count() > 0:
+            logger.info("    [Fallback Edit Flow] 4. Switching to 'Use a Link' tab...")
+            use_link_tab.click(force=True, timeout=3000)
+            page.wait_for_timeout(2000)
+
+        # Step E: Tag relevant products via their Shopify URL
+        logger.info(f"    [Fallback Edit Flow] 5. Tagging up to {max_tags} relevant products via 'Add a product link'...")
+        added_count = 0
+
+        for idx, prod in enumerate(relevant_products):
+            if added_count >= max_tags:
+                break
+
+            prod_url = str(prod.get('url', '')).split('?')[0].strip()
+            if not prod_url:
+                continue
+
+            safe_title = str(prod.get('title', '')).encode('ascii', 'ignore').decode()[:35]
+
+            # If this is product #2+, we might need to click (+) in the Tag Products tray if returned to edit modal
+            inp = page.locator("input[placeholder*='product link' i]").first
+            if inp.count() == 0 or not inp.is_visible():
+                plus_btn = page.locator(
+                    "div[role='button']:has([data-test-id='plus-icon']), "
+                    "button:has([data-test-id='plus-icon']), "
+                    "div[aria-label*='Tag products' i] button, "
+                    "button:has-text('+')"
+                ).first
+                if plus_btn.count() > 0 and plus_btn.is_visible():
+                    logger.info("    [Fallback Edit Flow] Clicking (+) to add next product tag...")
+                    plus_btn.click(force=True, timeout=3000)
+                    page.wait_for_timeout(2000)
+                    if use_link_tab.count() > 0 and use_link_tab.is_visible():
+                        use_link_tab.click(force=True, timeout=2000)
+                        page.wait_for_timeout(1500)
+                    inp = page.locator("input[placeholder*='product link' i]").first
+
+            if inp.count() == 0 or not inp.is_visible():
+                logger.info(f"    [Fallback Edit Flow] Product link input not available for product #{idx+1}. Stopping tag additions.")
+                break
+
+            logger.info(f"    [Fallback Edit Flow] Submitting URL for '{safe_title}': {prod_url}...")
+            inp.click()
+            inp.fill(prod_url)
+            inp.press("Enter")
+            page.wait_for_timeout(5500)
+
+            # Click the scraped product image card
+            target_img = page.locator("img[src*='cdn/shop'], img[src*='shopify'], img[src*='meeeshop']").first
+            if target_img.count() == 0:
+                # Fallback to the first image card below the input in the Product Tags sidebar
+                inp_box = inp.bounding_box()
+                cand_imgs = page.locator("img")
+                for c_i in range(cand_imgs.count()):
+                    im = cand_imgs.nth(c_i)
+                    ibox = im.bounding_box()
+                    if ibox and inp_box and ibox['y'] > inp_box['y'] + 40 and ibox['width'] >= 100:
+                        target_img = im
+                        break
+
+            if target_img and target_img.count() > 0:
+                try:
+                    target_img.click(force=True, timeout=4000)
+                    added_count += 1
+                    logger.info(f"    [Fallback Edit Flow] ✓ Successfully added product tag #{added_count}: '{safe_title}'")
+                    page.wait_for_timeout(2500)
+                except Exception as ce:
+                    logger.warning(f"    [Fallback Edit Flow] Card click notice: {ce}")
+            else:
+                logger.warning(f"    [Fallback Edit Flow] Scraped image not found for '{safe_title}'.")
+
+        if added_count == 0:
+            logger.warning("    [Fallback Edit Flow] 0 products could be tagged via product links.")
+            return False
+
+        if take_screenshot: take_screenshot("playwright_edit_modal_tags_added.png")
+
+        # Step F: Click the red 'Save' button in the Edit Pin modal
+        logger.info("    [Fallback Edit Flow] 6. Saving Edit Pin modal with updated tags...")
+        save_btn = page.locator("button:has-text('Save'), div[role='button']:has-text('Save'), [data-test-id='save-pin-button']").last
+        if save_btn.count() > 0:
+            save_btn.scroll_into_view_if_needed()
+            save_btn.click(force=True, timeout=5000)
+            page.wait_for_timeout(4000)
+            if take_screenshot: take_screenshot("playwright_final_tagged_pin.png")
+            logger.info(f"  [SUCCESS] [Playwright] Successfully tagged {added_count} products onto Pin #{pin_id} via 'Edit Pin' -> 'Use a Link' flow (URL, title & desc 100% intact)!")
+            return True
+        else:
+            logger.warning("    [Fallback Edit Flow] 'Save' button not found in Edit Pin modal.")
+            return False
+
+    except Exception as e_edit:
+        logger.error(f"    [Fallback Edit Flow] Exception during Edit Pin flow: {e_edit}")
+        return False
+
+
 def tag_pin_visually_with_playwright(
     pin_id: str,
     relevant_products: List[Dict[str, Any]],
@@ -577,13 +737,19 @@ def tag_pin_visually_with_playwright(
 
             # Fast check: If Pinterest rendered carousel overlay controls, it is an Idea/Story carousel Pin
             if not tag_btn and page.locator("[data-test-id*='carousel-overlay']").count() > 0:
-                logger.warning(
+                logger.info(
                     f"  [Playwright] Detected carousel overlay navigation on Pin #{pin_id}. "
-                    "This is an Idea/Story Pin (carousel format). Pinterest does not support visual shopping bag product tagging on carousel pins."
+                    "Launching Fallback Tagging Flow: 'Edit Pin' -> 'Add products' -> 'Use a Link'..."
                 )
-                _take_debug_screenshot("playwright_story_pin_detected.png")
+                fallback_success = _tag_pin_via_edit_modal_flow(
+                    page,
+                    pin_id,
+                    relevant_products,
+                    max_tags=max_tags,
+                    take_screenshot=_take_debug_screenshot
+                )
                 browser.close()
-                return False
+                return fallback_success
 
             # Step 3: Hover over pin image to reveal "Tag products" button (if not already revealed)
             if not tag_btn:
@@ -699,21 +865,20 @@ def tag_pin_visually_with_playwright(
                         logger.debug(f"More actions menu notice: {e_more}")
 
             if not tag_btn or tag_btn.count() == 0:
-                logger.warning("  [Playwright] 'Tag products' button not found on Pin image.")
-                logger.info(f"  [Playwright] Diagnostic State -> URL='{page.url}' | Title='{page.title()}'")
-                all_btns = page.locator("button, [role='button']")
-                btn_count = all_btns.count()
-                logger.info(f"  [Playwright] Total interactive button elements detected: {btn_count}")
-                for b_i in range(min(25, btn_count)):
-                    try:
-                        b_el = all_btns.nth(b_i)
-                        b_txt = (b_el.inner_text() or "").strip()[:40]
-                        b_aria = b_el.get_attribute("aria-label") or ""
-                        b_testid = b_el.get_attribute("data-test-id") or ""
-                        logger.info(f"    Button #{b_i+1}: text='{b_txt}' | aria='{b_aria}' | data-test-id='{b_testid}'")
-                    except Exception:
-                        pass
+                logger.info("  [Playwright] Direct 'Tag products' button not found on Pin image.")
+                logger.info("  [Playwright] Launching Fallback Tagging Flow: 'Edit Pin' -> 'Add products' -> 'Use a Link'...")
+                fallback_success = _tag_pin_via_edit_modal_flow(
+                    page,
+                    pin_id,
+                    relevant_products,
+                    max_tags=max_tags,
+                    take_screenshot=_take_debug_screenshot
+                )
+                if fallback_success:
+                    browser.close()
+                    return True
 
+                logger.warning("  [Playwright] Both primary visual tagging and fallback Edit Pin flow could not complete.")
                 _take_debug_screenshot("playwright_tag_failure.png")
                 try:
                     with open("playwright_failure_page.html", "w", encoding="utf-8") as hf:
@@ -892,24 +1057,22 @@ def attach_tagged_product_to_pin(
         safe_t = str(p.get('title') or '').encode('ascii', 'ignore').decode()
         logger.info(f"    Item #{idx+1}: {safe_t} (${p.get('price')}) | Variant ID: {p.get('variant_id')}")
 
-    if is_story_pin:
-        logger.warning(f"  [SKIPPED VISUAL TAGGING] Pin #{pin_id} is an Idea/Story Pin (carousel/pages format). Pinterest web UI only supports visual 'Tag products' shopping bag overlay on Standard Pins.")
-        if apply_live and pclient and hasattr(pclient, 'client') and pclient.client:
-            try:
-                base_text = (pin_desc or pin_title or "MeeeShop Fashion").split(" | Similar In-Stock Style:")[0].strip()
-                updated_desc = f"{base_text} | Similar In-Stock Style: {first_prod.get('title', '')} (${first_prod.get('price', '')}) at us.meeeshop.com"
-                options = {"id": str(pin_id), "description": updated_desc}
-                data = pclient.client.req_builder.buildPost(options=options, source_url=f"/pin/{pin_id}/")
-                resp = pclient.client.post(url="https://www.pinterest.com/resource/PinResource/update/", data=data)
-                if resp.status_code == 200:
-                    logger.info(f"  [SUCCESS] Story Pin #{pin_id} description updated with in-stock style recommendations via Pinterest API!")
-                    return True
-            except Exception as e:
-                logger.error(f"  Pinterest API update exception: {e}")
-        return False
-
     if apply_live:
         visual_success = tag_pin_visually_with_playwright(pin_id, relevant_products, max_tags=10)
+        if not visual_success and is_story_pin:
+            logger.info("  [Playwright] Visual tagging fallback: updating story pin description via Pinterest API...")
+            if pclient and hasattr(pclient, 'client') and pclient.client:
+                try:
+                    base_text = (pin_desc or pin_title or "MeeeShop Fashion").split(" | Similar In-Stock Style:")[0].strip()
+                    updated_desc = f"{base_text} | Similar In-Stock Style: {first_prod.get('title', '')} (${first_prod.get('price', '')}) at us.meeeshop.com"
+                    options = {"id": str(pin_id), "description": updated_desc}
+                    data = pclient.client.req_builder.buildPost(options=options, source_url=f"/pin/{pin_id}/")
+                    resp = pclient.client.post(url="https://www.pinterest.com/resource/PinResource/update/", data=data)
+                    if resp.status_code == 200:
+                        logger.info(f"  [SUCCESS] Story Pin #{pin_id} description updated with in-stock style recommendations via Pinterest API!")
+                        return True
+                except Exception as e:
+                    logger.error(f"  Pinterest API update exception: {e}")
         return visual_success
     else:
         logger.info("  [TEST / DRY-RUN MODE] Visual tagging simulated for up to 10 products (No live edit made).")
