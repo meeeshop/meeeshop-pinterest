@@ -565,14 +565,16 @@ def tag_pin_visually_with_playwright(
             # Step 2: Hover over pin image to reveal "Tag products" button
             logger.info("  [Playwright] 2. Hovering pin image to reveal 'Tag products' button...")
             pin_media_selectors = [
-                "[data-test-id='pin-visual-wrapper']",
+                "[data-test-id='CloseupMainPin']",
                 "[data-test-id='pin-closeup-image']",
+                "[data-test-id='pin-visual-wrapper']",
+                "[elementtiming='StoryPinImageBlock-MainPinImage']",
+                "img[alt='Story pin image']",
+                "div[role='button']:has(img[src*='pinimg.com'])",
                 "div[data-test-id='closeup-image']",
                 "div[data-test-id='pin-media-container']",
-                "img[src*='pinimg.com/736x']",
-                "img[src*='pinimg.com/originals']",
-                "div[role='img']",
-                "[data-test-id='visual-search-crop-box']"
+                "img[src*='pinimg.com']:not([alt*='cutout'])",
+                "div[role='img']"
             ]
 
             pin_media = None
@@ -582,12 +584,16 @@ def tag_pin_visually_with_playwright(
                     pin_media = cand
                     break
 
+            # Hover with force=True and short timeout to bypass pointer interception
             if pin_media:
-                pin_media.hover()
-                page.wait_for_timeout(1000)
+                try:
+                    pin_media.hover(force=True, timeout=3000)
+                    page.wait_for_timeout(600)
+                except Exception as he:
+                    logger.debug(f"  [Playwright] pin_media hover notice: {he}")
             else:
                 # Fallback: hover largest visible image
-                imgs = page.locator("img")
+                imgs = page.locator("img:not([alt*='cutout'])")
                 max_area = 0
                 best_img = None
                 for idx in range(imgs.count()):
@@ -602,8 +608,30 @@ def tag_pin_visually_with_playwright(
                     except Exception:
                         pass
                 if best_img:
-                    best_img.hover()
-                    page.wait_for_timeout(1000)
+                    try:
+                        best_img.hover(force=True, timeout=3000)
+                        page.wait_for_timeout(600)
+                    except Exception:
+                        pass
+
+            # Move mouse specifically to the pin image and top-right corner where shopping bag icon sits
+            try:
+                target_box = None
+                if pin_media:
+                    target_box = pin_media.bounding_box()
+                if not target_box:
+                    main_pin = page.locator("[data-test-id='CloseupMainPin'], [elementtiming='StoryPinImageBlock-MainPinImage']").first
+                    if main_pin.count() > 0:
+                        target_box = main_pin.bounding_box()
+                if target_box:
+                    # Move to center
+                    page.mouse.move(target_box['x'] + target_box['width'] / 2, target_box['y'] + target_box['height'] / 2)
+                    page.wait_for_timeout(400)
+                    # Move to top-right corner
+                    page.mouse.move(target_box['x'] + target_box['width'] - 35, target_box['y'] + 35)
+                    page.wait_for_timeout(600)
+            except Exception:
+                pass
 
             tag_btn_selectors = [
                 "button[aria-label='Tag products']",
@@ -611,7 +639,9 @@ def tag_pin_visually_with_playwright(
                 "button[aria-label*='Tag product' i]",
                 "div[role='button'][aria-label*='Tag product' i]",
                 "button:has-text('Tag products')",
-                "[aria-label='Tag products']"
+                "[aria-label='Tag products']",
+                "button[aria-label*='Tag' i]",
+                "[data-test-id*='tag' i]"
             ]
 
             tag_btn = None
@@ -621,20 +651,20 @@ def tag_pin_visually_with_playwright(
                     tag_btn = cand
                     break
 
-            # If not revealed yet, position mouse at top-right of pin media container
-            if not tag_btn and pin_media:
-                try:
-                    box = pin_media.bounding_box()
-                    if box:
-                        page.mouse.move(box['x'] + box['width'] - 30, box['y'] + 30)
+            # If not revealed yet, check More actions (...) menu as fallback
+            if not tag_btn or tag_btn.count() == 0:
+                more_btn = page.locator("button[aria-label='More actions'], button[aria-label='More options']").first
+                if more_btn.count() > 0 and more_btn.is_visible():
+                    try:
+                        more_btn.click(force=True, timeout=2000)
                         page.wait_for_timeout(1000)
                         for tsel in tag_btn_selectors:
                             cand = page.locator(tsel).first
-                            if cand.count() > 0:
+                            if cand.count() > 0 and cand.is_visible():
                                 tag_btn = cand
                                 break
-                except Exception:
-                    pass
+                    except Exception:
+                        pass
 
             if not tag_btn or tag_btn.count() == 0:
                 logger.warning("  [Playwright] 'Tag products' button not found on Pin image.")
@@ -642,7 +672,10 @@ def tag_pin_visually_with_playwright(
                 browser.close()
                 return False
 
-            tag_btn.click()
+            try:
+                tag_btn.click(force=True, timeout=5000)
+            except Exception:
+                tag_btn.click()
             page.wait_for_timeout(3000)
 
             # Step 3: Click '+' in tagged-items-grid
@@ -655,7 +688,10 @@ def tag_pin_visually_with_playwright(
                 browser.close()
                 return False
 
-            add_btn.click()
+            try:
+                add_btn.click(force=True, timeout=5000)
+            except Exception:
+                add_btn.click()
             page.wait_for_timeout(3000)
 
             dialog = page.locator('[role="dialog"]')
@@ -669,7 +705,10 @@ def tag_pin_visually_with_playwright(
                 browser.close()
                 return False
 
-            catalog_tab.click()
+            try:
+                catalog_tab.click(force=True, timeout=5000)
+            except Exception:
+                catalog_tab.click()
             page.wait_for_timeout(2000)
 
             inp = dialog.locator('input[placeholder*="Enter product item ID"]').first
@@ -718,7 +757,7 @@ def tag_pin_visually_with_playwright(
 
                 if card:
                     try:
-                        card.click()
+                        card.click(force=True, timeout=5000)
                         added_count += 1
                         logger.info(f"      Successfully added product #{added_count}")
                         page.wait_for_timeout(800)
@@ -742,14 +781,20 @@ def tag_pin_visually_with_playwright(
                 save_btn = page.locator("button:has-text('Save product')").first
 
             if save_btn.count() > 0 and save_btn.is_enabled():
-                save_btn.click()
+                try:
+                    save_btn.click(force=True, timeout=5000)
+                except Exception:
+                    save_btn.click()
                 page.wait_for_timeout(3000)
 
             # Step 7: Click "Done" button to save tags on Pin
             logger.info("  [Playwright] 7. Clicking 'Done' button to save tags on Pin...")
             done_btn = page.locator("button:has-text('Done')").first
             if done_btn.count() > 0:
-                done_btn.click()
+                try:
+                    done_btn.click(force=True, timeout=5000)
+                except Exception:
+                    done_btn.click()
                 page.wait_for_timeout(4000)
                 logger.info(f"  [SUCCESS] [Playwright] Successfully tagged {added_count} relevant products onto Pin #{pin_id} (title, desc & URL 100% untouched)!")
                 browser.close()
