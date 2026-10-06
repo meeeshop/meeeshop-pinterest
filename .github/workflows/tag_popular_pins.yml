@@ -76,13 +76,14 @@ jobs:
           echo "Executing command: $CMD"
           eval $CMD
 
-      - name: Upload Debug Screenshots on Failure
-        if: failure()
+      - name: Upload Debug Artifacts (Screenshots & HTML)
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-tag-debug-screenshots
+          name: playwright-tag-debug-artifacts
           path: |
             playwright_*.png
+            playwright_*.html
             *.png
           if-no-files-found: ignore
 

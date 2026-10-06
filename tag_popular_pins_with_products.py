@@ -511,40 +511,33 @@ def tag_pin_visually_with_playwright(
                 except Exception as se:
                     logger.debug(f"  [Playwright] Could not save screenshot: {se}")
 
-            def _is_logged_in() -> bool:
-                if "login" in page.url.lower():
-                    return False
-                # If Login/Sign up buttons exist on header
-                login_indicators = page.locator("button:has-text('Log in'), a:has-text('Log in'), [data-test-id='login-button']")
-                if login_indicators.count() > 0 and login_indicators.first.is_visible():
-                    return False
-                # If authenticated profile indicator exists
-                auth_indicators = page.locator(
-                    "[data-test-id='header-profile'], "
-                    "[data-test-id='header-profile-avatar'], "
-                    "[aria-label*='profile' i], "
-                    "button[aria-label*='Accounts and more' i], "
-                    "[data-test-id='business-hub-header'], "
-                    "a[href*='/meeeshop']"
-                )
-                if auth_indicators.count() > 0:
-                    return True
-                return "pin/" in page.url.lower() and login_indicators.count() == 0
+            # Step 1: Verify active authenticated session via /pin-builder/
+            logger.info("  [Playwright] Step 1: Verifying active authentication session on Pinterest...")
+            try:
+                page.goto("https://www.pinterest.com/pin-builder/", wait_until="domcontentloaded", timeout=45000)
+                page.wait_for_timeout(2500)
+                logger.info(f"  [Playwright] Auth check initial landing: URL='{page.url}' | Title='{page.title()}'")
+            except Exception as e_nav:
+                logger.warning(f"  [Playwright] Initial navigation notice: {e_nav}")
 
-            logger.info(f"  [Playwright] 1. Loading Pin page: https://www.pinterest.com/pin/{pin_id}/")
-            page.goto(f'https://www.pinterest.com/pin/{pin_id}/', wait_until='domcontentloaded', timeout=45000)
-            page.wait_for_timeout(3000)
-
-            # Check authentication state and fallback to UI login if needed
-            if not _is_logged_in():
-                logger.info("  [Playwright] Session not authenticated. Attempting UI login fallback...")
+            if "login" in page.url.lower() or "pin-builder" not in page.url.lower():
+                logger.info("  [Playwright] Session unauthenticated or redirected to login. Attempting login via credentials...")
+                _take_debug_screenshot("playwright_00_pre_login.png")
                 if poster.email and poster.password and poster._login_via_ui(page):
-                    logger.info("  [Playwright] ✓ UI login succeeded! Saving updated session cookies...")
+                    logger.info(f"  [Playwright] ✓ UI login succeeded! Current URL: {page.url}")
                     poster._save_cookies(ctx)
-                    page.goto(f'https://www.pinterest.com/pin/{pin_id}/', wait_until='domcontentloaded', timeout=45000)
-                    page.wait_for_timeout(3000)
+                    _take_debug_screenshot("playwright_00_post_login.png")
                 else:
                     logger.warning("  [Playwright] UI login fallback could not complete or credentials unavailable.")
+            else:
+                logger.info("  [Playwright] ✓ Authenticated session confirmed on Pinterest!")
+
+            # Step 2: Navigate to target Pin page
+            logger.info(f"  [Playwright] Step 2: Loading target Pin page: https://www.pinterest.com/pin/{pin_id}/")
+            page.goto(f'https://www.pinterest.com/pin/{pin_id}/', wait_until='domcontentloaded', timeout=45000)
+            page.wait_for_timeout(3000)
+            logger.info(f"  [Playwright] Target Pin loaded: URL='{page.url}' | Title='{page.title()}'")
+            _take_debug_screenshot("playwright_01_pin_loaded.png")
 
             # Dismiss any popup banners, cookie notices, or prompts
             try:
@@ -557,13 +550,14 @@ def tag_pin_visually_with_playwright(
                 ]:
                     close_btns = page.locator(dismiss_sel)
                     if close_btns.count() > 0 and close_btns.first.is_visible():
-                        close_btns.first.click()
+                        logger.info(f"  [Playwright] Dismissing popup banner: {dismiss_sel}")
+                        close_btns.first.click(force=True, timeout=2000)
                         page.wait_for_timeout(500)
             except Exception:
                 pass
 
-            # Step 2: Hover over pin image to reveal "Tag products" button
-            logger.info("  [Playwright] 2. Hovering pin image to reveal 'Tag products' button...")
+            # Step 3: Hover over pin image to reveal "Tag products" button
+            logger.info("  [Playwright] Step 3: Hovering pin image to reveal 'Tag products' button...")
             pin_media_selectors = [
                 "[data-test-id='CloseupMainPin']",
                 "[data-test-id='pin-closeup-image']",
@@ -581,6 +575,7 @@ def tag_pin_visually_with_playwright(
             for psel in pin_media_selectors:
                 cand = page.locator(psel).first
                 if cand.count() > 0 and cand.is_visible():
+                    logger.info(f"  [Playwright] Resolved pin media container: '{psel}'")
                     pin_media = cand
                     break
 
@@ -593,6 +588,7 @@ def tag_pin_visually_with_playwright(
                     logger.debug(f"  [Playwright] pin_media hover notice: {he}")
             else:
                 # Fallback: hover largest visible image
+                logger.info("  [Playwright] Primary container selectors not found. Searching for largest image on page...")
                 imgs = page.locator("img:not([alt*='cutout'])")
                 max_area = 0
                 best_img = None
@@ -608,6 +604,7 @@ def tag_pin_visually_with_playwright(
                     except Exception:
                         pass
                 if best_img:
+                    logger.info(f"  [Playwright] Hovering largest image (area={max_area})...")
                     try:
                         best_img.hover(force=True, timeout=3000)
                         page.wait_for_timeout(600)
@@ -624,14 +621,17 @@ def tag_pin_visually_with_playwright(
                     if main_pin.count() > 0:
                         target_box = main_pin.bounding_box()
                 if target_box:
+                    logger.info(f"  [Playwright] Pin media bounding box: x={target_box['x']}, y={target_box['y']}, w={target_box['width']}, h={target_box['height']}")
                     # Move to center
                     page.mouse.move(target_box['x'] + target_box['width'] / 2, target_box['y'] + target_box['height'] / 2)
                     page.wait_for_timeout(400)
                     # Move to top-right corner
                     page.mouse.move(target_box['x'] + target_box['width'] - 35, target_box['y'] + 35)
                     page.wait_for_timeout(600)
-            except Exception:
-                pass
+            except Exception as e_box:
+                logger.debug(f"  [Playwright] Bounding box hover notice: {e_box}")
+
+            _take_debug_screenshot("playwright_02_hover_state.png")
 
             tag_btn_selectors = [
                 "button[aria-label='Tag products']",
@@ -647,7 +647,8 @@ def tag_pin_visually_with_playwright(
             tag_btn = None
             for tsel in tag_btn_selectors:
                 cand = page.locator(tsel).first
-                if cand.count() > 0:
+                if cand.count() > 0 and cand.is_visible():
+                    logger.info(f"  [Playwright] Found 'Tag products' button via selector: '{tsel}'")
                     tag_btn = cand
                     break
 
@@ -655,20 +656,43 @@ def tag_pin_visually_with_playwright(
             if not tag_btn or tag_btn.count() == 0:
                 more_btn = page.locator("button[aria-label='More actions'], button[aria-label='More options']").first
                 if more_btn.count() > 0 and more_btn.is_visible():
+                    logger.info("  [Playwright] 'Tag products' not visible on hover. Opening 'More actions' (...) menu...")
                     try:
                         more_btn.click(force=True, timeout=2000)
                         page.wait_for_timeout(1000)
+                        _take_debug_screenshot("playwright_02_more_actions_open.png")
                         for tsel in tag_btn_selectors:
                             cand = page.locator(tsel).first
                             if cand.count() > 0 and cand.is_visible():
+                                logger.info(f"  [Playwright] Found 'Tag products' in More actions menu: '{tsel}'")
                                 tag_btn = cand
                                 break
-                    except Exception:
-                        pass
+                    except Exception as e_more:
+                        logger.debug(f"More actions menu notice: {e_more}")
 
             if not tag_btn or tag_btn.count() == 0:
                 logger.warning("  [Playwright] 'Tag products' button not found on Pin image.")
+                logger.info(f"  [Playwright] Diagnostic State -> URL='{page.url}' | Title='{page.title()}'")
+                all_btns = page.locator("button, [role='button']")
+                btn_count = all_btns.count()
+                logger.info(f"  [Playwright] Total interactive button elements detected: {btn_count}")
+                for b_i in range(min(25, btn_count)):
+                    try:
+                        b_el = all_btns.nth(b_i)
+                        b_txt = (b_el.inner_text() or "").strip()[:40]
+                        b_aria = b_el.get_attribute("aria-label") or ""
+                        b_testid = b_el.get_attribute("data-test-id") or ""
+                        logger.info(f"    Button #{b_i+1}: text='{b_txt}' | aria='{b_aria}' | data-test-id='{b_testid}'")
+                    except Exception:
+                        pass
+
                 _take_debug_screenshot("playwright_tag_failure.png")
+                try:
+                    with open("playwright_failure_page.html", "w", encoding="utf-8") as hf:
+                        hf.write(page.content())
+                    logger.info("  [Playwright] Dumped full DOM HTML to playwright_failure_page.html")
+                except Exception:
+                    pass
                 browser.close()
                 return False
 
