@@ -4479,6 +4479,46 @@
       "target_board_id": "962222345325118481",
       "live_url": "https://www.pinterest.com/pin/4598034564963717184/",
       "timestamp": "2026-10-06T04:54:12.412096+00:00"
+    },
+    {
+      "pin_id": "4590927370258899008",
+      "product_title": "Cross Back Polka Dot Dress with Pockets",
+      "category_group": "dresses",
+      "source_board": "_products",
+      "target_board": "Dressy Outfits",
+      "target_board_id": "962222345325709865",
+      "live_url": "https://www.pinterest.com/pin/4590927370258899008/",
+      "timestamp": "2026-10-06T08:32:39.635517+00:00"
+    },
+    {
+      "pin_id": "4590927365963931712",
+      "product_title": "Ximena Tote Bag and Wallet Set",
+      "category_group": "bags_accessories",
+      "source_board": "_products",
+      "target_board": "Bags",
+      "target_board_id": "962222345325683645",
+      "live_url": "https://www.pinterest.com/pin/4590927365963931712/",
+      "timestamp": "2026-10-06T08:33:05.884470+00:00"
+    },
+    {
+      "pin_id": "4590927361668964416",
+      "product_title": "High Waist Jersey Skirt with Side Pockets",
+      "category_group": "skirts",
+      "source_board": "_products",
+      "target_board": "Feminine & Flowy Fits",
+      "target_board_id": "962222345325696967",
+      "live_url": "https://www.pinterest.com/pin/4590927361668964416/",
+      "timestamp": "2026-10-06T08:33:21.568827+00:00"
+    },
+    {
+      "pin_id": "4590927362742706240",
+      "product_title": "Olive Green Longline Trench Coat with Belt",
+      "category_group": "outerwear",
+      "source_board": "_products",
+      "target_board": "best selling products",
+      "target_board_id": "962222345325596670",
+      "live_url": "https://www.pinterest.com/pin/4590927362742706240/",
+      "timestamp": "2026-10-06T08:33:50.459376+00:00"
     }
   ],
   "board_last_used": {
@@ -4487,14 +4527,14 @@
     "Skirts": "2026-10-05T08:16:08.391532+00:00",
     "Dresses": "2026-10-03T20:08:51.233458+00:00",
     "Sweaters": "2026-10-05T08:16:26.016701+00:00",
-    "Dressy Outfits": "2026-09-29T21:32:41.454673+00:00",
+    "Dressy Outfits": "2026-10-06T08:32:39.635517+00:00",
     "Dress": "2026-10-04T07:44:53.903864+00:00",
     "Outerwear": "2026-09-30T00:01:52.269089+00:00",
     "Chic & Cozy: Annie Wear Trends": "2026-10-05T23:20:08.170881+00:00",
     "Chic Looks": "2026-10-02T21:27:36.403164+00:00",
     "Short fall dresses": "2026-10-04T16:34:31.792639+00:00",
     "Shirts & Tops": "2026-10-03T07:33:50.132616+00:00",
-    "Feminine & Flowy Fits": "2026-10-01T21:58:52.204877+00:00",
+    "Feminine & Flowy Fits": "2026-10-06T08:33:21.568827+00:00",
     "Blouses": "2026-10-03T20:09:43.329353+00:00",
     "Must-Have Fashion Picks": "2026-10-03T07:34:48.731402+00:00",
     "\"fashion models\"": "2026-10-03T07:35:21.622588+00:00",
@@ -4518,7 +4558,7 @@
     "Wardrobe Goals": "2026-10-05T23:19:51.715846+00:00",
     "Emory Park Clothing": "2026-10-03T23:28:14.350608+00:00",
     "Shop For Holidays": "2026-10-05T23:20:26.208912+00:00",
-    "Bags": "2026-09-28T08:12:23.494163+00:00",
+    "Bags": "2026-10-06T08:33:05.884470+00:00",
     "MeeeShop's Luxe Styles": "2026-10-04T23:45:34.073719+00:00",
     "Davi & Dani Womens Clothing | us.meeeshop.com": "2026-10-01T00:19:22.235691+00:00",
     "Zenana Women's Clothing, Dresses, Tops, Pants": "2026-10-04T16:35:47.576285+00:00",
@@ -4529,7 +4569,7 @@
     "Nylon backpack": "2026-09-30T07:56:23.887814+00:00",
     "Mustard Seed Clothing": "2026-10-03T15:52:52.208575+00:00",
     "Effortless Looks": "2026-10-06T04:53:25.832529+00:00",
-    "best selling products": "2026-10-02T00:24:13.021076+00:00",
+    "best selling products": "2026-10-06T08:33:50.459376+00:00",
     "New Trendy Women Apparel, Shoes, Handbags & more": "2026-10-01T21:59:26.056358+00:00",
     "BFCM Deals": "2026-10-02T00:24:32.906066+00:00",
     "Sweaters for women": "2026-10-03T15:52:30.100444+00:00",
@@ -4558,6 +4598,6 @@
     "Simple Outfits": "2026-09-14T07:33:46.407531+00:00",
     "Women's shacket": "2026-09-23T23:24:09.009069+00:00"
   },
-  "daily_count": 4,
-  "last_repin_time": "2026-10-06T04:54:12.412096+00:00"
+  "daily_count": 8,
+  "last_repin_time": "2026-10-06T08:33:50.459376+00:00"
 }
