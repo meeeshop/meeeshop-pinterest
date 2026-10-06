@@ -473,33 +473,172 @@ def tag_pin_visually_with_playwright(
     try:
         poster = StealthPinterestPoster(headless=True)
         cookies = poster._get_cookies_dict()
-        if not cookies:
-            logger.warning("  [Playwright] No Pinterest cookies found for visual tagging.")
+        if not cookies and not (poster.email and poster.password):
+            logger.warning("  [Playwright] Neither Pinterest cookies nor login credentials found for visual tagging.")
             return False
 
         with sync_playwright() as p:
             browser = p.chromium.launch(
                 headless=True,
-                args=['--no-sandbox', '--disable-blink-features=AutomationControlled', '--disable-dev-shm-usage']
+                args=[
+                    '--no-sandbox',
+                    '--disable-setuid-sandbox',
+                    '--disable-blink-features=AutomationControlled',
+                    '--disable-dev-shm-usage',
+                    '--disable-infobars',
+                    '--window-size=1280,900'
+                ]
             )
-            ctx = browser.new_context(viewport={'width': 1280, 'height': 900})
-            ctx.add_cookies(cookies)
+            ctx = browser.new_context(
+                viewport={'width': 1280, 'height': 900},
+                user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+                locale="en-US",
+                timezone_id="America/New_York"
+            )
+            ctx.add_init_script("Object.defineProperty(navigator, 'webdriver', { get: () => undefined });")
+            if cookies:
+                try:
+                    ctx.add_cookies(cookies)
+                except Exception as ce:
+                    logger.warning(f"  [Playwright] Cookie injection notice: {ce}")
+
             page = ctx.new_page()
 
+            def _take_debug_screenshot(name: str = "playwright_tag_failure.png"):
+                try:
+                    page.screenshot(path=name, full_page=True)
+                    logger.info(f"  [Playwright] Saved diagnostic screenshot to {name} (URL: {page.url})")
+                except Exception as se:
+                    logger.debug(f"  [Playwright] Could not save screenshot: {se}")
+
+            def _is_logged_in() -> bool:
+                if "login" in page.url.lower():
+                    return False
+                # If Login/Sign up buttons exist on header
+                login_indicators = page.locator("button:has-text('Log in'), a:has-text('Log in'), [data-test-id='login-button']")
+                if login_indicators.count() > 0 and login_indicators.first.is_visible():
+                    return False
+                # If authenticated profile indicator exists
+                auth_indicators = page.locator(
+                    "[data-test-id='header-profile'], "
+                    "[data-test-id='header-profile-avatar'], "
+                    "[aria-label*='profile' i], "
+                    "button[aria-label*='Accounts and more' i], "
+                    "[data-test-id='business-hub-header'], "
+                    "a[href*='/meeeshop']"
+                )
+                if auth_indicators.count() > 0:
+                    return True
+                return "pin/" in page.url.lower() and login_indicators.count() == 0
+
             logger.info(f"  [Playwright] 1. Loading Pin page: https://www.pinterest.com/pin/{pin_id}/")
-            page.goto(f'https://www.pinterest.com/pin/{pin_id}/', wait_until='domcontentloaded')
+            page.goto(f'https://www.pinterest.com/pin/{pin_id}/', wait_until='domcontentloaded', timeout=45000)
             page.wait_for_timeout(3000)
 
-            # Step 2: Hover over image and click "Tag products"
-            logger.info("  [Playwright] 2. Hovering pin image to reveal 'Tag products' button...")
-            img = page.locator("img").first
-            if img.count() > 0:
-                img.hover()
-                page.wait_for_timeout(1000)
+            # Check authentication state and fallback to UI login if needed
+            if not _is_logged_in():
+                logger.info("  [Playwright] Session not authenticated. Attempting UI login fallback...")
+                if poster.email and poster.password and poster._login_via_ui(page):
+                    logger.info("  [Playwright] ✓ UI login succeeded! Saving updated session cookies...")
+                    poster._save_cookies(ctx)
+                    page.goto(f'https://www.pinterest.com/pin/{pin_id}/', wait_until='domcontentloaded', timeout=45000)
+                    page.wait_for_timeout(3000)
+                else:
+                    logger.warning("  [Playwright] UI login fallback could not complete or credentials unavailable.")
 
-            tag_btn = page.locator("button[aria-label='Tag products']").first
-            if tag_btn.count() == 0:
+            # Dismiss any popup banners, cookie notices, or prompts
+            try:
+                for dismiss_sel in [
+                    "button[aria-label='Close']",
+                    "[data-test-id='modal-close-button']",
+                    "button:has-text('Accept all')",
+                    "button:has-text('Got it')",
+                    "button:has-text('Not now')"
+                ]:
+                    close_btns = page.locator(dismiss_sel)
+                    if close_btns.count() > 0 and close_btns.first.is_visible():
+                        close_btns.first.click()
+                        page.wait_for_timeout(500)
+            except Exception:
+                pass
+
+            # Step 2: Hover over pin image to reveal "Tag products" button
+            logger.info("  [Playwright] 2. Hovering pin image to reveal 'Tag products' button...")
+            pin_media_selectors = [
+                "[data-test-id='pin-visual-wrapper']",
+                "[data-test-id='pin-closeup-image']",
+                "div[data-test-id='closeup-image']",
+                "div[data-test-id='pin-media-container']",
+                "img[src*='pinimg.com/736x']",
+                "img[src*='pinimg.com/originals']",
+                "div[role='img']",
+                "[data-test-id='visual-search-crop-box']"
+            ]
+
+            pin_media = None
+            for psel in pin_media_selectors:
+                cand = page.locator(psel).first
+                if cand.count() > 0 and cand.is_visible():
+                    pin_media = cand
+                    break
+
+            if pin_media:
+                pin_media.hover()
+                page.wait_for_timeout(1000)
+            else:
+                # Fallback: hover largest visible image
+                imgs = page.locator("img")
+                max_area = 0
+                best_img = None
+                for idx in range(imgs.count()):
+                    cand = imgs.nth(idx)
+                    try:
+                        box = cand.bounding_box()
+                        if box and box['width'] > 180 and box['height'] > 180:
+                            area = box['width'] * box['height']
+                            if area > max_area:
+                                max_area = area
+                                best_img = cand
+                    except Exception:
+                        pass
+                if best_img:
+                    best_img.hover()
+                    page.wait_for_timeout(1000)
+
+            tag_btn_selectors = [
+                "button[aria-label='Tag products']",
+                "[data-test-id='tag-products-button']",
+                "button[aria-label*='Tag product' i]",
+                "div[role='button'][aria-label*='Tag product' i]",
+                "button:has-text('Tag products')",
+                "[aria-label='Tag products']"
+            ]
+
+            tag_btn = None
+            for tsel in tag_btn_selectors:
+                cand = page.locator(tsel).first
+                if cand.count() > 0:
+                    tag_btn = cand
+                    break
+
+            # If not revealed yet, position mouse at top-right of pin media container
+            if not tag_btn and pin_media:
+                try:
+                    box = pin_media.bounding_box()
+                    if box:
+                        page.mouse.move(box['x'] + box['width'] - 30, box['y'] + 30)
+                        page.wait_for_timeout(1000)
+                        for tsel in tag_btn_selectors:
+                            cand = page.locator(tsel).first
+                            if cand.count() > 0:
+                                tag_btn = cand
+                                break
+                except Exception:
+                    pass
+
+            if not tag_btn or tag_btn.count() == 0:
                 logger.warning("  [Playwright] 'Tag products' button not found on Pin image.")
+                _take_debug_screenshot("playwright_tag_failure.png")
                 browser.close()
                 return False
 
@@ -512,6 +651,7 @@ def tag_pin_visually_with_playwright(
             add_btn = grid.locator("div[role='button'], button, div[tabindex='0']").first
             if add_btn.count() == 0:
                 logger.warning("  [Playwright] '+' button not found in tagged-items-grid.")
+                _take_debug_screenshot("playwright_tag_failure.png")
                 browser.close()
                 return False
 
@@ -525,6 +665,7 @@ def tag_pin_visually_with_playwright(
             catalog_tab = dialog.locator('button:has-text("Catalog"), div:has-text("Catalog")').last
             if catalog_tab.count() == 0:
                 logger.warning("  [Playwright] 'Catalog' tab not found in modal.")
+                _take_debug_screenshot("playwright_tag_failure.png")
                 browser.close()
                 return False
 
@@ -534,6 +675,7 @@ def tag_pin_visually_with_playwright(
             inp = dialog.locator('input[placeholder*="Enter product item ID"]').first
             if inp.count() == 0:
                 logger.warning("  [Playwright] 'Enter product item ID' input field not found.")
+                _take_debug_screenshot("playwright_tag_failure.png")
                 browser.close()
                 return False
 
@@ -565,7 +707,6 @@ def tag_pin_visually_with_playwright(
                     continue
 
                 # Find the matched catalog card in the main search grid (NOT in bottom selection tray!)
-                # Search result cards are in dialog with y between 200 and 660, width >= 80
                 card = None
                 imgs = dialog.locator('img[src*="pinimg"]')
                 for idx in range(imgs.count()):
@@ -588,6 +729,7 @@ def tag_pin_visually_with_playwright(
 
             if added_count == 0:
                 logger.warning("  [Playwright] 0 products were added via Catalog variant IDs.")
+                _take_debug_screenshot("playwright_tag_failure.png")
                 browser.close()
                 return False
 
@@ -614,6 +756,7 @@ def tag_pin_visually_with_playwright(
                 return True
             else:
                 logger.warning("  [Playwright] 'Done' button not found.")
+                _take_debug_screenshot("playwright_tag_failure.png")
                 browser.close()
                 return False
 
