@@ -556,53 +556,81 @@ def tag_pin_visually_with_playwright(
             except Exception:
                 pass
 
-            # Step 3: Hover over pin image to reveal "Tag products" button
-            logger.info("  [Playwright] Step 3: Hovering pin image to reveal 'Tag products' button...")
-            pin_media_selectors = [
-                "[data-test-id='CloseupMainPin']",
-                "[data-test-id='pin-closeup-image']",
-                "[data-test-id='pin-visual-wrapper']",
-                "[elementtiming='StoryPinImageBlock-MainPinImage']",
-                "img[alt='Story pin image']",
-                "div[role='button']:has(img[src*='pinimg.com'])",
-                "div[data-test-id='closeup-image']",
-                "div[data-test-id='pin-media-container']",
-                "img[src*='pinimg.com']:not([alt*='cutout'])",
-                "div[role='img']"
+            tag_btn_selectors = [
+                "button[aria-label='Tag products']",
+                "[data-test-id='tag-products-button']",
+                "button[aria-label*='Tag product' i]",
+                "div[role='button'][aria-label*='Tag product' i]",
+                "button:has-text('Tag products')",
+                "[aria-label='Tag products']",
+                "button[aria-label*='Tag' i]",
+                "[data-test-id*='tag' i]"
             ]
 
-            pin_media = None
-            for psel in pin_media_selectors:
-                cand = page.locator(psel).first
+            tag_btn = None
+            for tsel in tag_btn_selectors:
+                cand = page.locator(tsel).first
                 if cand.count() > 0 and cand.is_visible():
-                    logger.info(f"  [Playwright] Resolved pin media container: '{psel}'")
-                    pin_media = cand
+                    logger.info(f"  [Playwright] Found 'Tag products' button on page load: '{tsel}'")
+                    tag_btn = cand
                     break
 
-            # Hover with force=True and short timeout to bypass pointer interception
-            if pin_media:
-                try:
-                    pin_media.hover(force=True, timeout=3000)
-                    page.wait_for_timeout(600)
-                except Exception as he:
-                    logger.debug(f"  [Playwright] pin_media hover notice: {he}")
-            else:
-                # Fallback: hover largest visible image
-                logger.info("  [Playwright] Primary container selectors not found. Searching for largest image on page...")
-                imgs = page.locator("img:not([alt*='cutout'])")
-                max_area = 0
-                best_img = None
-                for idx in range(imgs.count()):
-                    cand = imgs.nth(idx)
+            # Fast check: If Pinterest rendered carousel overlay controls, it is an Idea/Story carousel Pin
+            if not tag_btn and page.locator("[data-test-id*='carousel-overlay']").count() > 0:
+                logger.warning(
+                    f"  [Playwright] Detected carousel overlay navigation on Pin #{pin_id}. "
+                    "This is an Idea/Story Pin (carousel format). Pinterest does not support visual shopping bag product tagging on carousel pins."
+                )
+                _take_debug_screenshot("playwright_story_pin_detected.png")
+                browser.close()
+                return False
+
+            # Step 3: Hover over pin image to reveal "Tag products" button (if not already revealed)
+            if not tag_btn:
+                logger.info("  [Playwright] Step 3: Hovering pin image to reveal 'Tag products' button...")
+                pin_media_selectors = [
+                    "[data-test-id='CloseupMainPin']",
+                    "[data-test-id='pin-closeup-image']",
+                    "[data-test-id='pin-visual-wrapper']",
+                    "div[role='button']:has(img[src*='pinimg.com'])",
+                    "div[data-test-id='closeup-image']",
+                    "div[data-test-id='pin-media-container']",
+                    "img[src*='pinimg.com']:not([alt*='cutout'])",
+                    "div[role='img']"
+                ]
+
+                pin_media = None
+                for psel in pin_media_selectors:
+                    cand = page.locator(psel).first
+                    if cand.count() > 0 and cand.is_visible():
+                        logger.info(f"  [Playwright] Resolved pin media container: '{psel}'")
+                        pin_media = cand
+                        break
+
+                # Hover with force=True and short timeout to bypass pointer interception
+                if pin_media:
                     try:
-                        box = cand.bounding_box()
-                        if box and box['width'] > 180 and box['height'] > 180:
-                            area = box['width'] * box['height']
-                            if area > max_area:
-                                max_area = area
-                                best_img = cand
-                    except Exception:
-                        pass
+                        pin_media.hover(force=True, timeout=3000)
+                        page.wait_for_timeout(600)
+                    except Exception as he:
+                        logger.debug(f"  [Playwright] pin_media hover notice: {he}")
+                else:
+                    # Fallback: hover largest visible image
+                    logger.info("  [Playwright] Primary container selectors not found. Searching for largest image on page...")
+                    imgs = page.locator("img:not([alt*='cutout'])")
+                    max_area = 0
+                    best_img = None
+                    for idx in range(imgs.count()):
+                        cand = imgs.nth(idx)
+                        try:
+                            box = cand.bounding_box()
+                            if box and box['width'] > 180 and box['height'] > 180:
+                                area = box['width'] * box['height']
+                                if area > max_area:
+                                    max_area = area
+                                    best_img = cand
+                        except Exception:
+                            pass
                 if best_img:
                     logger.info(f"  [Playwright] Hovering largest image (area={max_area})...")
                     try:
@@ -644,13 +672,13 @@ def tag_pin_visually_with_playwright(
                 "[data-test-id*='tag' i]"
             ]
 
-            tag_btn = None
-            for tsel in tag_btn_selectors:
-                cand = page.locator(tsel).first
-                if cand.count() > 0 and cand.is_visible():
-                    logger.info(f"  [Playwright] Found 'Tag products' button via selector: '{tsel}'")
-                    tag_btn = cand
-                    break
+            if not tag_btn or tag_btn.count() == 0:
+                for tsel in tag_btn_selectors:
+                    cand = page.locator(tsel).first
+                    if cand.count() > 0 and cand.is_visible():
+                        logger.info(f"  [Playwright] Found 'Tag products' button via selector: '{tsel}'")
+                        tag_btn = cand
+                        break
 
             # If not revealed yet, check More actions (...) menu as fallback
             if not tag_btn or tag_btn.count() == 0:
@@ -861,7 +889,8 @@ def attach_tagged_product_to_pin(
     logger.info(f"  Pin Title & Description (100% UNTOUCHED)  : Preserved intact")
     logger.info(f"  Total Relevant In-Stock Products Found   : {len(relevant_products)}")
     for idx, p in enumerate(relevant_products[:5]):
-        logger.info(f"    Item #{idx+1}: {p.get('title')} (${p.get('price')}) | Variant ID: {p.get('variant_id')}")
+        safe_t = str(p.get('title') or '').encode('ascii', 'ignore').decode()
+        logger.info(f"    Item #{idx+1}: {safe_t} (${p.get('price')}) | Variant ID: {p.get('variant_id')}")
 
     if is_story_pin:
         logger.warning(f"  [SKIPPED VISUAL TAGGING] Pin #{pin_id} is an Idea/Story Pin (carousel/pages format). Pinterest web UI only supports visual 'Tag products' shopping bag overlay on Standard Pins.")
@@ -959,9 +988,14 @@ def process_and_tag_popular_pins(
                     pin_context["title"] = str(p_data.get('title') or p_data.get('grid_title') or pin_context["title"])
                     pin_context["desc"] = str(p_data.get('description') or pin_context["desc"])
                     pin_context["link"] = str(p_data.get('link') or pin_context["link"])
-                    is_story_pin = bool(p_data.get('story_pin_data') or p_data.get('is_story') or p_data.get('has_story_pin_data'))
+                    is_story_pin = bool(
+                        p_data.get('story_pin_data_id') or
+                        p_data.get('story_pin_data') or
+                        p_data.get('is_story') or
+                        p_data.get('has_story_pin_data')
+                    )
                     if is_story_pin:
-                        logger.warning(f"Pin #{test_pin_id} detected as an Idea/Story Pin (carousel). Pinterest only supports visual shopping bag tagging on Standard Pins.")
+                        logger.warning(f"Pin #{test_pin_id} detected as an Idea/Story Pin (carousel/pages format, story_pin_data_id='{p_data.get('story_pin_data_id')}'). Pinterest only supports visual shopping bag tagging on Standard Pins.")
                     logger.info(f"Retrieved exact live details for Pin #{test_pin_id}: title='{pin_context['title']}', link='{pin_context['link']}', is_story_pin={is_story_pin}")
             except Exception as ex:
                 logger.debug(f"Fetch exact pin details notice: {ex}")
@@ -1131,7 +1165,7 @@ def process_and_tag_popular_pins(
                     continue
 
                 # Skip Idea/Story Pins (carousel format) since Pinterest only supports visual shopping bag tagging on Standard Pins
-                if bool(pin.get('story_pin_data')) or bool(pin.get('has_story_pin_data')) or pin.get('is_story'):
+                if bool(pin.get('story_pin_data_id') or pin.get('story_pin_data') or pin.get('has_story_pin_data') or pin.get('is_story')):
                     continue
 
                 pid = str(pin.get('id', '')).strip()
@@ -1206,7 +1240,7 @@ def process_and_tag_popular_pins(
                             continue
 
                         # Skip Idea/Story Pins (carousel format)
-                        if bool(pin.get('story_pin_data')) or bool(pin.get('has_story_pin_data')) or pin.get('is_story'):
+                        if bool(pin.get('story_pin_data_id') or pin.get('story_pin_data') or pin.get('has_story_pin_data') or pin.get('is_story')):
                             continue
 
                         pid = str(pin.get('id', '')).strip()
