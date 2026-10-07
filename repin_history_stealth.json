@@ -4599,11 +4599,51 @@
       "target_board_id": "962222345325172804",
       "live_url": "https://www.pinterest.com/pin/4606056635327241280/",
       "timestamp": "2026-10-07T00:17:44.309739+00:00"
+    },
+    {
+      "pin_id": "4606901074110200896",
+      "product_title": "Alexy Signature Tote Bag and Set",
+      "category_group": "bags_accessories",
+      "source_board": "_products",
+      "target_board": "Trendy Backpacks",
+      "target_board_id": "962222345325574751",
+      "live_url": "https://www.pinterest.com/pin/4606901074110200896/",
+      "timestamp": "2026-10-07T08:07:47.288221+00:00"
+    },
+    {
+      "pin_id": "4606901052635364416",
+      "product_title": "Btr Active Seamless Baselayer Top",
+      "category_group": "tops_tanks_blouses",
+      "source_board": "_products",
+      "target_board": "Everyday Style Essentials",
+      "target_board_id": "962222345325698485",
+      "live_url": "https://www.pinterest.com/pin/4606901052635364416/",
+      "timestamp": "2026-10-07T08:08:14.636434+00:00"
+    },
+    {
+      "pin_id": "4597190159982276672",
+      "product_title": "Ymi Women\u2019s Double Yoke Bootcut Jeans",
+      "category_group": "pants_denim",
+      "source_board": "_products",
+      "target_board": "Pants & Leggings",
+      "target_board_id": "962222345325046951",
+      "live_url": "https://www.pinterest.com/pin/4597190159982276672/",
+      "timestamp": "2026-10-07T08:08:38.962642+00:00"
+    },
+    {
+      "pin_id": "4603241860714536000",
+      "product_title": "Wonderlust Woven Dual Pouch Wristlet",
+      "category_group": "general_apparel",
+      "source_board": "_products",
+      "target_board": "Fashion",
+      "target_board_id": "574420196161243696",
+      "live_url": "https://www.pinterest.com/pin/4603241860714536000/",
+      "timestamp": "2026-10-07T08:08:56.221400+00:00"
     }
   ],
   "board_last_used": {
     "Women's Cardigans": "2026-10-04T07:45:10.499321+00:00",
-    "Pants & Leggings": "2026-10-01T08:18:28.691662+00:00",
+    "Pants & Leggings": "2026-10-07T08:08:38.962642+00:00",
     "Skirts": "2026-10-05T08:16:08.391532+00:00",
     "Dresses": "2026-10-03T20:08:51.233458+00:00",
     "Sweaters": "2026-10-05T08:16:26.016701+00:00",
@@ -4642,7 +4682,7 @@
     "MeeeShop's Luxe Styles": "2026-10-04T23:45:34.073719+00:00",
     "Davi & Dani Womens Clothing | us.meeeshop.com": "2026-10-06T18:02:46.054573+00:00",
     "Zenana Women's Clothing, Dresses, Tops, Pants": "2026-10-04T16:35:47.576285+00:00",
-    "Trendy Backpacks": "2026-09-28T19:23:11.346730+00:00",
+    "Trendy Backpacks": "2026-10-07T08:07:47.288221+00:00",
     "LE LIS Womens Clothing | us.meeeshop": "2026-10-03T00:06:00.987240+00:00",
     "Chic & Effortless Styles": "2026-10-06T04:52:57.131974+00:00",
     "Jeans": "2026-10-01T18:14:22.860640+00:00",
@@ -4662,8 +4702,8 @@
     "Winter Outfits": "2026-10-03T20:08:27.257871+00:00",
     "Ootd #ootd": "2026-10-07T00:17:44.309739+00:00",
     "Sweaters #Sweaters #WinterOutfits": "2026-10-04T20:24:24.876387+00:00",
-    "Everyday Style Essentials": "2026-10-02T17:36:33.902851+00:00",
-    "Fashion": "2026-10-02T21:26:40.462334+00:00",
+    "Everyday Style Essentials": "2026-10-07T08:08:14.636434+00:00",
+    "Fashion": "2026-10-07T08:08:56.221400+00:00",
     "Kancan USA Jeans": "2026-10-03T15:51:57.608296+00:00",
     "Stylish Finds": "2026-10-02T21:27:14.594290+00:00",
     "Straight Leg Jeans": "2026-10-03T20:09:09.945651+00:00",
@@ -4678,6 +4718,6 @@
     "Simple Outfits": "2026-09-14T07:33:46.407531+00:00",
     "Women's shacket": "2026-10-06T21:52:24.134094+00:00"
   },
-  "daily_count": 3,
-  "last_repin_time": "2026-10-07T00:17:44.309739+00:00"
+  "daily_count": 7,
+  "last_repin_time": "2026-10-07T08:08:56.221400+00:00"
 }
