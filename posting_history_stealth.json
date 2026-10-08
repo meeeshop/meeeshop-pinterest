@@ -9124,11 +9124,57 @@
       "template": 16,
       "pin_url": "https://www.pinterest.com/pin/962222276664786303/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8949204451499,
+      "title": "Classic Soft Cable Knit Pullover Sweater - Boho Cozy Fall Essential \u2014 MeeeShop",
+      "board": "Trends",
+      "timestamp": "2026-10-08T00:51:17.201643",
+      "type": "carousel",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276664789876/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8985000837291,
+      "title": "Graciela Solid Hobo Bag and Set - Halloween Cozy Fall Handbag \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-10-08T00:53:57.522958",
+      "type": "video",
+      "style": "carousel",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276664789934/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": "571048657067",
+      "article_id": "571048657067",
+      "title": "The French Tuck vs Full Tuck Guide for High-Waisted Pants and Jeans",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-10-08T00:55:34.354497",
+      "type": "blog",
+      "style": "card",
+      "template": 9,
+      "pin_url": "https://www.pinterest.com/pin/962222276664789955/",
+      "blog_url": "https://us.meeeshop.com/blogs/womens-shirts-tops-style-guide/the-french-tuck-vs-full-tuck-guide-for-high-waisted-pants-and-jeans",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8789756903595,
+      "title": "Eco Friendly Corset High Rise Crop Flare Jeans (dark Wash) - Fall Ready \u2014 MeeeShop",
+      "board": "Moody Blues & Vintage Pinks",
+      "timestamp": "2026-10-08T00:57:33.726975",
+      "type": "product",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276664789992/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-09-30T00:14:02.173306",
-    "Trends": "2026-10-07T22:16:01.960847",
+    "Trends": "2026-10-08T00:51:17.201643",
     "Dresses": "2026-09-27T16:12:10.740177",
     "Feminine & Flowy Fits": "2026-10-05T08:44:16.555889",
     "Short fall dresses": "2026-09-27T20:28:30.955145",
@@ -9173,7 +9219,7 @@
     "Fashion Models": "2026-09-26T07:23:52.358528",
     "My Shop #1737732113": "2026-09-27T07:52:58.867216",
     "Shop For Holidays": "2026-09-27T20:25:54.302856",
-    "New": "2026-10-07T22:17:29.015510",
+    "New": "2026-10-08T00:53:57.522958",
     "American Bazi": "2026-10-01T00:30:42.549462",
     "Cool & Casual Styles": "2026-09-17T20:36:32.448629",
     "MeeeShop's Luxe Styles": "2026-10-01T08:37:57.461950",
@@ -9236,11 +9282,12 @@
     "Look casual...": "2026-09-18T07:19:12.747094",
     "Simple Outfits": "2026-09-21T21:17:08.897037",
     "Wardrobe Oozes": "2026-09-30T21:39:05.673247",
-    "Zenana Womens...": "2026-10-05T20:13:39.727847"
+    "Zenana Womens...": "2026-10-05T20:13:39.727847",
+    "Moody Blues & Vintage Pinks": "2026-10-08T00:57:33.726975"
   },
-  "daily_count": 12,
-  "last_post_time": "2026-10-07T22:19:50.691902",
+  "daily_count": 4,
+  "last_post_time": "2026-10-08T00:57:33.726975",
   "board_rotation_cursor": 0,
-  "last_image_style": "carousel",
-  "last_template_index": 16
+  "last_image_style": "collage",
+  "last_template_index": 14
 }
