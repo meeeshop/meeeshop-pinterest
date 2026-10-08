@@ -9214,11 +9214,55 @@
       "template": 17,
       "pin_url": "https://www.pinterest.com/pin/962222276664797898/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8882914001067,
+      "title": "Swiss Dot Lace V Neck a Line Knot Back Dress - Cozy Fall & Halloween Chic \u2014 MeeeShop",
+      "board": "Trends",
+      "timestamp": "2026-10-08T18:16:28.771217",
+      "type": "video",
+      "style": "carousel",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276664812255/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8906718937259,
+      "title": "Tribal Print Knit Top | MeeeShop US Boutique",
+      "board": "New",
+      "timestamp": "2026-10-08T18:17:38.779932",
+      "type": "carousel",
+      "style": "collage",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276664812292/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8985003917483,
+      "title": "Leila Tote Bag - Cozy Fall & Halloween Must-Have \u2014 MeeeShop",
+      "board": "My Shop #1737732113",
+      "timestamp": "2026-10-08T18:19:02.022080",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276664812368/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8970886938795,
+      "title": "Emory Park Mallory Shorts | MeeeShop US Boutique",
+      "board": "Shop For Holidays",
+      "timestamp": "2026-10-08T18:20:19.332653",
+      "type": "carousel",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276664812459/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-09-30T00:14:02.173306",
-    "Trends": "2026-10-08T08:36:27.530670",
+    "Trends": "2026-10-08T18:16:28.771217",
     "Dresses": "2026-09-27T16:12:10.740177",
     "Feminine & Flowy Fits": "2026-10-05T08:44:16.555889",
     "Short fall dresses": "2026-09-27T20:28:30.955145",
@@ -9261,9 +9305,9 @@
     "Nylon backpack": "2026-10-06T17:44:46.276185",
     "Everyday Style": "2026-10-07T22:19:50.691902",
     "Fashion Models": "2026-10-08T08:38:57.387467",
-    "My Shop #1737732113": "2026-09-27T07:52:58.867216",
-    "Shop For Holidays": "2026-09-27T20:25:54.302856",
-    "New": "2026-10-08T08:37:38.232801",
+    "My Shop #1737732113": "2026-10-08T18:19:02.022080",
+    "Shop For Holidays": "2026-10-08T18:20:19.332653",
+    "New": "2026-10-08T18:17:38.779932",
     "American Bazi": "2026-10-01T00:30:42.549462",
     "Cool & Casual Styles": "2026-09-17T20:36:32.448629",
     "MeeeShop's Luxe Styles": "2026-10-01T08:37:57.461950",
@@ -9329,9 +9373,9 @@
     "Zenana Womens...": "2026-10-05T20:13:39.727847",
     "Moody Blues & Vintage Pinks": "2026-10-08T00:57:33.726975"
   },
-  "daily_count": 8,
-  "last_post_time": "2026-10-08T08:41:35.457395",
+  "daily_count": 12,
+  "last_post_time": "2026-10-08T18:20:19.332653",
   "board_rotation_cursor": 0,
   "last_image_style": "collage",
-  "last_template_index": 17
+  "last_template_index": 14
 }
