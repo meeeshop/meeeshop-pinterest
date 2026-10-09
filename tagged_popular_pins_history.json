@@ -5851,7 +5851,151 @@
       ],
       "tagged_at": "2026-10-09T05:17:56.681431+00:00",
       "verified_at": "2026-10-09T05:17:56.681444+00:00"
+    },
+    "962222276629676184": {
+      "pin_id": "962222276629676184",
+      "pin_title": "MeeeShop: Shop Dresses, Jeans, Clothes, Shoes, & Accessories For Women",
+      "original_link": "https://us.meeeshop.com/products/listicle-flower-embroidered-puff-sleeve-tiered-maxi-dress?utm_source=Pinterest",
+      "tagged_products": [
+        {
+          "id": "8825278070955",
+          "variant_id": "47233237844139",
+          "handle": "boho-print-wide-leg-pants-with-pockets",
+          "title": "Boho. Print Wide Leg Pants with Pockets",
+          "price": 69.99,
+          "url": "https://us.meeeshop.com/products/boho-print-wide-leg-pants-with-pockets?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/boho-print-wide-leg-pants-with-pockets-1.jpg?v=1787716049"
+        },
+        {
+          "id": "9041690263723",
+          "variant_id": "47971879354539",
+          "handle": "billy-the-kid",
+          "title": "Billy the Kid",
+          "price": 184.99,
+          "url": "https://us.meeeshop.com/products/billy-the-kid?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/billy-the-kid-in-xs-billy-kidman-bottom-516523.png?v=1790768671"
+        },
+        {
+          "id": "8949207597227",
+          "variant_id": "47683561554091",
+          "handle": "breathable-wide-leg-pants-olive-two-tone",
+          "title": "Breathable Wide-leg Pants \u2013 Olive Two-tone Straight Fit",
+          "price": 99.99,
+          "url": "https://us.meeeshop.com/products/breathable-wide-leg-pants-olive-two-tone?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/breathable-wide-leg-pants-olive-two-tone-straight-fit-1.jpg?v=1787675724"
+        },
+        {
+          "id": "8744047214763",
+          "variant_id": "46492122677419",
+          "handle": "adler-breech-petite",
+          "title": "Adler Breech - Petite",
+          "price": 189.99,
+          "url": "https://us.meeeshop.com/products/adler-breech-petite?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/AdlerPGray.jpg?v=1788222667"
+        },
+        {
+          "id": "8988048949419",
+          "variant_id": "47790483570859",
+          "handle": "amayah-buttoned-straight-pants-two-piece-set",
+          "title": "Amayah Buttoned Straight Pants Two Piece Set",
+          "price": 84.99,
+          "url": "https://us.meeeshop.com/products/amayah-buttoned-straight-pants-two-piece-set?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/amayah-buttoned-straight-pants-two-piece-set-in-pi-275627.png?v=1789186033"
+        },
+        {
+          "id": "9090080112811",
+          "variant_id": "48187297169579",
+          "handle": "athina-button-detailed-pu-black-leather-dress",
+          "title": "Athina button detailed PU black leather dress",
+          "price": 114.0,
+          "url": "https://us.meeeshop.com/products/athina-button-detailed-pu-black-leather-dress?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/20648239_704bdf52-c32a-4f57-a056-5d920086ccad_1.jpg?v=1791520477"
+        },
+        {
+          "id": "8930016428203",
+          "variant_id": "47609299042475",
+          "handle": "graceemma-blue-floral-tiered-dress",
+          "title": "Blue Floral Tiered Dress",
+          "price": 134.99,
+          "url": "https://us.meeeshop.com/products/graceemma-blue-floral-tiered-dress?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/blue-floral-tiered-dress-1.jpg?v=1787717768"
+        },
+        {
+          "id": "8883469254827",
+          "variant_id": "47424519635115",
+          "handle": "all-tied-up-dress",
+          "title": "All Tied up Dress",
+          "price": 89.99,
+          "url": "https://us.meeeshop.com/products/all-tied-up-dress?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/all-tied-up-dress-1.svg?v=1787675326"
+        },
+        {
+          "id": "8949205794987",
+          "variant_id": "47683554279595",
+          "handle": "barely-there-seamless-slip-dress",
+          "title": "Barely There Seamless Slip Dress",
+          "price": 69.99,
+          "url": "https://us.meeeshop.com/products/barely-there-seamless-slip-dress?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/barely-there-seamless-slip-dress-1.jpg?v=1787675717"
+        },
+        {
+          "id": "8988058681515",
+          "variant_id": "47790532722859",
+          "handle": "aurora-tied-neck-pocketed-mini-dress",
+          "title": "Aurora Tied Neck Pocketed Mini Dress",
+          "price": 109.99,
+          "url": "https://us.meeeshop.com/products/aurora-tied-neck-pocketed-mini-dress?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/aurora-tied-neck-pocketed-mini-dress-in-s-898731.jpg?v=1789188504"
+        },
+        {
+          "id": "8988055896235",
+          "variant_id": "47790521974955",
+          "handle": "birdie-ribbon-bow-lace-trim-square-neck-mini-dress",
+          "title": "Birdie Ribbon Bow Lace Trim Square Neck Mini Dress",
+          "price": 104.99,
+          "url": "https://us.meeeshop.com/products/birdie-ribbon-bow-lace-trim-square-neck-mini-dress?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/birdie-ribbon-bow-lace-trim-square-neck-mini-dress-939563.png?v=1789187877"
+        },
+        {
+          "id": "8782638547115",
+          "variant_id": "47103413813419",
+          "handle": "audrey-retro-dress-red-dragons",
+          "title": "Audrey Retro Dress Red Dragons",
+          "price": 209.99,
+          "url": "https://us.meeeshop.com/products/audrey-retro-dress-red-dragons?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/audrey-retro-dress-red-dragons-1.jpg?v=1787715718"
+        },
+        {
+          "id": "8782689894571",
+          "variant_id": "47103632408747",
+          "handle": "buki-little-black-dress-lbd",
+          "title": "Buki Little Black Dress (lbd)",
+          "price": 209.99,
+          "url": "https://us.meeeshop.com/products/buki-little-black-dress-lbd?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/buki-little-black-dress-lbd-1.png?v=1787675835"
+        },
+        {
+          "id": "8949205860523",
+          "variant_id": "47683554508971",
+          "handle": "2-in-1-shapewear-dress-double-layer-tumm",
+          "title": "2-in-1 Shapewear Dress \u2013 Double Layer Tummy Control",
+          "price": 74.99,
+          "url": "https://us.meeeshop.com/products/2-in-1-shapewear-dress-double-layer-tumm?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/2-in-1-shapewear-dress-double-layer-tummy-control-1.jpg?v=1787675718"
+        },
+        {
+          "id": "8841417556139",
+          "variant_id": "47283204227243",
+          "handle": "azure-allure-one-shoulder-dress",
+          "title": "Azure Allure One-shoulder Dress",
+          "price": 104.99,
+          "url": "https://us.meeeshop.com/products/azure-allure-one-shoulder-dress?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/azure-allure-one-shoulder-dress-1.jpg?v=1787675172"
+        }
+      ],
+      "tagged_at": "2026-10-09T05:23:10.274735+00:00",
+      "verified_at": "2026-10-09T05:23:10.274748+00:00"
     }
   },
-  "last_run": "2026-10-09T05:17:56.681449+00:00"
+  "last_run": "2026-10-09T05:23:10.274752+00:00"
 }
