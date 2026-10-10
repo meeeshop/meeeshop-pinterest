@@ -5019,6 +5019,36 @@
       "target_board_id": "962222345325094365",
       "live_url": "https://www.pinterest.com/pin/4607675093685738048/",
       "timestamp": "2026-10-10T17:05:38.585949+00:00"
+    },
+    {
+      "pin_id": "4607675100128188992",
+      "product_title": "Ymi Women's Joey Seamed Ultra Wide Leg Jeans",
+      "category_group": "pants_denim",
+      "source_board": "_products",
+      "target_board": "Straight Leg Jeans",
+      "target_board_id": "962222345325683657",
+      "live_url": "https://www.pinterest.com/pin/4607675100128188992/",
+      "timestamp": "2026-10-10T20:41:06.669954+00:00"
+    },
+    {
+      "pin_id": "4607675095833221696",
+      "product_title": "Stella Tote Bag",
+      "category_group": "bags_accessories",
+      "source_board": "_products",
+      "target_board": "Bags",
+      "target_board_id": "962222345325683645",
+      "live_url": "https://www.pinterest.com/pin/4607675095833221696/",
+      "timestamp": "2026-10-10T20:41:34.369515+00:00"
+    },
+    {
+      "pin_id": "4607675093685738048",
+      "product_title": "Retrolicious Cats & Pumpkins A-Line Skirt for Women, 100% Cotton Multi",
+      "category_group": "skirts",
+      "source_board": "_products",
+      "target_board": "Dressy Outfits",
+      "target_board_id": "962222345325709865",
+      "live_url": "https://www.pinterest.com/pin/4607675093685738048/",
+      "timestamp": "2026-10-10T20:42:03.925576+00:00"
     }
   ],
   "board_last_used": {
@@ -5027,7 +5057,7 @@
     "Skirts": "2026-10-10T17:05:38.585949+00:00",
     "Dresses": "2026-10-09T00:53:06.969983+00:00",
     "Sweaters": "2026-10-05T08:16:26.016701+00:00",
-    "Dressy Outfits": "2026-10-06T08:32:39.635517+00:00",
+    "Dressy Outfits": "2026-10-10T20:42:03.925576+00:00",
     "Dress": "2026-10-10T08:05:21.121949+00:00",
     "Outerwear": "2026-10-09T08:28:12.977589+00:00",
     "Chic & Cozy: Annie Wear Trends": "2026-10-05T23:20:08.170881+00:00",
@@ -5058,7 +5088,7 @@
     "Wardrobe Goals": "2026-10-09T21:52:13.832220+00:00",
     "Emory Park Clothing": "2026-10-09T08:28:41.245296+00:00",
     "Shop For Holidays": "2026-10-09T21:52:42.618548+00:00",
-    "Bags": "2026-10-06T08:33:05.884470+00:00",
+    "Bags": "2026-10-10T20:41:34.369515+00:00",
     "MeeeShop's Luxe Styles": "2026-10-04T23:45:34.073719+00:00",
     "Davi & Dani Womens Clothing | us.meeeshop.com": "2026-10-06T18:02:46.054573+00:00",
     "Zenana Women's Clothing, Dresses, Tops, Pants": "2026-10-09T00:53:54.078763+00:00",
@@ -5086,7 +5116,7 @@
     "Fashion": "2026-10-07T08:08:56.221400+00:00",
     "Kancan USA Jeans": "2026-10-10T17:04:38.490657+00:00",
     "Stylish Finds": "2026-10-07T18:35:24.433902+00:00",
-    "Straight Leg Jeans": "2026-10-03T20:09:09.945651+00:00",
+    "Straight Leg Jeans": "2026-10-10T20:41:06.669954+00:00",
     "Handbags #handbags": "2026-10-10T17:05:10.536696+00:00",
     "Weekend to Workwear": "2026-10-04T20:23:35.861340+00:00",
     "Luxe Clothing": "2026-10-07T22:14:51.023802+00:00",
@@ -5098,6 +5128,6 @@
     "Simple Outfits": "2026-09-14T07:33:46.407531+00:00",
     "Women's shacket": "2026-10-06T21:52:24.134094+00:00"
   },
-  "daily_count": 8,
-  "last_repin_time": "2026-10-10T17:05:38.585949+00:00"
+  "daily_count": 11,
+  "last_repin_time": "2026-10-10T20:42:03.925576+00:00"
 }
