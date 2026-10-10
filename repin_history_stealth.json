@@ -4949,6 +4949,46 @@
       "target_board_id": "962222345325683655",
       "live_url": "https://www.pinterest.com/pin/4591279194175426624/",
       "timestamp": "2026-10-10T00:25:14.380386+00:00"
+    },
+    {
+      "pin_id": "4595853182261121088",
+      "product_title": "Slub Tank",
+      "category_group": "tops_tanks_blouses",
+      "source_board": "_products",
+      "target_board": "Cool & Casual Styles",
+      "target_board_id": "962222345325724607",
+      "live_url": "https://www.pinterest.com/pin/4595853182261121088/",
+      "timestamp": "2026-10-10T08:05:03.859462+00:00"
+    },
+    {
+      "pin_id": "4595853155417575488",
+      "product_title": "Chatham Black and Gold Swirl Print Dress",
+      "category_group": "dresses",
+      "source_board": "_products",
+      "target_board": "Dress",
+      "target_board_id": "962222345325683647",
+      "live_url": "https://www.pinterest.com/pin/4595853155417575488/",
+      "timestamp": "2026-10-10T08:05:21.121949+00:00"
+    },
+    {
+      "pin_id": "4595853168302477376",
+      "product_title": "Couture Comfort Jumpsuit",
+      "category_group": "rompers_jumpsuits",
+      "source_board": "_products",
+      "target_board": "Chic & Effortless Styles",
+      "target_board_id": "962222345325692903",
+      "live_url": "https://www.pinterest.com/pin/4595853168302477376/",
+      "timestamp": "2026-10-10T08:05:46.523982+00:00"
+    },
+    {
+      "pin_id": "4595853169376219200",
+      "product_title": "Downeast Countryside A-Line Midi Dress with Pockets \u2014 Purple Gingham",
+      "category_group": "dresses",
+      "source_board": "_products",
+      "target_board": "Short fall dresses",
+      "target_board_id": "962222345325607224",
+      "live_url": "https://www.pinterest.com/pin/4595853169376219200/",
+      "timestamp": "2026-10-10T08:06:20.058597+00:00"
     }
   ],
   "board_last_used": {
@@ -4958,11 +4998,11 @@
     "Dresses": "2026-10-09T00:53:06.969983+00:00",
     "Sweaters": "2026-10-05T08:16:26.016701+00:00",
     "Dressy Outfits": "2026-10-06T08:32:39.635517+00:00",
-    "Dress": "2026-10-04T07:44:53.903864+00:00",
+    "Dress": "2026-10-10T08:05:21.121949+00:00",
     "Outerwear": "2026-10-09T08:28:12.977589+00:00",
     "Chic & Cozy: Annie Wear Trends": "2026-10-05T23:20:08.170881+00:00",
     "Chic Looks": "2026-10-09T00:54:16.891766+00:00",
-    "Short fall dresses": "2026-10-04T16:34:31.792639+00:00",
+    "Short fall dresses": "2026-10-10T08:06:20.058597+00:00",
     "Shirts & Tops": "2026-10-07T22:14:25.703121+00:00",
     "Feminine & Flowy Fits": "2026-10-06T08:33:21.568827+00:00",
     "Blouses": "2026-10-08T08:24:19.571095+00:00",
@@ -4984,7 +5024,7 @@
     "Edgy fashion": "2026-10-08T22:21:23.973510+00:00",
     "comfy fall outfits": "2026-09-30T17:45:20.967666+00:00",
     "Thanks giving Outfits": "2026-10-08T22:20:56.639721+00:00",
-    "Cool & Casual Styles": "2026-10-04T23:46:14.480681+00:00",
+    "Cool & Casual Styles": "2026-10-10T08:05:03.859462+00:00",
     "Wardrobe Goals": "2026-10-09T21:52:13.832220+00:00",
     "Emory Park Clothing": "2026-10-09T08:28:41.245296+00:00",
     "Shop For Holidays": "2026-10-09T21:52:42.618548+00:00",
@@ -4994,7 +5034,7 @@
     "Zenana Women's Clothing, Dresses, Tops, Pants": "2026-10-09T00:53:54.078763+00:00",
     "Trendy Backpacks": "2026-10-07T08:07:47.288221+00:00",
     "LE LIS Womens Clothing | us.meeeshop": "2026-10-08T00:38:39.530376+00:00",
-    "Chic & Effortless Styles": "2026-10-06T04:52:57.131974+00:00",
+    "Chic & Effortless Styles": "2026-10-10T08:05:46.523982+00:00",
     "Jeans": "2026-10-09T18:06:15.898489+00:00",
     "Nylon backpack": "2026-10-07T18:34:46.430257+00:00",
     "Mustard Seed Clothing": "2026-10-08T22:21:44.568985+00:00",
@@ -5028,6 +5068,6 @@
     "Simple Outfits": "2026-09-14T07:33:46.407531+00:00",
     "Women's shacket": "2026-10-06T21:52:24.134094+00:00"
   },
-  "daily_count": 1,
-  "last_repin_time": "2026-10-10T00:25:14.380386+00:00"
+  "daily_count": 5,
+  "last_repin_time": "2026-10-10T08:06:20.058597+00:00"
 }
