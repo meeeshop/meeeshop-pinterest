@@ -6139,7 +6139,151 @@
       ],
       "tagged_at": "2026-10-10T06:16:22.735270+00:00",
       "verified_at": "2026-10-10T06:16:22.735283+00:00"
+    },
+    "962222276624250676": {
+      "pin_id": "962222276624250676",
+      "pin_title": "Listicle V-neck Sweatshirt and Pants Set",
+      "original_link": "https://us.meeeshop.com/products/listicle-v-neck-sweatshirt-and-pants-set",
+      "tagged_products": [
+        {
+          "id": "8905532440747",
+          "variant_id": "47546257473707",
+          "handle": "graceemma-butter-soft-shorts-black",
+          "title": "Butter Soft Shorts, Black",
+          "price": 84.99,
+          "url": "https://us.meeeshop.com/products/graceemma-butter-soft-shorts-black?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/butter-soft-shorts-black-1.jpg?v=1787717463"
+        },
+        {
+          "id": "8905532309675",
+          "variant_id": "47546257014955",
+          "handle": "graceemma-butter-soft-shorts-pink",
+          "title": "Butter Soft Shorts, Pink",
+          "price": 84.99,
+          "url": "https://us.meeeshop.com/products/graceemma-butter-soft-shorts-pink?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/butter-soft-shorts-pink-1.jpg?v=1787717461"
+        },
+        {
+          "id": "9041683873963",
+          "variant_id": "47971851075755",
+          "handle": "budweiser-king-of-beers-tee",
+          "title": "Budweiser King of Beers Tee",
+          "price": 119.99,
+          "url": "https://us.meeeshop.com/products/budweiser-king-of-beers-tee?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/budweiser-king-of-beers-tee-in-xs-budweiser-shirt-339499.jpg?v=1790688457"
+        },
+        {
+          "id": "8933161205931",
+          "variant_id": "47624530100395",
+          "handle": "brushed-commit-tee",
+          "title": "Brushed Commit Tee",
+          "price": 79.99,
+          "url": "https://us.meeeshop.com/products/brushed-commit-tee?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/brushed-commit-tee-1.jpg?v=1787717946"
+        },
+        {
+          "id": "9041683120299",
+          "variant_id": "47971846226091",
+          "handle": "black-sabbath-baby-tee",
+          "title": "Black Sabbath Baby Tee",
+          "price": 109.99,
+          "url": "https://us.meeeshop.com/products/black-sabbath-baby-tee?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/black-sabbath-baby-tee-in-xs-black-sabbath-tee-shi-489835.png?v=1790688152"
+        },
+        {
+          "id": "8883470565547",
+          "variant_id": "47424526155947",
+          "handle": "buki-boss-babe-tech-tee-blue",
+          "title": "Buki Boss (babe) Tech Tee - Blue",
+          "price": 139.99,
+          "url": "https://us.meeeshop.com/products/buki-boss-babe-tech-tee-blue?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/buki-boss-babe-tech-tee-blue-1.webp?v=1787716952"
+        },
+        {
+          "id": "9090080243883",
+          "variant_id": "48187297464491",
+          "handle": "all-tied-up-cardigan-top",
+          "title": "All Tied up Cardigan Top",
+          "price": 119.99,
+          "url": "https://us.meeeshop.com/products/all-tied-up-cardigan-top?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/all-tied-up-cardigan-top-in-olive-collection-465515.jpg?v=1791524405"
+        },
+        {
+          "id": "9041683579051",
+          "variant_id": "47971848454315",
+          "handle": "arden-tee",
+          "title": "Arden Tee",
+          "price": 109.99,
+          "url": "https://us.meeeshop.com/products/arden-tee?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/arden-tee-in-xs-arden-teen-wolf-top-406187.png?v=1791113644"
+        },
+        {
+          "id": "8879311716523",
+          "variant_id": "47388108357803",
+          "handle": "boyfriend-tee",
+          "title": "Boyfriend Tee",
+          "price": 94.99,
+          "url": "https://us.meeeshop.com/products/boyfriend-tee?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/boyfriend-tee-1.jpg?v=1787716810"
+        },
+        {
+          "id": "8933187944619",
+          "variant_id": "47624592818347",
+          "handle": "black-utility-crop-top-cargo-pant-set",
+          "title": "Black Utility Crop Top & Cargo Pant Set",
+          "price": 134.99,
+          "url": "https://us.meeeshop.com/products/black-utility-crop-top-cargo-pant-set?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/black-utility-crop-top-cargo-pant-set-1.jpg?v=1787675497"
+        },
+        {
+          "id": "9041684267179",
+          "variant_id": "47971854516395",
+          "handle": "budweiser-raglan",
+          "title": "Budweiser Raglan",
+          "price": 124.99,
+          "url": "https://us.meeeshop.com/products/budweiser-raglan?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/budweiser-raglan-in-xs-budweiser-raglan-shirt-top-960939.jpg?v=1790688602"
+        },
+        {
+          "id": "8883470368939",
+          "variant_id": "47424525664427",
+          "handle": "buki-bon-voyage-travel-tee-blush-pink",
+          "title": "Buki Bon Voyage Travel Tee - Blush Pink",
+          "price": 119.99,
+          "url": "https://us.meeeshop.com/products/buki-bon-voyage-travel-tee-blush-pink?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/buki-bon-voyage-travel-tee-blush-pink-1.webp?v=1787716948"
+        },
+        {
+          "id": "8921414795435",
+          "variant_id": "47583447679147",
+          "handle": "asymmetrical-waist-denim-shorts-with-pockets",
+          "title": "Asymmetrical Waist Denim Shorts with Pockets",
+          "price": 54.99,
+          "url": "https://us.meeeshop.com/products/asymmetrical-waist-denim-shorts-with-pockets?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/asymmetrical-waist-denim-shorts-with-pockets-1.jpg?v=1787717675"
+        },
+        {
+          "id": "9095802290347",
+          "variant_id": "48214523674795",
+          "handle": "ayla-sequin-top",
+          "title": "Ayla Sequin Top",
+          "price": 65.0,
+          "url": "https://us.meeeshop.com/products/ayla-sequin-top?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/IPJ5123T_RUBY_1.jpg?v=1791611103"
+        },
+        {
+          "id": "8949210710187",
+          "variant_id": "47683570598059",
+          "handle": "bohemian-fusion-multi-patterned-crochet",
+          "title": "Bohemian Fusion Multi-patterned Crochet Stitched Top",
+          "price": 64.99,
+          "url": "https://us.meeeshop.com/products/bohemian-fusion-multi-patterned-crochet?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/bohemian-fusion-multi-patterned-crochet-stitched-top-1.jpg?v=1787675729"
+        }
+      ],
+      "tagged_at": "2026-10-10T06:20:10.941077+00:00",
+      "verified_at": "2026-10-10T06:20:10.941088+00:00"
     }
   },
-  "last_run": "2026-10-10T06:16:22.735287+00:00"
+  "last_run": "2026-10-10T06:20:10.941093+00:00"
 }
