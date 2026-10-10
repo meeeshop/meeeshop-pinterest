@@ -4989,12 +4989,42 @@
       "target_board_id": "962222345325607224",
       "live_url": "https://www.pinterest.com/pin/4595853169376219200/",
       "timestamp": "2026-10-10T08:06:20.058597+00:00"
+    },
+    {
+      "pin_id": "4607675100128188992",
+      "product_title": "Ymi Women's Joey Seamed Ultra Wide Leg Jeans",
+      "category_group": "pants_denim",
+      "source_board": "_products",
+      "target_board": "Kancan USA Jeans",
+      "target_board_id": "962222345325077882",
+      "live_url": "https://www.pinterest.com/pin/4607675100128188992/",
+      "timestamp": "2026-10-10T17:04:38.490657+00:00"
+    },
+    {
+      "pin_id": "4607675095833221696",
+      "product_title": "Stella Tote Bag",
+      "category_group": "bags_accessories",
+      "source_board": "_products",
+      "target_board": "Handbags #handbags",
+      "target_board_id": "962222345324852891",
+      "live_url": "https://www.pinterest.com/pin/4607675095833221696/",
+      "timestamp": "2026-10-10T17:05:10.536696+00:00"
+    },
+    {
+      "pin_id": "4607675093685738048",
+      "product_title": "Retrolicious Cats & Pumpkins A-Line Skirt for Women, 100% Cotton Multi",
+      "category_group": "skirts",
+      "source_board": "_products",
+      "target_board": "Skirts",
+      "target_board_id": "962222345325094365",
+      "live_url": "https://www.pinterest.com/pin/4607675093685738048/",
+      "timestamp": "2026-10-10T17:05:38.585949+00:00"
     }
   ],
   "board_last_used": {
     "Women's Cardigans": "2026-10-04T07:45:10.499321+00:00",
     "Pants & Leggings": "2026-10-07T08:08:38.962642+00:00",
-    "Skirts": "2026-10-05T08:16:08.391532+00:00",
+    "Skirts": "2026-10-10T17:05:38.585949+00:00",
     "Dresses": "2026-10-09T00:53:06.969983+00:00",
     "Sweaters": "2026-10-05T08:16:26.016701+00:00",
     "Dressy Outfits": "2026-10-06T08:32:39.635517+00:00",
@@ -5054,10 +5084,10 @@
     "Sweaters #Sweaters #WinterOutfits": "2026-10-04T20:24:24.876387+00:00",
     "Everyday Style Essentials": "2026-10-07T08:08:14.636434+00:00",
     "Fashion": "2026-10-07T08:08:56.221400+00:00",
-    "Kancan USA Jeans": "2026-10-03T15:51:57.608296+00:00",
+    "Kancan USA Jeans": "2026-10-10T17:04:38.490657+00:00",
     "Stylish Finds": "2026-10-07T18:35:24.433902+00:00",
     "Straight Leg Jeans": "2026-10-03T20:09:09.945651+00:00",
-    "Handbags #handbags": "2026-10-05T08:17:10.180915+00:00",
+    "Handbags #handbags": "2026-10-10T17:05:10.536696+00:00",
     "Weekend to Workwear": "2026-10-04T20:23:35.861340+00:00",
     "Luxe Clothing": "2026-10-07T22:14:51.023802+00:00",
     "Loungewear": "2026-09-22T05:13:37.588164+00:00",
@@ -5068,6 +5098,6 @@
     "Simple Outfits": "2026-09-14T07:33:46.407531+00:00",
     "Women's shacket": "2026-10-06T21:52:24.134094+00:00"
   },
-  "daily_count": 5,
-  "last_repin_time": "2026-10-10T08:06:20.058597+00:00"
+  "daily_count": 8,
+  "last_repin_time": "2026-10-10T17:05:38.585949+00:00"
 }
