@@ -9803,6 +9803,52 @@
       "template": 16,
       "pin_url": "https://www.pinterest.com/pin/962222276664910114/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": "571133493419",
+      "article_id": "571133493419",
+      "title": "Utility and Quilted Jacket Outfit Ideas for Weekend Walks and Travel",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-10-12T00:21:10.364710",
+      "type": "blog",
+      "style": "card",
+      "template": 9,
+      "pin_url": "https://www.pinterest.com/pin/962222276664913639/",
+      "blog_url": "https://us.meeeshop.com/blogs/coats-jackets-style-guide/utility-and-quilted-jacket-outfit-ideas-for-weekend-walks-and-travel",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8740283023531,
+      "title": "Judy Blue Full Size High Waist Rigid Magic Heavy Destroy Straight Jeans | MeeeShop US Boutique",
+      "board": "New",
+      "timestamp": "2026-10-12T00:23:05.760061",
+      "type": "carousel",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276664913709/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 9034571088043,
+      "title": "Hybrid Ultra High Rise Relaxed Flare Jeans - Cozy Fall & Halloween Must-Have",
+      "board": "Kimchi USA Jeans",
+      "timestamp": "2026-10-12T00:24:28.028171",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276664913758/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8744047116459,
+      "title": "Fall Cozy Chic: Diamond Tech Tank for Halloween & Autumn Workwear \u2014 MeeeShop",
+      "board": "Farm clothes",
+      "timestamp": "2026-10-12T00:26:51.368244",
+      "type": "video",
+      "style": "collage",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276664913835/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
@@ -9844,15 +9890,15 @@
     "Casual": "2026-10-07T00:38:15.282483",
     "Confident Looks": "2026-10-06T08:51:49.198715",
     "Casual Chic Style": "2026-10-06T21:57:31.825227",
-    "Farm clothes": "2026-09-30T00:16:34.794847",
-    "Kimchi USA Jeans": "2026-09-25T16:20:55.173067",
+    "Farm clothes": "2026-10-12T00:26:51.368244",
+    "Kimchi USA Jeans": "2026-10-12T00:24:28.028171",
     "Wardrobe Goals": "2026-10-07T08:23:58.676137",
     "Nylon backpack": "2026-10-06T17:44:46.276185",
     "Everyday Style": "2026-10-07T22:19:50.691902",
     "Fashion Models": "2026-10-08T08:38:57.387467",
     "My Shop #1737732113": "2026-10-08T18:19:02.022080",
     "Shop For Holidays": "2026-10-08T18:20:19.332653",
-    "New": "2026-10-11T21:07:47.604075",
+    "New": "2026-10-12T00:23:05.760061",
     "American Bazi": "2026-10-01T00:30:42.549462",
     "Cool & Casual Styles": "2026-10-09T22:08:35.633664",
     "MeeeShop's Luxe Styles": "2026-10-01T08:37:57.461950",
@@ -9919,8 +9965,8 @@
     "Moody Blues & Vintage Pinks": "2026-10-08T00:57:33.726975",
     "Umgee USA": "2026-10-10T16:46:42.000590"
   },
-  "daily_count": 13,
-  "last_post_time": "2026-10-11T21:10:16.114391",
+  "daily_count": 4,
+  "last_post_time": "2026-10-12T00:26:51.368244",
   "board_rotation_cursor": 0,
   "last_image_style": "collage",
   "last_template_index": 16
