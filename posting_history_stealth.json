@@ -9937,11 +9937,55 @@
       "template": 11,
       "pin_url": "https://www.pinterest.com/pin/962222276664940321/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8968032354475,
+      "title": "Essential Toffee Long + Soft Cardigan Top: Cozy Fall Layer for Halloween & Work",
+      "board": "Trends",
+      "timestamp": "2026-10-12T23:46:43.165104",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276664944532/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8845242925227,
+      "title": "Flying Tomato Extravagant Presence Woven Top - Bold Fall & Halloween Chic \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-10-12T23:49:09.661443",
+      "type": "video",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276664944568/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8782620917931,
+      "title": "Retrolicious Badger Doris Skirt - Cozy Fall & Halloween Chic \u2014 MeeeShop",
+      "board": "Stylish Finds",
+      "timestamp": "2026-10-12T23:50:18.655377",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276664944593/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8885871640747,
+      "title": "The Earhart Pants, Black - Cozy Fall & Halloween Ready \u2014 MeeeShop",
+      "board": "Pants & Leggings",
+      "timestamp": "2026-10-12T23:51:27.730749",
+      "type": "carousel",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276664944602/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
-    "Pants & Leggings": "2026-09-30T00:14:02.173306",
-    "Trends": "2026-10-12T20:40:27.329450",
+    "Pants & Leggings": "2026-10-12T23:51:27.730749",
+    "Trends": "2026-10-12T23:46:43.165104",
     "Dresses": "2026-10-09T17:51:49.766064",
     "Feminine & Flowy Fits": "2026-10-05T08:44:16.555889",
     "Short fall dresses": "2026-10-11T08:33:29.765610",
@@ -9986,7 +10030,7 @@
     "Fashion Models": "2026-10-08T08:38:57.387467",
     "My Shop #1737732113": "2026-10-08T18:19:02.022080",
     "Shop For Holidays": "2026-10-08T18:20:19.332653",
-    "New": "2026-10-12T20:41:34.808567",
+    "New": "2026-10-12T23:49:09.661443",
     "American Bazi": "2026-10-12T08:56:12.088793",
     "Cool & Casual Styles": "2026-10-09T22:08:35.633664",
     "MeeeShop's Luxe Styles": "2026-10-01T08:37:57.461950",
@@ -10014,7 +10058,7 @@
     "Style Ideas": "2026-10-11T21:08:59.423394",
     "Mustard Seed Clothing": "2026-10-07T22:18:41.440828",
     "Woman Fashion!": "2026-10-12T09:00:46.773048",
-    "Stylish Finds": "2026-10-01T22:04:03.170051",
+    "Stylish Finds": "2026-10-12T23:50:18.655377",
     "Confidence Ladies": "2026-10-02T08:14:50.098159",
     "Fresh Finds New...": "2026-10-02T17:12:21.763155",
     "Affordable Women's Fashion USA": "2026-10-02T21:31:53.502629",
@@ -10053,9 +10097,9 @@
     "Moody Blues & Vintage Pinks": "2026-10-08T00:57:33.726975",
     "Umgee USA": "2026-10-10T16:46:42.000590"
   },
-  "daily_count": 12,
-  "last_post_time": "2026-10-12T20:44:50.011640",
+  "daily_count": 16,
+  "last_post_time": "2026-10-12T23:51:27.730749",
   "board_rotation_cursor": 0,
   "last_image_style": "collage",
-  "last_template_index": 11
+  "last_template_index": 17
 }
