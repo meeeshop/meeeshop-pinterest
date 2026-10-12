@@ -5299,6 +5299,26 @@
       "target_board_id": "962222345325675424",
       "live_url": "https://www.pinterest.com/pin/4600145638247352384/",
       "timestamp": "2026-10-12T21:02:03.629526+00:00"
+    },
+    {
+      "pin_id": "4593882807684302912",
+      "product_title": "The Gray Solitaire Handbag",
+      "category_group": "bags_accessories",
+      "source_board": "_products",
+      "target_board": "Our Recommended Feminine Styles",
+      "target_board_id": "962222345324527791",
+      "live_url": "https://www.pinterest.com/pin/4593882807684302912/",
+      "timestamp": "2026-10-12T23:45:44.805731+00:00"
+    },
+    {
+      "pin_id": "4596275343379400768",
+      "product_title": "The Meander Beige Handbag",
+      "category_group": "bags_accessories",
+      "source_board": "_products",
+      "target_board": "Confident Looks",
+      "target_board_id": "962222345325695770",
+      "live_url": "https://www.pinterest.com/pin/4596275343379400768/",
+      "timestamp": "2026-10-12T23:46:19.021221+00:00"
     }
   ],
   "board_last_used": {
@@ -5321,9 +5341,9 @@
     "Cocktail Dresses": "2026-10-12T21:02:03.629526+00:00",
     "Camis & Tanks": "2026-10-08T00:38:09.595204+00:00",
     "Trendy & Timeless Fashion": "2026-10-12T21:01:12.140901+00:00",
-    "Our Recommended Feminine Styles": "2026-10-08T08:24:50.895981+00:00",
+    "Our Recommended Feminine Styles": "2026-10-12T23:45:44.805731+00:00",
     "Rompers, Jumpsuits & Outfit Sets": "2026-10-06T04:53:44.932434+00:00",
-    "Confident Looks": "2026-10-08T18:33:36.962985+00:00",
+    "Confident Looks": "2026-10-12T23:46:19.021221+00:00",
     "Trends": "2026-10-09T00:53:34.280624+00:00",
     "Wardrobe Must-Haves": "2026-10-09T08:27:48.971691+00:00",
     "Casual": "2026-10-09T18:04:56.368644+00:00",
@@ -5378,6 +5398,6 @@
     "Simple Outfits": "2026-09-14T07:33:46.407531+00:00",
     "Women's shacket": "2026-10-06T21:52:24.134094+00:00"
   },
-  "daily_count": 9,
-  "last_repin_time": "2026-10-12T21:02:03.629526+00:00"
+  "daily_count": 11,
+  "last_repin_time": "2026-10-12T23:46:19.021221+00:00"
 }
