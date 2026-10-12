@@ -9893,11 +9893,55 @@
       "template": 17,
       "pin_url": "https://www.pinterest.com/pin/962222276664923337/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8933161992363,
+      "title": "Gravity Strength Built-in Tank | MeeeShop US Boutique",
+      "board": "Trends",
+      "timestamp": "2026-10-12T20:40:27.329450",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276664940178/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 9087953830059,
+      "title": "Collins Signature Shoulder Bag - Fall Cozy & Halloween Chic \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-10-12T20:41:34.808567",
+      "type": "carousel",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276664940219/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8933166645419,
+      "title": "Cozy Fall: Women's Bamboo Lounge Set - Long Sleeve T-shirt and Jogger Pants \u2014 MeeeShop",
+      "board": "Relaxed Yet Trendy...",
+      "timestamp": "2026-10-12T20:43:44.442679",
+      "type": "video",
+      "style": "carousel",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276664940283/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 9053204185259,
+      "title": "Downeast Carpe Diem Sweater - Cozy Fall Essential for Halloween & Work \u2014 MeeeShop",
+      "board": "Winter Outfits",
+      "timestamp": "2026-10-12T20:44:50.011640",
+      "type": "carousel",
+      "style": "collage",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276664940321/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-09-30T00:14:02.173306",
-    "Trends": "2026-10-12T08:53:29.641538",
+    "Trends": "2026-10-12T20:40:27.329450",
     "Dresses": "2026-10-09T17:51:49.766064",
     "Feminine & Flowy Fits": "2026-10-05T08:44:16.555889",
     "Short fall dresses": "2026-10-11T08:33:29.765610",
@@ -9942,7 +9986,7 @@
     "Fashion Models": "2026-10-08T08:38:57.387467",
     "My Shop #1737732113": "2026-10-08T18:19:02.022080",
     "Shop For Holidays": "2026-10-08T18:20:19.332653",
-    "New": "2026-10-12T08:55:02.686767",
+    "New": "2026-10-12T20:41:34.808567",
     "American Bazi": "2026-10-12T08:56:12.088793",
     "Cool & Casual Styles": "2026-10-09T22:08:35.633664",
     "MeeeShop's Luxe Styles": "2026-10-01T08:37:57.461950",
@@ -9994,10 +10038,10 @@
     "Womens Cardigans": "2026-10-08T22:25:57.755958",
     "comfy fall outfits": "2026-09-22T07:38:35.882823",
     "Ankle Strap Flats": "2026-09-01T07:39:15.343019",
-    "Relaxed Yet Trendy...": "2026-09-01T15:54:13.191192",
+    "Relaxed Yet Trendy...": "2026-10-12T20:43:44.442679",
     "Chic & Cozy: Annie...": "2026-09-23T23:32:59.222690",
     "Fall outfits": "2026-09-30T08:18:32.567692",
-    "Winter Outfits": "2026-09-22T00:01:02.289587",
+    "Winter Outfits": "2026-10-12T20:44:50.011640",
     "Women's shacket": "2026-10-02T17:13:32.401685",
     "Fall Outfits 2026": "2026-09-30T17:25:44.491082",
     "Womens shacket": "2026-10-03T23:42:07.347470",
@@ -10009,9 +10053,9 @@
     "Moody Blues & Vintage Pinks": "2026-10-08T00:57:33.726975",
     "Umgee USA": "2026-10-10T16:46:42.000590"
   },
-  "daily_count": 8,
-  "last_post_time": "2026-10-12T09:00:46.773048",
+  "daily_count": 12,
+  "last_post_time": "2026-10-12T20:44:50.011640",
   "board_rotation_cursor": 0,
   "last_image_style": "collage",
-  "last_template_index": 17
+  "last_template_index": 11
 }
