@@ -4,16 +4,145 @@
       "pin_id": "962222276632068955",
       "pin_title": "MeeeShop: Shop Dresses, Jeans, Clothes, Shoes, & Accessories For Women",
       "original_link": "https://us.meeeshop.com/products/davi-dani-crochet-patchwork-round-neck-pullover-sweater-top",
-      "tagged_product": {
-        "id": "8988049932459",
-        "handle": "brynn-textured-round-neck-drop-shoulder-pullover-sweatshirt",
-        "title": "Brynn Textured Round Neck Drop Shoulder Pullover Sweatshirt",
-        "price": 84.99,
-        "url": "https://us.meeeshop.com/products/brynn-textured-round-neck-drop-shoulder-pullover-sweatshirt?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
-        "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/brynn-textured-round-neck-drop-shoulder-pullover-s-908267.png?v=1789186582"
-      },
-      "tagged_at": "2026-09-24T11:51:21.904179+00:00",
-      "verified_at": "2026-09-25T06:55:15.888389+00:00"
+      "tagged_products": [
+        {
+          "id": "8985000444075",
+          "variant_id": "47782308118699",
+          "handle": "andry-tote-bag",
+          "title": "Andry Tote Bag",
+          "price": 94.99,
+          "url": "https://us.meeeshop.com/products/andry-tote-bag?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/andry-tote-bag-in-denim-blue-laundry-bag-tote-847979.jpg?v=1789106357"
+        },
+        {
+          "id": "8985000542379",
+          "variant_id": "47782309003435",
+          "handle": "addison-shoulder-bag-and-wristlet-set",
+          "title": "Addison Shoulder Bag and Wristlet Set",
+          "price": 114.99,
+          "url": "https://us.meeeshop.com/products/addison-shoulder-bag-and-wristlet-set?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/addison-shoulder-bag-and-wristlet-set-in-beige-add-125931.jpg?v=1789106423"
+        },
+        {
+          "id": "9087954485419",
+          "variant_id": "48172201214123",
+          "handle": "blossom-shoulder-bag-and-set",
+          "title": "Blossom Shoulder Bag and Set",
+          "price": 104.99,
+          "url": "https://us.meeeshop.com/products/blossom-shoulder-bag-and-set?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/blossom-shoulder-bag-and-set-in-seafoam-bloom-shou-774443.jpg?v=1791454189"
+        },
+        {
+          "id": "8985003786411",
+          "variant_id": "47782330433707",
+          "handle": "bonnie-shoulder-bag-and-set",
+          "title": "Bonnie Shoulder Bag and Set",
+          "price": 124.99,
+          "url": "https://us.meeeshop.com/products/bonnie-shoulder-bag-and-set?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/bonnie-shoulder-bag-and-set-in-croco-black-bonnie-517675.jpg?v=1789107713"
+        },
+        {
+          "id": "9087953043627",
+          "variant_id": "48172186763435",
+          "handle": "aliyah-shoulder-bag",
+          "title": "Aliyah Shoulder Bag",
+          "price": 94.99,
+          "url": "https://us.meeeshop.com/products/aliyah-shoulder-bag?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/aliyah-shoulder-bag-in-black-aaliyah-shoulder-bag-688811.jpg?v=1791453106"
+        },
+        {
+          "id": "9028753916075",
+          "variant_id": "47915666768043",
+          "handle": "aurelia-embossed-shoulder-bag",
+          "title": "Aurelia Embossed Shoulder Bag",
+          "price": 109.99,
+          "url": "https://us.meeeshop.com/products/aurelia-embossed-shoulder-bag?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/aurelia-embossed-shoulder-bag-in-black-955691.jpg?v=1790056122"
+        },
+        {
+          "id": "9087953895595",
+          "variant_id": "48172195119275",
+          "handle": "bizzy-embossed-shoulder-bag",
+          "title": "Bizzy Embossed Shoulder Bag",
+          "price": 104.99,
+          "url": "https://us.meeeshop.com/products/bizzy-embossed-shoulder-bag?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/bizzy-embossed-shoulder-bag-in-black-927083.jpg?v=1791453709"
+        },
+        {
+          "id": "8985002311851",
+          "variant_id": "47782322864299",
+          "handle": "bonnie-gradient-croc-shoulder-bag-and-set",
+          "title": "Bonnie Gradient Croc Shoulder Bag and Set",
+          "price": 124.99,
+          "url": "https://us.meeeshop.com/products/bonnie-gradient-croc-shoulder-bag-and-set?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/bonnie-gradient-croc-shoulder-bag-and-set-in-croc-541547.jpg?v=1789107205"
+        },
+        {
+          "id": "9087953469611",
+          "variant_id": "48172190924971",
+          "handle": "alaina-printed-flag-shoulder-bag",
+          "title": "Alaina Printed Flag Shoulder Bag",
+          "price": 109.99,
+          "url": "https://us.meeeshop.com/products/alaina-printed-flag-shoulder-bag?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/alaina-printed-flag-shoulder-bag-in-beige-258219.jpg?v=1791453410"
+        },
+        {
+          "id": "8985001623723",
+          "variant_id": "47782317686955",
+          "handle": "arlena-crossbody-bag",
+          "title": "Arlena Crossbody Bag",
+          "price": 94.99,
+          "url": "https://us.meeeshop.com/products/arlena-crossbody-bag?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/arlena-crossbody-bag-in-black-guess-arlena-crossbo-120171.jpg?v=1789106810"
+        },
+        {
+          "id": "9090073297067",
+          "variant_id": "48187278491819",
+          "handle": "andrea-2-in-1-suede-hobo-shoulder-bag",
+          "title": "Andrea 2-in-1 Suede Hobo Shoulder Bag",
+          "price": 69.99,
+          "url": "https://us.meeeshop.com/products/andrea-2-in-1-suede-hobo-shoulder-bag?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/andrea-2-in-1-suede-hobo-shoulder-bag-in-fawn-263467.jpg?v=1791524107"
+        },
+        {
+          "id": "8985003032747",
+          "variant_id": "47782327582891",
+          "handle": "amalia-solid-croc-crossbody-bag",
+          "title": "Amalia Solid Croc Crossbody Bag",
+          "price": 94.99,
+          "url": "https://us.meeeshop.com/products/amalia-solid-croc-crossbody-bag?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/amalia-solid-croc-crossbody-bag-in-croco-black-bag-340331.jpg?v=1789107585"
+        },
+        {
+          "id": "8981451571371",
+          "variant_id": "47768438177963",
+          "handle": "andra-crossbody-bag",
+          "title": "Andra Crossbody Bag",
+          "price": 89.99,
+          "url": "https://us.meeeshop.com/products/andra-crossbody-bag?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/andra-crossbody-bag-in-beige-andrea-crossbody-bag-272299.jpg?v=1788932677"
+        },
+        {
+          "id": "8981475000491",
+          "variant_id": "47768558239915",
+          "handle": "avielle-crossbody-bag",
+          "title": "Avielle Crossbody Bag",
+          "price": 109.99,
+          "url": "https://us.meeeshop.com/products/avielle-crossbody-bag?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/avielle-crossbody-bag-in-beige-aviel-mini-double-z-375787.jpg?v=1788934455"
+        },
+        {
+          "id": "8985002836139",
+          "variant_id": "47782326796459",
+          "handle": "amalia-croc-embossed-crossbody-bag",
+          "title": "Amalia Croc-embossed Crossbody Bag",
+          "price": 94.99,
+          "url": "https://us.meeeshop.com/products/amalia-croc-embossed-crossbody-bag?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/amalia-croc-embossed-crossbody-bag-in-croco-navy-b-964075.jpg?v=1789107506"
+        }
+      ],
+      "tagged_at": "2026-10-12T04:06:27.693407+00:00",
+      "verified_at": "2026-10-12T04:06:27.693418+00:00"
     },
     "962222276663464369": {
       "pin_id": "962222276663464369",
@@ -7149,5 +7278,5 @@
       "verified_at": "2026-10-12T04:01:05.719252+00:00"
     }
   },
-  "last_run": "2026-10-12T04:01:05.719257+00:00"
+  "last_run": "2026-10-12T04:06:27.693424+00:00"
 }
