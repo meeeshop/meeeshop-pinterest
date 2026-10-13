@@ -7996,7 +7996,151 @@
       ],
       "tagged_at": "2026-10-13T04:09:24.727859+00:00",
       "verified_at": "2026-10-13T04:09:24.727871+00:00"
+    },
+    "962222276629734561": {
+      "pin_id": "962222276629734561",
+      "pin_title": "MeeeShop: Shop Dresses, Jeans, Clothes, Shoes, & Accessories For Women",
+      "original_link": "https://us.meeeshop.com/products/haptics-tiered-babydoll-maxi-dress-with-side-pocket-2?utm_source=Pinterest",
+      "tagged_products": [
+        {
+          "id": "8949207662763",
+          "variant_id": "47683561881771",
+          "handle": "boucle-lounge-pants",
+          "title": "Boucle Lounge Pants",
+          "price": 84.99,
+          "url": "https://us.meeeshop.com/products/boucle-lounge-pants?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/boucle-lounge-pants-1.jpg?v=1787675725"
+        },
+        {
+          "id": "8789757231275",
+          "variant_id": "47130841219243",
+          "handle": "altitude-heights-corset-double-waistband-straight-fray",
+          "title": "Altitude Heights Corset Double Waistband Straight Frayed Hem Jeans",
+          "price": 129.99,
+          "url": "https://us.meeeshop.com/products/altitude-heights-corset-double-waistband-straight-fray?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/altitude-heights-corset-double-waistband-straight-frayed-hem-jeans-1.png?v=1787715832"
+        },
+        {
+          "id": "8789754773675",
+          "variant_id": "47130831978667",
+          "handle": "alexa-high-rise-tapered-leg-mom-jeans",
+          "title": "Alexa High Rise Tapered Leg Mom Jeans",
+          "price": 124.99,
+          "url": "https://us.meeeshop.com/products/alexa-high-rise-tapered-leg-mom-jeans?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/alexa-high-rise-tapered-leg-mom-jeans-1.png?v=1787715779"
+        },
+        {
+          "id": "8905532506283",
+          "variant_id": "47546257932459",
+          "handle": "graceemma-butter-soft-pants-brown",
+          "title": "Butter Soft Pants, Brown",
+          "price": 89.99,
+          "url": "https://us.meeeshop.com/products/graceemma-butter-soft-pants-brown?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/butter-soft-pants-brown-1.jpg?v=1787717465"
+        },
+        {
+          "id": "8789756739755",
+          "variant_id": "47181803651243",
+          "handle": "aurora-tummy-control-eco-friendly-fabric-slim-palazzo",
+          "title": "Aurora Tummy Control Eco Friendly Fabric Slim Palazzo Jeans (medium Wash)",
+          "price": 129.99,
+          "url": "https://us.meeeshop.com/products/aurora-tummy-control-eco-friendly-fabric-slim-palazzo?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/aurora-tummy-control-eco-friendly-fabric-slim-palazzo-jeans-medium-wash-1.png?v=1787715815"
+        },
+        {
+          "id": "8811044044971",
+          "variant_id": "47176712716459",
+          "handle": "anastasia-tummy-control-high-rise-wide-flare-jeans",
+          "title": "Anastasia Tummy Control High Rise Wide Flare Jeans",
+          "price": 129.99,
+          "url": "https://us.meeeshop.com/products/anastasia-tummy-control-high-rise-wide-flare-jeans?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/anastasia-tummy-control-high-rise-wide-flare-jeans-1.png?v=1787715881"
+        },
+        {
+          "id": "8789754839211",
+          "variant_id": "47130833322155",
+          "handle": "brianna-high-rise-skinny-flare-jeans-reg-plus",
+          "title": "Brianna High Rise Skinny Flare Jeans (reg & Plus)",
+          "price": 119.99,
+          "url": "https://us.meeeshop.com/products/brianna-high-rise-skinny-flare-jeans-reg-plus?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/brianna-high-rise-skinny-flare-jeans-reg-plus-1.jpg?v=1787715779"
+        },
+        {
+          "id": "8789755658411",
+          "variant_id": "47130835157163",
+          "handle": "blue-by-slim-ultra-high-rise-90s-straight-jean",
+          "title": "Blue by Slim Ultra High Rise 90's Straight Jeans",
+          "price": 109.99,
+          "url": "https://us.meeeshop.com/products/blue-by-slim-ultra-high-rise-90s-straight-jean?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/blue-by-slim-ultra-high-rise-90s-straight-jeans-1.jpg?v=1787715797"
+        },
+        {
+          "id": "8905532375211",
+          "variant_id": "47546256785579",
+          "handle": "graceemma-butter-soft-pants-pink",
+          "title": "Butter Soft Pants, Pink",
+          "price": 89.99,
+          "url": "https://us.meeeshop.com/products/graceemma-butter-soft-pants-pink?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/butter-soft-pants-pink-1.jpg?v=1787717462"
+        },
+        {
+          "id": "8988048949419",
+          "variant_id": "47790483570859",
+          "handle": "amayah-buttoned-straight-pants-two-piece-set",
+          "title": "Amayah Buttoned Straight Pants Two Piece Set",
+          "price": 84.99,
+          "url": "https://us.meeeshop.com/products/amayah-buttoned-straight-pants-two-piece-set?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/amayah-buttoned-straight-pants-two-piece-set-in-pi-275627.png?v=1789186033"
+        },
+        {
+          "id": "8988050292907",
+          "variant_id": "47790497071275",
+          "handle": "avery-polka-dot-elastic-waist-casual-pants-set",
+          "title": "Avery Polka Dot Elastic Waist Casual Pants Set",
+          "price": 109.99,
+          "url": "https://us.meeeshop.com/products/avery-polka-dot-elastic-waist-casual-pants-set?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/avery-polka-dot-elastic-waist-casual-pants-set-in-874347.png?v=1789186672"
+        },
+        {
+          "id": "8883470041259",
+          "variant_id": "47424525107371",
+          "handle": "buki-easy-street-stretch-chino-pant",
+          "title": "Buki Easy Street Stretch Chino Pant",
+          "price": 199.99,
+          "url": "https://us.meeeshop.com/products/buki-easy-street-stretch-chino-pant?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/buki-easy-street-stretch-chino-pant-1.png?v=1787716954"
+        },
+        {
+          "id": "8825278070955",
+          "variant_id": "47233237844139",
+          "handle": "boho-print-wide-leg-pants-with-pockets",
+          "title": "Boho. Print Wide Leg Pants with Pockets",
+          "price": 69.99,
+          "url": "https://us.meeeshop.com/products/boho-print-wide-leg-pants-with-pockets?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/boho-print-wide-leg-pants-with-pockets-1.jpg?v=1787716049"
+        },
+        {
+          "id": "8744047214763",
+          "variant_id": "46492122677419",
+          "handle": "adler-breech-petite",
+          "title": "Adler Breech - Petite",
+          "price": 189.99,
+          "url": "https://us.meeeshop.com/products/adler-breech-petite?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/AdlerPGray.jpg?v=1788222667"
+        },
+        {
+          "id": "8988052226219",
+          "variant_id": "47790504771755",
+          "handle": "anna-eyelet-embroidered-lace-patchwork-cropped-pullover-drawstring-pan",
+          "title": "Anna Eyelet Embroidered Lace Patchwork Cropped Pullover Drawstring Pants Set",
+          "price": 114.99,
+          "url": "https://us.meeeshop.com/products/anna-eyelet-embroidered-lace-patchwork-cropped-pullover-drawstring-pan?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/anna-eyelet-embroidered-lace-patchwork-cropped-pul-525099.png?v=1789187010"
+        }
+      ],
+      "tagged_at": "2026-10-13T11:10:35.001302+00:00",
+      "verified_at": "2026-10-13T11:10:35.001314+00:00"
     }
   },
-  "last_run": "2026-10-13T04:09:24.727876+00:00"
+  "last_run": "2026-10-13T11:10:35.001319+00:00"
 }
