@@ -9981,6 +9981,52 @@
       "template": 17,
       "pin_url": "https://www.pinterest.com/pin/962222276664944602/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": "571147649195",
+      "article_id": "571147649195",
+      "title": "How to Prevent Sweater and Knitwear Pilling: Shaving and Washing Rules",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-10-13T02:31:30.073810",
+      "type": "blog",
+      "style": "card",
+      "template": 9,
+      "pin_url": "https://www.pinterest.com/pin/962222276664947428/",
+      "blog_url": "https://us.meeeshop.com/blogs/our-tips/how-to-prevent-sweater-and-knitwear-pilling-shaving-and-washing-rules",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 9041687904427,
+      "title": "Willie Nelson Abbott, Texas Tee - Cozy Fall Graphic Tee for Halloween \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-10-13T02:34:12.390463",
+      "type": "video",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276664947479/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 9087954190507,
+      "title": "Nylah Shoulder Bag - Cozy Fall & Halloween Must-Have \u2014 MeeeShop",
+      "board": "Confidence Ladies",
+      "timestamp": "2026-10-13T02:37:13.981559",
+      "type": "video",
+      "style": "carousel",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276664947554/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8985002606763,
+      "title": "Ynnari Croc Round Crossbody Bag - Cozy Fall Must-Have for Halloween \ud83c\udf83 \u2014 MeeeShop",
+      "board": "Fresh Finds New...",
+      "timestamp": "2026-10-13T02:38:34.446311",
+      "type": "carousel",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276664947574/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
@@ -10030,7 +10076,7 @@
     "Fashion Models": "2026-10-08T08:38:57.387467",
     "My Shop #1737732113": "2026-10-08T18:19:02.022080",
     "Shop For Holidays": "2026-10-08T18:20:19.332653",
-    "New": "2026-10-12T23:49:09.661443",
+    "New": "2026-10-13T02:34:12.390463",
     "American Bazi": "2026-10-12T08:56:12.088793",
     "Cool & Casual Styles": "2026-10-09T22:08:35.633664",
     "MeeeShop's Luxe Styles": "2026-10-01T08:37:57.461950",
@@ -10059,8 +10105,8 @@
     "Mustard Seed Clothing": "2026-10-07T22:18:41.440828",
     "Woman Fashion!": "2026-10-12T09:00:46.773048",
     "Stylish Finds": "2026-10-12T23:50:18.655377",
-    "Confidence Ladies": "2026-10-02T08:14:50.098159",
-    "Fresh Finds New...": "2026-10-02T17:12:21.763155",
+    "Confidence Ladies": "2026-10-13T02:37:13.981559",
+    "Fresh Finds New...": "2026-10-13T02:38:34.446311",
     "Affordable Women's Fashion USA": "2026-10-02T21:31:53.502629",
     "Festive & Flora Fits": "2026-10-09T01:11:05.416031",
     "Shop Responsibly": "2026-10-03T00:21:39.108297",
@@ -10097,8 +10143,8 @@
     "Moody Blues & Vintage Pinks": "2026-10-08T00:57:33.726975",
     "Umgee USA": "2026-10-10T16:46:42.000590"
   },
-  "daily_count": 16,
-  "last_post_time": "2026-10-12T23:51:27.730749",
+  "daily_count": 4,
+  "last_post_time": "2026-10-13T02:38:34.446311",
   "board_rotation_cursor": 0,
   "last_image_style": "collage",
   "last_template_index": 17
