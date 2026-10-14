@@ -10304,11 +10304,55 @@
       "template": 17,
       "pin_url": "https://www.pinterest.com/pin/962222276664999886/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8928207437995,
+      "title": "Sovella Active Recovery Sandals Women's Pf Buckle Slide White - Fall Cozy Chic",
+      "board": "Trends",
+      "timestamp": "2026-10-14T23:48:39.600908",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276665003821/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8883469942955,
+      "title": "Buki Resort Crop Pant | MeeeShop US Boutique",
+      "board": "New",
+      "timestamp": "2026-10-14T23:49:56.338580",
+      "type": "carousel",
+      "style": "collage",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276665003863/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8949213855915,
+      "title": "Linen Wide-leg Jumpsuit - Adjustable Cuffs: Boho Chic Fall Look \u2014 MeeeShop",
+      "board": "Rompers, Jumpsuits &...",
+      "timestamp": "2026-10-14T23:51:11.974810",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276665003891/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 9034386866347,
+      "title": "Emory Park Harley Oversized Top - Cozy Fall & Halloween Must-Have \u2014 MeeeShop",
+      "board": "Effortless Looks",
+      "timestamp": "2026-10-14T23:52:20.362275",
+      "type": "carousel",
+      "style": "collage",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276665003918/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-10-12T23:51:27.730749",
-    "Trends": "2026-10-14T20:57:18.284949",
+    "Trends": "2026-10-14T23:48:39.600908",
     "Dresses": "2026-10-09T17:51:49.766064",
     "Feminine & Flowy Fits": "2026-10-05T08:44:16.555889",
     "Short fall dresses": "2026-10-11T08:33:29.765610",
@@ -10322,7 +10366,7 @@
     "Must-Have Fashion...": "2026-10-14T07:21:24.483377",
     "Flares Jeans": "2026-10-04T16:19:30.152231",
     "Short Tall dresses": "2026-09-28T19:06:30.836754",
-    "Rompers, Jumpsuits &...": "2026-09-28T22:44:10.280293",
+    "Rompers, Jumpsuits &...": "2026-10-14T23:51:11.974810",
     "Skirts": "2026-10-10T16:45:30.490579",
     "Shirts & Tops": "2026-10-06T01:49:38.556851",
     "Blouses": "2026-10-07T08:26:58.929993",
@@ -10353,7 +10397,7 @@
     "Fashion Models": "2026-10-08T08:38:57.387467",
     "My Shop #1737732113": "2026-10-08T18:19:02.022080",
     "Shop For Holidays": "2026-10-08T18:20:19.332653",
-    "New": "2026-10-14T16:17:57.123031",
+    "New": "2026-10-14T23:49:56.338580",
     "American Bazi": "2026-10-12T08:56:12.088793",
     "Cool & Casual Styles": "2026-10-09T22:08:35.633664",
     "MeeeShop's Luxe Styles": "2026-10-13T22:07:06.705382",
@@ -10361,7 +10405,7 @@
     "Zenana Women's...": "2026-10-14T00:18:06.826258",
     "Thanks giving Outfits": "2026-10-02T00:43:31.413836",
     "Weekend to Workwear": "2026-10-10T08:21:00.513624",
-    "Effortless Looks": "2026-10-02T00:42:21.029386",
+    "Effortless Looks": "2026-10-14T23:52:20.362275",
     "Vamp Romantic Styles": "2026-10-02T08:13:36.748078",
     "BFCM Deals": "2026-10-08T22:27:04.842923",
     "Poetcore Aesthetics": "2026-10-03T15:33:52.654769",
@@ -10421,9 +10465,9 @@
     "Umgee USA": "2026-10-10T16:46:42.000590",
     "Edgy Fashion": "2026-10-13T09:13:02.770988"
   },
-  "daily_count": 13,
-  "last_post_time": "2026-10-14T20:57:18.284949",
+  "daily_count": 17,
+  "last_post_time": "2026-10-14T23:52:20.362275",
   "board_rotation_cursor": 0,
   "last_image_style": "collage",
-  "last_template_index": 17
+  "last_template_index": 11
 }
