@@ -10159,11 +10159,57 @@
       "template": 14,
       "pin_url": "https://www.pinterest.com/pin/962222276664971246/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 9095812481195,
+      "title": "Retrolicious Cats & Flowers Fit & Flare Dress - Cozy Fall & Halloween Chic \u2014 MeeeShop",
+      "board": "Trends",
+      "timestamp": "2026-10-14T00:14:47.776530",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276664973668/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": "571153547435",
+      "article_id": "571153547435",
+      "title": "How to Layer a Turtleneck Under Blazers, Dresses, and Button-Downs",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-10-14T00:16:25.586053",
+      "type": "blog",
+      "style": "card",
+      "template": 9,
+      "pin_url": "https://www.pinterest.com/pin/962222276664973687/",
+      "blog_url": "https://us.meeeshop.com/blogs/cardigans-sweaters-style-guide/how-to-layer-a-turtleneck-under-blazers-dresses-and-button-downs",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 9041687380139,
+      "title": "Sonny & Cher Oversized Tank - Cozy Fall Halloween Top \u2014 MeeeShop",
+      "board": "Zenana Women's...",
+      "timestamp": "2026-10-14T00:18:06.826258",
+      "type": "product",
+      "style": "collage",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276664973708/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8985000247467,
+      "title": "Arya Signature Tote and Set: Cozy Fall Halloween Must-Have \u2014 MeeeShop",
+      "board": "Blogs",
+      "timestamp": "2026-10-14T00:19:26.816164",
+      "type": "carousel",
+      "style": "card",
+      "template": 9,
+      "pin_url": "https://www.pinterest.com/pin/962222276664973731/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-10-12T23:51:27.730749",
-    "Trends": "2026-10-13T22:04:47.789688",
+    "Trends": "2026-10-14T00:14:47.776530",
     "Dresses": "2026-10-09T17:51:49.766064",
     "Feminine & Flowy Fits": "2026-10-05T08:44:16.555889",
     "Short fall dresses": "2026-10-11T08:33:29.765610",
@@ -10213,7 +10259,7 @@
     "Cool & Casual Styles": "2026-10-09T22:08:35.633664",
     "MeeeShop's Luxe Styles": "2026-10-13T22:07:06.705382",
     "Outerwear": "2026-10-11T21:10:16.114391",
-    "Zenana Women's...": "2026-10-01T22:02:58.445673",
+    "Zenana Women's...": "2026-10-14T00:18:06.826258",
     "Thanks giving Outfits": "2026-10-02T00:43:31.413836",
     "Weekend to Workwear": "2026-10-10T08:21:00.513624",
     "Effortless Looks": "2026-10-02T00:42:21.029386",
@@ -10243,7 +10289,7 @@
     "Festive & Flora Fits": "2026-10-09T01:11:05.416031",
     "Shop Responsibly": "2026-10-13T18:46:43.071354",
     "Social": "2026-10-13T18:47:48.052447",
-    "Blogs": "2026-10-03T15:32:35.065712",
+    "Blogs": "2026-10-14T00:19:26.816164",
     "All Pins": "2026-10-03T20:13:18.072982",
     "Outer wear": "2026-09-15T07:32:22.556924",
     "Women's Cardigans": "2026-09-30T21:40:21.762619",
@@ -10276,9 +10322,9 @@
     "Umgee USA": "2026-10-10T16:46:42.000590",
     "Edgy Fashion": "2026-10-13T09:13:02.770988"
   },
-  "daily_count": 16,
-  "last_post_time": "2026-10-13T22:08:21.476759",
+  "daily_count": 4,
+  "last_post_time": "2026-10-14T00:19:26.816164",
   "board_rotation_cursor": 0,
-  "last_image_style": "collage",
-  "last_template_index": 14
+  "last_image_style": "card",
+  "last_template_index": 9
 }
