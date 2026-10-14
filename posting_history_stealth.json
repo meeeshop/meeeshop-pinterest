@@ -10205,11 +10205,55 @@
       "template": 9,
       "pin_url": "https://www.pinterest.com/pin/962222276664973731/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8818151260331,
+      "title": "Emory Park Brisa Skort: Cozy Fall & Halloween Style Must-Have \u2014 MeeeShop",
+      "board": "Trends",
+      "timestamp": "2026-10-14T07:19:11.729565",
+      "type": "video",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276664980961/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 9033028665515,
+      "title": "High Rise Relaxed Barrel Jeans - Cozy Fall & Halloween Ready \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-10-14T07:20:15.697489",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276664980986/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8949221294251,
+      "title": "Crystal Clear Carry-all Messenger Bag - Boho Chic for Halloween & Cozy Fall \u2014 MeeeShop",
+      "board": "Must-Have Fashion...",
+      "timestamp": "2026-10-14T07:21:24.483377",
+      "type": "carousel",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276664981014/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8928207896747,
+      "title": "Sovella Active Recovery Sandals Women's Pf Thong Beige - Cozy Fall Comfort \u2014 MeeeShop",
+      "board": "Boat Shoes",
+      "timestamp": "2026-10-14T07:23:47.693796",
+      "type": "video",
+      "style": "carousel",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276664981045/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-10-12T23:51:27.730749",
-    "Trends": "2026-10-14T00:14:47.776530",
+    "Trends": "2026-10-14T07:19:11.729565",
     "Dresses": "2026-10-09T17:51:49.766064",
     "Feminine & Flowy Fits": "2026-10-05T08:44:16.555889",
     "Short fall dresses": "2026-10-11T08:33:29.765610",
@@ -10220,7 +10264,7 @@
     "Jeans": "2026-10-04T08:04:14.307937",
     "Cocktail Dresses": "2026-10-13T22:08:21.476759",
     "Dressy Outfits": "2026-10-05T23:26:11.342404",
-    "Must-Have Fashion...": "2026-10-03T20:12:01.928084",
+    "Must-Have Fashion...": "2026-10-14T07:21:24.483377",
     "Flares Jeans": "2026-10-04T16:19:30.152231",
     "Short Tall dresses": "2026-09-28T19:06:30.836754",
     "Rompers, Jumpsuits &...": "2026-09-28T22:44:10.280293",
@@ -10254,7 +10298,7 @@
     "Fashion Models": "2026-10-08T08:38:57.387467",
     "My Shop #1737732113": "2026-10-08T18:19:02.022080",
     "Shop For Holidays": "2026-10-08T18:20:19.332653",
-    "New": "2026-10-13T22:05:54.070969",
+    "New": "2026-10-14T07:20:15.697489",
     "American Bazi": "2026-10-12T08:56:12.088793",
     "Cool & Casual Styles": "2026-10-09T22:08:35.633664",
     "MeeeShop's Luxe Styles": "2026-10-13T22:07:06.705382",
@@ -10301,7 +10345,7 @@
     "Coats & Jackets": "2026-09-18T23:12:40.092332",
     "Sweaters #Sweaters...": "2026-10-05T23:25:01.057901",
     "Sweaters & Sweater...": "2026-10-06T21:56:03.564881",
-    "Boat Shoes": "2026-08-24T12:37:33.243466",
+    "Boat Shoes": "2026-10-14T07:23:47.693796",
     "Sweaters for women": "2026-09-22T16:04:26.733981",
     "Womens Cardigans": "2026-10-08T22:25:57.755958",
     "comfy fall outfits": "2026-09-22T07:38:35.882823",
@@ -10322,9 +10366,9 @@
     "Umgee USA": "2026-10-10T16:46:42.000590",
     "Edgy Fashion": "2026-10-13T09:13:02.770988"
   },
-  "daily_count": 4,
-  "last_post_time": "2026-10-14T00:19:26.816164",
+  "daily_count": 8,
+  "last_post_time": "2026-10-14T07:23:47.693796",
   "board_rotation_cursor": 0,
-  "last_image_style": "card",
-  "last_template_index": 9
+  "last_image_style": "carousel",
+  "last_template_index": 11
 }
