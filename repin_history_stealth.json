@@ -5569,6 +5569,16 @@
       "target_board_id": "962222345325672760",
       "live_url": "https://www.pinterest.com/pin/4604086281453101632/",
       "timestamp": "2026-10-14T16:46:14.468729+00:00"
+    },
+    {
+      "pin_id": "4595642043650115648",
+      "product_title": "Dallas Polka Dot Print Barrel Jeans",
+      "category_group": "pants_denim",
+      "source_board": "_products",
+      "target_board": "Kancan USA Jeans",
+      "target_board_id": "962222345325077882",
+      "live_url": "https://www.pinterest.com/pin/4595642043650115648/",
+      "timestamp": "2026-10-14T20:55:15.816367+00:00"
     }
   ],
   "board_last_used": {
@@ -5634,7 +5644,7 @@
     "Sweaters #Sweaters #WinterOutfits": "2026-10-04T20:24:24.876387+00:00",
     "Everyday Style Essentials": "2026-10-11T17:29:06.622627+00:00",
     "Fashion": "2026-10-11T17:29:41.800443+00:00",
-    "Kancan USA Jeans": "2026-10-10T17:04:38.490657+00:00",
+    "Kancan USA Jeans": "2026-10-14T20:55:15.816367+00:00",
     "Stylish Finds": "2026-10-11T21:04:26.570769+00:00",
     "Straight Leg Jeans": "2026-10-10T20:41:06.669954+00:00",
     "Handbags #handbags": "2026-10-14T00:04:53.844877+00:00",
@@ -5648,6 +5658,6 @@
     "Simple Outfits": "2026-09-14T07:33:46.407531+00:00",
     "Women's shacket": "2026-10-06T21:52:24.134094+00:00"
   },
-  "daily_count": 12,
-  "last_repin_time": "2026-10-14T16:46:14.468729+00:00"
+  "daily_count": 13,
+  "last_repin_time": "2026-10-14T20:55:15.816367+00:00"
 }
