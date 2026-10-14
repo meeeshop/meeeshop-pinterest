@@ -10249,11 +10249,55 @@
       "template": 11,
       "pin_url": "https://www.pinterest.com/pin/962222276664981045/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8976562290859,
+      "title": "Luxe Deluxe Chain Shoulder Bag - Fall Chic & Halloween Ready! \u2014 MeeeShop",
+      "board": "Trends",
+      "timestamp": "2026-10-14T16:15:37.770492",
+      "type": "carousel",
+      "style": "collage",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276664991882/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8988051701931,
+      "title": "Rebecca Elastic Waistband Short Set - Cozy Fall Halloween Outfit \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-10-14T16:17:57.123031",
+      "type": "video",
+      "style": "carousel",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276664991939/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8897138589867,
+      "title": "Ymi Women's Drop Shoulder Boyfriend Denim Jacket - Cozy Fall Outerwear \u2014 MeeeShop",
+      "board": "Outer wear",
+      "timestamp": "2026-10-14T16:19:19.139823",
+      "type": "carousel",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276664991979/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8985001689259,
+      "title": "Vesper Mini Shoulder Bag - Perfect Cozy Fall & Halloween Accessory \u2014 MeeeShop",
+      "board": "All Pins",
+      "timestamp": "2026-10-14T16:20:36.169492",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276664992001/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-10-12T23:51:27.730749",
-    "Trends": "2026-10-14T07:19:11.729565",
+    "Trends": "2026-10-14T16:15:37.770492",
     "Dresses": "2026-10-09T17:51:49.766064",
     "Feminine & Flowy Fits": "2026-10-05T08:44:16.555889",
     "Short fall dresses": "2026-10-11T08:33:29.765610",
@@ -10298,7 +10342,7 @@
     "Fashion Models": "2026-10-08T08:38:57.387467",
     "My Shop #1737732113": "2026-10-08T18:19:02.022080",
     "Shop For Holidays": "2026-10-08T18:20:19.332653",
-    "New": "2026-10-14T07:20:15.697489",
+    "New": "2026-10-14T16:17:57.123031",
     "American Bazi": "2026-10-12T08:56:12.088793",
     "Cool & Casual Styles": "2026-10-09T22:08:35.633664",
     "MeeeShop's Luxe Styles": "2026-10-13T22:07:06.705382",
@@ -10334,8 +10378,8 @@
     "Shop Responsibly": "2026-10-13T18:46:43.071354",
     "Social": "2026-10-13T18:47:48.052447",
     "Blogs": "2026-10-14T00:19:26.816164",
-    "All Pins": "2026-10-03T20:13:18.072982",
-    "Outer wear": "2026-09-15T07:32:22.556924",
+    "All Pins": "2026-10-14T16:20:36.169492",
+    "Outer wear": "2026-10-14T16:19:19.139823",
     "Women's Cardigans": "2026-09-30T21:40:21.762619",
     "Loungewear": "2026-10-03T07:54:06.931497",
     "Bow heels": "2026-09-24T07:28:41.663446",
@@ -10366,9 +10410,9 @@
     "Umgee USA": "2026-10-10T16:46:42.000590",
     "Edgy Fashion": "2026-10-13T09:13:02.770988"
   },
-  "daily_count": 8,
-  "last_post_time": "2026-10-14T07:23:47.693796",
+  "daily_count": 12,
+  "last_post_time": "2026-10-14T16:20:36.169492",
   "board_rotation_cursor": 0,
   "last_image_style": "carousel",
-  "last_template_index": 11
+  "last_template_index": 16
 }
