@@ -39,7 +39,47 @@
           "role": "THE SHOES"
         }
       ]
+    },
+    {
+      "timestamp": "2026-10-15T08:30:47.918951+00:00",
+      "formula_id": "how_to_style_flare_jeans",
+      "formula_title": "How to Style Flare Jeans: Outfit Formula",
+      "pin_url": "https://www.pinterest.com/pin/962222276665012772/",
+      "pin_id": "962222276665012772",
+      "board": "Kancan USA Jeans",
+      "title": "How to Style Flare Jeans: Outfit Formula | How to Style Flare Jeans & Sweater | MeeeShop",
+      "tagged_products_count": 4,
+      "outfit_items": [
+        {
+          "id": "8740253106347",
+          "variant_id": "46478454194347",
+          "title": "Hyfve Tie Front Spaghetti Strap Top",
+          "price": "84.99",
+          "role": "THE TOP"
+        },
+        {
+          "id": "9087954452651",
+          "variant_id": "48172201050283",
+          "title": "Acacia Canteen Crossbody Bag",
+          "price": "94.99",
+          "role": "THE BAG"
+        },
+        {
+          "id": "8897140752555",
+          "variant_id": "47512654348459",
+          "title": "Ymi Women's Luxe High Rise Wannabettabutt Flare Jeans",
+          "price": "84.99",
+          "role": "THE FLARE DENIM"
+        },
+        {
+          "id": "9073872076971",
+          "variant_id": "48110997405867",
+          "title": "Alma Booties Black",
+          "price": "169.99",
+          "role": "THE FOOTWEAR"
+        }
+      ]
     }
   ],
-  "last_run": "2026-10-15T06:52:57.687941+00:00"
+  "last_run": "2026-10-15T08:30:47.918974+00:00"
 }
