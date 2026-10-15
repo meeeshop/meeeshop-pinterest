@@ -5669,6 +5669,26 @@
       "target_board_id": "962222345325118481",
       "live_url": "https://www.pinterest.com/pin/4592475461191084096/",
       "timestamp": "2026-10-15T20:30:44.903501+00:00"
+    },
+    {
+      "pin_id": "4598386452314101824",
+      "product_title": "Smith Tee",
+      "category_group": "tops_tanks_blouses",
+      "source_board": "_products",
+      "target_board": "Must-Have Fashion Picks",
+      "target_board_id": "962222345325701393",
+      "live_url": "https://www.pinterest.com/pin/4598386452314101824/",
+      "timestamp": "2026-10-15T23:28:47.714810+00:00"
+    },
+    {
+      "pin_id": "4597542013916616768",
+      "product_title": "Callie Bucket Bag and Wallet Set",
+      "category_group": "bags_accessories",
+      "source_board": "_products",
+      "target_board": "New Trendy Women Apparel, Shoes, Handbags & more",
+      "target_board_id": "962222345325172900",
+      "live_url": "https://www.pinterest.com/pin/4597542013916616768/",
+      "timestamp": "2026-10-15T23:29:14.694053+00:00"
     }
   ],
   "board_last_used": {
@@ -5686,7 +5706,7 @@
     "Shirts & Tops": "2026-10-12T21:01:41.995814+00:00",
     "Feminine & Flowy Fits": "2026-10-11T21:05:01.051771+00:00",
     "Blouses": "2026-10-13T21:58:07.523808+00:00",
-    "Must-Have Fashion Picks": "2026-10-12T00:09:20.769781+00:00",
+    "Must-Have Fashion Picks": "2026-10-15T23:28:47.714810+00:00",
     "\"fashion models\"": "2026-10-12T08:34:48.506747+00:00",
     "Cocktail Dresses": "2026-10-12T21:02:03.629526+00:00",
     "Camis & Tanks": "2026-10-14T16:45:05.403758+00:00",
@@ -5720,7 +5740,7 @@
     "Mustard Seed Clothing": "2026-10-08T22:21:44.568985+00:00",
     "Effortless Looks": "2026-10-12T08:35:08.758674+00:00",
     "best selling products": "2026-10-14T07:05:17.287988+00:00",
-    "New Trendy Women Apparel, Shoes, Handbags & more": "2026-10-12T08:34:13.988860+00:00",
+    "New Trendy Women Apparel, Shoes, Handbags & more": "2026-10-15T23:29:14.694053+00:00",
     "BFCM Deals": "2026-10-14T07:06:33.546400+00:00",
     "Sweaters for women": "2026-10-13T21:58:34.184087+00:00",
     "new products": "2026-10-14T16:44:39.295704+00:00",
@@ -5748,6 +5768,6 @@
     "Simple Outfits": "2026-09-14T07:33:46.407531+00:00",
     "Women's shacket": "2026-10-06T21:52:24.134094+00:00"
   },
-  "daily_count": 5,
-  "last_repin_time": "2026-10-15T20:30:44.903501+00:00"
+  "daily_count": 7,
+  "last_repin_time": "2026-10-15T23:29:14.694053+00:00"
 }
