@@ -79,7 +79,47 @@
           "role": "THE FOOTWEAR"
         }
       ]
+    },
+    {
+      "timestamp": "2026-10-15T10:07:19.422765+00:00",
+      "formula_id": "everyday_chic",
+      "formula_title": "Everyday Chic Outfit Formula",
+      "pin_url": "https://www.pinterest.com/pin/962222276665014151/",
+      "pin_id": "962222276665014151",
+      "board": "Style Ideas",
+      "title": "Everyday Chic Outfit Formula - Easy Everyday Styling Formula | MeeeShop",
+      "tagged_products_count": 4,
+      "outfit_items": [
+        {
+          "id": "8740256907435",
+          "variant_id": "46478472446123",
+          "title": "Hyfve Contrast Trim Sleeveless Ribbed Top",
+          "price": "84.99",
+          "role": "THE TOP"
+        },
+        {
+          "id": "9087953076395",
+          "variant_id": "48172186271915",
+          "title": "Amahia Tote Bag and Crossbody Set",
+          "price": "109.99",
+          "role": "THE BAG"
+        },
+        {
+          "id": "8740253761707",
+          "variant_id": "46478458355883",
+          "title": "Hyfve Acid Wash French Terry Wide-leg Pants",
+          "price": "104.99",
+          "role": "THE BOTTOM"
+        },
+        {
+          "id": "9073872208043",
+          "variant_id": "48110998421675",
+          "title": "Cecilia Slingback Black",
+          "price": "159.99",
+          "role": "THE SHOES"
+        }
+      ]
     }
   ],
-  "last_run": "2026-10-15T08:30:47.918974+00:00"
+  "last_run": "2026-10-15T10:07:19.422785+00:00"
 }

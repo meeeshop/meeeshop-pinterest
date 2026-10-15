@@ -1,4 +1,42 @@
 {
-  "posts": [],
-  "last_run": null
+  "posts": [
+    {
+      "timestamp": "2026-10-15T10:10:42.523745+00:00",
+      "formula_id": "date_night",
+      "formula_title": "Date Night Outfit Formula",
+      "pin_url": null,
+      "pin_id": null,
+      "board": "Cocktail Dresses",
+      "title": "Date Night Outfit Formula | Chic Midi Dress & Accessories | MeeeShop",
+      "type": "native_collage",
+      "canvas_preview": "/home/runner/work/meeeshop-pinterest/meeeshop-pinterest/scratch/collage_canvas_date_night_1792059019.png",
+      "cutout_items": [
+        {
+          "role": "THE DRESS",
+          "title": "Hyfve Boned Tie-back Dress",
+          "product_id": "8740253597867",
+          "pin_id": null
+        },
+        {
+          "role": "THE BAG",
+          "title": "Blossom Shoulder Bag and Set",
+          "product_id": "9087954485419",
+          "pin_id": null
+        },
+        {
+          "role": "THE SHOES",
+          "title": "Retrolicious Cowgirl Boots Doris Skirt",
+          "product_id": "8782625865899",
+          "pin_id": null
+        },
+        {
+          "role": "THE LAYER",
+          "title": "Hyfve Collared V-neck Top",
+          "product_id": "8740258414763",
+          "pin_id": null
+        }
+      ]
+    }
+  ],
+  "last_run": "2026-10-15T10:10:42.523915+00:00"
 }
