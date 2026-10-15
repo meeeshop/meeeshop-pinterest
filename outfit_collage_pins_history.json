@@ -36,7 +36,44 @@
           "pin_id": null
         }
       ]
+    },
+    {
+      "timestamp": "2026-10-15T18:14:01.215114+00:00",
+      "formula_id": "cozy_sweater_weather",
+      "formula_title": "Cozy Fall Layers Outfit Formula",
+      "pin_url": null,
+      "pin_id": null,
+      "board": "Sweaters",
+      "title": "Cozy Fall Layers Outfit Formula - Easy Everyday Styling Formula | MeeeShop",
+      "type": "native_collage",
+      "canvas_preview": "/home/runner/work/meeeshop-pinterest/meeeshop-pinterest/scratch/collage_canvas_cozy_sweater_weather_1792088021.png",
+      "cutout_items": [
+        {
+          "role": "THE KNIT",
+          "title": "Hyfve Rolled Sleeve Button-up Top",
+          "product_id": "8740258611371",
+          "pin_id": null
+        },
+        {
+          "role": "THE TOTE",
+          "title": "Kenna Tote Handbag",
+          "product_id": "9087952945323",
+          "pin_id": null
+        },
+        {
+          "role": "THE DENIM",
+          "title": "Hybrid Ultra High Rise Relaxed Flare Jeans",
+          "product_id": "9034571088043",
+          "pin_id": null
+        },
+        {
+          "role": "THE BOOTS",
+          "title": "Alice Boots Black",
+          "product_id": "9073872240811",
+          "pin_id": null
+        }
+      ]
     }
   ],
-  "last_run": "2026-10-15T10:10:42.523915+00:00"
+  "last_run": "2026-10-15T18:14:01.215331+00:00"
 }
