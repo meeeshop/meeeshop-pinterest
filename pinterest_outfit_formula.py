@@ -171,6 +171,7 @@ OUTFIT_FORMULAS = {
         "id": "casual_fall",
         "title": "Casual Fall Weekend Outfit Inspo",
         "subtitle": "HOW TO STYLE FLARE JEANS & A COZY KNIT",
+        "collection_handle": "flare-jeans",
         "slots": [
             {"category": "tops", "role_label": "THE TOP", "preference": ["sweater", "knit", "cardigan", "graphic", "tee", "top"]},
             {"category": "bags", "role_label": "THE BAG", "preference": ["crossbody", "sling", "shoulder", "bag"]},
@@ -185,6 +186,7 @@ OUTFIT_FORMULAS = {
         "id": "how_to_style_flare_jeans",
         "title": "How to Style Flare Jeans: Outfit Formula",
         "subtitle": "EFFORTLESS WESTERN CHIC FOR FALL & WEEKENDS",
+        "collection_handle": "flare-jeans",
         "slots": [
             {"category": "tops", "role_label": "THE TOP", "preference": ["western", "graphic", "tee", "blouse", "sweater", "tank"]},
             {"category": "bags", "role_label": "THE BAG", "preference": ["canteen", "crossbody", "tote", "handbag", "sling"]},
@@ -199,6 +201,7 @@ OUTFIT_FORMULAS = {
         "id": "everyday_chic",
         "title": "Everyday Chic Outfit Formula",
         "subtitle": "MINIMALIST STREET STYLE & BOUTIQUE BASICS",
+        "collection_handle": "womens-tops",
         "slots": [
             {"category": "tops", "role_label": "THE TOP", "preference": ["blouse", "tie front", "shirt", "top", "cami"]},
             {"category": "bags", "role_label": "THE BAG", "preference": ["shoulder", "crossbody", "tote", "bag"]},
@@ -213,6 +216,7 @@ OUTFIT_FORMULAS = {
         "id": "date_night",
         "title": "Date Night Outfit Formula",
         "subtitle": "ELEGANT DRESS & ACCESSORY STYLING INSPIRATION",
+        "collection_handle": "womens-dresses",
         "slots": [
             {"category": "dresses", "role_label": "THE DRESS", "preference": ["tie-back", "boned", "midi", "cocktail", "maxi", "dress"]},
             {"category": "bags", "role_label": "THE BAG", "preference": ["shoulder", "crossbody", "clutch", "bag"]},
@@ -227,6 +231,7 @@ OUTFIT_FORMULAS = {
         "id": "cozy_sweater_weather",
         "title": "Cozy Fall Layers Outfit Formula",
         "subtitle": "HOW TO STYLE KNIT SWEATERS WITH RELAXED DENIM",
+        "collection_handle": "womens-sweaters",
         "slots": [
             {"category": "tops", "role_label": "THE KNIT", "preference": ["sweater", "knit", "pullover", "cardigan"]},
             {"category": "bags", "role_label": "THE TOTE", "preference": ["tote", "backpack", "shoulder", "crossbody"]},
@@ -607,12 +612,14 @@ def generate_outfit_seo(formula: Dict[str, Any], items: List[Dict[str, Any]]) ->
     if len(desc) > 500:
         desc = desc[:497] + "..."
 
-    primary_link = items[0].get("url") if items else "https://us.meeeshop.com"
+    store_base = "https://us.meeeshop.com"
+    col_handle = formula.get("collection_handle", "womens-bottoms")
+    collection_link = f"{store_base}/collections/{col_handle}?utm_source=pinterest&utm_medium=outfit_formula_pin&utm_campaign={formula['id']}"
 
     return {
         "title": title,
         "description": desc,
-        "link": primary_link,
+        "link": collection_link,
         "alt_text": f"Outfit formula collage showing {f_title} with styled boutique apparel from MeeeShop US",
     }
 
