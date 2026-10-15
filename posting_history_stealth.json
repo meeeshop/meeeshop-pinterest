@@ -10348,6 +10348,52 @@
       "template": 11,
       "pin_url": "https://www.pinterest.com/pin/962222276665003918/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": "571160461483",
+      "article_id": "571160461483",
+      "title": "Skirt Outfits for Curvy Women: Styling Midi and A-Line Silhouettes",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-10-15T16:03:29.626492",
+      "type": "blog",
+      "style": "card",
+      "template": 9,
+      "pin_url": "https://www.pinterest.com/pin/841962092891515748/",
+      "blog_url": "https://us.meeeshop.com/blogs/plus-size-curvy-clothing/skirt-outfits-for-curvy-women-styling-midi-and-a-line-silhouettes",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8740256678059,
+      "title": "Hyfve Wrap Front Elastic Waist Skort - Cozy Fall Must-Have \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-10-15T16:04:44.006745",
+      "type": "carousel",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276665022584/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8976556982443,
+      "title": "Flying Tomato Moonlit Garden Printed Maxi Skirt - Cozy Halloween Fall Style \u2014 MeeeShop",
+      "board": "Chic Looks",
+      "timestamp": "2026-10-15T16:06:10.576165",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276665022634/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8825418186923,
+      "title": "Flying Tomato She's a Sweet Talker Denim Pants - Cozy Fall & Halloween Ready",
+      "board": "Jeans",
+      "timestamp": "2026-10-15T16:07:25.488289",
+      "type": "carousel",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276665022688/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
@@ -10360,7 +10406,7 @@
     "Trendy & Timeless Fashion": "2026-08-13T05:29:39.715837",
     "Dress": "2026-09-28T08:31:13.214090",
     "Bags": "2026-10-08T08:41:35.457395",
-    "Jeans": "2026-10-04T08:04:14.307937",
+    "Jeans": "2026-10-15T16:07:25.488289",
     "Cocktail Dresses": "2026-10-13T22:08:21.476759",
     "Dressy Outfits": "2026-10-05T23:26:11.342404",
     "Must-Have Fashion...": "2026-10-14T07:21:24.483377",
@@ -10383,7 +10429,7 @@
     "Kancan USA Jeans": "2026-10-06T01:46:48.693110",
     "Footwear": "2026-09-07T23:26:56.803572",
     "Fitted Jeans": "2026-10-06T08:49:31.590936",
-    "Chic Looks": "2026-10-03T07:52:51.341640",
+    "Chic Looks": "2026-10-15T16:06:10.576165",
     "Straight Leg Jeans": "2026-10-10T20:45:15.438542",
     "Puff Sleeves Tops": "2026-10-11T00:15:32.779445",
     "Casual": "2026-10-07T00:38:15.282483",
@@ -10397,7 +10443,7 @@
     "Fashion Models": "2026-10-08T08:38:57.387467",
     "My Shop #1737732113": "2026-10-08T18:19:02.022080",
     "Shop For Holidays": "2026-10-08T18:20:19.332653",
-    "New": "2026-10-14T23:49:56.338580",
+    "New": "2026-10-15T16:04:44.006745",
     "American Bazi": "2026-10-12T08:56:12.088793",
     "Cool & Casual Styles": "2026-10-09T22:08:35.633664",
     "MeeeShop's Luxe Styles": "2026-10-13T22:07:06.705382",
@@ -10465,9 +10511,9 @@
     "Umgee USA": "2026-10-10T16:46:42.000590",
     "Edgy Fashion": "2026-10-13T09:13:02.770988"
   },
-  "daily_count": 17,
-  "last_post_time": "2026-10-14T23:52:20.362275",
+  "daily_count": 4,
+  "last_post_time": "2026-10-15T16:07:25.488289",
   "board_rotation_cursor": 0,
   "last_image_style": "collage",
-  "last_template_index": 11
+  "last_template_index": 17
 }
