@@ -8716,7 +8716,151 @@
       ],
       "tagged_at": "2026-10-14T09:12:09.102225+00:00",
       "verified_at": "2026-10-14T09:12:09.102238+00:00"
+    },
+    "962222276628447337": {
+      "pin_id": "962222276628447337",
+      "pin_title": "MeeeShop: Shop Dresses, Jeans, Clothes, Shoes, & Accessories For Women",
+      "original_link": "https://us.meeeshop.com/products/kingsley-35-mary-jane-loafer?utm_source=Pinterest",
+      "tagged_products": [
+        {
+          "id": "8905532211371",
+          "variant_id": "47546255868075",
+          "handle": "graceemma-butter-soft-pants-blue",
+          "title": "Butter Soft Pants, Blue",
+          "price": 89.99,
+          "url": "https://us.meeeshop.com/products/graceemma-butter-soft-pants-blue?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/butter-soft-pants-blue-1.jpg?v=1787717455"
+        },
+        {
+          "id": "8988050489515",
+          "variant_id": "47790499070123",
+          "handle": "billie-mineral-wash-drawstring-high-waist-wide-leg-pants",
+          "title": "Billie Mineral Wash Drawstring High Waist Wide Leg Pants",
+          "price": 109.99,
+          "url": "https://us.meeeshop.com/products/billie-mineral-wash-drawstring-high-waist-wide-leg-pants?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/billie-mineral-wash-drawstring-high-waist-wide-leg-037035.png?v=1789186773"
+        },
+        {
+          "id": "8933199872171",
+          "variant_id": "47624633548971",
+          "handle": "blanche-pants-100-cotton-gauze",
+          "title": "Blanche Pants - 100% Cotton Gauze",
+          "price": 94.99,
+          "url": "https://us.meeeshop.com/products/blanche-pants-100-cotton-gauze?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/blanche-pants-100-cotton-gauze-1.jpg?v=1787675608"
+        },
+        {
+          "id": "8988051964075",
+          "variant_id": "47790502936747",
+          "handle": "aven-elastic-waist-ankle-length-wide-leg-pants",
+          "title": "Aven Elastic Waist Ankle Length Wide Leg Pants",
+          "price": 104.99,
+          "url": "https://us.meeeshop.com/products/aven-elastic-waist-ankle-length-wide-leg-pants?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/aven-elastic-waist-ankle-length-wide-leg-pants-in-657323.png?v=1789186922"
+        },
+        {
+          "id": "9103168864427",
+          "variant_id": "48250437632171",
+          "handle": "ash-mini-dress",
+          "title": "Ash Mini Dress",
+          "price": 79.99,
+          "url": "https://us.meeeshop.com/products/ash-mini-dress?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/ash-mini-dress-in-xs-ashley-black-mini-1-058091.jpg?v=1791971707"
+        },
+        {
+          "id": "9103168897195",
+          "variant_id": "48250437959851",
+          "handle": "ash-mini-dress-1",
+          "title": "Ash Mini Dress",
+          "price": 79.99,
+          "url": "https://us.meeeshop.com/products/ash-mini-dress-1?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/ash-mini-dress-in-xs-ash-mini-storage-254699.jpg?v=1791971717"
+        },
+        {
+          "id": "8921414795435",
+          "variant_id": "47583447679147",
+          "handle": "asymmetrical-waist-denim-shorts-with-pockets",
+          "title": "Asymmetrical Waist Denim Shorts with Pockets",
+          "price": 54.99,
+          "url": "https://us.meeeshop.com/products/asymmetrical-waist-denim-shorts-with-pockets?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/asymmetrical-waist-denim-shorts-with-pockets-1.jpg?v=1787717675"
+        },
+        {
+          "id": "8928275234987",
+          "variant_id": "47605694562475",
+          "handle": "bow-field-cozy-lounge-slipper",
+          "title": "Bow Field Cozy Lounge Slipper",
+          "price": 69.99,
+          "url": "https://us.meeeshop.com/products/bow-field-cozy-lounge-slipper?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/bow-field-cozy-lounge-slipper-1.jpg?v=1787675426"
+        },
+        {
+          "id": "8879309717675",
+          "variant_id": "47388092596395",
+          "handle": "basic-jogger",
+          "title": "Basic Jogger",
+          "price": 129.99,
+          "url": "https://us.meeeshop.com/products/basic-jogger?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/basic-jogger-1.jpg?v=1787716782"
+        },
+        {
+          "id": "8825276006571",
+          "variant_id": "47233226178731",
+          "handle": "back-detailed-wide-leg-jumpsuit",
+          "title": "Back Detailed Wide Leg Jumpsuit",
+          "price": 79.99,
+          "url": "https://us.meeeshop.com/products/back-detailed-wide-leg-jumpsuit?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/back-detailed-wide-leg-jumpsuit-1.jpg?v=1787716026"
+        },
+        {
+          "id": "8933187944619",
+          "variant_id": "47624592818347",
+          "handle": "black-utility-crop-top-cargo-pant-set",
+          "title": "Black Utility Crop Top & Cargo Pant Set",
+          "price": 134.99,
+          "url": "https://us.meeeshop.com/products/black-utility-crop-top-cargo-pant-set?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/black-utility-crop-top-cargo-pant-set-1.jpg?v=1787675497"
+        },
+        {
+          "id": "8970893394091",
+          "variant_id": "47735959158955",
+          "handle": "aspen-flannel-tunic-red-black-yarndyed-plaid",
+          "title": "Aspen Flannel Tunic Red Black Yarndyed Plaid",
+          "price": 189.99,
+          "url": "https://us.meeeshop.com/products/aspen-flannel-tunic-red-black-yarndyed-plaid?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/aspen-flannel-tunic-red-black-yarndyed-plaid-in-xs-997739.jpg?v=1788335755"
+        },
+        {
+          "id": "8974562787499",
+          "variant_id": "47743048089771",
+          "handle": "braylyn-polka-dot-maxi-skirt",
+          "title": "Braylyn Polka Dot Maxi Skirt",
+          "price": 84.99,
+          "url": "https://us.meeeshop.com/products/braylyn-polka-dot-maxi-skirt?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/braylyn-polka-dot-maxi-skirt-in-xs-pol-brand-skirt-449515.jpg?v=1788427132"
+        },
+        {
+          "id": "8905532539051",
+          "variant_id": "47546257703083",
+          "handle": "graceemma-butter-soft-quarter-zip-top-slate-blue",
+          "title": "Butter Soft Quarter-zip Top, Slate Blue",
+          "price": 114.99,
+          "url": "https://us.meeeshop.com/products/graceemma-butter-soft-quarter-zip-top-slate-blue?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/butter-soft-quarter-zip-top-slate-blue-1.jpg?v=1787717465"
+        },
+        {
+          "id": "8941772144811",
+          "variant_id": "47973853003947",
+          "handle": "3-in-1-large-soft-faux-leather-womens-tote-handbags",
+          "title": "3 in 1 Large Soft Faux Leather Womens Tote Handbags",
+          "price": 81.0,
+          "url": "https://us.meeeshop.com/products/3-in-1-large-soft-faux-leather-womens-tote-handbags?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/3-in-1-large-soft-faux-leather-womens-tote-handbags-1.jpg?v=1787718361"
+        }
+      ],
+      "tagged_at": "2026-10-15T03:42:07.535108+00:00",
+      "verified_at": "2026-10-15T03:42:07.535120+00:00"
     }
   },
-  "last_run": "2026-10-14T09:12:09.102243+00:00"
+  "last_run": "2026-10-15T03:42:07.535129+00:00"
 }
