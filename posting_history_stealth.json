@@ -9080,6 +9080,52 @@
       "template": 15,
       "pin_url": "https://www.pinterest.com/pin/962222276664765785/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": "570971291819",
+      "article_id": "570971291819",
+      "title": "How to Spot High-Quality Stitching and Fabric Construction",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-10-15T07:10:27.815358",
+      "type": "blog",
+      "style": "card",
+      "template": 9,
+      "pin_url": "https://www.pinterest.com/pin/962222276665011279/",
+      "blog_url": "https://us.meeeshop.com/blogs/our-tips/how-to-spot-high-quality-stitching-and-fabric-construction",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8789757722795,
+      "title": "Noemi Eco Friendly Front Pocket Detail High Rise Flare Jeans | MeeeShop US Boutique",
+      "board": "New",
+      "timestamp": "2026-10-15T07:11:38.613553",
+      "type": "carousel",
+      "style": "collage",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276665011303/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8983336714411,
+      "title": "Fine Twill Bootcut Legging - Chic Cozy Fall & Halloween Ready! \u2014 MeeeShop",
+      "board": "Cool & Casual Styles",
+      "timestamp": "2026-10-15T07:12:50.976279",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276665011331/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8985000411307,
+      "title": "Graciela Hobo Bag and Set: Cozy Fall & Halloween Style \u2014 MeeeShop",
+      "board": "Bags",
+      "timestamp": "2026-10-15T07:14:32.482905",
+      "type": "carousel",
+      "style": "collage",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276665011370/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
@@ -9091,7 +9137,7 @@
     "Must-Have Fashion Picks": "2026-08-13T05:20:05.419233",
     "Trendy & Timeless Fashion": "2026-08-13T05:29:39.715837",
     "Dress": "2026-09-28T08:31:13.214090",
-    "Bags": "2026-09-25T07:23:45.465423",
+    "Bags": "2026-10-15T07:14:32.482905",
     "Jeans": "2026-10-04T08:04:14.307937",
     "Cocktail Dresses": "2026-09-27T23:48:19.929334",
     "Dressy Outfits": "2026-10-05T23:26:11.342404",
@@ -9129,9 +9175,9 @@
     "Fashion Models": "2026-09-26T07:23:52.358528",
     "My Shop #1737732113": "2026-09-27T07:52:58.867216",
     "Shop For Holidays": "2026-09-27T20:25:54.302856",
-    "New": "2026-10-07T08:22:50.297128",
+    "New": "2026-10-15T07:11:38.613553",
     "American Bazi": "2026-10-01T00:30:42.549462",
-    "Cool & Casual Styles": "2026-09-17T20:36:32.448629",
+    "Cool & Casual Styles": "2026-10-15T07:12:50.976279",
     "MeeeShop's Luxe Styles": "2026-10-01T08:37:57.461950",
     "Outerwear": "2026-09-10T23:06:16.590733",
     "Zenana Women's...": "2026-10-01T22:02:58.445673",
@@ -9194,9 +9240,9 @@
     "Wardrobe Oozes": "2026-09-30T21:39:05.673247",
     "Zenana Womens...": "2026-10-05T20:13:39.727847"
   },
-  "daily_count": 8,
-  "last_post_time": "2026-10-07T08:26:58.929993",
+  "daily_count": 4,
+  "last_post_time": "2026-10-15T07:14:32.482905",
   "board_rotation_cursor": 0,
-  "last_image_style": "carousel",
-  "last_template_index": 15
+  "last_image_style": "collage",
+  "last_template_index": 11
 }
