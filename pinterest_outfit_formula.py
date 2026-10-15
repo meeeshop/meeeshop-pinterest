@@ -617,6 +617,232 @@ def generate_outfit_seo(formula: Dict[str, Any], items: List[Dict[str, Any]]) ->
     }
 
 
+# ── Visual Hotspot Dot Product Tagging on 4 Collage Quadrants ─────────────────
+
+# Normalized (x, y) center percentages for our 4-quadrant layout:
+OUTFIT_HOTSPOT_COORDS = [
+    {"x_pct": 0.26, "y_pct": 0.31, "role": "THE TOP"},
+    {"x_pct": 0.74, "y_pct": 0.31, "role": "THE BAG"},
+    {"x_pct": 0.26, "y_pct": 0.68, "role": "THE DENIM"},
+    {"x_pct": 0.74, "y_pct": 0.68, "role": "THE SHOES"},
+]
+
+
+def tag_outfit_pin_with_hotspots(pin_id: str, outfit_items: List[Dict[str, Any]]) -> bool:
+    """
+    Tags up to 4 outfit products as clickable visual hotspot dots directly onto the
+    quadrants of the outfit collage pin image:
+      Dot 1 (Top-Left)     -> THE TOP
+      Dot 2 (Top-Right)    -> THE BAG
+      Dot 3 (Bottom-Left)  -> THE DENIM
+      Dot 4 (Bottom-Right) -> THE SHOES
+    """
+    try:
+        from stealth_pinterest_poster import StealthPinterestPoster
+        from playwright.sync_api import sync_playwright
+    except ImportError as e:
+        logger.warning(f"[TAG] Playwright or StealthPinterestPoster import notice: {e}")
+        return False
+
+    poster = StealthPinterestPoster(headless=True)
+    cookies = poster._get_cookies_dict()
+    if not cookies and not (poster.email and poster.password):
+        logger.warning("[TAG] No credentials or cookies available for tagging.")
+        return False
+
+    with sync_playwright() as p:
+        browser = p.chromium.launch(
+            headless=True,
+            args=[
+                '--no-sandbox',
+                '--disable-setuid-sandbox',
+                '--disable-blink-features=AutomationControlled',
+                '--disable-dev-shm-usage',
+                '--disable-infobars',
+                '--window-size=1280,900'
+            ]
+        )
+        ctx = browser.new_context(
+            viewport={'width': 1280, 'height': 900},
+            user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+            locale="en-US",
+            timezone_id="America/New_York"
+        )
+        ctx.add_init_script("Object.defineProperty(navigator, 'webdriver', { get: () => undefined });")
+        if cookies:
+            try:
+                ctx.add_cookies(cookies)
+            except Exception:
+                pass
+
+        page = ctx.new_page()
+
+        try:
+            pin_url = f"https://www.pinterest.com/pin/{pin_id}/"
+            logger.info(f"[TAG] Loading Pin for interactive tagging: {pin_url}")
+            page.goto(pin_url, wait_until="domcontentloaded", timeout=45000)
+            page.wait_for_timeout(3000)
+
+            if "login" in page.url.lower():
+                logger.info("[TAG] Logging in to Pinterest via credentials...")
+                if poster.email and poster.password and poster._login_via_ui(page):
+                    poster._save_cookies(ctx)
+                    page.goto(pin_url, wait_until="domcontentloaded", timeout=45000)
+                    page.wait_for_timeout(3000)
+
+            tag_btn_selectors = [
+                "button[aria-label='Tag products']",
+                "[data-test-id='tag-products-button']",
+                "button[aria-label*='Tag product' i]",
+                "div[role='button'][aria-label*='Tag product' i]",
+                "button:has-text('Tag products')",
+                "[aria-label='Tag products']",
+            ]
+            tag_btn = None
+            for sel in tag_btn_selectors:
+                c = page.locator(sel).first
+                if c.count() > 0 and c.is_visible():
+                    tag_btn = c
+                    break
+
+            if not tag_btn:
+                img_cand = page.locator("img[src*='pinimg.com']").first
+                if img_cand.count() > 0:
+                    try:
+                        img_cand.hover(force=True, timeout=2000)
+                        page.wait_for_timeout(500)
+                    except Exception:
+                        pass
+                for sel in tag_btn_selectors:
+                    c = page.locator(sel).first
+                    if c.count() > 0 and c.is_visible():
+                        tag_btn = c
+                        break
+
+            if not tag_btn:
+                logger.warning("[TAG] 'Tag products' button not visible on pin.")
+                browser.close()
+                return False
+
+            tag_btn.click(force=True, timeout=5000)
+            page.wait_for_timeout(3000)
+
+            pin_img = page.locator("div[role='img'], img[src*='pinimg.com']").first
+            img_box = pin_img.bounding_box() if pin_img.count() > 0 else None
+
+            if not img_box:
+                logger.warning("[TAG] Pin image bounding box not found in tagging mode.")
+                browser.close()
+                return False
+
+            logger.info(f"[TAG] Pin image box: x={img_box['x']:.0f}, y={img_box['y']:.0f}, w={img_box['width']:.0f}, h={img_box['height']:.0f}")
+            tagged_dots_count = 0
+
+            for idx, item in enumerate(outfit_items[:4]):
+                coords = OUTFIT_HOTSPOT_COORDS[idx]
+                click_x = img_box['x'] + img_box['width'] * coords['x_pct']
+                click_y = img_box['y'] + img_box['height'] * coords['y_pct']
+
+                safe_t = item.get('title', '')[:30]
+                role = coords['role']
+                logger.info(f"  [HOTSPOT {idx+1}/4] Clicking {role} at coordinate ({click_x:.0f}, {click_y:.0f}) for '{safe_t}'...")
+
+                page.mouse.click(click_x, click_y)
+                page.wait_for_timeout(2000)
+
+                dialog = page.locator('[role="dialog"]').first
+                if dialog.count() == 0 or not dialog.is_visible():
+                    grid = page.locator("[data-test-id='tagged-items-grid']")
+                    add_btn = grid.locator("div[role='button'], button").first
+                    if add_btn.count() > 0 and add_btn.is_visible():
+                        add_btn.click(force=True, timeout=3000)
+                        page.wait_for_timeout(2000)
+                        dialog = page.locator('[role="dialog"]').first
+
+                if dialog.count() == 0 or not dialog.is_visible():
+                    logger.warning(f"  Modal dialog did not open for {role}")
+                    continue
+
+                catalog_tab = dialog.locator('button:has-text("Catalog"), div:has-text("Catalog")').last
+                url_tab = dialog.locator('button:has-text("URL"), button:has-text("Use a Link"), div:has-text("URL")').last
+
+                card_added = False
+                vid = str(item.get("variant_id", "")).strip()
+
+                if vid and catalog_tab.count() > 0 and catalog_tab.is_visible():
+                    catalog_tab.click(force=True, timeout=3000)
+                    page.wait_for_timeout(1000)
+                    inp = dialog.locator('input[placeholder*="Enter product item ID"]').first
+                    if inp.count() > 0 and inp.is_visible():
+                        inp.click()
+                        inp.fill("")
+                        inp.fill(vid)
+                        inp.press("Enter")
+                        page.wait_for_timeout(2000)
+
+                        imgs = dialog.locator('img[src*="pinimg"]')
+                        for ci in range(imgs.count()):
+                            cand = imgs.nth(ci)
+                            cbox = cand.bounding_box()
+                            if cbox and 200 < cbox['y'] < 660 and cbox['width'] >= 75:
+                                cand.click(force=True, timeout=4000)
+                                card_added = True
+                                break
+
+                if not card_added and url_tab.count() > 0 and url_tab.is_visible():
+                    url_tab.click(force=True, timeout=3000)
+                    page.wait_for_timeout(1000)
+                    url_inp = dialog.locator("input[placeholder*='product link' i], input[type='text']").first
+                    if url_inp.count() > 0:
+                        clean_url = str(item.get("url", "")).split("?")[0]
+                        url_inp.click()
+                        url_inp.fill(clean_url)
+                        url_inp.press("Enter")
+                        page.wait_for_timeout(3500)
+                        scraped_img = dialog.locator("img:not([alt*='cutout'])").first
+                        if scraped_img.count() > 0 and scraped_img.is_visible():
+                            scraped_img.click(force=True, timeout=4000)
+                            card_added = True
+
+                if card_added:
+                    tagged_dots_count += 1
+                    logger.info(f"  ✓ Attached {role}: '{safe_t}' to visual dot #{tagged_dots_count}")
+                    page.wait_for_timeout(1000)
+
+                    save_btn = dialog.locator("button:has-text('Save products'), button:has-text('Save product')").first
+                    if save_btn.count() > 0 and save_btn.is_enabled():
+                        save_btn.click(force=True, timeout=4000)
+                        page.wait_for_timeout(2000)
+                else:
+                    logger.warning(f"  Could not find product card for {role}")
+                    close_btn = dialog.locator("button[aria-label='Close'], [data-test-id='modal-close-button']").first
+                    if close_btn.count() > 0:
+                        close_btn.click()
+                        page.wait_for_timeout(1000)
+
+            logger.info("[TAG] Clicking 'Done' button to persist visual hotspot tags on Pin...")
+            done_btn = page.locator("button:has-text('Done')").first
+            if done_btn.count() > 0:
+                done_btn.click(force=True, timeout=5000)
+                page.wait_for_timeout(4000)
+                logger.info(f"[TAG SUCCESS] Successfully tagged {tagged_dots_count} visual hotspot dots on Pin #{pin_id}!")
+                browser.close()
+                return tagged_dots_count > 0
+            else:
+                logger.warning("[TAG] 'Done' button not found.")
+                browser.close()
+                return False
+
+        except Exception as e:
+            logger.error(f"[TAG] Exception during visual hotspot tagging: {e}")
+            try:
+                page.screenshot(path="scratch/hotspot_tag_error.png")
+            except Exception:
+                pass
+            browser.close()
+            return False
+
+
 # ── Master Orchestration Workflow ─────────────────────────────────────────────
 
 def run_outfit_formula_workflow(
@@ -734,9 +960,9 @@ def run_outfit_formula_workflow(
         pin_id_match = re.search(r'/pin/(\d+)', live_pin_url)
         pin_id = pin_id_match.group(1) if pin_id_match else None
 
-        # ── Step 5: Automatically Tag Products on the Pin ─────────────────────
+        # ── Step 5: Automatically Tag Products with Visual Hotspots on the Pin ───
         tagged_ok = False
-        if pin_id and tag_pin_visually_with_playwright:
+        if pin_id:
             logger.info(f"[TAG] Tagging {len(outfit_items)} outfit products directly onto Pin #{pin_id}...")
             tag_payload = []
             for it in outfit_items:
@@ -747,19 +973,22 @@ def run_outfit_formula_workflow(
                     "title": it["title"],
                     "price": it["price"],
                     "url": it["url"],
-                    "image_url": it["image_url"]
+                    "image_url": it["image_url"],
+                    "role_label": it.get("role_label", "")
                 })
 
             try:
-                tagged_ok = tag_pin_visually_with_playwright(pin_id, tag_payload, max_tags=10)
+                tagged_ok = tag_outfit_pin_with_hotspots(pin_id, tag_payload)
                 if tagged_ok:
-                    logger.info(f"[TAG OK] All {len(tag_payload)} outfit products successfully tagged on Pin #{pin_id}!")
+                    logger.info(f"[TAG OK] All {len(tag_payload)} outfit products successfully tagged with visual hotspot dots on Pin #{pin_id}!")
                 else:
-                    logger.warning(f"Visual product tagging returned False for Pin #{pin_id}")
+                    logger.warning(f"Visual hotspot tagging returned False, attempting standard catalog tagger fallback...")
+                    if tag_pin_visually_with_playwright:
+                        tagged_ok = tag_pin_visually_with_playwright(pin_id, tag_payload, max_tags=10)
             except Exception as te:
                 logger.error(f"Error during product tagging on Pin #{pin_id}: {te}")
         else:
-            logger.info("[TAG SKIP] Tagging skipped (no pin_id captured or visual tagger unavailable).")
+            logger.info("[TAG SKIP] Tagging skipped (no pin_id captured).")
 
         history["posts"].append({
             "timestamp": datetime.now(timezone.utc).isoformat(),
