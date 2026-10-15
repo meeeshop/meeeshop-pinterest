@@ -1,0 +1,125 @@
+{
+  "posts": [
+    {
+      "timestamp": "2026-10-15T06:52:57.687922+00:00",
+      "formula_id": "casual_fall",
+      "formula_title": "Casual Fall Weekend Outfit Inspo",
+      "pin_url": "https://www.pinterest.com/pin/962222276665011025/",
+      "pin_id": "962222276665011025",
+      "board": "Casual Outfits",
+      "title": "Casual Fall Weekend Outfit Inspo - Easy Everyday Styling Formula | MeeeShop",
+      "tagged_products_count": 4,
+      "outfit_items": [
+        {
+          "id": "8744047181995",
+          "variant_id": "46492121858219",
+          "title": "Diamond Tech Tee",
+          "price": "139.99",
+          "role": "THE TOP"
+        },
+        {
+          "id": "9087953961131",
+          "variant_id": "48172195479723",
+          "title": "Ezra Shoulder Bag",
+          "price": "119.99",
+          "role": "THE BAG"
+        },
+        {
+          "id": "8740283220139",
+          "variant_id": "46478636679339",
+          "title": "Risen Full Size Mid Rise Wide Leg Jeans with Flared Look plus Size",
+          "price": "124.99",
+          "role": "THE DENIM"
+        },
+        {
+          "id": "9073872175275",
+          "variant_id": "48110997995691",
+          "title": "Alma Booties Brown",
+          "price": "169.99",
+          "role": "THE SHOES"
+        }
+      ]
+    },
+    {
+      "timestamp": "2026-10-15T08:30:47.918951+00:00",
+      "formula_id": "how_to_style_flare_jeans",
+      "formula_title": "How to Style Flare Jeans: Outfit Formula",
+      "pin_url": "https://www.pinterest.com/pin/962222276665012772/",
+      "pin_id": "962222276665012772",
+      "board": "Kancan USA Jeans",
+      "title": "How to Style Flare Jeans: Outfit Formula | How to Style Flare Jeans & Sweater | MeeeShop",
+      "tagged_products_count": 4,
+      "outfit_items": [
+        {
+          "id": "8740253106347",
+          "variant_id": "46478454194347",
+          "title": "Hyfve Tie Front Spaghetti Strap Top",
+          "price": "84.99",
+          "role": "THE TOP"
+        },
+        {
+          "id": "9087954452651",
+          "variant_id": "48172201050283",
+          "title": "Acacia Canteen Crossbody Bag",
+          "price": "94.99",
+          "role": "THE BAG"
+        },
+        {
+          "id": "8897140752555",
+          "variant_id": "47512654348459",
+          "title": "Ymi Women's Luxe High Rise Wannabettabutt Flare Jeans",
+          "price": "84.99",
+          "role": "THE FLARE DENIM"
+        },
+        {
+          "id": "9073872076971",
+          "variant_id": "48110997405867",
+          "title": "Alma Booties Black",
+          "price": "169.99",
+          "role": "THE FOOTWEAR"
+        }
+      ]
+    },
+    {
+      "timestamp": "2026-10-15T10:07:19.422765+00:00",
+      "formula_id": "everyday_chic",
+      "formula_title": "Everyday Chic Outfit Formula",
+      "pin_url": "https://www.pinterest.com/pin/962222276665014151/",
+      "pin_id": "962222276665014151",
+      "board": "Style Ideas",
+      "title": "Everyday Chic Outfit Formula - Easy Everyday Styling Formula | MeeeShop",
+      "tagged_products_count": 4,
+      "outfit_items": [
+        {
+          "id": "8740256907435",
+          "variant_id": "46478472446123",
+          "title": "Hyfve Contrast Trim Sleeveless Ribbed Top",
+          "price": "84.99",
+          "role": "THE TOP"
+        },
+        {
+          "id": "9087953076395",
+          "variant_id": "48172186271915",
+          "title": "Amahia Tote Bag and Crossbody Set",
+          "price": "109.99",
+          "role": "THE BAG"
+        },
+        {
+          "id": "8740253761707",
+          "variant_id": "46478458355883",
+          "title": "Hyfve Acid Wash French Terry Wide-leg Pants",
+          "price": "104.99",
+          "role": "THE BOTTOM"
+        },
+        {
+          "id": "9073872208043",
+          "variant_id": "48110998421675",
+          "title": "Cecilia Slingback Black",
+          "price": "159.99",
+          "role": "THE SHOES"
+        }
+      ]
+    }
+  ],
+  "last_run": "2026-10-15T10:07:19.422785+00:00"
+}
