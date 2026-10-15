@@ -1,4 +1,45 @@
 {
-  "posts": [],
-  "last_run": null
+  "posts": [
+    {
+      "timestamp": "2026-10-15T06:52:57.687922+00:00",
+      "formula_id": "casual_fall",
+      "formula_title": "Casual Fall Weekend Outfit Inspo",
+      "pin_url": "https://www.pinterest.com/pin/962222276665011025/",
+      "pin_id": "962222276665011025",
+      "board": "Casual Outfits",
+      "title": "Casual Fall Weekend Outfit Inspo - Easy Everyday Styling Formula | MeeeShop",
+      "tagged_products_count": 4,
+      "outfit_items": [
+        {
+          "id": "8744047181995",
+          "variant_id": "46492121858219",
+          "title": "Diamond Tech Tee",
+          "price": "139.99",
+          "role": "THE TOP"
+        },
+        {
+          "id": "9087953961131",
+          "variant_id": "48172195479723",
+          "title": "Ezra Shoulder Bag",
+          "price": "119.99",
+          "role": "THE BAG"
+        },
+        {
+          "id": "8740283220139",
+          "variant_id": "46478636679339",
+          "title": "Risen Full Size Mid Rise Wide Leg Jeans with Flared Look plus Size",
+          "price": "124.99",
+          "role": "THE DENIM"
+        },
+        {
+          "id": "9073872175275",
+          "variant_id": "48110997995691",
+          "title": "Alma Booties Brown",
+          "price": "169.99",
+          "role": "THE SHOES"
+        }
+      ]
+    }
+  ],
+  "last_run": "2026-10-15T06:52:57.687941+00:00"
 }
