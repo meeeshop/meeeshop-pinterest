@@ -29,6 +29,15 @@ on:
         options:
           - apply
           - dry-run
+      workflow_type:
+        description: 'Collage Pipeline: both (Parallel Split-Workflow), rendered (PIL Editorial Collage), native_collage (Pinterest Collage Tool)'
+        required: false
+        default: 'both'
+        type: choice
+        options:
+          - both
+          - rendered
+          - native_collage
       pins_count:
         description: 'Number of outfit pins to generate (default: 1)'
         required: false
@@ -96,6 +105,7 @@ jobs:
           PYTHONUNBUFFERED: '1'
         run: |
           COUNT="${{ github.event.inputs.pins_count || '1' }}"
+          WORKFLOW_FLAG="--workflow-type ${{ github.event.inputs.workflow_type || 'both' }}"
           FORMULA_FLAG=""
           if [ -n "${{ github.event.inputs.formula }}" ] && [ "${{ github.event.inputs.formula }}" != "auto" ]; then
             FORMULA_FLAG="--formula ${{ github.event.inputs.formula }}"
@@ -106,8 +116,8 @@ jobs:
             MODE_FLAG="--dry-run"
           fi
 
-          echo "Launching Outfit Formula Workflow (Mode: $MODE_FLAG, Pins: $COUNT)..."
-          python pinterest_outfit_formula.py $MODE_FLAG --pins-count $COUNT $FORMULA_FLAG
+          echo "Launching Outfit Formula Workflow (Mode: $MODE_FLAG, Pins: $COUNT, Type: $WORKFLOW_FLAG)..."
+          python pinterest_outfit_formula.py $MODE_FLAG --pins-count $COUNT $WORKFLOW_FLAG $FORMULA_FLAG
 
       - name: Upload Generated Outfit Collages & Debug Screenshots
         if: always()
@@ -116,6 +126,7 @@ jobs:
           name: outfit-collages-${{ github.run_number }}
           path: |
             scratch/*.jpg
+            scratch/*.png
             *.png
           retention-days: 7
           if-no-files-found: ignore
@@ -125,5 +136,5 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action Bot"
-          git add outfit_formula_history.json
-          git diff --quiet && git diff --staged --quiet || (git commit -m "chore(pinterest): record outfit formula pin history [skip ci]" && git push origin develop)
+          git add outfit_formula_history.json outfit_collage_pins_history.json
+          git diff --quiet && git diff --staged --quiet || (git commit -m "chore(pinterest): record outfit formula and native collage history [skip ci]" && git push origin develop)

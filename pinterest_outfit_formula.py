@@ -1023,13 +1023,13 @@ def run_outfit_formula_workflow(
     return success_count > 0
 
 
-# ── CLI Interface ─────────────────────────────────────────────────────────────
-
 def main():
     parser = argparse.ArgumentParser(description="MeeeShop Pinterest Outfit Formula & Styling Collage Generator")
     parser.add_argument("--formula", type=str, default="auto", choices=["auto"] + list(OUTFIT_FORMULAS.keys()),
                         help="Outfit Formula to generate (default: auto)")
     parser.add_argument("--pins-count", type=int, default=1, help="Number of outfit pins to create (default: 1)")
+    parser.add_argument("--workflow-type", type=str, default="rendered", choices=["rendered", "native_collage", "both"],
+                        help="Workflow pipeline: 'rendered' (PIL editorial collage), 'native_collage' (Pinterest Collage Tool cutouts), or 'both'")
     parser.add_argument("--dry-run", action="store_true", help="Simulate pipeline and generate collage without publishing")
     parser.add_argument("--apply", action="store_true", help="Actually post and tag pins live on Pinterest")
 
@@ -1038,17 +1038,43 @@ def main():
     is_dry_run = args.dry_run or not args.apply
 
     logger.info("=" * 70)
-    logger.info(f"MeeeShop Pinterest Outfit Formula Orchestrator (Dry-Run: {is_dry_run})")
+    logger.info(f"MeeeShop Pinterest Outfit Formula Orchestrator (Dry-Run: {is_dry_run}, Workflow: {args.workflow_type})")
     logger.info("=" * 70)
 
-    success = run_outfit_formula_workflow(
-        formula_name=args.formula,
-        pins_count=args.pins_count,
-        dry_run=is_dry_run
-    )
+    overall_success = True
 
-    sys.exit(0 if success else 1)
+    # 1. Run rendered collage pipeline if requested
+    if args.workflow_type in ["rendered", "both"]:
+        logger.info("\n[PIPELINE 1/2] Running Rendered Editorial Collage Workflow...")
+        rend_ok = run_outfit_formula_workflow(
+            formula_name=args.formula,
+            pins_count=args.pins_count,
+            dry_run=is_dry_run
+        )
+        if not rend_ok:
+            logger.warning("Rendered collage workflow reported issues.")
+            overall_success = False
+
+    # 2. Run native Pinterest Collage Tool pipeline if requested
+    if args.workflow_type in ["native_collage", "both"]:
+        logger.info("\n[PIPELINE 2/2] Running Native Pinterest Collage Creation Tool Workflow...")
+        try:
+            from pinterest_collage_tool_poster import run_native_collage_workflow
+            nat_ok = run_native_collage_workflow(
+                formula_name=args.formula,
+                pins_count=args.pins_count,
+                dry_run=is_dry_run
+            )
+            if not nat_ok:
+                logger.warning("Native Collage Creation Tool workflow reported issues.")
+                overall_success = False
+        except Exception as ce:
+            logger.error(f"Error executing native collage tool pipeline: {ce}")
+            overall_success = False
+
+    sys.exit(0 if overall_success else 1)
 
 
 if __name__ == "__main__":
     main()
+
