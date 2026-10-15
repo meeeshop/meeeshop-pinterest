@@ -10438,11 +10438,55 @@
       "template": 11,
       "pin_url": "https://www.pinterest.com/pin/962222276665031030/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 9042739232939,
+      "title": "Emory Park Sasha Halter Neck Top | MeeeShop US Boutique",
+      "board": "Trends",
+      "timestamp": "2026-10-15T23:37:40.629377",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276665035508/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 9053204742315,
+      "title": "Downeast Classic Plaid Button Down Top | MeeeShop US Boutique",
+      "board": "New",
+      "timestamp": "2026-10-15T23:38:49.053632",
+      "type": "carousel",
+      "style": "collage",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276665035537/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8825274695851,
+      "title": "Lace Overlay Puff Sleeve Top - Cozy Fall Blouse for Halloween & Work \u2014 MeeeShop",
+      "board": "Late Summer to Fall Teacher Style",
+      "timestamp": "2026-10-15T23:41:33.878739",
+      "type": "video",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276665035588/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8782689730731,
+      "title": "Buki Resort Vee Long Sleeve Popover Shirt - Black: Cozy Fall & Halloween Chic",
+      "board": "Our Recommended...",
+      "timestamp": "2026-10-15T23:42:42.667698",
+      "type": "carousel",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276665035619/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-10-12T23:51:27.730749",
-    "Trends": "2026-10-15T20:32:07.326766",
+    "Trends": "2026-10-15T23:37:40.629377",
     "Dresses": "2026-10-09T17:51:49.766064",
     "Feminine & Flowy Fits": "2026-10-05T08:44:16.555889",
     "Short fall dresses": "2026-10-11T08:33:29.765610",
@@ -10463,7 +10507,7 @@
     "Rompers_Jumpsuits &...": "2026-09-29T21:36:35.738149",
     "Handbag #handsips": "2026-10-09T22:10:15.321346",
     "Trendy & Timeless...": "2026-10-15T20:37:39.179845",
-    "Our Recommended...": "2026-10-04T23:57:28.919555",
+    "Our Recommended...": "2026-10-15T23:42:42.667698",
     "Blouse": "2026-10-09T08:45:59.438869",
     "Wardrobe Must-Hav...": "2026-10-04T23:58:44.007127",
     "Camis & Tanks": "2026-10-10T00:50:29.543261",
@@ -10487,7 +10531,7 @@
     "Fashion Models": "2026-10-08T08:38:57.387467",
     "My Shop #1737732113": "2026-10-08T18:19:02.022080",
     "Shop For Holidays": "2026-10-08T18:20:19.332653",
-    "New": "2026-10-15T20:33:25.500984",
+    "New": "2026-10-15T23:38:49.053632",
     "American Bazi": "2026-10-12T08:56:12.088793",
     "Cool & Casual Styles": "2026-10-09T22:08:35.633664",
     "MeeeShop's Luxe Styles": "2026-10-13T22:07:06.705382",
@@ -10510,7 +10554,7 @@
     "LE LIS Womens Clothi...": "2026-10-04T20:27:28.991537",
     "New Trendy Woman...": "2026-10-09T17:50:42.262583",
     "Outfit Ideas": "2026-10-10T00:53:04.213924",
-    "Late Summer to Fall Teacher Style": "2026-10-02T21:30:32.422844",
+    "Late Summer to Fall Teacher Style": "2026-10-15T23:41:33.878739",
     "Ootd #ootd": "2026-10-10T20:44:07.206557",
     "Style Ideas": "2026-10-11T21:08:59.423394",
     "Mustard Seed Clothing": "2026-10-07T22:18:41.440828",
@@ -10555,9 +10599,9 @@
     "Umgee USA": "2026-10-10T16:46:42.000590",
     "Edgy Fashion": "2026-10-13T09:13:02.770988"
   },
-  "daily_count": 8,
-  "last_post_time": "2026-10-15T20:37:39.179845",
+  "daily_count": 12,
+  "last_post_time": "2026-10-15T23:42:42.667698",
   "board_rotation_cursor": 0,
   "last_image_style": "collage",
-  "last_template_index": 11
+  "last_template_index": 14
 }
