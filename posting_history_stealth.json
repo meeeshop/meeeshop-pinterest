@@ -10616,11 +10616,55 @@
       "template": 15,
       "pin_url": "https://www.pinterest.com/pin/962222276665062481/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8897137148075,
+      "title": "Ymi Women's Porkchop Pocket Bootcut Jeans | MeeeShop US Boutique",
+      "board": "Trends",
+      "timestamp": "2026-10-16T23:22:27.418010",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276665066884/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8932955291819,
+      "title": "Clara Bum Bag - Cozy Fall & Halloween Must-Have Crossbody \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-10-16T23:23:33.350862",
+      "type": "carousel",
+      "style": "collage",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276665066888/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8988058288299,
+      "title": "Hollis Pleated Detail Vintage Washed Denim Top - Cozy Fall & Halloween Tee \u2014 MeeeShop",
+      "board": "Shirts & Tops",
+      "timestamp": "2026-10-16T23:24:50.313004",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276665066898/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8932954538155,
+      "title": "Sabrina Studded Suede Bum Bag: Halloween & Cozy Fall Must-Have \u2014 MeeeShop",
+      "board": "Confident Looks",
+      "timestamp": "2026-10-16T23:26:05.521142",
+      "type": "carousel",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276665066914/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-10-12T23:51:27.730749",
-    "Trends": "2026-10-16T20:06:11.838743",
+    "Trends": "2026-10-16T23:22:27.418010",
     "Dresses": "2026-10-09T17:51:49.766064",
     "Feminine & Flowy Fits": "2026-10-05T08:44:16.555889",
     "Short fall dresses": "2026-10-11T08:33:29.765610",
@@ -10636,7 +10680,7 @@
     "Short Tall dresses": "2026-09-28T19:06:30.836754",
     "Rompers, Jumpsuits &...": "2026-10-14T23:51:11.974810",
     "Skirts": "2026-10-10T16:45:30.490579",
-    "Shirts & Tops": "2026-10-06T01:49:38.556851",
+    "Shirts & Tops": "2026-10-16T23:24:50.313004",
     "Blouses": "2026-10-07T08:26:58.929993",
     "Rompers_Jumpsuits &...": "2026-10-16T20:10:03.538169",
     "Handbag #handsips": "2026-10-09T22:10:15.321346",
@@ -10655,7 +10699,7 @@
     "Straight Leg Jeans": "2026-10-10T20:45:15.438542",
     "Puff Sleeves Tops": "2026-10-11T00:15:32.779445",
     "Casual": "2026-10-07T00:38:15.282483",
-    "Confident Looks": "2026-10-06T08:51:49.198715",
+    "Confident Looks": "2026-10-16T23:26:05.521142",
     "Casual Chic Style": "2026-10-06T21:57:31.825227",
     "Farm clothes": "2026-10-12T00:26:51.368244",
     "Kimchi USA Jeans": "2026-10-12T00:24:28.028171",
@@ -10665,7 +10709,7 @@
     "Fashion Models": "2026-10-08T08:38:57.387467",
     "My Shop #1737732113": "2026-10-08T18:19:02.022080",
     "Shop For Holidays": "2026-10-08T18:20:19.332653",
-    "New": "2026-10-16T20:07:31.068206",
+    "New": "2026-10-16T23:23:33.350862",
     "American Bazi": "2026-10-12T08:56:12.088793",
     "Cool & Casual Styles": "2026-10-09T22:08:35.633664",
     "MeeeShop's Luxe Styles": "2026-10-13T22:07:06.705382",
@@ -10733,9 +10777,9 @@
     "Umgee USA": "2026-10-10T16:46:42.000590",
     "Edgy Fashion": "2026-10-13T09:13:02.770988"
   },
-  "daily_count": 12,
-  "last_post_time": "2026-10-16T20:10:03.538169",
+  "daily_count": 16,
+  "last_post_time": "2026-10-16T23:26:05.521142",
   "board_rotation_cursor": 0,
   "last_image_style": "collage",
-  "last_template_index": 15
+  "last_template_index": 14
 }
