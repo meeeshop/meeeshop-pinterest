@@ -10572,11 +10572,55 @@
       "template": 16,
       "pin_url": "https://www.pinterest.com/pin/962222276665054991/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8988054847659,
+      "title": "Cora Blue Stripe Button Pleated Drawstring Waist Casual Wide Leg Jeans | MeeeShop US Boutique",
+      "board": "Trends",
+      "timestamp": "2026-10-16T20:06:11.838743",
+      "type": "product",
+      "style": "carousel",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276665062393/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8820881031339,
+      "title": "Tassel O Ring Tote - Chic Halloween & Cozy Fall Bag for Every Day \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-10-16T20:07:31.068206",
+      "type": "carousel",
+      "style": "collage",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276665062427/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8811043979435,
+      "title": "Alexis High Rise Stretch Skinny Jeans | MeeeShop US Boutique",
+      "board": "Kancan USA Jeans",
+      "timestamp": "2026-10-16T20:08:42.207928",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276665062460/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8879310831787,
+      "title": "Indigo Jumpsuit: Cozy Fall & Halloween Chic - Shop Now! \u2014 MeeeShop",
+      "board": "Rompers_Jumpsuits &...",
+      "timestamp": "2026-10-16T20:10:03.538169",
+      "type": "carousel",
+      "style": "collage",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276665062481/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-10-12T23:51:27.730749",
-    "Trends": "2026-10-16T15:51:54.256190",
+    "Trends": "2026-10-16T20:06:11.838743",
     "Dresses": "2026-10-09T17:51:49.766064",
     "Feminine & Flowy Fits": "2026-10-05T08:44:16.555889",
     "Short fall dresses": "2026-10-11T08:33:29.765610",
@@ -10594,7 +10638,7 @@
     "Skirts": "2026-10-10T16:45:30.490579",
     "Shirts & Tops": "2026-10-06T01:49:38.556851",
     "Blouses": "2026-10-07T08:26:58.929993",
-    "Rompers_Jumpsuits &...": "2026-09-29T21:36:35.738149",
+    "Rompers_Jumpsuits &...": "2026-10-16T20:10:03.538169",
     "Handbag #handsips": "2026-10-09T22:10:15.321346",
     "Trendy & Timeless...": "2026-10-15T20:37:39.179845",
     "Our Recommended...": "2026-10-15T23:42:42.667698",
@@ -10604,7 +10648,7 @@
     "Wardrobe Must Haves": "2026-10-16T07:00:23.457902",
     "Trendy Backpacks": "2026-10-10T08:19:43.038195",
     "Festive Styles": "2026-10-01T08:36:54.596284",
-    "Kancan USA Jeans": "2026-10-06T01:46:48.693110",
+    "Kancan USA Jeans": "2026-10-16T20:08:42.207928",
     "Footwear": "2026-09-07T23:26:56.803572",
     "Fitted Jeans": "2026-10-06T08:49:31.590936",
     "Chic Looks": "2026-10-15T16:06:10.576165",
@@ -10621,7 +10665,7 @@
     "Fashion Models": "2026-10-08T08:38:57.387467",
     "My Shop #1737732113": "2026-10-08T18:19:02.022080",
     "Shop For Holidays": "2026-10-08T18:20:19.332653",
-    "New": "2026-10-16T15:53:03.593120",
+    "New": "2026-10-16T20:07:31.068206",
     "American Bazi": "2026-10-12T08:56:12.088793",
     "Cool & Casual Styles": "2026-10-09T22:08:35.633664",
     "MeeeShop's Luxe Styles": "2026-10-13T22:07:06.705382",
@@ -10689,9 +10733,9 @@
     "Umgee USA": "2026-10-10T16:46:42.000590",
     "Edgy Fashion": "2026-10-13T09:13:02.770988"
   },
-  "daily_count": 8,
-  "last_post_time": "2026-10-16T15:55:36.192546",
+  "daily_count": 12,
+  "last_post_time": "2026-10-16T20:10:03.538169",
   "board_rotation_cursor": 0,
   "last_image_style": "collage",
-  "last_template_index": 16
+  "last_template_index": 15
 }
