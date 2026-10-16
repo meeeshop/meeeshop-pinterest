@@ -10482,6 +10482,52 @@
       "template": 14,
       "pin_url": "https://www.pinterest.com/pin/962222276665035619/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": "571031945387",
+      "article_id": "571031945387",
+      "title": "Curating an Intentional Boutique Capsule Wardrobe This Season",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-10-16T06:53:48.766240",
+      "type": "blog",
+      "style": "card",
+      "template": 9,
+      "pin_url": "https://www.pinterest.com/pin/962222276665043265/",
+      "blog_url": "https://us.meeeshop.com/blogs/womens-clothing/curating-an-intentional-boutique-capsule-wardrobe-this-season",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8983337074859,
+      "title": "Emory Park Mia Top - Cozy Fall Chic for Halloween & Work \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-10-16T06:55:53.607948",
+      "type": "video",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276665043287/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8970884743339,
+      "title": "Emory Park Paige Baby Tee - Cozy Fall Essential for Halloween Vibes \u2014 MeeeShop",
+      "board": "Wardrobe Must-Hav...",
+      "timestamp": "2026-10-16T06:58:01.511867",
+      "type": "video",
+      "style": "carousel",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276665043308/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8985002344619,
+      "title": "Juno Tote Bag - Cozy Fall Essential for Halloween Style \u2014 MeeeShop",
+      "board": "Wardrobe Must Haves",
+      "timestamp": "2026-10-16T07:00:23.457902",
+      "type": "video",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276665043357/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
@@ -10509,9 +10555,9 @@
     "Trendy & Timeless...": "2026-10-15T20:37:39.179845",
     "Our Recommended...": "2026-10-15T23:42:42.667698",
     "Blouse": "2026-10-09T08:45:59.438869",
-    "Wardrobe Must-Hav...": "2026-10-04T23:58:44.007127",
+    "Wardrobe Must-Hav...": "2026-10-16T06:58:01.511867",
     "Camis & Tanks": "2026-10-10T00:50:29.543261",
-    "Wardrobe Must Haves": "2026-10-05T08:43:06.250894",
+    "Wardrobe Must Haves": "2026-10-16T07:00:23.457902",
     "Trendy Backpacks": "2026-10-10T08:19:43.038195",
     "Festive Styles": "2026-10-01T08:36:54.596284",
     "Kancan USA Jeans": "2026-10-06T01:46:48.693110",
@@ -10531,7 +10577,7 @@
     "Fashion Models": "2026-10-08T08:38:57.387467",
     "My Shop #1737732113": "2026-10-08T18:19:02.022080",
     "Shop For Holidays": "2026-10-08T18:20:19.332653",
-    "New": "2026-10-15T23:38:49.053632",
+    "New": "2026-10-16T06:55:53.607948",
     "American Bazi": "2026-10-12T08:56:12.088793",
     "Cool & Casual Styles": "2026-10-09T22:08:35.633664",
     "MeeeShop's Luxe Styles": "2026-10-13T22:07:06.705382",
@@ -10599,9 +10645,9 @@
     "Umgee USA": "2026-10-10T16:46:42.000590",
     "Edgy Fashion": "2026-10-13T09:13:02.770988"
   },
-  "daily_count": 12,
-  "last_post_time": "2026-10-15T23:42:42.667698",
+  "daily_count": 4,
+  "last_post_time": "2026-10-16T07:00:23.457902",
   "board_rotation_cursor": 0,
   "last_image_style": "collage",
-  "last_template_index": 14
+  "last_template_index": 17
 }
