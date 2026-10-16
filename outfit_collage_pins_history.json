@@ -221,7 +221,44 @@
           "pin_id": null
         }
       ]
+    },
+    {
+      "timestamp": "2026-10-16T21:31:51.027719+00:00",
+      "formula_id": "how_to_style_flare_jeans",
+      "formula_title": "How to Style Flare Jeans: Outfit Formula",
+      "pin_url": null,
+      "pin_id": null,
+      "board": "Kancan USA Jeans",
+      "title": "How to Style Flare Jeans: Outfit Formula | How to Style Flare Jeans & Sweater | MeeeShop",
+      "type": "native_collage",
+      "canvas_preview": "/home/runner/work/meeeshop-pinterest/meeeshop-pinterest/scratch/collage_canvas_how_to_style_flare_jeans_1792186290.png",
+      "cutout_items": [
+        {
+          "role": "THE TOP",
+          "title": "Retrolicious Leaves Bow Top",
+          "product_id": "8782620459179",
+          "pin_id": null
+        },
+        {
+          "role": "THE BAG",
+          "title": "Camille Crossbody Bag",
+          "product_id": "9087954223275",
+          "pin_id": null
+        },
+        {
+          "role": "THE FLARE DENIM",
+          "title": "Noemi Eco Friendly Front Pocket Detail High Rise Flare Jeans",
+          "product_id": "8789757722795",
+          "pin_id": null
+        },
+        {
+          "role": "THE FOOTWEAR",
+          "title": "Alice Boots Brown",
+          "product_id": "9073872044203",
+          "pin_id": null
+        }
+      ]
     }
   ],
-  "last_run": "2026-10-16T18:00:47.483127+00:00"
+  "last_run": "2026-10-16T21:31:51.027916+00:00"
 }
