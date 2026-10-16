@@ -199,7 +199,47 @@
           "role": "THE BOOTS"
         }
       ]
+    },
+    {
+      "timestamp": "2026-10-16T01:12:51.114591+00:00",
+      "formula_id": "casual_fall",
+      "formula_title": "Casual Fall Weekend Outfit Inspo",
+      "pin_url": "https://www.pinterest.com/pin/841962092891522431/",
+      "pin_id": "841962092891522431",
+      "board": "Casual Outfits",
+      "title": "Casual Fall Weekend Outfit Inspo - Easy Everyday Styling Formula | MeeeShop",
+      "tagged_products_count": 4,
+      "outfit_items": [
+        {
+          "id": "8744046985387",
+          "variant_id": "46492118089899",
+          "title": "Btr Active Seamless Baselayer Top",
+          "price": "109.99",
+          "role": "THE TOP"
+        },
+        {
+          "id": "9087954419883",
+          "variant_id": "48172200689835",
+          "title": "Maeve Shoulder Bag and Set",
+          "price": "109.99",
+          "role": "THE BAG"
+        },
+        {
+          "id": "8744042725547",
+          "variant_id": "46492100067499",
+          "title": "Risen Full Size High Rise Wide Leg Patch Detailed Jeans plus Size",
+          "price": "124.99",
+          "role": "THE DENIM"
+        },
+        {
+          "id": "9073872011435",
+          "variant_id": "48110997012651",
+          "title": "Cecilia Slingback Green",
+          "price": "159.99",
+          "role": "THE SHOES"
+        }
+      ]
     }
   ],
-  "last_run": "2026-10-15T21:36:41.922762+00:00"
+  "last_run": "2026-10-16T01:12:51.114610+00:00"
 }

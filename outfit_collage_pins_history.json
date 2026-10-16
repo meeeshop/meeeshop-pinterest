@@ -110,7 +110,44 @@
           "pin_id": null
         }
       ]
+    },
+    {
+      "timestamp": "2026-10-16T01:15:36.970576+00:00",
+      "formula_id": "cozy_sweater_weather",
+      "formula_title": "Cozy Fall Layers Outfit Formula",
+      "pin_url": null,
+      "pin_id": null,
+      "board": "Sweaters",
+      "title": "Cozy Fall Layers Outfit Formula - Easy Everyday Styling Formula | MeeeShop",
+      "type": "native_collage",
+      "canvas_preview": "/home/runner/work/meeeshop-pinterest/meeeshop-pinterest/scratch/collage_canvas_cozy_sweater_weather_1792113318.png",
+      "cutout_items": [
+        {
+          "role": "THE KNIT",
+          "title": "Riley Technical Top",
+          "product_id": "8744047083691",
+          "pin_id": null
+        },
+        {
+          "role": "THE TOTE",
+          "title": "Tatum Backpack Handbag",
+          "product_id": "9087954387115",
+          "pin_id": null
+        },
+        {
+          "role": "THE DENIM",
+          "title": "Ymi Women's plus High Rise Wide Leg Skater Cargo Jeans",
+          "product_id": "8897141964971",
+          "pin_id": null
+        },
+        {
+          "role": "THE BOOTS",
+          "title": "Alma Booties Brown",
+          "product_id": "9073872175275",
+          "pin_id": null
+        }
+      ]
     }
   ],
-  "last_run": "2026-10-15T21:39:14.300646+00:00"
+  "last_run": "2026-10-16T01:15:36.970701+00:00"
 }
