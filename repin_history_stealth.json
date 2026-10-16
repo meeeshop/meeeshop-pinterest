@@ -5729,12 +5729,52 @@
       "target_board_id": "962222345325728634",
       "live_url": "https://www.pinterest.com/pin/4590786593420044352/",
       "timestamp": "2026-10-16T06:44:24.926941+00:00"
+    },
+    {
+      "pin_id": "4600778950907400768",
+      "product_title": "Meryl Oversize Suede Adjustable Hobo Carryall Shoulder Bag",
+      "category_group": "bags_accessories",
+      "source_board": "_products",
+      "target_board": "Trendy & Timeless Fashion",
+      "target_board_id": "962222345325694325",
+      "live_url": "https://www.pinterest.com/pin/4600778950907400768/",
+      "timestamp": "2026-10-16T16:14:13.519493+00:00"
+    },
+    {
+      "pin_id": "4600778964866044480",
+      "product_title": "Downeast Carpe Diem Skirt",
+      "category_group": "skirts",
+      "source_board": "_products",
+      "target_board": "Skirts",
+      "target_board_id": "962222345325094365",
+      "live_url": "https://www.pinterest.com/pin/4600778964866044480/",
+      "timestamp": "2026-10-16T16:14:30.313014+00:00"
+    },
+    {
+      "pin_id": "4602327081918468672",
+      "product_title": "Mrs Maisel Dress Navy Ground with Paris Maps",
+      "category_group": "dresses",
+      "source_board": "_products",
+      "target_board": "LE LIS Womens Clothing | us.meeeshop",
+      "target_board_id": "962222345325171074",
+      "live_url": "https://www.pinterest.com/pin/4602327081918468672/",
+      "timestamp": "2026-10-16T16:15:00.183619+00:00"
+    },
+    {
+      "pin_id": "4602327099098337856",
+      "product_title": "Evie Slingback Cream",
+      "category_group": "bags_accessories",
+      "source_board": "_products",
+      "target_board": "Our Recommended Feminine Styles",
+      "target_board_id": "962222345324527791",
+      "live_url": "https://www.pinterest.com/pin/4602327099098337856/",
+      "timestamp": "2026-10-16T16:15:19.144408+00:00"
     }
   ],
   "board_last_used": {
     "Women's Cardigans": "2026-10-14T23:36:08.217018+00:00",
     "Pants & Leggings": "2026-10-11T21:03:55.910421+00:00",
-    "Skirts": "2026-10-10T17:05:38.585949+00:00",
+    "Skirts": "2026-10-16T16:14:30.313014+00:00",
     "Dresses": "2026-10-09T00:53:06.969983+00:00",
     "Sweaters": "2026-10-05T08:16:26.016701+00:00",
     "Dressy Outfits": "2026-10-10T20:42:03.925576+00:00",
@@ -5750,8 +5790,8 @@
     "\"fashion models\"": "2026-10-16T06:43:20.538056+00:00",
     "Cocktail Dresses": "2026-10-12T21:02:03.629526+00:00",
     "Camis & Tanks": "2026-10-14T16:45:05.403758+00:00",
-    "Trendy & Timeless Fashion": "2026-10-12T21:01:12.140901+00:00",
-    "Our Recommended Feminine Styles": "2026-10-12T23:45:44.805731+00:00",
+    "Trendy & Timeless Fashion": "2026-10-16T16:14:13.519493+00:00",
+    "Our Recommended Feminine Styles": "2026-10-16T16:15:19.144408+00:00",
     "Rompers, Jumpsuits & Outfit Sets": "2026-10-14T00:04:30.092970+00:00",
     "Confident Looks": "2026-10-12T23:46:19.021221+00:00",
     "Trends": "2026-10-13T02:20:41.476453+00:00",
@@ -5773,7 +5813,7 @@
     "Davi & Dani Womens Clothing | us.meeeshop.com": "2026-10-16T06:42:59.191762+00:00",
     "Zenana Women's Clothing, Dresses, Tops, Pants": "2026-10-13T21:57:49.919542+00:00",
     "Trendy Backpacks": "2026-10-15T16:29:45.499059+00:00",
-    "LE LIS Womens Clothing | us.meeeshop": "2026-10-08T00:38:39.530376+00:00",
+    "LE LIS Womens Clothing | us.meeeshop": "2026-10-16T16:15:00.183619+00:00",
     "Chic & Effortless Styles": "2026-10-14T00:04:06.670214+00:00",
     "Jeans": "2026-10-13T08:56:39.269127+00:00",
     "Nylon backpack": "2026-10-15T16:30:03.670891+00:00",
@@ -5808,6 +5848,6 @@
     "Simple Outfits": "2026-09-14T07:33:46.407531+00:00",
     "Women's shacket": "2026-10-06T21:52:24.134094+00:00"
   },
-  "daily_count": 4,
-  "last_repin_time": "2026-10-16T06:44:24.926941+00:00"
+  "daily_count": 8,
+  "last_repin_time": "2026-10-16T16:15:19.144408+00:00"
 }
