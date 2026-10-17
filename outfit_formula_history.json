@@ -439,7 +439,47 @@
           "role": "THE LAYER"
         }
       ]
+    },
+    {
+      "timestamp": "2026-10-17T16:58:44.461120+00:00",
+      "formula_id": "casual_fall",
+      "formula_title": "Casual Fall Weekend Outfit Inspo",
+      "pin_url": "https://www.pinterest.com/pin/962222276665087322/",
+      "pin_id": "962222276665087322",
+      "board": "Casual Outfits",
+      "title": "Casual Fall Weekend Outfit Inspo - Easy Everyday Styling Formula | MeeeShop",
+      "tagged_products_count": 4,
+      "outfit_items": [
+        {
+          "id": "8782620754091",
+          "variant_id": "47103336644779",
+          "title": "Retrolicious Pretty in Pink Bow Top",
+          "price": "69.99",
+          "role": "THE TOP"
+        },
+        {
+          "id": "9087954190507",
+          "variant_id": "48172198035627",
+          "title": "Nylah Shoulder Bag",
+          "price": "104.99",
+          "role": "THE BAG"
+        },
+        {
+          "id": "9034570858667",
+          "variant_id": "47945094168747",
+          "title": "High Rise Front Patch Pocket Holly Flare Jeans",
+          "price": "114.99",
+          "role": "THE DENIM"
+        },
+        {
+          "id": "9073872175275",
+          "variant_id": "48110997995691",
+          "title": "Alma Booties Brown",
+          "price": "169.99",
+          "role": "THE SHOES"
+        }
+      ]
     }
   ],
-  "last_run": "2026-10-17T06:26:39.718313+00:00"
+  "last_run": "2026-10-17T16:58:44.461139+00:00"
 }
