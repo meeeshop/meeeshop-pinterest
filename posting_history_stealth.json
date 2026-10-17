@@ -10794,11 +10794,55 @@
       "template": 17,
       "pin_url": "https://www.pinterest.com/pin/795659459212060776/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8988052783275,
+      "title": "Neve Frilled V Neck Short Sleeve Ruffle Maxi Dress - Halloween Cozy Fall Chic",
+      "board": "Trends",
+      "timestamp": "2026-10-17T22:59:33.864692",
+      "type": "product",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276665097349/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8981475000491,
+      "title": "Avielle Crossbody Bag: Cozy Fall & Halloween Must-Have \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-10-17T23:00:40.966675",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276665097359/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8879309226155,
+      "title": "Linen Halter Tank | MeeeShop US Boutique",
+      "board": "Wardrobe Goals",
+      "timestamp": "2026-10-17T23:01:45.663888",
+      "type": "carousel",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276665097374/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 9028752277675,
+      "title": "Kristal Signature Tote Bag - Cozy Fall Must-Have for Halloween Style \u2014 MeeeShop",
+      "board": "Nylon backpack",
+      "timestamp": "2026-10-17T23:02:50.377466",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276665097381/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-10-12T23:51:27.730749",
-    "Trends": "2026-10-17T19:41:52.895401",
+    "Trends": "2026-10-17T22:59:33.864692",
     "Dresses": "2026-10-09T17:51:49.766064",
     "Feminine & Flowy Fits": "2026-10-05T08:44:16.555889",
     "Short fall dresses": "2026-10-11T08:33:29.765610",
@@ -10837,13 +10881,13 @@
     "Casual Chic Style": "2026-10-17T06:53:37.214773",
     "Farm clothes": "2026-10-12T00:26:51.368244",
     "Kimchi USA Jeans": "2026-10-12T00:24:28.028171",
-    "Wardrobe Goals": "2026-10-07T08:23:58.676137",
-    "Nylon backpack": "2026-10-06T17:44:46.276185",
+    "Wardrobe Goals": "2026-10-17T23:01:45.663888",
+    "Nylon backpack": "2026-10-17T23:02:50.377466",
     "Everyday Style": "2026-10-07T22:19:50.691902",
     "Fashion Models": "2026-10-08T08:38:57.387467",
     "My Shop #1737732113": "2026-10-08T18:19:02.022080",
     "Shop For Holidays": "2026-10-08T18:20:19.332653",
-    "New": "2026-10-17T19:43:05.380675",
+    "New": "2026-10-17T23:00:40.966675",
     "American Bazi": "2026-10-12T08:56:12.088793",
     "Cool & Casual Styles": "2026-10-09T22:08:35.633664",
     "MeeeShop's Luxe Styles": "2026-10-13T22:07:06.705382",
@@ -10911,9 +10955,9 @@
     "Umgee USA": "2026-10-10T16:46:42.000590",
     "Edgy Fashion": "2026-10-13T09:13:02.770988"
   },
-  "daily_count": 12,
-  "last_post_time": "2026-10-17T19:49:37.987515",
+  "daily_count": 16,
+  "last_post_time": "2026-10-17T23:02:50.377466",
   "board_rotation_cursor": 0,
   "last_image_style": "carousel",
-  "last_template_index": 17
+  "last_template_index": 16
 }
