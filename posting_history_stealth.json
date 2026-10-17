@@ -10660,11 +10660,55 @@
       "template": 14,
       "pin_url": "https://www.pinterest.com/pin/962222276665066914/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8985003819179,
+      "title": "Cozy Fall Trend: Mkf Collection by Mia K. - Kenya Crossbody Bag \u2014 MeeeShop",
+      "board": "Trends",
+      "timestamp": "2026-10-17T06:49:28.592776",
+      "type": "video",
+      "style": "carousel",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276665074385/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8928274743467,
+      "title": "Spooky Ghost Cozy Slippers - Soft Black Slippers with Cute Ghost and Pumpkin Embroidery | Halloween ",
+      "board": "New",
+      "timestamp": "2026-10-17T06:50:52.920879",
+      "type": "carousel",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276665074402/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 9041683284139,
+      "title": "Pink Floyd World Tour Glitter Tee | MeeeShop US Boutique",
+      "board": "new products",
+      "timestamp": "2026-10-17T06:52:14.054275",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276665074424/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 9041689739435,
+      "title": "The Moonlight Trousers: Cozy Fall Chic for Halloween Vibes \u2014 MeeeShop",
+      "board": "Casual Chic Style",
+      "timestamp": "2026-10-17T06:53:37.214773",
+      "type": "carousel",
+      "style": "collage",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276665074448/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-10-12T23:51:27.730749",
-    "Trends": "2026-10-16T23:22:27.418010",
+    "Trends": "2026-10-17T06:49:28.592776",
     "Dresses": "2026-10-09T17:51:49.766064",
     "Feminine & Flowy Fits": "2026-10-05T08:44:16.555889",
     "Short fall dresses": "2026-10-11T08:33:29.765610",
@@ -10700,7 +10744,7 @@
     "Puff Sleeves Tops": "2026-10-11T00:15:32.779445",
     "Casual": "2026-10-07T00:38:15.282483",
     "Confident Looks": "2026-10-16T23:26:05.521142",
-    "Casual Chic Style": "2026-10-06T21:57:31.825227",
+    "Casual Chic Style": "2026-10-17T06:53:37.214773",
     "Farm clothes": "2026-10-12T00:26:51.368244",
     "Kimchi USA Jeans": "2026-10-12T00:24:28.028171",
     "Wardrobe Goals": "2026-10-07T08:23:58.676137",
@@ -10709,7 +10753,7 @@
     "Fashion Models": "2026-10-08T08:38:57.387467",
     "My Shop #1737732113": "2026-10-08T18:19:02.022080",
     "Shop For Holidays": "2026-10-08T18:20:19.332653",
-    "New": "2026-10-16T23:23:33.350862",
+    "New": "2026-10-17T06:50:52.920879",
     "American Bazi": "2026-10-12T08:56:12.088793",
     "Cool & Casual Styles": "2026-10-09T22:08:35.633664",
     "MeeeShop's Luxe Styles": "2026-10-13T22:07:06.705382",
@@ -10722,7 +10766,7 @@
     "BFCM Deals": "2026-10-08T22:27:04.842923",
     "Poetcore Aesthetics": "2026-10-03T15:33:52.654769",
     "Emory Park Clothing": "2026-10-03T23:40:45.969110",
-    "new products": "2026-10-06T17:45:55.949394",
+    "new products": "2026-10-17T06:52:14.054275",
     "Chic & Effortless Styles": "2026-10-09T01:09:36.405369",
     "Davi & Dani Womens...": "2026-10-04T08:03:03.268363",
     "Weekend to Workout": "2026-10-11T00:16:49.968751",
@@ -10777,9 +10821,9 @@
     "Umgee USA": "2026-10-10T16:46:42.000590",
     "Edgy Fashion": "2026-10-13T09:13:02.770988"
   },
-  "daily_count": 16,
-  "last_post_time": "2026-10-16T23:26:05.521142",
+  "daily_count": 4,
+  "last_post_time": "2026-10-17T06:53:37.214773",
   "board_rotation_cursor": 0,
   "last_image_style": "collage",
-  "last_template_index": 14
+  "last_template_index": 11
 }
