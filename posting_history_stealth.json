@@ -10704,11 +10704,57 @@
       "template": 11,
       "pin_url": "https://www.pinterest.com/pin/962222276665074448/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8985002803371,
+      "title": "Miriam Croc Tote Bag and Set | MeeeShop US Boutique",
+      "board": "Trends",
+      "timestamp": "2026-10-17T14:44:51.898256",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276665083712/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": "571124318379",
+      "article_id": "571124318379",
+      "title": "Comfortable Elastic Waistband Pants That Still Look Structured and Chic",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-10-17T14:46:28.214089",
+      "type": "blog",
+      "style": "card",
+      "template": 9,
+      "pin_url": "https://www.pinterest.com/pin/962222276665083753/",
+      "blog_url": "https://us.meeeshop.com/blogs/womens-pants-style-guide/comfortable-elastic-waistband-pants-that-still-look-structured-and-chic",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8819277955243,
+      "title": "Downeast on Repeat Dress - Cozy Fall & Halloween Ready! \u2014 MeeeShop",
+      "board": "Short Tall dresses",
+      "timestamp": "2026-10-17T14:49:00.454478",
+      "type": "video",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276665083833/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 9006479245483,
+      "title": "Front Pocket Knit Detail Soft Warm Long Cardigan Top - Cozy Fall Chic \u2014 MeeeShop",
+      "board": "Chic & Cozy: Annie...",
+      "timestamp": "2026-10-17T14:50:18.455747",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276665083873/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-10-12T23:51:27.730749",
-    "Trends": "2026-10-17T06:49:28.592776",
+    "Trends": "2026-10-17T14:44:51.898256",
     "Dresses": "2026-10-09T17:51:49.766064",
     "Feminine & Flowy Fits": "2026-10-05T08:44:16.555889",
     "Short fall dresses": "2026-10-11T08:33:29.765610",
@@ -10721,7 +10767,7 @@
     "Dressy Outfits": "2026-10-05T23:26:11.342404",
     "Must-Have Fashion...": "2026-10-14T07:21:24.483377",
     "Flares Jeans": "2026-10-16T15:54:18.104742",
-    "Short Tall dresses": "2026-09-28T19:06:30.836754",
+    "Short Tall dresses": "2026-10-17T14:49:00.454478",
     "Rompers, Jumpsuits &...": "2026-10-14T23:51:11.974810",
     "Skirts": "2026-10-10T16:45:30.490579",
     "Shirts & Tops": "2026-10-16T23:24:50.313004",
@@ -10806,7 +10852,7 @@
     "comfy fall outfits": "2026-10-16T15:55:36.192546",
     "Ankle Strap Flats": "2026-09-01T07:39:15.343019",
     "Relaxed Yet Trendy...": "2026-10-12T20:43:44.442679",
-    "Chic & Cozy: Annie...": "2026-09-23T23:32:59.222690",
+    "Chic & Cozy: Annie...": "2026-10-17T14:50:18.455747",
     "Fall outfits": "2026-09-30T08:18:32.567692",
     "Winter Outfits": "2026-10-12T20:44:50.011640",
     "Women's shacket": "2026-10-02T17:13:32.401685",
@@ -10821,9 +10867,9 @@
     "Umgee USA": "2026-10-10T16:46:42.000590",
     "Edgy Fashion": "2026-10-13T09:13:02.770988"
   },
-  "daily_count": 4,
-  "last_post_time": "2026-10-17T06:53:37.214773",
+  "daily_count": 8,
+  "last_post_time": "2026-10-17T14:50:18.455747",
   "board_rotation_cursor": 0,
-  "last_image_style": "collage",
-  "last_template_index": 11
+  "last_image_style": "carousel",
+  "last_template_index": 15
 }
