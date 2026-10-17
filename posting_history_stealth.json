@@ -10750,11 +10750,55 @@
       "template": 15,
       "pin_url": "https://www.pinterest.com/pin/962222276665083873/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 9095812710571,
+      "title": "Retrolicious Red Diamond Midi Dress - Perfect Halloween & Fall Chic \u2014 MeeeShop",
+      "board": "Trends",
+      "timestamp": "2026-10-17T19:41:52.895401",
+      "type": "carousel",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276665092722/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8985002082475,
+      "title": "Fall Chic: Damaris Crossbody Bag for Cozy Halloween Outfits \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-10-17T19:43:05.380675",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276665092770/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8988049735851,
+      "title": "Elle Ribbed Trim Drop Shoulder Oversized Sweater - Cozy Fall Must-Have \u2014 MeeeShop",
+      "board": "Sweaters for women",
+      "timestamp": "2026-10-17T19:45:17.614135",
+      "type": "video",
+      "style": "collage",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276665092850/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8988050292907,
+      "title": "Avery Polka Dot Elastic Waist Casual Pants Set - Cozy Fall Look \u2014 MeeeShop",
+      "board": "Look casual...",
+      "timestamp": "2026-10-17T19:49:37.987515",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/795659459212060776/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-10-12T23:51:27.730749",
-    "Trends": "2026-10-17T14:44:51.898256",
+    "Trends": "2026-10-17T19:41:52.895401",
     "Dresses": "2026-10-09T17:51:49.766064",
     "Feminine & Flowy Fits": "2026-10-05T08:44:16.555889",
     "Short fall dresses": "2026-10-11T08:33:29.765610",
@@ -10799,7 +10843,7 @@
     "Fashion Models": "2026-10-08T08:38:57.387467",
     "My Shop #1737732113": "2026-10-08T18:19:02.022080",
     "Shop For Holidays": "2026-10-08T18:20:19.332653",
-    "New": "2026-10-17T06:50:52.920879",
+    "New": "2026-10-17T19:43:05.380675",
     "American Bazi": "2026-10-12T08:56:12.088793",
     "Cool & Casual Styles": "2026-10-09T22:08:35.633664",
     "MeeeShop's Luxe Styles": "2026-10-13T22:07:06.705382",
@@ -10847,7 +10891,7 @@
     "Sweaters #Sweaters...": "2026-10-05T23:25:01.057901",
     "Sweaters & Sweater...": "2026-10-06T21:56:03.564881",
     "Boat Shoes": "2026-10-14T07:23:47.693796",
-    "Sweaters for women": "2026-09-22T16:04:26.733981",
+    "Sweaters for women": "2026-10-17T19:45:17.614135",
     "Womens Cardigans": "2026-10-08T22:25:57.755958",
     "comfy fall outfits": "2026-10-16T15:55:36.192546",
     "Ankle Strap Flats": "2026-09-01T07:39:15.343019",
@@ -10859,7 +10903,7 @@
     "Fall Outfits 2026": "2026-09-30T17:25:44.491082",
     "Womens shacket": "2026-10-03T23:42:07.347470",
     "Meshohn Luxe Styles": "2026-09-12T14:50:36.971883",
-    "Look casual...": "2026-09-18T07:19:12.747094",
+    "Look casual...": "2026-10-17T19:49:37.987515",
     "Simple Outfits": "2026-09-21T21:17:08.897037",
     "Wardrobe Oozes": "2026-09-30T21:39:05.673247",
     "Zenana Womens...": "2026-10-05T20:13:39.727847",
@@ -10867,9 +10911,9 @@
     "Umgee USA": "2026-10-10T16:46:42.000590",
     "Edgy Fashion": "2026-10-13T09:13:02.770988"
   },
-  "daily_count": 8,
-  "last_post_time": "2026-10-17T14:50:18.455747",
+  "daily_count": 12,
+  "last_post_time": "2026-10-17T19:49:37.987515",
   "board_rotation_cursor": 0,
   "last_image_style": "carousel",
-  "last_template_index": 15
+  "last_template_index": 17
 }
