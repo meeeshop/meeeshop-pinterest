@@ -369,7 +369,44 @@
           "pin_id": null
         }
       ]
+    },
+    {
+      "timestamp": "2026-10-17T20:51:48.519028+00:00",
+      "formula_id": "casual_fall",
+      "formula_title": "Casual Fall Weekend Outfit Inspo",
+      "pin_url": null,
+      "pin_id": null,
+      "board": "Casual Outfits",
+      "title": "Casual Fall Weekend Outfit Inspo - Easy Everyday Styling Formula | MeeeShop",
+      "type": "native_collage",
+      "canvas_preview": "/home/runner/work/meeeshop-pinterest/meeeshop-pinterest/scratch/collage_canvas_casual_fall_1792270287.png",
+      "cutout_items": [
+        {
+          "role": "THE TOP",
+          "title": "Retrolicious Isabel Top in Peacock Blue",
+          "product_id": "8782621737131",
+          "pin_id": null
+        },
+        {
+          "role": "THE BAG",
+          "title": "Bizzy Embossed Shoulder Bag",
+          "product_id": "9087953895595",
+          "pin_id": null
+        },
+        {
+          "role": "THE DENIM",
+          "title": "Ymi Women's Luxe High Rise Wide Leg Jeans",
+          "product_id": "9095809269931",
+          "pin_id": null
+        },
+        {
+          "role": "THE SHOES",
+          "title": "Alma Booties Brown",
+          "product_id": "9073872175275",
+          "pin_id": null
+        }
+      ]
     }
   ],
-  "last_run": "2026-10-17T17:01:10.852266+00:00"
+  "last_run": "2026-10-17T20:51:48.519166+00:00"
 }
