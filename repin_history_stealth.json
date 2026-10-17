@@ -5849,13 +5849,53 @@
       "target_board_id": "962222345325683653",
       "live_url": "https://www.pinterest.com/pin/4602327099098337856/",
       "timestamp": "2026-10-16T23:12:40.227671+00:00"
+    },
+    {
+      "pin_id": "4601975200987042368",
+      "product_title": "Flying Tomato Girls Just Wanna Have Woven Maxi Dress",
+      "category_group": "dresses",
+      "source_board": "_products",
+      "target_board": "Dresses",
+      "target_board_id": "962222345325006107",
+      "live_url": "https://www.pinterest.com/pin/4601975200987042368/",
+      "timestamp": "2026-10-17T06:32:04.469299+00:00"
+    },
+    {
+      "pin_id": "4600145653607905344",
+      "product_title": "Ciri Double Bag",
+      "category_group": "bags_accessories",
+      "source_board": "_products",
+      "target_board": "New",
+      "target_board_id": "962222345325425838",
+      "live_url": "https://www.pinterest.com/pin/4600145653607905344/",
+      "timestamp": "2026-10-17T06:32:31.252760+00:00"
+    },
+    {
+      "pin_id": "4597190158343125056",
+      "product_title": "Nina Mid-rise Track Skirt",
+      "category_group": "skirts",
+      "source_board": "_products",
+      "target_board": "Wardrobe Goals",
+      "target_board_id": "962222345325718185",
+      "live_url": "https://www.pinterest.com/pin/4597190158343125056/",
+      "timestamp": "2026-10-17T06:32:49.534211+00:00"
+    },
+    {
+      "pin_id": "4597190132573321280",
+      "product_title": "MeeeShop Eliana Floral Drawstring Barrel Jeans for Women Floral",
+      "category_group": "pants_denim",
+      "source_board": "_products",
+      "target_board": "Straight Leg Jeans",
+      "target_board_id": "962222345325683657",
+      "live_url": "https://www.pinterest.com/pin/4597190132573321280/",
+      "timestamp": "2026-10-17T06:33:16.791428+00:00"
     }
   ],
   "board_last_used": {
     "Women's Cardigans": "2026-10-14T23:36:08.217018+00:00",
     "Pants & Leggings": "2026-10-11T21:03:55.910421+00:00",
     "Skirts": "2026-10-16T16:14:30.313014+00:00",
-    "Dresses": "2026-10-09T00:53:06.969983+00:00",
+    "Dresses": "2026-10-17T06:32:04.469299+00:00",
     "Sweaters": "2026-10-05T08:16:26.016701+00:00",
     "Dressy Outfits": "2026-10-16T20:03:29.002064+00:00",
     "Dress": "2026-10-10T08:05:21.121949+00:00",
@@ -5878,14 +5918,14 @@
     "Wardrobe Must-Haves": "2026-10-16T23:11:30.196560+00:00",
     "Casual": "2026-10-16T23:12:40.227671+00:00",
     "Farm clothes": "2026-10-13T08:56:04.742015+00:00",
-    "New": "2026-10-13T08:55:42.444234+00:00",
+    "New": "2026-10-17T06:32:31.252760+00:00",
     "Festive Styles": "2026-10-15T20:30:44.903501+00:00",
     "American Bazi": "2026-10-16T06:43:55.516905+00:00",
     "Edgy fashion": "2026-10-14T00:03:41.553490+00:00",
     "comfy fall outfits": "2026-10-11T00:02:09.334676+00:00",
     "Thanks giving Outfits": "2026-10-16T20:03:10.033703+00:00",
     "Cool & Casual Styles": "2026-10-10T08:05:03.859462+00:00",
-    "Wardrobe Goals": "2026-10-13T18:59:42.035679+00:00",
+    "Wardrobe Goals": "2026-10-17T06:32:49.534211+00:00",
     "Emory Park Clothing": "2026-10-09T08:28:41.245296+00:00",
     "Shop For Holidays": "2026-10-13T21:57:31.218048+00:00",
     "Bags": "2026-10-14T16:45:38.884687+00:00",
@@ -5916,7 +5956,7 @@
     "Fashion": "2026-10-15T16:28:50.367290+00:00",
     "Kancan USA Jeans": "2026-10-14T20:55:15.816367+00:00",
     "Stylish Finds": "2026-10-15T16:29:14.948753+00:00",
-    "Straight Leg Jeans": "2026-10-10T20:41:06.669954+00:00",
+    "Straight Leg Jeans": "2026-10-17T06:33:16.791428+00:00",
     "Handbags #handbags": "2026-10-14T00:04:53.844877+00:00",
     "Weekend to Workwear": "2026-10-12T08:33:51.430180+00:00",
     "Luxe Clothing": "2026-10-07T22:14:51.023802+00:00",
@@ -5928,6 +5968,6 @@
     "Simple Outfits": "2026-09-14T07:33:46.407531+00:00",
     "Women's shacket": "2026-10-06T21:52:24.134094+00:00"
   },
-  "daily_count": 16,
-  "last_repin_time": "2026-10-16T23:12:40.227671+00:00"
+  "daily_count": 4,
+  "last_repin_time": "2026-10-17T06:33:16.791428+00:00"
 }
