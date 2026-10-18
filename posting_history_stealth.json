@@ -10928,11 +10928,55 @@
       "template": 11,
       "pin_url": "https://www.pinterest.com/pin/962222276665116002/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8930017116331,
+      "title": "V-neck Top with Lace Trim, Brown - Cozy Fall Halloween Must-Have \u2014 MeeeShop",
+      "board": "Trends",
+      "timestamp": "2026-10-18T19:37:22.049812",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276665123105/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8883469844651,
+      "title": "Buki Collagen Camisole - Blush Pink Top | MeeeShop US Boutique",
+      "board": "New",
+      "timestamp": "2026-10-18T19:39:41.044902",
+      "type": "carousel",
+      "style": "collage",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276665123181/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8970884972715,
+      "title": "Emory Park Rhea Midi Skirt - Cozy Fall Vibes for Halloween & Pumpkin Patch \u2014 MeeeShop",
+      "board": "Poetcore Aesthetics",
+      "timestamp": "2026-10-18T19:41:07.771537",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276665123238/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 9095816085675,
+      "title": "Rome Shirt Navy Patchwork Foulard Print | MeeeShop US Boutique",
+      "board": "Everyday Style",
+      "timestamp": "2026-10-18T19:43:39.030068",
+      "type": "video",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276665123290/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-10-12T23:51:27.730749",
-    "Trends": "2026-10-18T15:10:23.461597",
+    "Trends": "2026-10-18T19:37:22.049812",
     "Dresses": "2026-10-09T17:51:49.766064",
     "Feminine & Flowy Fits": "2026-10-05T08:44:16.555889",
     "Short fall dresses": "2026-10-11T08:33:29.765610",
@@ -10973,11 +11017,11 @@
     "Kimchi USA Jeans": "2026-10-12T00:24:28.028171",
     "Wardrobe Goals": "2026-10-17T23:01:45.663888",
     "Nylon backpack": "2026-10-17T23:02:50.377466",
-    "Everyday Style": "2026-10-07T22:19:50.691902",
+    "Everyday Style": "2026-10-18T19:43:39.030068",
     "Fashion Models": "2026-10-08T08:38:57.387467",
     "My Shop #1737732113": "2026-10-08T18:19:02.022080",
     "Shop For Holidays": "2026-10-08T18:20:19.332653",
-    "New": "2026-10-18T15:11:38.783687",
+    "New": "2026-10-18T19:39:41.044902",
     "American Bazi": "2026-10-12T08:56:12.088793",
     "Cool & Casual Styles": "2026-10-09T22:08:35.633664",
     "MeeeShop's Luxe Styles": "2026-10-13T22:07:06.705382",
@@ -10988,7 +11032,7 @@
     "Effortless Looks": "2026-10-14T23:52:20.362275",
     "Vamp Romantic Styles": "2026-10-02T08:13:36.748078",
     "BFCM Deals": "2026-10-08T22:27:04.842923",
-    "Poetcore Aesthetics": "2026-10-03T15:33:52.654769",
+    "Poetcore Aesthetics": "2026-10-18T19:41:07.771537",
     "Emory Park Clothing": "2026-10-03T23:40:45.969110",
     "new products": "2026-10-17T06:52:14.054275",
     "Chic & Effortless Styles": "2026-10-09T01:09:36.405369",
@@ -11045,9 +11089,9 @@
     "Umgee USA": "2026-10-10T16:46:42.000590",
     "Edgy Fashion": "2026-10-13T09:13:02.770988"
   },
-  "daily_count": 8,
-  "last_post_time": "2026-10-18T15:14:33.386346",
+  "daily_count": 12,
+  "last_post_time": "2026-10-18T19:43:39.030068",
   "board_rotation_cursor": 0,
   "last_image_style": "collage",
-  "last_template_index": 11
+  "last_template_index": 14
 }
