@@ -10884,11 +10884,55 @@
       "template": 15,
       "pin_url": "https://www.pinterest.com/pin/962222276665106251/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 9041685708971,
+      "title": "Grateful Dead Stealie Baseball Tee | MeeeShop US Boutique",
+      "board": "Trends",
+      "timestamp": "2026-10-18T15:10:23.461597",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/841962092891562814/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8825275941035,
+      "title": "Ruffle Sleeve Light Sweater: Cozy Fall Essential for Halloween Vibes \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-10-18T15:11:38.783687",
+      "type": "carousel",
+      "style": "collage",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276665115936/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8949202583723,
+      "title": "Aztec Soft Knit Cardigan with Tribal Print - Western Vibe \ud83c\udf35 Top: Boho Fall Look",
+      "board": "Fall outfits",
+      "timestamp": "2026-10-18T15:12:47.810357",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276665115970/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 9041687478443,
+      "title": "Rolling Stones Tattoo You Tank - Edgy Fall Look for Halloween & Cozy Days \u2014 MeeeShop",
+      "board": "Blouses",
+      "timestamp": "2026-10-18T15:14:33.386346",
+      "type": "product",
+      "style": "collage",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276665116002/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-10-12T23:51:27.730749",
-    "Trends": "2026-10-18T07:06:20.730711",
+    "Trends": "2026-10-18T15:10:23.461597",
     "Dresses": "2026-10-09T17:51:49.766064",
     "Feminine & Flowy Fits": "2026-10-05T08:44:16.555889",
     "Short fall dresses": "2026-10-11T08:33:29.765610",
@@ -10905,7 +10949,7 @@
     "Rompers, Jumpsuits &...": "2026-10-14T23:51:11.974810",
     "Skirts": "2026-10-10T16:45:30.490579",
     "Shirts & Tops": "2026-10-16T23:24:50.313004",
-    "Blouses": "2026-10-07T08:26:58.929993",
+    "Blouses": "2026-10-18T15:14:33.386346",
     "Rompers_Jumpsuits &...": "2026-10-16T20:10:03.538169",
     "Handbag #handsips": "2026-10-09T22:10:15.321346",
     "Trendy & Timeless...": "2026-10-15T20:37:39.179845",
@@ -10933,7 +10977,7 @@
     "Fashion Models": "2026-10-08T08:38:57.387467",
     "My Shop #1737732113": "2026-10-08T18:19:02.022080",
     "Shop For Holidays": "2026-10-08T18:20:19.332653",
-    "New": "2026-10-18T07:07:25.395379",
+    "New": "2026-10-18T15:11:38.783687",
     "American Bazi": "2026-10-12T08:56:12.088793",
     "Cool & Casual Styles": "2026-10-09T22:08:35.633664",
     "MeeeShop's Luxe Styles": "2026-10-13T22:07:06.705382",
@@ -10987,7 +11031,7 @@
     "Ankle Strap Flats": "2026-09-01T07:39:15.343019",
     "Relaxed Yet Trendy...": "2026-10-12T20:43:44.442679",
     "Chic & Cozy: Annie...": "2026-10-17T14:50:18.455747",
-    "Fall outfits": "2026-09-30T08:18:32.567692",
+    "Fall outfits": "2026-10-18T15:12:47.810357",
     "Winter Outfits": "2026-10-12T20:44:50.011640",
     "Women's shacket": "2026-10-02T17:13:32.401685",
     "Fall Outfits 2026": "2026-09-30T17:25:44.491082",
@@ -11001,9 +11045,9 @@
     "Umgee USA": "2026-10-10T16:46:42.000590",
     "Edgy Fashion": "2026-10-13T09:13:02.770988"
   },
-  "daily_count": 4,
-  "last_post_time": "2026-10-18T07:12:07.115314",
+  "daily_count": 8,
+  "last_post_time": "2026-10-18T15:14:33.386346",
   "board_rotation_cursor": 0,
   "last_image_style": "collage",
-  "last_template_index": 15
+  "last_template_index": 11
 }
