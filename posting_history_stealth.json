@@ -11060,6 +11060,52 @@
       "template": 15,
       "pin_url": "https://www.pinterest.com/pin/962222276665137040/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": "571181138091",
+      "article_id": "571181138091",
+      "title": "Boutique Shopping Guide: How to Spot Quality Fabric and Finishing",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-10-19T18:03:30.696566",
+      "type": "blog",
+      "style": "card",
+      "template": 9,
+      "pin_url": "https://www.pinterest.com/pin/962222276665149583/",
+      "blog_url": "https://us.meeeshop.com/blogs/womens-clothing/boutique-shopping-guide-how-to-spot-quality-fabric-and-finishing",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 9053305897131,
+      "title": "Downeast Underlined Crew: Cozy Fall Sweater for Halloween Vibes \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-10-19T18:04:36.977286",
+      "type": "carousel",
+      "style": "collage",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276665149613/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8984999985323,
+      "title": "Bruna Tote Bag and Wallet Set | MeeeShop US Boutique",
+      "board": "My Shop #1737732113",
+      "timestamp": "2026-10-19T18:05:45.862605",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276665149644/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8818148868267,
+      "title": "Emory Park Pia Mini Dress - Cozy Fall & Halloween Ready Outfit \u2014 MeeeShop",
+      "board": "Thanks giving Outfits",
+      "timestamp": "2026-10-19T18:06:52.644154",
+      "type": "carousel",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276665149666/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
@@ -11107,15 +11153,15 @@
     "Nylon backpack": "2026-10-17T23:02:50.377466",
     "Everyday Style": "2026-10-18T19:43:39.030068",
     "Fashion Models": "2026-10-18T22:58:47.110263",
-    "My Shop #1737732113": "2026-10-08T18:19:02.022080",
+    "My Shop #1737732113": "2026-10-19T18:05:45.862605",
     "Shop For Holidays": "2026-10-08T18:20:19.332653",
-    "New": "2026-10-19T07:34:14.571592",
+    "New": "2026-10-19T18:04:36.977286",
     "American Bazi": "2026-10-12T08:56:12.088793",
     "Cool & Casual Styles": "2026-10-09T22:08:35.633664",
     "MeeeShop's Luxe Styles": "2026-10-13T22:07:06.705382",
     "Outerwear": "2026-10-11T21:10:16.114391",
     "Zenana Women's...": "2026-10-14T00:18:06.826258",
-    "Thanks giving Outfits": "2026-10-02T00:43:31.413836",
+    "Thanks giving Outfits": "2026-10-19T18:06:52.644154",
     "Weekend to Workwear": "2026-10-10T08:21:00.513624",
     "Effortless Looks": "2026-10-14T23:52:20.362275",
     "Vamp Romantic Styles": "2026-10-18T23:00:05.912022",
@@ -11177,9 +11223,9 @@
     "Umgee USA": "2026-10-10T16:46:42.000590",
     "Edgy Fashion": "2026-10-13T09:13:02.770988"
   },
-  "daily_count": 4,
-  "last_post_time": "2026-10-19T07:37:52.838798",
+  "daily_count": 8,
+  "last_post_time": "2026-10-19T18:06:52.644154",
   "board_rotation_cursor": 0,
   "last_image_style": "collage",
-  "last_template_index": 15
+  "last_template_index": 17
 }
