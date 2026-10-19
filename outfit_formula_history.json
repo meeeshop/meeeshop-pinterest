@@ -719,7 +719,47 @@
           "role": "THE FOOTWEAR"
         }
       ]
+    },
+    {
+      "timestamp": "2026-10-19T07:10:58.436520+00:00",
+      "formula_id": "date_night",
+      "formula_title": "Date Night Outfit Formula",
+      "pin_url": "https://www.pinterest.com/pin/962222276665136621/",
+      "pin_id": "962222276665136621",
+      "board": "Cocktail Dresses",
+      "title": "Date Night Outfit Formula | Chic Midi Dress & Accessories | MeeeShop",
+      "tagged_products_count": 4,
+      "outfit_items": [
+        {
+          "id": "8745258844331",
+          "variant_id": "46506902257835",
+          "title": "Flying Tomato Ocean Tapestry Woven Maxi Dress",
+          "price": "114.99",
+          "role": "THE DRESS"
+        },
+        {
+          "id": "9087953830059",
+          "variant_id": "48172194431147",
+          "title": "Collins Signature Shoulder Bag",
+          "price": "109.99",
+          "role": "THE BAG"
+        },
+        {
+          "id": "9073872175275",
+          "variant_id": "48110997995691",
+          "title": "Alma Booties Brown",
+          "price": "169.99",
+          "role": "THE SHOES"
+        },
+        {
+          "id": "8782622654635",
+          "variant_id": "47103348900011",
+          "title": "Retrolicious Leaves Bow Top",
+          "price": "69.99",
+          "role": "THE LAYER"
+        }
+      ]
     }
   ],
-  "last_run": "2026-10-19T01:05:28.551627+00:00"
+  "last_run": "2026-10-19T07:10:58.436539+00:00"
 }
