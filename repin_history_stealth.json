@@ -6219,6 +6219,26 @@
       "target_board_id": "962222345325574751",
       "live_url": "https://www.pinterest.com/pin/4595712393164150848/",
       "timestamp": "2026-10-19T18:28:38.643433+00:00"
+    },
+    {
+      "pin_id": "4609926894868895296",
+      "product_title": "Flying Tomato Palm Escape Woven Maxi Dress",
+      "category_group": "dresses",
+      "source_board": "_products",
+      "target_board": "Festive Styles",
+      "target_board_id": "962222345325118481",
+      "live_url": "https://www.pinterest.com/pin/4609926894868895296/",
+      "timestamp": "2026-10-19T21:43:00.826625+00:00"
+    },
+    {
+      "pin_id": "4609926899163862592",
+      "product_title": "Ymi Women's Skater Cargo Wide Leg Jeans Denim",
+      "category_group": "pants_denim",
+      "source_board": "_products",
+      "target_board": "Flares Jeans",
+      "target_board_id": "962222345325683655",
+      "live_url": "https://www.pinterest.com/pin/4609926899163862592/",
+      "timestamp": "2026-10-19T21:43:34.919862+00:00"
     }
   ],
   "board_last_used": {
@@ -6249,7 +6269,7 @@
     "Casual": "2026-10-16T23:12:40.227671+00:00",
     "Farm clothes": "2026-10-18T22:44:01.036153+00:00",
     "New": "2026-10-17T06:32:31.252760+00:00",
-    "Festive Styles": "2026-10-15T20:30:44.903501+00:00",
+    "Festive Styles": "2026-10-19T21:43:00.826625+00:00",
     "American Bazi": "2026-10-16T06:43:55.516905+00:00",
     "Edgy fashion": "2026-10-14T00:03:41.553490+00:00",
     "comfy fall outfits": "2026-10-11T00:02:09.334676+00:00",
@@ -6277,7 +6297,7 @@
     "Fall outfits": "2026-10-11T08:16:30.316092+00:00",
     "Puff Sleeve Tops": "2026-10-18T22:42:26.828965+00:00",
     "Outfit Ideas": "2026-10-18T15:32:16.999863+00:00",
-    "Flares Jeans": "2026-10-14T07:05:45.229177+00:00",
+    "Flares Jeans": "2026-10-19T21:43:34.919862+00:00",
     "Style Ideas": "2026-10-18T19:34:57.707251+00:00",
     "Winter Outfits": "2026-10-14T07:06:16.533872+00:00",
     "Ootd #ootd": "2026-10-18T22:43:00.084054+00:00",
@@ -6298,6 +6318,6 @@
     "Simple Outfits": "2026-09-14T07:33:46.407531+00:00",
     "Women's shacket": "2026-10-06T21:52:24.134094+00:00"
   },
-  "daily_count": 7,
-  "last_repin_time": "2026-10-19T18:28:38.643433+00:00"
+  "daily_count": 9,
+  "last_repin_time": "2026-10-19T21:43:34.919862+00:00"
 }
