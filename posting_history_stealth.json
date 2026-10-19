@@ -11016,18 +11016,62 @@
       "template": 16,
       "pin_url": "https://www.pinterest.com/pin/962222276665127740/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8988054716587,
+      "title": "Luna Lounge Set - Cozy Fall & Halloween Ready Outfit \u2014 MeeeShop",
+      "board": "Trends",
+      "timestamp": "2026-10-19T07:31:50.622122",
+      "type": "video",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276665136928/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8988049932459,
+      "title": "Brynn Textured Round Neck Drop Shoulder Pullover Sweatshirt | MeeeShop US Boutique",
+      "board": "New",
+      "timestamp": "2026-10-19T07:34:14.571592",
+      "type": "video",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276665136970/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8988057338027,
+      "title": "Kali Short Bubble Sleeve Tiered Maxi Dress - Festive Fall & Halloween Chic \u2014 MeeeShop",
+      "board": "Festive Styles",
+      "timestamp": "2026-10-19T07:36:42.153918",
+      "type": "video",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276665137015/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8825883852971,
+      "title": "Mkf Collection by Mia K. - Janise Tote Bag | MeeeShop US Boutique",
+      "board": "Bags",
+      "timestamp": "2026-10-19T07:37:52.838798",
+      "type": "carousel",
+      "style": "collage",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276665137040/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-10-12T23:51:27.730749",
-    "Trends": "2026-10-18T22:55:01.341536",
+    "Trends": "2026-10-19T07:31:50.622122",
     "Dresses": "2026-10-09T17:51:49.766064",
     "Feminine & Flowy Fits": "2026-10-05T08:44:16.555889",
     "Short fall dresses": "2026-10-11T08:33:29.765610",
     "Must-Have Fashion Picks": "2026-08-13T05:20:05.419233",
     "Trendy & Timeless Fashion": "2026-08-13T05:29:39.715837",
     "Dress": "2026-10-15T20:36:05.634355",
-    "Bags": "2026-10-08T08:41:35.457395",
+    "Bags": "2026-10-19T07:37:52.838798",
     "Jeans": "2026-10-15T16:07:25.488289",
     "Cocktail Dresses": "2026-10-13T22:08:21.476759",
     "Dressy Outfits": "2026-10-05T23:26:11.342404",
@@ -11047,7 +11091,7 @@
     "Camis & Tanks": "2026-10-10T00:50:29.543261",
     "Wardrobe Must Haves": "2026-10-16T07:00:23.457902",
     "Trendy Backpacks": "2026-10-10T08:19:43.038195",
-    "Festive Styles": "2026-10-01T08:36:54.596284",
+    "Festive Styles": "2026-10-19T07:36:42.153918",
     "Kancan USA Jeans": "2026-10-16T20:08:42.207928",
     "Footwear": "2026-09-07T23:26:56.803572",
     "Fitted Jeans": "2026-10-06T08:49:31.590936",
@@ -11065,7 +11109,7 @@
     "Fashion Models": "2026-10-18T22:58:47.110263",
     "My Shop #1737732113": "2026-10-08T18:19:02.022080",
     "Shop For Holidays": "2026-10-08T18:20:19.332653",
-    "New": "2026-10-18T22:57:38.951671",
+    "New": "2026-10-19T07:34:14.571592",
     "American Bazi": "2026-10-12T08:56:12.088793",
     "Cool & Casual Styles": "2026-10-09T22:08:35.633664",
     "MeeeShop's Luxe Styles": "2026-10-13T22:07:06.705382",
@@ -11133,9 +11177,9 @@
     "Umgee USA": "2026-10-10T16:46:42.000590",
     "Edgy Fashion": "2026-10-13T09:13:02.770988"
   },
-  "daily_count": 16,
-  "last_post_time": "2026-10-18T23:00:05.912022",
+  "daily_count": 4,
+  "last_post_time": "2026-10-19T07:37:52.838798",
   "board_rotation_cursor": 0,
   "last_image_style": "collage",
-  "last_template_index": 16
+  "last_template_index": 15
 }
