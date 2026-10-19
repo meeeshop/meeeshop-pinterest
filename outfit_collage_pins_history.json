@@ -665,7 +665,44 @@
           "pin_id": null
         }
       ]
+    },
+    {
+      "timestamp": "2026-10-19T22:36:06.271537+00:00",
+      "formula_id": "how_to_style_flare_jeans",
+      "formula_title": "How to Style Flare Jeans: Outfit Formula",
+      "pin_url": null,
+      "pin_id": null,
+      "board": "Kancan USA Jeans",
+      "title": "How to Style Flare Jeans: Outfit Formula | How to Style Flare Jeans & Sweater | MeeeShop",
+      "type": "native_collage",
+      "canvas_preview": "/home/runner/work/meeeshop-pinterest/meeeshop-pinterest/scratch/collage_canvas_how_to_style_flare_jeans_1792449346.png",
+      "cutout_items": [
+        {
+          "role": "THE TOP",
+          "title": "Cape Cod Shirt Sea Life",
+          "product_id": "8782637826219",
+          "pin_id": null
+        },
+        {
+          "role": "THE BAG",
+          "title": "Stella Tote Bag",
+          "product_id": "9087953600683",
+          "pin_id": null
+        },
+        {
+          "role": "THE FLARE DENIM",
+          "title": "Eco Friendly Corset High Rise Crop Flare Jeans (dark Wash)",
+          "product_id": "8789756903595",
+          "pin_id": null
+        },
+        {
+          "role": "THE FOOTWEAR",
+          "title": "Alma Booties Brown",
+          "product_id": "9073872175275",
+          "pin_id": null
+        }
+      ]
     }
   ],
-  "last_run": "2026-10-19T19:51:04.533917+00:00"
+  "last_run": "2026-10-19T22:36:06.271801+00:00"
 }
