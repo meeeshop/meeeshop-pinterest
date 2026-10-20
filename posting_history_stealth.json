@@ -11196,11 +11196,55 @@
       "template": 14,
       "pin_url": "https://www.pinterest.com/pin/962222276665158251/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 9058765406379,
+      "title": "Flying Tomato Sculpted Noir Shirred Midi Skirt - Halloween Chic & Cozy Fall \u2014 MeeeShop",
+      "board": "Trends",
+      "timestamp": "2026-10-20T07:20:27.595081",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276665165173/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8941754581163,
+      "title": "Goal Five Powerstripe LS Track Jacket - Cozy Fall & Halloween Ready! \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-10-20T07:22:41.793611",
+      "type": "video",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276665165220/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8931950461099,
+      "title": "Side Split Crop Top - Four-way Stretch, Made in USA | Cozy Fall Must-Have \u2014 MeeeShop",
+      "board": "Shop For Holidays",
+      "timestamp": "2026-10-20T07:25:10.217091",
+      "type": "video",
+      "style": "carousel",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276665165257/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8911380086955,
+      "title": "Mkf Collection by Mia K. - Dilma Phone Crossbody Bag | MeeeShop US Boutique",
+      "board": "BFCM Deals",
+      "timestamp": "2026-10-20T07:26:28.335399",
+      "type": "carousel",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276665165277/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-10-12T23:51:27.730749",
-    "Trends": "2026-10-19T21:45:09.409453",
+    "Trends": "2026-10-20T07:20:27.595081",
     "Dresses": "2026-10-09T17:51:49.766064",
     "Feminine & Flowy Fits": "2026-10-19T21:47:32.938103",
     "Short fall dresses": "2026-10-11T08:33:29.765610",
@@ -11244,8 +11288,8 @@
     "Everyday Style": "2026-10-18T19:43:39.030068",
     "Fashion Models": "2026-10-18T22:58:47.110263",
     "My Shop #1737732113": "2026-10-19T18:05:45.862605",
-    "Shop For Holidays": "2026-10-08T18:20:19.332653",
-    "New": "2026-10-20T00:12:33.263729",
+    "Shop For Holidays": "2026-10-20T07:25:10.217091",
+    "New": "2026-10-20T07:22:41.793611",
     "American Bazi": "2026-10-12T08:56:12.088793",
     "Cool & Casual Styles": "2026-10-09T22:08:35.633664",
     "MeeeShop's Luxe Styles": "2026-10-13T22:07:06.705382",
@@ -11255,7 +11299,7 @@
     "Weekend to Workwear": "2026-10-10T08:21:00.513624",
     "Effortless Looks": "2026-10-14T23:52:20.362275",
     "Vamp Romantic Styles": "2026-10-18T23:00:05.912022",
-    "BFCM Deals": "2026-10-08T22:27:04.842923",
+    "BFCM Deals": "2026-10-20T07:26:28.335399",
     "Poetcore Aesthetics": "2026-10-18T19:41:07.771537",
     "Emory Park Clothing": "2026-10-20T00:16:27.399121",
     "new products": "2026-10-17T06:52:14.054275",
@@ -11313,8 +11357,8 @@
     "Umgee USA": "2026-10-10T16:46:42.000590",
     "Edgy Fashion": "2026-10-13T09:13:02.770988"
   },
-  "daily_count": 4,
-  "last_post_time": "2026-10-20T00:16:27.399121",
+  "daily_count": 8,
+  "last_post_time": "2026-10-20T07:26:28.335399",
   "board_rotation_cursor": 0,
   "last_image_style": "collage",
   "last_template_index": 14
