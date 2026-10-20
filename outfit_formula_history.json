@@ -839,7 +839,47 @@
           "role": "THE SHOES"
         }
       ]
+    },
+    {
+      "timestamp": "2026-10-20T01:43:44.021072+00:00",
+      "formula_id": "cozy_sweater_weather",
+      "formula_title": "Cozy Fall Layers Outfit Formula",
+      "pin_url": "https://www.pinterest.com/pin/962222276665160099/",
+      "pin_id": "962222276665160099",
+      "board": "Sweaters",
+      "title": "Cozy Fall Layers Outfit Formula - Easy Everyday Styling Formula | MeeeShop",
+      "tagged_products_count": 4,
+      "outfit_items": [
+        {
+          "id": "8782637826219",
+          "variant_id": "47103410208939",
+          "title": "Cape Cod Shirt Sea Life",
+          "price": "209.99",
+          "role": "THE KNIT"
+        },
+        {
+          "id": "9087954157739",
+          "variant_id": "48172197642411",
+          "title": "Elke Convertible Backpack Handbag",
+          "price": "109.99",
+          "role": "THE TOTE"
+        },
+        {
+          "id": "8740284530859",
+          "variant_id": "46478644478123",
+          "title": "Judy Blue Full Size Wide Leg Capris Jeans plus Size",
+          "price": "119.99",
+          "role": "THE DENIM"
+        },
+        {
+          "id": "9073872175275",
+          "variant_id": "48110997995691",
+          "title": "Alma Booties Brown",
+          "price": "169.99",
+          "role": "THE BOOTS"
+        }
+      ]
     }
   ],
-  "last_run": "2026-10-19T22:33:42.148237+00:00"
+  "last_run": "2026-10-20T01:43:44.021093+00:00"
 }
