@@ -959,7 +959,47 @@
           "role": "THE FOOTWEAR"
         }
       ]
+    },
+    {
+      "timestamp": "2026-10-20T21:48:25.566463+00:00",
+      "formula_id": "casual_fall",
+      "formula_title": "Casual Fall Weekend Outfit Inspo",
+      "pin_url": "https://www.pinterest.com/pin/841962092891601844/",
+      "pin_id": "841962092891601844",
+      "board": "Casual Outfits",
+      "title": "Casual Fall Weekend Outfit Inspo - Easy Everyday Styling Formula | MeeeShop",
+      "tagged_products_count": 4,
+      "outfit_items": [
+        {
+          "id": "8740256907435",
+          "variant_id": "46478472446123",
+          "title": "Hyfve Contrast Trim Sleeveless Ribbed Top",
+          "price": "84.99",
+          "role": "THE TOP"
+        },
+        {
+          "id": "9087954485419",
+          "variant_id": "48172201214123",
+          "title": "Blossom Shoulder Bag and Set",
+          "price": "104.99",
+          "role": "THE BAG"
+        },
+        {
+          "id": "8740283220139",
+          "variant_id": "46478636679339",
+          "title": "Risen Full Size Mid Rise Wide Leg Jeans with Flared Look plus Size",
+          "price": "124.99",
+          "role": "THE DENIM"
+        },
+        {
+          "id": "9073872240811",
+          "variant_id": "48110998192299",
+          "title": "Alice Boots Black",
+          "price": "194.99",
+          "role": "THE SHOES"
+        }
+      ]
     }
   ],
-  "last_run": "2026-10-20T18:27:52.908394+00:00"
+  "last_run": "2026-10-20T21:48:25.566482+00:00"
 }
