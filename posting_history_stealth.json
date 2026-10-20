@@ -11150,6 +11150,52 @@
       "template": 17,
       "pin_url": "https://www.pinterest.com/pin/962222276665155030/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": "571204403371",
+      "article_id": "571204403371",
+      "title": "How to Layer Lightweight Knit Tops Under Blazers Without Adding Bulk",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-10-20T00:11:29.875884",
+      "type": "blog",
+      "style": "card",
+      "template": 9,
+      "pin_url": "https://www.pinterest.com/pin/962222276665158131/",
+      "blog_url": "https://us.meeeshop.com/blogs/womens-shirts-tops-style-guide/how-to-layer-lightweight-knit-tops-under-blazers-without-adding-bulk",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8786744443051,
+      "title": "Elle Convertible Plush Top Handle Crossbody - Cozy Fall & Halloween Ready Bag",
+      "board": "New",
+      "timestamp": "2026-10-20T00:12:33.263729",
+      "type": "carousel",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276665158161/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8811044044971,
+      "title": "Anastasia Tummy Control High Rise Wide Flare Jeans - Cozy Fall Flare Fit \u2014 MeeeShop",
+      "board": "Fitted Jeans",
+      "timestamp": "2026-10-20T00:13:50.826055",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276665158180/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8988052619435,
+      "title": "Micah Scallop Detail Pleated Corduroy Mini Dress - Cozy Fall & Halloween Chic",
+      "board": "Emory Park Clothing",
+      "timestamp": "2026-10-20T00:16:27.399121",
+      "type": "video",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276665158251/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
@@ -11184,7 +11230,7 @@
     "Festive Styles": "2026-10-19T07:36:42.153918",
     "Kancan USA Jeans": "2026-10-16T20:08:42.207928",
     "Footwear": "2026-09-07T23:26:56.803572",
-    "Fitted Jeans": "2026-10-06T08:49:31.590936",
+    "Fitted Jeans": "2026-10-20T00:13:50.826055",
     "Chic Looks": "2026-10-15T16:06:10.576165",
     "Straight Leg Jeans": "2026-10-10T20:45:15.438542",
     "Puff Sleeves Tops": "2026-10-11T00:15:32.779445",
@@ -11199,7 +11245,7 @@
     "Fashion Models": "2026-10-18T22:58:47.110263",
     "My Shop #1737732113": "2026-10-19T18:05:45.862605",
     "Shop For Holidays": "2026-10-08T18:20:19.332653",
-    "New": "2026-10-19T21:46:26.951552",
+    "New": "2026-10-20T00:12:33.263729",
     "American Bazi": "2026-10-12T08:56:12.088793",
     "Cool & Casual Styles": "2026-10-09T22:08:35.633664",
     "MeeeShop's Luxe Styles": "2026-10-13T22:07:06.705382",
@@ -11211,7 +11257,7 @@
     "Vamp Romantic Styles": "2026-10-18T23:00:05.912022",
     "BFCM Deals": "2026-10-08T22:27:04.842923",
     "Poetcore Aesthetics": "2026-10-18T19:41:07.771537",
-    "Emory Park Clothing": "2026-10-03T23:40:45.969110",
+    "Emory Park Clothing": "2026-10-20T00:16:27.399121",
     "new products": "2026-10-17T06:52:14.054275",
     "Chic & Effortless Styles": "2026-10-09T01:09:36.405369",
     "Davi & Dani Womens...": "2026-10-04T08:03:03.268363",
@@ -11267,9 +11313,9 @@
     "Umgee USA": "2026-10-10T16:46:42.000590",
     "Edgy Fashion": "2026-10-13T09:13:02.770988"
   },
-  "daily_count": 12,
-  "last_post_time": "2026-10-19T21:48:41.036255",
+  "daily_count": 4,
+  "last_post_time": "2026-10-20T00:16:27.399121",
   "board_rotation_cursor": 0,
   "last_image_style": "collage",
-  "last_template_index": 17
+  "last_template_index": 14
 }
