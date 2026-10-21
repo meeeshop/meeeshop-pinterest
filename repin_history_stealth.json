@@ -6419,11 +6419,51 @@
       "target_board_id": "962222345325599496",
       "live_url": "https://www.pinterest.com/pin/4604086275033025088/",
       "timestamp": "2026-10-20T23:35:28.494758+00:00"
+    },
+    {
+      "pin_id": "4595923506855147584",
+      "product_title": "Downeast Carry on Cardi Top",
+      "category_group": "tops_tanks_blouses",
+      "source_board": "_products",
+      "target_board": "American Bazi",
+      "target_board_id": "962222345325578167",
+      "live_url": "https://www.pinterest.com/pin/4595923506855147584/",
+      "timestamp": "2026-10-21T07:01:27.156168+00:00"
+    },
+    {
+      "pin_id": "4595923512223856704",
+      "product_title": "Camila High Waist Ruffle Hem Maxi Dress for Women \u2014 Striped Bow-Tie Straps, Contrast Trim, Multi",
+      "category_group": "dresses",
+      "source_board": "_products",
+      "target_board": "Davi & Dani Womens Clothing | us.meeeshop.com",
+      "target_board_id": "962222345325171174",
+      "live_url": "https://www.pinterest.com/pin/4595923512223856704/",
+      "timestamp": "2026-10-21T07:01:58.341401+00:00"
+    },
+    {
+      "pin_id": "4607604756234548800",
+      "product_title": "Black Leopard Print Wide-Leg High-Waist Jeans for Women",
+      "category_group": "pants_denim",
+      "source_board": "_products",
+      "target_board": "Pants & Leggings",
+      "target_board_id": "962222345325046951",
+      "live_url": "https://www.pinterest.com/pin/4607604756234548800/",
+      "timestamp": "2026-10-21T07:02:32.214020+00:00"
+    },
+    {
+      "pin_id": "4601904895235951168",
+      "product_title": "Flying Tomato Golden Rose Afterglow Woven Maxi Dress \u2014 Strapless Smocked Back, Floral Print Green",
+      "category_group": "dresses",
+      "source_board": "_products",
+      "target_board": "LE LIS Womens Clothing | us.meeeshop",
+      "target_board_id": "962222345325171074",
+      "live_url": "https://www.pinterest.com/pin/4601904895235951168/",
+      "timestamp": "2026-10-21T07:02:53.899652+00:00"
     }
   ],
   "board_last_used": {
     "Women's Cardigans": "2026-10-14T23:36:08.217018+00:00",
-    "Pants & Leggings": "2026-10-18T06:57:01.813737+00:00",
+    "Pants & Leggings": "2026-10-21T07:02:32.214020+00:00",
     "Skirts": "2026-10-16T16:14:30.313014+00:00",
     "Dresses": "2026-10-17T06:32:04.469299+00:00",
     "Sweaters": "2026-10-05T08:16:26.016701+00:00",
@@ -6450,7 +6490,7 @@
     "Farm clothes": "2026-10-18T22:44:01.036153+00:00",
     "New": "2026-10-20T20:49:03.305675+00:00",
     "Festive Styles": "2026-10-19T21:43:00.826625+00:00",
-    "American Bazi": "2026-10-16T06:43:55.516905+00:00",
+    "American Bazi": "2026-10-21T07:01:27.156168+00:00",
     "Edgy fashion": "2026-10-14T00:03:41.553490+00:00",
     "comfy fall outfits": "2026-10-11T00:02:09.334676+00:00",
     "Thanks giving Outfits": "2026-10-16T20:03:10.033703+00:00",
@@ -6460,10 +6500,10 @@
     "Shop For Holidays": "2026-10-20T20:50:00.436126+00:00",
     "Bags": "2026-10-18T15:31:55.821881+00:00",
     "MeeeShop's Luxe Styles": "2026-10-17T15:08:18.756702+00:00",
-    "Davi & Dani Womens Clothing | us.meeeshop.com": "2026-10-16T06:42:59.191762+00:00",
+    "Davi & Dani Womens Clothing | us.meeeshop.com": "2026-10-21T07:01:58.341401+00:00",
     "Zenana Women's Clothing, Dresses, Tops, Pants": "2026-10-18T22:43:27.655462+00:00",
     "Trendy Backpacks": "2026-10-19T18:28:38.643433+00:00",
-    "LE LIS Womens Clothing | us.meeeshop": "2026-10-16T16:15:00.183619+00:00",
+    "LE LIS Womens Clothing | us.meeeshop": "2026-10-21T07:02:53.899652+00:00",
     "Chic & Effortless Styles": "2026-10-20T20:50:16.879594+00:00",
     "Jeans": "2026-10-19T18:28:15.496668+00:00",
     "Nylon backpack": "2026-10-20T07:07:39.069345+00:00",
@@ -6498,6 +6538,6 @@
     "Simple Outfits": "2026-09-14T07:33:46.407531+00:00",
     "Women's shacket": "2026-10-06T21:52:24.134094+00:00"
   },
-  "daily_count": 18,
-  "last_repin_time": "2026-10-20T23:35:28.494758+00:00"
+  "daily_count": 4,
+  "last_repin_time": "2026-10-21T07:02:53.899652+00:00"
 }
