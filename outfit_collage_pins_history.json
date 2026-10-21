@@ -850,7 +850,44 @@
           "pin_id": null
         }
       ]
+    },
+    {
+      "timestamp": "2026-10-21T01:32:37.664993+00:00",
+      "formula_id": "date_night",
+      "formula_title": "Date Night Outfit Formula",
+      "pin_url": null,
+      "pin_id": null,
+      "board": "Cocktail Dresses",
+      "title": "Date Night Outfit Formula | Chic Midi Dress & Accessories | MeeeShop",
+      "type": "native_collage",
+      "canvas_preview": "/home/runner/work/meeeshop-pinterest/meeeshop-pinterest/scratch/collage_canvas_date_night_1792546337.png",
+      "cutout_items": [
+        {
+          "role": "THE DRESS",
+          "title": "Hyfve Boned Tie-back Dress",
+          "product_id": "8740253597867",
+          "pin_id": null
+        },
+        {
+          "role": "THE BAG",
+          "title": "Maeve Shoulder Bag and Set",
+          "product_id": "9087954419883",
+          "pin_id": null
+        },
+        {
+          "role": "THE SHOES",
+          "title": "Cecilia Slingback Green",
+          "product_id": "9073872011435",
+          "pin_id": null
+        },
+        {
+          "role": "THE LAYER",
+          "title": "Hyfve Rolled Sleeve Button-up Top",
+          "product_id": "8740258611371",
+          "pin_id": null
+        }
+      ]
     }
   ],
-  "last_run": "2026-10-20T21:51:01.004854+00:00"
+  "last_run": "2026-10-21T01:32:37.665404+00:00"
 }
