@@ -11416,11 +11416,57 @@
       "template": 14,
       "pin_url": "https://www.pinterest.com/pin/962222276665195014/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8928275267755,
+      "title": "Lemon Drop Gingham Lounge Slippers - Sweet & Cozy: Fall Cozy Must-Have \u2014 MeeeShop",
+      "board": "Trends",
+      "timestamp": "2026-10-21T16:25:20.924113",
+      "type": "video",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276665205781/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8879307817131,
+      "title": "Cropped Worker's Jacket - Cozy Fall & Halloween Must-Have \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-10-21T16:26:32.875376",
+      "type": "carousel",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276665205814/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8932954603691,
+      "title": "Eden Envelope Card Holder Wallet - Minimalist Fall Must-Have \u2014 MeeeShop",
+      "board": "New Trendy Woman...",
+      "timestamp": "2026-10-21T16:27:52.923701",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276665205835/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": "571168719019",
+      "article_id": "571168719019",
+      "title": "Plastic-Free and Low-Impact Fashion: Choosing Sustainable Boutique Pieces",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-10-21T16:29:28.239168",
+      "type": "blog",
+      "style": "card",
+      "template": 9,
+      "pin_url": "https://www.pinterest.com/pin/962222276665205871/",
+      "blog_url": "https://us.meeeshop.com/blogs/everything-anything-about-vegan/plastic-free-and-low-impact-fashion-choosing-sustainable-boutique-pieces",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-10-12T23:51:27.730749",
-    "Trends": "2026-10-21T07:18:18.101831",
+    "Trends": "2026-10-21T16:25:20.924113",
     "Dresses": "2026-10-09T17:51:49.766064",
     "Feminine & Flowy Fits": "2026-10-19T21:47:32.938103",
     "Short fall dresses": "2026-10-11T08:33:29.765610",
@@ -11465,7 +11511,7 @@
     "Fashion Models": "2026-10-18T22:58:47.110263",
     "My Shop #1737732113": "2026-10-19T18:05:45.862605",
     "Shop For Holidays": "2026-10-20T07:25:10.217091",
-    "New": "2026-10-21T07:19:28.750833",
+    "New": "2026-10-21T16:26:32.875376",
     "American Bazi": "2026-10-12T08:56:12.088793",
     "Cool & Casual Styles": "2026-10-09T22:08:35.633664",
     "MeeeShop's Luxe Styles": "2026-10-13T22:07:06.705382",
@@ -11486,7 +11532,7 @@
     "Best selling products": "2026-10-20T20:55:03.608175",
     "Off-Duty Athlete Looks": "2026-10-11T08:34:44.381400",
     "LE LIS Womens Clothi...": "2026-10-20T20:56:10.887545",
-    "New Trendy Woman...": "2026-10-09T17:50:42.262583",
+    "New Trendy Woman...": "2026-10-21T16:27:52.923701",
     "Outfit Ideas": "2026-10-10T00:53:04.213924",
     "Late Summer to Fall Teacher Style": "2026-10-15T23:41:33.878739",
     "Ootd #ootd": "2026-10-10T20:44:07.206557",
@@ -11533,9 +11579,9 @@
     "Umgee USA": "2026-10-10T16:46:42.000590",
     "Edgy Fashion": "2026-10-13T09:13:02.770988"
   },
-  "daily_count": 4,
-  "last_post_time": "2026-10-21T07:21:49.368630",
+  "daily_count": 8,
+  "last_post_time": "2026-10-21T16:29:28.239168",
   "board_rotation_cursor": 0,
-  "last_image_style": "collage",
-  "last_template_index": 14
+  "last_image_style": "card",
+  "last_template_index": 9
 }
