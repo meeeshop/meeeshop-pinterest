@@ -1039,7 +1039,47 @@
           "role": "THE FOOTWEAR"
         }
       ]
+    },
+    {
+      "timestamp": "2026-10-21T06:51:25.719473+00:00",
+      "formula_id": "everyday_chic",
+      "formula_title": "Everyday Chic Outfit Formula",
+      "pin_url": "https://www.pinterest.com/pin/962222276665194656/",
+      "pin_id": "962222276665194656",
+      "board": "Style Ideas",
+      "title": "Everyday Chic Outfit Formula - Easy Everyday Styling Formula | MeeeShop",
+      "tagged_products_count": 4,
+      "outfit_items": [
+        {
+          "id": "8740258611371",
+          "variant_id": "46478481719467",
+          "title": "Hyfve Rolled Sleeve Button-up Top",
+          "price": "79.99",
+          "role": "THE TOP"
+        },
+        {
+          "id": "9087952945323",
+          "variant_id": "48172189548715",
+          "title": "Kenna Tote Handbag",
+          "price": "104.99",
+          "role": "THE BAG"
+        },
+        {
+          "id": "8740253761707",
+          "variant_id": "46478458355883",
+          "title": "Hyfve Acid Wash French Terry Wide-leg Pants",
+          "price": "104.99",
+          "role": "THE BOTTOM"
+        },
+        {
+          "id": "9073872011435",
+          "variant_id": "48110997012651",
+          "title": "Cecilia Slingback Green",
+          "price": "159.99",
+          "role": "THE SHOES"
+        }
+      ]
     }
   ],
-  "last_run": "2026-10-21T01:29:59.905951+00:00"
+  "last_run": "2026-10-21T06:51:25.719492+00:00"
 }
