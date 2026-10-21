@@ -1079,7 +1079,47 @@
           "role": "THE SHOES"
         }
       ]
+    },
+    {
+      "timestamp": "2026-10-21T18:33:55.474702+00:00",
+      "formula_id": "cozy_sweater_weather",
+      "formula_title": "Cozy Fall Layers Outfit Formula",
+      "pin_url": "https://www.pinterest.com/pin/962222276665209653/",
+      "pin_id": "962222276665209653",
+      "board": "Sweaters",
+      "title": "Cozy Fall Layers Outfit Formula - Easy Everyday Styling Formula | MeeeShop",
+      "tagged_products_count": 4,
+      "outfit_items": [
+        {
+          "id": "8744046985387",
+          "variant_id": "46492118089899",
+          "title": "Btr Active Seamless Baselayer Top",
+          "price": "109.99",
+          "role": "THE KNIT"
+        },
+        {
+          "id": "9087954419883",
+          "variant_id": "48172200689835",
+          "title": "Maeve Shoulder Bag and Set",
+          "price": "109.99",
+          "role": "THE TOTE"
+        },
+        {
+          "id": "9034571088043",
+          "variant_id": "47945095774379",
+          "title": "Hybrid Ultra High Rise Relaxed Flare Jeans",
+          "price": "114.99",
+          "role": "THE DENIM"
+        },
+        {
+          "id": "9073872175275",
+          "variant_id": "48110997995691",
+          "title": "Alma Booties Brown",
+          "price": "169.99",
+          "role": "THE BOOTS"
+        }
+      ]
     }
   ],
-  "last_run": "2026-10-21T06:51:25.719492+00:00"
+  "last_run": "2026-10-21T18:33:55.474722+00:00"
 }
