@@ -11607,11 +11607,33 @@
       "template": 15,
       "pin_url": "https://www.pinterest.com/pin/962222276665238443/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8897137475755,
+      "title": "Ymi Women's Billie Baggy Wide Leg Jeans: Cozy Fall Must-Have \u2014 MeeeShop",
+      "board": "Trends",
+      "timestamp": "2026-10-22T20:46:28.124291",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276665245844/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8988049801387,
+      "title": "Scottie Floral Print Pleated High Waist Wide Leg Denim Jumpsuit | MeeeShop US Boutique",
+      "board": "New",
+      "timestamp": "2026-10-22T20:47:36.287204",
+      "type": "carousel",
+      "style": "collage",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276665245876/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-10-12T23:51:27.730749",
-    "Trends": "2026-10-22T16:40:11.824265",
+    "Trends": "2026-10-22T20:46:28.124291",
     "Dresses": "2026-10-09T17:51:49.766064",
     "Feminine & Flowy Fits": "2026-10-19T21:47:32.938103",
     "Short fall dresses": "2026-10-11T08:33:29.765610",
@@ -11656,7 +11678,7 @@
     "Fashion Models": "2026-10-18T22:58:47.110263",
     "My Shop #1737732113": "2026-10-19T18:05:45.862605",
     "Shop For Holidays": "2026-10-20T07:25:10.217091",
-    "New": "2026-10-22T07:22:47.639519",
+    "New": "2026-10-22T20:47:36.287204",
     "American Bazi": "2026-10-12T08:56:12.088793",
     "Cool & Casual Styles": "2026-10-09T22:08:35.633664",
     "MeeeShop's Luxe Styles": "2026-10-13T22:07:06.705382",
@@ -11724,8 +11746,8 @@
     "Umgee USA": "2026-10-10T16:46:42.000590",
     "Edgy Fashion": "2026-10-13T09:13:02.770988"
   },
-  "daily_count": 21,
-  "last_post_time": "2026-10-22T16:40:11.824265",
+  "daily_count": 23,
+  "last_post_time": "2026-10-22T20:47:36.287204",
   "board_rotation_cursor": 0,
   "last_image_style": "collage",
   "last_template_index": 15
