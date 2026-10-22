@@ -1239,7 +1239,47 @@
           "role": "THE LAYER"
         }
       ]
+    },
+    {
+      "timestamp": "2026-10-22T18:29:13.836066+00:00",
+      "formula_id": "how_to_style_flare_jeans",
+      "formula_title": "How to Style Flare Jeans: Outfit Formula",
+      "pin_url": "https://www.pinterest.com/pin/962222276665241614/",
+      "pin_id": "962222276665241614",
+      "board": "Kancan USA Jeans",
+      "title": "How to Style Flare Jeans: Outfit Formula | How to Style Flare Jeans & Sweater | MeeeShop",
+      "tagged_products_count": 4,
+      "outfit_items": [
+        {
+          "id": "8782620459179",
+          "variant_id": "47103335235755",
+          "title": "Retrolicious Leaves Bow Top",
+          "price": "69.99",
+          "role": "THE TOP"
+        },
+        {
+          "id": "9087954354347",
+          "variant_id": "48172200329387",
+          "title": "Danielle Tote Bag and Set",
+          "price": "109.99",
+          "role": "THE BAG"
+        },
+        {
+          "id": "8811044044971",
+          "variant_id": "47176712716459",
+          "title": "Anastasia Tummy Control High Rise Wide Flare Jeans",
+          "price": "129.99",
+          "role": "THE FLARE DENIM"
+        },
+        {
+          "id": "9073872044203",
+          "variant_id": "48110997209259",
+          "title": "Alice Boots Brown",
+          "price": "194.99",
+          "role": "THE FOOTWEAR"
+        }
+      ]
     }
   ],
-  "last_run": "2026-10-22T06:53:22.831585+00:00"
+  "last_run": "2026-10-22T18:29:13.836085+00:00"
 }
