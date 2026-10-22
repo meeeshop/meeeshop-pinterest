@@ -6549,13 +6549,43 @@
       "target_board_id": "962222345325578179",
       "live_url": "https://www.pinterest.com/pin/4597190171834033216/",
       "timestamp": "2026-10-21T23:51:16.480112+00:00"
+    },
+    {
+      "pin_id": "4608097324658161216",
+      "product_title": "Ivy Tote Bag and Set",
+      "category_group": "bags_accessories",
+      "source_board": "_products",
+      "target_board": "Bags",
+      "target_board_id": "962222345325683645",
+      "live_url": "https://www.pinterest.com/pin/4608097324658161216/",
+      "timestamp": "2026-10-22T07:03:22.921593+00:00"
+    },
+    {
+      "pin_id": "4600427116087552576",
+      "product_title": "Emory Park Arlet Maxi Dress",
+      "category_group": "dresses",
+      "source_board": "_products",
+      "target_board": "Dresses",
+      "target_board_id": "962222345325006107",
+      "live_url": "https://www.pinterest.com/pin/4600427116087552576/",
+      "timestamp": "2026-10-22T07:03:58.316847+00:00"
+    },
+    {
+      "pin_id": "4608097349622658624",
+      "product_title": "Lucille Women's 2-Piece Shoulder Handbag & Wallet \u2013 Vegan Leather Taupe",
+      "category_group": "bags_accessories",
+      "source_board": "_products",
+      "target_board": "Outfit Ideas",
+      "target_board_id": "962222345325672760",
+      "live_url": "https://www.pinterest.com/pin/4608097349622658624/",
+      "timestamp": "2026-10-22T07:04:15.273986+00:00"
     }
   ],
   "board_last_used": {
     "Women's Cardigans": "2026-10-14T23:36:08.217018+00:00",
     "Pants & Leggings": "2026-10-21T07:02:32.214020+00:00",
     "Skirts": "2026-10-16T16:14:30.313014+00:00",
-    "Dresses": "2026-10-17T06:32:04.469299+00:00",
+    "Dresses": "2026-10-22T07:03:58.316847+00:00",
     "Sweaters": "2026-10-21T20:52:02.588599+00:00",
     "Dressy Outfits": "2026-10-21T16:47:38.363487+00:00",
     "Dress": "2026-10-17T22:48:30.599966+00:00",
@@ -6588,7 +6618,7 @@
     "Wardrobe Goals": "2026-10-20T20:49:26.543233+00:00",
     "Emory Park Clothing": "2026-10-17T15:07:53.497025+00:00",
     "Shop For Holidays": "2026-10-20T20:50:00.436126+00:00",
-    "Bags": "2026-10-18T15:31:55.821881+00:00",
+    "Bags": "2026-10-22T07:03:22.921593+00:00",
     "MeeeShop's Luxe Styles": "2026-10-21T16:46:27.169329+00:00",
     "Davi & Dani Womens Clothing | us.meeeshop.com": "2026-10-21T07:01:58.341401+00:00",
     "Zenana Women's Clothing, Dresses, Tops, Pants": "2026-10-18T22:43:27.655462+00:00",
@@ -6606,7 +6636,7 @@
     "new products": "2026-10-21T16:47:20.187851+00:00",
     "Fall outfits": "2026-10-11T08:16:30.316092+00:00",
     "Puff Sleeve Tops": "2026-10-18T22:42:26.828965+00:00",
-    "Outfit Ideas": "2026-10-18T15:32:16.999863+00:00",
+    "Outfit Ideas": "2026-10-22T07:04:15.273986+00:00",
     "Flares Jeans": "2026-10-19T21:43:34.919862+00:00",
     "Style Ideas": "2026-10-18T19:34:57.707251+00:00",
     "Winter Outfits": "2026-10-14T07:06:16.533872+00:00",
@@ -6628,6 +6658,6 @@
     "Simple Outfits": "2026-09-14T07:33:46.407531+00:00",
     "Women's shacket": "2026-10-06T21:52:24.134094+00:00"
   },
-  "daily_count": 13,
-  "last_repin_time": "2026-10-21T23:51:16.480112+00:00"
+  "daily_count": 3,
+  "last_repin_time": "2026-10-22T07:04:15.273986+00:00"
 }
