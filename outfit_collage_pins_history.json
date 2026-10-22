@@ -998,7 +998,44 @@
           "pin_id": null
         }
       ]
+    },
+    {
+      "timestamp": "2026-10-22T01:31:17.164683+00:00",
+      "formula_id": "everyday_chic",
+      "formula_title": "Everyday Chic Outfit Formula",
+      "pin_url": null,
+      "pin_id": null,
+      "board": "Style Ideas",
+      "title": "Everyday Chic Outfit Formula - Easy Everyday Styling Formula | MeeeShop",
+      "type": "native_collage",
+      "canvas_preview": "/home/runner/work/meeeshop-pinterest/meeeshop-pinterest/scratch/collage_canvas_everyday_chic_1792632657.png",
+      "cutout_items": [
+        {
+          "role": "THE TOP",
+          "title": "Retrolicious Anchor Bow Top",
+          "product_id": "8782620393643",
+          "pin_id": null
+        },
+        {
+          "role": "THE BAG",
+          "title": "Danielle Tote Bag and Set",
+          "product_id": "9087954354347",
+          "pin_id": null
+        },
+        {
+          "role": "THE BOTTOM",
+          "title": "Hyfve Mineral Wash Wide Leg Cargo Pants",
+          "product_id": "8740255531179",
+          "pin_id": null
+        },
+        {
+          "role": "THE SHOES",
+          "title": "Evie Slingback Cream",
+          "product_id": "9073872109739",
+          "pin_id": null
+        }
+      ]
     }
   ],
-  "last_run": "2026-10-21T21:56:55.803960+00:00"
+  "last_run": "2026-10-22T01:31:17.165088+00:00"
 }

@@ -1159,7 +1159,47 @@
           "role": "THE LAYER"
         }
       ]
+    },
+    {
+      "timestamp": "2026-10-22T01:28:36.337149+00:00",
+      "formula_id": "casual_fall",
+      "formula_title": "Casual Fall Weekend Outfit Inspo",
+      "pin_url": "https://www.pinterest.com/pin/841962092891620775/",
+      "pin_id": "841962092891620775",
+      "board": "Casual Outfits",
+      "title": "Casual Fall Weekend Outfit Inspo - Easy Everyday Styling Formula | MeeeShop",
+      "tagged_products_count": 4,
+      "outfit_items": [
+        {
+          "id": "8744047116459",
+          "variant_id": "47862731833515",
+          "title": "Diamond Tech Tank",
+          "price": "68.00",
+          "role": "THE TOP"
+        },
+        {
+          "id": "9087954288811",
+          "variant_id": "48172199608491",
+          "title": "Isa Crossbody Bag",
+          "price": "104.99",
+          "role": "THE BAG"
+        },
+        {
+          "id": "8744042725547",
+          "variant_id": "46492100067499",
+          "title": "Risen Full Size High Rise Wide Leg Patch Detailed Jeans plus Size",
+          "price": "124.99",
+          "role": "THE DENIM"
+        },
+        {
+          "id": "9073872175275",
+          "variant_id": "48110997995691",
+          "title": "Alma Booties Brown",
+          "price": "169.99",
+          "role": "THE SHOES"
+        }
+      ]
     }
   ],
-  "last_run": "2026-10-21T21:54:40.385718+00:00"
+  "last_run": "2026-10-22T01:28:36.337170+00:00"
 }
