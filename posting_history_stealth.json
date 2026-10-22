@@ -11506,11 +11506,57 @@
       "template": 14,
       "pin_url": "https://www.pinterest.com/pin/962222276665213921/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8988050489515,
+      "title": "Billie Mineral Wash Drawstring High Waist Wide Leg Pants | MeeeShop US Boutique",
+      "board": "Trends",
+      "timestamp": "2026-10-21T23:58:22.432784",
+      "type": "carousel",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276665217944/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8825419104427,
+      "title": "Flying Tomato as Time Goes by Woven Maxi Dress | MeeeShop US Boutique",
+      "board": "New",
+      "timestamp": "2026-10-21T23:59:35.904167",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276665217959/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8970887233707,
+      "title": "Emory Park Ellie Cardigan Top - Cozy Fall Must-Have \u2014 MeeeShop",
+      "board": "Women's Cardigans",
+      "timestamp": "2026-10-22T00:02:33.389000",
+      "type": "video",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276665217993/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": "571190542507",
+      "article_id": "571190542507",
+      "title": "Finding Trousers That Don't Gap at the Waist: Rise and Fabric Tips",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-10-22T00:04:11.140702",
+      "type": "blog",
+      "style": "card",
+      "template": 9,
+      "pin_url": "https://www.pinterest.com/pin/962222276665218022/",
+      "blog_url": "https://us.meeeshop.com/blogs/womens-pants-style-guide/finding-trousers-that-dont-gap-at-the-waist-rise-and-fabric-tips",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-10-12T23:51:27.730749",
-    "Trends": "2026-10-21T20:52:27.743003",
+    "Trends": "2026-10-21T23:58:22.432784",
     "Dresses": "2026-10-09T17:51:49.766064",
     "Feminine & Flowy Fits": "2026-10-19T21:47:32.938103",
     "Short fall dresses": "2026-10-11T08:33:29.765610",
@@ -11555,7 +11601,7 @@
     "Fashion Models": "2026-10-18T22:58:47.110263",
     "My Shop #1737732113": "2026-10-19T18:05:45.862605",
     "Shop For Holidays": "2026-10-20T07:25:10.217091",
-    "New": "2026-10-21T20:54:03.298264",
+    "New": "2026-10-21T23:59:35.904167",
     "American Bazi": "2026-10-12T08:56:12.088793",
     "Cool & Casual Styles": "2026-10-09T22:08:35.633664",
     "MeeeShop's Luxe Styles": "2026-10-13T22:07:06.705382",
@@ -11593,7 +11639,7 @@
     "Blogs": "2026-10-14T00:19:26.816164",
     "All Pins": "2026-10-14T16:20:36.169492",
     "Outer wear": "2026-10-14T16:19:19.139823",
-    "Women's Cardigans": "2026-09-30T21:40:21.762619",
+    "Women's Cardigans": "2026-10-22T00:02:33.389000",
     "Loungewear": "2026-10-03T07:54:06.931497",
     "Bow heels": "2026-09-24T07:28:41.663446",
     "Sweaters": "2026-10-04T20:28:39.858979",
@@ -11623,9 +11669,9 @@
     "Umgee USA": "2026-10-10T16:46:42.000590",
     "Edgy Fashion": "2026-10-13T09:13:02.770988"
   },
-  "daily_count": 12,
-  "last_post_time": "2026-10-21T20:56:37.282449",
+  "daily_count": 16,
+  "last_post_time": "2026-10-22T00:04:11.140702",
   "board_rotation_cursor": 0,
-  "last_image_style": "carousel",
-  "last_template_index": 14
+  "last_image_style": "card",
+  "last_template_index": 9
 }
