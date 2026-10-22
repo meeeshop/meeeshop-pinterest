@@ -11552,11 +11552,55 @@
       "pin_url": "https://www.pinterest.com/pin/962222276665218022/",
       "blog_url": "https://us.meeeshop.com/blogs/womens-pants-style-guide/finding-trousers-that-dont-gap-at-the-waist-rise-and-fabric-tips",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8825883787435,
+      "title": "Mkf Collection by Mia K. - Jordina 2 Pcs Shoulder Bag with Matching Wallet Fall",
+      "board": "Trends",
+      "timestamp": "2026-10-22T07:20:41.585479",
+      "type": "video",
+      "style": "collage",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276665226537/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8879311945899,
+      "title": "Easy Tee: Cozy Fall Must-Have for Halloween & Autumn Style \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-10-22T07:22:47.639519",
+      "type": "video",
+      "style": "carousel",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276665226561/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 9098373136555,
+      "title": "The Black Solitaire Handbag: Chic, Cozy Fall Must-Have \u2014 MeeeShop",
+      "board": "Handbag #handsips",
+      "timestamp": "2026-10-22T07:24:10.788626",
+      "type": "carousel",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276665226571/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8984999428267,
+      "title": "Bonnie Croc-embossed Handbag and Set - Cozy Fall Tote for Halloween \u2014 MeeeShop",
+      "board": "Outfit Ideas",
+      "timestamp": "2026-10-22T07:27:47.956283",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276665226627/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-10-12T23:51:27.730749",
-    "Trends": "2026-10-21T23:58:22.432784",
+    "Trends": "2026-10-22T07:20:41.585479",
     "Dresses": "2026-10-09T17:51:49.766064",
     "Feminine & Flowy Fits": "2026-10-19T21:47:32.938103",
     "Short fall dresses": "2026-10-11T08:33:29.765610",
@@ -11575,7 +11619,7 @@
     "Shirts & Tops": "2026-10-16T23:24:50.313004",
     "Blouses": "2026-10-18T15:14:33.386346",
     "Rompers_Jumpsuits &...": "2026-10-16T20:10:03.538169",
-    "Handbag #handsips": "2026-10-09T22:10:15.321346",
+    "Handbag #handsips": "2026-10-22T07:24:10.788626",
     "Trendy & Timeless...": "2026-10-15T20:37:39.179845",
     "Our Recommended...": "2026-10-15T23:42:42.667698",
     "Blouse": "2026-10-21T07:20:32.412247",
@@ -11601,7 +11645,7 @@
     "Fashion Models": "2026-10-18T22:58:47.110263",
     "My Shop #1737732113": "2026-10-19T18:05:45.862605",
     "Shop For Holidays": "2026-10-20T07:25:10.217091",
-    "New": "2026-10-21T23:59:35.904167",
+    "New": "2026-10-22T07:22:47.639519",
     "American Bazi": "2026-10-12T08:56:12.088793",
     "Cool & Casual Styles": "2026-10-09T22:08:35.633664",
     "MeeeShop's Luxe Styles": "2026-10-13T22:07:06.705382",
@@ -11623,7 +11667,7 @@
     "Off-Duty Athlete Looks": "2026-10-11T08:34:44.381400",
     "LE LIS Womens Clothi...": "2026-10-20T20:56:10.887545",
     "New Trendy Woman...": "2026-10-21T16:27:52.923701",
-    "Outfit Ideas": "2026-10-10T00:53:04.213924",
+    "Outfit Ideas": "2026-10-22T07:27:47.956283",
     "Late Summer to Fall Teacher Style": "2026-10-15T23:41:33.878739",
     "Ootd #ootd": "2026-10-10T20:44:07.206557",
     "Style Ideas": "2026-10-11T21:08:59.423394",
@@ -11669,9 +11713,9 @@
     "Umgee USA": "2026-10-10T16:46:42.000590",
     "Edgy Fashion": "2026-10-13T09:13:02.770988"
   },
-  "daily_count": 16,
-  "last_post_time": "2026-10-22T00:04:11.140702",
+  "daily_count": 20,
+  "last_post_time": "2026-10-22T07:27:47.956283",
   "board_rotation_cursor": 0,
-  "last_image_style": "card",
-  "last_template_index": 9
+  "last_image_style": "carousel",
+  "last_template_index": 17
 }
