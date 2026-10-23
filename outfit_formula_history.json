@@ -1319,7 +1319,47 @@
           "role": "THE SHOES"
         }
       ]
+    },
+    {
+      "timestamp": "2026-10-23T06:49:05.273982+00:00",
+      "formula_id": "cozy_sweater_weather",
+      "formula_title": "Cozy Fall Layers Outfit Formula",
+      "pin_url": "https://www.pinterest.com/pin/962222276665258190/",
+      "pin_id": "962222276665258190",
+      "board": "Sweaters",
+      "title": "Cozy Fall Layers Outfit Formula - Easy Everyday Styling Formula | MeeeShop",
+      "tagged_products_count": 4,
+      "outfit_items": [
+        {
+          "id": "8782620754091",
+          "variant_id": "47103336644779",
+          "title": "Retrolicious Pretty in Pink Bow Top",
+          "price": "69.99",
+          "role": "THE KNIT"
+        },
+        {
+          "id": "9087954387115",
+          "variant_id": "48172200165547",
+          "title": "Tatum Backpack Handbag",
+          "price": "104.99",
+          "role": "THE TOTE"
+        },
+        {
+          "id": "8897141964971",
+          "variant_id": "47512666407083",
+          "title": "Ymi Women's plus High Rise Wide Leg Skater Cargo Jeans",
+          "price": "69.99",
+          "role": "THE DENIM"
+        },
+        {
+          "id": "9073872175275",
+          "variant_id": "48110997995691",
+          "title": "Alma Booties Brown",
+          "price": "169.99",
+          "role": "THE BOOTS"
+        }
+      ]
     }
   ],
-  "last_run": "2026-10-22T21:49:54.757887+00:00"
+  "last_run": "2026-10-23T06:49:05.274002+00:00"
 }
