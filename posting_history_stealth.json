@@ -11686,12 +11686,56 @@
       "template": 14,
       "pin_url": "https://www.pinterest.com/pin/962222276665258502/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8970890215595,
+      "title": "Emory Park Allie Top | MeeeShop US Boutique",
+      "board": "Trends",
+      "timestamp": "2026-10-23T20:39:41.594543",
+      "type": "product",
+      "style": "collage",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276665278249/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8933199708331,
+      "title": "Women's Cotton Gauze Rosemary Top - Cozy Fall Shirt for Halloween \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-10-23T20:40:52.855200",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276665278289/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8883466371243,
+      "title": "Summer Solid Yellow Long Sleeve Chiffon Dress - Cozy Fall & Halloween Ready \u2014 MeeeShop",
+      "board": "Dresses",
+      "timestamp": "2026-10-23T20:41:56.204070",
+      "type": "carousel",
+      "style": "collage",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276665278314/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8931946889387,
+      "title": "Daybreak Lightweight Long Sleeve Workout Shirt - Thumbhole Sleeves & Split Hem",
+      "board": "Style Ideas",
+      "timestamp": "2026-10-23T20:43:03.584741",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276665278344/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-10-12T23:51:27.730749",
-    "Trends": "2026-10-23T07:12:34.359559",
-    "Dresses": "2026-10-09T17:51:49.766064",
+    "Trends": "2026-10-23T20:39:41.594543",
+    "Dresses": "2026-10-23T20:41:56.204070",
     "Feminine & Flowy Fits": "2026-10-19T21:47:32.938103",
     "Short fall dresses": "2026-10-11T08:33:29.765610",
     "Must-Have Fashion Picks": "2026-08-13T05:20:05.419233",
@@ -11735,7 +11779,7 @@
     "Fashion Models": "2026-10-18T22:58:47.110263",
     "My Shop #1737732113": "2026-10-19T18:05:45.862605",
     "Shop For Holidays": "2026-10-20T07:25:10.217091",
-    "New": "2026-10-22T20:47:36.287204",
+    "New": "2026-10-23T20:40:52.855200",
     "American Bazi": "2026-10-12T08:56:12.088793",
     "Cool & Casual Styles": "2026-10-23T07:15:18.663260",
     "MeeeShop's Luxe Styles": "2026-10-13T22:07:06.705382",
@@ -11760,7 +11804,7 @@
     "Outfit Ideas": "2026-10-22T07:27:47.956283",
     "Late Summer to Fall Teacher Style": "2026-10-15T23:41:33.878739",
     "Ootd #ootd": "2026-10-23T07:17:22.313935",
-    "Style Ideas": "2026-10-11T21:08:59.423394",
+    "Style Ideas": "2026-10-23T20:43:03.584741",
     "Mustard Seed Clothing": "2026-10-21T07:21:49.368630",
     "Woman Fashion!": "2026-10-12T09:00:46.773048",
     "Stylish Finds": "2026-10-12T23:50:18.655377",
@@ -11803,9 +11847,9 @@
     "Umgee USA": "2026-10-10T16:46:42.000590",
     "Edgy Fashion": "2026-10-13T09:13:02.770988"
   },
-  "daily_count": 4,
-  "last_post_time": "2026-10-23T07:17:22.313935",
+  "daily_count": 8,
+  "last_post_time": "2026-10-23T20:43:03.584741",
   "board_rotation_cursor": 0,
   "last_image_style": "carousel",
-  "last_template_index": 14
+  "last_template_index": 17
 }
