@@ -11640,11 +11640,57 @@
       "template": 11,
       "pin_url": "https://www.pinterest.com/pin/962222276665250316/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8932954800299,
+      "title": "Jolie Puffer Bum Bag - New Color! Cozy Fall Must-Have for Halloween \u2014 MeeeShop",
+      "board": "Trends",
+      "timestamp": "2026-10-23T07:12:34.359559",
+      "type": "carousel",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276665258446/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": "571216724139",
+      "article_id": "571216724139",
+      "title": "Plant-Based Wardrobe Essentials for Mindful, Sustainable Everyday Dressing",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-10-23T07:14:08.568133",
+      "type": "blog",
+      "style": "card",
+      "template": 9,
+      "pin_url": "https://www.pinterest.com/pin/962222276665258465/",
+      "blog_url": "https://us.meeeshop.com/blogs/everything-anything-about-vegan/plant-based-wardrobe-essentials-for-mindful-sustainable-everyday-dressing",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 9042738905259,
+      "title": "Emory Park Asteria Pants: Cozy Camo & Corduroy Fall Style \u2014 MeeeShop",
+      "board": "Cool & Casual Styles",
+      "timestamp": "2026-10-23T07:15:18.663260",
+      "type": "carousel",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276665258470/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8789755363499,
+      "title": "High Rise Embroidered Modern Bootcut Jeans - Halloween Cozy Fall Must-Have \u2014 MeeeShop",
+      "board": "Ootd #ootd",
+      "timestamp": "2026-10-23T07:17:22.313935",
+      "type": "video",
+      "style": "carousel",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276665258502/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-10-12T23:51:27.730749",
-    "Trends": "2026-10-22T23:57:27.223488",
+    "Trends": "2026-10-23T07:12:34.359559",
     "Dresses": "2026-10-09T17:51:49.766064",
     "Feminine & Flowy Fits": "2026-10-19T21:47:32.938103",
     "Short fall dresses": "2026-10-11T08:33:29.765610",
@@ -11691,7 +11737,7 @@
     "Shop For Holidays": "2026-10-20T07:25:10.217091",
     "New": "2026-10-22T20:47:36.287204",
     "American Bazi": "2026-10-12T08:56:12.088793",
-    "Cool & Casual Styles": "2026-10-09T22:08:35.633664",
+    "Cool & Casual Styles": "2026-10-23T07:15:18.663260",
     "MeeeShop's Luxe Styles": "2026-10-13T22:07:06.705382",
     "Outerwear": "2026-10-11T21:10:16.114391",
     "Zenana Women's...": "2026-10-14T00:18:06.826258",
@@ -11713,7 +11759,7 @@
     "New Trendy Woman...": "2026-10-21T16:27:52.923701",
     "Outfit Ideas": "2026-10-22T07:27:47.956283",
     "Late Summer to Fall Teacher Style": "2026-10-15T23:41:33.878739",
-    "Ootd #ootd": "2026-10-10T20:44:07.206557",
+    "Ootd #ootd": "2026-10-23T07:17:22.313935",
     "Style Ideas": "2026-10-11T21:08:59.423394",
     "Mustard Seed Clothing": "2026-10-21T07:21:49.368630",
     "Woman Fashion!": "2026-10-12T09:00:46.773048",
@@ -11757,9 +11803,9 @@
     "Umgee USA": "2026-10-10T16:46:42.000590",
     "Edgy Fashion": "2026-10-13T09:13:02.770988"
   },
-  "daily_count": 24,
-  "last_post_time": "2026-10-22T23:57:27.223488",
+  "daily_count": 4,
+  "last_post_time": "2026-10-23T07:17:22.313935",
   "board_rotation_cursor": 0,
   "last_image_style": "carousel",
-  "last_template_index": 11
+  "last_template_index": 14
 }
