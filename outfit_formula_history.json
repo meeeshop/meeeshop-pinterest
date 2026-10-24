@@ -1519,7 +1519,47 @@
           "role": "THE SHOES"
         }
       ]
+    },
+    {
+      "timestamp": "2026-10-24T17:20:28.967152+00:00",
+      "formula_id": "date_night",
+      "formula_title": "Date Night Outfit Formula",
+      "pin_url": "https://www.pinterest.com/pin/962222276665305920/",
+      "pin_id": "962222276665305920",
+      "board": "Cocktail Dresses",
+      "title": "Date Night Outfit Formula | Chic Midi Dress & Accessories | MeeeShop",
+      "tagged_products_count": 4,
+      "outfit_items": [
+        {
+          "id": "8745254322347",
+          "variant_id": "46506740187307",
+          "title": "Flying Tomato Mono Form Sweater Knit Midi Dress",
+          "price": "109.99",
+          "role": "THE DRESS"
+        },
+        {
+          "id": "9087953830059",
+          "variant_id": "48172194431147",
+          "title": "Collins Signature Shoulder Bag",
+          "price": "109.99",
+          "role": "THE BAG"
+        },
+        {
+          "id": "9073872175275",
+          "variant_id": "48110997995691",
+          "title": "Alma Booties Brown",
+          "price": "169.99",
+          "role": "THE SHOES"
+        },
+        {
+          "id": "8782621900971",
+          "variant_id": "47103344902315",
+          "title": "Retrolicious Retro Boat Neck Top in Red",
+          "price": "54.99",
+          "role": "THE LAYER"
+        }
+      ]
     }
   ],
-  "last_run": "2026-10-24T06:44:24.384625+00:00"
+  "last_run": "2026-10-24T17:20:28.967172+00:00"
 }
