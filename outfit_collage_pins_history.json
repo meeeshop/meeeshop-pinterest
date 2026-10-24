@@ -1257,7 +1257,44 @@
           "pin_id": null
         }
       ]
+    },
+    {
+      "timestamp": "2026-10-24T01:43:23.272423+00:00",
+      "formula_id": "everyday_chic",
+      "formula_title": "Everyday Chic Outfit Formula",
+      "pin_url": null,
+      "pin_id": null,
+      "board": "Style Ideas",
+      "title": "Everyday Chic Outfit Formula - Easy Everyday Styling Formula | MeeeShop",
+      "type": "native_collage",
+      "canvas_preview": "/home/runner/work/meeeshop-pinterest/meeeshop-pinterest/scratch/collage_canvas_everyday_chic_1792806183.png",
+      "cutout_items": [
+        {
+          "role": "THE TOP",
+          "title": "Retrolicious Isabel Top in Plum",
+          "product_id": "8782621868203",
+          "pin_id": null
+        },
+        {
+          "role": "THE BAG",
+          "title": "Hazel Signature Tote Bag",
+          "product_id": "9087953993899",
+          "pin_id": null
+        },
+        {
+          "role": "THE BOTTOM",
+          "title": "Hyfve Wrap Front Elastic Waist Skort",
+          "product_id": "8740256678059",
+          "pin_id": null
+        },
+        {
+          "role": "THE SHOES",
+          "title": "Cecilia Slingback Black",
+          "product_id": "9073872208043",
+          "pin_id": null
+        }
+      ]
     }
   ],
-  "last_run": "2026-10-23T21:39:19.702469+00:00"
+  "last_run": "2026-10-24T01:43:23.272777+00:00"
 }

@@ -1439,7 +1439,47 @@
           "role": "THE SHOES"
         }
       ]
+    },
+    {
+      "timestamp": "2026-10-24T01:40:50.437825+00:00",
+      "formula_id": "date_night",
+      "formula_title": "Date Night Outfit Formula",
+      "pin_url": "https://www.pinterest.com/pin/962222276665284303/",
+      "pin_id": "962222276665284303",
+      "board": "Cocktail Dresses",
+      "title": "Date Night Outfit Formula | Chic Midi Dress & Accessories | MeeeShop",
+      "tagged_products_count": 4,
+      "outfit_items": [
+        {
+          "id": "8745254289579",
+          "variant_id": "46506740089003",
+          "title": "Flying Tomato Refreshing Vibe Woven Maxi Dress",
+          "price": "109.99",
+          "role": "THE DRESS"
+        },
+        {
+          "id": "9087953862827",
+          "variant_id": "48172194693291",
+          "title": "Nola Crossbody Bag",
+          "price": "94.99",
+          "role": "THE BAG"
+        },
+        {
+          "id": "8928207700139",
+          "variant_id": "47605557756075",
+          "title": "Sovella Active Recovery Sandals Women's Pf Slide Black/leopard",
+          "price": "99.99",
+          "role": "THE SHOES"
+        },
+        {
+          "id": "8782621802667",
+          "variant_id": "47103344017579",
+          "title": "Retrolicious Retro Boat Neck Top in Mustard",
+          "price": "54.99",
+          "role": "THE LAYER"
+        }
+      ]
     }
   ],
-  "last_run": "2026-10-23T21:36:15.084444+00:00"
+  "last_run": "2026-10-24T01:40:50.437843+00:00"
 }
