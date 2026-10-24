@@ -6929,6 +6929,16 @@
       "target_board_id": "962222345325704400",
       "live_url": "https://www.pinterest.com/pin/4610489852370300480/",
       "timestamp": "2026-10-24T19:44:43.800590+00:00"
+    },
+    {
+      "pin_id": "4601482640503233088",
+      "product_title": "Lennox Classic Midi Dress",
+      "category_group": "dresses",
+      "source_board": "_products",
+      "target_board": "Rompers, Jumpsuits & Outfit Sets",
+      "target_board_id": "962222345325668668",
+      "live_url": "https://www.pinterest.com/pin/4601482640503233088/",
+      "timestamp": "2026-10-24T22:49:26.439670+00:00"
     }
   ],
   "board_last_used": {
@@ -6952,7 +6962,7 @@
     "Camis & Tanks": "2026-10-23T06:56:22.304999+00:00",
     "Trendy & Timeless Fashion": "2026-10-24T06:52:34.990517+00:00",
     "Our Recommended Feminine Styles": "2026-10-24T06:53:06.132795+00:00",
-    "Rompers, Jumpsuits & Outfit Sets": "2026-10-19T18:27:30.536485+00:00",
+    "Rompers, Jumpsuits & Outfit Sets": "2026-10-24T22:49:26.439670+00:00",
     "Confident Looks": "2026-10-24T19:43:02.386276+00:00",
     "Trends": "2026-10-24T19:44:11.752017+00:00",
     "Wardrobe Must-Haves": "2026-10-24T19:44:43.800590+00:00",
@@ -7008,6 +7018,6 @@
     "Simple Outfits": "2026-10-24T19:43:36.754965+00:00",
     "Women's shacket": "2026-10-06T21:52:24.134094+00:00"
   },
-  "daily_count": 12,
-  "last_repin_time": "2026-10-24T19:44:43.800590+00:00"
+  "daily_count": 13,
+  "last_repin_time": "2026-10-24T22:49:26.439670+00:00"
 }
