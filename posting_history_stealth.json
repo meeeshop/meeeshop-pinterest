@@ -11864,11 +11864,55 @@
       "template": 14,
       "pin_url": "https://www.pinterest.com/pin/962222276665302048/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8885871181995,
+      "title": "Kathryn Classic Button-up, Yellow Stripes Top - Cozy Fall & Halloween Must-Have",
+      "board": "Trends",
+      "timestamp": "2026-10-24T19:44:38.282155",
+      "type": "carousel",
+      "style": "collage",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276665310019/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8985002672299,
+      "title": "Merlina Tote Bag and Wallet Set - Halloween & Cozy Fall Must-Have \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-10-24T19:45:43.928280",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276665310039/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8827510063275,
+      "title": "Sandbar Carryall Summer Tote - Perfect for Halloween & Cozy Fall \u2014 MeeeShop",
+      "board": "Confidence Ladies",
+      "timestamp": "2026-10-24T19:47:03.690341",
+      "type": "carousel",
+      "style": "collage",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276665310065/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 9028753817771,
+      "title": "Vera Tote Bag - Cozy Cotton Companion for Halloween & Fall \u2014 MeeeShop",
+      "board": "Fresh Finds New...",
+      "timestamp": "2026-10-24T19:48:19.952133",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276665310102/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-10-12T23:51:27.730749",
-    "Trends": "2026-10-24T15:11:28.130608",
+    "Trends": "2026-10-24T19:44:38.282155",
     "Dresses": "2026-10-23T20:41:56.204070",
     "Feminine & Flowy Fits": "2026-10-19T21:47:32.938103",
     "Short fall dresses": "2026-10-24T07:06:32.059527",
@@ -11913,7 +11957,7 @@
     "Fashion Models": "2026-10-18T22:58:47.110263",
     "My Shop #1737732113": "2026-10-19T18:05:45.862605",
     "Shop For Holidays": "2026-10-20T07:25:10.217091",
-    "New": "2026-10-24T15:13:55.801705",
+    "New": "2026-10-24T19:45:43.928280",
     "American Bazi": "2026-10-12T08:56:12.088793",
     "Cool & Casual Styles": "2026-10-23T07:15:18.663260",
     "MeeeShop's Luxe Styles": "2026-10-13T22:07:06.705382",
@@ -11942,8 +11986,8 @@
     "Mustard Seed Clothing": "2026-10-21T07:21:49.368630",
     "Woman Fashion!": "2026-10-23T23:54:43.904046",
     "Stylish Finds": "2026-10-24T15:15:09.843237",
-    "Confidence Ladies": "2026-10-13T02:37:13.981559",
-    "Fresh Finds New...": "2026-10-13T02:38:34.446311",
+    "Confidence Ladies": "2026-10-24T19:47:03.690341",
+    "Fresh Finds New...": "2026-10-24T19:48:19.952133",
     "Affordable Women's Fashion USA": "2026-10-13T09:11:59.461121",
     "Festive & Flora Fits": "2026-10-21T20:55:21.643977",
     "Shop Responsibly": "2026-10-13T18:46:43.071354",
@@ -11981,9 +12025,9 @@
     "Umgee USA": "2026-10-10T16:46:42.000590",
     "Edgy Fashion": "2026-10-13T09:13:02.770988"
   },
-  "daily_count": 8,
-  "last_post_time": "2026-10-24T15:16:21.082068",
+  "daily_count": 12,
+  "last_post_time": "2026-10-24T19:48:19.952133",
   "board_rotation_cursor": 0,
   "last_image_style": "carousel",
-  "last_template_index": 14
+  "last_template_index": 15
 }
