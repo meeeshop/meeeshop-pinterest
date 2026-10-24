@@ -1294,7 +1294,44 @@
           "pin_id": null
         }
       ]
+    },
+    {
+      "timestamp": "2026-10-24T06:47:09.098911+00:00",
+      "formula_id": "cozy_sweater_weather",
+      "formula_title": "Cozy Fall Layers Outfit Formula",
+      "pin_url": null,
+      "pin_id": null,
+      "board": "Sweaters",
+      "title": "Cozy Fall Layers Outfit Formula - Easy Everyday Styling Formula | MeeeShop",
+      "type": "native_collage",
+      "canvas_preview": "/home/runner/work/meeeshop-pinterest/meeeshop-pinterest/scratch/collage_canvas_cozy_sweater_weather_1792824409.png",
+      "cutout_items": [
+        {
+          "role": "THE KNIT",
+          "title": "Retrolicious Retro Boat Neck Top in Red",
+          "product_id": "8782621900971",
+          "pin_id": null
+        },
+        {
+          "role": "THE TOTE",
+          "title": "Ingrid Convertible Backpack Handbag",
+          "product_id": "9087954256043",
+          "pin_id": null
+        },
+        {
+          "role": "THE DENIM",
+          "title": "Ymi Women's High Rise Wide Leg Cargo Jeans",
+          "product_id": "8897141538987",
+          "pin_id": null
+        },
+        {
+          "role": "THE BOOTS",
+          "title": "Alma Booties Brown",
+          "product_id": "9073872175275",
+          "pin_id": null
+        }
+      ]
     }
   ],
-  "last_run": "2026-10-24T01:43:23.272777+00:00"
+  "last_run": "2026-10-24T06:47:09.099390+00:00"
 }
