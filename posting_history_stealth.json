@@ -11820,11 +11820,55 @@
       "pin_url": "https://www.pinterest.com/pin/962222276665290721/",
       "blog_url": "https://us.meeeshop.com/blogs/womens-skirts-style-guide/tiered-maxi-skirt-outfit-ideas-for-breezy-bohemian-and-casual-looks",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8883469451435,
+      "title": "Blush Snowfall Fur Winter Heavy Jacket | MeeeShop US Boutique",
+      "board": "Trends",
+      "timestamp": "2026-10-24T15:11:28.130608",
+      "type": "video",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276665301938/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8818158076075,
+      "title": "Emory Park Justine Shorts: Cozy Fall & Halloween Style Essentials \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-10-24T15:13:55.801705",
+      "type": "video",
+      "style": "carousel",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276665301993/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8976556720299,
+      "title": "Flying Tomato Brown Blossom Contour Power Mesh Midi Dress | MeeeShop US Boutique",
+      "board": "Stylish Finds",
+      "timestamp": "2026-10-24T15:15:09.843237",
+      "type": "carousel",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276665302028/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 9028753555627,
+      "title": "Harper Nylon Shoulder Bag and Set: Cozy Fall Crossbody & Tote \u2014 MeeeShop",
+      "board": "Trendy Backpacks",
+      "timestamp": "2026-10-24T15:16:21.082068",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276665302048/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-10-12T23:51:27.730749",
-    "Trends": "2026-10-24T07:02:16.599318",
+    "Trends": "2026-10-24T15:11:28.130608",
     "Dresses": "2026-10-23T20:41:56.204070",
     "Feminine & Flowy Fits": "2026-10-19T21:47:32.938103",
     "Short fall dresses": "2026-10-24T07:06:32.059527",
@@ -11850,7 +11894,7 @@
     "Wardrobe Must-Hav...": "2026-10-16T06:58:01.511867",
     "Camis & Tanks": "2026-10-10T00:50:29.543261",
     "Wardrobe Must Haves": "2026-10-16T07:00:23.457902",
-    "Trendy Backpacks": "2026-10-10T08:19:43.038195",
+    "Trendy Backpacks": "2026-10-24T15:16:21.082068",
     "Festive Styles": "2026-10-19T07:36:42.153918",
     "Kancan USA Jeans": "2026-10-16T20:08:42.207928",
     "Footwear": "2026-09-07T23:26:56.803572",
@@ -11869,7 +11913,7 @@
     "Fashion Models": "2026-10-18T22:58:47.110263",
     "My Shop #1737732113": "2026-10-19T18:05:45.862605",
     "Shop For Holidays": "2026-10-20T07:25:10.217091",
-    "New": "2026-10-24T07:03:59.911185",
+    "New": "2026-10-24T15:13:55.801705",
     "American Bazi": "2026-10-12T08:56:12.088793",
     "Cool & Casual Styles": "2026-10-23T07:15:18.663260",
     "MeeeShop's Luxe Styles": "2026-10-13T22:07:06.705382",
@@ -11897,7 +11941,7 @@
     "Style Ideas": "2026-10-23T20:43:03.584741",
     "Mustard Seed Clothing": "2026-10-21T07:21:49.368630",
     "Woman Fashion!": "2026-10-23T23:54:43.904046",
-    "Stylish Finds": "2026-10-12T23:50:18.655377",
+    "Stylish Finds": "2026-10-24T15:15:09.843237",
     "Confidence Ladies": "2026-10-13T02:37:13.981559",
     "Fresh Finds New...": "2026-10-13T02:38:34.446311",
     "Affordable Women's Fashion USA": "2026-10-13T09:11:59.461121",
@@ -11937,9 +11981,9 @@
     "Umgee USA": "2026-10-10T16:46:42.000590",
     "Edgy Fashion": "2026-10-13T09:13:02.770988"
   },
-  "daily_count": 4,
-  "last_post_time": "2026-10-24T07:08:04.172648",
+  "daily_count": 8,
+  "last_post_time": "2026-10-24T15:16:21.082068",
   "board_rotation_cursor": 0,
-  "last_image_style": "card",
-  "last_template_index": 9
+  "last_image_style": "carousel",
+  "last_template_index": 14
 }
