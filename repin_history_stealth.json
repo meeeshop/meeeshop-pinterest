@@ -7059,11 +7059,41 @@
       "target_board_id": "962222345325599496",
       "live_url": "https://www.pinterest.com/pin/4602678934701881920/",
       "timestamp": "2026-10-25T19:56:20.042260+00:00"
+    },
+    {
+      "pin_id": "4600990103611759168",
+      "product_title": "Constance Top \u2014 Women's 100% Cotton Gauze Relaxed Blouse, Coffee Bean",
+      "category_group": "tops_tanks_blouses",
+      "source_board": "_products",
+      "target_board": "American Bazi",
+      "target_board_id": "962222345325578167",
+      "live_url": "https://www.pinterest.com/pin/4600990103611759168/",
+      "timestamp": "2026-10-25T22:58:24.890661+00:00"
+    },
+    {
+      "pin_id": "4608800969706860096",
+      "product_title": "Judy Blue Full Size High Waist Tummy Control Wide Jeans for Women MD",
+      "category_group": "pants_denim",
+      "source_board": "_products",
+      "target_board": "Pants & Leggings",
+      "target_board_id": "962222345325046951",
+      "live_url": "https://www.pinterest.com/pin/4608800969706860096/",
+      "timestamp": "2026-10-25T22:58:50.845406+00:00"
+    },
+    {
+      "pin_id": "4608801002455985728",
+      "product_title": "Women's Stretch Rib Knit Skirt with Side Slit Oatmeal",
+      "category_group": "skirts",
+      "source_board": "_products",
+      "target_board": "Chic Looks",
+      "target_board_id": "962222345325728634",
+      "live_url": "https://www.pinterest.com/pin/4608801002455985728/",
+      "timestamp": "2026-10-25T22:59:22.137963+00:00"
     }
   ],
   "board_last_used": {
     "Women's Cardigans": "2026-10-14T23:36:08.217018+00:00",
-    "Pants & Leggings": "2026-10-21T07:02:32.214020+00:00",
+    "Pants & Leggings": "2026-10-25T22:58:50.845406+00:00",
     "Skirts": "2026-10-16T16:14:30.313014+00:00",
     "Dresses": "2026-10-22T07:03:58.316847+00:00",
     "Sweaters": "2026-10-21T20:52:02.588599+00:00",
@@ -7071,7 +7101,7 @@
     "Dress": "2026-10-23T06:55:57.354754+00:00",
     "Outerwear": "2026-10-09T08:28:12.977589+00:00",
     "Chic & Cozy: Annie Wear Trends": "2026-10-25T07:17:20.210196+00:00",
-    "Chic Looks": "2026-10-16T06:44:24.926941+00:00",
+    "Chic Looks": "2026-10-25T22:59:22.137963+00:00",
     "Short fall dresses": "2026-10-23T16:45:28.138719+00:00",
     "Shirts & Tops": "2026-10-22T20:45:41.571750+00:00",
     "Feminine & Flowy Fits": "2026-10-21T20:52:19.430782+00:00",
@@ -7090,7 +7120,7 @@
     "Farm clothes": "2026-10-22T20:45:09.974831+00:00",
     "New": "2026-10-25T07:16:15.709948+00:00",
     "Festive Styles": "2026-10-19T21:43:00.826625+00:00",
-    "American Bazi": "2026-10-21T07:01:27.156168+00:00",
+    "American Bazi": "2026-10-25T22:58:24.890661+00:00",
     "Edgy fashion": "2026-10-23T20:37:45.193555+00:00",
     "comfy fall outfits": "2026-10-25T15:42:19.618492+00:00",
     "Thanks giving Outfits": "2026-10-21T16:46:47.248736+00:00",
@@ -7138,6 +7168,6 @@
     "Simple Outfits": "2026-10-24T19:43:36.754965+00:00",
     "Women's shacket": "2026-10-06T21:52:24.134094+00:00"
   },
-  "daily_count": 12,
-  "last_repin_time": "2026-10-25T19:56:20.042260+00:00"
+  "daily_count": 15,
+  "last_repin_time": "2026-10-25T22:59:22.137963+00:00"
 }
