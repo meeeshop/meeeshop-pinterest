@@ -11952,11 +11952,57 @@
       "template": 11,
       "pin_url": "https://www.pinterest.com/pin/962222276665315316/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8936272789675,
+      "title": "Downeast Newberry Dress - Cozy Fall & Halloween Outfit Inspiration \u2014 MeeeShop",
+      "board": "Trends",
+      "timestamp": "2026-10-25T07:25:21.703547",
+      "type": "carousel",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276665325866/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8892151300267,
+      "title": "Viscose V-neck Flounce Sleeve Top - Cozy Fall & Halloween Chic \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-10-25T07:26:31.605627",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276665325904/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": "571253194923",
+      "article_id": "571253194923",
+      "title": "How to Style Distressed Boyfriend Jeans with Feminine Tops",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-10-25T07:28:13.994262",
+      "type": "blog",
+      "style": "card",
+      "template": 9,
+      "pin_url": "https://www.pinterest.com/pin/962222276665325925/",
+      "blog_url": "https://us.meeeshop.com/blogs/jeans-style-guide/how-to-style-distressed-boyfriend-jeans-with-feminine-tops",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8882874679467,
+      "title": "Off Shoulder Solid Backless Full Elegant Dress - Halloween Chic & Cozy Fall \u2014 MeeeShop",
+      "board": "Shop Responsibly",
+      "timestamp": "2026-10-25T07:30:35.234589",
+      "type": "video",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276665325969/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-10-12T23:51:27.730749",
-    "Trends": "2026-10-24T23:01:07.599973",
+    "Trends": "2026-10-25T07:25:21.703547",
     "Dresses": "2026-10-23T20:41:56.204070",
     "Feminine & Flowy Fits": "2026-10-19T21:47:32.938103",
     "Short fall dresses": "2026-10-24T07:06:32.059527",
@@ -12001,7 +12047,7 @@
     "Fashion Models": "2026-10-18T22:58:47.110263",
     "My Shop #1737732113": "2026-10-19T18:05:45.862605",
     "Shop For Holidays": "2026-10-20T07:25:10.217091",
-    "New": "2026-10-24T23:02:14.989612",
+    "New": "2026-10-25T07:26:31.605627",
     "American Bazi": "2026-10-12T08:56:12.088793",
     "Cool & Casual Styles": "2026-10-23T07:15:18.663260",
     "MeeeShop's Luxe Styles": "2026-10-13T22:07:06.705382",
@@ -12034,7 +12080,7 @@
     "Fresh Finds New...": "2026-10-24T19:48:19.952133",
     "Affordable Women's Fashion USA": "2026-10-24T23:03:39.090774",
     "Festive & Flora Fits": "2026-10-21T20:55:21.643977",
-    "Shop Responsibly": "2026-10-13T18:46:43.071354",
+    "Shop Responsibly": "2026-10-25T07:30:35.234589",
     "Social": "2026-10-13T18:47:48.052447",
     "Blogs": "2026-10-14T00:19:26.816164",
     "All Pins": "2026-10-14T16:20:36.169492",
@@ -12069,9 +12115,9 @@
     "Umgee USA": "2026-10-10T16:46:42.000590",
     "Edgy Fashion": "2026-10-13T09:13:02.770988"
   },
-  "daily_count": 16,
-  "last_post_time": "2026-10-24T23:04:48.504690",
+  "daily_count": 4,
+  "last_post_time": "2026-10-25T07:30:35.234589",
   "board_rotation_cursor": 0,
-  "last_image_style": "carousel",
-  "last_template_index": 11
+  "last_image_style": "collage",
+  "last_template_index": 14
 }
