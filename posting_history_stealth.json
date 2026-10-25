@@ -11998,11 +11998,55 @@
       "template": 14,
       "pin_url": "https://www.pinterest.com/pin/962222276665325969/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8786783862955,
+      "title": "Whitney Foldover Compact Crossbody - Cozy Fall Must-Have Bag for Halloween Chic",
+      "board": "Trends",
+      "timestamp": "2026-10-25T15:21:36.232166",
+      "type": "product",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276665338384/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 9087953797291,
+      "title": "Makenna Shoulder Bag - Cozy Fall Crossbody for Halloween & Pumpkin Patch \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-10-25T15:22:58.270962",
+      "type": "carousel",
+      "style": "collage",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276665338426/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8933167071403,
+      "title": "Women's Bamboo/cotton Short Sleeve Scoop Neck T-shirt | MeeeShop US Boutique",
+      "board": "Social",
+      "timestamp": "2026-10-25T15:26:00.469696",
+      "type": "video",
+      "style": "carousel",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276665338599/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8825884311723,
+      "title": "Mkf Collection by Mia K. - Skylar Crossbody Bag: Perfect for Cozy Fall & Halloween",
+      "board": "Blogs",
+      "timestamp": "2026-10-25T15:27:07.680307",
+      "type": "carousel",
+      "style": "card",
+      "template": 9,
+      "pin_url": "https://www.pinterest.com/pin/962222276665338639/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-10-12T23:51:27.730749",
-    "Trends": "2026-10-25T07:25:21.703547",
+    "Trends": "2026-10-25T15:21:36.232166",
     "Dresses": "2026-10-23T20:41:56.204070",
     "Feminine & Flowy Fits": "2026-10-19T21:47:32.938103",
     "Short fall dresses": "2026-10-24T07:06:32.059527",
@@ -12047,7 +12091,7 @@
     "Fashion Models": "2026-10-18T22:58:47.110263",
     "My Shop #1737732113": "2026-10-19T18:05:45.862605",
     "Shop For Holidays": "2026-10-20T07:25:10.217091",
-    "New": "2026-10-25T07:26:31.605627",
+    "New": "2026-10-25T15:22:58.270962",
     "American Bazi": "2026-10-12T08:56:12.088793",
     "Cool & Casual Styles": "2026-10-23T07:15:18.663260",
     "MeeeShop's Luxe Styles": "2026-10-13T22:07:06.705382",
@@ -12081,8 +12125,8 @@
     "Affordable Women's Fashion USA": "2026-10-24T23:03:39.090774",
     "Festive & Flora Fits": "2026-10-21T20:55:21.643977",
     "Shop Responsibly": "2026-10-25T07:30:35.234589",
-    "Social": "2026-10-13T18:47:48.052447",
-    "Blogs": "2026-10-14T00:19:26.816164",
+    "Social": "2026-10-25T15:26:00.469696",
+    "Blogs": "2026-10-25T15:27:07.680307",
     "All Pins": "2026-10-14T16:20:36.169492",
     "Outer wear": "2026-10-14T16:19:19.139823",
     "Women's Cardigans": "2026-10-22T00:02:33.389000",
@@ -12115,9 +12159,9 @@
     "Umgee USA": "2026-10-10T16:46:42.000590",
     "Edgy Fashion": "2026-10-13T09:13:02.770988"
   },
-  "daily_count": 4,
-  "last_post_time": "2026-10-25T07:30:35.234589",
+  "daily_count": 8,
+  "last_post_time": "2026-10-25T15:27:07.680307",
   "board_rotation_cursor": 0,
-  "last_image_style": "collage",
-  "last_template_index": 14
+  "last_image_style": "card",
+  "last_template_index": 9
 }
