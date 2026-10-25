@@ -1479,7 +1479,44 @@
           "pin_id": null
         }
       ]
+    },
+    {
+      "timestamp": "2026-10-25T17:37:24.559319+00:00",
+      "formula_id": "casual_fall",
+      "formula_title": "Casual Fall Weekend Outfit Inspo",
+      "pin_url": null,
+      "pin_id": null,
+      "board": "Casual Outfits",
+      "title": "Casual Fall Weekend Outfit Inspo - Easy Everyday Styling Formula | MeeeShop",
+      "type": "native_collage",
+      "canvas_preview": "/home/runner/work/meeeshop-pinterest/meeeshop-pinterest/scratch/collage_canvas_casual_fall_1792949823.png",
+      "cutout_items": [
+        {
+          "role": "THE TOP",
+          "title": "Retrolicious Camping Bow Top",
+          "product_id": "8782625636523",
+          "pin_id": null
+        },
+        {
+          "role": "THE BAG",
+          "title": "Makenna Shoulder Bag",
+          "product_id": "9087953797291",
+          "pin_id": null
+        },
+        {
+          "role": "THE DENIM",
+          "title": "Ymi Women's Super Soft High Rise Wide Leg Jeans",
+          "product_id": "8897139572907",
+          "pin_id": null
+        },
+        {
+          "role": "THE SHOES",
+          "title": "Alma Booties Brown",
+          "product_id": "9073872175275",
+          "pin_id": null
+        }
+      ]
     }
   ],
-  "last_run": "2026-10-25T07:12:49.844668+00:00"
+  "last_run": "2026-10-25T17:37:24.559790+00:00"
 }
