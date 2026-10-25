@@ -1516,7 +1516,44 @@
           "pin_id": null
         }
       ]
+    },
+    {
+      "timestamp": "2026-10-25T21:05:54.024008+00:00",
+      "formula_id": "everyday_chic",
+      "formula_title": "Everyday Chic Outfit Formula",
+      "pin_url": null,
+      "pin_id": null,
+      "board": "Style Ideas",
+      "title": "Everyday Chic Outfit Formula - Easy Everyday Styling Formula | MeeeShop",
+      "type": "native_collage",
+      "canvas_preview": "/home/runner/work/meeeshop-pinterest/meeeshop-pinterest/scratch/collage_canvas_everyday_chic_1792962333.png",
+      "cutout_items": [
+        {
+          "role": "THE TOP",
+          "title": "Retrolicious Camping Bow Top",
+          "product_id": "8782625636523",
+          "pin_id": null
+        },
+        {
+          "role": "THE BAG",
+          "title": "Liza Tote Bag",
+          "product_id": "9087953928363",
+          "pin_id": null
+        },
+        {
+          "role": "THE BOTTOM",
+          "title": "Judy Blue Full Size Wide Leg Capris Jeans plus Size",
+          "product_id": "8740284530859",
+          "pin_id": null
+        },
+        {
+          "role": "THE SHOES",
+          "title": "Cecilia Slingback Black",
+          "product_id": "9073872208043",
+          "pin_id": null
+        }
+      ]
     }
   ],
-  "last_run": "2026-10-25T17:37:24.559790+00:00"
+  "last_run": "2026-10-25T21:05:54.024379+00:00"
 }

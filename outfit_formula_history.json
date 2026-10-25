@@ -1719,7 +1719,47 @@
           "role": "THE FOOTWEAR"
         }
       ]
+    },
+    {
+      "timestamp": "2026-10-25T21:03:23.848444+00:00",
+      "formula_id": "everyday_chic",
+      "formula_title": "Everyday Chic Outfit Formula",
+      "pin_url": "https://www.pinterest.com/pin/962222276665348871/",
+      "pin_id": "962222276665348871",
+      "board": "Style Ideas",
+      "title": "Everyday Chic Outfit Formula - Easy Everyday Styling Formula | MeeeShop",
+      "tagged_products_count": 4,
+      "outfit_items": [
+        {
+          "id": "8740253106347",
+          "variant_id": "46478454194347",
+          "title": "Hyfve Tie Front Spaghetti Strap Top",
+          "price": "84.99",
+          "role": "THE TOP"
+        },
+        {
+          "id": "9087954452651",
+          "variant_id": "48172201050283",
+          "title": "Acacia Canteen Crossbody Bag",
+          "price": "94.99",
+          "role": "THE BAG"
+        },
+        {
+          "id": "8740284498091",
+          "variant_id": "46478644019371",
+          "title": "Judy Blue Full Size High Waist Wide Leg Jeans with Skewed Inseam plus Size",
+          "price": "134.99",
+          "role": "THE BOTTOM"
+        },
+        {
+          "id": "9073872076971",
+          "variant_id": "48110997405867",
+          "title": "Alma Booties Black",
+          "price": "169.99",
+          "role": "THE SHOES"
+        }
+      ]
     }
   ],
-  "last_run": "2026-10-25T17:34:50.140471+00:00"
+  "last_run": "2026-10-25T21:03:23.848464+00:00"
 }
