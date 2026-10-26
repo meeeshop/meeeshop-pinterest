@@ -1839,7 +1839,47 @@
           "role": "THE BOOTS"
         }
       ]
+    },
+    {
+      "timestamp": "2026-10-26T19:51:52.558599+00:00",
+      "formula_id": "cozy_sweater_weather",
+      "formula_title": "Cozy Fall Layers Outfit Formula",
+      "pin_url": "https://www.pinterest.com/pin/962222276665379314/",
+      "pin_id": "962222276665379314",
+      "board": "Sweaters",
+      "title": "Cozy Fall Layers Outfit Formula - Easy Everyday Styling Formula | MeeeShop",
+      "tagged_products_count": 4,
+      "outfit_items": [
+        {
+          "id": "8740258611371",
+          "variant_id": "46478481719467",
+          "title": "Hyfve Rolled Sleeve Button-up Top",
+          "price": "79.99",
+          "role": "THE KNIT"
+        },
+        {
+          "id": "9087952945323",
+          "variant_id": "48172189548715",
+          "title": "Kenna Tote Handbag",
+          "price": "104.99",
+          "role": "THE TOTE"
+        },
+        {
+          "id": "8740284530859",
+          "variant_id": "46478644478123",
+          "title": "Judy Blue Full Size Wide Leg Capris Jeans plus Size",
+          "price": "119.99",
+          "role": "THE DENIM"
+        },
+        {
+          "id": "9073872175275",
+          "variant_id": "48110997995691",
+          "title": "Alma Booties Brown",
+          "price": "169.99",
+          "role": "THE BOOTS"
+        }
+      ]
     }
   ],
-  "last_run": "2026-10-26T07:17:20.547040+00:00"
+  "last_run": "2026-10-26T19:51:52.558621+00:00"
 }

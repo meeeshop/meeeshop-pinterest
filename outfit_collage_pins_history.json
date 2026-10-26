@@ -1627,7 +1627,44 @@
           "pin_id": null
         }
       ]
+    },
+    {
+      "timestamp": "2026-10-26T19:54:27.186146+00:00",
+      "formula_id": "casual_fall",
+      "formula_title": "Casual Fall Weekend Outfit Inspo",
+      "pin_url": null,
+      "pin_id": null,
+      "board": "Casual Outfits",
+      "title": "Casual Fall Weekend Outfit Inspo - Easy Everyday Styling Formula | MeeeShop",
+      "type": "native_collage",
+      "canvas_preview": "/home/runner/work/meeeshop-pinterest/meeeshop-pinterest/scratch/collage_canvas_casual_fall_1793044446.png",
+      "cutout_items": [
+        {
+          "role": "THE TOP",
+          "title": "Btr Active Seamless Baselayer Top",
+          "product_id": "8744046985387",
+          "pin_id": null
+        },
+        {
+          "role": "THE BAG",
+          "title": "Maeve Shoulder Bag and Set",
+          "product_id": "9087954419883",
+          "pin_id": null
+        },
+        {
+          "role": "THE DENIM",
+          "title": "Ymi Women's Luxe High Rise Wannabettabutt Flare Jeans",
+          "product_id": "8897140752555",
+          "pin_id": null
+        },
+        {
+          "role": "THE SHOES",
+          "title": "Cecilia Slingback Green",
+          "product_id": "9073872011435",
+          "pin_id": null
+        }
+      ]
     }
   ],
-  "last_run": "2026-10-26T07:20:06.737806+00:00"
+  "last_run": "2026-10-26T19:54:27.186519+00:00"
 }
