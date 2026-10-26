@@ -6131,13 +6131,103 @@
       "original_link": "https://us.meeeshop.com/products/kingsley-1-horse-bit-loafer?utm_source=Pinterest",
       "tagged_products": [
         {
-          "id": "8841417523371",
-          "variant_id": "47283202949291",
-          "handle": "breezy-blue-denim-palazzos",
-          "title": "Breezy Blue Denim Palazzos",
-          "price": 139.99,
-          "url": "https://us.meeeshop.com/products/breezy-blue-denim-palazzos?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
-          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/breezy-blue-denim-palazzos-1.jpg?v=1787675163"
+          "id": "8983410081963",
+          "variant_id": "47775508988075",
+          "handle": "casual-color-block-two-piece-set",
+          "title": "Casual Color Block Two Piece Set",
+          "price": 69.99,
+          "url": "https://us.meeeshop.com/products/casual-color-block-two-piece-set?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/casual-color-block-two-piece-set-in-grey-casual-co-606827.jpg?v=1789030719"
+        },
+        {
+          "id": "8928275234987",
+          "variant_id": "47605694562475",
+          "handle": "bow-field-cozy-lounge-slipper",
+          "title": "Bow Field Cozy Lounge Slipper",
+          "price": 69.99,
+          "url": "https://us.meeeshop.com/products/bow-field-cozy-lounge-slipper?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/bow-field-cozy-lounge-slipper-1.jpg?v=1787675426"
+        },
+        {
+          "id": "8970892837035",
+          "variant_id": "47735956701355",
+          "handle": "aspen-cowl-neck-tunic-with-fringe-and-button-neck-in-red-yarndyed-flan",
+          "title": "Aspen Cowl Neck Tunic with Fringe and Button Neck in Red Yarndyed Flannel Plaid Top",
+          "price": 179.99,
+          "url": "https://us.meeeshop.com/products/aspen-cowl-neck-tunic-with-fringe-and-button-neck-in-red-yarndyed-flan?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/aspen-cowl-neck-tunic-with-fringe-and-button-neck-195499.jpg?v=1788335634"
+        },
+        {
+          "id": "8879309717675",
+          "variant_id": "47388092596395",
+          "handle": "basic-jogger",
+          "title": "Basic Jogger",
+          "price": 129.99,
+          "url": "https://us.meeeshop.com/products/basic-jogger?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/basic-jogger-1.jpg?v=1787716782"
+        },
+        {
+          "id": "8968032780459",
+          "variant_id": "47727328493739",
+          "handle": "abbie-mesh-detail-knit-midi-skirt",
+          "title": "Abbie Mesh Detail Knit Midi Skirt",
+          "price": 94.99,
+          "url": "https://us.meeeshop.com/products/abbie-mesh-detail-knit-midi-skirt?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/abbie-mesh-detail-knit-midi-skirt-in-black-fall-wa-047467.jpg?v=1788179284"
+        },
+        {
+          "id": "8970893394091",
+          "variant_id": "47735959158955",
+          "handle": "aspen-flannel-tunic-red-black-yarndyed-plaid",
+          "title": "Aspen Flannel Tunic Red Black Yarndyed Plaid",
+          "price": 189.99,
+          "url": "https://us.meeeshop.com/products/aspen-flannel-tunic-red-black-yarndyed-plaid?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/aspen-flannel-tunic-red-black-yarndyed-plaid-in-xs-997739.jpg?v=1788335755"
+        },
+        {
+          "id": "8974562787499",
+          "variant_id": "47743048089771",
+          "handle": "braylyn-polka-dot-maxi-skirt",
+          "title": "Braylyn Polka Dot Maxi Skirt",
+          "price": 84.99,
+          "url": "https://us.meeeshop.com/products/braylyn-polka-dot-maxi-skirt?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/braylyn-polka-dot-maxi-skirt-in-xs-pol-brand-skirt-449515.jpg?v=1788427132"
+        },
+        {
+          "id": "8883469254827",
+          "variant_id": "47424519635115",
+          "handle": "all-tied-up-dress",
+          "title": "All Tied up Dress",
+          "price": 89.99,
+          "url": "https://us.meeeshop.com/products/all-tied-up-dress?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/all-tied-up-dress-1.svg?v=1787675326"
+        },
+        {
+          "id": "8970893787307",
+          "variant_id": "47735961190571",
+          "handle": "cape-cod-tunic-blue-medallions",
+          "title": "Cape Cod Tunic Blue Medallions",
+          "price": 184.99,
+          "url": "https://us.meeeshop.com/products/cape-cod-tunic-blue-medallions?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/cape-cod-tunic-blue-medallions-in-xs-cape-cod-meda-603371.jpg?v=1788335813"
+        },
+        {
+          "id": "8866329854123",
+          "variant_id": "47346481397931",
+          "handle": "camel-strapless-tailored-wide-leg-jumpsuit",
+          "title": "Camel Strapless Tailored Wide-leg Jumpsuit",
+          "price": 144.99,
+          "url": "https://us.meeeshop.com/products/camel-strapless-tailored-wide-leg-jumpsuit?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/camel-strapless-tailored-wide-leg-jumpsuit-1.jpg?v=1787675197"
+        },
+        {
+          "id": "9090080112811",
+          "variant_id": "48187297169579",
+          "handle": "button-detailed-pu-black-leather-dress",
+          "title": "Button Detailed Pu Black Leather Dress",
+          "price": 144.99,
+          "url": "https://us.meeeshop.com/products/button-detailed-pu-black-leather-dress?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/button-detailed-pu-black-leather-dress-in-small-318635.jpg?v=1791524345"
         },
         {
           "id": "8931950952619",
@@ -6149,125 +6239,35 @@
           "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/all-tied-up-leggings-made-in-usa-1.png?v=1787717894"
         },
         {
-          "id": "9041689247915",
-          "variant_id": "47971875291307",
-          "handle": "born-to-raise-hell-joggers",
-          "title": "Born to Raise Hell Joggers",
-          "price": 149.99,
-          "url": "https://us.meeeshop.com/products/born-to-raise-hell-joggers?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
-          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/born-to-raise-hell-joggers-in-xs-born-x-raised-jog-665707.jpg?v=1790689794"
+          "id": "9041687675051",
+          "variant_id": "47971871129771",
+          "handle": "brooklyn-panthers-fleece-sweatshirt",
+          "title": "Brooklyn Panthers Fleece Sweatshirt",
+          "price": 144.99,
+          "url": "https://us.meeeshop.com/products/brooklyn-panthers-fleece-sweatshirt?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/brooklyn-panthers-fleece-sweatshirt-in-xs-top-635243.png?v=1790689598"
         },
         {
-          "id": "8933161402539",
-          "variant_id": "47624532525227",
-          "handle": "brushed-attain-crossover-legging",
-          "title": "Brushed Attain Crossover Legging",
-          "price": 99.99,
-          "url": "https://us.meeeshop.com/products/brushed-attain-crossover-legging?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
-          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/brushed-attain-crossover-legging-1.jpg?v=1787717955"
+          "id": "8825276006571",
+          "variant_id": "47233226178731",
+          "handle": "back-detailed-wide-leg-jumpsuit",
+          "title": "Back Detailed Wide Leg Jumpsuit",
+          "price": 79.99,
+          "url": "https://us.meeeshop.com/products/back-detailed-wide-leg-jumpsuit?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/back-detailed-wide-leg-jumpsuit-1.jpg?v=1787716026"
         },
         {
-          "id": "8883469779115",
-          "variant_id": "47424522617003",
-          "handle": "buki-rise-shine-legging-pant-black",
-          "title": "Buki Rise & Shine Legging Pant (black)",
+          "id": "8970893066411",
+          "variant_id": "47735957684395",
+          "handle": "cape-cod-tunic-sea-creatures-print",
+          "title": "Cape Cod Tunic Sea Creatures Print",
           "price": 169.99,
-          "url": "https://us.meeeshop.com/products/buki-rise-shine-legging-pant-black?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
-          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/buki-rise-shine-legging-pant-black-1.png?v=1787716942"
-        },
-        {
-          "id": "8905532211371",
-          "variant_id": "47546255868075",
-          "handle": "graceemma-butter-soft-pants-blue",
-          "title": "Butter Soft Pants, Blue",
-          "price": 89.99,
-          "url": "https://us.meeeshop.com/products/graceemma-butter-soft-pants-blue?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
-          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/butter-soft-pants-blue-1.jpg?v=1787717455"
-        },
-        {
-          "id": "8744047018155",
-          "variant_id": "46492119793835",
-          "handle": "btr-active-riding-tights",
-          "title": "Btr Active Riding Tights",
-          "price": 179.99,
-          "url": "https://us.meeeshop.com/products/btr-active-riding-tights?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
-          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/btr-active-riding-tights-1.jpg?v=1787715683"
-        },
-        {
-          "id": "8988051964075",
-          "variant_id": "47790502936747",
-          "handle": "aven-elastic-waist-ankle-length-wide-leg-pants",
-          "title": "Aven Elastic Waist Ankle Length Wide Leg Pants",
-          "price": 104.99,
-          "url": "https://us.meeeshop.com/products/aven-elastic-waist-ankle-length-wide-leg-pants?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
-          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/aven-elastic-waist-ankle-length-wide-leg-pants-in-657323.png?v=1789186922"
-        },
-        {
-          "id": "8988050489515",
-          "variant_id": "47790499070123",
-          "handle": "billie-mineral-wash-drawstring-high-waist-wide-leg-pants",
-          "title": "Billie Mineral Wash Drawstring High Waist Wide Leg Pants",
-          "price": 109.99,
-          "url": "https://us.meeeshop.com/products/billie-mineral-wash-drawstring-high-waist-wide-leg-pants?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
-          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/billie-mineral-wash-drawstring-high-waist-wide-leg-037035.png?v=1789186773"
-        },
-        {
-          "id": "8744047247531",
-          "variant_id": "46492123332779",
-          "handle": "adler-breech",
-          "title": "Adler Breech",
-          "price": 209.99,
-          "url": "https://us.meeeshop.com/products/adler-breech?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
-          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/adler-breech-1.jpg?v=1787715698"
-        },
-        {
-          "id": "8933199872171",
-          "variant_id": "47624633548971",
-          "handle": "blanche-pants-100-cotton-gauze",
-          "title": "Blanche Pants - 100% Cotton Gauze",
-          "price": 94.99,
-          "url": "https://us.meeeshop.com/products/blanche-pants-100-cotton-gauze?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
-          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/blanche-pants-100-cotton-gauze-1.jpg?v=1787675608"
-        },
-        {
-          "id": "8782689599659",
-          "variant_id": "47103630966955",
-          "handle": "buki-straight-skinny-legging-pant",
-          "title": "Buki Straight Skinny Legging Pant",
-          "price": 129.99,
-          "url": "https://us.meeeshop.com/products/buki-straight-skinny-legging-pant?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
-          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/buki-straight-skinny-legging-pant-1.png?v=1787675824"
-        },
-        {
-          "id": "9095812743339",
-          "variant_id": "48214575251627",
-          "handle": "book-stacks-vintage-dress",
-          "title": "Book Stacks Vintage Dress",
-          "price": 89.99,
-          "url": "https://us.meeeshop.com/products/book-stacks-vintage-dress?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
-          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/9001-5609_1.jpg?v=1791611905"
-        },
-        {
-          "id": "9095812612267",
-          "variant_id": "48214576431275",
-          "handle": "black-cat-collared-dress",
-          "title": "Black Cat Collared Dress",
-          "price": 89.99,
-          "url": "https://us.meeeshop.com/products/black-cat-collared-dress?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
-          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/9003-5704_2.jpg?v=1791611905"
-        },
-        {
-          "id": "8825274630315",
-          "variant_id": "47233216544939",
-          "handle": "brushed-rib-pocket-cardigan",
-          "title": "Brushed Rib Pocket Cardigan",
-          "price": 69.99,
-          "url": "https://us.meeeshop.com/products/brushed-rib-pocket-cardigan?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
-          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/brushed-rib-pocket-cardigan-1.jpg?v=1787715953"
+          "url": "https://us.meeeshop.com/products/cape-cod-tunic-sea-creatures-print?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/cape-cod-tunic-sea-creatures-print-in-xs-cape-cod-818091.jpg?v=1788335682"
         }
       ],
-      "tagged_at": "2026-10-10T06:16:22.735270+00:00",
-      "verified_at": "2026-10-10T06:16:22.735283+00:00"
+      "tagged_at": "2026-10-26T03:55:45.240994+00:00",
+      "verified_at": "2026-10-26T03:55:45.241006+00:00"
     },
     "962222276624250676": {
       "pin_id": "962222276624250676",
@@ -10734,5 +10734,5 @@
       "verified_at": "2026-10-26T03:52:38.528035+00:00"
     }
   },
-  "last_run": "2026-10-26T03:52:38.528041+00:00"
+  "last_run": "2026-10-26T03:55:45.241020+00:00"
 }
