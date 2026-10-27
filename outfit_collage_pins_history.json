@@ -1701,7 +1701,44 @@
           "pin_id": null
         }
       ]
+    },
+    {
+      "timestamp": "2026-10-27T02:03:52.661179+00:00",
+      "formula_id": "how_to_style_flare_jeans",
+      "formula_title": "How to Style Flare Jeans: Outfit Formula",
+      "pin_url": null,
+      "pin_id": null,
+      "board": "Kancan USA Jeans",
+      "title": "How to Style Flare Jeans: Outfit Formula | How to Style Flare Jeans & Sweater | MeeeShop",
+      "type": "native_collage",
+      "canvas_preview": "/home/runner/work/meeeshop-pinterest/meeeshop-pinterest/scratch/collage_canvas_how_to_style_flare_jeans_1793066613.png",
+      "cutout_items": [
+        {
+          "role": "THE TOP",
+          "title": "Riley Technical Top",
+          "product_id": "8744047083691",
+          "pin_id": null
+        },
+        {
+          "role": "THE BAG",
+          "title": "Cameron Signature Tote Bag",
+          "product_id": "9087953371307",
+          "pin_id": null
+        },
+        {
+          "role": "THE FLARE DENIM",
+          "title": "Brianna High Rise Skinny Flare Jeans (reg & Plus)",
+          "product_id": "8789754839211",
+          "pin_id": null
+        },
+        {
+          "role": "THE FOOTWEAR",
+          "title": "Alma Booties Brown",
+          "product_id": "9073872175275",
+          "pin_id": null
+        }
+      ]
     }
   ],
-  "last_run": "2026-10-26T22:53:41.490300+00:00"
+  "last_run": "2026-10-27T02:03:52.661906+00:00"
 }
