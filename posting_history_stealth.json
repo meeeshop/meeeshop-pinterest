@@ -12174,11 +12174,57 @@
       "template": 11,
       "pin_url": "https://www.pinterest.com/pin/962222276665361998/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8825881297067,
+      "title": "Mkf Collection by Mia K. - Zephyra Weekender Bag | MeeeShop US Boutique",
+      "board": "Trends",
+      "timestamp": "2026-10-27T00:18:35.022553",
+      "type": "carousel",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276665386163/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": "571278327979",
+      "article_id": "571278327979",
+      "title": "The 5 Most Versatile Dress Styles for Capsule Wardrobe Travel",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-10-27T00:20:09.104151",
+      "type": "blog",
+      "style": "card",
+      "template": 9,
+      "pin_url": "https://www.pinterest.com/pin/962222276665386182/",
+      "blog_url": "https://us.meeeshop.com/blogs/dresses-style-guide/the-5-most-versatile-dress-styles-for-capsule-wardrobe-travel",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8970889003179,
+      "title": "Emory Park Honora Maxi Dress - Elegant Halloween & Cozy Fall Cocktail Look \u2014 MeeeShop",
+      "board": "Cocktail Dresses",
+      "timestamp": "2026-10-27T00:21:20.472023",
+      "type": "carousel",
+      "style": "collage",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276665386201/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 9053204021419,
+      "title": "Downeast Essential Long Sleeve Tee | MeeeShop US Boutique",
+      "board": "American Bazi",
+      "timestamp": "2026-10-27T00:24:30.915597",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276665386274/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-10-12T23:51:27.730749",
-    "Trends": "2026-10-26T07:35:03.807510",
+    "Trends": "2026-10-27T00:18:35.022553",
     "Dresses": "2026-10-23T20:41:56.204070",
     "Feminine & Flowy Fits": "2026-10-19T21:47:32.938103",
     "Short fall dresses": "2026-10-24T07:06:32.059527",
@@ -12187,7 +12233,7 @@
     "Dress": "2026-10-15T20:36:05.634355",
     "Bags": "2026-10-19T07:37:52.838798",
     "Jeans": "2026-10-15T16:07:25.488289",
-    "Cocktail Dresses": "2026-10-13T22:08:21.476759",
+    "Cocktail Dresses": "2026-10-27T00:21:20.472023",
     "Dressy Outfits": "2026-10-20T23:47:53.618852",
     "Must-Have Fashion...": "2026-10-25T23:15:37.289134",
     "Flares Jeans": "2026-10-16T15:54:18.104742",
@@ -12224,7 +12270,7 @@
     "My Shop #1737732113": "2026-10-19T18:05:45.862605",
     "Shop For Holidays": "2026-10-20T07:25:10.217091",
     "New": "2026-10-26T07:37:24.752322",
-    "American Bazi": "2026-10-12T08:56:12.088793",
+    "American Bazi": "2026-10-27T00:24:30.915597",
     "Cool & Casual Styles": "2026-10-23T07:15:18.663260",
     "MeeeShop's Luxe Styles": "2026-10-13T22:07:06.705382",
     "Outerwear": "2026-10-11T21:10:16.114391",
@@ -12292,8 +12338,8 @@
     "Edgy Fashion": "2026-10-13T09:13:02.770988"
   },
   "daily_count": 4,
-  "last_post_time": "2026-10-26T07:42:21.624446",
+  "last_post_time": "2026-10-27T00:24:30.915597",
   "board_rotation_cursor": 0,
   "last_image_style": "carousel",
-  "last_template_index": 11
+  "last_template_index": 17
 }
