@@ -1959,7 +1959,47 @@
           "role": "THE FOOTWEAR"
         }
       ]
+    },
+    {
+      "timestamp": "2026-10-27T07:07:27.991831+00:00",
+      "formula_id": "everyday_chic",
+      "formula_title": "Everyday Chic Outfit Formula",
+      "pin_url": "https://www.pinterest.com/pin/962222276665393281/",
+      "pin_id": "962222276665393281",
+      "board": "Style Ideas",
+      "title": "Everyday Chic Outfit Formula - Easy Everyday Styling Formula | MeeeShop",
+      "tagged_products_count": 4,
+      "outfit_items": [
+        {
+          "id": "8744047083691",
+          "variant_id": "46492121039019",
+          "title": "Riley Technical Top",
+          "price": "144.99",
+          "role": "THE TOP"
+        },
+        {
+          "id": "9087954321579",
+          "variant_id": "48172199936171",
+          "title": "Solari Braided Chain Shoulder Bag",
+          "price": "104.99",
+          "role": "THE BAG"
+        },
+        {
+          "id": "8740253761707",
+          "variant_id": "46478458355883",
+          "title": "Hyfve Acid Wash French Terry Wide-leg Pants",
+          "price": "104.99",
+          "role": "THE BOTTOM"
+        },
+        {
+          "id": "9073872109739",
+          "variant_id": "48110997602475",
+          "title": "Evie Slingback Cream",
+          "price": "139.99",
+          "role": "THE SHOES"
+        }
+      ]
     }
   ],
-  "last_run": "2026-10-27T02:00:55.802598+00:00"
+  "last_run": "2026-10-27T07:07:27.991852+00:00"
 }
