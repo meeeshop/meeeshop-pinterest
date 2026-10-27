@@ -12264,11 +12264,55 @@
       "template": 14,
       "pin_url": "https://www.pinterest.com/pin/962222276665393736/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8789757001899,
+      "title": "Tummy Control Western High Rise Straight Leg Jeans | MeeeShop US Boutique",
+      "board": "Trends",
+      "timestamp": "2026-10-27T21:29:33.280544",
+      "type": "carousel",
+      "style": "collage",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276665413327/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 9087953961131,
+      "title": "Ezra Shoulder Bag: Cozy Fall Crossbody for Halloween Style \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-10-27T21:31:57.640973",
+      "type": "video",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276665413377/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 9095812612267,
+      "title": "Retrolicious Black Cat Collared Dress - Purr-fect Halloween & Cozy Fall Look",
+      "board": "Rompers, Jumpsuits &...",
+      "timestamp": "2026-10-27T21:33:30.490480",
+      "type": "product",
+      "style": "collage",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276665413428/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8968031994027,
+      "title": "Stella Navy Maxi Denim Skirt: Cozy Fall & Halloween Style \u2014 MeeeShop",
+      "board": "Skirts",
+      "timestamp": "2026-10-27T21:34:46.643893",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276665413477/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-10-12T23:51:27.730749",
-    "Trends": "2026-10-27T07:32:11.566154",
+    "Trends": "2026-10-27T21:29:33.280544",
     "Dresses": "2026-10-23T20:41:56.204070",
     "Feminine & Flowy Fits": "2026-10-19T21:47:32.938103",
     "Short fall dresses": "2026-10-24T07:06:32.059527",
@@ -12282,8 +12326,8 @@
     "Must-Have Fashion...": "2026-10-25T23:15:37.289134",
     "Flares Jeans": "2026-10-16T15:54:18.104742",
     "Short Tall dresses": "2026-10-17T14:49:00.454478",
-    "Rompers, Jumpsuits &...": "2026-10-14T23:51:11.974810",
-    "Skirts": "2026-10-10T16:45:30.490579",
+    "Rompers, Jumpsuits &...": "2026-10-27T21:33:30.490480",
+    "Skirts": "2026-10-27T21:34:46.643893",
     "Shirts & Tops": "2026-10-16T23:24:50.313004",
     "Blouses": "2026-10-18T15:14:33.386346",
     "Rompers_Jumpsuits &...": "2026-10-16T20:10:03.538169",
@@ -12313,7 +12357,7 @@
     "Fashion Models": "2026-10-18T22:58:47.110263",
     "My Shop #1737732113": "2026-10-19T18:05:45.862605",
     "Shop For Holidays": "2026-10-20T07:25:10.217091",
-    "New": "2026-10-27T07:33:20.194267",
+    "New": "2026-10-27T21:31:57.640973",
     "American Bazi": "2026-10-27T00:24:30.915597",
     "Cool & Casual Styles": "2026-10-23T07:15:18.663260",
     "MeeeShop's Luxe Styles": "2026-10-13T22:07:06.705382",
@@ -12381,8 +12425,8 @@
     "Umgee USA": "2026-10-10T16:46:42.000590",
     "Edgy Fashion": "2026-10-13T09:13:02.770988"
   },
-  "daily_count": 8,
-  "last_post_time": "2026-10-27T07:38:33.890446",
+  "daily_count": 12,
+  "last_post_time": "2026-10-27T21:34:46.643893",
   "board_rotation_cursor": 0,
   "last_image_style": "carousel",
   "last_template_index": 14
