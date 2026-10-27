@@ -12220,11 +12220,55 @@
       "template": 17,
       "pin_url": "https://www.pinterest.com/pin/962222276665386274/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8782690091179,
+      "title": "Buki Collagen Camisole - Pearl Grey: Cozy Fall Must-Have \u2014 MeeeShop",
+      "board": "Trends",
+      "timestamp": "2026-10-27T07:32:11.566154",
+      "type": "carousel",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276665393684/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8892151431339,
+      "title": "Twisted Stripe 3/4 Sleeve Cowl Neck Tank - Cozy Fall Must-Have \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-10-27T07:33:20.194267",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276665393693/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8825881886891,
+      "title": "Mkf Collection by Mia K. - Estelle Shoulder Bag | MeeeShop US Boutique",
+      "board": "Trendy & Timeless...",
+      "timestamp": "2026-10-27T07:36:05.466874",
+      "type": "video",
+      "style": "collage",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276665393721/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8883466666155,
+      "title": "Winter Blush Fuzzy Striped Sweater | MeeeShop US Boutique",
+      "board": "Fall Outfits 2026",
+      "timestamp": "2026-10-27T07:38:33.890446",
+      "type": "video",
+      "style": "carousel",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276665393736/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-10-12T23:51:27.730749",
-    "Trends": "2026-10-27T00:18:35.022553",
+    "Trends": "2026-10-27T07:32:11.566154",
     "Dresses": "2026-10-23T20:41:56.204070",
     "Feminine & Flowy Fits": "2026-10-19T21:47:32.938103",
     "Short fall dresses": "2026-10-24T07:06:32.059527",
@@ -12244,7 +12288,7 @@
     "Blouses": "2026-10-18T15:14:33.386346",
     "Rompers_Jumpsuits &...": "2026-10-16T20:10:03.538169",
     "Handbag #handsips": "2026-10-22T07:24:10.788626",
-    "Trendy & Timeless...": "2026-10-15T20:37:39.179845",
+    "Trendy & Timeless...": "2026-10-27T07:36:05.466874",
     "Our Recommended...": "2026-10-15T23:42:42.667698",
     "Blouse": "2026-10-21T07:20:32.412247",
     "Wardrobe Must-Hav...": "2026-10-16T06:58:01.511867",
@@ -12269,7 +12313,7 @@
     "Fashion Models": "2026-10-18T22:58:47.110263",
     "My Shop #1737732113": "2026-10-19T18:05:45.862605",
     "Shop For Holidays": "2026-10-20T07:25:10.217091",
-    "New": "2026-10-26T07:37:24.752322",
+    "New": "2026-10-27T07:33:20.194267",
     "American Bazi": "2026-10-27T00:24:30.915597",
     "Cool & Casual Styles": "2026-10-23T07:15:18.663260",
     "MeeeShop's Luxe Styles": "2026-10-13T22:07:06.705382",
@@ -12326,7 +12370,7 @@
     "Fall outfits": "2026-10-18T15:12:47.810357",
     "Winter Outfits": "2026-10-12T20:44:50.011640",
     "Women's shacket": "2026-10-02T17:13:32.401685",
-    "Fall Outfits 2026": "2026-09-30T17:25:44.491082",
+    "Fall Outfits 2026": "2026-10-27T07:38:33.890446",
     "Womens shacket": "2026-10-03T23:42:07.347470",
     "Meshohn Luxe Styles": "2026-10-21T20:56:37.282449",
     "Look casual...": "2026-10-17T19:49:37.987515",
@@ -12337,9 +12381,9 @@
     "Umgee USA": "2026-10-10T16:46:42.000590",
     "Edgy Fashion": "2026-10-13T09:13:02.770988"
   },
-  "daily_count": 4,
-  "last_post_time": "2026-10-27T00:24:30.915597",
+  "daily_count": 8,
+  "last_post_time": "2026-10-27T07:38:33.890446",
   "board_rotation_cursor": 0,
   "last_image_style": "carousel",
-  "last_template_index": 17
+  "last_template_index": 14
 }
