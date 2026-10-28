@@ -12308,17 +12308,61 @@
       "template": 14,
       "pin_url": "https://www.pinterest.com/pin/962222276665413477/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8897141211307,
+      "title": "Ymi Women's Luxe Capri with Side Slit - Cozy Fall Capri for Halloween \u2014 MeeeShop",
+      "board": "Trends",
+      "timestamp": "2026-10-28T00:20:51.663945",
+      "type": "carousel",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276665417452/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8879309258923,
+      "title": "Women's Inside Out Long Sleeve | MeeeShop US Boutique",
+      "board": "New",
+      "timestamp": "2026-10-28T00:21:54.752492",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276665417492/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 9103168864427,
+      "title": "Ash Mini Dress: Cozy Fall & Halloween Chic Outfit Idea \u2014 MeeeShop",
+      "board": "Dress",
+      "timestamp": "2026-10-28T00:23:01.545301",
+      "type": "carousel",
+      "style": "collage",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276665417518/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8933166809259,
+      "title": "Women's Bamboo Viscose/cotton Capri Leggings - Cozy Fall & Halloween \u2014 MeeeShop",
+      "board": "Weekend to Workout",
+      "timestamp": "2026-10-28T00:25:47.865945",
+      "type": "video",
+      "style": "carousel",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276665417585/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-10-12T23:51:27.730749",
-    "Trends": "2026-10-27T21:29:33.280544",
+    "Trends": "2026-10-28T00:20:51.663945",
     "Dresses": "2026-10-23T20:41:56.204070",
     "Feminine & Flowy Fits": "2026-10-19T21:47:32.938103",
     "Short fall dresses": "2026-10-24T07:06:32.059527",
     "Must-Have Fashion Picks": "2026-08-13T05:20:05.419233",
     "Trendy & Timeless Fashion": "2026-08-13T05:29:39.715837",
-    "Dress": "2026-10-15T20:36:05.634355",
+    "Dress": "2026-10-28T00:23:01.545301",
     "Bags": "2026-10-19T07:37:52.838798",
     "Jeans": "2026-10-15T16:07:25.488289",
     "Cocktail Dresses": "2026-10-27T00:21:20.472023",
@@ -12357,7 +12401,7 @@
     "Fashion Models": "2026-10-18T22:58:47.110263",
     "My Shop #1737732113": "2026-10-19T18:05:45.862605",
     "Shop For Holidays": "2026-10-20T07:25:10.217091",
-    "New": "2026-10-27T21:31:57.640973",
+    "New": "2026-10-28T00:21:54.752492",
     "American Bazi": "2026-10-27T00:24:30.915597",
     "Cool & Casual Styles": "2026-10-23T07:15:18.663260",
     "MeeeShop's Luxe Styles": "2026-10-13T22:07:06.705382",
@@ -12373,7 +12417,7 @@
     "new products": "2026-10-17T06:52:14.054275",
     "Chic & Effortless Styles": "2026-10-20T16:10:02.062883",
     "Davi & Dani Womens...": "2026-10-20T16:11:11.256363",
-    "Weekend to Workout": "2026-10-11T00:16:49.968751",
+    "Weekend to Workout": "2026-10-28T00:25:47.865945",
     "Gimme Gummy Playful Nostalgia": "2026-10-18T07:12:07.115314",
     "Best selling products": "2026-10-20T20:55:03.608175",
     "Off-Duty Athlete Looks": "2026-10-11T08:34:44.381400",
@@ -12425,9 +12469,9 @@
     "Umgee USA": "2026-10-10T16:46:42.000590",
     "Edgy Fashion": "2026-10-13T09:13:02.770988"
   },
-  "daily_count": 12,
-  "last_post_time": "2026-10-27T21:34:46.643893",
+  "daily_count": 4,
+  "last_post_time": "2026-10-28T00:25:47.865945",
   "board_rotation_cursor": 0,
   "last_image_style": "carousel",
-  "last_template_index": 14
+  "last_template_index": 11
 }
