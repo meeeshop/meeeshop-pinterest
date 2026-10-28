@@ -10732,7 +10732,151 @@
       ],
       "tagged_at": "2026-10-26T03:52:38.528022+00:00",
       "verified_at": "2026-10-26T03:52:38.528035+00:00"
+    },
+    "962222276617503732": {
+      "pin_id": "962222276617503732",
+      "pin_title": "MeeeShop: Shop Dresses, Jeans, Clothes, Shoes, & Accessories For Women",
+      "original_link": "https://us.meeeshop.com/products/rolling-stones-1994-sweatshirt",
+      "tagged_products": [
+        {
+          "id": "9138381619371",
+          "variant_id": "48434997919915",
+          "handle": "adalynn-plus-high-rise-boot-cut-jeans",
+          "title": "Adalynn Plus High Rise Boot Cut Jeans",
+          "price": 99.0,
+          "url": "https://us.meeeshop.com/products/adalynn-plus-high-rise-boot-cut-jeans?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/301669c45029dc927.jpg?v=1793159944"
+        },
+        {
+          "id": "9138382504107",
+          "variant_id": "48435007553707",
+          "handle": "aurelia-tummy-control-high-rise-crop-palazzo-jeans",
+          "title": "Aurelia Tummy Control High Rise Crop Palazzo Jeans",
+          "price": 98.0,
+          "url": "https://us.meeeshop.com/products/aurelia-tummy-control-high-rise-crop-palazzo-jeans?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/Artemisvintage6a286179cd9f926a286179cdab7.519537796a286179cdab7.jpg?v=1793159956"
+        },
+        {
+          "id": "9138381324459",
+          "variant_id": "48434996379819",
+          "handle": "ava-plus-high-rise-crop-flare-jeans",
+          "title": "Ava Plus High Rise Crop Flare Jeans",
+          "price": 91.0,
+          "url": "https://us.meeeshop.com/products/ava-plus-high-rise-crop-flare-jeans?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/Artemisvintage69e66b9368e4f269e66b9368ef3.2949011869e66b9368ef3.jpg?v=1793159944"
+        },
+        {
+          "id": "9138382143659",
+          "variant_id": "48435003785387",
+          "handle": "alexa-plus-high-rise-tapered-leg-mom-jeans",
+          "title": "Alexa Plus High Rise Tapered Leg Mom Jeans",
+          "price": 92.0,
+          "url": "https://us.meeeshop.com/products/alexa-plus-high-rise-tapered-leg-mom-jeans?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/Artemisvintage69e6a19249c66869e6a19249d17.4466871569e6a19249d17.jpg?v=1793159952"
+        },
+        {
+          "id": "8930416820395",
+          "variant_id": "47612242493611",
+          "handle": "and-the-why-full-size-double-layered-plaid-contrast-sweatshirt",
+          "title": "And the Why Full Size Double Layered Plaid Contrast Sweatshirt",
+          "price": 134.99,
+          "url": "https://us.meeeshop.com/products/and-the-why-full-size-double-layered-plaid-contrast-sweatshirt?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/and-the-why-full-size-double-layered-plaid-contrast-sweatshirt-1.webp?v=1787717807"
+        },
+        {
+          "id": "8905532440747",
+          "variant_id": "47546257473707",
+          "handle": "graceemma-butter-soft-shorts-black",
+          "title": "Butter Soft Shorts, Black",
+          "price": 84.99,
+          "url": "https://us.meeeshop.com/products/graceemma-butter-soft-shorts-black?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/butter-soft-shorts-black-1.jpg?v=1787717463"
+        },
+        {
+          "id": "8883469942955",
+          "variant_id": "47424524583083",
+          "handle": "buki-resort-crop-pant",
+          "title": "Buki Resort Crop Pant",
+          "price": 159.99,
+          "url": "https://us.meeeshop.com/products/buki-resort-crop-pant?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/buki-resort-crop-pant-1.png?v=1787716945"
+        },
+        {
+          "id": "8789759197355",
+          "variant_id": "47130850853035",
+          "handle": "athena-inseam-transform-high-rise-a-wide-jeans",
+          "title": "Athena Inseam Transform High Rise A-wide Jeans",
+          "price": 134.99,
+          "url": "https://us.meeeshop.com/products/athena-inseam-transform-high-rise-a-wide-jeans?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/athena-inseam-transform-high-rise-a-wide-jeans-1.jpg?v=1787715856"
+        },
+        {
+          "id": "9073872240811",
+          "variant_id": "48110998192299",
+          "handle": "alice-boots-black",
+          "title": "Alice Boots Black",
+          "price": 194.99,
+          "url": "https://us.meeeshop.com/products/alice-boots-black?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/alice-boots-black-in-9-alice-and-olivia-black-boot-350699.png?v=1791205712"
+        },
+        {
+          "id": "8883469844651",
+          "variant_id": "47424523370667",
+          "handle": "buki-collagen-camisole-blush-pink-top",
+          "title": "Buki Collagen Camisole - Blush Pink Top",
+          "price": 79.99,
+          "url": "https://us.meeeshop.com/products/buki-collagen-camisole-blush-pink-top?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/Minimal_Lilac_Top_Editorial_Portrait_Buki_Collagen_Cami_51841201-60b8-4fc0-8450-4a06e04b4394.png?v=1792178129"
+        },
+        {
+          "id": "9073872044203",
+          "variant_id": "48110997209259",
+          "handle": "alice-boots-brown",
+          "title": "Alice Boots Brown",
+          "price": 194.99,
+          "url": "https://us.meeeshop.com/products/alice-boots-brown?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/alice-boots-brown-in-9-alice-brown-boots-shoe-334891.png?v=1791205625"
+        },
+        {
+          "id": "8782689599659",
+          "variant_id": "47103630966955",
+          "handle": "buki-straight-skinny-legging-pant",
+          "title": "Buki Straight Skinny Legging Pant",
+          "price": 129.99,
+          "url": "https://us.meeeshop.com/products/buki-straight-skinny-legging-pant?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/buki-straight-skinny-legging-pant-1.png?v=1787675824"
+        },
+        {
+          "id": "8933187944619",
+          "variant_id": "47624592818347",
+          "handle": "black-utility-crop-top-cargo-pant-set",
+          "title": "Black Utility Crop Top & Cargo Pant Set",
+          "price": 134.99,
+          "url": "https://us.meeeshop.com/products/black-utility-crop-top-cargo-pant-set?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/black-utility-crop-top-cargo-pant-set-1.jpg?v=1787675497"
+        },
+        {
+          "id": "8869160845483",
+          "variant_id": "47351138091179",
+          "handle": "camouflage-print-contrast-thumbhole-knit-top",
+          "title": "Camouflage Print Contrast Thumbhole Knit Top",
+          "price": 79.99,
+          "url": "https://us.meeeshop.com/products/camouflage-print-contrast-thumbhole-knit-top?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/camouflage-print-contrast-thumbhole-knit-top-1.jpg?v=1787716646"
+        },
+        {
+          "id": "8883470532779",
+          "variant_id": "47424525992107",
+          "handle": "buki-barcelona-shirt-black",
+          "title": "Buki Barcelona Shirt - Black",
+          "price": 179.99,
+          "url": "https://us.meeeshop.com/products/buki-barcelona-shirt-black?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/Barcelona_Black.png?v=1790632023"
+        }
+      ],
+      "tagged_at": "2026-10-28T04:11:01.568395+00:00",
+      "verified_at": "2026-10-28T04:11:01.568408+00:00"
     }
   },
-  "last_run": "2026-10-28T04:07:36.396851+00:00"
+  "last_run": "2026-10-28T04:11:01.568413+00:00"
 }
