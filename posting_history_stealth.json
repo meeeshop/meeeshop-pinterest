@@ -12442,11 +12442,55 @@
       "template": 14,
       "pin_url": "https://www.pinterest.com/pin/962222276665437747/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 9041690034347,
+      "title": "Playa Jumpsuit - Vintage Black | MeeeShop US Boutique",
+      "board": "Trends",
+      "timestamp": "2026-10-28T21:54:23.853431",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276665444114/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8795779334315,
+      "title": "Flying Tomato Paris Stripe Cutout Midi Dress - Cozy Fall Halloween Chic \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-10-28T21:55:38.197118",
+      "type": "carousel",
+      "style": "collage",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276665444161/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 9058765111467,
+      "title": "Flying Tomato Gilded Drape Satin One-shoulder Maxi Dress | MeeeShop US Boutique",
+      "board": "Our Recommended...",
+      "timestamp": "2026-10-28T21:56:50.341847",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276665444210/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8970884415659,
+      "title": "Emory Park Lola Cradigan | MeeeShop US Boutique",
+      "board": "Sweaters",
+      "timestamp": "2026-10-28T21:58:09.900032",
+      "type": "carousel",
+      "style": "collage",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276665444256/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-10-12T23:51:27.730749",
-    "Trends": "2026-10-28T08:06:44.334989",
+    "Trends": "2026-10-28T21:54:23.853431",
     "Dresses": "2026-10-23T20:41:56.204070",
     "Feminine & Flowy Fits": "2026-10-19T21:47:32.938103",
     "Short fall dresses": "2026-10-24T07:06:32.059527",
@@ -12467,7 +12511,7 @@
     "Rompers_Jumpsuits &...": "2026-10-16T20:10:03.538169",
     "Handbag #handsips": "2026-10-22T07:24:10.788626",
     "Trendy & Timeless...": "2026-10-27T07:36:05.466874",
-    "Our Recommended...": "2026-10-15T23:42:42.667698",
+    "Our Recommended...": "2026-10-28T21:56:50.341847",
     "Blouse": "2026-10-21T07:20:32.412247",
     "Wardrobe Must-Hav...": "2026-10-16T06:58:01.511867",
     "Camis & Tanks": "2026-10-24T23:04:48.504690",
@@ -12491,7 +12535,7 @@
     "Fashion Models": "2026-10-18T22:58:47.110263",
     "My Shop #1737732113": "2026-10-19T18:05:45.862605",
     "Shop For Holidays": "2026-10-20T07:25:10.217091",
-    "New": "2026-10-28T17:45:47.816581",
+    "New": "2026-10-28T21:55:38.197118",
     "American Bazi": "2026-10-27T00:24:30.915597",
     "Cool & Casual Styles": "2026-10-23T07:15:18.663260",
     "MeeeShop's Luxe Styles": "2026-10-28T08:10:24.708953",
@@ -12532,7 +12576,7 @@
     "Women's Cardigans": "2026-10-22T00:02:33.389000",
     "Loungewear": "2026-10-03T07:54:06.931497",
     "Bow heels": "2026-09-24T07:28:41.663446",
-    "Sweaters": "2026-10-04T20:28:39.858979",
+    "Sweaters": "2026-10-28T21:58:09.900032",
     "Luxe Clothing": "2026-10-20T23:46:44.237353",
     "Chic & Cozy Anim...": "2026-10-05T20:11:06.424521",
     "Coats & Jackets": "2026-10-26T07:42:21.624446",
@@ -12559,9 +12603,9 @@
     "Umgee USA": "2026-10-10T16:46:42.000590",
     "Edgy Fashion": "2026-10-13T09:13:02.770988"
   },
-  "daily_count": 12,
-  "last_post_time": "2026-10-28T17:51:24.693569",
+  "daily_count": 16,
+  "last_post_time": "2026-10-28T21:58:09.900032",
   "board_rotation_cursor": 0,
   "last_image_style": "collage",
-  "last_template_index": 14
+  "last_template_index": 11
 }
