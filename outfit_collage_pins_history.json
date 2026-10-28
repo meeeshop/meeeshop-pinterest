@@ -1775,7 +1775,44 @@
           "pin_id": null
         }
       ]
+    },
+    {
+      "timestamp": "2026-10-28T02:12:04.526375+00:00",
+      "formula_id": "date_night",
+      "formula_title": "Date Night Outfit Formula",
+      "pin_url": null,
+      "pin_id": null,
+      "board": "Cocktail Dresses",
+      "title": "Date Night Outfit Formula | Chic Midi Dress & Accessories | MeeeShop",
+      "type": "native_collage",
+      "canvas_preview": "/home/runner/work/meeeshop-pinterest/meeeshop-pinterest/scratch/collage_canvas_date_night_1793153505.png",
+      "cutout_items": [
+        {
+          "role": "THE DRESS",
+          "title": "Flying Tomato Angel Veil Solid Midi Dress",
+          "product_id": "8745259204779",
+          "pin_id": null
+        },
+        {
+          "role": "THE BAG",
+          "title": "Nylah Shoulder Bag",
+          "product_id": "9087954190507",
+          "pin_id": null
+        },
+        {
+          "role": "THE SHOES",
+          "title": "Alma Booties Brown",
+          "product_id": "9073872175275",
+          "pin_id": null
+        },
+        {
+          "role": "THE LAYER",
+          "title": "Retrolicious Pink Dot Bow Top",
+          "product_id": "8782620590251",
+          "pin_id": null
+        }
+      ]
     }
   ],
-  "last_run": "2026-10-27T07:10:14.594317+00:00"
+  "last_run": "2026-10-28T02:12:04.527000+00:00"
 }
