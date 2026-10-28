@@ -12396,6 +12396,52 @@
       "template": 17,
       "pin_url": "https://www.pinterest.com/pin/962222276665425039/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": "571235139755",
+      "article_id": "571235139755",
+      "title": "Cropped Cardigan Outfit Formulas with Wide-Leg Trousers and Skirts",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-10-28T17:44:32.202142",
+      "type": "blog",
+      "style": "card",
+      "template": 9,
+      "pin_url": "https://www.pinterest.com/pin/962222276665437530/",
+      "blog_url": "https://us.meeeshop.com/blogs/cardigans-sweaters-style-guide/cropped-cardigan-outfit-formulas-with-wide-leg-trousers-and-skirts",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 9041683251371,
+      "title": "Rolling Stones Ruby Tuesday Baby Tee - Cozy Fall Graphic Tee \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-10-28T17:45:47.816581",
+      "type": "carousel",
+      "style": "collage",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276665437562/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 9123373547691,
+      "title": "Flying Tomato Mocha Mystique Dark Brown Printed Mesh Midi Dress - Fall Chic \u2014 MeeeShop",
+      "board": "Moody Blues & Vintage Pinks",
+      "timestamp": "2026-10-28T17:48:20.073059",
+      "type": "video",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276665437635/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 9041689936043,
+      "title": "The Bonnie Cropped Hoodie - Olive Top: Cozy Fall & Halloween Style \u2014 MeeeShop",
+      "board": "Zenana Women's...",
+      "timestamp": "2026-10-28T17:51:24.693569",
+      "type": "video",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276665437747/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
@@ -12445,12 +12491,12 @@
     "Fashion Models": "2026-10-18T22:58:47.110263",
     "My Shop #1737732113": "2026-10-19T18:05:45.862605",
     "Shop For Holidays": "2026-10-20T07:25:10.217091",
-    "New": "2026-10-28T08:07:52.410849",
+    "New": "2026-10-28T17:45:47.816581",
     "American Bazi": "2026-10-27T00:24:30.915597",
     "Cool & Casual Styles": "2026-10-23T07:15:18.663260",
     "MeeeShop's Luxe Styles": "2026-10-28T08:10:24.708953",
     "Outerwear": "2026-10-11T21:10:16.114391",
-    "Zenana Women's...": "2026-10-14T00:18:06.826258",
+    "Zenana Women's...": "2026-10-28T17:51:24.693569",
     "Thanks giving Outfits": "2026-10-19T18:06:52.644154",
     "Weekend to Workwear": "2026-10-23T23:52:04.270036",
     "Effortless Looks": "2026-10-14T23:52:20.362275",
@@ -12509,13 +12555,13 @@
     "Simple Outfits": "2026-09-21T21:17:08.897037",
     "Wardrobe Oozes": "2026-09-30T21:39:05.673247",
     "Zenana Womens...": "2026-10-05T20:13:39.727847",
-    "Moody Blues & Vintage Pinks": "2026-10-08T00:57:33.726975",
+    "Moody Blues & Vintage Pinks": "2026-10-28T17:48:20.073059",
     "Umgee USA": "2026-10-10T16:46:42.000590",
     "Edgy Fashion": "2026-10-13T09:13:02.770988"
   },
-  "daily_count": 8,
-  "last_post_time": "2026-10-28T08:10:24.708953",
+  "daily_count": 12,
+  "last_post_time": "2026-10-28T17:51:24.693569",
   "board_rotation_cursor": 0,
-  "last_image_style": "carousel",
-  "last_template_index": 17
+  "last_image_style": "collage",
+  "last_template_index": 14
 }
