@@ -4691,13 +4691,112 @@
       "original_link": "https://us.meeeshop.com/products/bibi-button-up-striped-dolman-sleeve-shirt",
       "tagged_products": [
         {
-          "id": "8888479416491",
-          "variant_id": "47454321017003",
-          "handle": "bibi-sequin-mardi-gras-striped-round-neck-sweatshirt",
-          "title": "Bibi Sequin Mardi Gras Striped Round Neck Sweatshirt",
+          "id": "8825276137643",
+          "variant_id": "47233226866859",
+          "handle": "argyle-print-button-front-jersey-top",
+          "title": "Argyle Print Button Front Jersey Top",
+          "price": 54.99,
+          "url": "https://us.meeeshop.com/products/argyle-print-button-front-jersey-top?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/argyle-print-button-front-jersey-top-1.jpg?v=1787716026"
+        },
+        {
+          "id": "8897484619947",
+          "variant_id": "47515499692203",
+          "handle": "bibi-flower-printed-short-dolman-blouse-top",
+          "title": "Bibi Flower Printed Short Dolman Blouse Top",
+          "price": 69.99,
+          "url": "https://us.meeeshop.com/products/bibi-flower-printed-short-dolman-blouse-top?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/bibi-flower-printed-short-dolman-blouse-top-1.webp?v=1787717402"
+        },
+        {
+          "id": "8869160681643",
+          "variant_id": "47351137042603",
+          "handle": "button-detailed-front-knit-with-contrast-sleeves-top",
+          "title": "Button Detailed Front Knit with Contrast Sleeves Top",
+          "price": 84.99,
+          "url": "https://us.meeeshop.com/products/button-detailed-front-knit-with-contrast-sleeves-top?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/button-detailed-front-knit-with-contrast-sleeves-top-1.jpg?v=1787716630"
+        },
+        {
+          "id": "8888475320491",
+          "variant_id": "47454308073643",
+          "handle": "bibi-christmas-plaid-exaggerated-shoulder-sleeves-top",
+          "title": "Bibi Christmas Plaid Exaggerated Shoulder Sleeves Top",
+          "price": 79.99,
+          "url": "https://us.meeeshop.com/products/bibi-christmas-plaid-exaggerated-shoulder-sleeves-top?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/bibi-christmas-plaid-exaggerated-shoulder-sleeves-top-1.webp?v=1787717032"
+        },
+        {
+          "id": "8930419966123",
+          "variant_id": "47612260712619",
+          "handle": "annie-wear-striped-bow-round-neck-knit-top",
+          "title": "Annie Wear Striped Bow Round Neck Knit Top",
+          "price": 119.99,
+          "url": "https://us.meeeshop.com/products/annie-wear-striped-bow-round-neck-knit-top?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/annie-wear-striped-bow-round-neck-knit-top-1.webp?v=1787717842"
+        },
+        {
+          "id": "8931951018155",
+          "variant_id": "47618248376491",
+          "handle": "2x1-rib-stripe-tank-top-made-in-usa",
+          "title": "2x1 Rib Stripe Tank Top Made in USA",
           "price": 89.99,
-          "url": "https://us.meeeshop.com/products/bibi-sequin-mardi-gras-striped-round-neck-sweatshirt?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
-          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/bibi-sequin-mardi-gras-striped-round-neck-sweatshirt-1.webp?v=1787717049"
+          "url": "https://us.meeeshop.com/products/2x1-rib-stripe-tank-top-made-in-usa?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/2x1-rib-stripe-tank-top-made-in-usa-1.png?v=1787717884"
+        },
+        {
+          "id": "8825274957995",
+          "variant_id": "47233217331371",
+          "handle": "bubble-sleeve-knit-jersey-top",
+          "title": "Bubble Sleeve Knit Jersey Top",
+          "price": 54.99,
+          "url": "https://us.meeeshop.com/products/bubble-sleeve-knit-jersey-top?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/bubble-sleeve-knit-jersey-top-1.jpg?v=1787715968"
+        },
+        {
+          "id": "9041685348523",
+          "variant_id": "47971860054187",
+          "handle": "but-first-rodeo-crop-top",
+          "title": "\"but First, Rodeo\" Crop Top",
+          "price": 104.99,
+          "url": "https://us.meeeshop.com/products/but-first-rodeo-crop-top?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/but-first-rodeo-crop-top-in-xs-but-first-coffee-to-071595.jpg?v=1790688976"
+        },
+        {
+          "id": "8931951116459",
+          "variant_id": "47618249851051",
+          "handle": "2x1-rib-solid-round-neck-tank-top-made-in-usa",
+          "title": "2x1 Rib Solid Round Neck Tank Top Made in USA",
+          "price": 89.99,
+          "url": "https://us.meeeshop.com/products/2x1-rib-solid-round-neck-tank-top-made-in-usa?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/2x1-rib-solid-round-neck-tank-top-made-in-usa-1.png?v=1787717890"
+        },
+        {
+          "id": "8879311093931",
+          "variant_id": "47388102951083",
+          "handle": "2x1-long-sleeve-henley-top",
+          "title": "2x1 Long Sleeve Henley Top",
+          "price": 134.99,
+          "url": "https://us.meeeshop.com/products/2x1-long-sleeve-henley-top?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/2x1-long-sleeve-henley-top-1.jpg?v=1787716803"
+        },
+        {
+          "id": "8869173002411",
+          "variant_id": "47351157031083",
+          "handle": "air-scuba-round-neck-long-sleeve-sweatshirt",
+          "title": "Air Scuba Round Neck Long Sleeve Sweatshirt",
+          "price": 74.99,
+          "url": "https://us.meeeshop.com/products/air-scuba-round-neck-long-sleeve-sweatshirt?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/air-scuba-round-neck-long-sleeve-sweatshirt-1.jpg?v=1787716655"
+        },
+        {
+          "id": "8782689730731",
+          "variant_id": "47103631917227",
+          "handle": "buki-resort-vee-long-sleeve-popover-shirt-black",
+          "title": "Buki Resort Vee Long Sleeve Popover Shirt - Black",
+          "price": 189.99,
+          "url": "https://us.meeeshop.com/products/buki-resort-vee-long-sleeve-popover-shirt-black?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/Sesort_Vee_Black_Studio.png?v=1790632678"
         },
         {
           "id": "8782689992875",
@@ -4718,116 +4817,17 @@
           "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/buki-sleeveless-turtleneck-shirt-1.webp?v=1787675836"
         },
         {
-          "id": "8949202583723",
-          "variant_id": "47683547332779",
-          "handle": "aztec-soft-knit-cardigan-with-tribal-pri",
-          "title": "Aztec Soft Knit Cardigan with Tribal Print - Western Vibe \ud83c\udf35 Top",
-          "price": 99.99,
-          "url": "https://us.meeeshop.com/products/aztec-soft-knit-cardigan-with-tribal-pri?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
-          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/aztec-soft-knit-cardigan-with-tribal-print-western-vibe-top-1.jpg?v=1787675703"
-        },
-        {
-          "id": "8949210710187",
-          "variant_id": "47683570598059",
-          "handle": "bohemian-fusion-multi-patterned-crochet",
-          "title": "Bohemian Fusion Multi-patterned Crochet Stitched Top",
-          "price": 64.99,
-          "url": "https://us.meeeshop.com/products/bohemian-fusion-multi-patterned-crochet?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
-          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/bohemian-fusion-multi-patterned-crochet-stitched-top-1.jpg?v=1787675729"
-        },
-        {
-          "id": "9006478983339",
-          "variant_id": "47973854609579",
-          "handle": "aztec-patterned-sweater-cardigan",
-          "title": "Aztec Patterned Sweater Cardigan",
-          "price": 81.99,
-          "url": "https://us.meeeshop.com/products/aztec-patterned-sweater-cardigan?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
-          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/aztec-patterned-sweater-cardigan-in-black-aztec-pa-426347.jpg?v=1789477139"
-        },
-        {
-          "id": "8879306834091",
-          "variant_id": "47388057469099",
-          "handle": "boatneck-sweater",
-          "title": "Boatneck Sweater",
-          "price": 99.99,
-          "url": "https://us.meeeshop.com/products/boatneck-sweater?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
-          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/boatneck-sweater-1.jpg?v=1787716706"
-        },
-        {
-          "id": "8949201273003",
-          "variant_id": "47683542483115",
-          "handle": "botanical-leaf-embroidered-kimono-cardig",
-          "title": "Botanical Leaf Embroidered Kimono Cardigan Top",
-          "price": 64.99,
-          "url": "https://us.meeeshop.com/products/botanical-leaf-embroidered-kimono-cardig?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
-          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/botanical-leaf-embroidered-kimono-cardigan-top-1.jpg?v=1787675656"
-        },
-        {
-          "id": "9041690656939",
-          "variant_id": "47971880927403",
-          "handle": "beach-boys-1978-endless-summer-top",
-          "title": "Beach Boys 1978 Endless Summer Top",
-          "price": 104.99,
-          "url": "https://us.meeeshop.com/products/beach-boys-1978-endless-summer-top?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
-          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/beach-boys-1978-endless-summer-top-in-xs-summer-ou-663403.jpg?v=1790768700"
-        },
-        {
-          "id": "8883470532779",
-          "variant_id": "47424525992107",
-          "handle": "buki-barcelona-shirt-black",
-          "title": "Buki Barcelona Shirt - Black",
-          "price": 179.99,
-          "url": "https://us.meeeshop.com/products/buki-barcelona-shirt-black?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
-          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/Barcelona_Black.png?v=1790632023"
-        },
-        {
-          "id": "8905532637355",
-          "variant_id": "47859171623083",
-          "handle": "graceemma-butter-soft-quarter-zip-top-brown",
-          "title": "Butter Soft Quarter-zip Top, Brown",
-          "price": 72.0,
-          "url": "https://us.meeeshop.com/products/graceemma-butter-soft-quarter-zip-top-brown?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
-          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/butter-soft-quarter-zip-top-brown-1.jpg?v=1787717467"
-        },
-        {
-          "id": "8883470598315",
-          "variant_id": "47424526319787",
-          "handle": "buki-boss-babe-t-shirt-redwood",
-          "title": "Buki Boss (babe) T-shirt - Redwood",
-          "price": 139.99,
-          "url": "https://us.meeeshop.com/products/buki-boss-babe-t-shirt-redwood?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
-          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/Minimalist_Rose_Wrap_Fashion_Portrait.png?v=1790896102"
-        },
-        {
-          "id": "8905532539051",
-          "variant_id": "47546257703083",
-          "handle": "graceemma-butter-soft-quarter-zip-top-slate-blue",
-          "title": "Butter Soft Quarter-zip Top, Slate Blue",
-          "price": 114.99,
-          "url": "https://us.meeeshop.com/products/graceemma-butter-soft-quarter-zip-top-slate-blue?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
-          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/butter-soft-quarter-zip-top-slate-blue-1.jpg?v=1787717465"
-        },
-        {
-          "id": "8879309488299",
-          "variant_id": "47388087484587",
-          "handle": "backless-hoodie-top",
-          "title": "Backless Hoodie Top",
-          "price": 119.99,
-          "url": "https://us.meeeshop.com/products/backless-hoodie-top?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
-          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/backless-hoodie-top-1.jpg?v=1787716773"
-        },
-        {
-          "id": "8988057927851",
-          "variant_id": "47920386932907",
-          "handle": "briar-drop-shoulder-sweater",
-          "title": "Briar Drop Shoulder Sweater",
-          "price": 68.0,
-          "url": "https://us.meeeshop.com/products/briar-drop-shoulder-sweater?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
-          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/briar-drop-shoulder-sweater-in-s-top-556395.png?v=1789188306"
+          "id": "8879311716523",
+          "variant_id": "47388108357803",
+          "handle": "boyfriend-tee",
+          "title": "Boyfriend Tee",
+          "price": 94.99,
+          "url": "https://us.meeeshop.com/products/boyfriend-tee?utm_source=pinterest&utm_medium=shoppable_pin_tag&utm_campaign=popular_pin",
+          "image_url": "https://cdn.shopify.com/s/files/1/0605/3992/8747/files/boyfriend-tee-1.jpg?v=1787716810"
         }
       ],
-      "tagged_at": "2026-10-03T06:36:31.790186+00:00",
-      "verified_at": "2026-10-03T06:36:31.790198+00:00"
+      "tagged_at": "2026-10-28T04:07:36.396829+00:00",
+      "verified_at": "2026-10-28T04:07:36.396840+00:00"
     },
     "962222276619040626": {
       "pin_id": "962222276619040626",
@@ -10734,5 +10734,5 @@
       "verified_at": "2026-10-26T03:52:38.528035+00:00"
     }
   },
-  "last_run": "2026-10-27T03:42:25.381711+00:00"
+  "last_run": "2026-10-28T04:07:36.396851+00:00"
 }
