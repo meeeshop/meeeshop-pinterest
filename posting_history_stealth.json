@@ -12352,11 +12352,55 @@
       "template": 11,
       "pin_url": "https://www.pinterest.com/pin/962222276665417585/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8782622654635,
+      "title": "Retrolicious Leaves Bow Top - Cozy Fall Blouse for Halloween & Everyday Style",
+      "board": "Trends",
+      "timestamp": "2026-10-28T08:06:44.334989",
+      "type": "carousel",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276665424987/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8818154176683,
+      "title": "Emory Park Lola Shorts: Cozy Fall Vibes & Halloween Chic \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-10-28T08:07:52.410849",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276665425006/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 9041685840043,
+      "title": "Grateful Dead Dancing Bears Tie Tank - Psychedelic Fall Vibes & Halloween Ready",
+      "board": "Off-Duty Athlete Looks",
+      "timestamp": "2026-10-28T08:09:14.844181",
+      "type": "carousel",
+      "style": "collage",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276665425022/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8931945971883,
+      "title": "High-neck Racerback Crop Top - Cozy Fall & Halloween Must-Have \u2014 MeeeShop",
+      "board": "MeeeShop's Luxe Styles",
+      "timestamp": "2026-10-28T08:10:24.708953",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276665425039/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-10-12T23:51:27.730749",
-    "Trends": "2026-10-28T00:20:51.663945",
+    "Trends": "2026-10-28T08:06:44.334989",
     "Dresses": "2026-10-23T20:41:56.204070",
     "Feminine & Flowy Fits": "2026-10-19T21:47:32.938103",
     "Short fall dresses": "2026-10-24T07:06:32.059527",
@@ -12401,10 +12445,10 @@
     "Fashion Models": "2026-10-18T22:58:47.110263",
     "My Shop #1737732113": "2026-10-19T18:05:45.862605",
     "Shop For Holidays": "2026-10-20T07:25:10.217091",
-    "New": "2026-10-28T00:21:54.752492",
+    "New": "2026-10-28T08:07:52.410849",
     "American Bazi": "2026-10-27T00:24:30.915597",
     "Cool & Casual Styles": "2026-10-23T07:15:18.663260",
-    "MeeeShop's Luxe Styles": "2026-10-13T22:07:06.705382",
+    "MeeeShop's Luxe Styles": "2026-10-28T08:10:24.708953",
     "Outerwear": "2026-10-11T21:10:16.114391",
     "Zenana Women's...": "2026-10-14T00:18:06.826258",
     "Thanks giving Outfits": "2026-10-19T18:06:52.644154",
@@ -12420,7 +12464,7 @@
     "Weekend to Workout": "2026-10-28T00:25:47.865945",
     "Gimme Gummy Playful Nostalgia": "2026-10-18T07:12:07.115314",
     "Best selling products": "2026-10-20T20:55:03.608175",
-    "Off-Duty Athlete Looks": "2026-10-11T08:34:44.381400",
+    "Off-Duty Athlete Looks": "2026-10-28T08:09:14.844181",
     "LE LIS Womens Clothi...": "2026-10-20T20:56:10.887545",
     "New Trendy Woman...": "2026-10-21T16:27:52.923701",
     "Outfit Ideas": "2026-10-22T07:27:47.956283",
@@ -12469,9 +12513,9 @@
     "Umgee USA": "2026-10-10T16:46:42.000590",
     "Edgy Fashion": "2026-10-13T09:13:02.770988"
   },
-  "daily_count": 4,
-  "last_post_time": "2026-10-28T00:25:47.865945",
+  "daily_count": 8,
+  "last_post_time": "2026-10-28T08:10:24.708953",
   "board_rotation_cursor": 0,
   "last_image_style": "carousel",
-  "last_template_index": 11
+  "last_template_index": 17
 }
