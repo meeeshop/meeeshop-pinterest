@@ -2279,7 +2279,47 @@
           "role": "THE LAYER"
         }
       ]
+    },
+    {
+      "timestamp": "2026-10-29T19:31:37.162620+00:00",
+      "formula_id": "cozy_sweater_weather",
+      "formula_title": "Cozy Fall Layers Outfit Formula",
+      "pin_url": "https://www.pinterest.com/pin/962222276665469942/",
+      "pin_id": "962222276665469942",
+      "board": "Sweaters",
+      "title": "Cozy Fall Layers Outfit Formula - Easy Everyday Styling Formula | MeeeShop",
+      "tagged_products_count": 4,
+      "outfit_items": [
+        {
+          "id": "8782621868203",
+          "variant_id": "47862754148523",
+          "title": "Retrolicious Isabel Top in Plum",
+          "price": "24.99",
+          "role": "THE KNIT"
+        },
+        {
+          "id": "9087954157739",
+          "variant_id": "48172197642411",
+          "title": "Elke Convertible Backpack Handbag",
+          "price": "109.99",
+          "role": "THE TOTE"
+        },
+        {
+          "id": "9138371887275",
+          "variant_id": "48434892734635",
+          "title": "Metallic Ultra High Rise Relaxed Flare Jeans",
+          "price": "114.99",
+          "role": "THE DENIM"
+        },
+        {
+          "id": "9073872175275",
+          "variant_id": "48110997995691",
+          "title": "Alma Booties Brown",
+          "price": "169.99",
+          "role": "THE BOOTS"
+        }
+      ]
     }
   ],
-  "last_run": "2026-10-29T07:54:05.739095+00:00"
+  "last_run": "2026-10-29T19:31:37.162641+00:00"
 }
