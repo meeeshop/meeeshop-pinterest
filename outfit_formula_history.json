@@ -2199,7 +2199,47 @@
           "role": "THE FOOTWEAR"
         }
       ]
+    },
+    {
+      "timestamp": "2026-10-29T02:20:08.201752+00:00",
+      "formula_id": "everyday_chic",
+      "formula_title": "Everyday Chic Outfit Formula",
+      "pin_url": "https://www.pinterest.com/pin/962222276665450094/",
+      "pin_id": "962222276665450094",
+      "board": "Style Ideas",
+      "title": "Everyday Chic Outfit Formula - Easy Everyday Styling Formula | MeeeShop",
+      "tagged_products_count": 4,
+      "outfit_items": [
+        {
+          "id": "8782621737131",
+          "variant_id": "47103343460523",
+          "title": "Retrolicious Isabel Top in Peacock Blue",
+          "price": "54.99",
+          "role": "THE TOP"
+        },
+        {
+          "id": "9087953928363",
+          "variant_id": "48172194889899",
+          "title": "Liza Tote Bag",
+          "price": "104.99",
+          "role": "THE BAG"
+        },
+        {
+          "id": "9138382110891",
+          "variant_id": "48435003392171",
+          "title": "High Rise Tummy Control Holly Flare Jeans",
+          "price": "109.99",
+          "role": "THE BOTTOM"
+        },
+        {
+          "id": "9073872208043",
+          "variant_id": "48110998421675",
+          "title": "Cecilia Slingback Black",
+          "price": "159.99",
+          "role": "THE SHOES"
+        }
+      ]
     }
   ],
-  "last_run": "2026-10-28T22:46:36.414806+00:00"
+  "last_run": "2026-10-29T02:20:08.201783+00:00"
 }
