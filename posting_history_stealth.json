@@ -12486,11 +12486,57 @@
       "template": 11,
       "pin_url": "https://www.pinterest.com/pin/962222276665444256/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 9138370347179,
+      "title": "Tummy Control High Rise Relaxed Straight Leg Jeans - Cozy Fall Must-Have \u2014 MeeeShop",
+      "board": "Trends",
+      "timestamp": "2026-10-29T00:43:05.006269",
+      "type": "product",
+      "style": "carousel",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276665448232/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": "571292287147",
+      "article_id": "571292287147",
+      "title": "Pleated vs Flat-Front Pants: Which Cut is Most Flattering for Your Shape?",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-10-29T00:44:41.690946",
+      "type": "blog",
+      "style": "card",
+      "template": 9,
+      "pin_url": "https://www.pinterest.com/pin/962222276665448267/",
+      "blog_url": "https://us.meeeshop.com/blogs/womens-pants-style-guide/pleated-vs-flat-front-pants-which-cut-is-most-flattering-for-your-shape",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8818149458091,
+      "title": "Emory Park Coralie Midi Dress | MeeeShop US Boutique",
+      "board": "Wardrobe Must-Hav...",
+      "timestamp": "2026-10-29T00:45:48.483090",
+      "type": "carousel",
+      "style": "collage",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276665448302/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 9041683546283,
+      "title": "Majestic Horses Top | MeeeShop US Boutique",
+      "board": "Effortless Looks",
+      "timestamp": "2026-10-29T00:46:59.983697",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276665448337/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-10-12T23:51:27.730749",
-    "Trends": "2026-10-28T21:54:23.853431",
+    "Trends": "2026-10-29T00:43:05.006269",
     "Dresses": "2026-10-23T20:41:56.204070",
     "Feminine & Flowy Fits": "2026-10-19T21:47:32.938103",
     "Short fall dresses": "2026-10-24T07:06:32.059527",
@@ -12513,7 +12559,7 @@
     "Trendy & Timeless...": "2026-10-27T07:36:05.466874",
     "Our Recommended...": "2026-10-28T21:56:50.341847",
     "Blouse": "2026-10-21T07:20:32.412247",
-    "Wardrobe Must-Hav...": "2026-10-16T06:58:01.511867",
+    "Wardrobe Must-Hav...": "2026-10-29T00:45:48.483090",
     "Camis & Tanks": "2026-10-24T23:04:48.504690",
     "Wardrobe Must Haves": "2026-10-16T07:00:23.457902",
     "Trendy Backpacks": "2026-10-24T15:16:21.082068",
@@ -12543,7 +12589,7 @@
     "Zenana Women's...": "2026-10-28T17:51:24.693569",
     "Thanks giving Outfits": "2026-10-19T18:06:52.644154",
     "Weekend to Workwear": "2026-10-23T23:52:04.270036",
-    "Effortless Looks": "2026-10-14T23:52:20.362275",
+    "Effortless Looks": "2026-10-29T00:46:59.983697",
     "Vamp Romantic Styles": "2026-10-18T23:00:05.912022",
     "BFCM Deals": "2026-10-20T07:26:28.335399",
     "Poetcore Aesthetics": "2026-10-18T19:41:07.771537",
@@ -12603,9 +12649,9 @@
     "Umgee USA": "2026-10-10T16:46:42.000590",
     "Edgy Fashion": "2026-10-13T09:13:02.770988"
   },
-  "daily_count": 16,
-  "last_post_time": "2026-10-28T21:58:09.900032",
+  "daily_count": 4,
+  "last_post_time": "2026-10-29T00:46:59.983697",
   "board_rotation_cursor": 0,
-  "last_image_style": "collage",
-  "last_template_index": 11
+  "last_image_style": "carousel",
+  "last_template_index": 15
 }
