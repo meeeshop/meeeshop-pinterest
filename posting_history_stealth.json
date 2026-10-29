@@ -12532,11 +12532,33 @@
       "template": 15,
       "pin_url": "https://www.pinterest.com/pin/962222276665448337/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8818148802731,
+      "title": "Emory Park Neoma Top: Cozy Fall Chic for Halloween & Work \u2014 MeeeShop",
+      "board": "Trends",
+      "timestamp": "2026-10-29T08:15:31.482202",
+      "type": "video",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276665455937/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8970889134251,
+      "title": "Emory Park Danica Top: Cozy Fall Chic for Halloween & Work \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-10-29T08:16:34.192509",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276665455955/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-10-12T23:51:27.730749",
-    "Trends": "2026-10-29T00:43:05.006269",
+    "Trends": "2026-10-29T08:15:31.482202",
     "Dresses": "2026-10-23T20:41:56.204070",
     "Feminine & Flowy Fits": "2026-10-19T21:47:32.938103",
     "Short fall dresses": "2026-10-24T07:06:32.059527",
@@ -12581,7 +12603,7 @@
     "Fashion Models": "2026-10-18T22:58:47.110263",
     "My Shop #1737732113": "2026-10-19T18:05:45.862605",
     "Shop For Holidays": "2026-10-20T07:25:10.217091",
-    "New": "2026-10-28T21:55:38.197118",
+    "New": "2026-10-29T08:16:34.192509",
     "American Bazi": "2026-10-27T00:24:30.915597",
     "Cool & Casual Styles": "2026-10-23T07:15:18.663260",
     "MeeeShop's Luxe Styles": "2026-10-28T08:10:24.708953",
@@ -12649,9 +12671,9 @@
     "Umgee USA": "2026-10-10T16:46:42.000590",
     "Edgy Fashion": "2026-10-13T09:13:02.770988"
   },
-  "daily_count": 4,
-  "last_post_time": "2026-10-29T00:46:59.983697",
+  "daily_count": 6,
+  "last_post_time": "2026-10-29T08:16:34.192509",
   "board_rotation_cursor": 0,
   "last_image_style": "carousel",
-  "last_template_index": 15
+  "last_template_index": 14
 }
