@@ -12554,11 +12554,55 @@
       "template": 14,
       "pin_url": "https://www.pinterest.com/pin/962222276665455955/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8949210775723,
+      "title": "Serene Blooms Crochet Style Top - Boho Chic for Halloween & Cozy Fall \u2014 MeeeShop",
+      "board": "Trends",
+      "timestamp": "2026-10-29T17:52:44.966561",
+      "type": "video",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276665467362/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8883469222059,
+      "title": "Desert Rose: Cinched Waist Windbreaker & Tassel Skirt Set - Fall Halloween Look",
+      "board": "New",
+      "timestamp": "2026-10-29T17:53:54.461866",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276665467387/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8782660305067,
+      "title": "Flying Tomato Tropical Temptation Halter Woven Midi Dress - Cozy Fall Halloween",
+      "board": "Wardrobe Must Haves",
+      "timestamp": "2026-10-29T17:56:23.703435",
+      "type": "video",
+      "style": "collage",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276665467443/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 9123372925099,
+      "title": "Flying Tomato Burgundy Kiss Velvet Sweetheart Keyhole Midi Dress - Fall Chic",
+      "board": "Rompers_Jumpsuits &...",
+      "timestamp": "2026-10-29T17:57:39.209691",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276665467467/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-10-12T23:51:27.730749",
-    "Trends": "2026-10-29T08:15:31.482202",
+    "Trends": "2026-10-29T17:52:44.966561",
     "Dresses": "2026-10-23T20:41:56.204070",
     "Feminine & Flowy Fits": "2026-10-19T21:47:32.938103",
     "Short fall dresses": "2026-10-24T07:06:32.059527",
@@ -12576,14 +12620,14 @@
     "Skirts": "2026-10-27T21:34:46.643893",
     "Shirts & Tops": "2026-10-16T23:24:50.313004",
     "Blouses": "2026-10-18T15:14:33.386346",
-    "Rompers_Jumpsuits &...": "2026-10-16T20:10:03.538169",
+    "Rompers_Jumpsuits &...": "2026-10-29T17:57:39.209691",
     "Handbag #handsips": "2026-10-22T07:24:10.788626",
     "Trendy & Timeless...": "2026-10-27T07:36:05.466874",
     "Our Recommended...": "2026-10-28T21:56:50.341847",
     "Blouse": "2026-10-21T07:20:32.412247",
     "Wardrobe Must-Hav...": "2026-10-29T00:45:48.483090",
     "Camis & Tanks": "2026-10-24T23:04:48.504690",
-    "Wardrobe Must Haves": "2026-10-16T07:00:23.457902",
+    "Wardrobe Must Haves": "2026-10-29T17:56:23.703435",
     "Trendy Backpacks": "2026-10-24T15:16:21.082068",
     "Festive Styles": "2026-10-19T07:36:42.153918",
     "Kancan USA Jeans": "2026-10-16T20:08:42.207928",
@@ -12603,7 +12647,7 @@
     "Fashion Models": "2026-10-18T22:58:47.110263",
     "My Shop #1737732113": "2026-10-19T18:05:45.862605",
     "Shop For Holidays": "2026-10-20T07:25:10.217091",
-    "New": "2026-10-29T08:16:34.192509",
+    "New": "2026-10-29T17:53:54.461866",
     "American Bazi": "2026-10-27T00:24:30.915597",
     "Cool & Casual Styles": "2026-10-23T07:15:18.663260",
     "MeeeShop's Luxe Styles": "2026-10-28T08:10:24.708953",
@@ -12671,9 +12715,9 @@
     "Umgee USA": "2026-10-10T16:46:42.000590",
     "Edgy Fashion": "2026-10-13T09:13:02.770988"
   },
-  "daily_count": 6,
-  "last_post_time": "2026-10-29T08:16:34.192509",
+  "daily_count": 10,
+  "last_post_time": "2026-10-29T17:57:39.209691",
   "board_rotation_cursor": 0,
   "last_image_style": "carousel",
-  "last_template_index": 14
+  "last_template_index": 17
 }
