@@ -1960,7 +1960,44 @@
           "pin_id": null
         }
       ]
+    },
+    {
+      "timestamp": "2026-10-29T07:56:41.691462+00:00",
+      "formula_id": "date_night",
+      "formula_title": "Date Night Outfit Formula",
+      "pin_url": null,
+      "pin_id": null,
+      "board": "Cocktail Dresses",
+      "title": "Date Night Outfit Formula | Chic Midi Dress & Accessories | MeeeShop",
+      "type": "native_collage",
+      "canvas_preview": "/home/runner/work/meeeshop-pinterest/meeeshop-pinterest/scratch/collage_canvas_date_night_1793260580.png",
+      "cutout_items": [
+        {
+          "role": "THE DRESS",
+          "title": "Flying Tomato Refreshing Vibe Woven Maxi Dress",
+          "product_id": "8745254289579",
+          "pin_id": null
+        },
+        {
+          "role": "THE BAG",
+          "title": "Nola Crossbody Bag",
+          "product_id": "9087953862827",
+          "pin_id": null
+        },
+        {
+          "role": "THE SHOES",
+          "title": "Alma Booties Brown",
+          "product_id": "9073872175275",
+          "pin_id": null
+        },
+        {
+          "role": "THE LAYER",
+          "title": "Retrolicious Isabel Top in Plum",
+          "product_id": "8782621868203",
+          "pin_id": null
+        }
+      ]
     }
   ],
-  "last_run": "2026-10-29T02:23:07.166428+00:00"
+  "last_run": "2026-10-29T07:56:41.692153+00:00"
 }

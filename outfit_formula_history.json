@@ -2239,7 +2239,47 @@
           "role": "THE SHOES"
         }
       ]
+    },
+    {
+      "timestamp": "2026-10-29T07:54:05.739072+00:00",
+      "formula_id": "date_night",
+      "formula_title": "Date Night Outfit Formula",
+      "pin_url": "https://www.pinterest.com/pin/962222276665455615/",
+      "pin_id": "962222276665455615",
+      "board": "Cocktail Dresses",
+      "title": "Date Night Outfit Formula | Chic Midi Dress & Accessories | MeeeShop",
+      "tagged_products_count": 4,
+      "outfit_items": [
+        {
+          "id": "8745259204779",
+          "variant_id": "46506904027307",
+          "title": "Flying Tomato Angel Veil Solid Midi Dress",
+          "price": "119.99",
+          "role": "THE DRESS"
+        },
+        {
+          "id": "9087953895595",
+          "variant_id": "48172195119275",
+          "title": "Bizzy Embossed Shoulder Bag",
+          "price": "104.99",
+          "role": "THE BAG"
+        },
+        {
+          "id": "8928207700139",
+          "variant_id": "47605557756075",
+          "title": "Sovella Active Recovery Sandals Women's Pf Slide Black/leopard",
+          "price": "99.99",
+          "role": "THE SHOES"
+        },
+        {
+          "id": "8782621802667",
+          "variant_id": "47103344017579",
+          "title": "Retrolicious Retro Boat Neck Top in Mustard",
+          "price": "54.99",
+          "role": "THE LAYER"
+        }
+      ]
     }
   ],
-  "last_run": "2026-10-29T02:20:08.201783+00:00"
+  "last_run": "2026-10-29T07:54:05.739095+00:00"
 }
