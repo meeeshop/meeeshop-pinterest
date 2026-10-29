@@ -7619,6 +7619,46 @@
       "target_board_id": "962222345325578167",
       "live_url": "https://www.pinterest.com/pin/4602960391938033216/",
       "timestamp": "2026-10-29T18:10:02.699563+00:00"
+    },
+    {
+      "pin_id": "4600990056278443584",
+      "product_title": "Michelle Classic Denim Jacket",
+      "category_group": "pants_denim",
+      "source_board": "_products",
+      "target_board": "Coats & Jackets",
+      "target_board_id": "962222345325591031",
+      "live_url": "https://www.pinterest.com/pin/4600990056278443584/",
+      "timestamp": "2026-10-29T21:58:16.888290+00:00"
+    },
+    {
+      "pin_id": "4608378822232555072",
+      "product_title": "Ivy Tote Bag & Crossbody Set for Women \u2013 Vegan Leather, Gold-Tone Hardware, Denim Blue",
+      "category_group": "pants_denim",
+      "source_board": "_products",
+      "target_board": "Handbags #handbags",
+      "target_board_id": "962222345324852891",
+      "live_url": "https://www.pinterest.com/pin/4608378822232555072/",
+      "timestamp": "2026-10-29T21:58:49.426848+00:00"
+    },
+    {
+      "pin_id": "4597119757323627584",
+      "product_title": "YMI Women's Low-Rise Relaxed Cargo Jeans with Flap Pockets Medium Blue",
+      "category_group": "pants_denim",
+      "source_board": "_products",
+      "target_board": "Kancan USA Jeans",
+      "target_board_id": "962222345325077882",
+      "live_url": "https://www.pinterest.com/pin/4597119757323627584/",
+      "timestamp": "2026-10-29T21:59:15.884772+00:00"
+    },
+    {
+      "pin_id": "4590857005817105472",
+      "product_title": "Embellished High Rise Cross over Flare Jeans",
+      "category_group": "pants_denim",
+      "source_board": "_products",
+      "target_board": "Straight Leg Jeans",
+      "target_board_id": "962222345325683657",
+      "live_url": "https://www.pinterest.com/pin/4590857005817105472/",
+      "timestamp": "2026-10-29T21:59:49.688920+00:00"
     }
   ],
   "board_last_used": {
@@ -7684,20 +7724,20 @@
     "Sweaters #Sweaters #WinterOutfits": "2026-10-18T19:36:20.187727+00:00",
     "Everyday Style Essentials": "2026-10-29T18:09:46.115905+00:00",
     "Fashion": "2026-10-26T21:49:49.479755+00:00",
-    "Kancan USA Jeans": "2026-10-25T15:41:59.902262+00:00",
+    "Kancan USA Jeans": "2026-10-29T21:59:15.884772+00:00",
     "Stylish Finds": "2026-10-27T07:16:09.109249+00:00",
-    "Straight Leg Jeans": "2026-10-25T19:55:46.135690+00:00",
-    "Handbags #handbags": "2026-10-26T18:34:18.249872+00:00",
+    "Straight Leg Jeans": "2026-10-29T21:59:49.688920+00:00",
+    "Handbags #handbags": "2026-10-29T21:58:49.426848+00:00",
     "Weekend to Workwear": "2026-10-23T16:45:11.955199+00:00",
     "Luxe Clothing": "2026-10-24T15:32:26.249097+00:00",
     "Loungewear": "2026-09-22T05:13:37.588164+00:00",
-    "Coats & Jackets": "2026-10-11T00:03:18.486351+00:00",
+    "Coats & Jackets": "2026-10-29T21:58:16.888290+00:00",
     "Umgee USA": "2026-10-21T20:51:19.351154+00:00",
     "Look casual elegante": "2026-10-23T06:55:38.111053+00:00",
     "Relaxed Yet Trendy Fashion": "2026-10-24T06:52:01.299503+00:00",
     "Simple Outfits": "2026-10-24T19:43:36.754965+00:00",
     "Women's shacket": "2026-10-26T18:35:03.331027+00:00"
   },
-  "daily_count": 12,
-  "last_repin_time": "2026-10-29T18:10:02.699563+00:00"
+  "daily_count": 16,
+  "last_repin_time": "2026-10-29T21:59:49.688920+00:00"
 }
