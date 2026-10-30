@@ -12776,11 +12776,55 @@
       "template": 11,
       "pin_url": "https://www.pinterest.com/pin/962222276665495631/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 9123373220011,
+      "title": "Flying Tomato Modern Noir Black Strapless Button Top - Cozy Fall Halloween Chic",
+      "board": "Trends",
+      "timestamp": "2026-10-30T21:42:28.103210",
+      "type": "carousel",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276665501570/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 9138381488299,
+      "title": "Fall Cozy Vibes: Daphne High Rise Double Button Waistband Bermuda Jeans \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-10-30T21:43:35.829426",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276665501590/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8818153717931,
+      "title": "Emory Park Olivia Top - Cozy Fall Chic for Teachers & Pumpkin Patch \u2014 MeeeShop",
+      "board": "Late Summer to Fall Teacher Style",
+      "timestamp": "2026-10-30T21:44:49.302680",
+      "type": "carousel",
+      "style": "collage",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276665501610/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 9041683185835,
+      "title": "Led Zeppelin Mothership 1968 Tee - Vintage Vibes for Halloween & Cozy Fall \u2014 MeeeShop",
+      "board": "Wardrobe Goals",
+      "timestamp": "2026-10-30T21:45:52.284056",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276665501658/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-10-30T08:23:10.916119",
-    "Trends": "2026-10-30T17:31:56.458854",
+    "Trends": "2026-10-30T21:42:28.103210",
     "Dresses": "2026-10-23T20:41:56.204070",
     "Feminine & Flowy Fits": "2026-10-19T21:47:32.938103",
     "Short fall dresses": "2026-10-24T07:06:32.059527",
@@ -12819,13 +12863,13 @@
     "Casual Chic Style": "2026-10-30T17:34:40.085403",
     "Farm clothes": "2026-10-25T20:01:42.671117",
     "Kimchi USA Jeans": "2026-10-29T22:02:05.072004",
-    "Wardrobe Goals": "2026-10-17T23:01:45.663888",
+    "Wardrobe Goals": "2026-10-30T21:45:52.284056",
     "Nylon backpack": "2026-10-17T23:02:50.377466",
     "Everyday Style": "2026-10-18T19:43:39.030068",
     "Fashion Models": "2026-10-18T22:58:47.110263",
     "My Shop #1737732113": "2026-10-19T18:05:45.862605",
     "Shop For Holidays": "2026-10-20T07:25:10.217091",
-    "New": "2026-10-30T17:33:16.338884",
+    "New": "2026-10-30T21:43:35.829426",
     "American Bazi": "2026-10-27T00:24:30.915597",
     "Cool & Casual Styles": "2026-10-23T07:15:18.663260",
     "MeeeShop's Luxe Styles": "2026-10-28T08:10:24.708953",
@@ -12848,7 +12892,7 @@
     "LE LIS Womens Clothi...": "2026-10-20T20:56:10.887545",
     "New Trendy Woman...": "2026-10-21T16:27:52.923701",
     "Outfit Ideas": "2026-10-22T07:27:47.956283",
-    "Late Summer to Fall Teacher Style": "2026-10-15T23:41:33.878739",
+    "Late Summer to Fall Teacher Style": "2026-10-30T21:44:49.302680",
     "Ootd #ootd": "2026-10-23T07:17:22.313935",
     "Style Ideas": "2026-10-23T20:43:03.584741",
     "Mustard Seed Clothing": "2026-10-21T07:21:49.368630",
@@ -12893,9 +12937,9 @@
     "Umgee USA": "2026-10-10T16:46:42.000590",
     "Edgy Fashion": "2026-10-13T09:13:02.770988"
   },
-  "daily_count": 12,
-  "last_post_time": "2026-10-30T17:35:59.565417",
+  "daily_count": 16,
+  "last_post_time": "2026-10-30T21:45:52.284056",
   "board_rotation_cursor": 0,
   "last_image_style": "carousel",
-  "last_template_index": 11
+  "last_template_index": 17
 }
