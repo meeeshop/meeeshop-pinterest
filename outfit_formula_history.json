@@ -2359,7 +2359,47 @@
           "role": "THE BOOTS"
         }
       ]
+    },
+    {
+      "timestamp": "2026-10-30T02:33:46.970289+00:00",
+      "formula_id": "casual_fall",
+      "formula_title": "Casual Fall Weekend Outfit Inspo",
+      "pin_url": "https://www.pinterest.com/pin/841962092891765000/",
+      "pin_id": "841962092891765000",
+      "board": "Casual Outfits",
+      "title": "Casual Fall Weekend Outfit Inspo - Easy Everyday Styling Formula | MeeeShop",
+      "tagged_products_count": 4,
+      "outfit_items": [
+        {
+          "id": "8782622621867",
+          "variant_id": "47103348015275",
+          "title": "Retrolicious Xoxo Bow Top",
+          "price": "74.99",
+          "role": "THE TOP"
+        },
+        {
+          "id": "9087953862827",
+          "variant_id": "48172194693291",
+          "title": "Nola Crossbody Bag",
+          "price": "94.99",
+          "role": "THE BAG"
+        },
+        {
+          "id": "8744042725547",
+          "variant_id": "46492100067499",
+          "title": "Risen Full Size High Rise Wide Leg Patch Detailed Jeans plus Size",
+          "price": "124.99",
+          "role": "THE DENIM"
+        },
+        {
+          "id": "9073872175275",
+          "variant_id": "48110997995691",
+          "title": "Alma Booties Brown",
+          "price": "169.99",
+          "role": "THE SHOES"
+        }
+      ]
     }
   ],
-  "last_run": "2026-10-29T22:55:58.917448+00:00"
+  "last_run": "2026-10-30T02:33:46.970310+00:00"
 }
