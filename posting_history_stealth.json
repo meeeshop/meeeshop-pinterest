@@ -12688,11 +12688,55 @@
       "pin_url": "https://www.pinterest.com/pin/962222276665476900/",
       "blog_url": "https://us.meeeshop.com/blogs/everything-anything-about-vegan/how-to-build-a-minimalist-15-piece-eco-conscious-wardrobe",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8841417359531,
+      "title": "Pink Utility Cargo Pants: Cozy Fall Trend for Halloween & Work \u2014 MeeeShop",
+      "board": "Trends",
+      "timestamp": "2026-10-30T08:19:13.275524",
+      "type": "carousel",
+      "style": "collage",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276665484318/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8950655221931,
+      "title": "Two-tone Ruched Button-up Mini Dress - Perfect Halloween & Cozy Fall Look \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-10-30T08:20:19.925105",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276665484327/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 9138371559595,
+      "title": "Madeline plus Ultra High Rise Double Waistband Ankle Skinny with Hem Distress Jeans | MeeeShop US Bo",
+      "board": "Pants & Leggings",
+      "timestamp": "2026-10-30T08:23:10.916119",
+      "type": "carousel",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276665484376/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8897135509675,
+      "title": "Ymi Women's plus Premium Stretch Cuff Essential Capri - Cozy Fall Capri Pants",
+      "board": "Jeans",
+      "timestamp": "2026-10-30T08:25:20.715031",
+      "type": "video",
+      "style": "carousel",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276665484426/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
-    "Pants & Leggings": "2026-10-12T23:51:27.730749",
-    "Trends": "2026-10-30T00:46:17.897140",
+    "Pants & Leggings": "2026-10-30T08:23:10.916119",
+    "Trends": "2026-10-30T08:19:13.275524",
     "Dresses": "2026-10-23T20:41:56.204070",
     "Feminine & Flowy Fits": "2026-10-19T21:47:32.938103",
     "Short fall dresses": "2026-10-24T07:06:32.059527",
@@ -12700,7 +12744,7 @@
     "Trendy & Timeless Fashion": "2026-08-13T05:29:39.715837",
     "Dress": "2026-10-28T00:23:01.545301",
     "Bags": "2026-10-19T07:37:52.838798",
-    "Jeans": "2026-10-15T16:07:25.488289",
+    "Jeans": "2026-10-30T08:25:20.715031",
     "Cocktail Dresses": "2026-10-27T00:21:20.472023",
     "Dressy Outfits": "2026-10-20T23:47:53.618852",
     "Must-Have Fashion...": "2026-10-25T23:15:37.289134",
@@ -12737,7 +12781,7 @@
     "Fashion Models": "2026-10-18T22:58:47.110263",
     "My Shop #1737732113": "2026-10-19T18:05:45.862605",
     "Shop For Holidays": "2026-10-20T07:25:10.217091",
-    "New": "2026-10-30T00:49:03.501906",
+    "New": "2026-10-30T08:20:19.925105",
     "American Bazi": "2026-10-27T00:24:30.915597",
     "Cool & Casual Styles": "2026-10-23T07:15:18.663260",
     "MeeeShop's Luxe Styles": "2026-10-28T08:10:24.708953",
@@ -12805,9 +12849,9 @@
     "Umgee USA": "2026-10-10T16:46:42.000590",
     "Edgy Fashion": "2026-10-13T09:13:02.770988"
   },
-  "daily_count": 4,
-  "last_post_time": "2026-10-30T00:51:44.410531",
+  "daily_count": 8,
+  "last_post_time": "2026-10-30T08:25:20.715031",
   "board_rotation_cursor": 0,
-  "last_image_style": "card",
-  "last_template_index": 9
+  "last_image_style": "carousel",
+  "last_template_index": 11
 }
