@@ -2399,7 +2399,47 @@
           "role": "THE SHOES"
         }
       ]
+    },
+    {
+      "timestamp": "2026-10-30T07:56:54.703221+00:00",
+      "formula_id": "how_to_style_flare_jeans",
+      "formula_title": "How to Style Flare Jeans: Outfit Formula",
+      "pin_url": "https://www.pinterest.com/pin/962222276665484024/",
+      "pin_id": "962222276665484024",
+      "board": "Kancan USA Jeans",
+      "title": "How to Style Flare Jeans: Outfit Formula | How to Style Flare Jeans & Sweater | MeeeShop",
+      "tagged_products_count": 4,
+      "outfit_items": [
+        {
+          "id": "8744047181995",
+          "variant_id": "46492121858219",
+          "title": "Diamond Tech Tee",
+          "price": "139.99",
+          "role": "THE TOP"
+        },
+        {
+          "id": "9087953993899",
+          "variant_id": "48172195840171",
+          "title": "Hazel Signature Tote Bag",
+          "price": "109.99",
+          "role": "THE BAG"
+        },
+        {
+          "id": "8789757657259",
+          "variant_id": "47862798188715",
+          "title": "Paisley High Rise Flare Jeans (reg & Plus)",
+          "price": "96.00",
+          "role": "THE FLARE DENIM"
+        },
+        {
+          "id": "8928275202219",
+          "variant_id": "47605694169259",
+          "title": "Western Whimsy Coziest Lounge Slippers",
+          "price": "69.99",
+          "role": "THE FOOTWEAR"
+        }
+      ]
     }
   ],
-  "last_run": "2026-10-30T02:33:46.970310+00:00"
+  "last_run": "2026-10-30T07:56:54.703243+00:00"
 }
