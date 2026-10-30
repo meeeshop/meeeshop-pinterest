@@ -2182,7 +2182,44 @@
           "pin_id": null
         }
       ]
+    },
+    {
+      "timestamp": "2026-10-30T22:37:13.645683+00:00",
+      "formula_id": "casual_fall",
+      "formula_title": "Casual Fall Weekend Outfit Inspo",
+      "pin_url": null,
+      "pin_id": null,
+      "board": "Casual Outfits",
+      "title": "Casual Fall Weekend Outfit Inspo - Easy Everyday Styling Formula | MeeeShop",
+      "type": "native_collage",
+      "canvas_preview": "/home/runner/work/meeeshop-pinterest/meeeshop-pinterest/scratch/collage_canvas_casual_fall_1793399813.png",
+      "cutout_items": [
+        {
+          "role": "THE TOP",
+          "title": "Retrolicious Isabel Top in Leopard",
+          "product_id": "8782622720171",
+          "pin_id": null
+        },
+        {
+          "role": "THE BAG",
+          "title": "Collins Signature Shoulder Bag",
+          "product_id": "9087953830059",
+          "pin_id": null
+        },
+        {
+          "role": "THE DENIM",
+          "title": "Daisy Tummy Control Hip Lifter High Rise Modern Flare Jeans",
+          "product_id": "9138382602411",
+          "pin_id": null
+        },
+        {
+          "role": "THE SHOES",
+          "title": "Alma Booties Brown",
+          "product_id": "9073872175275",
+          "pin_id": null
+        }
+      ]
     }
   ],
-  "last_run": "2026-10-30T19:11:01.276455+00:00"
+  "last_run": "2026-10-30T22:37:13.645981+00:00"
 }
