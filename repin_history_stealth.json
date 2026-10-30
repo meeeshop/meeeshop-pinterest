@@ -7659,11 +7659,51 @@
       "target_board_id": "962222345325683657",
       "live_url": "https://www.pinterest.com/pin/4590857005817105472/",
       "timestamp": "2026-10-29T21:59:49.688920+00:00"
+    },
+    {
+      "pin_id": "4596064266942598208",
+      "product_title": "Emma Woven Clutch Wristlet",
+      "category_group": "general_apparel",
+      "source_board": "_products",
+      "target_board": "Fashion",
+      "target_board_id": "574420196161243696",
+      "live_url": "https://www.pinterest.com/pin/4596064266942598208/",
+      "timestamp": "2026-10-30T00:32:12.240010+00:00"
+    },
+    {
+      "pin_id": "4596064244394019904",
+      "product_title": "MeeeShop Women's Side Split Crop Top \u2014 Four-Way Stretch, Made in USA Black",
+      "category_group": "tops_tanks_blouses",
+      "source_board": "_products",
+      "target_board": "MeeeShop's Luxe Styles",
+      "target_board_id": "962222345324947500",
+      "live_url": "https://www.pinterest.com/pin/4596064244394019904/",
+      "timestamp": "2026-10-30T00:32:43.696694+00:00"
+    },
+    {
+      "pin_id": "4597542025818152000",
+      "product_title": "Ymi Women's Low Rise Wide Leg Jeans",
+      "category_group": "pants_denim",
+      "source_board": "_products",
+      "target_board": "Pants & Leggings",
+      "target_board_id": "962222345325046951",
+      "live_url": "https://www.pinterest.com/pin/4597542025818152000/",
+      "timestamp": "2026-10-30T00:33:15.098862+00:00"
+    },
+    {
+      "pin_id": "4597541982868479040",
+      "product_title": "YMI Women's High-Rise Curve Confidence WannaBettaButt Skinny Jeans Light Blue",
+      "category_group": "pants_denim",
+      "source_board": "_products",
+      "target_board": "Stylish Finds",
+      "target_board_id": "962222345325699951",
+      "live_url": "https://www.pinterest.com/pin/4597541982868479040/",
+      "timestamp": "2026-10-30T00:33:42.593576+00:00"
     }
   ],
   "board_last_used": {
     "Women's Cardigans": "2026-10-14T23:36:08.217018+00:00",
-    "Pants & Leggings": "2026-10-25T22:58:50.845406+00:00",
+    "Pants & Leggings": "2026-10-30T00:33:15.098862+00:00",
     "Skirts": "2026-10-26T21:50:16.598629+00:00",
     "Dresses": "2026-10-22T07:03:58.316847+00:00",
     "Sweaters": "2026-10-21T20:52:02.588599+00:00",
@@ -7699,7 +7739,7 @@
     "Emory Park Clothing": "2026-10-22T16:47:38.816835+00:00",
     "Shop For Holidays": "2026-10-28T21:53:15.622649+00:00",
     "Bags": "2026-10-27T00:10:32.199343+00:00",
-    "MeeeShop's Luxe Styles": "2026-10-26T21:49:29.018452+00:00",
+    "MeeeShop's Luxe Styles": "2026-10-30T00:32:43.696694+00:00",
     "Davi & Dani Womens Clothing | us.meeeshop.com": "2026-10-28T18:01:51.870716+00:00",
     "Zenana Women's Clothing, Dresses, Tops, Pants": "2026-10-28T18:01:32.188259+00:00",
     "Trendy Backpacks": "2026-10-27T17:38:27.188473+00:00",
@@ -7723,9 +7763,9 @@
     "Ootd #ootd": "2026-10-29T08:01:01.179056+00:00",
     "Sweaters #Sweaters #WinterOutfits": "2026-10-18T19:36:20.187727+00:00",
     "Everyday Style Essentials": "2026-10-29T18:09:46.115905+00:00",
-    "Fashion": "2026-10-26T21:49:49.479755+00:00",
+    "Fashion": "2026-10-30T00:32:12.240010+00:00",
     "Kancan USA Jeans": "2026-10-29T21:59:15.884772+00:00",
-    "Stylish Finds": "2026-10-27T07:16:09.109249+00:00",
+    "Stylish Finds": "2026-10-30T00:33:42.593576+00:00",
     "Straight Leg Jeans": "2026-10-29T21:59:49.688920+00:00",
     "Handbags #handbags": "2026-10-29T21:58:49.426848+00:00",
     "Weekend to Workwear": "2026-10-23T16:45:11.955199+00:00",
@@ -7738,6 +7778,6 @@
     "Simple Outfits": "2026-10-24T19:43:36.754965+00:00",
     "Women's shacket": "2026-10-26T18:35:03.331027+00:00"
   },
-  "daily_count": 16,
-  "last_repin_time": "2026-10-29T21:59:49.688920+00:00"
+  "daily_count": 4,
+  "last_repin_time": "2026-10-30T00:33:42.593576+00:00"
 }
