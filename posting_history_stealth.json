@@ -12954,11 +12954,22 @@
       "template": 15,
       "pin_url": "https://www.pinterest.com/pin/962222276665523922/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8789756903595,
+      "title": "Eco Friendly Corset High Rise Crop Flare Jeans (dark Wash) | MeeeShop US Boutique",
+      "board": "Trends",
+      "timestamp": "2026-10-31T20:42:28.676710",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276665529840/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-10-30T08:23:10.916119",
-    "Trends": "2026-10-31T16:36:34.170310",
+    "Trends": "2026-10-31T20:42:28.676710",
     "Dresses": "2026-10-23T20:41:56.204070",
     "Feminine & Flowy Fits": "2026-10-19T21:47:32.938103",
     "Short fall dresses": "2026-10-24T07:06:32.059527",
@@ -13071,9 +13082,9 @@
     "Umgee USA": "2026-10-10T16:46:42.000590",
     "Edgy Fashion": "2026-10-13T09:13:02.770988"
   },
-  "daily_count": 12,
-  "last_post_time": "2026-10-31T16:42:34.154183",
+  "daily_count": 13,
+  "last_post_time": "2026-10-31T20:42:28.676710",
   "board_rotation_cursor": 0,
-  "last_image_style": "collage",
-  "last_template_index": 15
+  "last_image_style": "carousel",
+  "last_template_index": 17
 }
