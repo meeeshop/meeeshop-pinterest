@@ -12820,6 +12820,52 @@
       "template": 17,
       "pin_url": "https://www.pinterest.com/pin/962222276665501658/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": "571331182763",
+      "article_id": "571331182763",
+      "title": "Best Flattering Plus-Size Dress Silhouettes: Empire Waist vs Wrap Dresses",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-10-31T00:35:09.422835",
+      "type": "blog",
+      "style": "card",
+      "template": 9,
+      "pin_url": "https://www.pinterest.com/pin/962222276665504988/",
+      "blog_url": "https://us.meeeshop.com/blogs/plus-size-curvy-clothing/best-flattering-plus-size-dress-silhouettes-empire-waist-vs-wrap-dresses",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8825274564779,
+      "title": "French Terry Wide Leg Overalls - Cozy Fall & Halloween Ready \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-10-31T00:37:36.540126",
+      "type": "video",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276665505041/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8905531490475,
+      "title": "Kathryn Classic Button-up, Pink Stripes Top - Cozy Fall & Halloween Chic \u2014 MeeeShop",
+      "board": "Shirts & Tops",
+      "timestamp": "2026-10-31T00:38:42.314286",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276665505066/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8949210742955,
+      "title": "Chevron Chic Flare Crop Top: Boho Fall Crop for Halloween & Cozy Fall \u2014 MeeeShop",
+      "board": "Chic & Cozy Anim...",
+      "timestamp": "2026-10-31T00:40:00.802851",
+      "type": "carousel",
+      "style": "collage",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276665505083/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
@@ -12840,7 +12886,7 @@
     "Short Tall dresses": "2026-10-30T17:35:59.565417",
     "Rompers, Jumpsuits &...": "2026-10-27T21:33:30.490480",
     "Skirts": "2026-10-27T21:34:46.643893",
-    "Shirts & Tops": "2026-10-16T23:24:50.313004",
+    "Shirts & Tops": "2026-10-31T00:38:42.314286",
     "Blouses": "2026-10-18T15:14:33.386346",
     "Rompers_Jumpsuits &...": "2026-10-29T17:57:39.209691",
     "Handbag #handsips": "2026-10-22T07:24:10.788626",
@@ -12869,7 +12915,7 @@
     "Fashion Models": "2026-10-18T22:58:47.110263",
     "My Shop #1737732113": "2026-10-19T18:05:45.862605",
     "Shop For Holidays": "2026-10-20T07:25:10.217091",
-    "New": "2026-10-30T21:43:35.829426",
+    "New": "2026-10-31T00:37:36.540126",
     "American Bazi": "2026-10-27T00:24:30.915597",
     "Cool & Casual Styles": "2026-10-23T07:15:18.663260",
     "MeeeShop's Luxe Styles": "2026-10-28T08:10:24.708953",
@@ -12912,7 +12958,7 @@
     "Bow heels": "2026-09-24T07:28:41.663446",
     "Sweaters": "2026-10-28T21:58:09.900032",
     "Luxe Clothing": "2026-10-20T23:46:44.237353",
-    "Chic & Cozy Anim...": "2026-10-05T20:11:06.424521",
+    "Chic & Cozy Anim...": "2026-10-31T00:40:00.802851",
     "Coats & Jackets": "2026-10-26T07:42:21.624446",
     "Sweaters #Sweaters...": "2026-10-05T23:25:01.057901",
     "Sweaters & Sweater...": "2026-10-06T21:56:03.564881",
@@ -12937,9 +12983,9 @@
     "Umgee USA": "2026-10-10T16:46:42.000590",
     "Edgy Fashion": "2026-10-13T09:13:02.770988"
   },
-  "daily_count": 16,
-  "last_post_time": "2026-10-30T21:45:52.284056",
+  "daily_count": 4,
+  "last_post_time": "2026-10-31T00:40:00.802851",
   "board_rotation_cursor": 0,
-  "last_image_style": "carousel",
-  "last_template_index": 17
+  "last_image_style": "collage",
+  "last_template_index": 11
 }
