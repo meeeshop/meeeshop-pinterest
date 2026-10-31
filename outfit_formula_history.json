@@ -2639,7 +2639,47 @@
           "role": "THE LAYER"
         }
       ]
+    },
+    {
+      "timestamp": "2026-10-31T21:48:28.815021+00:00",
+      "formula_id": "how_to_style_flare_jeans",
+      "formula_title": "How to Style Flare Jeans: Outfit Formula",
+      "pin_url": "https://www.pinterest.com/pin/962222276665531455/",
+      "pin_id": "962222276665531455",
+      "board": "Kancan USA Jeans",
+      "title": "How to Style Flare Jeans: Outfit Formula | How to Style Flare Jeans & Sweater | MeeeShop",
+      "tagged_products_count": 4,
+      "outfit_items": [
+        {
+          "id": "8740258611371",
+          "variant_id": "46478481719467",
+          "title": "Hyfve Rolled Sleeve Button-up Top",
+          "price": "79.99",
+          "role": "THE TOP"
+        },
+        {
+          "id": "9087952945323",
+          "variant_id": "48172189548715",
+          "title": "Kenna Tote Handbag",
+          "price": "104.99",
+          "role": "THE BAG"
+        },
+        {
+          "id": "9138370314411",
+          "variant_id": "48434867044523",
+          "title": "Mulberry High Rise Flared Leg Jeans",
+          "price": "114.99",
+          "role": "THE FLARE DENIM"
+        },
+        {
+          "id": "9073872175275",
+          "variant_id": "48110997995691",
+          "title": "Alma Booties Brown",
+          "price": "169.99",
+          "role": "THE FOOTWEAR"
+        }
+      ]
     }
   ],
-  "last_run": "2026-10-31T18:27:33.911932+00:00"
+  "last_run": "2026-10-31T21:48:28.815043+00:00"
 }

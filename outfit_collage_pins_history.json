@@ -2330,7 +2330,44 @@
           "pin_id": null
         }
       ]
+    },
+    {
+      "timestamp": "2026-10-31T21:50:56.925983+00:00",
+      "formula_id": "how_to_style_flare_jeans",
+      "formula_title": "How to Style Flare Jeans: Outfit Formula",
+      "pin_url": "https://www.pinterest.com/pin/962222276665531538/",
+      "pin_id": "962222276665531538",
+      "board": "Kancan USA Jeans",
+      "title": "How to Style Flare Jeans: Outfit Formula | How to Style Flare Jeans & Sweater | MeeeShop",
+      "type": "native_collage",
+      "canvas_preview": "/home/runner/work/meeeshop-pinterest/meeeshop-pinterest/scratch/collage_canvas_how_to_style_flare_jeans_1793483437.png",
+      "cutout_items": [
+        {
+          "role": "THE TOP",
+          "title": "Retrolicious Camping Bow Top",
+          "product_id": "8782625636523",
+          "pin_id": null
+        },
+        {
+          "role": "THE BAG",
+          "title": "Stella Tote Bag",
+          "product_id": "9087953600683",
+          "pin_id": null
+        },
+        {
+          "role": "THE FLARE DENIM",
+          "title": "Risen High Rise Denim Shorts with Embroidered Detail",
+          "product_id": "8771487170731",
+          "pin_id": null
+        },
+        {
+          "role": "THE FOOTWEAR",
+          "title": "Alma Booties Brown",
+          "product_id": "9073872175275",
+          "pin_id": null
+        }
+      ]
     }
   ],
-  "last_run": "2026-10-31T18:30:32.661060+00:00"
+  "last_run": "2026-10-31T21:50:56.926596+00:00"
 }
