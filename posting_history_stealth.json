@@ -12910,11 +12910,55 @@
       "template": 14,
       "pin_url": "https://www.pinterest.com/pin/962222276665512326/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8897135444139,
+      "title": "Ymi Women's High Rise Sailor Bootcut - Cozy Fall Bootcut Jeans for Halloween",
+      "board": "Trends",
+      "timestamp": "2026-10-31T16:36:34.170310",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276665523741/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8936271937707,
+      "title": "Downeast Flower Farm Top | MeeeShop US Boutique",
+      "board": "New",
+      "timestamp": "2026-10-31T16:38:55.156301",
+      "type": "video",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276665523821/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8949221294251,
+      "title": "Crystal Clear Carry-all Messenger Bag - Boho Chic Fall Must-Have \u2014 MeeeShop",
+      "board": "Nylon backpack",
+      "timestamp": "2026-10-31T16:41:22.494270",
+      "type": "video",
+      "style": "carousel",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276665523882/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 9058765406379,
+      "title": "Flying Tomato Sculpted Noir Shirred Midi Skirt - Halloween & Cozy Fall Look \u2014 MeeeShop",
+      "board": "Chic Looks",
+      "timestamp": "2026-10-31T16:42:34.154183",
+      "type": "carousel",
+      "style": "collage",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276665523922/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-10-30T08:23:10.916119",
-    "Trends": "2026-10-31T08:14:40.188655",
+    "Trends": "2026-10-31T16:36:34.170310",
     "Dresses": "2026-10-23T20:41:56.204070",
     "Feminine & Flowy Fits": "2026-10-19T21:47:32.938103",
     "Short fall dresses": "2026-10-24T07:06:32.059527",
@@ -12945,7 +12989,7 @@
     "Kancan USA Jeans": "2026-10-16T20:08:42.207928",
     "Footwear": "2026-09-07T23:26:56.803572",
     "Fitted Jeans": "2026-10-20T00:13:50.826055",
-    "Chic Looks": "2026-10-15T16:06:10.576165",
+    "Chic Looks": "2026-10-31T16:42:34.154183",
     "Straight Leg Jeans": "2026-10-25T23:14:25.364626",
     "Puff Sleeves Tops": "2026-10-25T20:00:24.492187",
     "Casual": "2026-10-19T21:48:41.036255",
@@ -12954,12 +12998,12 @@
     "Farm clothes": "2026-10-25T20:01:42.671117",
     "Kimchi USA Jeans": "2026-10-29T22:02:05.072004",
     "Wardrobe Goals": "2026-10-30T21:45:52.284056",
-    "Nylon backpack": "2026-10-17T23:02:50.377466",
+    "Nylon backpack": "2026-10-31T16:41:22.494270",
     "Everyday Style": "2026-10-31T08:16:50.023538",
     "Fashion Models": "2026-10-18T22:58:47.110263",
     "My Shop #1737732113": "2026-10-19T18:05:45.862605",
     "Shop For Holidays": "2026-10-20T07:25:10.217091",
-    "New": "2026-10-31T08:15:45.251695",
+    "New": "2026-10-31T16:38:55.156301",
     "American Bazi": "2026-10-27T00:24:30.915597",
     "Cool & Casual Styles": "2026-10-23T07:15:18.663260",
     "MeeeShop's Luxe Styles": "2026-10-28T08:10:24.708953",
@@ -13027,9 +13071,9 @@
     "Umgee USA": "2026-10-10T16:46:42.000590",
     "Edgy Fashion": "2026-10-13T09:13:02.770988"
   },
-  "daily_count": 8,
-  "last_post_time": "2026-10-31T08:17:55.044539",
+  "daily_count": 12,
+  "last_post_time": "2026-10-31T16:42:34.154183",
   "board_rotation_cursor": 0,
   "last_image_style": "collage",
-  "last_template_index": 14
+  "last_template_index": 15
 }
