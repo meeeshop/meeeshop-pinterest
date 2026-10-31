@@ -12866,11 +12866,55 @@
       "template": 11,
       "pin_url": "https://www.pinterest.com/pin/962222276665505083/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8786739986603,
+      "title": "Flying Tomato Runway Hit Line Denim Jumpsuit | MeeeShop US Boutique",
+      "board": "Trends",
+      "timestamp": "2026-10-31T08:14:40.188655",
+      "type": "product",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276665512245/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 9087953305771,
+      "title": "Callie Bucket Bag and Wallet Set - Cozy Fall Essentials \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-10-31T08:15:45.251695",
+      "type": "carousel",
+      "style": "collage",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276665512271/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 9135840919723,
+      "title": "Peanuts Charlie Stencil Sweatshirt - Cozy Fall Must-Have for Halloween \u2014 MeeeShop",
+      "board": "Everyday Style",
+      "timestamp": "2026-10-31T08:16:50.023538",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276665512306/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8882870026411,
+      "title": "High Waist Pants with Buckle Belt | MeeeShop US Boutique",
+      "board": "Flares Jeans",
+      "timestamp": "2026-10-31T08:17:55.044539",
+      "type": "carousel",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276665512326/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-10-30T08:23:10.916119",
-    "Trends": "2026-10-30T21:42:28.103210",
+    "Trends": "2026-10-31T08:14:40.188655",
     "Dresses": "2026-10-23T20:41:56.204070",
     "Feminine & Flowy Fits": "2026-10-19T21:47:32.938103",
     "Short fall dresses": "2026-10-24T07:06:32.059527",
@@ -12882,7 +12926,7 @@
     "Cocktail Dresses": "2026-10-27T00:21:20.472023",
     "Dressy Outfits": "2026-10-20T23:47:53.618852",
     "Must-Have Fashion...": "2026-10-25T23:15:37.289134",
-    "Flares Jeans": "2026-10-16T15:54:18.104742",
+    "Flares Jeans": "2026-10-31T08:17:55.044539",
     "Short Tall dresses": "2026-10-30T17:35:59.565417",
     "Rompers, Jumpsuits &...": "2026-10-27T21:33:30.490480",
     "Skirts": "2026-10-27T21:34:46.643893",
@@ -12911,11 +12955,11 @@
     "Kimchi USA Jeans": "2026-10-29T22:02:05.072004",
     "Wardrobe Goals": "2026-10-30T21:45:52.284056",
     "Nylon backpack": "2026-10-17T23:02:50.377466",
-    "Everyday Style": "2026-10-18T19:43:39.030068",
+    "Everyday Style": "2026-10-31T08:16:50.023538",
     "Fashion Models": "2026-10-18T22:58:47.110263",
     "My Shop #1737732113": "2026-10-19T18:05:45.862605",
     "Shop For Holidays": "2026-10-20T07:25:10.217091",
-    "New": "2026-10-31T00:37:36.540126",
+    "New": "2026-10-31T08:15:45.251695",
     "American Bazi": "2026-10-27T00:24:30.915597",
     "Cool & Casual Styles": "2026-10-23T07:15:18.663260",
     "MeeeShop's Luxe Styles": "2026-10-28T08:10:24.708953",
@@ -12983,9 +13027,9 @@
     "Umgee USA": "2026-10-10T16:46:42.000590",
     "Edgy Fashion": "2026-10-13T09:13:02.770988"
   },
-  "daily_count": 4,
-  "last_post_time": "2026-10-31T00:40:00.802851",
+  "daily_count": 8,
+  "last_post_time": "2026-10-31T08:17:55.044539",
   "board_rotation_cursor": 0,
   "last_image_style": "collage",
-  "last_template_index": 11
+  "last_template_index": 14
 }
