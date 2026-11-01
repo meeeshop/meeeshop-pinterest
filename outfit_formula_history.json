@@ -2679,7 +2679,47 @@
           "role": "THE FOOTWEAR"
         }
       ]
+    },
+    {
+      "timestamp": "2026-11-01T02:07:09.534521+00:00",
+      "formula_id": "everyday_chic",
+      "formula_title": "Everyday Chic Outfit Formula",
+      "pin_url": "https://www.pinterest.com/pin/962222276665535617/",
+      "pin_id": "962222276665535617",
+      "board": "Style Ideas",
+      "title": "Everyday Chic Outfit Formula - Easy Everyday Styling Formula | MeeeShop",
+      "tagged_products_count": 4,
+      "outfit_items": [
+        {
+          "id": "8744046985387",
+          "variant_id": "46492118089899",
+          "title": "Btr Active Seamless Baselayer Top",
+          "price": "109.99",
+          "role": "THE TOP"
+        },
+        {
+          "id": "9087953076395",
+          "variant_id": "48172186271915",
+          "title": "Amahia Tote Bag and Crossbody Set",
+          "price": "109.99",
+          "role": "THE BAG"
+        },
+        {
+          "id": "8740256678059",
+          "variant_id": "46478470742187",
+          "title": "Hyfve Wrap Front Elastic Waist Skort",
+          "price": "89.99",
+          "role": "THE BOTTOM"
+        },
+        {
+          "id": "9073872011435",
+          "variant_id": "48110997012651",
+          "title": "Cecilia Slingback Green",
+          "price": "159.99",
+          "role": "THE SHOES"
+        }
+      ]
     }
   ],
-  "last_run": "2026-10-31T21:48:28.815043+00:00"
+  "last_run": "2026-11-01T02:07:09.534546+00:00"
 }
