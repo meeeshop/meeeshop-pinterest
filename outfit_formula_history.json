@@ -2799,7 +2799,47 @@
           "role": "THE BOOTS"
         }
       ]
+    },
+    {
+      "timestamp": "2026-11-01T22:16:31.094353+00:00",
+      "formula_id": "everyday_chic",
+      "formula_title": "Everyday Chic Outfit Formula",
+      "pin_url": "https://www.pinterest.com/pin/962222276665562968/",
+      "pin_id": "962222276665562968",
+      "board": "Style Ideas",
+      "title": "Everyday Chic Outfit Formula - Easy Everyday Styling Formula | MeeeShop",
+      "tagged_products_count": 4,
+      "outfit_items": [
+        {
+          "id": "8782625636523",
+          "variant_id": "47103360336043",
+          "title": "Retrolicious Camping Bow Top",
+          "price": "69.99",
+          "role": "THE TOP"
+        },
+        {
+          "id": "9087954288811",
+          "variant_id": "48172199608491",
+          "title": "Isa Crossbody Bag",
+          "price": "104.99",
+          "role": "THE BAG"
+        },
+        {
+          "id": "8740253761707",
+          "variant_id": "46478458355883",
+          "title": "Hyfve Acid Wash French Terry Wide-leg Pants",
+          "price": "104.99",
+          "role": "THE BOTTOM"
+        },
+        {
+          "id": "9073872142507",
+          "variant_id": "48110997799083",
+          "title": "Evie Slingback Black",
+          "price": "139.99",
+          "role": "THE SHOES"
+        }
+      ]
     }
   ],
-  "last_run": "2026-11-01T18:51:18.505544+00:00"
+  "last_run": "2026-11-01T22:16:31.094376+00:00"
 }

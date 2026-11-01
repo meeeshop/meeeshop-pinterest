@@ -2478,7 +2478,44 @@
           "pin_id": null
         }
       ]
+    },
+    {
+      "timestamp": "2026-11-01T22:18:53.789057+00:00",
+      "formula_id": "everyday_chic",
+      "formula_title": "Everyday Chic Outfit Formula",
+      "pin_url": null,
+      "pin_id": null,
+      "board": "Style Ideas",
+      "title": "Everyday Chic Outfit Formula - Easy Everyday Styling Formula | MeeeShop",
+      "type": "native_collage",
+      "canvas_preview": "/home/runner/work/meeeshop-pinterest/meeeshop-pinterest/scratch/collage_canvas_everyday_chic_1793571515.png",
+      "cutout_items": [
+        {
+          "role": "THE TOP",
+          "title": "Cape Cod Rock and Roll Print Top",
+          "product_id": "8782637858987",
+          "pin_id": null
+        },
+        {
+          "role": "THE BAG",
+          "title": "Celestine Quilted Shoulder Bag",
+          "product_id": "9087953764523",
+          "pin_id": null
+        },
+        {
+          "role": "THE BOTTOM",
+          "title": "Judy Blue Full Size Wide Leg Capris Jeans plus Size",
+          "product_id": "8740284530859",
+          "pin_id": null
+        },
+        {
+          "role": "THE SHOES",
+          "title": "Evie Slingback Cream",
+          "product_id": "9073872109739",
+          "pin_id": null
+        }
+      ]
     }
   ],
-  "last_run": "2026-11-01T18:53:53.097420+00:00"
+  "last_run": "2026-11-01T22:18:53.789452+00:00"
 }
