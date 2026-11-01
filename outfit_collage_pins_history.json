@@ -2441,7 +2441,44 @@
           "pin_id": null
         }
       ]
+    },
+    {
+      "timestamp": "2026-11-01T18:53:53.096974+00:00",
+      "formula_id": "date_night",
+      "formula_title": "Date Night Outfit Formula",
+      "pin_url": null,
+      "pin_id": null,
+      "board": "Cocktail Dresses",
+      "title": "Date Night Outfit Formula | Chic Midi Dress & Accessories | MeeeShop",
+      "type": "native_collage",
+      "canvas_preview": "/home/runner/work/meeeshop-pinterest/meeeshop-pinterest/scratch/collage_canvas_date_night_1793559215.png",
+      "cutout_items": [
+        {
+          "role": "THE DRESS",
+          "title": "Flying Tomato Ocean Tapestry Woven Maxi Dress",
+          "product_id": "8745258844331",
+          "pin_id": null
+        },
+        {
+          "role": "THE BAG",
+          "title": "Isa Crossbody Bag",
+          "product_id": "9087954288811",
+          "pin_id": null
+        },
+        {
+          "role": "THE SHOES",
+          "title": "Evie Slingback Black",
+          "product_id": "9073872142507",
+          "pin_id": null
+        },
+        {
+          "role": "THE LAYER",
+          "title": "Retrolicious Camping Bow Top",
+          "product_id": "8782625636523",
+          "pin_id": null
+        }
+      ]
     }
   ],
-  "last_run": "2026-11-01T08:31:41.365326+00:00"
+  "last_run": "2026-11-01T18:53:53.097420+00:00"
 }
