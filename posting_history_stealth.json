@@ -13099,11 +13099,55 @@
       "template": 11,
       "pin_url": "https://www.pinterest.com/pin/962222276665554448/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8869160550571,
+      "title": "Plaid Print Button Down Hoodie Top - Cozy Thanksgiving Look \u2014 MeeeShop",
+      "board": "Trends",
+      "timestamp": "2026-11-01T21:23:11.844609",
+      "type": "carousel",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276665561633/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8950655123627,
+      "title": "Tailored Utility Blazer Dress: Thanksgiving & Holiday Chic \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-11-01T21:25:38.841651",
+      "type": "video",
+      "style": "carousel",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276665561721/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 9095809826987,
+      "title": "Ymi Women's Petite High Rise Denim Ankle Jogger - Thanksgiving & Friendsgiving",
+      "board": "Shop For Holidays",
+      "timestamp": "2026-11-01T21:26:44.134524",
+      "type": "carousel",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276665561749/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8879308210347,
+      "title": "Cozy Wool Strap Tank - Perfect for Thanksgiving & Friendsgiving \u2014 MeeeShop",
+      "board": "BFCM Deals",
+      "timestamp": "2026-11-01T21:27:51.158681",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276665561765/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-10-30T08:23:10.916119",
-    "Trends": "2026-11-01T17:28:29.121984",
+    "Trends": "2026-11-01T21:23:11.844609",
     "Dresses": "2026-10-23T20:41:56.204070",
     "Feminine & Flowy Fits": "2026-10-19T21:47:32.938103",
     "Short fall dresses": "2026-10-24T07:06:32.059527",
@@ -13147,8 +13191,8 @@
     "Everyday Style": "2026-10-31T08:16:50.023538",
     "Fashion Models": "2026-11-01T08:58:55.714935",
     "My Shop #1737732113": "2026-11-01T17:30:56.581140",
-    "Shop For Holidays": "2026-10-20T07:25:10.217091",
-    "New": "2026-11-01T17:29:46.956869",
+    "Shop For Holidays": "2026-11-01T21:26:44.134524",
+    "New": "2026-11-01T21:25:38.841651",
     "American Bazi": "2026-10-27T00:24:30.915597",
     "Cool & Casual Styles": "2026-10-23T07:15:18.663260",
     "MeeeShop's Luxe Styles": "2026-10-28T08:10:24.708953",
@@ -13158,7 +13202,7 @@
     "Weekend to Workwear": "2026-10-23T23:52:04.270036",
     "Effortless Looks": "2026-10-29T00:46:59.983697",
     "Vamp Romantic Styles": "2026-11-01T09:00:14.729773",
-    "BFCM Deals": "2026-10-20T07:26:28.335399",
+    "BFCM Deals": "2026-11-01T21:27:51.158681",
     "Poetcore Aesthetics": "2026-11-01T00:07:50.969712",
     "Emory Park Clothing": "2026-10-20T00:16:27.399121",
     "new products": "2026-10-30T00:50:12.101785",
@@ -13216,9 +13260,9 @@
     "Umgee USA": "2026-10-10T16:46:42.000590",
     "Edgy Fashion": "2026-10-13T09:13:02.770988"
   },
-  "daily_count": 12,
-  "last_post_time": "2026-11-01T17:33:20.328555",
+  "daily_count": 16,
+  "last_post_time": "2026-11-01T21:27:51.158681",
   "board_rotation_cursor": 0,
   "last_image_style": "carousel",
-  "last_template_index": 11
+  "last_template_index": 14
 }
