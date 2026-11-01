@@ -2719,7 +2719,47 @@
           "role": "THE SHOES"
         }
       ]
+    },
+    {
+      "timestamp": "2026-11-01T08:29:10.040456+00:00",
+      "formula_id": "casual_fall",
+      "formula_title": "Casual Fall Weekend Outfit Inspo",
+      "pin_url": "https://www.pinterest.com/pin/841962092891798398/",
+      "pin_id": "841962092891798398",
+      "board": "Casual Outfits",
+      "title": "Casual Fall Weekend Outfit Inspo - Easy Everyday Styling Formula | MeeeShop",
+      "tagged_products_count": 4,
+      "outfit_items": [
+        {
+          "id": "8744047083691",
+          "variant_id": "46492121039019",
+          "title": "Riley Technical Top",
+          "price": "144.99",
+          "role": "THE TOP"
+        },
+        {
+          "id": "9087954419883",
+          "variant_id": "48172200689835",
+          "title": "Maeve Shoulder Bag and Set",
+          "price": "109.99",
+          "role": "THE BAG"
+        },
+        {
+          "id": "9138382602411",
+          "variant_id": "48435008536747",
+          "title": "Daisy Tummy Control Hip Lifter High Rise Modern Flare Jeans",
+          "price": "114.99",
+          "role": "THE DENIM"
+        },
+        {
+          "id": "9073872175275",
+          "variant_id": "48110997995691",
+          "title": "Alma Booties Brown",
+          "price": "169.99",
+          "role": "THE SHOES"
+        }
+      ]
     }
   ],
-  "last_run": "2026-11-01T02:07:09.534546+00:00"
+  "last_run": "2026-11-01T08:29:10.040476+00:00"
 }
