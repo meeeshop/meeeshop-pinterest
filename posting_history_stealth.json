@@ -13055,11 +13055,55 @@
       "template": 14,
       "pin_url": "https://www.pinterest.com/pin/962222276665541585/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 9087953010859,
+      "title": "Ciri Double Bag - Denim Duo for Thanksgiving & Holiday Chic \u2014 MeeeShop",
+      "board": "Trends",
+      "timestamp": "2026-11-01T17:28:29.121984",
+      "type": "carousel",
+      "style": "collage",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276665554313/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8885871411371,
+      "title": "Striped Knit Top with Attached Skirt, Navy - Thanksgiving & Holiday Ready \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-11-01T17:29:46.956869",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276665554351/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8879310733483,
+      "title": "Linen Button Back Tank - Cozy Thanksgiving & Holiday Style \u2014 MeeeShop",
+      "board": "My Shop #1737732113",
+      "timestamp": "2026-11-01T17:30:56.581140",
+      "type": "carousel",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276665554385/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8879307718827,
+      "title": "Linen Pull-on Barrel Pant: Effortless Thanksgiving Chic \u2014 MeeeShop",
+      "board": "Casual",
+      "timestamp": "2026-11-01T17:33:20.328555",
+      "type": "video",
+      "style": "carousel",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276665554448/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-10-30T08:23:10.916119",
-    "Trends": "2026-11-01T08:56:03.769594",
+    "Trends": "2026-11-01T17:28:29.121984",
     "Dresses": "2026-10-23T20:41:56.204070",
     "Feminine & Flowy Fits": "2026-10-19T21:47:32.938103",
     "Short fall dresses": "2026-10-24T07:06:32.059527",
@@ -13093,7 +13137,7 @@
     "Chic Looks": "2026-10-31T16:42:34.154183",
     "Straight Leg Jeans": "2026-10-25T23:14:25.364626",
     "Puff Sleeves Tops": "2026-10-25T20:00:24.492187",
-    "Casual": "2026-10-19T21:48:41.036255",
+    "Casual": "2026-11-01T17:33:20.328555",
     "Confident Looks": "2026-10-29T22:03:12.064596",
     "Casual Chic Style": "2026-10-30T17:34:40.085403",
     "Farm clothes": "2026-10-25T20:01:42.671117",
@@ -13102,9 +13146,9 @@
     "Nylon backpack": "2026-10-31T16:41:22.494270",
     "Everyday Style": "2026-10-31T08:16:50.023538",
     "Fashion Models": "2026-11-01T08:58:55.714935",
-    "My Shop #1737732113": "2026-10-19T18:05:45.862605",
+    "My Shop #1737732113": "2026-11-01T17:30:56.581140",
     "Shop For Holidays": "2026-10-20T07:25:10.217091",
-    "New": "2026-11-01T08:57:47.474905",
+    "New": "2026-11-01T17:29:46.956869",
     "American Bazi": "2026-10-27T00:24:30.915597",
     "Cool & Casual Styles": "2026-10-23T07:15:18.663260",
     "MeeeShop's Luxe Styles": "2026-10-28T08:10:24.708953",
@@ -13172,9 +13216,9 @@
     "Umgee USA": "2026-10-10T16:46:42.000590",
     "Edgy Fashion": "2026-10-13T09:13:02.770988"
   },
-  "daily_count": 8,
-  "last_post_time": "2026-11-01T09:00:14.729773",
+  "daily_count": 12,
+  "last_post_time": "2026-11-01T17:33:20.328555",
   "board_rotation_cursor": 0,
   "last_image_style": "carousel",
-  "last_template_index": 14
+  "last_template_index": 11
 }
