@@ -13233,13 +13233,57 @@
       "template": 14,
       "pin_url": "https://www.pinterest.com/pin/962222276665574630/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8892158607531,
+      "title": "Burnout Printed Velvet Buttoned Shirt - Thanksgiving Chic Look \u2014 MeeeShop",
+      "board": "Trends",
+      "timestamp": "2026-11-02T21:11:05.122393",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276665592283/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8941772243115,
+      "title": "Embossed Dome Handbag with Top Handles and Adjustable Strap | MeeeShop US Boutique",
+      "board": "New",
+      "timestamp": "2026-11-02T21:12:24.020968",
+      "type": "carousel",
+      "style": "collage",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276665592328/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8789759131819,
+      "title": "Simone Tummy Control High Rise Bootcut Jeans - Perfect Thanksgiving Look \u2014 MeeeShop",
+      "board": "Kancan USA Jeans",
+      "timestamp": "2026-11-02T21:13:26.085169",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276665592358/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8970893557931,
+      "title": "Montauk Dress Linen Cotton Hydrangeas Print - Feminine Thanksgiving Maxi Dress",
+      "board": "Feminine & Flowy Fits",
+      "timestamp": "2026-11-02T21:15:35.177592",
+      "type": "carousel",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276665592400/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-10-30T08:23:10.916119",
-    "Trends": "2026-11-02T09:04:49.040658",
+    "Trends": "2026-11-02T21:11:05.122393",
     "Dresses": "2026-10-23T20:41:56.204070",
-    "Feminine & Flowy Fits": "2026-10-19T21:47:32.938103",
+    "Feminine & Flowy Fits": "2026-11-02T21:15:35.177592",
     "Short fall dresses": "2026-10-24T07:06:32.059527",
     "Must-Have Fashion Picks": "2026-08-13T05:20:05.419233",
     "Trendy & Timeless Fashion": "2026-08-13T05:29:39.715837",
@@ -13265,7 +13309,7 @@
     "Wardrobe Must Haves": "2026-10-29T17:56:23.703435",
     "Trendy Backpacks": "2026-10-24T15:16:21.082068",
     "Festive Styles": "2026-11-02T00:33:23.809853",
-    "Kancan USA Jeans": "2026-10-16T20:08:42.207928",
+    "Kancan USA Jeans": "2026-11-02T21:13:26.085169",
     "Footwear": "2026-09-07T23:26:56.803572",
     "Fitted Jeans": "2026-10-20T00:13:50.826055",
     "Chic Looks": "2026-10-31T16:42:34.154183",
@@ -13282,7 +13326,7 @@
     "Fashion Models": "2026-11-01T08:58:55.714935",
     "My Shop #1737732113": "2026-11-01T17:30:56.581140",
     "Shop For Holidays": "2026-11-01T21:26:44.134524",
-    "New": "2026-11-02T09:06:45.296496",
+    "New": "2026-11-02T21:12:24.020968",
     "American Bazi": "2026-10-27T00:24:30.915597",
     "Cool & Casual Styles": "2026-10-23T07:15:18.663260",
     "MeeeShop's Luxe Styles": "2026-10-28T08:10:24.708953",
@@ -13350,8 +13394,8 @@
     "Umgee USA": "2026-10-10T16:46:42.000590",
     "Edgy Fashion": "2026-10-13T09:13:02.770988"
   },
-  "daily_count": 8,
-  "last_post_time": "2026-11-02T09:09:01.926214",
+  "daily_count": 12,
+  "last_post_time": "2026-11-02T21:15:35.177592",
   "board_rotation_cursor": 0,
   "last_image_style": "collage",
   "last_template_index": 14
