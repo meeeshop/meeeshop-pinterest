@@ -13189,18 +13189,62 @@
       "template": 17,
       "pin_url": "https://www.pinterest.com/pin/962222276665565802/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8905531719851,
+      "title": "The Kathryn Button-up, Striped Pink Top - Thanksgiving & Friendsgiving Chic \u2014 MeeeShop",
+      "board": "Trends",
+      "timestamp": "2026-11-02T09:04:49.040658",
+      "type": "video",
+      "style": "carousel",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276665574583/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8825274695851,
+      "title": "Lace Overlay Puff Sleeve Top - Elegant Thanksgiving & Holiday Look \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-11-02T09:06:45.296496",
+      "type": "product",
+      "style": "collage",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276665574597/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8909799555243,
+      "title": "Stunning Plus Size Sequin Fringe Lace Short Dress for Thanksgiving Glam \u2014 MeeeShop",
+      "board": "Thanks giving Outfits",
+      "timestamp": "2026-11-02T09:07:53.628765",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276665574610/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8825883099307,
+      "title": "Trendy Fall Must-Have: Mkf Collection by Mia K. - Angela Shoulder Bag \u2014 MeeeShop",
+      "board": "Bags",
+      "timestamp": "2026-11-02T09:09:01.926214",
+      "type": "carousel",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276665574630/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-10-30T08:23:10.916119",
-    "Trends": "2026-11-01T21:23:11.844609",
+    "Trends": "2026-11-02T09:04:49.040658",
     "Dresses": "2026-10-23T20:41:56.204070",
     "Feminine & Flowy Fits": "2026-10-19T21:47:32.938103",
     "Short fall dresses": "2026-10-24T07:06:32.059527",
     "Must-Have Fashion Picks": "2026-08-13T05:20:05.419233",
     "Trendy & Timeless Fashion": "2026-08-13T05:29:39.715837",
     "Dress": "2026-10-28T00:23:01.545301",
-    "Bags": "2026-10-19T07:37:52.838798",
+    "Bags": "2026-11-02T09:09:01.926214",
     "Jeans": "2026-10-30T08:25:20.715031",
     "Cocktail Dresses": "2026-10-27T00:21:20.472023",
     "Dressy Outfits": "2026-10-20T23:47:53.618852",
@@ -13238,13 +13282,13 @@
     "Fashion Models": "2026-11-01T08:58:55.714935",
     "My Shop #1737732113": "2026-11-01T17:30:56.581140",
     "Shop For Holidays": "2026-11-01T21:26:44.134524",
-    "New": "2026-11-02T00:29:53.175207",
+    "New": "2026-11-02T09:06:45.296496",
     "American Bazi": "2026-10-27T00:24:30.915597",
     "Cool & Casual Styles": "2026-10-23T07:15:18.663260",
     "MeeeShop's Luxe Styles": "2026-10-28T08:10:24.708953",
     "Outerwear": "2026-10-11T21:10:16.114391",
     "Zenana Women's...": "2026-10-28T17:51:24.693569",
-    "Thanks giving Outfits": "2026-10-19T18:06:52.644154",
+    "Thanks giving Outfits": "2026-11-02T09:07:53.628765",
     "Weekend to Workwear": "2026-10-23T23:52:04.270036",
     "Effortless Looks": "2026-10-29T00:46:59.983697",
     "Vamp Romantic Styles": "2026-11-01T09:00:14.729773",
@@ -13306,9 +13350,9 @@
     "Umgee USA": "2026-10-10T16:46:42.000590",
     "Edgy Fashion": "2026-10-13T09:13:02.770988"
   },
-  "daily_count": 4,
-  "last_post_time": "2026-11-02T00:33:23.809853",
+  "daily_count": 8,
+  "last_post_time": "2026-11-02T09:09:01.926214",
   "board_rotation_cursor": 0,
   "last_image_style": "collage",
-  "last_template_index": 17
+  "last_template_index": 14
 }
