@@ -13143,6 +13143,52 @@
       "template": 14,
       "pin_url": "https://www.pinterest.com/pin/962222276665561765/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": "571270398123",
+      "article_id": "571270398123",
+      "title": "How to Style Leather Blazers for Evening Dinners and Night Outs",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-11-02T00:27:22.938185",
+      "type": "blog",
+      "style": "card",
+      "template": 9,
+      "pin_url": "https://www.pinterest.com/pin/962222276665565652/",
+      "blog_url": "https://us.meeeshop.com/blogs/coats-jackets-style-guide/how-to-style-leather-blazers-for-evening-dinners-and-night-outs",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 9041689411755,
+      "title": "Sage Rib Tank - Olive: Perfect Thanksgiving & Holiday Casual Chic \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-11-02T00:29:53.175207",
+      "type": "video",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276665565732/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8883470041259,
+      "title": "Buki Easy Street Stretch Chino Pant - Thanksgiving-Ready Chic Comfort \u2014 MeeeShop",
+      "board": "Chic & Effortless Styles",
+      "timestamp": "2026-11-02T00:31:09.485632",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276665565769/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8882873008299,
+      "title": "Solid Refined Cocktail Party Lace Midi Ruched Waist Dress - Thanksgiving Glam",
+      "board": "Festive Styles",
+      "timestamp": "2026-11-02T00:33:23.809853",
+      "type": "video",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276665565802/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
@@ -13174,7 +13220,7 @@
     "Camis & Tanks": "2026-10-24T23:04:48.504690",
     "Wardrobe Must Haves": "2026-10-29T17:56:23.703435",
     "Trendy Backpacks": "2026-10-24T15:16:21.082068",
-    "Festive Styles": "2026-10-19T07:36:42.153918",
+    "Festive Styles": "2026-11-02T00:33:23.809853",
     "Kancan USA Jeans": "2026-10-16T20:08:42.207928",
     "Footwear": "2026-09-07T23:26:56.803572",
     "Fitted Jeans": "2026-10-20T00:13:50.826055",
@@ -13192,7 +13238,7 @@
     "Fashion Models": "2026-11-01T08:58:55.714935",
     "My Shop #1737732113": "2026-11-01T17:30:56.581140",
     "Shop For Holidays": "2026-11-01T21:26:44.134524",
-    "New": "2026-11-01T21:25:38.841651",
+    "New": "2026-11-02T00:29:53.175207",
     "American Bazi": "2026-10-27T00:24:30.915597",
     "Cool & Casual Styles": "2026-10-23T07:15:18.663260",
     "MeeeShop's Luxe Styles": "2026-10-28T08:10:24.708953",
@@ -13206,7 +13252,7 @@
     "Poetcore Aesthetics": "2026-11-01T00:07:50.969712",
     "Emory Park Clothing": "2026-10-20T00:16:27.399121",
     "new products": "2026-10-30T00:50:12.101785",
-    "Chic & Effortless Styles": "2026-10-20T16:10:02.062883",
+    "Chic & Effortless Styles": "2026-11-02T00:31:09.485632",
     "Davi & Dani Womens...": "2026-10-20T16:11:11.256363",
     "Weekend to Workout": "2026-10-28T00:25:47.865945",
     "Gimme Gummy Playful Nostalgia": "2026-11-01T00:05:59.648053",
@@ -13260,9 +13306,9 @@
     "Umgee USA": "2026-10-10T16:46:42.000590",
     "Edgy Fashion": "2026-10-13T09:13:02.770988"
   },
-  "daily_count": 16,
-  "last_post_time": "2026-11-01T21:27:51.158681",
+  "daily_count": 4,
+  "last_post_time": "2026-11-02T00:33:23.809853",
   "board_rotation_cursor": 0,
-  "last_image_style": "carousel",
-  "last_template_index": 14
+  "last_image_style": "collage",
+  "last_template_index": 17
 }
