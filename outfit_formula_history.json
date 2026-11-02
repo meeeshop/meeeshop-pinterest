@@ -2839,7 +2839,47 @@
           "role": "THE SHOES"
         }
       ]
+    },
+    {
+      "timestamp": "2026-11-02T02:21:33.783779+00:00",
+      "formula_id": "date_night",
+      "formula_title": "Date Night Outfit Formula",
+      "pin_url": "https://www.pinterest.com/pin/962222276665567952/",
+      "pin_id": "962222276665567952",
+      "board": "Cocktail Dresses",
+      "title": "Date Night Outfit Formula | Chic Midi Dress & Accessories | MeeeShop",
+      "tagged_products_count": 4,
+      "outfit_items": [
+        {
+          "id": "8740253597867",
+          "variant_id": "46478457372843",
+          "title": "Hyfve Boned Tie-back Dress",
+          "price": "114.99",
+          "role": "THE DRESS"
+        },
+        {
+          "id": "9087954223275",
+          "variant_id": "48172198756523",
+          "title": "Camille Crossbody Bag",
+          "price": "94.99",
+          "role": "THE BAG"
+        },
+        {
+          "id": "9073872109739",
+          "variant_id": "48110997602475",
+          "title": "Evie Slingback Cream",
+          "price": "139.99",
+          "role": "THE SHOES"
+        },
+        {
+          "id": "8782620393643",
+          "variant_id": "47103333531819",
+          "title": "Retrolicious Anchor Bow Top",
+          "price": "69.99",
+          "role": "THE LAYER"
+        }
+      ]
     }
   ],
-  "last_run": "2026-11-01T22:16:31.094376+00:00"
+  "last_run": "2026-11-02T02:21:33.783800+00:00"
 }
