@@ -1,0 +1,140 @@
+name: Daily Outfit Formula Pins (Highest Save Rate)
+
+# Automated "Outfit Formula" & "How to Style It" Collage Pin Generator for MeeeShop
+# Generates 2:3 vertical (1000 × 1500 px) editorial outfit collages pairing in-stock Shopify products:
+#   Top (Sweater/Graphic Tee) + Bottom (Flare Jeans/Skirt) + Bag (MKF Crossbody/Sling) + Shoes (Booties/Slingbacks)
+#
+# Once published, automatically tags all featured products onto the Pin image via Playwright
+# so organic USA women shoppers can explore and purchase each piece directly.
+#
+# USA Women's Pinterest Peak Shopping Times:
+#   14:00 UTC = 10:00 AM ET / 7:00 AM PT  — Morning fashion inspiration & daily planning
+#   18:30 UTC =  2:30 PM ET / 11:30 AM PT — Mid-day lunch & shopping browse
+#   23:00 UTC =  7:00 PM ET / 4:00 PM PT  — After-work relax scroll
+#   02:00 UTC = 10:00 PM ET / 7:00 PM PT  — Evening prime bedtime lounge (Highest US Save Peak)
+
+on:
+  schedule:
+    - cron: '0 14 * * *'
+    - cron: '30 18 * * *'
+    - cron: '0 23 * * *'
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'Execution Mode (apply = Live pin post + shoppable product tagging, dry-run = Preview only)'
+        required: true
+        default: 'apply'
+        type: choice
+        options:
+          - apply
+          - dry-run
+      workflow_type:
+        description: 'Collage Pipeline: both (Parallel Split-Workflow), rendered (PIL Editorial Collage), native_collage (Pinterest Collage Tool)'
+        required: false
+        default: 'both'
+        type: choice
+        options:
+          - both
+          - rendered
+          - native_collage
+      pins_count:
+        description: 'Number of outfit pins to generate (default: 1)'
+        required: false
+        default: '1'
+        type: string
+      formula:
+        description: 'Outfit Formula Theme'
+        required: false
+        default: 'auto'
+        type: choice
+        options:
+          - auto
+          - casual_fall
+          - how_to_style_flare_jeans
+          - everyday_chic
+          - date_night
+          - cozy_sweater_weather
+
+concurrency:
+  group: pinterest-outfit-formula
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  outfit_formula_pinning:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          ref: develop
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install Python Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install playwright
+          playwright install chromium --with-deps
+
+      - name: Install System Fonts and Utilities
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y fonts-liberation fonts-dejavu gsfonts ffmpeg
+
+      - name: Run Outfit Formula Generator & Auto-Tagger
+        env:
+          ENCRYPTION_KEY_PRIMARY: ${{ secrets.ENCRYPTION_KEY_PRIMARY }}
+          ENCRYPTION_KEY_FALLBACK: ${{ secrets.ENCRYPTION_KEY_FALLBACK }}
+          SHOPIFY_STORE_URL: ${{ secrets.SHOPIFY_STORE_URL }}
+          SHOPIFY_ACCESS_TOKEN: ${{ secrets.SHOPIFY_ACCESS_TOKEN }}
+          PINTEREST_COOKIES_B64: ${{ secrets.PINTEREST_COOKIES_B64 }}
+          PINTEREST_EMAIL: ${{ secrets.PINTEREST_EMAIL }}
+          PINTEREST_PASSWORD: ${{ secrets.PINTEREST_PASSWORD }}
+          PYTHONUNBUFFERED: '1'
+        run: |
+          COUNT="${{ github.event.inputs.pins_count || '1' }}"
+          WORKFLOW_FLAG="--workflow-type ${{ github.event.inputs.workflow_type || 'both' }}"
+          FORMULA_FLAG=""
+          if [ -n "${{ github.event.inputs.formula }}" ] && [ "${{ github.event.inputs.formula }}" != "auto" ]; then
+            FORMULA_FLAG="--formula ${{ github.event.inputs.formula }}"
+          fi
+
+          MODE_FLAG="--apply"
+          if [ "${{ github.event.inputs.mode }}" = "dry-run" ]; then
+            MODE_FLAG="--dry-run"
+          fi
+
+          echo "Launching Outfit Formula Workflow (Mode: $MODE_FLAG, Pins: $COUNT, Type: $WORKFLOW_FLAG)..."
+          python pinterest_outfit_formula.py $MODE_FLAG --pins-count $COUNT $WORKFLOW_FLAG $FORMULA_FLAG
+
+      - name: Upload Generated Outfit Collages & Debug Screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: outfit-collages-${{ github.run_number }}
+          path: |
+            scratch/*.jpg
+            scratch/*.png
+            *.png
+          retention-days: 7
+          if-no-files-found: ignore
+
+      - name: Commit and Push History Updates to develop
+        if: always()
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action Bot"
+          git add outfit_formula_history.json outfit_collage_pins_history.json
+          git diff --quiet && git diff --staged --quiet || (git commit -m "chore(pinterest): record outfit formula and native collage history [skip ci]" && git push origin develop)

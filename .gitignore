@@ -66,6 +66,7 @@ posting_history.json
 *.html
 /tmp/
 /temp/
+scratch/
 
 # OS
 .DS_Store

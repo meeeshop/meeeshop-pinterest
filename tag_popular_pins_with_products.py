@@ -447,6 +447,199 @@ def find_relevant_shopify_products_for_pin(
     return selected[:target_count]
 
 
+def _tag_pin_via_edit_modal_flow(
+    page: Any,
+    pin_id: str,
+    relevant_products: List[Dict[str, Any]],
+    max_tags: int = 10,
+    take_screenshot: Any = None
+) -> bool:
+    """
+    Fallback tagging flow via the Pin's 'Edit Pin' modal:
+    1. Opens 'More actions' (...) menu on the pin.
+    2. Clicks 'Edit Pin'.
+    3. In the Edit Pin modal under 'Tag Products', clicks 'Add products' (or (+) button if products already present).
+    4. Clicks the 'Use a Link' tab.
+    5. Sequentially enters each Shopify product URL to scrape live details.
+    6. Clicks the scraped product image card to tag it.
+    7. Uses the (+) 'Add product tag' button to add subsequent products (up to max_tags / 10 products).
+    8. Waits until at least 10 products (or all available products) are added.
+    9. Clicks the red 'Save' button in the Edit Pin modal to persist all tagged products live!
+    """
+    try:
+        # Step A: More actions (...)
+        more_btn = page.locator("button[aria-label='More actions'], button[aria-label='More options']").first
+        if more_btn.count() == 0 or not more_btn.is_visible():
+            logger.warning("    [Fallback Edit Flow] 'More actions' (...) button not visible.")
+            return False
+
+        logger.info("    [Fallback Edit Flow] 1. Opening 'More actions' (...) menu...")
+        more_btn.click(force=True, timeout=3000)
+        page.wait_for_timeout(1200)
+
+        # Step B: Click 'Edit Pin'
+        edit_btn = page.get_by_text("Edit Pin", exact=True).first
+        if edit_btn.count() == 0 or not edit_btn.is_visible():
+            edit_btn = page.locator("[role='menuitem']:has-text('Edit Pin'), button:has-text('Edit Pin'), span:has-text('Edit Pin')").first
+
+        if edit_btn.count() == 0:
+            logger.warning("    [Fallback Edit Flow] 'Edit Pin' menu item not found.")
+            return False
+
+        logger.info("    [Fallback Edit Flow] 2. Clicking 'Edit Pin'...")
+        edit_btn.click(force=True, timeout=4000)
+        page.wait_for_timeout(3000)
+        if take_screenshot: take_screenshot("playwright_edit_modal_opened.png")
+
+        # Step C: Click 'Add products' or (+) under Tag Products
+        add_prods_btn = page.get_by_text("Add products", exact=False).first
+        if add_prods_btn.count() == 0 or not add_prods_btn.is_visible():
+            add_prods_btn = page.locator("button:has-text('Add products'), div[role='button']:has-text('Add products')").first
+
+        if add_prods_btn.count() > 0 and add_prods_btn.is_visible():
+            logger.info("    [Fallback Edit Flow] 3. Clicking 'Add products'...")
+            add_prods_btn.scroll_into_view_if_needed()
+            add_prods_btn.click(force=True, timeout=4000)
+            page.wait_for_timeout(3000)
+        else:
+            plus_entry = page.locator(
+                "svg[aria-label='Add product tag'], "
+                "[aria-label='Add product tag'], "
+                "div[role='button']:has(svg[aria-label='Add product tag'])"
+            ).first
+            if plus_entry.count() > 0 and plus_entry.is_visible():
+                logger.info("    [Fallback Edit Flow] 3. Products already present on pin. Clicking (+) 'Add product tag'...")
+                plus_entry.scroll_into_view_if_needed()
+                plus_entry.click(force=True, timeout=4000)
+                page.wait_for_timeout(3000)
+            else:
+                logger.warning("    [Fallback Edit Flow] Neither 'Add products' nor (+) button found in Edit Pin modal.")
+                return False
+
+        if take_screenshot: take_screenshot("playwright_tag_dialog_opened.png")
+
+        # Step D: Click 'Use a Link' tab
+        use_link_tab = page.get_by_text("Use a Link", exact=False).first
+        if use_link_tab.count() == 0:
+            use_link_tab = page.locator("button:has-text('Use a Link'), div[role='tab']:has-text('Use a Link')").first
+
+        if use_link_tab.count() > 0 and use_link_tab.is_visible():
+            logger.info("    [Fallback Edit Flow] 4. Switching to 'Use a Link' tab...")
+            use_link_tab.click(force=True, timeout=3000)
+            page.wait_for_timeout(2000)
+
+        # Step E: Tag relevant products via their Shopify URL
+        logger.info(f"    [Fallback Edit Flow] 5. Tagging up to {max_tags} relevant products via 'Add a product link'...")
+        added_count = 0
+
+        for idx, prod in enumerate(relevant_products):
+            if added_count >= max_tags:
+                logger.info(f"    [Fallback Edit Flow] Target of {max_tags} tagged products reached.")
+                break
+
+            prod_url = str(prod.get('url', '')).split('?')[0].strip()
+            if not prod_url:
+                continue
+
+            safe_title = str(prod.get('title', '')).encode('ascii', 'ignore').decode()[:35]
+
+            # If input is not visible, click (+) in the Tag Products section to reopen
+            inp = page.locator("input[placeholder*='product link' i]").first
+            if inp.count() == 0 or not inp.is_visible():
+                plus_btn = page.locator(
+                    "svg[aria-label='Add product tag'], "
+                    "[aria-label='Add product tag'], "
+                    "div[role='button']:has(svg[aria-label='Add product tag']), "
+                    "button[aria-label='Add product tag'], "
+                    "div[role='button']:has([data-test-id='plus-icon']), "
+                    "button:has([data-test-id='plus-icon']), "
+                    "button:has-text('+')"
+                ).first
+                if plus_btn.count() > 0 and plus_btn.is_visible():
+                    logger.info(f"    [Fallback Edit Flow] Clicking (+) to open link input for product #{added_count+1}...")
+                    plus_btn.click(force=True, timeout=3000)
+                    page.wait_for_timeout(2500)
+                    if use_link_tab.count() > 0 and use_link_tab.is_visible():
+                        use_link_tab.click(force=True, timeout=2000)
+                        page.wait_for_timeout(1500)
+                    inp = page.locator("input[placeholder*='product link' i]").first
+
+            if inp.count() == 0 or not inp.is_visible():
+                logger.info(f"    [Fallback Edit Flow] Product link input not available for product #{idx+1}. Retrying plus button...")
+                plus_btn = page.locator("svg[aria-label='Add product tag'], [aria-label='Add product tag']").first
+                if plus_btn.count() > 0:
+                    plus_btn.click(force=True, timeout=3000)
+                    page.wait_for_timeout(2500)
+                    if use_link_tab.count() > 0 and use_link_tab.is_visible():
+                        use_link_tab.click(force=True, timeout=2000)
+                        page.wait_for_timeout(1500)
+                    inp = page.locator("input[placeholder*='product link' i]").first
+
+            if inp.count() == 0 or not inp.is_visible():
+                logger.info(f"    [Fallback Edit Flow] Product link input could not be reopened. Stopping tag additions at {added_count} products.")
+                break
+
+            logger.info(f"    [Fallback Edit Flow] Submitting URL for product #{added_count+1}/{max_tags} '{safe_title}': {prod_url}...")
+            inp.click()
+            inp.fill(prod_url)
+            inp.press("Enter")
+            page.wait_for_timeout(5500)
+
+            # Click the scraped product image card
+            target_img = page.locator("img[src*='cdn/shop'], img[src*='shopify'], img[src*='meeeshop']").first
+            if target_img.count() == 0 or not target_img.is_visible():
+                page.wait_for_timeout(2500)
+                target_img = page.locator("img[src*='cdn/shop'], img[src*='shopify'], img[src*='meeeshop']").first
+
+            if target_img.count() == 0 or not target_img.is_visible():
+                # Fallback to the first image card below the input in the Product Tags sidebar
+                inp_box = inp.bounding_box()
+                cand_imgs = page.locator("img")
+                for c_i in range(cand_imgs.count()):
+                    im = cand_imgs.nth(c_i)
+                    ibox = im.bounding_box()
+                    if ibox and inp_box and ibox['y'] > inp_box['y'] + 40 and ibox['width'] >= 100:
+                        target_img = im
+                        break
+
+            if target_img and target_img.count() > 0 and target_img.is_visible():
+                try:
+                    target_img.click(force=True, timeout=4000)
+                    added_count += 1
+                    logger.info(f"    [Fallback Edit Flow] [OK] Successfully added product tag #{added_count}/{max_tags}: '{safe_title}'")
+                    page.wait_for_timeout(2500)
+                except Exception as ce:
+                    logger.warning(f"    [Fallback Edit Flow] Card click notice: {ce}")
+            else:
+                logger.warning(f"    [Fallback Edit Flow] Scraped image not found for '{safe_title}'.")
+
+        if added_count == 0:
+            logger.warning("    [Fallback Edit Flow] 0 products could be tagged via product links.")
+            return False
+
+        logger.info(f"    [Fallback Edit Flow] Tagging cycle complete. Total products added: {added_count}. Waiting for UI state before saving...")
+        page.wait_for_timeout(2000)
+        if take_screenshot: take_screenshot("playwright_edit_modal_tags_added.png")
+
+        # Step F: Click the red 'Save' button in the Edit Pin modal
+        logger.info(f"    [Fallback Edit Flow] 6. Clicking red 'Save' button to persist all {added_count} tagged products...")
+        save_btn = page.locator("button:has-text('Save'), div[role='button']:has-text('Save'), [data-test-id='save-pin-button']").last
+        if save_btn.count() > 0:
+            save_btn.scroll_into_view_if_needed()
+            save_btn.click(force=True, timeout=5000)
+            page.wait_for_timeout(5000)
+            if take_screenshot: take_screenshot("playwright_final_tagged_pin.png")
+            logger.info(f"  [SUCCESS] [Playwright] Successfully tagged {added_count} products onto Pin #{pin_id} via 'Edit Pin' -> 'Use a Link' flow (URL, title & desc 100% intact)!")
+            return True
+        else:
+            logger.warning("    [Fallback Edit Flow] 'Save' button not found in Edit Pin modal.")
+            return False
+
+    except Exception as e_edit:
+        logger.error(f"    [Fallback Edit Flow] Exception during Edit Pin flow: {e_edit}")
+        return False
+
+
 def tag_pin_visually_with_playwright(
     pin_id: str,
     relevant_products: List[Dict[str, Any]],
@@ -473,37 +666,266 @@ def tag_pin_visually_with_playwright(
     try:
         poster = StealthPinterestPoster(headless=True)
         cookies = poster._get_cookies_dict()
-        if not cookies:
-            logger.warning("  [Playwright] No Pinterest cookies found for visual tagging.")
+        if not cookies and not (poster.email and poster.password):
+            logger.warning("  [Playwright] Neither Pinterest cookies nor login credentials found for visual tagging.")
             return False
 
         with sync_playwright() as p:
             browser = p.chromium.launch(
                 headless=True,
-                args=['--no-sandbox', '--disable-blink-features=AutomationControlled', '--disable-dev-shm-usage']
+                args=[
+                    '--no-sandbox',
+                    '--disable-setuid-sandbox',
+                    '--disable-blink-features=AutomationControlled',
+                    '--disable-dev-shm-usage',
+                    '--disable-infobars',
+                    '--window-size=1280,900'
+                ]
             )
-            ctx = browser.new_context(viewport={'width': 1280, 'height': 900})
-            ctx.add_cookies(cookies)
+            ctx = browser.new_context(
+                viewport={'width': 1280, 'height': 900},
+                user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+                locale="en-US",
+                timezone_id="America/New_York"
+            )
+            ctx.add_init_script("Object.defineProperty(navigator, 'webdriver', { get: () => undefined });")
+            if cookies:
+                try:
+                    ctx.add_cookies(cookies)
+                except Exception as ce:
+                    logger.warning(f"  [Playwright] Cookie injection notice: {ce}")
+
             page = ctx.new_page()
 
-            logger.info(f"  [Playwright] 1. Loading Pin page: https://www.pinterest.com/pin/{pin_id}/")
-            page.goto(f'https://www.pinterest.com/pin/{pin_id}/', wait_until='domcontentloaded')
+            def _take_debug_screenshot(name: str = "playwright_tag_failure.png"):
+                try:
+                    page.screenshot(path=name, full_page=True)
+                    logger.info(f"  [Playwright] Saved diagnostic screenshot to {name} (URL: {page.url})")
+                except Exception as se:
+                    logger.debug(f"  [Playwright] Could not save screenshot: {se}")
+
+            # Step 1: Verify active authenticated session via /pin-builder/
+            logger.info("  [Playwright] Step 1: Verifying active authentication session on Pinterest...")
+            try:
+                page.goto("https://www.pinterest.com/pin-builder/", wait_until="domcontentloaded", timeout=45000)
+                page.wait_for_timeout(2500)
+                logger.info(f"  [Playwright] Auth check initial landing: URL='{page.url}' | Title='{page.title()}'")
+            except Exception as e_nav:
+                logger.warning(f"  [Playwright] Initial navigation notice: {e_nav}")
+
+            if "login" in page.url.lower() or "pin-builder" not in page.url.lower():
+                logger.info("  [Playwright] Session unauthenticated or redirected to login. Attempting login via credentials...")
+                _take_debug_screenshot("playwright_00_pre_login.png")
+                if poster.email and poster.password and poster._login_via_ui(page):
+                    logger.info(f"  [Playwright] ✓ UI login succeeded! Current URL: {page.url}")
+                    poster._save_cookies(ctx)
+                    _take_debug_screenshot("playwright_00_post_login.png")
+                else:
+                    logger.warning("  [Playwright] UI login fallback could not complete or credentials unavailable.")
+            else:
+                logger.info("  [Playwright] ✓ Authenticated session confirmed on Pinterest!")
+
+            # Step 2: Navigate to target Pin page
+            logger.info(f"  [Playwright] Step 2: Loading target Pin page: https://www.pinterest.com/pin/{pin_id}/")
+            page.goto(f'https://www.pinterest.com/pin/{pin_id}/', wait_until='domcontentloaded', timeout=45000)
             page.wait_for_timeout(3000)
+            logger.info(f"  [Playwright] Target Pin loaded: URL='{page.url}' | Title='{page.title()}'")
+            _take_debug_screenshot("playwright_01_pin_loaded.png")
 
-            # Step 2: Hover over image and click "Tag products"
-            logger.info("  [Playwright] 2. Hovering pin image to reveal 'Tag products' button...")
-            img = page.locator("img").first
-            if img.count() > 0:
-                img.hover()
-                page.wait_for_timeout(1000)
+            # Dismiss any popup banners, cookie notices, or prompts
+            try:
+                for dismiss_sel in [
+                    "button[aria-label='Close']",
+                    "[data-test-id='modal-close-button']",
+                    "button:has-text('Accept all')",
+                    "button:has-text('Got it')",
+                    "button:has-text('Not now')"
+                ]:
+                    close_btns = page.locator(dismiss_sel)
+                    if close_btns.count() > 0 and close_btns.first.is_visible():
+                        logger.info(f"  [Playwright] Dismissing popup banner: {dismiss_sel}")
+                        close_btns.first.click(force=True, timeout=2000)
+                        page.wait_for_timeout(500)
+            except Exception:
+                pass
 
-            tag_btn = page.locator("button[aria-label='Tag products']").first
-            if tag_btn.count() == 0:
-                logger.warning("  [Playwright] 'Tag products' button not found on Pin image.")
+            tag_btn_selectors = [
+                "button[aria-label='Tag products']",
+                "[data-test-id='tag-products-button']",
+                "button[aria-label*='Tag product' i]",
+                "div[role='button'][aria-label*='Tag product' i]",
+                "button:has-text('Tag products')",
+                "[aria-label='Tag products']",
+                "button[aria-label*='Tag' i]",
+                "[data-test-id*='tag' i]"
+            ]
+
+            tag_btn = None
+            for tsel in tag_btn_selectors:
+                cand = page.locator(tsel).first
+                if cand.count() > 0 and cand.is_visible():
+                    logger.info(f"  [Playwright] Found 'Tag products' button on page load: '{tsel}'")
+                    tag_btn = cand
+                    break
+
+            # Fast check: If Pinterest rendered carousel overlay controls, it is an Idea/Story carousel Pin
+            if not tag_btn and page.locator("[data-test-id*='carousel-overlay']").count() > 0:
+                logger.info(
+                    f"  [Playwright] Detected carousel overlay navigation on Pin #{pin_id}. "
+                    "Launching Fallback Tagging Flow: 'Edit Pin' -> 'Add products' -> 'Use a Link'..."
+                )
+                fallback_success = _tag_pin_via_edit_modal_flow(
+                    page,
+                    pin_id,
+                    relevant_products,
+                    max_tags=max_tags,
+                    take_screenshot=_take_debug_screenshot
+                )
+                browser.close()
+                return fallback_success
+
+            # Step 3: Hover over pin image to reveal "Tag products" button (if not already revealed)
+            if not tag_btn:
+                logger.info("  [Playwright] Step 3: Hovering pin image to reveal 'Tag products' button...")
+                pin_media_selectors = [
+                    "[data-test-id='CloseupMainPin']",
+                    "[data-test-id='pin-closeup-image']",
+                    "[data-test-id='pin-visual-wrapper']",
+                    "div[role='button']:has(img[src*='pinimg.com'])",
+                    "div[data-test-id='closeup-image']",
+                    "div[data-test-id='pin-media-container']",
+                    "img[src*='pinimg.com']:not([alt*='cutout'])",
+                    "div[role='img']"
+                ]
+
+                pin_media = None
+                for psel in pin_media_selectors:
+                    cand = page.locator(psel).first
+                    if cand.count() > 0 and cand.is_visible():
+                        logger.info(f"  [Playwright] Resolved pin media container: '{psel}'")
+                        pin_media = cand
+                        break
+
+                # Hover with force=True and short timeout to bypass pointer interception
+                if pin_media:
+                    try:
+                        pin_media.hover(force=True, timeout=3000)
+                        page.wait_for_timeout(600)
+                    except Exception as he:
+                        logger.debug(f"  [Playwright] pin_media hover notice: {he}")
+                else:
+                    # Fallback: hover largest visible image
+                    logger.info("  [Playwright] Primary container selectors not found. Searching for largest image on page...")
+                    imgs = page.locator("img:not([alt*='cutout'])")
+                    max_area = 0
+                    best_img = None
+                    for idx in range(imgs.count()):
+                        cand = imgs.nth(idx)
+                        try:
+                            box = cand.bounding_box()
+                            if box and box['width'] > 180 and box['height'] > 180:
+                                area = box['width'] * box['height']
+                                if area > max_area:
+                                    max_area = area
+                                    best_img = cand
+                        except Exception:
+                            pass
+                if best_img:
+                    logger.info(f"  [Playwright] Hovering largest image (area={max_area})...")
+                    try:
+                        best_img.hover(force=True, timeout=3000)
+                        page.wait_for_timeout(600)
+                    except Exception:
+                        pass
+
+            # Move mouse specifically to the pin image and top-right corner where shopping bag icon sits
+            try:
+                target_box = None
+                if pin_media:
+                    target_box = pin_media.bounding_box()
+                if not target_box:
+                    main_pin = page.locator("[data-test-id='CloseupMainPin'], [elementtiming='StoryPinImageBlock-MainPinImage']").first
+                    if main_pin.count() > 0:
+                        target_box = main_pin.bounding_box()
+                if target_box:
+                    logger.info(f"  [Playwright] Pin media bounding box: x={target_box['x']}, y={target_box['y']}, w={target_box['width']}, h={target_box['height']}")
+                    # Move to center
+                    page.mouse.move(target_box['x'] + target_box['width'] / 2, target_box['y'] + target_box['height'] / 2)
+                    page.wait_for_timeout(400)
+                    # Move to top-right corner
+                    page.mouse.move(target_box['x'] + target_box['width'] - 35, target_box['y'] + 35)
+                    page.wait_for_timeout(600)
+            except Exception as e_box:
+                logger.debug(f"  [Playwright] Bounding box hover notice: {e_box}")
+
+            _take_debug_screenshot("playwright_02_hover_state.png")
+
+            tag_btn_selectors = [
+                "button[aria-label='Tag products']",
+                "[data-test-id='tag-products-button']",
+                "button[aria-label*='Tag product' i]",
+                "div[role='button'][aria-label*='Tag product' i]",
+                "button:has-text('Tag products')",
+                "[aria-label='Tag products']",
+                "button[aria-label*='Tag' i]",
+                "[data-test-id*='tag' i]"
+            ]
+
+            if not tag_btn or tag_btn.count() == 0:
+                for tsel in tag_btn_selectors:
+                    cand = page.locator(tsel).first
+                    if cand.count() > 0 and cand.is_visible():
+                        logger.info(f"  [Playwright] Found 'Tag products' button via selector: '{tsel}'")
+                        tag_btn = cand
+                        break
+
+            # If not revealed yet, check More actions (...) menu as fallback
+            if not tag_btn or tag_btn.count() == 0:
+                more_btn = page.locator("button[aria-label='More actions'], button[aria-label='More options']").first
+                if more_btn.count() > 0 and more_btn.is_visible():
+                    logger.info("  [Playwright] 'Tag products' not visible on hover. Opening 'More actions' (...) menu...")
+                    try:
+                        more_btn.click(force=True, timeout=2000)
+                        page.wait_for_timeout(1000)
+                        _take_debug_screenshot("playwright_02_more_actions_open.png")
+                        for tsel in tag_btn_selectors:
+                            cand = page.locator(tsel).first
+                            if cand.count() > 0 and cand.is_visible():
+                                logger.info(f"  [Playwright] Found 'Tag products' in More actions menu: '{tsel}'")
+                                tag_btn = cand
+                                break
+                    except Exception as e_more:
+                        logger.debug(f"More actions menu notice: {e_more}")
+
+            if not tag_btn or tag_btn.count() == 0:
+                logger.info("  [Playwright] Direct 'Tag products' button not found on Pin image.")
+                logger.info("  [Playwright] Launching Fallback Tagging Flow: 'Edit Pin' -> 'Add products' -> 'Use a Link'...")
+                fallback_success = _tag_pin_via_edit_modal_flow(
+                    page,
+                    pin_id,
+                    relevant_products,
+                    max_tags=max_tags,
+                    take_screenshot=_take_debug_screenshot
+                )
+                if fallback_success:
+                    browser.close()
+                    return True
+
+                logger.warning("  [Playwright] Both primary visual tagging and fallback Edit Pin flow could not complete.")
+                _take_debug_screenshot("playwright_tag_failure.png")
+                try:
+                    with open("playwright_failure_page.html", "w", encoding="utf-8") as hf:
+                        hf.write(page.content())
+                    logger.info("  [Playwright] Dumped full DOM HTML to playwright_failure_page.html")
+                except Exception:
+                    pass
                 browser.close()
                 return False
 
-            tag_btn.click()
+            try:
+                tag_btn.click(force=True, timeout=5000)
+            except Exception:
+                tag_btn.click()
             page.wait_for_timeout(3000)
 
             # Step 3: Click '+' in tagged-items-grid
@@ -512,10 +934,14 @@ def tag_pin_visually_with_playwright(
             add_btn = grid.locator("div[role='button'], button, div[tabindex='0']").first
             if add_btn.count() == 0:
                 logger.warning("  [Playwright] '+' button not found in tagged-items-grid.")
+                _take_debug_screenshot("playwright_tag_failure.png")
                 browser.close()
                 return False
 
-            add_btn.click()
+            try:
+                add_btn.click(force=True, timeout=5000)
+            except Exception:
+                add_btn.click()
             page.wait_for_timeout(3000)
 
             dialog = page.locator('[role="dialog"]')
@@ -525,15 +951,20 @@ def tag_pin_visually_with_playwright(
             catalog_tab = dialog.locator('button:has-text("Catalog"), div:has-text("Catalog")').last
             if catalog_tab.count() == 0:
                 logger.warning("  [Playwright] 'Catalog' tab not found in modal.")
+                _take_debug_screenshot("playwright_tag_failure.png")
                 browser.close()
                 return False
 
-            catalog_tab.click()
+            try:
+                catalog_tab.click(force=True, timeout=5000)
+            except Exception:
+                catalog_tab.click()
             page.wait_for_timeout(2000)
 
             inp = dialog.locator('input[placeholder*="Enter product item ID"]').first
             if inp.count() == 0:
                 logger.warning("  [Playwright] 'Enter product item ID' input field not found.")
+                _take_debug_screenshot("playwright_tag_failure.png")
                 browser.close()
                 return False
 
@@ -565,7 +996,6 @@ def tag_pin_visually_with_playwright(
                     continue
 
                 # Find the matched catalog card in the main search grid (NOT in bottom selection tray!)
-                # Search result cards are in dialog with y between 200 and 660, width >= 80
                 card = None
                 imgs = dialog.locator('img[src*="pinimg"]')
                 for idx in range(imgs.count()):
@@ -577,7 +1007,7 @@ def tag_pin_visually_with_playwright(
 
                 if card:
                     try:
-                        card.click()
+                        card.click(force=True, timeout=5000)
                         added_count += 1
                         logger.info(f"      Successfully added product #{added_count}")
                         page.wait_for_timeout(800)
@@ -588,6 +1018,7 @@ def tag_pin_visually_with_playwright(
 
             if added_count == 0:
                 logger.warning("  [Playwright] 0 products were added via Catalog variant IDs.")
+                _take_debug_screenshot("playwright_tag_failure.png")
                 browser.close()
                 return False
 
@@ -600,20 +1031,27 @@ def tag_pin_visually_with_playwright(
                 save_btn = page.locator("button:has-text('Save product')").first
 
             if save_btn.count() > 0 and save_btn.is_enabled():
-                save_btn.click()
+                try:
+                    save_btn.click(force=True, timeout=5000)
+                except Exception:
+                    save_btn.click()
                 page.wait_for_timeout(3000)
 
             # Step 7: Click "Done" button to save tags on Pin
             logger.info("  [Playwright] 7. Clicking 'Done' button to save tags on Pin...")
             done_btn = page.locator("button:has-text('Done')").first
             if done_btn.count() > 0:
-                done_btn.click()
+                try:
+                    done_btn.click(force=True, timeout=5000)
+                except Exception:
+                    done_btn.click()
                 page.wait_for_timeout(4000)
                 logger.info(f"  [SUCCESS] [Playwright] Successfully tagged {added_count} relevant products onto Pin #{pin_id} (title, desc & URL 100% untouched)!")
                 browser.close()
                 return True
             else:
                 logger.warning("  [Playwright] 'Done' button not found.")
+                _take_debug_screenshot("playwright_tag_failure.png")
                 browser.close()
                 return False
 
@@ -629,7 +1067,8 @@ def attach_tagged_product_to_pin(
     relevant_products: Any,
     pin_title: str = "",
     pin_desc: str = "",
-    apply_live: bool = False
+    apply_live: bool = False,
+    is_story_pin: bool = False
 ) -> bool:
     """
     Attaches up to 10 relevant Shoppable Products to the Pin image via Catalog variant IDs.
@@ -648,10 +1087,25 @@ def attach_tagged_product_to_pin(
     logger.info(f"  Pin Title & Description (100% UNTOUCHED)  : Preserved intact")
     logger.info(f"  Total Relevant In-Stock Products Found   : {len(relevant_products)}")
     for idx, p in enumerate(relevant_products[:5]):
-        logger.info(f"    Item #{idx+1}: {p.get('title')} (${p.get('price')}) | Variant ID: {p.get('variant_id')}")
+        safe_t = str(p.get('title') or '').encode('ascii', 'ignore').decode()
+        logger.info(f"    Item #{idx+1}: {safe_t} (${p.get('price')}) | Variant ID: {p.get('variant_id')}")
 
     if apply_live:
         visual_success = tag_pin_visually_with_playwright(pin_id, relevant_products, max_tags=10)
+        if not visual_success and is_story_pin:
+            logger.info("  [Playwright] Visual tagging fallback: updating story pin description via Pinterest API...")
+            if pclient and hasattr(pclient, 'client') and pclient.client:
+                try:
+                    base_text = (pin_desc or pin_title or "MeeeShop Fashion").split(" | Similar In-Stock Style:")[0].strip()
+                    updated_desc = f"{base_text} | Similar In-Stock Style: {first_prod.get('title', '')} (${first_prod.get('price', '')}) at us.meeeshop.com"
+                    options = {"id": str(pin_id), "description": updated_desc}
+                    data = pclient.client.req_builder.buildPost(options=options, source_url=f"/pin/{pin_id}/")
+                    resp = pclient.client.post(url="https://www.pinterest.com/resource/PinResource/update/", data=data)
+                    if resp.status_code == 200:
+                        logger.info(f"  [SUCCESS] Story Pin #{pin_id} description updated with in-stock style recommendations via Pinterest API!")
+                        return True
+                except Exception as e:
+                    logger.error(f"  Pinterest API update exception: {e}")
         return visual_success
     else:
         logger.info("  [TEST / DRY-RUN MODE] Visual tagging simulated for up to 10 products (No live edit made).")
@@ -715,6 +1169,7 @@ def process_and_tag_popular_pins(
         }
 
         # Attempt to fetch exact pin details if client active
+        is_story_pin = False
         if pclient and hasattr(pclient, 'client') and pclient.client:
             try:
                 options = {"id": str(test_pin_id)}
@@ -729,7 +1184,15 @@ def process_and_tag_popular_pins(
                     pin_context["title"] = str(p_data.get('title') or p_data.get('grid_title') or pin_context["title"])
                     pin_context["desc"] = str(p_data.get('description') or pin_context["desc"])
                     pin_context["link"] = str(p_data.get('link') or pin_context["link"])
-                    logger.info(f"Retrieved exact live details for Pin #{test_pin_id}: title='{pin_context['title']}', link='{pin_context['link']}'")
+                    is_story_pin = bool(
+                        p_data.get('story_pin_data_id') or
+                        p_data.get('story_pin_data') or
+                        p_data.get('is_story') or
+                        p_data.get('has_story_pin_data')
+                    )
+                    if is_story_pin:
+                        logger.warning(f"Pin #{test_pin_id} detected as an Idea/Story Pin (carousel/pages format, story_pin_data_id='{p_data.get('story_pin_data_id')}'). Pinterest only supports visual shopping bag tagging on Standard Pins.")
+                    logger.info(f"Retrieved exact live details for Pin #{test_pin_id}: title='{pin_context['title']}', link='{pin_context['link']}', is_story_pin={is_story_pin}")
             except Exception as ex:
                 logger.debug(f"Fetch exact pin details notice: {ex}")
 
@@ -755,7 +1218,8 @@ def process_and_tag_popular_pins(
             relevant_prods,
             pin_title=pin_context["title"],
             pin_desc=pin_context["desc"],
-            apply_live=apply_live
+            apply_live=apply_live,
+            is_story_pin=is_story_pin
         )
 
         test_result = {
@@ -767,6 +1231,7 @@ def process_and_tag_popular_pins(
                 {"title": p["title"], "price": p["price"], "variant_id": p.get("variant_id"), "url": p["url"]}
                 for p in relevant_prods
             ],
+            "is_story_pin": is_story_pin,
             "live_applied": success if apply_live else False,
             "mode": mode_str
         }
@@ -895,6 +1360,10 @@ def process_and_tag_popular_pins(
                 if not isinstance(pin, dict) or pin.get('type') != 'pin':
                     continue
 
+                # Skip Idea/Story Pins (carousel format) since Pinterest only supports visual shopping bag tagging on Standard Pins
+                if bool(pin.get('story_pin_data_id') or pin.get('story_pin_data') or pin.get('has_story_pin_data') or pin.get('is_story')):
+                    continue
+
                 pid = str(pin.get('id', '')).strip()
                 if not pid.isdigit() or len(pid) < 15:
                     continue
@@ -964,6 +1433,10 @@ def process_and_tag_popular_pins(
                     bpins = pclient.client.board_feed(board_id=bid, page_size=20)
                     for pin in (bpins or []):
                         if not isinstance(pin, dict) or pin.get('type') != 'pin':
+                            continue
+
+                        # Skip Idea/Story Pins (carousel format)
+                        if bool(pin.get('story_pin_data_id') or pin.get('story_pin_data') or pin.get('has_story_pin_data') or pin.get('is_story')):
                             continue
 
                         pid = str(pin.get('id', '')).strip()
@@ -1126,8 +1599,15 @@ def main():
     if apply_live:
         if args.test_pin_id:
             if not res or not res.get("live_applied", False):
-                logger.error(f"[FAILURE] Live tagging failed for test Pin #{args.test_pin_id}.")
-                sys.exit(1)
+                if res and res.get("is_story_pin"):
+                    logger.warning(
+                        f"[NOTICE] Pin #{args.test_pin_id} is an Idea/Story Pin (carousel format). "
+                        "Pinterest web UI does not support visual shopping bag product tagging on Story/Carousel Pins (only on Standard Pins). "
+                        "To test visual product tagging, please specify a Standard Pin ID (e.g. 962222276664727672) or run in batch mode."
+                    )
+                else:
+                    logger.error(f"[FAILURE] Live tagging failed for test Pin #{args.test_pin_id}.")
+                    sys.exit(1)
         else:
             if not res or res.get("status") == "error":
                 logger.error("[FAILURE] Live tagging encountered an error.")
