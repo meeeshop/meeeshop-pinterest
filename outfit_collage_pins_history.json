@@ -2737,7 +2737,44 @@
           "pin_id": null
         }
       ]
+    },
+    {
+      "timestamp": "2026-11-03T20:34:01.186438+00:00",
+      "formula_id": "cozy_sweater_weather",
+      "formula_title": "Cozy Fall Layers Outfit Formula",
+      "pin_url": null,
+      "pin_id": null,
+      "board": "Sweaters",
+      "title": "Cozy Fall Layers Outfit Formula - Easy Everyday Styling Formula | MeeeShop",
+      "type": "native_collage",
+      "canvas_preview": "/home/runner/work/meeeshop-pinterest/meeeshop-pinterest/scratch/collage_canvas_cozy_sweater_weather_1793738021.png",
+      "cutout_items": [
+        {
+          "role": "THE KNIT",
+          "title": "Retrolicious Isabel Top in Plum",
+          "product_id": "8782621868203",
+          "pin_id": null
+        },
+        {
+          "role": "THE TOTE",
+          "title": "Elke Convertible Backpack Handbag",
+          "product_id": "9087954157739",
+          "pin_id": null
+        },
+        {
+          "role": "THE DENIM",
+          "title": "Maya plus High Rise Flared Leg Jeans",
+          "product_id": "9138373263531",
+          "pin_id": null
+        },
+        {
+          "role": "THE BOOTS",
+          "title": "Alma Booties Brown",
+          "product_id": "9073872175275",
+          "pin_id": null
+        }
+      ]
     }
   ],
-  "last_run": "2026-11-03T08:55:58.657217+00:00"
+  "last_run": "2026-11-03T20:34:01.187323+00:00"
 }
