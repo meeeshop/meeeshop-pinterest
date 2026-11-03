@@ -2626,7 +2626,44 @@
           "pin_id": null
         }
       ]
+    },
+    {
+      "timestamp": "2026-11-03T01:11:48.176527+00:00",
+      "formula_id": "cozy_sweater_weather",
+      "formula_title": "Cozy Fall Layers Outfit Formula",
+      "pin_url": null,
+      "pin_id": null,
+      "board": "Sweaters",
+      "title": "Cozy Fall Layers Outfit Formula - Easy Everyday Styling Formula | MeeeShop",
+      "type": "native_collage",
+      "canvas_preview": "/home/runner/work/meeeshop-pinterest/meeeshop-pinterest/scratch/collage_canvas_cozy_sweater_weather_1793668290.png",
+      "cutout_items": [
+        {
+          "role": "THE KNIT",
+          "title": "Retrolicious Isabel Top in Blush",
+          "product_id": "8782621442219",
+          "pin_id": null
+        },
+        {
+          "role": "THE TOTE",
+          "title": "June Signature Backpack Handbag",
+          "product_id": "9087954059435",
+          "pin_id": null
+        },
+        {
+          "role": "THE DENIM",
+          "title": "Judy Blue Full Size High Waist Distressed Wide Leg Jeans",
+          "product_id": "8744042758315",
+          "pin_id": null
+        },
+        {
+          "role": "THE BOOTS",
+          "title": "Alma Booties Brown",
+          "product_id": "9073872175275",
+          "pin_id": null
+        }
+      ]
     }
   ],
-  "last_run": "2026-11-02T22:45:42.913947+00:00"
+  "last_run": "2026-11-03T01:11:48.177192+00:00"
 }
