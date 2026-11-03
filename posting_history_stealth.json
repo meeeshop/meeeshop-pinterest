@@ -13277,11 +13277,57 @@
       "template": 14,
       "pin_url": "https://www.pinterest.com/pin/962222276665592400/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8941772210347,
+      "title": "Fluffy Plush Handbag with Integrated Top Handle and Chain Strap | MeeeShop US Boutique",
+      "board": "Trends",
+      "timestamp": "2026-11-03T00:02:44.718038",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276665595948/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": "571347140779",
+      "article_id": "571347140779",
+      "title": "Crewneck vs V-Neck Knitwear: Which Neckline Complements Your Frame?",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-11-03T00:04:19.549874",
+      "type": "blog",
+      "style": "card",
+      "template": 9,
+      "pin_url": "https://www.pinterest.com/pin/962222276665595966/",
+      "blog_url": "https://us.meeeshop.com/blogs/cardigans-sweaters-style-guide/crewneck-vs-v-neck-knitwear-which-neckline-complements-your-frame",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8818156437675,
+      "title": "Emory Park Marisol Pants | MeeeShop US Boutique",
+      "board": "Best selling products",
+      "timestamp": "2026-11-03T00:06:44.895505",
+      "type": "carousel",
+      "style": "collage",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276665595979/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8933187911851,
+      "title": "Distressed Denim Trench Coat | MeeeShop US Boutique",
+      "board": "New Trendy Woman...",
+      "timestamp": "2026-11-03T00:09:21.657391",
+      "type": "video",
+      "style": "carousel",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276665595993/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-10-30T08:23:10.916119",
-    "Trends": "2026-11-02T21:11:05.122393",
+    "Trends": "2026-11-03T00:02:44.718038",
     "Dresses": "2026-10-23T20:41:56.204070",
     "Feminine & Flowy Fits": "2026-11-02T21:15:35.177592",
     "Short fall dresses": "2026-10-24T07:06:32.059527",
@@ -13344,10 +13390,10 @@
     "Davi & Dani Womens...": "2026-10-20T16:11:11.256363",
     "Weekend to Workout": "2026-10-28T00:25:47.865945",
     "Gimme Gummy Playful Nostalgia": "2026-11-01T00:05:59.648053",
-    "Best selling products": "2026-10-20T20:55:03.608175",
+    "Best selling products": "2026-11-03T00:06:44.895505",
     "Off-Duty Athlete Looks": "2026-10-28T08:09:14.844181",
     "LE LIS Womens Clothi...": "2026-10-20T20:56:10.887545",
-    "New Trendy Woman...": "2026-10-21T16:27:52.923701",
+    "New Trendy Woman...": "2026-11-03T00:09:21.657391",
     "Outfit Ideas": "2026-10-22T07:27:47.956283",
     "Late Summer to Fall Teacher Style": "2026-10-30T21:44:49.302680",
     "Ootd #ootd": "2026-10-23T07:17:22.313935",
@@ -13394,9 +13440,9 @@
     "Umgee USA": "2026-10-10T16:46:42.000590",
     "Edgy Fashion": "2026-10-13T09:13:02.770988"
   },
-  "daily_count": 12,
-  "last_post_time": "2026-11-02T21:15:35.177592",
+  "daily_count": 4,
+  "last_post_time": "2026-11-03T00:09:21.657391",
   "board_rotation_cursor": 0,
-  "last_image_style": "collage",
-  "last_template_index": 14
+  "last_image_style": "carousel",
+  "last_template_index": 17
 }
