@@ -3159,7 +3159,47 @@
           "role": "THE FOOTWEAR"
         }
       ]
+    },
+    {
+      "timestamp": "2026-11-04T03:01:59.579581+00:00",
+      "formula_id": "cozy_sweater_weather",
+      "formula_title": "Cozy Fall Layers Outfit Formula",
+      "pin_url": "https://www.pinterest.com/pin/962222276665627104/",
+      "pin_id": "962222276665627104",
+      "board": "Sweaters",
+      "title": "Cozy Fall Layers Outfit Formula - Easy Everyday Styling Formula | MeeeShop",
+      "tagged_products_count": 4,
+      "outfit_items": [
+        {
+          "id": "8782621900971",
+          "variant_id": "47103344902315",
+          "title": "Retrolicious Retro Boat Neck Top in Red",
+          "price": "54.99",
+          "role": "THE KNIT"
+        },
+        {
+          "id": "9087954256043",
+          "variant_id": "48172198396075",
+          "title": "Ingrid Convertible Backpack Handbag",
+          "price": "104.99",
+          "role": "THE TOTE"
+        },
+        {
+          "id": "8897141964971",
+          "variant_id": "47512666407083",
+          "title": "Ymi Women's plus High Rise Wide Leg Skater Cargo Jeans",
+          "price": "69.99",
+          "role": "THE DENIM"
+        },
+        {
+          "id": "9073872175275",
+          "variant_id": "48110997995691",
+          "title": "Alma Booties Brown",
+          "price": "169.99",
+          "role": "THE BOOTS"
+        }
+      ]
     }
   ],
-  "last_run": "2026-11-03T23:34:21.020359+00:00"
+  "last_run": "2026-11-04T03:01:59.579601+00:00"
 }
