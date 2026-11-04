@@ -13455,11 +13455,57 @@
       "template": 14,
       "pin_url": "https://www.pinterest.com/pin/962222276665622511/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8976562159787,
+      "title": "Bahama Breeze Fit All Sling Bag - Thanksgiving Crossbody Trend \u2014 MeeeShop",
+      "board": "Trends",
+      "timestamp": "2026-11-04T01:10:50.279172",
+      "type": "video",
+      "style": "collage",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276665624947/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": "571354808491",
+      "article_id": "571354808491",
+      "title": "Texture Mixing 101: Pairing Knit, Denim, Silk, and Leather Seamlessly",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-11-04T01:12:31.045021",
+      "type": "blog",
+      "style": "card",
+      "template": 9,
+      "pin_url": "https://www.pinterest.com/pin/962222276665624993/",
+      "blog_url": "https://us.meeeshop.com/blogs/womens-clothing/texture-mixing-101-pairing-knit-denim-silk-and-leather-seamlessly",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8985000771755,
+      "title": "Patricia Weekender Bag | MeeeShop US Boutique",
+      "board": "Handbag #handsips",
+      "timestamp": "2026-11-04T01:14:06.565271",
+      "type": "carousel",
+      "style": "collage",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276665625026/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8984999854251,
+      "title": "Rubia Satchel Bag | MeeeShop US Boutique",
+      "board": "Woman Fashion!",
+      "timestamp": "2026-11-04T01:16:09.892582",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276665625069/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-10-30T08:23:10.916119",
-    "Trends": "2026-11-03T22:32:14.713484",
+    "Trends": "2026-11-04T01:10:50.279172",
     "Dresses": "2026-10-23T20:41:56.204070",
     "Feminine & Flowy Fits": "2026-11-02T21:15:35.177592",
     "Short fall dresses": "2026-10-24T07:06:32.059527",
@@ -13478,7 +13524,7 @@
     "Shirts & Tops": "2026-10-31T00:38:42.314286",
     "Blouses": "2026-11-03T22:35:23.557048",
     "Rompers_Jumpsuits &...": "2026-10-29T17:57:39.209691",
-    "Handbag #handsips": "2026-10-22T07:24:10.788626",
+    "Handbag #handsips": "2026-11-04T01:14:06.565271",
     "Trendy & Timeless...": "2026-10-27T07:36:05.466874",
     "Our Recommended...": "2026-10-28T21:56:50.341847",
     "Blouse": "2026-11-03T22:36:32.355112",
@@ -13531,7 +13577,7 @@
     "Ootd #ootd": "2026-11-03T09:16:26.592430",
     "Style Ideas": "2026-11-03T09:17:35.115362",
     "Mustard Seed Clothing": "2026-10-21T07:21:49.368630",
-    "Woman Fashion!": "2026-10-23T23:54:43.904046",
+    "Woman Fashion!": "2026-11-04T01:16:09.892582",
     "Stylish Finds": "2026-10-24T15:15:09.843237",
     "Confidence Ladies": "2026-10-24T19:47:03.690341",
     "Fresh Finds New...": "2026-10-24T19:48:19.952133",
@@ -13572,8 +13618,8 @@
     "Umgee USA": "2026-10-10T16:46:42.000590",
     "Edgy Fashion": "2026-10-13T09:13:02.770988"
   },
-  "daily_count": 16,
-  "last_post_time": "2026-11-03T22:36:32.355112",
+  "daily_count": 4,
+  "last_post_time": "2026-11-04T01:16:09.892582",
   "board_rotation_cursor": 0,
   "last_image_style": "carousel",
   "last_template_index": 14
