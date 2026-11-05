@@ -1,0 +1,84 @@
+name: "Style Guides: High-Converting SEO Blog Pins"
+
+# High-converting editorial style guide pins from MeeeShop Shopify blogs.
+# Proved to be the #1 driver of organic outbound website clicks from Pinterest.
+# Targets high-intent search queries ("How to Style...", "Outfit Ideas for...").
+#
+# Daily Schedule:
+#   15:30 UTC = 10:30 AM ET / 7:30 AM PT — Morning fashion reading
+#   20:00 UTC =  3:00 PM ET / 12:00 PM PT — Afternoon break & style browse
+
+on:
+  schedule:
+    - cron: '30 15 * * *'
+    - cron: '0 20 * * *'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run (simulate without live posting)'
+        type: boolean
+        required: false
+        default: false
+
+permissions:
+  actions: read
+  contents: write
+
+jobs:
+  blog_styleguides:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          ref: develop
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Install System Fonts
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y fonts-liberation fonts-dejavu gsfonts
+
+      - name: Post Editorial Style Guide Pins
+        env:
+          ENCRYPTION_KEY_PRIMARY: ${{ secrets.ENCRYPTION_KEY_PRIMARY }}
+          ENCRYPTION_KEY_FALLBACK: ${{ secrets.ENCRYPTION_KEY_FALLBACK }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SHOPIFY_STORE_URL: ${{ secrets.SHOPIFY_STORE_URL }}
+          SHOPIFY_ACCESS_TOKEN: ${{ secrets.SHOPIFY_ACCESS_TOKEN }}
+          PINTEREST_COOKIES_B64: ${{ secrets.PINTEREST_COOKIES_B64 }}
+          PINTEREST_EMAIL: ${{ secrets.PINTEREST_EMAIL }}
+          PINTEREST_PASSWORD: ${{ secrets.PINTEREST_PASSWORD }}
+          DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
+        run: |
+          echo "Launching SEO Blog & Style Guide Pinning Pipeline..."
+          python pinterest_blog_daily.py
+
+      - name: Commit and Push History to develop
+        if: always()
+        run: |
+          git config --local user.name "GitHub Action Bot"
+          git config --local user.email "action@github.com"
+          git add blog_posting_history.json refresh_history_v2.json posting_history_v2.json || true
+          git diff --quiet && git diff --staged --quiet || (git commit -m "chore(pinterest): record style guide blog pin history [skip ci]" && git pull origin develop --rebase && git push origin develop)
+
+      - name: Upload Blog History Artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: blog-history-${{ github.run_number }}
+          path: blog_posting_history.json
+          retention-days: 14

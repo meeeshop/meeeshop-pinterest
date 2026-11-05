@@ -12,13 +12,19 @@ name: Evergreen Pinterest Analytics Loop
 # Selenium analytics fallback is DISABLED — py3pin native API only (account safety).
 
 on:
-  schedule:
-    # 01:00 UTC = 8:00 PM EST / 9:00 PM EDT — prime time USA women shoppers
-    - cron: '0 1 * * 1'   # Monday
-    - cron: '0 1 * * 2'   # Tuesday
-    - cron: '0 1 * * 3'   # Wednesday
-    - cron: '0 1 * * 4'   # Thursday
-    - cron: '0 1 * * 5'   # Friday
+# ==============================================================================
+# [PAUSED / OVERLAPPING - REPLACED BY workflow-viral-repin-loop.yml]
+# Automated cron is paused to prevent overlap and domain throttling.
+# TO RESTORE: Uncomment the 'schedule:' block below.
+# Manual triggers via workflow_dispatch remain active.
+# ==============================================================================
+#   schedule:
+#     # 01:00 UTC = 8:00 PM EST / 9:00 PM EDT — prime time USA women shoppers
+#     - cron: '0 1 * * 1'   # Monday
+#     - cron: '0 1 * * 2'   # Tuesday
+#     - cron: '0 1 * * 3'   # Wednesday
+#     - cron: '0 1 * * 4'   # Thursday
+#     - cron: '0 1 * * 5'   # Friday
   workflow_dispatch:
     inputs:
       strategy:

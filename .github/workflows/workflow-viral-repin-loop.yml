@@ -1,0 +1,111 @@
+name: "Viral Loop: Evergreen Repin & Analytics"
+
+# Evergreen traffic multiplier — identifies organically engaged pins (saves, impressions)
+# and repins them across curated, fresh boards with refreshed visual templates.
+# Checks in-stock status via Shopify API and automatically creates 301 redirects for out-of-stock items.
+#
+# Daily Schedule:
+#   00:30 UTC = 7:30 PM ET / 4:30 PM PT (Mon-Fri) — Prime time US women evening browsing
+
+on:
+  schedule:
+    - cron: '30 0 * * 1-5'
+  workflow_dispatch:
+    inputs:
+      strategy:
+        description: 'Repin strategy (daily = top pin from last 7 days, biweekly = top pins from last 60 days)'
+        required: false
+        default: 'daily'
+        type: choice
+        options:
+          - daily
+          - biweekly
+      image_style:
+        description: 'Pin image style rotation (auto, hero, card, collage)'
+        required: false
+        default: 'auto'
+        type: choice
+        options:
+          - auto
+          - hero
+          - card
+          - collage
+      dry_run:
+        description: 'Dry run (simulate without live repinning)'
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  actions: read
+  contents: write
+
+jobs:
+  viral_repin:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          ref: develop
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Install System Fonts
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y fonts-liberation fonts-dejavu gsfonts
+
+      - name: Run Viral Evergreen Repin Loop
+        env:
+          ENCRYPTION_KEY_PRIMARY: ${{ secrets.ENCRYPTION_KEY_PRIMARY }}
+          ENCRYPTION_KEY_FALLBACK: ${{ secrets.ENCRYPTION_KEY_FALLBACK }}
+          PINTEREST_EMAIL: ${{ secrets.PINTEREST_EMAIL }}
+          PINTEREST_PASSWORD: ${{ secrets.PINTEREST_PASSWORD }}
+          PINTEREST_COOKIES_B64: ${{ secrets.PINTEREST_COOKIES_B64 }}
+          SHOPIFY_STORE_URL: ${{ secrets.SHOPIFY_STORE_URL }}
+          SHOPIFY_ACCESS_TOKEN: ${{ secrets.SHOPIFY_ACCESS_TOKEN }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          FORCE_IMAGE_STYLE: ${{ github.event.inputs.image_style || 'auto' }}
+          DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
+          PINTEREST_DAILY_CAP: '12'
+          PINTEREST_WEEKEND_CAP: '15'
+        run: |
+          STRAT="${{ github.event.inputs.strategy || 'daily' }}"
+          echo "Executing Viral Repin Loop (Strategy: $STRAT)..."
+          if [ "$STRAT" = "biweekly" ]; then
+            python pinterest_analytics_loop.py --strategy biweekly --limit 2 --days 60
+          else
+            python pinterest_analytics_loop.py --strategy daily --limit 1 --days 7
+          fi
+
+      - name: Commit and Push History to develop
+        if: always()
+        run: |
+          git config --local user.name "GitHub Action Bot"
+          git config --local user.email "action@github.com"
+          git add repin_history.json daily_pin_count.json posting_history_v2.json refresh_history_v2.json || true
+          git diff --quiet && git diff --staged --quiet || (git commit -m "chore(pinterest): record evergreen repin history [skip ci]" && git pull origin develop --rebase && git push origin develop)
+
+      - name: Upload Repin Artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: viral-repin-history-${{ github.run_number }}
+          path: |
+            repin_history.json
+            daily_pin_count.json
+          retention-days: 14
+          if-no-files-found: ignore

@@ -241,6 +241,51 @@ OUTFIT_FORMULAS = {
         "board_name": "Sweaters",
         "fallback_boards": ["Style Ideas", "Casual Outfits", "Kancan USA Jeans"],
         "seo_keywords": ["sweater weather outfit", "cozy fall layers", "how to style knitwear", "relaxed wide leg denim", "autumn capsule wardrobe", "aesthetic fall outfit formula"],
+    },
+    "thanksgiving_chic": {
+        "id": "thanksgiving_chic",
+        "title": "Thanksgiving Outfit Formula",
+        "subtitle": "EFFORTLESS & COMFORTABLE FAMILY DINNER STYLING",
+        "collection_handle": "womens-sweaters",
+        "slots": [
+            {"category": "tops", "role_label": "THE COZY TOP", "preference": ["sweater", "knit", "cardigan", "blouse", "top"]},
+            {"category": "jeans", "role_label": "STRETCH DENIM", "preference": ["flare", "wide leg", "kancan", "stretch", "jean"]},
+            {"category": "bags", "role_label": "THE SHOULDER BAG", "preference": ["shoulder", "crossbody", "tote", "bag"]},
+            {"category": "shoes", "role_label": "ANKLE BOOTIES", "preference": ["bootie", "boot", "flat", "shoe"]},
+        ],
+        "board_name": "Casual Outfits",
+        "fallback_boards": ["Sweaters", "Kancan USA Jeans", "Style Ideas"],
+        "seo_keywords": ["thanksgiving outfit formula", "casual thanksgiving outfit", "what to wear to thanksgiving dinner", "comfortable fall outfit", "fall boutique fashion 2026"],
+    },
+    "holiday_glam": {
+        "id": "holiday_glam",
+        "title": "Holiday Party Outfit Formula",
+        "subtitle": "CHIC DRESS & ACCESSORIES FOR EVENING GATHERINGS",
+        "collection_handle": "womens-dresses",
+        "slots": [
+            {"category": "dresses", "role_label": "THE STATEMENT DRESS", "preference": ["cocktail", "midi", "velvet", "tie-back", "dress"]},
+            {"category": "bags", "role_label": "EVENING BAG", "preference": ["clutch", "shoulder", "crossbody", "bag"]},
+            {"category": "shoes", "role_label": "THE HEELS / BOOTS", "preference": ["heel", "slingback", "bootie", "boot"]},
+            {"category": "tops", "role_label": "ELEGANT LAYER", "preference": ["blazer", "cardigan", "wrap", "jacket", "top"]},
+        ],
+        "board_name": "Cocktail Dresses",
+        "fallback_boards": ["Style Ideas", "Luxe Clothing", "Festive Styles"],
+        "seo_keywords": ["holiday party outfit formula", "winter cocktail dresses", "christmas party outfit ideas", "evening dresses 2026", "chic holiday party look"],
+    },
+    "winter_warmth": {
+        "id": "winter_warmth",
+        "title": "Winter Layering Outfit Formula",
+        "subtitle": "HOW TO LAYER WARM KNITS, DENIM & CHIC BOOTIES",
+        "collection_handle": "womens-outerwear",
+        "slots": [
+            {"category": "tops", "role_label": "WARM KNIT", "preference": ["sweater", "turtleneck", "pullover", "cardigan", "top"]},
+            {"category": "jeans", "role_label": "WINTER DENIM", "preference": ["flare", "wide leg", "straight", "jean"]},
+            {"category": "bags", "role_label": "EVERYDAY TOTE", "preference": ["tote", "crossbody", "backpack", "bag"]},
+            {"category": "shoes", "role_label": "WINTER BOOTS", "preference": ["boot", "bootie", "leather", "shoe"]},
+        ],
+        "board_name": "Sweaters",
+        "fallback_boards": ["Outerwear", "Casual Outfits", "Style Ideas"],
+        "seo_keywords": ["winter outfit formula", "winter layers outfit ideas", "how to style winter knitwear", "cold weather casual fashion", "winter boutique outfits"],
     }
 }
 
@@ -616,10 +661,14 @@ def generate_outfit_seo(formula: Dict[str, Any], items: List[Dict[str, Any]]) ->
     col_handle = formula.get("collection_handle", "womens-bottoms")
     collection_link = f"{store_base}/collections/{col_handle}?utm_source=pinterest&utm_medium=outfit_formula_pin&utm_campaign={formula['id']}"
 
+    # Rich Pin compatibility: Use hero item direct product URL if available
+    hero_url = items[0].get("url") if items and len(items) > 0 and items[0].get("url") else None
+    destination_url = hero_url if hero_url else collection_link
+
     return {
         "title": title,
         "description": desc,
-        "link": collection_link,
+        "link": destination_url,
         "alt_text": f"Outfit formula collage showing {f_title} with styled boutique apparel from MeeeShop US",
     }
 

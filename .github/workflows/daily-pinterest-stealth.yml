@@ -8,11 +8,17 @@ name: Daily Pinterest Stealth Posting (Solution 3)
 #   ENCRYPTION_KEY_PRIMARY and ENCRYPTION_KEY_FALLBACK
 
 on:
-  schedule:
-    - cron: '0 12 * * *'   # 8:00 AM ET / 12:00 UTC — Morning East Coast commute scroll
-    - cron: '30 17 * * *'  # 1:30 PM ET / 10:30 AM PT / 17:30 UTC — Mid-day lunch & shopping break
-    - cron: '0 21 * * *'   # 5:00 PM ET / 2:00 PM PT / 21:00 UTC — After-work unwind scroll
-    - cron: '0 2 * * *'    # 10:00 PM ET / 9:00 PM CT / 7:00 PM PT / 02:00 UTC — Night Prime-Time Bedtime Lounge (Highest US Peak!)
+# ==============================================================================
+# [PAUSED / OVERLAPPING - REPLACED BY workflow-outfit-formulas.yml & workflow-video-slideshow.yml]
+# Automated cron is paused to prevent overlap and domain throttling.
+# TO RESTORE: Uncomment the 'schedule:' block below.
+# Manual triggers via workflow_dispatch remain active.
+# ==============================================================================
+#   schedule:
+#     - cron: '0 12 * * *'   # 8:00 AM ET / 12:00 UTC — Morning East Coast commute scroll
+#     - cron: '30 17 * * *'  # 1:30 PM ET / 10:30 AM PT / 17:30 UTC — Mid-day lunch & shopping break
+#     - cron: '0 21 * * *'   # 5:00 PM ET / 2:00 PM PT / 21:00 UTC — After-work unwind scroll
+#     - cron: '0 2 * * *'    # 10:00 PM ET / 9:00 PM CT / 7:00 PM PT / 02:00 UTC — Night Prime-Time Bedtime Lounge (Highest US Peak!)
   workflow_dispatch:
     inputs:
       pins_count:
