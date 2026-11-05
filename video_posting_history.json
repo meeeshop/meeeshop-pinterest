@@ -449,6 +449,19 @@
       "board": "Jeans",
       "product_url": "https://us.meeeshop.com/products/risen-full-size-mid-rise-wide-leg-jeans-with-flared-look-plus-size",
       "posted_at": "2026-08-08T13:56:16.205216+00:00"
+    },
+    {
+      "product_id": "8745254322347",
+      "product_handle": "flying-tomato-mono-form-sweater-knit-midi-dress",
+      "product_title": "Flying Tomato Mono Form Sweater Knit Midi Dress",
+      "category": "dresses",
+      "pin_id": "962222276665661672",
+      "board": "Dresses",
+      "product_url": "https://us.meeeshop.com/products/flying-tomato-mono-form-sweater-knit-midi-dress",
+      "posted_at": "2026-11-05T09:07:43.882766+00:00"
     }
-  ]
+  ],
+  "category_last_used": {
+    "dresses": "2026-11-05T09:07:43.882744+00:00"
+  }
 }
