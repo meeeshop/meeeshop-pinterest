@@ -1,0 +1,102 @@
+name: "Video Showcase: Vertical Product Pins"
+
+# Generates high-impact 9:16 vertical video pins with dynamic motion, background music
+# and styling headlines from active in-stock Shopify products.
+# Captures high Home Feed and Watch Tab algorithmic distribution on Pinterest.
+#
+# Daily Schedule:
+#   13:00 UTC = 8:00 AM ET / 5:00 AM PT  — Morning commute / coffee browse
+#   01:00 UTC = 8:00 PM ET / 5:00 PM PT  — Evening prime time lounge
+
+on:
+  schedule:
+    - cron: '0 13 * * *'
+    - cron: '0 1 * * *'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run (generate video locally without live posting)'
+        required: false
+        default: 'false'
+        type: choice
+        options:
+          - 'false'
+          - 'true'
+      pins_per_run:
+        description: 'Max video pins per run'
+        required: false
+        default: '1'
+        type: choice
+        options:
+          - '1'
+          - '2'
+
+concurrency:
+  group: pinterest-video-pins
+  cancel-in-progress: true
+
+permissions:
+  actions: read
+  contents: write
+
+jobs:
+  video_pinning:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          ref: develop
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install System Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --fix-missing ffmpeg fonts-dejavu-core fonts-liberation
+
+      - name: Install Python Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Generate & Publish Video Pins
+        env:
+          ENCRYPTION_KEY_PRIMARY: ${{ secrets.ENCRYPTION_KEY_PRIMARY }}
+          ENCRYPTION_KEY_FALLBACK: ${{ secrets.ENCRYPTION_KEY_FALLBACK }}
+          SHOPIFY_STORE_URL: ${{ secrets.SHOPIFY_STORE_URL }}
+          SHOPIFY_ACCESS_TOKEN: ${{ secrets.SHOPIFY_ACCESS_TOKEN }}
+          PINTEREST_COOKIES_B64: ${{ secrets.PINTEREST_COOKIES_B64 }}
+          PINTEREST_EMAIL: ${{ secrets.PINTEREST_EMAIL }}
+          PINTEREST_PASSWORD: ${{ secrets.PINTEREST_PASSWORD }}
+          MAX_PINS_PER_RUN: ${{ github.event.inputs.pins_per_run || '1' }}
+          DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
+        run: |
+          echo "Launching Pinterest Vertical Video Pin Generator..."
+          python pinterest_video_daily.py
+
+      - name: Commit and Push Video History to develop
+        if: always()
+        run: |
+          git config --local user.name "GitHub Action Bot"
+          git config --local user.email "action@github.com"
+          git add video_posting_history.json || true
+          git diff --quiet && git diff --staged --quiet || (git commit -m "chore(pinterest): record video pin history [skip ci]" && git pull origin develop --rebase && git push origin develop)
+
+      - name: Upload Video Artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: video-pins-${{ github.run_number }}
+          path: |
+            generated_videos/*.mp4
+            video_posting_history.json
+          retention-days: 7
+          if-no-files-found: ignore

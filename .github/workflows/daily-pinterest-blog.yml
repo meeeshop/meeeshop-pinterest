@@ -1,8 +1,14 @@
 name: Pinterest Blog Postings (Twice Weekly)
 
 on:
-  schedule:
-    - cron: '30 15 * * 2,5'   # 11:30 AM ET / 15:30 UTC twice a week (Tuesday and Friday)
+# ==============================================================================
+# [PAUSED / OVERLAPPING - REPLACED BY workflow-blog-styleguides.yml]
+# Automated cron is paused to prevent overlap and domain throttling.
+# TO RESTORE: Uncomment the 'schedule:' block below.
+# Manual triggers via workflow_dispatch remain active.
+# ==============================================================================
+#   schedule:
+#     - cron: '30 15 * * 2,5'   # 11:30 AM ET / 15:30 UTC twice a week (Tuesday and Friday)
   workflow_dispatch:
     inputs:
       dry_run:

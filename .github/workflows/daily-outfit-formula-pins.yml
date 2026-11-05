@@ -14,11 +14,17 @@ name: Daily Outfit Formula Pins (Highest Save Rate)
 #   02:00 UTC = 10:00 PM ET / 7:00 PM PT  — Evening prime bedtime lounge (Highest US Save Peak)
 
 on:
-  schedule:
-    - cron: '0 14 * * *'
-    - cron: '30 18 * * *'
-    - cron: '0 23 * * *'
-    - cron: '0 2 * * *'
+# ==============================================================================
+# [PAUSED / OVERLAPPING - REPLACED BY workflow-outfit-formulas.yml]
+# Automated cron is paused to prevent overlap and domain throttling.
+# TO RESTORE: Uncomment the 'schedule:' block below.
+# Manual triggers via workflow_dispatch remain active.
+# ==============================================================================
+#   schedule:
+#     - cron: '0 14 * * *'
+#     - cron: '30 18 * * *'
+#     - cron: '0 23 * * *'
+#     - cron: '0 2 * * *'
   workflow_dispatch:
     inputs:
       mode:

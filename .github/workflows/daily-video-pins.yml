@@ -16,10 +16,16 @@ name: Daily Video Pins (Product Slideshow → Pinterest)
 # Products have a 10-day repost cooldown.
 
 on:
-  schedule:
-    - cron: '0 13 * * *'   # 9 AM ET — morning coffee scroll
-    - cron: '0 19 * * *'   # 3 PM ET — afternoon browse
-    - cron: '0 1  * * *'   # 9 PM ET — prime time
+# ==============================================================================
+# [PAUSED / OVERLAPPING - REPLACED BY workflow-video-slideshow.yml]
+# Automated cron is paused to prevent overlap and domain throttling.
+# TO RESTORE: Uncomment the 'schedule:' block below.
+# Manual triggers via workflow_dispatch remain active.
+# ==============================================================================
+#   schedule:
+#     - cron: '0 13 * * *'   # 9 AM ET — morning coffee scroll
+#     - cron: '0 19 * * *'   # 3 PM ET — afternoon browse
+#     - cron: '0 1  * * *'   # 9 PM ET — prime time
   workflow_dispatch:
     inputs:
       dry_run:
