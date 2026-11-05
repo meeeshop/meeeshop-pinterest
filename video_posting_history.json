@@ -459,9 +459,20 @@
       "board": "Dresses",
       "product_url": "https://us.meeeshop.com/products/flying-tomato-mono-form-sweater-knit-midi-dress",
       "posted_at": "2026-11-05T09:07:43.882766+00:00"
+    },
+    {
+      "product_id": "8744042725547",
+      "product_handle": "risen-full-size-high-rise-wide-leg-patch-detailed-jeans-plus-size",
+      "product_title": "Risen Full Size High Rise Wide Leg Patch Detailed Jeans plus Size",
+      "category": "bottoms",
+      "pin_id": "962222276665678610",
+      "board": "Jeans",
+      "product_url": "https://us.meeeshop.com/products/risen-full-size-high-rise-wide-leg-patch-detailed-jeans-plus-size",
+      "posted_at": "2026-11-05T20:45:07.458300+00:00"
     }
   ],
   "category_last_used": {
-    "dresses": "2026-11-05T09:07:43.882744+00:00"
+    "dresses": "2026-11-05T09:07:43.882744+00:00",
+    "bottoms": "2026-11-05T20:45:07.458281+00:00"
   }
 }
