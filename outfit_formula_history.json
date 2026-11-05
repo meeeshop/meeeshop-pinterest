@@ -3399,7 +3399,47 @@
           "role": "ANKLE BOOTIES"
         }
       ]
+    },
+    {
+      "timestamp": "2026-11-05T09:00:22.845937+00:00",
+      "formula_id": "holiday_glam",
+      "formula_title": "Holiday Party Outfit Formula",
+      "pin_url": "https://www.pinterest.com/pin/962222276665661546/",
+      "pin_id": "962222276665661546",
+      "board": "Cocktail Dresses",
+      "title": "Holiday Party Outfit Formula - Easy Everyday Styling Formula | MeeeShop",
+      "tagged_products_count": 0,
+      "outfit_items": [
+        {
+          "id": "8745258877099",
+          "variant_id": "46506902356139",
+          "title": "Flying Tomato Heirloom Border Woven Midi Dress",
+          "price": "119.99",
+          "role": "THE STATEMENT DRESS"
+        },
+        {
+          "id": "9087953830059",
+          "variant_id": "48172194431147",
+          "title": "Collins Signature Shoulder Bag",
+          "price": "109.99",
+          "role": "EVENING BAG"
+        },
+        {
+          "id": "9073872175275",
+          "variant_id": "48110997995691",
+          "title": "Alma Booties Brown",
+          "price": "169.99",
+          "role": "THE HEELS / BOOTS"
+        },
+        {
+          "id": "8782622654635",
+          "variant_id": "47103348900011",
+          "title": "Retrolicious Leaves Bow Top",
+          "price": "69.99",
+          "role": "ELEGANT LAYER"
+        }
+      ]
     }
   ],
-  "last_run": "2026-11-05T08:39:36.653972+00:00"
+  "last_run": "2026-11-05T09:00:22.845959+00:00"
 }
