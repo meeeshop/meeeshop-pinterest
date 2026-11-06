@@ -469,10 +469,21 @@
       "board": "Jeans",
       "product_url": "https://us.meeeshop.com/products/risen-full-size-high-rise-wide-leg-patch-detailed-jeans-plus-size",
       "posted_at": "2026-11-05T20:45:07.458300+00:00"
+    },
+    {
+      "product_id": "8740256678059",
+      "product_handle": "hyfve-wrap-front-elastic-waist-skort",
+      "product_title": "Hyfve Wrap Front Elastic Waist Skort",
+      "category": "general",
+      "pin_id": "962222276665690811",
+      "board": "Skirts",
+      "product_url": "https://us.meeeshop.com/products/hyfve-wrap-front-elastic-waist-skort",
+      "posted_at": "2026-11-06T07:46:34.604425+00:00"
     }
   ],
   "category_last_used": {
     "dresses": "2026-11-05T09:07:43.882744+00:00",
-    "bottoms": "2026-11-05T20:45:07.458281+00:00"
+    "bottoms": "2026-11-05T20:45:07.458281+00:00",
+    "general": "2026-11-06T07:46:34.604404+00:00"
   }
 }
