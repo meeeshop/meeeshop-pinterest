@@ -41,6 +41,17 @@ from playwright.sync_api import sync_playwright
 ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
 
+if hasattr(sys.stdout, "reconfigure"):
+    try:
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:
+        pass
+if hasattr(sys.stderr, "reconfigure"):
+    try:
+        sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:
+        pass
+
 # ── Force Robust Logging to stdout ──────────────────────────────────────────
 logging.basicConfig(
     level=logging.INFO,
@@ -220,6 +231,10 @@ def check_shopify_in_stock(link: str, pin_data: Optional[Dict[str, Any]] = None)
                     return False, "sold_out_0_inventory"
             except Exception:
                 return True, "storefront_active_200"
+
+        if resp.status_code == 429:
+            # Storefront rate limit: Fall back to Pinterest catalog metadata
+            return True, "rate_limited_fallback_allowed"
 
         return False, f"http_status_{resp.status_code}"
 

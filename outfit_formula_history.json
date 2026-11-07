@@ -3439,7 +3439,207 @@
           "role": "ELEGANT LAYER"
         }
       ]
+    },
+    {
+      "timestamp": "2026-11-05T23:49:39.641814+00:00",
+      "formula_id": "winter_warmth",
+      "formula_title": "Winter Layering Outfit Formula",
+      "pin_url": "https://www.pinterest.com/pin/962222276665682739/",
+      "pin_id": "962222276665682739",
+      "board": "Sweaters",
+      "title": "Winter Layering Outfit Formula - Easy Everyday Styling Formula | MeeeShop",
+      "tagged_products_count": 4,
+      "outfit_items": [
+        {
+          "id": "8740258611371",
+          "variant_id": "46478481719467",
+          "title": "Hyfve Rolled Sleeve Button-up Top",
+          "price": "79.99",
+          "role": "WARM KNIT"
+        },
+        {
+          "id": "8740276928683",
+          "variant_id": "46478596047019",
+          "title": "High Rise Slim Wide Straight",
+          "price": "134.99",
+          "role": "WINTER DENIM"
+        },
+        {
+          "id": "9087952945323",
+          "variant_id": "48172189548715",
+          "title": "Kenna Tote Handbag",
+          "price": "104.99",
+          "role": "EVERYDAY TOTE"
+        },
+        {
+          "id": "8782625865899",
+          "variant_id": "47103362433195",
+          "title": "Retrolicious Cowgirl Boots Doris Skirt",
+          "price": "149.99",
+          "role": "WINTER BOOTS"
+        }
+      ]
+    },
+    {
+      "timestamp": "2026-11-06T08:49:09.775468+00:00",
+      "formula_id": "everyday_chic",
+      "formula_title": "Everyday Chic Outfit Formula",
+      "pin_url": "https://www.pinterest.com/pin/962222276665691482/",
+      "pin_id": "962222276665691482",
+      "board": "Style Ideas",
+      "title": "Everyday Chic Outfit Formula - Easy Everyday Styling Formula | MeeeShop",
+      "tagged_products_count": 4,
+      "outfit_items": [
+        {
+          "id": "8744046985387",
+          "variant_id": "46492118089899",
+          "title": "Btr Active Seamless Baselayer Top",
+          "price": "109.99",
+          "role": "THE TOP"
+        },
+        {
+          "id": "9087953076395",
+          "variant_id": "48172186271915",
+          "title": "Amahia Tote Bag and Crossbody Set",
+          "price": "109.99",
+          "role": "THE BAG"
+        },
+        {
+          "id": "8740256678059",
+          "variant_id": "46478470742187",
+          "title": "Hyfve Wrap Front Elastic Waist Skort",
+          "price": "89.99",
+          "role": "THE BOTTOM"
+        },
+        {
+          "id": "9073872011435",
+          "variant_id": "48110997012651",
+          "title": "Cecilia Slingback Green",
+          "price": "159.99",
+          "role": "THE SHOES"
+        }
+      ]
+    },
+    {
+      "timestamp": "2026-11-06T20:19:52.495613+00:00",
+      "formula_id": "cozy_sweater_weather",
+      "formula_title": "Cozy Fall Layers Outfit Formula",
+      "pin_url": "https://www.pinterest.com/pin/962222276665707226/",
+      "pin_id": "962222276665707226",
+      "board": "Sweaters",
+      "title": "Cozy Fall Layers Outfit Formula - Easy Everyday Styling Formula | MeeeShop",
+      "tagged_products_count": 4,
+      "outfit_items": [
+        {
+          "id": "8744047083691",
+          "variant_id": "46492121039019",
+          "title": "Riley Technical Top",
+          "price": "144.99",
+          "role": "THE KNIT"
+        },
+        {
+          "id": "9087954419883",
+          "variant_id": "48172200689835",
+          "title": "Maeve Shoulder Bag and Set",
+          "price": "109.99",
+          "role": "THE TOTE"
+        },
+        {
+          "id": "8897141538987",
+          "variant_id": "47859167428779",
+          "title": "Ymi Women's High Rise Wide Leg Cargo Jeans",
+          "price": "42.00",
+          "role": "THE DENIM"
+        },
+        {
+          "id": "9073872175275",
+          "variant_id": "48110997995691",
+          "title": "Alma Booties Brown",
+          "price": "169.99",
+          "role": "THE BOOTS"
+        }
+      ]
+    },
+    {
+      "timestamp": "2026-11-06T23:25:57.402145+00:00",
+      "formula_id": "casual_fall",
+      "formula_title": "Casual Fall Weekend Outfit Inspo",
+      "pin_url": "https://www.pinterest.com/pin/962222276665710991/",
+      "pin_id": "962222276665710991",
+      "board": "Casual Outfits",
+      "title": "Casual Fall Weekend Outfit Inspo - Easy Everyday Styling Formula | MeeeShop",
+      "tagged_products_count": 4,
+      "outfit_items": [
+        {
+          "id": "8744047116459",
+          "variant_id": "47862731833515",
+          "title": "Diamond Tech Tank",
+          "price": "68.00",
+          "role": "THE TOP"
+        },
+        {
+          "id": "9087954321579",
+          "variant_id": "48172199936171",
+          "title": "Solari Braided Chain Shoulder Bag",
+          "price": "104.99",
+          "role": "THE BAG"
+        },
+        {
+          "id": "9138382602411",
+          "variant_id": "48435008536747",
+          "title": "Daisy Tummy Control Hip Lifter High Rise Modern Flare Jeans",
+          "price": "114.99",
+          "role": "THE DENIM"
+        },
+        {
+          "id": "9073872175275",
+          "variant_id": "48110997995691",
+          "title": "Alma Booties Brown",
+          "price": "169.99",
+          "role": "THE SHOES"
+        }
+      ]
+    },
+    {
+      "timestamp": "2026-11-07T02:34:31.827629+00:00",
+      "formula_id": "how_to_style_flare_jeans",
+      "formula_title": "How to Style Flare Jeans: Outfit Formula",
+      "pin_url": "https://www.pinterest.com/pin/962222276665714509/",
+      "pin_id": "962222276665714509",
+      "board": "Kancan USA Jeans",
+      "title": "How to Style Flare Jeans: Outfit Formula | How to Style Flare Jeans & Sweater | MeeeShop",
+      "tagged_products_count": 4,
+      "outfit_items": [
+        {
+          "id": "8782620393643",
+          "variant_id": "47103333531819",
+          "title": "Retrolicious Anchor Bow Top",
+          "price": "69.99",
+          "role": "THE TOP"
+        },
+        {
+          "id": "9087954288811",
+          "variant_id": "48172199608491",
+          "title": "Isa Crossbody Bag",
+          "price": "104.99",
+          "role": "THE BAG"
+        },
+        {
+          "id": "9138370314411",
+          "variant_id": "48434867044523",
+          "title": "Mulberry High Rise Flared Leg Jeans",
+          "price": "114.99",
+          "role": "THE FLARE DENIM"
+        },
+        {
+          "id": "9073872142507",
+          "variant_id": "48110997799083",
+          "title": "Evie Slingback Black",
+          "price": "139.99",
+          "role": "THE FOOTWEAR"
+        }
+      ]
     }
   ],
-  "last_run": "2026-11-05T09:00:22.845959+00:00"
+  "last_run": "2026-11-07T02:34:31.827648+00:00"
 }
