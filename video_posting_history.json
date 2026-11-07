@@ -499,11 +499,21 @@
       "board": "Dresses",
       "product_url": "https://us.meeeshop.com/products/flying-tomato-glamour-in-motion-woven-maxi-dress",
       "posted_at": "2026-11-07T06:53:51.452595+00:00"
+    },
+    {
+      "product_id": "8740283941035",
+      "product_handle": "risen-slouchy-baggy-jeans-with-contrast-stitching",
+      "product_title": "Risen Slouchy Baggy Jeans with Contrast Stitching",
+      "category": "bottoms",
+      "pin_id": "962222276665733995",
+      "board": "Jeans",
+      "product_url": "https://us.meeeshop.com/products/risen-slouchy-baggy-jeans-with-contrast-stitching",
+      "posted_at": "2026-11-07T17:56:46.512063+00:00"
     }
   ],
   "category_last_used": {
     "dresses": "2026-11-07T06:53:51.452574+00:00",
-    "bottoms": "2026-11-05T20:45:07.458281+00:00",
+    "bottoms": "2026-11-07T17:56:46.512043+00:00",
     "general": "2026-11-06T07:46:34.604404+00:00",
     "tops": "2026-11-06T19:47:55.745800+00:00"
   }
