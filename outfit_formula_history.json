@@ -3839,7 +3839,47 @@
           "role": "WINTER BOOTS"
         }
       ]
+    },
+    {
+      "timestamp": "2026-11-08T18:41:19.567232+00:00",
+      "formula_id": "everyday_chic",
+      "formula_title": "Everyday Chic Outfit Formula",
+      "pin_url": "https://www.pinterest.com/pin/962222276665766746/",
+      "pin_id": "962222276665766746",
+      "board": "Style Ideas",
+      "title": "Everyday Chic Outfit Formula - Easy Everyday Styling Formula | MeeeShop",
+      "tagged_products_count": 4,
+      "outfit_items": [
+        {
+          "id": "8782621442219",
+          "variant_id": "47862749528235",
+          "title": "Retrolicious Isabel Top in Blush",
+          "price": "24.99",
+          "role": "THE TOP"
+        },
+        {
+          "id": "9087954190507",
+          "variant_id": "48172198035627",
+          "title": "Nylah Shoulder Bag",
+          "price": "104.99",
+          "role": "THE BAG"
+        },
+        {
+          "id": "8740253761707",
+          "variant_id": "46478458355883",
+          "title": "Hyfve Acid Wash French Terry Wide-leg Pants",
+          "price": "104.99",
+          "role": "THE BOTTOM"
+        },
+        {
+          "id": "9073872208043",
+          "variant_id": "48110998421675",
+          "title": "Cecilia Slingback Black",
+          "price": "159.99",
+          "role": "THE SHOES"
+        }
+      ]
     }
   ],
-  "last_run": "2026-11-08T08:22:52.935230+00:00"
+  "last_run": "2026-11-08T18:41:19.567255+00:00"
 }
