@@ -509,12 +509,22 @@
       "board": "Jeans",
       "product_url": "https://us.meeeshop.com/products/risen-slouchy-baggy-jeans-with-contrast-stitching",
       "posted_at": "2026-11-07T17:56:46.512063+00:00"
+    },
+    {
+      "product_id": "8740283089067",
+      "product_handle": "risen-full-size-mid-rise-crop-wide-wide-cuffed-jeans-plus-size",
+      "product_title": "Risen Full Size Mid Rise Crop Wide Wide Cuffed Jeans plus Size",
+      "category": "tops",
+      "pin_id": "962222276665750700",
+      "board": "Jeans",
+      "product_url": "https://us.meeeshop.com/products/risen-full-size-mid-rise-crop-wide-wide-cuffed-jeans-plus-size",
+      "posted_at": "2026-11-08T06:59:49.869841+00:00"
     }
   ],
   "category_last_used": {
     "dresses": "2026-11-07T06:53:51.452574+00:00",
     "bottoms": "2026-11-07T17:56:46.512043+00:00",
     "general": "2026-11-06T07:46:34.604404+00:00",
-    "tops": "2026-11-06T19:47:55.745800+00:00"
+    "tops": "2026-11-08T06:59:49.869821+00:00"
   }
 }
