@@ -519,10 +519,20 @@
       "board": "Jeans",
       "product_url": "https://us.meeeshop.com/products/risen-full-size-mid-rise-crop-wide-wide-cuffed-jeans-plus-size",
       "posted_at": "2026-11-08T06:59:49.869841+00:00"
+    },
+    {
+      "product_id": "8740271292587",
+      "product_handle": "mlle-gabrielle-solid-cap-sleeve-dress",
+      "product_title": "Mlle Gabrielle Solid Cap Sleeve Dress",
+      "category": "dresses",
+      "pin_id": "962222276665766047",
+      "board": "Dresses",
+      "product_url": "https://us.meeeshop.com/products/mlle-gabrielle-solid-cap-sleeve-dress",
+      "posted_at": "2026-11-08T18:12:00.683158+00:00"
     }
   ],
   "category_last_used": {
-    "dresses": "2026-11-07T06:53:51.452574+00:00",
+    "dresses": "2026-11-08T18:12:00.683138+00:00",
     "bottoms": "2026-11-07T17:56:46.512043+00:00",
     "general": "2026-11-06T07:46:34.604404+00:00",
     "tops": "2026-11-08T06:59:49.869821+00:00"
