@@ -3919,7 +3919,47 @@
           "role": "THE FOOTWEAR"
         }
       ]
+    },
+    {
+      "timestamp": "2026-11-09T02:24:17.558451+00:00",
+      "formula_id": "casual_fall",
+      "formula_title": "Casual Fall Weekend Outfit Inspo",
+      "pin_url": "https://www.pinterest.com/pin/962222276665777402/",
+      "pin_id": "962222276665777402",
+      "board": "Casual Outfits",
+      "title": "Casual Fall Weekend Outfit Inspo - Easy Everyday Styling Formula | MeeeShop",
+      "tagged_products_count": 4,
+      "outfit_items": [
+        {
+          "id": "8782621802667",
+          "variant_id": "47103344017579",
+          "title": "Retrolicious Retro Boat Neck Top in Mustard",
+          "price": "54.99",
+          "role": "THE TOP"
+        },
+        {
+          "id": "9087953895595",
+          "variant_id": "48172195119275",
+          "title": "Bizzy Embossed Shoulder Bag",
+          "price": "104.99",
+          "role": "THE BAG"
+        },
+        {
+          "id": "9138381324459",
+          "variant_id": "48434996379819",
+          "title": "Ava plus High Rise Crop Flare Jeans",
+          "price": "109.99",
+          "role": "THE DENIM"
+        },
+        {
+          "id": "9073872175275",
+          "variant_id": "48110997995691",
+          "title": "Alma Booties Brown",
+          "price": "169.99",
+          "role": "THE SHOES"
+        }
+      ]
     }
   ],
-  "last_run": "2026-11-08T22:23:50.086117+00:00"
+  "last_run": "2026-11-09T02:24:17.558471+00:00"
 }
