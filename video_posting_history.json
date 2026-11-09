@@ -539,12 +539,22 @@
       "board": "Jeans",
       "product_url": "https://us.meeeshop.com/products/judy-blue-full-size-high-waist-tummy-control-chew-hem-destroy-wide-jea",
       "posted_at": "2026-11-09T07:44:43.133895+00:00"
+    },
+    {
+      "product_id": "8744046985387",
+      "product_handle": "btr-active-seamless-baselayer-top",
+      "product_title": "Btr Active Seamless Baselayer Top",
+      "category": "tops",
+      "pin_id": "https://www.pinterest.com/pin/962222276665788026/",
+      "board": "Shirts & Tops",
+      "product_url": "https://us.meeeshop.com/products/btr-active-seamless-baselayer-top",
+      "posted_at": "2026-11-09T12:48:01.687532+00:00"
     }
   ],
   "category_last_used": {
     "dresses": "2026-11-08T18:12:00.683138+00:00",
     "bottoms": "2026-11-09T07:44:43.133877+00:00",
     "general": "2026-11-06T07:46:34.604404+00:00",
-    "tops": "2026-11-08T06:59:49.869821+00:00"
+    "tops": "2026-11-09T12:48:01.687513+00:00"
   }
 }
