@@ -49,7 +49,7 @@ jobs:
 
       - name: Install Playwright Chromium
         run: |
-          python -m playwright install chromium --with-deps
+          python -m playwright install --with-deps
 
       - name: Install System Fonts
         run: |

@@ -110,15 +110,7 @@ class PinterestCollagePoster:
             return None
 
         with sync_playwright() as p:
-            browser = p.chromium.launch(
-                headless=self.headless,
-                args=[
-                    '--no-sandbox',
-                    '--disable-setuid-sandbox',
-                    '--disable-blink-features=AutomationControlled',
-                    '--window-size=1400,950'
-                ]
-            )
+            browser = self.poster_helper._launch_browser(p, "1400,950")
             ctx = browser.new_context(
                 viewport={'width': 1400, 'height': 950},
                 user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",

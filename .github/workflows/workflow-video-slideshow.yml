@@ -69,7 +69,7 @@ jobs:
 
       - name: Install Playwright Browsers
         run: |
-          python -m playwright install chromium --with-deps
+          python -m playwright install --with-deps
 
       - name: Generate & Publish Video Pins
         env:

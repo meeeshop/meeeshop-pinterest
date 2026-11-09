@@ -174,6 +174,30 @@ class StealthPinterestPoster:
         logger.warning(f"⚠️ Could not fill {field_name} field using any known selectors")
         return False
 
+    def _launch_browser(self, p, window_size: str = "1280,900"):
+        """Launch Chromium browser with automated self-healing fallback if binaries are missing in CI."""
+        launch_args = [
+            "--disable-blink-features=AutomationControlled",
+            "--no-sandbox",
+            "--disable-setuid-sandbox",
+            "--disable-infobars",
+            f"--window-size={window_size}",
+            "--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
+        ]
+        try:
+            return p.chromium.launch(headless=self.headless, args=launch_args)
+        except Exception as e:
+            err_msg = str(e)
+            if "Executable doesn't exist" in err_msg or "playwright install" in err_msg:
+                logger.warning("Playwright Chromium browser executable missing. Auto-installing now in CI runner...")
+                import subprocess
+                try:
+                    subprocess.run([sys.executable, "-m", "playwright", "install", "chromium", "--with-deps"], check=True)
+                except Exception:
+                    subprocess.run([sys.executable, "-m", "playwright", "install", "--with-deps"], check=True)
+                return p.chromium.launch(headless=self.headless, args=launch_args)
+            raise
+
     def create_carousel_pin(
         self,
         image_paths: List[str],
@@ -199,17 +223,7 @@ class StealthPinterestPoster:
         logger.info(f"🎠 Launching Carousel Stealth Chromium (headless={self.headless})...")
 
         with sync_playwright() as p:
-            browser = p.chromium.launch(
-                headless=self.headless,
-                args=[
-                    "--disable-blink-features=AutomationControlled",
-                    "--no-sandbox",
-                    "--disable-setuid-sandbox",
-                    "--disable-infobars",
-                    "--window-size=1280,900",
-                    "--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
-                ]
-            )
+            browser = self._launch_browser(p, "1280,900")
             context = browser.new_context(
                 viewport={"width": 1280, "height": 900},
                 user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
@@ -493,17 +507,7 @@ class StealthPinterestPoster:
         logger.info(f"🚀 Launching Stealth Playwright Chromium (headless={self.headless})...")
 
         with sync_playwright() as p:
-            browser = p.chromium.launch(
-                headless=self.headless,
-                args=[
-                    "--disable-blink-features=AutomationControlled",
-                    "--no-sandbox",
-                    "--disable-setuid-sandbox",
-                    "--disable-infobars",
-                    "--window-size=1280,900",
-                    "--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
-                ]
-            )
+            browser = self._launch_browser(p, "1280,900")
 
             context = browser.new_context(
                 viewport={"width": 1280, "height": 900},
