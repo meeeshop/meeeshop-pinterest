@@ -19,7 +19,8 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from secrets_manager import inject_to_env, get_secret
 inject_to_env()
 
-from pinterest_client import PinterestClient
+from stealth_pinterest_poster import StealthPinterestPoster
+from board_mapping import MEEESHOP_BOARDS
 from shopify_products import ShopifyClient
 from image_overlay import create_pin_image
 from blog_content_optimizer import generate_blog_pin_title, generate_blog_pin_description, select_blog_boards
@@ -189,14 +190,10 @@ def run_blog_posting() -> None:
     
     logger.info(f"Selected {len(to_post)} article(s) to post")
 
-    # 3. Pinterest Client Login
-    pinterest = PinterestClient()
-    boards = []
-    if not DRY_RUN:
-        if not pinterest.login():
-            raise RuntimeError("Pinterest login failed")
-        logger.info("✓ Pinterest login succeeded")
-        boards = pinterest.fetch_boards()
+    # 3. Stealth Pinterest UI Automation Poster (Playwright Chromium)
+    poster = StealthPinterestPoster(headless=True)
+    boards = [{"name": b, "id": b} for b in MEEESHOP_BOARDS]
+    logger.info(f"Loaded {len(boards)} candidate Pinterest boards for Stealth UI posting")
 
     temp_dir = Path(tempfile.gettempdir())
 
@@ -250,35 +247,29 @@ def run_blog_posting() -> None:
             continue
 
         # Target boards selection (Multi-board targeting)
-        target_boards = select_blog_boards(article, boards if boards else [{"name": "Style Ideas", "id": "fallback"}])
-        target_board = target_boards[0] if target_boards else {"name": "Style Ideas", "id": None}
+        target_boards = select_blog_boards(article, boards if boards else [{"name": "Style Ideas", "id": "Style Ideas"}])
+        target_board = target_boards[0] if target_boards else {"name": "Style Ideas", "id": "Style Ideas"}
         board_name = target_board.get("name", "Style Ideas")
-        board_id = target_board.get("id")
         
-        logger.info(f"Target Board: {board_name} (id={board_id})")
+        logger.info(f"Target Board: {board_name}")
 
         if DRY_RUN:
-            logger.info(f"[DRY RUN] Would post blog pin: '{pin_title}' to board '{board_name}'")
+            logger.info(f"[DRY RUN] Would post blog pin: '{pin_title}' to board '{board_name}' via Stealth Chromium")
             if temp_src != fallback_img:
                 temp_src.unlink(missing_ok=True)
             temp_final.unlink(missing_ok=True)
             continue
 
-        if not board_id and not DRY_RUN:
-            logger.error(f"No board ID found for posting. Skipping article.")
-            if temp_src != fallback_img:
-                temp_src.unlink(missing_ok=True)
-            temp_final.unlink(missing_ok=True)
-            continue
-
-        # Pin creation
-        success, pin_id = pinterest.create_pin(
-            image_path=final_image,
+        # Pin creation via Stealth Playwright Chromium (human-like typing & anti-bot evasion)
+        logger.info(f"Creating stealth blog pin on board '{board_name}'...")
+        success, pin_id = poster.create_pin(
+            image_path=str(final_image),
             title=pin_title,
             description=full_desc,
-            board_id=board_id,
-            url=blog_url,
-            alt_text=alt_text
+            board_name=board_name,
+            link_url=blog_url,
+            alt_text=alt_text,
+            dry_run=False,
         )
 
         # Cleanup

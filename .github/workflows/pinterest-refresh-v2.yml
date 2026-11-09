@@ -16,10 +16,16 @@ name: Pinterest Refresh Pins V2
 # Analytics loop runs at 8 PM ET to fill the gap cleanly.
 
 on:
-  schedule:
-    - cron: '30 14 * * *'   # 10:30 AM ET — after morning fresh run
-    - cron: '30 18 * * *'   #  2:30 PM ET — after post-lunch fresh run
-    - cron: '30 23 * * *'   #  7:30 PM ET — after after-work fresh run
+# ==============================================================================
+# [PAUSED - ANTI-SHADOWBAN SAFEGUARD]
+# Automated cron paused to eliminate non-stealth py3pin HTTP API requests.
+# Fresh daily pins are handled exclusively via daily-pinterest-stealth.yml
+# (Playwright Chromium stealth UI automation). Manual dispatch remains active.
+# ==============================================================================
+#   schedule:
+#     - cron: '30 14 * * *'   # 10:30 AM ET — after morning fresh run
+#     - cron: '30 18 * * *'   #  2:30 PM ET — after post-lunch fresh run
+#     - cron: '30 23 * * *'   #  7:30 PM ET — after after-work fresh run
   workflow_dispatch:
     inputs:
       dry_run:

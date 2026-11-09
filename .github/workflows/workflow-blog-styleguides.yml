@@ -47,6 +47,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Install Playwright Chromium
+        run: |
+          python -m playwright install --with-deps
+
       - name: Install System Fonts
         run: |
           sudo apt-get update

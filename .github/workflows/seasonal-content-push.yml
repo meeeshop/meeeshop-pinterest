@@ -44,21 +44,33 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Install Playwright Browsers
+        run: |
+          python -m playwright install --with-deps
+
       - name: Post Seasonal Burst Pins
         env:
           ENCRYPTION_KEY_PRIMARY: ${{ secrets.ENCRYPTION_KEY_PRIMARY }}
           ENCRYPTION_KEY_FALLBACK: ${{ secrets.ENCRYPTION_KEY_FALLBACK }}
-          PINS_TO_POST: ${{ github.event.inputs.pins_count || '4' }}
-          DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
+          PINTEREST_COOKIES_B64: ${{ secrets.PINTEREST_COOKIES_B64 }}
+          PINTEREST_EMAIL: ${{ secrets.PINTEREST_EMAIL }}
+          PINTEREST_PASSWORD: ${{ secrets.PINTEREST_PASSWORD }}
+          SHOPIFY_STORE_URL: ${{ secrets.SHOPIFY_STORE_URL }}
+          SHOPIFY_ACCESS_TOKEN: ${{ secrets.SHOPIFY_ACCESS_TOKEN }}
+          PINS_TO_POST: ${{ github.event.inputs.pins_count || '2' }}
         run: |
-          python pinterest_daily_v2.py
+          DRY_RUN_ARG=""
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+            DRY_RUN_ARG="--dry-run"
+          fi
+          python pinterest_daily_stealth.py $DRY_RUN_ARG
 
       - name: Commit and push history updates
         if: always()
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add posting_history_v2.json || true
+          git add posting_history_stealth.json || true
           git commit -m "chore: auto-update seasonal content history [skip ci]" || echo "No changes to commit"
           git pull origin ${{ github.ref_name }} --rebase || true
           git push origin HEAD || echo "Failed to push seasonal history updates"
