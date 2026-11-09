@@ -8,8 +8,14 @@ name: "Viral Loop: Evergreen Repin & Analytics"
 #   00:30 UTC = 7:30 PM ET / 4:30 PM PT (Mon-Fri) — Prime time US women evening browsing
 
 on:
-  schedule:
-    - cron: '30 0 * * 1-5'
+# ==============================================================================
+# [PAUSED - ANTI-SHADOWBAN SAFEGUARD]
+# Automated cron paused to prevent py3pin HTTP API shadowban risk.
+# Evergreen catalog repinning is safely handled by repin-products-board-stealth.yml
+# (Playwright Chromium stealth UI automation). Manual dispatch remains active.
+# ==============================================================================
+#   schedule:
+#     - cron: '30 0 * * 1-5'
   workflow_dispatch:
     inputs:
       strategy:

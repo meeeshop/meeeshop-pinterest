@@ -42,7 +42,8 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from secrets_manager import inject_to_env, get_secret
 inject_to_env()
 
-from pinterest_client import PinterestClient
+from stealth_pinterest_poster import StealthPinterestPoster
+from board_mapping import MEEESHOP_BOARDS
 from shopify_products import ShopifyClient, format_product_for_pinterest, select_board_for_product
 from content_generator import generate_content_package
 
@@ -731,109 +732,42 @@ def _pick_board(boards: List[Dict], formatted_product: Dict, history: Dict = Non
 
 
 # ---------------------------------------------------------------------------
-# Pinterest video pin via direct authenticated session (CSRF-safe)
 # ---------------------------------------------------------------------------
-# Pinterest video pin via py3-pinterest upload_video_pin()
+# Pinterest video pin via Stealth Chromium Playwright
 # ---------------------------------------------------------------------------
-
-# py3-pinterest raw client (for upload_video_pin — available in v2.0.0+)
-from py3pin.Pinterest import Pinterest as _Py3Pinterest
-
-
-def _make_py3_client(pinterest: "PinterestClient") -> Optional["_Py3Pinterest"]:
-    """
-    Create a _Py3Pinterest instance using the SAME authenticated session object
-    as PinterestClient. This avoids any cookie-jar divergence.
-    """
-    email    = get_secret("PINTEREST_EMAIL") or ""
-    username = get_secret("PINTEREST_USERNAME") or ""
-    py3 = _Py3Pinterest(email=email, password="", username=username)
-
-    # Monkey-patch _poll_upload_status to increase timeout/retries from 60s (30*2) to 300s (150*2)
-    try:
-        original_poll = py3._poll_upload_status
-        def custom_poll(upload_id, max_retries=150, interval=2):
-            logger.info(f"Polling upload status for {upload_id} (max_retries={max_retries}, interval={interval}s)")
-            return original_poll(upload_id, max_retries=max_retries, interval=interval)
-        py3._poll_upload_status = custom_poll
-    except Exception as e:
-        logger.warning(f"Could not monkey-patch _poll_upload_status: {e}")
-
-    try:
-        auth_session = pinterest._get_raw_session()
-        # Direct session swap (shared object — same cookie jar)
-        py3.http = auth_session
-
-        # Verbose diagnostics so we can see what's actually present
-        cookie_names = sorted(auth_session.cookies.keys())
-        csrftoken    = auth_session.cookies.get("csrftoken", "")
-        sess_cookie  = auth_session.cookies.get("_pinterest_sess", "")
-        auth_b_token = auth_session.cookies.get("_auth", "") or auth_session.cookies.get("_b", "")
-        logger.info(f"[py3-auth] cookie names ({len(cookie_names)}): {cookie_names}")
-        logger.info(f"[py3-auth] csrftoken len: {len(csrftoken)}  _pinterest_sess len: {len(sess_cookie)}  _auth/_b len: {len(auth_b_token)}")
-        if not csrftoken:
-            logger.error("[py3-auth] csrftoken is EMPTY — Pinterest will return 401")
-        if not sess_cookie:
-            logger.error("[py3-auth] _pinterest_sess is EMPTY — session not authenticated")
-    except Exception as e:
-        logger.warning(f"Could not share session with py3-pinterest: {e}")
-    return py3
-
 
 def _post_video_pin(
-    pinterest: "PinterestClient",
+    poster: StealthPinterestPoster,
     video_path: str,
-    board_id: str,
+    board_name: str,
     title: str,
     description: str,
     link: str,
     alt_text: str,
     thumb_path: Optional[str] = None,
+    dry_run: bool = False,
 ) -> Optional[str]:
-    """Upload MP4 as a Pinterest video pin via py3-pinterest. Returns pin_id or None."""
+    """Upload MP4 as a Pinterest video pin via Stealth Chromium Playwright. Returns pin identifier or None."""
     time.sleep(random.uniform(3, 7))
-    py3 = _make_py3_client(pinterest)
     try:
-        resp = py3.upload_video_pin(
-            video_file=video_path,
+        success, res_msg = poster.create_pin(
+            image_path=str(video_path),
             title=title,
             description=description,
-            link=link,
-            board_id=board_id,
+            board_name=board_name,
+            link_url=link,
             alt_text=alt_text,
-            cover_image_file=thumb_path if thumb_path and os.path.exists(thumb_path) else None,
+            cover_image_path=str(thumb_path) if thumb_path and os.path.exists(thumb_path) else None,
+            dry_run=dry_run,
         )
-        resp_data = resp.json() if hasattr(resp, "json") else resp
-        pin_id = (
-            (resp_data or {}).get("resource_response", {}).get("data", {}).get("id")
-            or (resp_data or {}).get("data", {}).get("id")
-        )
-        if pin_id:
-            logger.info(f"Video pin created — pin_id: {pin_id}")
-            return str(pin_id)
-        logger.error(f"upload_video_pin unexpected response: {str(resp_data)[:300]}")
-        return None
-    except requests.exceptions.HTTPError as e:
-        # Capture Pinterest's actual error body so we can see the failure reason
-        try:
-            err_body = e.response.text[:1000] if e.response is not None else "(no response)"
-            err_headers = dict(e.response.headers) if e.response is not None else {}
-            logger.error(f"upload_video_pin HTTPError: {e}")
-            logger.error(f"[401-debug] response body: {err_body}")
-            logger.error(f"[401-debug] response headers: {err_headers}")
-            logger.error(f"[401-debug] request URL: {e.response.request.url if e.response is not None else 'n/a'}")
-            req_headers = dict(e.response.request.headers) if e.response is not None else {}
-            # Redact cookie/csrf values, just show keys + lengths
-            safe_req_headers = {
-                k: (f"<len={len(v)}>" if k.lower() in ("cookie", "x-csrftoken") else v)
-                for k, v in req_headers.items()
-            }
-            logger.error(f"[401-debug] request headers: {safe_req_headers}")
-        except Exception as inner:
-            logger.error(f"upload_video_pin error (and failed to dump details: {inner}): {e}")
-        return None
+        if success:
+            logger.info(f"✓ Video pin created via Stealth Chromium: {res_msg}")
+            return res_msg or "stealth_video_pin_success"
+        else:
+            logger.error(f"✗ Stealth video pin creation failed: {res_msg}")
+            return None
     except Exception as e:
-        logger.error(f"upload_video_pin error: {e}", exc_info=True)
+        logger.error(f"Error posting video pin via Stealth Chromium: {e}", exc_info=True)
         return None
 
 
@@ -882,19 +816,10 @@ def run_video_posting() -> None:
         logger.info("DRY RUN MODE — no pins will be posted to Pinterest")
         logger.info("=" * 60)
 
-    # Pinterest auth
-    pinterest = PinterestClient()
-    boards = []
-    if not DRY_RUN:
-        if not pinterest.login():
-            raise RuntimeError("Pinterest authentication failed")
-        logger.info("✓ Pinterest authentication OK")
-        boards = pinterest.fetch_boards()
-
-    if not boards:
-        from board_mapping import MEEESHOP_BOARDS
-        boards = [{"name": b, "id": f"mock_{i}"} for i, b in enumerate(MEEESHOP_BOARDS)]
-    logger.info(f"✓ Loaded {len(boards)} Pinterest boards")
+    # Stealth Pinterest UI Automation Poster (Playwright Chromium)
+    poster = StealthPinterestPoster(headless=True)
+    boards = [{"name": b, "id": b} for b in MEEESHOP_BOARDS]
+    logger.info(f"✓ Loaded {len(boards)} candidate Pinterest boards for Stealth UI posting")
 
 
     # Shopify products
@@ -973,14 +898,15 @@ def run_video_posting() -> None:
         time.sleep(pause)
 
         pin_id = _post_video_pin(
-            pinterest=pinterest,
+            poster=poster,
             video_path=video_path,
-            board_id=board["id"],
+            board_name=board["name"],
             title=content["title"],
             description=content["description"],
             link=product_url,
             alt_text=content["alt_text"],
             thumb_path=thumb_path,
+            dry_run=False,
         )
         if not pin_id:
             logger.error("Pinterest video pin creation failed — skipping")
@@ -1048,7 +974,7 @@ def run_video_posting() -> None:
     if posted_count == 0 and post_failures > 0:
         raise RuntimeError(
             f"All {post_failures} pin(s) failed to post. "
-            "Check Pinterest auth, product images, ffmpeg, MoviePy, and py3-pinterest v2."
+            "Check Pinterest auth, product images, ffmpeg, MoviePy, and Playwright Chromium."
         )
 
 

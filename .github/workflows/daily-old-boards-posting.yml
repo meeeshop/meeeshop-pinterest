@@ -7,9 +7,15 @@ name: Daily Old Boards Pinterest Posting
 #   21:00 UTC =  5 PM ET / 4 PM CT / 2 PM PT — end-of-workday / commute scroll
 
 on:
-  schedule:
-    - cron: '0 15 * * *'   # 11 AM ET
-    - cron: '0 21 * * *'   # 5 PM ET
+# ==============================================================================
+# [PAUSED - ANTI-SHADOWBAN SAFEGUARD]
+# Automated cron paused to prevent py3pin HTTP API shadowban risk.
+# Niche board distribution is safely handled by repin-products-board-stealth.yml
+# (Playwright Chromium stealth UI automation). Manual dispatch remains active.
+# ==============================================================================
+#   schedule:
+#     - cron: '0 15 * * *'   # 11 AM ET
+#     - cron: '0 21 * * *'   # 5 PM ET
   workflow_dispatch:
     inputs:
       pins_count:
