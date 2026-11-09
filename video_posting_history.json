@@ -549,10 +549,20 @@
       "board": "Shirts & Tops",
       "product_url": "https://us.meeeshop.com/products/btr-active-seamless-baselayer-top",
       "posted_at": "2026-11-09T12:48:01.687532+00:00"
+    },
+    {
+      "product_id": "8740270506155",
+      "product_handle": "shelby-palmer-floral-ruffled-sleeve-dress",
+      "product_title": "Shelby & Palmer Floral Ruffled Sleeve Dress",
+      "category": "dresses",
+      "pin_id": "https://www.pinterest.com/pin/962222276665802667/",
+      "board": "Dresses",
+      "product_url": "https://us.meeeshop.com/products/shelby-palmer-floral-ruffled-sleeve-dress",
+      "posted_at": "2026-11-09T22:51:49.474710+00:00"
     }
   ],
   "category_last_used": {
-    "dresses": "2026-11-08T18:12:00.683138+00:00",
+    "dresses": "2026-11-09T22:51:49.474692+00:00",
     "bottoms": "2026-11-09T07:44:43.133877+00:00",
     "general": "2026-11-06T07:46:34.604404+00:00",
     "tops": "2026-11-09T12:48:01.687513+00:00"
