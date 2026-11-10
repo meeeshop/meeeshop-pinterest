@@ -4119,7 +4119,47 @@
           "role": "ANKLE BOOTIES"
         }
       ]
+    },
+    {
+      "timestamp": "2026-11-10T20:45:21.946877+00:00",
+      "formula_id": "cozy_sweater_weather",
+      "formula_title": "Cozy Fall Layers Outfit Formula",
+      "pin_url": "https://www.pinterest.com/pin/962222276665829881/",
+      "pin_id": "962222276665829881",
+      "board": "Sweaters",
+      "title": "Cozy Fall Layers Outfit Formula - Easy Everyday Styling Formula | MeeeShop",
+      "tagged_products_count": 4,
+      "outfit_items": [
+        {
+          "id": "8782689861803",
+          "variant_id": "47103631753387",
+          "title": "Buki Power Vee 'sweater' Sweatshirt - Wine",
+          "price": "164.99",
+          "role": "THE KNIT"
+        },
+        {
+          "id": "9028753948843",
+          "variant_id": "47915666440363",
+          "title": "Nevaeh Shoulder Bag",
+          "price": "114.99",
+          "role": "THE TOTE"
+        },
+        {
+          "id": "8897141964971",
+          "variant_id": "47512666407083",
+          "title": "Ymi Women's plus High Rise Wide Leg Skater Cargo Jeans",
+          "price": "99.99",
+          "role": "THE DENIM"
+        },
+        {
+          "id": "9073872175275",
+          "variant_id": "48110997995691",
+          "title": "Alma Booties Brown",
+          "price": "209.99",
+          "role": "THE BOOTS"
+        }
+      ]
     }
   ],
-  "last_run": "2026-11-10T09:02:00.996699+00:00"
+  "last_run": "2026-11-10T20:45:21.946900+00:00"
 }
