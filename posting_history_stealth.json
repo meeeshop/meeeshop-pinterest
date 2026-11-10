@@ -13679,11 +13679,55 @@
       "pin_url": "https://www.pinterest.com/pin/962222276665653914/",
       "blog_url": "https://us.meeeshop.com/blogs/womens-shirts-tops-style-guide/silk-and-satin-blouse-outfit-ideas-for-date-nights-and-evenings-out",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8885463253163,
+      "title": "Judy Blue Full Size High Waist Washed Denim Shorts - Perfect for Thanksgiving",
+      "board": "Trends",
+      "timestamp": "2026-11-10T19:33:26.876990",
+      "type": "product",
+      "style": "collage",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276665828297/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 9118723375275,
+      "title": "Emory Park Arlet Maxi Dress - Ivory Elegance for Thanksgiving & Holiday \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-11-10T19:34:35.339642",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276665828333/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8745258942635,
+      "title": "Flying Tomato Classic Bloom Day Woven Midi Dress | MeeeShop US Boutique",
+      "board": "Mustard Seed Clothing",
+      "timestamp": "2026-11-10T19:35:45.359758",
+      "type": "carousel",
+      "style": "collage",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276665828367/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8936272494763,
+      "title": "Elegant Downeast Campus Dress for Thanksgiving & Holiday Glam \u2014 MeeeShop",
+      "board": "Festive & Flora Fits",
+      "timestamp": "2026-11-10T19:37:07.619438",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276665828401/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-10-30T08:23:10.916119",
-    "Trends": "2026-11-05T01:26:23.075024",
+    "Trends": "2026-11-10T19:33:26.876990",
     "Dresses": "2026-10-23T20:41:56.204070",
     "Feminine & Flowy Fits": "2026-11-02T21:15:35.177592",
     "Short fall dresses": "2026-10-24T07:06:32.059527",
@@ -13728,7 +13772,7 @@
     "Fashion Models": "2026-11-01T08:58:55.714935",
     "My Shop #1737732113": "2026-11-01T17:30:56.581140",
     "Shop For Holidays": "2026-11-01T21:26:44.134524",
-    "New": "2026-11-05T01:27:34.409983",
+    "New": "2026-11-10T19:34:35.339642",
     "American Bazi": "2026-10-27T00:24:30.915597",
     "Cool & Casual Styles": "2026-11-04T22:53:58.695377",
     "MeeeShop's Luxe Styles": "2026-10-28T08:10:24.708953",
@@ -13754,13 +13798,13 @@
     "Late Summer to Fall Teacher Style": "2026-10-30T21:44:49.302680",
     "Ootd #ootd": "2026-11-03T09:16:26.592430",
     "Style Ideas": "2026-11-03T09:17:35.115362",
-    "Mustard Seed Clothing": "2026-10-21T07:21:49.368630",
+    "Mustard Seed Clothing": "2026-11-10T19:35:45.359758",
     "Woman Fashion!": "2026-11-04T01:16:09.892582",
     "Stylish Finds": "2026-11-04T19:15:16.556710",
     "Confidence Ladies": "2026-11-04T19:16:34.269034",
     "Fresh Finds New...": "2026-10-24T19:48:19.952133",
     "Affordable Women's Fashion USA": "2026-10-24T23:03:39.090774",
-    "Festive & Flora Fits": "2026-10-21T20:55:21.643977",
+    "Festive & Flora Fits": "2026-11-10T19:37:07.619438",
     "Shop Responsibly": "2026-10-25T07:30:35.234589",
     "Social": "2026-10-25T15:26:00.469696",
     "Blogs": "2026-10-25T15:27:07.680307",
@@ -13797,8 +13841,8 @@
     "Edgy Fashion": "2026-10-13T09:13:02.770988"
   },
   "daily_count": 4,
-  "last_post_time": "2026-11-05T01:30:29.849329",
+  "last_post_time": "2026-11-10T19:37:07.619438",
   "board_rotation_cursor": 0,
-  "last_image_style": "card",
-  "last_template_index": 9
+  "last_image_style": "carousel",
+  "last_template_index": 15
 }
