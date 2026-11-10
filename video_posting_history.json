@@ -559,11 +559,21 @@
       "board": "Dresses",
       "product_url": "https://us.meeeshop.com/products/shelby-palmer-floral-ruffled-sleeve-dress",
       "posted_at": "2026-11-09T22:51:49.474710+00:00"
+    },
+    {
+      "product_id": "8744042758315",
+      "product_handle": "judy-blue-full-size-high-waist-distressed-wide-leg-jeans",
+      "product_title": "Judy Blue Full Size High Waist Distressed Wide Leg Jeans",
+      "category": "bottoms",
+      "pin_id": "https://www.pinterest.com/pin/962222276665813180/",
+      "board": "Jeans",
+      "product_url": "https://us.meeeshop.com/products/judy-blue-full-size-high-waist-distressed-wide-leg-jeans",
+      "posted_at": "2026-11-10T08:06:58.741529+00:00"
     }
   ],
   "category_last_used": {
     "dresses": "2026-11-09T22:51:49.474692+00:00",
-    "bottoms": "2026-11-09T07:44:43.133877+00:00",
+    "bottoms": "2026-11-10T08:06:58.741509+00:00",
     "general": "2026-11-06T07:46:34.604404+00:00",
     "tops": "2026-11-09T12:48:01.687513+00:00"
   }
