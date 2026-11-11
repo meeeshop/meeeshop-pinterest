@@ -589,11 +589,21 @@
       "board": "Dresses",
       "product_url": "https://us.meeeshop.com/products/flying-tomato-heirloom-border-woven-midi-dress",
       "posted_at": "2026-11-11T07:36:13.804389+00:00"
+    },
+    {
+      "product_id": "8740284924075",
+      "product_handle": "judy-blue-full-size-hw-work-wear-knee-patch-straight-jeans-plus-size",
+      "product_title": "Judy Blue Full Size Hw Work Wear Knee Patch Straight Jeans plus Size",
+      "category": "bottoms",
+      "pin_id": "https://www.pinterest.com/pin/962222276665858806/",
+      "board": "Jeans",
+      "product_url": "https://us.meeeshop.com/products/judy-blue-full-size-hw-work-wear-knee-patch-straight-jeans-plus-size",
+      "posted_at": "2026-11-11T19:59:12.843651+00:00"
     }
   ],
   "category_last_used": {
     "dresses": "2026-11-11T07:36:13.804372+00:00",
-    "bottoms": "2026-11-10T08:06:58.741509+00:00",
+    "bottoms": "2026-11-11T19:59:12.843636+00:00",
     "general": "2026-11-06T07:46:34.604404+00:00",
     "tops": "2026-11-10T20:10:00.822580+00:00"
   }
