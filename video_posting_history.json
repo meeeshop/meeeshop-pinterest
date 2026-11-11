@@ -579,10 +579,20 @@
       "board": "Jeans",
       "product_url": "https://us.meeeshop.com/products/risen-full-size-tummy-control-high-rise-crop-barrel-jeans-plus-size",
       "posted_at": "2026-11-10T20:10:00.822596+00:00"
+    },
+    {
+      "product_id": "8745258877099",
+      "product_handle": "flying-tomato-heirloom-border-woven-midi-dress",
+      "product_title": "Flying Tomato Heirloom Border Woven Midi Dress",
+      "category": "dresses",
+      "pin_id": "https://www.pinterest.com/pin/962222276665842500/",
+      "board": "Dresses",
+      "product_url": "https://us.meeeshop.com/products/flying-tomato-heirloom-border-woven-midi-dress",
+      "posted_at": "2026-11-11T07:36:13.804389+00:00"
     }
   ],
   "category_last_used": {
-    "dresses": "2026-11-09T22:51:49.474692+00:00",
+    "dresses": "2026-11-11T07:36:13.804372+00:00",
     "bottoms": "2026-11-10T08:06:58.741509+00:00",
     "general": "2026-11-06T07:46:34.604404+00:00",
     "tops": "2026-11-10T20:10:00.822580+00:00"
