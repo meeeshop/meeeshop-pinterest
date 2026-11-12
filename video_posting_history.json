@@ -609,10 +609,20 @@
       "board": "Shirts & Tops",
       "product_url": "https://us.meeeshop.com/products/hyfve-contrast-trim-sleeveless-ribbed-top",
       "posted_at": "2026-11-12T08:03:22.707475+00:00"
+    },
+    {
+      "product_id": "8740270866603",
+      "product_handle": "mlle-gabrielle-solid-elbow-sleeve-dress",
+      "product_title": "Mlle Gabrielle Solid Elbow Sleeve Dress",
+      "category": "dresses",
+      "pin_id": "https://www.pinterest.com/pin/962222276665890841/",
+      "board": "Dresses",
+      "product_url": "https://us.meeeshop.com/products/mlle-gabrielle-solid-elbow-sleeve-dress",
+      "posted_at": "2026-11-12T20:37:29.950636+00:00"
     }
   ],
   "category_last_used": {
-    "dresses": "2026-11-11T07:36:13.804372+00:00",
+    "dresses": "2026-11-12T20:37:29.950620+00:00",
     "bottoms": "2026-11-11T19:59:12.843636+00:00",
     "general": "2026-11-06T07:46:34.604404+00:00",
     "tops": "2026-11-12T08:03:22.707460+00:00"
