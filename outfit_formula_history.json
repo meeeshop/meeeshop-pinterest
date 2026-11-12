@@ -4399,7 +4399,47 @@
           "role": "THE LAYER"
         }
       ]
+    },
+    {
+      "timestamp": "2026-11-12T09:01:30.226956+00:00",
+      "formula_id": "holiday_glam",
+      "formula_title": "Holiday Party Outfit Formula",
+      "pin_url": "https://www.pinterest.com/pin/962222276665874333/",
+      "pin_id": "962222276665874333",
+      "board": "Cocktail Dresses",
+      "title": "Holiday Party Outfit Formula - Easy Everyday Styling Formula | MeeeShop",
+      "tagged_products_count": 4,
+      "outfit_items": [
+        {
+          "id": "8740253597867",
+          "variant_id": "46478457372843",
+          "title": "Hyfve Boned Tie-back Dress",
+          "price": "114.99",
+          "role": "THE STATEMENT DRESS"
+        },
+        {
+          "id": "9087954321579",
+          "variant_id": "48172199936171",
+          "title": "Solari Braided Chain Shoulder Bag",
+          "price": "114.99",
+          "role": "EVENING BAG"
+        },
+        {
+          "id": "9073872175275",
+          "variant_id": "48110997995691",
+          "title": "Alma Booties Brown",
+          "price": "209.99",
+          "role": "THE HEELS / BOOTS"
+        },
+        {
+          "id": "8744047083691",
+          "variant_id": "46492121039019",
+          "title": "Riley Technical Top",
+          "price": "154.99",
+          "role": "ELEGANT LAYER"
+        }
+      ]
     }
   ],
-  "last_run": "2026-11-12T03:37:56.200088+00:00"
+  "last_run": "2026-11-12T09:01:30.226982+00:00"
 }
