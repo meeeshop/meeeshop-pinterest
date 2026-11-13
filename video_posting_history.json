@@ -619,11 +619,21 @@
       "board": "Dresses",
       "product_url": "https://us.meeeshop.com/products/mlle-gabrielle-solid-elbow-sleeve-dress",
       "posted_at": "2026-11-12T20:37:29.950636+00:00"
+    },
+    {
+      "product_id": "8771487170731",
+      "product_handle": "risen-high-rise-denim-shorts-with-embroidered-detail",
+      "product_title": "Risen High Rise Denim Shorts with Embroidered Detail",
+      "category": "bottoms",
+      "pin_id": "https://www.pinterest.com/pin/962222276665904981/",
+      "board": "Must-Have Fashion...",
+      "product_url": "https://us.meeeshop.com/products/risen-high-rise-denim-shorts-with-embroidered-detail",
+      "posted_at": "2026-11-13T07:43:45.983336+00:00"
     }
   ],
   "category_last_used": {
     "dresses": "2026-11-12T20:37:29.950620+00:00",
-    "bottoms": "2026-11-11T19:59:12.843636+00:00",
+    "bottoms": "2026-11-13T07:43:45.983317+00:00",
     "general": "2026-11-06T07:46:34.604404+00:00",
     "tops": "2026-11-12T08:03:22.707460+00:00"
   }
