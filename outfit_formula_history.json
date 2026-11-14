@@ -4799,7 +4799,47 @@
           "role": "ELEGANT LAYER"
         }
       ]
+    },
+    {
+      "timestamp": "2026-11-14T22:42:49.884419+00:00",
+      "formula_id": "thanksgiving_chic",
+      "formula_title": "Thanksgiving Outfit Formula",
+      "pin_url": "https://www.pinterest.com/pin/962222276665956836/",
+      "pin_id": "962222276665956836",
+      "board": "Casual Outfits",
+      "title": "Thanksgiving Outfit Formula - Easy Everyday Styling Formula | MeeeShop",
+      "tagged_products_count": 4,
+      "outfit_items": [
+        {
+          "id": "8782638055595",
+          "variant_id": "47103412011179",
+          "title": "Chesapeake Top with Cups on the Back",
+          "price": "219.99",
+          "role": "THE COZY TOP"
+        },
+        {
+          "id": "8740284498091",
+          "variant_id": "46478644019371",
+          "title": "Judy Blue Full Size High Waist Wide Leg Jeans with Skewed Inseam plus Size",
+          "price": "139.99",
+          "role": "STRETCH DENIM"
+        },
+        {
+          "id": "9087953764523",
+          "variant_id": "48172193841323",
+          "title": "Celestine Quilted Shoulder Bag",
+          "price": "114.99",
+          "role": "THE SHOULDER BAG"
+        },
+        {
+          "id": "9073872175275",
+          "variant_id": "48110997995691",
+          "title": "Alma Booties Brown",
+          "price": "209.99",
+          "role": "ANKLE BOOTIES"
+        }
+      ]
     }
   ],
-  "last_run": "2026-11-14T18:59:30.618966+00:00"
+  "last_run": "2026-11-14T22:42:49.884439+00:00"
 }
