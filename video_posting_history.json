@@ -649,11 +649,21 @@
       "board": "Dresses",
       "product_url": "https://us.meeeshop.com/products/hyfve-ribbed-sleeveless-dress",
       "posted_at": "2026-11-14T07:30:08.125979+00:00"
+    },
+    {
+      "product_id": "8740284498091",
+      "product_handle": "judy-blue-full-size-high-waist-wide-leg-jeans-with-skewed-inseam-plus",
+      "product_title": "Judy Blue Full Size High Waist Wide Leg Jeans with Skewed Inseam plus Size",
+      "category": "bottoms",
+      "pin_id": "https://www.pinterest.com/pin/962222276665949918/",
+      "board": "Jeans",
+      "product_url": "https://us.meeeshop.com/products/judy-blue-full-size-high-waist-wide-leg-jeans-with-skewed-inseam-plus",
+      "posted_at": "2026-11-14T18:40:14.722019+00:00"
     }
   ],
   "category_last_used": {
     "dresses": "2026-11-14T07:30:08.125964+00:00",
-    "bottoms": "2026-11-13T07:43:45.983317+00:00",
+    "bottoms": "2026-11-14T18:40:14.722005+00:00",
     "general": "2026-11-06T07:46:34.604404+00:00",
     "tops": "2026-11-13T20:14:18.521694+00:00"
   }
