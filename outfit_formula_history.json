@@ -4759,7 +4759,47 @@
           "role": "THE FOOTWEAR"
         }
       ]
+    },
+    {
+      "timestamp": "2026-11-14T18:59:30.618945+00:00",
+      "formula_id": "holiday_glam",
+      "formula_title": "Holiday Party Outfit Formula",
+      "pin_url": "https://www.pinterest.com/pin/962222276665950447/",
+      "pin_id": "962222276665950447",
+      "board": "Cocktail Dresses",
+      "title": "Holiday Party Outfit Formula - Easy Everyday Styling Formula | MeeeShop",
+      "tagged_products_count": 4,
+      "outfit_items": [
+        {
+          "id": "8745258942635",
+          "variant_id": "46506902552747",
+          "title": "Flying Tomato Classic Bloom Day Woven Midi Dress",
+          "price": "114.99",
+          "role": "THE STATEMENT DRESS"
+        },
+        {
+          "id": "9087953895595",
+          "variant_id": "48172195119275",
+          "title": "Bizzy Embossed Shoulder Bag",
+          "price": "109.99",
+          "role": "EVENING BAG"
+        },
+        {
+          "id": "9073872175275",
+          "variant_id": "48110997995691",
+          "title": "Alma Booties Brown",
+          "price": "209.99",
+          "role": "THE HEELS / BOOTS"
+        },
+        {
+          "id": "8782621802667",
+          "variant_id": "47103344017579",
+          "title": "Retrolicious Retro Boat Neck Top in Mustard",
+          "price": "74.99",
+          "role": "ELEGANT LAYER"
+        }
+      ]
     }
   ],
-  "last_run": "2026-11-14T08:22:42.430607+00:00"
+  "last_run": "2026-11-14T18:59:30.618966+00:00"
 }
