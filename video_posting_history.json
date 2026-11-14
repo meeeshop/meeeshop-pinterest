@@ -639,10 +639,20 @@
       "board": "Shirts & Tops",
       "product_url": "https://us.meeeshop.com/products/hyfve-collared-v-neck-top",
       "posted_at": "2026-11-13T20:14:18.521711+00:00"
+    },
+    {
+      "product_id": "8740257923243",
+      "product_handle": "hyfve-ribbed-sleeveless-dress",
+      "product_title": "Hyfve Ribbed Sleeveless Dress",
+      "category": "dresses",
+      "pin_id": "https://www.pinterest.com/pin/962222276665935456/",
+      "board": "Dresses",
+      "product_url": "https://us.meeeshop.com/products/hyfve-ribbed-sleeveless-dress",
+      "posted_at": "2026-11-14T07:30:08.125979+00:00"
     }
   ],
   "category_last_used": {
-    "dresses": "2026-11-12T20:37:29.950620+00:00",
+    "dresses": "2026-11-14T07:30:08.125964+00:00",
     "bottoms": "2026-11-13T07:43:45.983317+00:00",
     "general": "2026-11-06T07:46:34.604404+00:00",
     "tops": "2026-11-13T20:14:18.521694+00:00"
