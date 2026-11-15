@@ -669,10 +669,20 @@
       "board": "Shirts & Tops",
       "product_url": "https://us.meeeshop.com/products/diamond-tech-tee",
       "posted_at": "2026-11-15T07:40:43.809516+00:00"
+    },
+    {
+      "product_id": "8745260122283",
+      "product_handle": "flying-tomato-pure-sunshine-black-woven-maxi-dress",
+      "product_title": "Flying Tomato Pure Sunshine Black Woven Maxi Dress",
+      "category": "dresses",
+      "pin_id": "https://www.pinterest.com/pin/962222276665985184/",
+      "board": "Dresses",
+      "product_url": "https://us.meeeshop.com/products/flying-tomato-pure-sunshine-black-woven-maxi-dress",
+      "posted_at": "2026-11-15T19:15:19.640341+00:00"
     }
   ],
   "category_last_used": {
-    "dresses": "2026-11-14T07:30:08.125964+00:00",
+    "dresses": "2026-11-15T19:15:19.640325+00:00",
     "bottoms": "2026-11-14T18:40:14.722005+00:00",
     "general": "2026-11-06T07:46:34.604404+00:00",
     "tops": "2026-11-15T07:40:43.809500+00:00"
