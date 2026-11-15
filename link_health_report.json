@@ -1,13 +1,13 @@
 {
-  "timestamp": "2026-11-08T12:56:57.341120+00:00",
-  "total_urls_in_history": 250,
+  "timestamp": "2026-11-15T13:39:10.293628+00:00",
+  "total_urls_in_history": 262,
   "sampled_urls": 50,
   "dead_404_count": 1,
   "redirects_repaired": 1,
-  "rich_pin_ready_count": 32,
+  "rich_pin_ready_count": 27,
   "results": [
     {
-      "url": "https://us.meeeshop.com/products/blossom-shoulder-bag-and-set",
+      "url": "https://us.meeeshop.com/products/aliyah-shoulder-bag",
       "status_code": 200,
       "is_404": false,
       "redirect_created": false,
@@ -15,251 +15,43 @@
       "error": null
     },
     {
-      "url": "https://us.meeeshop.com/products/blue-dragon-denim-cape-cod-top",
+      "url": "https://us.meeeshop.com/products/ash-mini-dress-1",
+      "status_code": 200,
+      "is_404": false,
+      "redirect_created": false,
+      "rich_pin_ready": true,
+      "error": null
+    },
+    {
+      "url": "https://us.meeeshop.com/products/budweiser-raglan",
+      "status_code": 200,
+      "is_404": false,
+      "redirect_created": false,
+      "rich_pin_ready": true,
+      "error": null
+    },
+    {
+      "url": "https://us.meeeshop.com/products/bubble-sleeve-knit-jersey-top",
+      "status_code": 200,
+      "is_404": false,
+      "redirect_created": false,
+      "rich_pin_ready": true,
+      "error": null
+    },
+    {
+      "url": "https://us.meeeshop.com/products/2x1-rib-solid-round-neck-tank-top-made-in-usa",
+      "status_code": 200,
+      "is_404": false,
+      "redirect_created": false,
+      "rich_pin_ready": true,
+      "error": null
+    },
+    {
+      "url": "https://us.meeeshop.com/products/cape-cod-top-with-neutral-ground-butterflies",
       "status_code": 200,
       "is_404": false,
       "redirect_created": false,
       "rich_pin_ready": false,
-      "error": null
-    },
-    {
-      "url": "https://us.meeeshop.com/products/aztec-patterned-sweater-cardigan",
-      "status_code": 200,
-      "is_404": false,
-      "redirect_created": false,
-      "rich_pin_ready": true,
-      "error": null
-    },
-    {
-      "url": "https://us.meeeshop.com/products/buki-neo-tech-jacket-navy",
-      "status_code": 200,
-      "is_404": false,
-      "redirect_created": false,
-      "rich_pin_ready": true,
-      "error": null
-    },
-    {
-      "url": "https://us.meeeshop.com/products/annie-wear-striped-bow-round-neck-knit-top",
-      "status_code": 200,
-      "is_404": false,
-      "redirect_created": false,
-      "rich_pin_ready": true,
-      "error": null
-    },
-    {
-      "url": "https://us.meeeshop.com/products/alive-unleashed-long-sleeve",
-      "status_code": 200,
-      "is_404": false,
-      "redirect_created": false,
-      "rich_pin_ready": false,
-      "error": null
-    },
-    {
-      "url": "https://us.meeeshop.com/products/buki-sleeveless-turtleneck-shirt",
-      "status_code": 200,
-      "is_404": false,
-      "redirect_created": false,
-      "rich_pin_ready": true,
-      "error": null
-    },
-    {
-      "url": "https://us.meeeshop.com/products/brushed-mindset-flare-legging",
-      "status_code": 200,
-      "is_404": false,
-      "redirect_created": false,
-      "rich_pin_ready": false,
-      "error": null
-    },
-    {
-      "url": "https://us.meeeshop.com/products/graceemma-butter-soft-quarter-zip-top-maroon",
-      "status_code": 200,
-      "is_404": false,
-      "redirect_created": false,
-      "rich_pin_ready": true,
-      "error": null
-    },
-    {
-      "url": "https://us.meeeshop.com/products/black-utility-crop-top-cargo-pant-set",
-      "status_code": 200,
-      "is_404": false,
-      "redirect_created": false,
-      "rich_pin_ready": false,
-      "error": null
-    },
-    {
-      "url": "https://us.meeeshop.com/products/cape-cod-top-ivory-with-cheetah-embroidery",
-      "status_code": 200,
-      "is_404": false,
-      "redirect_created": false,
-      "rich_pin_ready": false,
-      "error": null
-    },
-    {
-      "url": "https://us.meeeshop.com/products/btr-active-riding-tights",
-      "status_code": 200,
-      "is_404": false,
-      "redirect_created": false,
-      "rich_pin_ready": true,
-      "error": null
-    },
-    {
-      "url": "https://us.meeeshop.com/products/botanical-leaf-embroidered-kimono-cardig",
-      "status_code": 200,
-      "is_404": false,
-      "redirect_created": false,
-      "rich_pin_ready": true,
-      "error": null
-    },
-    {
-      "url": "https://us.meeeshop.com/products/graceemma-butter-soft-v-neck-top-pink",
-      "status_code": 200,
-      "is_404": false,
-      "redirect_created": false,
-      "rich_pin_ready": true,
-      "error": null
-    },
-    {
-      "url": "https://us.meeeshop.com/products/black-taylor-washed-distressed-jean",
-      "status_code": 404,
-      "is_404": true,
-      "redirect_created": true,
-      "rich_pin_ready": false,
-      "error": null
-    },
-    {
-      "url": "https://us.meeeshop.com/products/aurora-tummy-control-eco-friendly-fabric-slim-palazzo",
-      "status_code": 200,
-      "is_404": false,
-      "redirect_created": false,
-      "rich_pin_ready": false,
-      "error": null
-    },
-    {
-      "url": "https://us.meeeshop.com/products/bamboo-full-size-round-neck-drop-shoulder-t-shi",
-      "status_code": 200,
-      "is_404": false,
-      "redirect_created": false,
-      "rich_pin_ready": true,
-      "error": null
-    },
-    {
-      "url": "https://us.meeeshop.com/products/addie-v-neck-pullover-and-drawstring-sweatpants-set",
-      "status_code": 200,
-      "is_404": false,
-      "redirect_created": false,
-      "rich_pin_ready": false,
-      "error": null
-    },
-    {
-      "url": "https://us.meeeshop.com/products/bibi-christmas-plaid-exaggerated-shoulder-sleeves-top",
-      "status_code": 200,
-      "is_404": false,
-      "redirect_created": false,
-      "rich_pin_ready": true,
-      "error": null
-    },
-    {
-      "url": "https://us.meeeshop.com/products/2-tone-light-sweater",
-      "status_code": 200,
-      "is_404": false,
-      "redirect_created": false,
-      "rich_pin_ready": true,
-      "error": null
-    },
-    {
-      "url": "https://us.meeeshop.com/products/cape-cod-tunic-blue-medallions",
-      "status_code": 200,
-      "is_404": false,
-      "redirect_created": false,
-      "rich_pin_ready": true,
-      "error": null
-    },
-    {
-      "url": "https://us.meeeshop.com/products/graceemma-butter-soft-v-neck-top-blue",
-      "status_code": 200,
-      "is_404": false,
-      "redirect_created": false,
-      "rich_pin_ready": true,
-      "error": null
-    },
-    {
-      "url": "https://us.meeeshop.com/products/asymmetrical-cross-strap-cutout-crop-top",
-      "status_code": 200,
-      "is_404": false,
-      "redirect_created": false,
-      "rich_pin_ready": true,
-      "error": null
-    },
-    {
-      "url": "https://us.meeeshop.com/products/2-n1-vegan-tote-handbag-pouch-faux-leather-tote-bag",
-      "status_code": 200,
-      "is_404": false,
-      "redirect_created": false,
-      "rich_pin_ready": true,
-      "error": null
-    },
-    {
-      "url": "https://us.meeeshop.com/products/buki-resort-vee-long-sleeve-popover-shirt-navy",
-      "status_code": 200,
-      "is_404": false,
-      "redirect_created": false,
-      "rich_pin_ready": true,
-      "error": null
-    },
-    {
-      "url": "https://us.meeeshop.com/products/beryl-embossed-tote-bag-and-wristlet-set",
-      "status_code": 200,
-      "is_404": false,
-      "redirect_created": false,
-      "rich_pin_ready": true,
-      "error": null
-    },
-    {
-      "url": "https://us.meeeshop.com/products/azure-dreamcape-set",
-      "status_code": 200,
-      "is_404": false,
-      "redirect_created": false,
-      "rich_pin_ready": false,
-      "error": null
-    },
-    {
-      "url": "https://us.meeeshop.com/products/alexandra-tote-bag-and-wallet-set",
-      "status_code": 200,
-      "is_404": false,
-      "redirect_created": false,
-      "rich_pin_ready": true,
-      "error": null
-    },
-    {
-      "url": "https://us.meeeshop.com/products/adler-breech",
-      "status_code": 200,
-      "is_404": false,
-      "redirect_created": false,
-      "rich_pin_ready": true,
-      "error": null
-    },
-    {
-      "url": "https://us.meeeshop.com/products/buki-collagen-camisole-pearl-grey",
-      "status_code": 200,
-      "is_404": false,
-      "redirect_created": false,
-      "rich_pin_ready": true,
-      "error": null
-    },
-    {
-      "url": "https://us.meeeshop.com/products/arya-signature-tote-and-set",
-      "status_code": 200,
-      "is_404": false,
-      "redirect_created": false,
-      "rich_pin_ready": true,
-      "error": null
-    },
-    {
-      "url": "https://us.meeeshop.com/products/brooklyn-laminated-mixed-media-checkered-tote",
-      "status_code": 200,
-      "is_404": false,
-      "redirect_created": false,
-      "rich_pin_ready": true,
       "error": null
     },
     {
@@ -271,47 +63,7 @@
       "error": null
     },
     {
-      "url": "https://us.meeeshop.com/products/avielle-crossbody-bag",
-      "status_code": 200,
-      "is_404": false,
-      "redirect_created": false,
-      "rich_pin_ready": true,
-      "error": null
-    },
-    {
-      "url": "https://us.meeeshop.com/products/basic-jogger",
-      "status_code": 200,
-      "is_404": false,
-      "redirect_created": false,
-      "rich_pin_ready": true,
-      "error": null
-    },
-    {
-      "url": "https://us.meeeshop.com/products/boyfriend-tee",
-      "status_code": 200,
-      "is_404": false,
-      "redirect_created": false,
-      "rich_pin_ready": true,
-      "error": null
-    },
-    {
-      "url": "https://us.meeeshop.com/products/graceemma-butter-soft-v-neck-top-brown",
-      "status_code": 200,
-      "is_404": false,
-      "redirect_created": false,
-      "rich_pin_ready": true,
-      "error": null
-    },
-    {
-      "url": "https://us.meeeshop.com/products/alexa-high-rise-tapered-leg-mom-jeans",
-      "status_code": 200,
-      "is_404": false,
-      "redirect_created": false,
-      "rich_pin_ready": true,
-      "error": null
-    },
-    {
-      "url": "https://us.meeeshop.com/products/bytos-full-size-distressed-high-rise-straight-jeans",
+      "url": "https://us.meeeshop.com/products/briar-round-neck-cap-sleeve-tee",
       "status_code": 200,
       "is_404": false,
       "redirect_created": false,
@@ -319,7 +71,31 @@
       "error": null
     },
     {
-      "url": "https://us.meeeshop.com/products/boatneck-sweater",
+      "url": "https://us.meeeshop.com/products/campbell-cotton-mineral-washed-tee",
+      "status_code": 200,
+      "is_404": false,
+      "redirect_created": false,
+      "rich_pin_ready": false,
+      "error": null
+    },
+    {
+      "url": "https://us.meeeshop.com/products/butter-soft-furly-sling-bag",
+      "status_code": 200,
+      "is_404": false,
+      "redirect_created": false,
+      "rich_pin_ready": false,
+      "error": null
+    },
+    {
+      "url": "https://us.meeeshop.com/products/graceemma-butter-soft-v-neck-top-black",
+      "status_code": 200,
+      "is_404": false,
+      "redirect_created": false,
+      "rich_pin_ready": false,
+      "error": null
+    },
+    {
+      "url": "https://us.meeeshop.com/products/bently-croc-embossed-tote-and-set",
       "status_code": 200,
       "is_404": false,
       "redirect_created": false,
@@ -327,7 +103,15 @@
       "error": null
     },
     {
-      "url": "https://us.meeeshop.com/products/bonnie-shoulder-bag-and-set",
+      "url": "https://us.meeeshop.com/products/ava-shirred-cuff-long-sleeve-round-neck-blouse",
+      "status_code": 200,
+      "is_404": false,
+      "redirect_created": false,
+      "rich_pin_ready": false,
+      "error": null
+    },
+    {
+      "url": "https://us.meeeshop.com/products/born-to-raise-hell-joggers",
       "status_code": 200,
       "is_404": false,
       "redirect_created": false,
@@ -335,7 +119,79 @@
       "error": null
     },
     {
-      "url": "https://us.meeeshop.com/products/abigail-corduroy-half-button-collared-long-sleeve-mini-dress",
+      "url": "https://us.meeeshop.com/products/built-in-pocket-short-tennis-skirt-made-in-usa",
+      "status_code": 200,
+      "is_404": false,
+      "redirect_created": false,
+      "rich_pin_ready": true,
+      "error": null
+    },
+    {
+      "url": "https://us.meeeshop.com/products/carry-all-quilted-cross-body-bag",
+      "status_code": 200,
+      "is_404": false,
+      "redirect_created": false,
+      "rich_pin_ready": true,
+      "error": null
+    },
+    {
+      "url": "https://us.meeeshop.com/products/2x1-rib-stripe-tank-top-made-in-usa",
+      "status_code": 200,
+      "is_404": false,
+      "redirect_created": false,
+      "rich_pin_ready": true,
+      "error": null
+    },
+    {
+      "url": "https://us.meeeshop.com/products/cape-cod-rock-and-roll-print-top",
+      "status_code": 200,
+      "is_404": false,
+      "redirect_created": false,
+      "rich_pin_ready": true,
+      "error": null
+    },
+    {
+      "url": "https://us.meeeshop.com/products/buki-barcelona-shirt-navy",
+      "status_code": 200,
+      "is_404": false,
+      "redirect_created": false,
+      "rich_pin_ready": true,
+      "error": null
+    },
+    {
+      "url": "https://us.meeeshop.com/products/graceemma-butter-soft-pants-slate-blue",
+      "status_code": 200,
+      "is_404": false,
+      "redirect_created": false,
+      "rich_pin_ready": false,
+      "error": null
+    },
+    {
+      "url": "https://us.meeeshop.com/products/cape-cod-tunic-blue-medallions",
+      "status_code": 200,
+      "is_404": false,
+      "redirect_created": false,
+      "rich_pin_ready": true,
+      "error": null
+    },
+    {
+      "url": "https://us.meeeshop.com/products/aztec-patterned-sweater-cardigan",
+      "status_code": 200,
+      "is_404": false,
+      "redirect_created": false,
+      "rich_pin_ready": true,
+      "error": null
+    },
+    {
+      "url": "https://us.meeeshop.com/products/buckle-up-denim-delight-dress",
+      "status_code": 200,
+      "is_404": false,
+      "redirect_created": false,
+      "rich_pin_ready": false,
+      "error": null
+    },
+    {
+      "url": "https://us.meeeshop.com/products/aurora-tied-neck-pocketed-mini-dress",
       "status_code": 200,
       "is_404": false,
       "redirect_created": false,
@@ -351,7 +207,15 @@
       "error": null
     },
     {
-      "url": "https://us.meeeshop.com/products/buki-collagen-camisole-blush-pink-top",
+      "url": "https://us.meeeshop.com/products/bytos-full-size-distressed-high-rise-straight-jeans",
+      "status_code": 200,
+      "is_404": false,
+      "redirect_created": false,
+      "rich_pin_ready": false,
+      "error": null
+    },
+    {
+      "url": "https://us.meeeshop.com/products/2-in-1-shapewear-dress-double-layer-tumm",
       "status_code": 200,
       "is_404": false,
       "redirect_created": false,
@@ -359,11 +223,147 @@
       "error": null
     },
     {
-      "url": "https://us.meeeshop.com/products/all-tied-up-dress",
+      "url": "https://us.meeeshop.com/products/black-taylor-washed-distressed-jean",
+      "status_code": 404,
+      "is_404": true,
+      "redirect_created": true,
+      "rich_pin_ready": false,
+      "error": null
+    },
+    {
+      "url": "https://us.meeeshop.com/products/brynlee-tote-bag-and-set",
+      "status_code": 200,
+      "is_404": false,
+      "redirect_created": false,
+      "rich_pin_ready": true,
+      "error": null
+    },
+    {
+      "url": "https://us.meeeshop.com/products/3-in-1-large-soft-faux-leather-womens-tote-handbags",
+      "status_code": 200,
+      "is_404": false,
+      "redirect_created": false,
+      "rich_pin_ready": true,
+      "error": null
+    },
+    {
+      "url": "https://us.meeeshop.com/products/breezy-tank-vintage-black",
+      "status_code": 200,
+      "is_404": false,
+      "redirect_created": false,
+      "rich_pin_ready": true,
+      "error": null
+    },
+    {
+      "url": "https://us.meeeshop.com/products/braylyn-polka-dot-maxi-skirt",
       "status_code": 200,
       "is_404": false,
       "redirect_created": false,
       "rich_pin_ready": false,
+      "error": null
+    },
+    {
+      "url": "https://us.meeeshop.com/products/basic-hoodie-top",
+      "status_code": 200,
+      "is_404": false,
+      "redirect_created": false,
+      "rich_pin_ready": true,
+      "error": null
+    },
+    {
+      "url": "https://us.meeeshop.com/products/camouflage-print-contrast-thumbhole-knit-top",
+      "status_code": 200,
+      "is_404": false,
+      "redirect_created": false,
+      "rich_pin_ready": true,
+      "error": null
+    },
+    {
+      "url": "https://us.meeeshop.com/products/and-the-why-full-size-double-layered-plaid-contrast-sweatshirt",
+      "status_code": 200,
+      "is_404": false,
+      "redirect_created": false,
+      "rich_pin_ready": true,
+      "error": null
+    },
+    {
+      "url": "https://us.meeeshop.com/products/allover-print-sleeveless-cross-back-cut-out-dress",
+      "status_code": 200,
+      "is_404": false,
+      "redirect_created": false,
+      "rich_pin_ready": false,
+      "error": null
+    },
+    {
+      "url": "https://us.meeeshop.com/products/buki-neo-tech-jacket-navy",
+      "status_code": 200,
+      "is_404": false,
+      "redirect_created": false,
+      "rich_pin_ready": true,
+      "error": null
+    },
+    {
+      "url": "https://us.meeeshop.com/products/allegra-weekender-bag",
+      "status_code": 200,
+      "is_404": false,
+      "redirect_created": false,
+      "rich_pin_ready": true,
+      "error": null
+    },
+    {
+      "url": "https://us.meeeshop.com/products/alexandra-tote-bag-and-wallet-set",
+      "status_code": 200,
+      "is_404": false,
+      "redirect_created": false,
+      "rich_pin_ready": false,
+      "error": null
+    },
+    {
+      "url": "https://us.meeeshop.com/products/button-detailed-front-knit-with-contrast-sleeves-top",
+      "status_code": 200,
+      "is_404": false,
+      "redirect_created": false,
+      "rich_pin_ready": true,
+      "error": null
+    },
+    {
+      "url": "https://us.meeeshop.com/products/built-in-shapewear-sleeveless-maxi-dress",
+      "status_code": 200,
+      "is_404": false,
+      "redirect_created": false,
+      "rich_pin_ready": false,
+      "error": null
+    },
+    {
+      "url": "https://us.meeeshop.com/products/brown-crochet-handbag",
+      "status_code": 200,
+      "is_404": false,
+      "redirect_created": false,
+      "rich_pin_ready": false,
+      "error": null
+    },
+    {
+      "url": "https://us.meeeshop.com/products/buki-resort-vee-long-sleeve-popover-shirt-black",
+      "status_code": 200,
+      "is_404": false,
+      "redirect_created": false,
+      "rich_pin_ready": true,
+      "error": null
+    },
+    {
+      "url": "https://us.meeeshop.com/products/bibi-christmas-theme-chevron-sequins-detail-sweater",
+      "status_code": 200,
+      "is_404": false,
+      "redirect_created": false,
+      "rich_pin_ready": false,
+      "error": null
+    },
+    {
+      "url": "https://us.meeeshop.com/products/alba-convertible-backpack-sling",
+      "status_code": 200,
+      "is_404": false,
+      "redirect_created": false,
+      "rich_pin_ready": true,
       "error": null
     },
     {
@@ -375,7 +375,15 @@
       "error": null
     },
     {
-      "url": "https://us.meeeshop.com/products/cape-cod-top-metro-print",
+      "url": "https://us.meeeshop.com/products/graceemma-butter-soft-quarter-zip-top-maroon",
+      "status_code": 200,
+      "is_404": false,
+      "redirect_created": false,
+      "rich_pin_ready": false,
+      "error": null
+    },
+    {
+      "url": "https://us.meeeshop.com/products/amahia-tote-bag-and-crossbody-set",
       "status_code": 429,
       "is_404": false,
       "redirect_created": false,
@@ -383,7 +391,7 @@
       "error": null
     },
     {
-      "url": "https://us.meeeshop.com/products/graceemma-butter-soft-pants-blue",
+      "url": "https://us.meeeshop.com/products/casual-loose-fit-blazer-and-pants",
       "status_code": 429,
       "is_404": false,
       "redirect_created": false,
@@ -391,15 +399,7 @@
       "error": null
     },
     {
-      "url": "https://us.meeeshop.com/products/alma-booties-brown",
-      "status_code": 429,
-      "is_404": false,
-      "redirect_created": false,
-      "rich_pin_ready": false,
-      "error": null
-    },
-    {
-      "url": "https://us.meeeshop.com/products/buki-ginza-jogger-pant",
+      "url": "https://us.meeeshop.com/products/andra-crossbody-bag",
       "status_code": 429,
       "is_404": false,
       "redirect_created": false,
