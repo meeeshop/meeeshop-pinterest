@@ -4879,7 +4879,47 @@
           "role": "THE BOOTS"
         }
       ]
+    },
+    {
+      "timestamp": "2026-11-15T08:41:35.457938+00:00",
+      "formula_id": "winter_warmth",
+      "formula_title": "Winter Layering Outfit Formula",
+      "pin_url": "https://www.pinterest.com/pin/962222276665968778/",
+      "pin_id": "962222276665968778",
+      "board": "Sweaters",
+      "title": "Winter Layering Outfit Formula - Easy Everyday Styling Formula | MeeeShop",
+      "tagged_products_count": 4,
+      "outfit_items": [
+        {
+          "id": "8740256907435",
+          "variant_id": "46478472446123",
+          "title": "Hyfve Contrast Trim Sleeveless Ribbed Top",
+          "price": "84.99",
+          "role": "WARM KNIT"
+        },
+        {
+          "id": "8740283023531",
+          "variant_id": "46478634942635",
+          "title": "Judy Blue Full Size High Waist Rigid Magic Heavy Destroy Straight Jeans",
+          "price": "124.99",
+          "role": "WINTER DENIM"
+        },
+        {
+          "id": "9087954452651",
+          "variant_id": "48172201050283",
+          "title": "Acacia Canteen Crossbody Bag",
+          "price": "104.99",
+          "role": "EVERYDAY TOTE"
+        },
+        {
+          "id": "9073872240811",
+          "variant_id": "48110998192299",
+          "title": "Alice Boots Black",
+          "price": "259.99",
+          "role": "WINTER BOOTS"
+        }
+      ]
     }
   ],
-  "last_run": "2026-11-15T02:25:37.643600+00:00"
+  "last_run": "2026-11-15T08:41:35.457958+00:00"
 }
