@@ -679,11 +679,21 @@
       "board": "Dresses",
       "product_url": "https://us.meeeshop.com/products/flying-tomato-pure-sunshine-black-woven-maxi-dress",
       "posted_at": "2026-11-15T19:15:19.640341+00:00"
+    },
+    {
+      "product_id": "8740283220139",
+      "product_handle": "risen-full-size-mid-rise-wide-leg-jeans-with-flared-look-plus-size",
+      "product_title": "Risen Full Size Mid Rise Wide Leg Jeans with Flared Look plus Size",
+      "category": "bottoms",
+      "pin_id": "https://www.pinterest.com/pin/962222276666000114/",
+      "board": "Jeans",
+      "product_url": "https://us.meeeshop.com/products/risen-full-size-mid-rise-wide-leg-jeans-with-flared-look-plus-size",
+      "posted_at": "2026-11-16T07:46:27.967129+00:00"
     }
   ],
   "category_last_used": {
     "dresses": "2026-11-15T19:15:19.640325+00:00",
-    "bottoms": "2026-11-14T18:40:14.722005+00:00",
+    "bottoms": "2026-11-16T07:46:27.967114+00:00",
     "general": "2026-11-06T07:46:34.604404+00:00",
     "tops": "2026-11-15T07:40:43.809500+00:00"
   }
