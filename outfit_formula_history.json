@@ -5039,7 +5039,47 @@
           "role": "THE LAYER"
         }
       ]
+    },
+    {
+      "timestamp": "2026-11-16T08:50:33.762863+00:00",
+      "formula_id": "casual_fall",
+      "formula_title": "Casual Fall Weekend Outfit Inspo",
+      "pin_url": "https://www.pinterest.com/pin/962222276666000827/",
+      "pin_id": "962222276666000827",
+      "board": "Casual Outfits",
+      "title": "Casual Fall Weekend Outfit Inspo - Easy Everyday Styling Formula | MeeeShop",
+      "tagged_products_count": 4,
+      "outfit_items": [
+        {
+          "id": "8782621868203",
+          "variant_id": "47862754148523",
+          "title": "Retrolicious Isabel Top in Plum",
+          "price": "74.99",
+          "role": "THE TOP"
+        },
+        {
+          "id": "8786744967339",
+          "variant_id": "47121539104939",
+          "title": "Sienna Sling Crossbody",
+          "price": "79.99",
+          "role": "THE BAG"
+        },
+        {
+          "id": "9138372804779",
+          "variant_id": "48434902892715",
+          "title": "Melli High Rise Flare Jeans with Frayed Hem",
+          "price": "134.99",
+          "role": "THE DENIM"
+        },
+        {
+          "id": "9073872175275",
+          "variant_id": "48110997995691",
+          "title": "Alma Booties Brown",
+          "price": "209.99",
+          "role": "THE SHOES"
+        }
+      ]
     }
   ],
-  "last_run": "2026-11-16T02:36:21.427583+00:00"
+  "last_run": "2026-11-16T08:50:33.762885+00:00"
 }
