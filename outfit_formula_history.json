@@ -4999,7 +4999,47 @@
           "role": "THE SHOES"
         }
       ]
+    },
+    {
+      "timestamp": "2026-11-16T02:36:21.427563+00:00",
+      "formula_id": "date_night",
+      "formula_title": "Date Night Outfit Formula",
+      "pin_url": "https://www.pinterest.com/pin/962222276665995377/",
+      "pin_id": "962222276665995377",
+      "board": "Cocktail Dresses",
+      "title": "Date Night Outfit Formula | Chic Midi Dress & Accessories | MeeeShop",
+      "tagged_products_count": 4,
+      "outfit_items": [
+        {
+          "id": "8745259204779",
+          "variant_id": "46506904027307",
+          "title": "Flying Tomato Angel Veil Solid Midi Dress",
+          "price": "119.99",
+          "role": "THE DRESS"
+        },
+        {
+          "id": "8786745065643",
+          "variant_id": "47913444671659",
+          "title": "Jessie Mixed Media Camera Crossbody Bag",
+          "price": "74.99",
+          "role": "THE BAG"
+        },
+        {
+          "id": "9073872175275",
+          "variant_id": "48110997995691",
+          "title": "Alma Booties Brown",
+          "price": "209.99",
+          "role": "THE SHOES"
+        },
+        {
+          "id": "8782689861803",
+          "variant_id": "47103631753387",
+          "title": "Buki Power Vee 'sweater' Sweatshirt - Wine",
+          "price": "164.99",
+          "role": "THE LAYER"
+        }
+      ]
     }
   ],
-  "last_run": "2026-11-15T23:06:14.078793+00:00"
+  "last_run": "2026-11-16T02:36:21.427583+00:00"
 }
