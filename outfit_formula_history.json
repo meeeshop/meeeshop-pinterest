@@ -5119,7 +5119,47 @@
           "role": "THE FOOTWEAR"
         }
       ]
+    },
+    {
+      "timestamp": "2026-11-17T01:59:30.449886+00:00",
+      "formula_id": "holiday_glam",
+      "formula_title": "Holiday Party Outfit Formula",
+      "pin_url": "https://www.pinterest.com/pin/962222276666021225/",
+      "pin_id": "962222276666021225",
+      "board": "Cocktail Dresses",
+      "title": "Holiday Party Outfit Formula - Easy Everyday Styling Formula | MeeeShop",
+      "tagged_products_count": 4,
+      "outfit_items": [
+        {
+          "id": "8745258909867",
+          "variant_id": "46506902454443",
+          "title": "Flying Tomato Romantic Canopy Woven Midi Dress",
+          "price": "139.99",
+          "role": "THE STATEMENT DRESS"
+        },
+        {
+          "id": "8786745262251",
+          "variant_id": "47394871050411",
+          "title": "Layla Woven Checkered Crossbody Sling Bag",
+          "price": "74.99",
+          "role": "EVENING BAG"
+        },
+        {
+          "id": "9073872011435",
+          "variant_id": "48110997012651",
+          "title": "Cecilia Slingback Green",
+          "price": "184.99",
+          "role": "THE HEELS / BOOTS"
+        },
+        {
+          "id": "8740258611371",
+          "variant_id": "46478481719467",
+          "title": "Hyfve Rolled Sleeve Button-up Top",
+          "price": "79.99",
+          "role": "ELEGANT LAYER"
+        }
+      ]
     }
   ],
-  "last_run": "2026-11-16T23:14:52.937040+00:00"
+  "last_run": "2026-11-17T01:59:30.449906+00:00"
 }
