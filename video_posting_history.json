@@ -719,11 +719,21 @@
       "board": "Dresses",
       "product_url": "https://us.meeeshop.com/products/flying-tomato-classic-bloom-day-woven-midi-dress",
       "posted_at": "2026-11-17T21:30:25.410954+00:00"
+    },
+    {
+      "product_id": "8740253761707",
+      "product_handle": "hyfve-acid-wash-french-terry-wide-leg-pants",
+      "product_title": "Hyfve Acid Wash French Terry Wide-leg Pants",
+      "category": "bottoms",
+      "pin_id": "https://www.pinterest.com/pin/962222276666056918/",
+      "board": "Pants & Leggings",
+      "product_url": "https://us.meeeshop.com/products/hyfve-acid-wash-french-terry-wide-leg-pants",
+      "posted_at": "2026-11-18T08:20:43.100669+00:00"
     }
   ],
   "category_last_used": {
     "dresses": "2026-11-17T21:30:25.410938+00:00",
-    "bottoms": "2026-11-16T07:46:27.967114+00:00",
+    "bottoms": "2026-11-18T08:20:43.100652+00:00",
     "general": "2026-11-16T22:43:05.243321+00:00",
     "tops": "2026-11-17T08:55:53.920669+00:00"
   }
