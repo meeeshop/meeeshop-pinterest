@@ -5359,7 +5359,47 @@
           "role": "ELEGANT LAYER"
         }
       ]
+    },
+    {
+      "timestamp": "2026-11-18T09:32:07.517210+00:00",
+      "formula_id": "date_night",
+      "formula_title": "Date Night Outfit Formula",
+      "pin_url": "https://www.pinterest.com/pin/962222276666058150/",
+      "pin_id": "962222276666058150",
+      "board": "Cocktail Dresses",
+      "title": "Date Night Outfit Formula | Chic Midi Dress & Accessories | MeeeShop",
+      "tagged_products_count": 4,
+      "outfit_items": [
+        {
+          "id": "8745258877099",
+          "variant_id": "46506902356139",
+          "title": "Flying Tomato Heirloom Border Woven Midi Dress",
+          "price": "139.99",
+          "role": "THE DRESS"
+        },
+        {
+          "id": "9087953862827",
+          "variant_id": "48172194693291",
+          "title": "Nola Crossbody Bag",
+          "price": "104.99",
+          "role": "THE BAG"
+        },
+        {
+          "id": "9073872175275",
+          "variant_id": "48110997995691",
+          "title": "Alma Booties Brown",
+          "price": "209.99",
+          "role": "THE SHOES"
+        },
+        {
+          "id": "8782625636523",
+          "variant_id": "47103360336043",
+          "title": "Retrolicious Camping Bow Top",
+          "price": "84.99",
+          "role": "THE LAYER"
+        }
+      ]
     }
   ],
-  "last_run": "2026-11-18T04:20:56.600793+00:00"
+  "last_run": "2026-11-18T09:32:07.517235+00:00"
 }
