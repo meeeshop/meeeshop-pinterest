@@ -5439,7 +5439,47 @@
           "role": "THE SHOES"
         }
       ]
+    },
+    {
+      "timestamp": "2026-11-19T00:42:20.102766+00:00",
+      "formula_id": "how_to_style_flare_jeans",
+      "formula_title": "How to Style Flare Jeans: Outfit Formula",
+      "pin_url": "https://www.pinterest.com/pin/962222276666078188/",
+      "pin_id": "962222276666078188",
+      "board": "Kancan USA Jeans",
+      "title": "How to Style Flare Jeans: Outfit Formula | How to Style Flare Jeans & Sweater | MeeeShop",
+      "tagged_products_count": 4,
+      "outfit_items": [
+        {
+          "id": "8782689730731",
+          "variant_id": "47103631917227",
+          "title": "Buki Resort Vee Long Sleeve Popover Shirt - Black",
+          "price": "189.99",
+          "role": "THE TOP"
+        },
+        {
+          "id": "9087953567915",
+          "variant_id": "48172191842475",
+          "title": "Maribel Convertible Crossbody Bag",
+          "price": "104.99",
+          "role": "THE BAG"
+        },
+        {
+          "id": "8811044044971",
+          "variant_id": "47176712716459",
+          "title": "Anastasia Tummy Control High Rise Wide Flare Jeans",
+          "price": "134.99",
+          "role": "THE FLARE DENIM"
+        },
+        {
+          "id": "8928275300523",
+          "variant_id": "47605694660779",
+          "title": "Howdy Boot Coziest Lounge Slippers",
+          "price": "74.99",
+          "role": "THE FOOTWEAR"
+        }
+      ]
     }
   ],
-  "last_run": "2026-11-18T21:46:44.024117+00:00"
+  "last_run": "2026-11-19T00:42:20.102786+00:00"
 }
