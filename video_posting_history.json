@@ -749,11 +749,21 @@
       "board": "Dresses",
       "product_url": "https://us.meeeshop.com/products/mlle-gabrielle-floral-sleeveless-dress",
       "posted_at": "2026-11-19T08:40:23.555071+00:00"
+    },
+    {
+      "product_id": "8740284072107",
+      "product_handle": "judy-blue-full-size-mid-rise-rigid-magic-release-hem-jeans",
+      "product_title": "Judy Blue Full Size Mid Rise Rigid Magic Release Hem Jeans",
+      "category": "bottoms",
+      "pin_id": "https://www.pinterest.com/pin/962222276666103614/",
+      "board": "Jeans",
+      "product_url": "https://us.meeeshop.com/products/judy-blue-full-size-mid-rise-rigid-magic-release-hem-jeans",
+      "posted_at": "2026-11-19T21:09:36.307730+00:00"
     }
   ],
   "category_last_used": {
     "dresses": "2026-11-19T08:40:23.555055+00:00",
-    "bottoms": "2026-11-18T08:20:43.100652+00:00",
+    "bottoms": "2026-11-19T21:09:36.307711+00:00",
     "general": "2026-11-16T22:43:05.243321+00:00",
     "tops": "2026-11-18T21:04:15.488260+00:00"
   }
