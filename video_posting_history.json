@@ -769,10 +769,20 @@
       "board": "Shirts & Tops",
       "product_url": "https://us.meeeshop.com/products/riley-technical-top",
       "posted_at": "2026-11-20T08:13:34.521521+00:00"
+    },
+    {
+      "product_id": "8740270637227",
+      "product_handle": "mlle-gabrielle-solid-sleeveless-dress",
+      "product_title": "Mlle Gabrielle Solid Sleeveless Dress",
+      "category": "dresses",
+      "pin_id": "https://www.pinterest.com/pin/962222276666138106/",
+      "board": "Dresses",
+      "product_url": "https://us.meeeshop.com/products/mlle-gabrielle-solid-sleeveless-dress",
+      "posted_at": "2026-11-20T20:55:42.144903+00:00"
     }
   ],
   "category_last_used": {
-    "dresses": "2026-11-19T08:40:23.555055+00:00",
+    "dresses": "2026-11-20T20:55:42.144886+00:00",
     "bottoms": "2026-11-19T21:09:36.307711+00:00",
     "general": "2026-11-16T22:43:05.243321+00:00",
     "tops": "2026-11-20T08:13:34.521506+00:00"
