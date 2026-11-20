@@ -759,12 +759,22 @@
       "board": "Jeans",
       "product_url": "https://us.meeeshop.com/products/judy-blue-full-size-mid-rise-rigid-magic-release-hem-jeans",
       "posted_at": "2026-11-19T21:09:36.307730+00:00"
+    },
+    {
+      "product_id": "8744047083691",
+      "product_handle": "riley-technical-top",
+      "product_title": "Riley Technical Top",
+      "category": "tops",
+      "pin_id": "https://www.pinterest.com/pin/962222276666117970/",
+      "board": "Shirts & Tops",
+      "product_url": "https://us.meeeshop.com/products/riley-technical-top",
+      "posted_at": "2026-11-20T08:13:34.521521+00:00"
     }
   ],
   "category_last_used": {
     "dresses": "2026-11-19T08:40:23.555055+00:00",
     "bottoms": "2026-11-19T21:09:36.307711+00:00",
     "general": "2026-11-16T22:43:05.243321+00:00",
-    "tops": "2026-11-18T21:04:15.488260+00:00"
+    "tops": "2026-11-20T08:13:34.521506+00:00"
   }
 }
