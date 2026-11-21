@@ -5839,7 +5839,47 @@
           "role": "ANKLE BOOTIES"
         }
       ]
+    },
+    {
+      "timestamp": "2026-11-21T09:01:48.383592+00:00",
+      "formula_id": "how_to_style_flare_jeans",
+      "formula_title": "How to Style Flare Jeans: Outfit Formula",
+      "pin_url": "https://www.pinterest.com/pin/962222276666152247/",
+      "pin_id": "962222276666152247",
+      "board": "Kancan USA Jeans",
+      "title": "How to Style Flare Jeans: Outfit Formula | How to Style Flare Jeans & Sweater | MeeeShop",
+      "tagged_products_count": 4,
+      "outfit_items": [
+        {
+          "id": "8782689861803",
+          "variant_id": "47103631753387",
+          "title": "Buki Power Vee 'sweater' Sweatshirt - Wine",
+          "price": "164.99",
+          "role": "THE TOP"
+        },
+        {
+          "id": "8786744967339",
+          "variant_id": "47121539104939",
+          "title": "Sienna Sling Crossbody",
+          "price": "79.99",
+          "role": "THE BAG"
+        },
+        {
+          "id": "8789756903595",
+          "variant_id": "47130839580843",
+          "title": "Eco Friendly Corset High Rise Crop Flare Jeans (dark Wash)",
+          "price": "134.99",
+          "role": "THE FLARE DENIM"
+        },
+        {
+          "id": "9073872175275",
+          "variant_id": "48110997995691",
+          "title": "Alma Booties Brown",
+          "price": "209.99",
+          "role": "THE FOOTWEAR"
+        }
+      ]
     }
   ],
-  "last_run": "2026-11-21T03:47:27.459207+00:00"
+  "last_run": "2026-11-21T09:01:48.383613+00:00"
 }
