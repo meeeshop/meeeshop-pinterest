@@ -789,12 +789,22 @@
       "board": "Jeans",
       "product_url": "https://us.meeeshop.com/products/risen-full-size-high-rise-wide-straight-cuffed-patch-jeans-plus-size",
       "posted_at": "2026-11-21T08:06:41.079611+00:00"
+    },
+    {
+      "product_id": "8740283842731",
+      "product_handle": "risen-full-size-tummy-control-high-rise-crop-barrel-jeans-plus-size",
+      "product_title": "Risen Full Size Tummy Control High Rise Crop Barrel Jeans plus Size",
+      "category": "tops",
+      "pin_id": "https://www.pinterest.com/pin/962222276666169485/",
+      "board": "Jeans",
+      "product_url": "https://us.meeeshop.com/products/risen-full-size-tummy-control-high-rise-crop-barrel-jeans-plus-size",
+      "posted_at": "2026-11-21T19:55:47.474229+00:00"
     }
   ],
   "category_last_used": {
     "dresses": "2026-11-20T20:55:42.144886+00:00",
     "bottoms": "2026-11-21T08:06:41.079593+00:00",
     "general": "2026-11-16T22:43:05.243321+00:00",
-    "tops": "2026-11-20T08:13:34.521506+00:00"
+    "tops": "2026-11-21T19:55:47.474214+00:00"
   }
 }
