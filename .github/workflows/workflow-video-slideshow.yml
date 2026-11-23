@@ -49,7 +49,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          ref: develop
+          fetch-depth: 0
 
       - name: Set up Python 3.11
         uses: actions/setup-python@v5
@@ -86,13 +86,19 @@ jobs:
           echo "Launching Pinterest Vertical Video Pin Generator..."
           python pinterest_video_daily.py
 
-      - name: Commit and Push Video History to develop
+      - name: Commit and Push Video History
         if: always()
         run: |
           git config --local user.name "GitHub Action Bot"
           git config --local user.email "action@github.com"
-          git add video_posting_history.json || true
-          git diff --quiet && git diff --staged --quiet || (git commit -m "chore(pinterest): record video pin history [skip ci]" && git pull origin develop --rebase && git push origin develop)
+          git add video_posting_history.json secrets.enc 2>/dev/null || true
+          if ! git diff --staged --quiet; then
+            git commit -m "chore(pinterest): record video pin history [skip ci]"
+          fi
+          git checkout -- . 2>/dev/null || true
+          TARGET_BRANCH="${{ github.ref_name || 'develop' }}"
+          git pull origin "$TARGET_BRANCH" --rebase || true
+          git push origin "HEAD:$TARGET_BRANCH" || (git pull origin "$TARGET_BRANCH" --rebase && git push origin "HEAD:$TARGET_BRANCH") || echo "Warning: Failed to push video history"
 
       - name: Upload Video Artifacts
         if: always()
