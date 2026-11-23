@@ -78,6 +78,8 @@ def main():
     with sync_playwright() as p:
         browser = p.chromium.launch(
             headless=False,
+            channel="chrome",
+            ignore_default_args=["--enable-automation"],
             args=[
                 "--disable-blink-features=AutomationControlled",
                 "--start-maximized"
@@ -92,9 +94,9 @@ def main():
         logger.info("Opening https://www.pinterest.com/login/ ...")
         page.goto("https://www.pinterest.com/login/", wait_until="domcontentloaded", timeout=45000)
 
-        logger.info("⏳ Waiting for login... (You have 10 minutes to complete sign-in)")
+        logger.info("⏳ Waiting for login... (Window will stay open for up to 30 minutes)")
 
-        max_seconds = 600
+        max_seconds = 1800
         start_time = time.time()
         authenticated = False
 
@@ -161,3 +163,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
