@@ -79,4 +79,5 @@ chromedriver
 
 # Additional local only files
 .pinterest_cookies
+.pinterest_cookies_b64
 .pinterest_creds/
