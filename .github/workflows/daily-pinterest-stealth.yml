@@ -105,9 +105,15 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add posting_history_stealth.json secrets.enc 2>/dev/null || true
           if ! git diff --staged --quiet; then
-            git commit -m "chore: auto-update stealth posting history [skip ci]"
+            git commit -m "chore: auto-update stealth posting history [skip ci]" || true
           fi
-          git checkout -- . 2>/dev/null || true
+          git reset --hard HEAD
+          git clean -fd
           TARGET_BRANCH="${{ github.ref_name || 'develop' }}"
-          git pull origin "$TARGET_BRANCH" --rebase || true
-          git push origin "HEAD:$TARGET_BRANCH" || (git pull origin "$TARGET_BRANCH" --rebase && git push origin "HEAD:$TARGET_BRANCH") || echo "Failed to push history updates"
+          git pull origin "$TARGET_BRANCH" --rebase --autostash || true
+          for i in 1 2 3; do
+            git push origin "HEAD:$TARGET_BRANCH" && break
+            echo "Push to $TARGET_BRANCH failed, retrying ($i/3)..."
+            sleep 2
+            git pull origin "$TARGET_BRANCH" --rebase --autostash || true
+          done || echo "Failed to push history updates to $TARGET_BRANCH"
