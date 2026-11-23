@@ -95,10 +95,16 @@ jobs:
           git config --local user.name "GitHub Action Bot"
           git add tagged_popular_pins_history.json secrets.enc 2>/dev/null || true
           if ! git diff --staged --quiet; then
-            git commit -m "chore(pinterest): tag popular pins with in-stock products [skip ci]"
+            git commit -m "chore(pinterest): tag popular pins with in-stock products [skip ci]" || true
           fi
-          git checkout -- . 2>/dev/null || true
+          git reset --hard HEAD
+          git clean -fd
           TARGET_BRANCH="${{ github.ref_name || 'develop' }}"
-          git pull origin "$TARGET_BRANCH" --rebase || true
-          git push origin "HEAD:$TARGET_BRANCH" || (git pull origin "$TARGET_BRANCH" --rebase && git push origin "HEAD:$TARGET_BRANCH") || echo "Warning: Failed to push popular pins history"
+          git pull origin "$TARGET_BRANCH" --rebase --autostash || true
+          for i in 1 2 3; do
+            git push origin "HEAD:$TARGET_BRANCH" && break
+            echo "Push to $TARGET_BRANCH failed, retrying ($i/3)..."
+            sleep 2
+            git pull origin "$TARGET_BRANCH" --rebase --autostash || true
+          done || echo "Warning: Failed to push popular pins history to $TARGET_BRANCH"
 

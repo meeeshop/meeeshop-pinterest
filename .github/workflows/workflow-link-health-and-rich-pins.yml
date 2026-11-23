@@ -64,12 +64,18 @@ jobs:
           git config --local user.email "action@github.com"
           git add link_health_report.json secrets.enc 2>/dev/null || true
           if ! git diff --staged --quiet; then
-            git commit -m "chore(pinterest): record link health audit report [skip ci]"
+            git commit -m "chore(pinterest): record link health audit report [skip ci]" || true
           fi
-          git checkout -- . 2>/dev/null || true
+          git reset --hard HEAD
+          git clean -fd
           TARGET_BRANCH="${{ github.ref_name || 'develop' }}"
-          git pull origin "$TARGET_BRANCH" --rebase || true
-          git push origin "HEAD:$TARGET_BRANCH" || (git pull origin "$TARGET_BRANCH" --rebase && git push origin "HEAD:$TARGET_BRANCH") || echo "Warning: Failed to push link health report"
+          git pull origin "$TARGET_BRANCH" --rebase --autostash || true
+          for i in 1 2 3; do
+            git push origin "HEAD:$TARGET_BRANCH" && break
+            echo "Push to $TARGET_BRANCH failed, retrying ($i/3)..."
+            sleep 2
+            git pull origin "$TARGET_BRANCH" --rebase --autostash || true
+          done || echo "Warning: Failed to push link health report to $TARGET_BRANCH"
 
       - name: Upload Link Health Report Artifact
         if: always()
