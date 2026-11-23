@@ -60,22 +60,29 @@ jobs:
       - name: Commit and Push Link Health Report
         if: always()
         run: |
+          set +e
           git config --local user.name "GitHub Action Bot"
           git config --local user.email "action@github.com"
           git add link_health_report.json secrets.enc 2>/dev/null || true
           if ! git diff --staged --quiet; then
             git commit -m "chore(pinterest): record link health audit report [skip ci]" || true
           fi
-          git reset --hard HEAD
-          git clean -fd
-          TARGET_BRANCH="${{ github.ref_name || 'develop' }}"
-          git pull origin "$TARGET_BRANCH" --rebase --autostash || true
+          git reset --hard HEAD 2>/dev/null || true
+          git clean -fd 2>/dev/null || true
+          TARGET_BRANCH="${{ github.ref_name }}"
+          TARGET_BRANCH="${TARGET_BRANCH:-develop}"
+          git pull origin "$TARGET_BRANCH" --rebase --autostash 2>/dev/null || true
           for i in 1 2 3; do
-            git push origin "HEAD:$TARGET_BRANCH" && break
+            if git push origin "HEAD:$TARGET_BRANCH"; then
+              echo "Successfully pushed link health report to $TARGET_BRANCH"
+              break
+            fi
             echo "Push to $TARGET_BRANCH failed, retrying ($i/3)..."
             sleep 2
-            git pull origin "$TARGET_BRANCH" --rebase --autostash || true
-          done || echo "Warning: Failed to push link health report to $TARGET_BRANCH"
+            git rebase --abort 2>/dev/null || true
+            git pull origin "$TARGET_BRANCH" --rebase --autostash 2>/dev/null || true
+          done
+          exit 0
 
       - name: Upload Link Health Report Artifact
         if: always()

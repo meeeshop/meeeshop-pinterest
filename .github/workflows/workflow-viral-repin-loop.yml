@@ -100,10 +100,29 @@ jobs:
       - name: Commit and Push History to develop
         if: always()
         run: |
+          set +e
           git config --local user.name "GitHub Action Bot"
           git config --local user.email "action@github.com"
-          git add repin_history.json daily_pin_count.json posting_history_v2.json refresh_history_v2.json || true
-          git diff --quiet && git diff --staged --quiet || (git commit -m "chore(pinterest): record evergreen repin history [skip ci]" && git pull origin develop --rebase && git push origin develop)
+          git add repin_history.json daily_pin_count.json posting_history_v2.json refresh_history_v2.json secrets.enc 2>/dev/null || true
+          if ! git diff --staged --quiet; then
+            git commit -m "chore(pinterest): record evergreen repin history [skip ci]" || true
+          fi
+          git reset --hard HEAD 2>/dev/null || true
+          git clean -fd 2>/dev/null || true
+          TARGET_BRANCH="${{ github.ref_name }}"
+          TARGET_BRANCH="${TARGET_BRANCH:-develop}"
+          git pull origin "$TARGET_BRANCH" --rebase --autostash 2>/dev/null || true
+          for i in 1 2 3; do
+            if git push origin "HEAD:$TARGET_BRANCH"; then
+              echo "Successfully pushed evergreen repin history to $TARGET_BRANCH"
+              break
+            fi
+            echo "Push to $TARGET_BRANCH failed, retrying ($i/3)..."
+            sleep 2
+            git rebase --abort 2>/dev/null || true
+            git pull origin "$TARGET_BRANCH" --rebase --autostash 2>/dev/null || true
+          done
+          exit 0
 
       - name: Upload Repin Artifacts
         if: always()
