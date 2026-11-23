@@ -819,12 +819,22 @@
       "board": "Pants & Leggings",
       "product_url": "https://us.meeeshop.com/products/high-rise-slim-wide-straight",
       "posted_at": "2026-11-22T20:07:14.434183+00:00"
+    },
+    {
+      "product_id": "8740256907435",
+      "product_handle": "hyfve-contrast-trim-sleeveless-ribbed-top",
+      "product_title": "Hyfve Contrast Trim Sleeveless Ribbed Top",
+      "category": "tops",
+      "pin_id": "https://www.pinterest.com/pin/962222276666224979/",
+      "board": "Shirts & Tops",
+      "product_url": "https://us.meeeshop.com/products/hyfve-contrast-trim-sleeveless-ribbed-top",
+      "posted_at": "2026-11-23T12:42:43.897517+00:00"
     }
   ],
   "category_last_used": {
     "dresses": "2026-11-22T07:53:50.260860+00:00",
     "bottoms": "2026-11-22T20:07:14.434168+00:00",
     "general": "2026-11-16T22:43:05.243321+00:00",
-    "tops": "2026-11-21T19:55:47.474214+00:00"
+    "tops": "2026-11-23T12:42:43.897500+00:00"
   }
 }
