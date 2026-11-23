@@ -834,23 +834,84 @@ class StealthPinterestPoster:
 
         try:
             page.goto("https://www.pinterest.com/login/", wait_until="domcontentloaded", timeout=30000)
-            time.sleep(2)
-            page.fill('input[id="email"], input[name="id"]', self.email)
-            page.fill('input[id="password"], input[name="password"]', self.password)
-            page.click('button[type="submit"]')
-            time.sleep(5)
-            return "login" not in page.url
+            time.sleep(3)
+
+            # Check for Google remember / readonly email screen ("Not you?")
+            not_you = page.locator('text="Not you?"')
+            if not_you.count() > 0:
+                logger.info("Detected 'Not you?' prompt on login screen. Clicking to reveal editable login form...")
+                not_you.first.click()
+                time.sleep(2)
+
+            # Check if email input is present and editable
+            email_inputs = page.locator('input[id="email"], input[name="id"]')
+            if email_inputs.count() > 0:
+                email_input = email_inputs.first
+                is_readonly = email_input.get_attribute("readonly")
+                current_val = email_input.get_attribute("value") or ""
+                if is_readonly:
+                    logger.warning(f"Email input is readonly with value '{current_val}'. Attempting to proceed to password...")
+                elif current_val.lower() != self.email.lower():
+                    email_input.fill(self.email)
+            else:
+                logger.warning("Email input not found; checking for password field directly...")
+
+            # Enter password
+            pwd_inputs = page.locator('input[id="password"], input[name="password"]')
+            if pwd_inputs.count() > 0:
+                pwd_inputs.first.fill(self.password)
+                time.sleep(1)
+
+            # Click login button
+            submit_btn = page.locator('button[type="submit"], button:has-text("Log in")').first
+            if submit_btn.count() > 0:
+                submit_btn.click()
+                time.sleep(6)
+
+            # Check for specific Pinterest error messages
+            body_text = page.inner_text("body")
+            if "Looks like you don't have a password" in body_text:
+                logger.error(
+                    "CRITICAL: Pinterest account %s was created via Google SSO and does not have a native password. "
+                    "Please set a password in Pinterest (Settings -> Account Management -> Password) to enable headless login, "
+                    "or run 'python refresh_pinterest_session.py' to update session cookies.",
+                    self.email
+                )
+                return False
+
+            if "login" not in page.url:
+                logger.info("UI login successful! Saving updated session cookies...")
+                self._save_cookies(page.context)
+                return True
+            else:
+                logger.error(f"UI login did not redirect away from login page. Current URL: {page.url}")
+                return False
+
         except Exception as e:
             logger.error(f"UI login failed: {e}")
             return False
 
     def _save_cookies(self, context) -> None:
-        """Save updated session cookies back to disk."""
+        """Save updated session cookies back to disk, base64 file, and encrypted vault."""
         try:
             updated_cookies = context.cookies()
             if updated_cookies:
+                # 1. Raw JSON file
                 COOKIES_FILE.write_text(json.dumps(updated_cookies, indent=2), encoding='utf-8')
-                logger.info(f"✓ Saved updated session cookies ({len(updated_cookies)})")
+
+                # 2. Base64 file
+                cookies_json = json.dumps(updated_cookies)
+                cookies_b64 = base64.b64encode(cookies_json.encode('utf-8')).decode('utf-8')
+                COOKIES_B64_FILE.write_text(cookies_b64, encoding='utf-8')
+
+                # 3. Encrypted secrets.enc
+                try:
+                    from secrets_manager import set_secret
+                    set_secret("PINTEREST_COOKIES_B64", cookies_b64)
+                except Exception as se:
+                    logger.debug(f"Could not update secrets.enc from worker: {se}")
+
+                logger.info(f"✓ Saved updated session cookies ({len(updated_cookies)}) to disk & vault")
         except Exception as ce:
             logger.debug(f"Cookie save note: {ce}")
 

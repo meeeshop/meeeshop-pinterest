@@ -187,3 +187,41 @@ def inject_to_env() -> None:
             os.environ[name] = value
     except Exception:
         pass
+
+
+def set_secret(key: str, value: str) -> bool:
+    """
+    Encrypt a key-value pair and write back to secrets.enc using double-Fernet encryption.
+    Updates in-memory environment as well.
+    """
+    _load_dotenv()
+    try:
+        primary, fallback = _get_keys()
+        vault = _load_vault()
+        decrypted_vault = {}
+        for k, v in vault.items():
+            try:
+                decrypted_vault[k] = _double_decrypt(v, primary, fallback)
+            except Exception:
+                pass
+
+        decrypted_vault[key] = value
+        os.environ[key] = value
+
+        new_vault = {}
+        for k, v in decrypted_vault.items():
+            inner = Fernet(fallback).encrypt(v.encode())
+            outer = Fernet(primary).encrypt(inner).decode()
+            new_vault[k] = outer
+
+        for candidate in [Path(__file__).with_name("secrets.enc"), Path("secrets.enc")]:
+            with open(candidate, "w", encoding="utf-8") as f:
+                json.dump(new_vault, f, indent=2)
+            break
+
+        logging.getLogger(__name__).info(f"Successfully updated {key} in secrets.enc")
+        return True
+    except Exception as e:
+        logging.getLogger(__name__).error(f"Failed to set secret {key}: {e}")
+        return False
+
