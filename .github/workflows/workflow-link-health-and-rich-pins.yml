@@ -32,7 +32,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          ref: develop
+          fetch-depth: 0
 
       - name: Set up Python 3.11
         uses: actions/setup-python@v5
@@ -57,13 +57,19 @@ jobs:
           echo "Starting Pinterest Link Health & Rich Pins Audit (Sample: $LIMIT)..."
           python pinterest_link_health_and_rich_pins.py --limit $LIMIT
 
-      - name: Commit and Push Link Health Report to develop
+      - name: Commit and Push Link Health Report
         if: always()
         run: |
           git config --local user.name "GitHub Action Bot"
           git config --local user.email "action@github.com"
-          git add link_health_report.json || true
-          git diff --quiet && git diff --staged --quiet || (git commit -m "chore(pinterest): record link health audit report [skip ci]" && git pull origin develop --rebase && git push origin develop)
+          git add link_health_report.json secrets.enc 2>/dev/null || true
+          if ! git diff --staged --quiet; then
+            git commit -m "chore(pinterest): record link health audit report [skip ci]"
+          fi
+          git checkout -- . 2>/dev/null || true
+          TARGET_BRANCH="${{ github.ref_name || 'develop' }}"
+          git pull origin "$TARGET_BRANCH" --rebase || true
+          git push origin "HEAD:$TARGET_BRANCH" || (git pull origin "$TARGET_BRANCH" --rebase && git push origin "HEAD:$TARGET_BRANCH") || echo "Warning: Failed to push link health report"
 
       - name: Upload Link Health Report Artifact
         if: always()
