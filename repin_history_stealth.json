@@ -8629,6 +8629,46 @@
       "target_board_id": "962222345325683645",
       "live_url": "https://www.pinterest.com/pin/4596416083045772864/",
       "timestamp": "2026-11-24T05:06:28.760611+00:00"
+    },
+    {
+      "pin_id": "4610560216842920768",
+      "product_title": "Ellie Crossbody Bag",
+      "category_group": "bags_accessories",
+      "source_board": "_products",
+      "target_board": "\"fashion models\"",
+      "target_board_id": "962222345325427353",
+      "live_url": "https://www.pinterest.com/pin/4610560216842920768/",
+      "timestamp": "2026-11-24T11:51:21.796961+00:00"
+    },
+    {
+      "pin_id": "4591842156126035520",
+      "product_title": "YMI Women's Low-Rise Straight Cargo Skater Jeans, SBT Tinted Midnight Blue",
+      "category_group": "pants_denim",
+      "source_board": "_products",
+      "target_board": "Jeans",
+      "target_board_id": "962222345325006084",
+      "live_url": "https://www.pinterest.com/pin/4591842156126035520/",
+      "timestamp": "2026-11-24T11:51:56.484347+00:00"
+    },
+    {
+      "pin_id": "4590856942765973056",
+      "product_title": "YMI Women's Detailed Snap Puffer Jacket with Cinched Waist Olive",
+      "category_group": "outerwear",
+      "source_board": "_products",
+      "target_board": "Sweaters",
+      "target_board_id": "962222345325683648",
+      "live_url": "https://www.pinterest.com/pin/4590856942765973056/",
+      "timestamp": "2026-11-24T11:52:31.403029+00:00"
+    },
+    {
+      "pin_id": "4597823486791745088",
+      "product_title": "Women's Satin Stretch Shorts Made in USA",
+      "category_group": "general_apparel",
+      "source_board": "_products",
+      "target_board": "Trendy & Timeless Fashion",
+      "target_board_id": "962222345325694325",
+      "live_url": "https://www.pinterest.com/pin/4597823486791745088/",
+      "timestamp": "2026-11-24T11:52:57.739261+00:00"
     }
   ],
   "board_last_used": {
@@ -8636,7 +8676,7 @@
     "Pants & Leggings": "2026-11-03T08:59:24.526326+00:00",
     "Skirts": "2026-11-10T09:33:00.516115+00:00",
     "Dresses": "2026-10-31T16:56:50.441606+00:00",
-    "Sweaters": "2026-10-21T20:52:02.588599+00:00",
+    "Sweaters": "2026-11-24T11:52:31.403029+00:00",
     "Dressy Outfits": "2026-11-05T01:12:48.991284+00:00",
     "Dress": "2026-10-31T16:57:53.986696+00:00",
     "Outerwear": "2026-10-28T00:11:42.452137+00:00",
@@ -8647,10 +8687,10 @@
     "Feminine & Flowy Fits": "2026-11-02T21:29:33.256828+00:00",
     "Blouses": "2026-11-02T21:29:58.137551+00:00",
     "Must-Have Fashion Picks": "2026-11-24T05:06:10.804863+00:00",
-    "\"fashion models\"": "2026-11-03T08:59:55.731478+00:00",
+    "\"fashion models\"": "2026-11-24T11:51:21.796961+00:00",
     "Cocktail Dresses": "2026-10-31T23:54:22.163393+00:00",
     "Camis & Tanks": "2026-11-10T19:39:58.245390+00:00",
-    "Trendy & Timeless Fashion": "2026-11-03T09:00:54.320252+00:00",
+    "Trendy & Timeless Fashion": "2026-11-24T11:52:57.739261+00:00",
     "Our Recommended Feminine Styles": "2026-11-03T19:14:07.810608+00:00",
     "Rompers, Jumpsuits & Outfit Sets": "2026-10-31T23:55:14.863410+00:00",
     "Confident Looks": "2026-11-03T19:14:26.982054+00:00",
@@ -8675,7 +8715,7 @@
     "Trendy Backpacks": "2026-11-03T19:13:38.701804+00:00",
     "LE LIS Womens Clothing | us.meeeshop": "2026-11-03T02:46:06.188692+00:00",
     "Chic & Effortless Styles": "2026-11-10T19:40:37.869379+00:00",
-    "Jeans": "2026-11-01T21:22:14.151676+00:00",
+    "Jeans": "2026-11-24T11:51:56.484347+00:00",
     "Nylon backpack": "2026-11-05T01:13:44.339267+00:00",
     "Mustard Seed Clothing": "2026-11-09T22:16:01.174011+00:00",
     "Effortless Looks": "2026-10-31T20:39:58.826853+00:00",
@@ -8708,6 +8748,6 @@
     "Simple Outfits": "2026-10-24T19:43:36.754965+00:00",
     "Women's shacket": "2026-10-26T18:35:03.331027+00:00"
   },
-  "daily_count": 8,
-  "last_repin_time": "2026-11-24T05:06:28.760611+00:00"
+  "daily_count": 12,
+  "last_repin_time": "2026-11-24T11:52:57.739261+00:00"
 }
