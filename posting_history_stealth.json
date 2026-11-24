@@ -13859,11 +13859,55 @@
       "template": 17,
       "pin_url": "https://www.pinterest.com/pin/962222276666250475/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 9095812841643,
+      "title": "Retrolicious Elizabeth Dress in Witches Brew | MeeeShop US Boutique",
+      "board": "Trends",
+      "timestamp": "2026-11-24T12:14:05.459958",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276666256660/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 9240360911019,
+      "title": "Emory Park Katana Top: Thanksgiving Casual Work & Friendsgiving Look \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-11-24T12:15:17.967877",
+      "type": "carousel",
+      "style": "collage",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276666256688/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8879307227307,
+      "title": "Women's Crop Tee - Chic Thanksgiving & Holiday Look \u2014 MeeeShop",
+      "board": "Social",
+      "timestamp": "2026-11-24T12:16:22.843076",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276666256718/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8911380480171,
+      "title": "Mkf Collection by Mia K. - Jessy Signature Crossbody Bag: Thanksgiving Chic \u2014 MeeeShop",
+      "board": "Blogs",
+      "timestamp": "2026-11-24T12:17:40.987869",
+      "type": "carousel",
+      "style": "card",
+      "template": 9,
+      "pin_url": "https://www.pinterest.com/pin/962222276666256755/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-10-30T08:23:10.916119",
-    "Trends": "2026-11-24T05:13:42.382888",
+    "Trends": "2026-11-24T12:14:05.459958",
     "Dresses": "2026-10-23T20:41:56.204070",
     "Feminine & Flowy Fits": "2026-11-02T21:15:35.177592",
     "Short fall dresses": "2026-10-24T07:06:32.059527",
@@ -13908,7 +13952,7 @@
     "Fashion Models": "2026-11-01T08:58:55.714935",
     "My Shop #1737732113": "2026-11-01T17:30:56.581140",
     "Shop For Holidays": "2026-11-01T21:26:44.134524",
-    "New": "2026-11-24T05:16:14.644316",
+    "New": "2026-11-24T12:15:17.967877",
     "American Bazi": "2026-10-27T00:24:30.915597",
     "Cool & Casual Styles": "2026-11-04T22:53:58.695377",
     "MeeeShop's Luxe Styles": "2026-10-28T08:10:24.708953",
@@ -13942,8 +13986,8 @@
     "Affordable Women's Fashion USA": "2026-11-24T05:17:25.906676",
     "Festive & Flora Fits": "2026-11-10T19:37:07.619438",
     "Shop Responsibly": "2026-11-24T05:19:25.129615",
-    "Social": "2026-10-25T15:26:00.469696",
-    "Blogs": "2026-10-25T15:27:07.680307",
+    "Social": "2026-11-24T12:16:22.843076",
+    "Blogs": "2026-11-24T12:17:40.987869",
     "All Pins": "2026-10-26T07:40:02.471763",
     "Outer wear": "2026-10-14T16:19:19.139823",
     "Women's Cardigans": "2026-10-22T00:02:33.389000",
@@ -13976,9 +14020,9 @@
     "Umgee USA": "2026-10-10T16:46:42.000590",
     "Edgy Fashion": "2026-10-13T09:13:02.770988"
   },
-  "daily_count": 8,
-  "last_post_time": "2026-11-24T05:19:25.129615",
+  "daily_count": 12,
+  "last_post_time": "2026-11-24T12:17:40.987869",
   "board_rotation_cursor": 0,
-  "last_image_style": "collage",
-  "last_template_index": 17
+  "last_image_style": "card",
+  "last_template_index": 9
 }
