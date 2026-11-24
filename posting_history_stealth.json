@@ -13815,11 +13815,55 @@
       "template": 17,
       "pin_url": "https://www.pinterest.com/pin/962222276666248452/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8818150506667,
+      "title": "Emory Park Pixie Shorts: Thanksgiving Chic Short Style \u2014 MeeeShop",
+      "board": "Trends",
+      "timestamp": "2026-11-24T05:13:42.382888",
+      "type": "video",
+      "style": "carousel",
+      "template": 16,
+      "pin_url": "https://www.pinterest.com/pin/962222276666250365/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8930418753707,
+      "title": "Judy Blue Full Size Cuffed Hem Slim Jeans - Perfect Thanksgiving & Holiday Look",
+      "board": "New",
+      "timestamp": "2026-11-24T05:16:14.644316",
+      "type": "video",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276666250417/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 9053303701675,
+      "title": "Downeast Go Floral Tee - Perfect Thanksgiving & Holiday Casual Top \u2014 MeeeShop",
+      "board": "Affordable Women's Fashion USA",
+      "timestamp": "2026-11-24T05:17:25.906676",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276666250446/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8818155487403,
+      "title": "Emory Park Elowen Shorts | MeeeShop US Boutique",
+      "board": "Shop Responsibly",
+      "timestamp": "2026-11-24T05:19:25.129615",
+      "type": "carousel",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276666250475/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-10-30T08:23:10.916119",
-    "Trends": "2026-11-23T23:36:41.340622",
+    "Trends": "2026-11-24T05:13:42.382888",
     "Dresses": "2026-10-23T20:41:56.204070",
     "Feminine & Flowy Fits": "2026-11-02T21:15:35.177592",
     "Short fall dresses": "2026-10-24T07:06:32.059527",
@@ -13864,7 +13908,7 @@
     "Fashion Models": "2026-11-01T08:58:55.714935",
     "My Shop #1737732113": "2026-11-01T17:30:56.581140",
     "Shop For Holidays": "2026-11-01T21:26:44.134524",
-    "New": "2026-11-24T03:32:41.194710",
+    "New": "2026-11-24T05:16:14.644316",
     "American Bazi": "2026-10-27T00:24:30.915597",
     "Cool & Casual Styles": "2026-11-04T22:53:58.695377",
     "MeeeShop's Luxe Styles": "2026-10-28T08:10:24.708953",
@@ -13895,9 +13939,9 @@
     "Stylish Finds": "2026-11-04T19:15:16.556710",
     "Confidence Ladies": "2026-11-04T19:16:34.269034",
     "Fresh Finds New...": "2026-11-24T03:35:15.647244",
-    "Affordable Women's Fashion USA": "2026-10-24T23:03:39.090774",
+    "Affordable Women's Fashion USA": "2026-11-24T05:17:25.906676",
     "Festive & Flora Fits": "2026-11-10T19:37:07.619438",
-    "Shop Responsibly": "2026-10-25T07:30:35.234589",
+    "Shop Responsibly": "2026-11-24T05:19:25.129615",
     "Social": "2026-10-25T15:26:00.469696",
     "Blogs": "2026-10-25T15:27:07.680307",
     "All Pins": "2026-10-26T07:40:02.471763",
@@ -13932,8 +13976,8 @@
     "Umgee USA": "2026-10-10T16:46:42.000590",
     "Edgy Fashion": "2026-10-13T09:13:02.770988"
   },
-  "daily_count": 4,
-  "last_post_time": "2026-11-24T03:35:15.647244",
+  "daily_count": 8,
+  "last_post_time": "2026-11-24T05:19:25.129615",
   "board_rotation_cursor": 0,
   "last_image_style": "collage",
   "last_template_index": 17
