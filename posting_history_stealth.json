@@ -13769,6 +13769,52 @@
       "template": 16,
       "pin_url": "https://www.pinterest.com/pin/962222276666243956/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": "571560689835",
+      "article_id": "571560689835",
+      "title": "How to Style Jumpsuits and Rompers for Daytime and Evening Events",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-11-24T03:29:55.584152",
+      "type": "blog",
+      "style": "card",
+      "template": 9,
+      "pin_url": "https://www.pinterest.com/pin/962222276666248373/",
+      "blog_url": "https://us.meeeshop.com/blogs/womens-clothing/how-to-style-jumpsuits-and-rompers-for-daytime-and-evening-events",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8985002115243,
+      "title": "Diva Pvc Tote Bag with Tweed Bucket Bag - Chic Thanksgiving & Holiday Must-Have",
+      "board": "New",
+      "timestamp": "2026-11-24T03:32:41.194710",
+      "type": "video",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276666248397/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8985002901675,
+      "title": "Viridiana Croc Tote Bag and Set | MeeeShop US Boutique",
+      "board": "Trendy Backpacks",
+      "timestamp": "2026-11-24T03:33:49.579106",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276666248423/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8879307325611,
+      "title": "Halter Tank for Thanksgiving: Cozy & Chic \u2014 MeeeShop",
+      "board": "Fresh Finds New...",
+      "timestamp": "2026-11-24T03:35:15.647244",
+      "type": "carousel",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276666248452/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
@@ -13799,7 +13845,7 @@
     "Wardrobe Must-Hav...": "2026-10-29T00:45:48.483090",
     "Camis & Tanks": "2026-10-24T23:04:48.504690",
     "Wardrobe Must Haves": "2026-10-29T17:56:23.703435",
-    "Trendy Backpacks": "2026-10-24T15:16:21.082068",
+    "Trendy Backpacks": "2026-11-24T03:33:49.579106",
     "Festive Styles": "2026-11-02T00:33:23.809853",
     "Kancan USA Jeans": "2026-11-02T21:13:26.085169",
     "Footwear": "2026-09-07T23:26:56.803572",
@@ -13818,7 +13864,7 @@
     "Fashion Models": "2026-11-01T08:58:55.714935",
     "My Shop #1737732113": "2026-11-01T17:30:56.581140",
     "Shop For Holidays": "2026-11-01T21:26:44.134524",
-    "New": "2026-11-23T23:38:21.668715",
+    "New": "2026-11-24T03:32:41.194710",
     "American Bazi": "2026-10-27T00:24:30.915597",
     "Cool & Casual Styles": "2026-11-04T22:53:58.695377",
     "MeeeShop's Luxe Styles": "2026-10-28T08:10:24.708953",
@@ -13848,7 +13894,7 @@
     "Woman Fashion!": "2026-11-04T01:16:09.892582",
     "Stylish Finds": "2026-11-04T19:15:16.556710",
     "Confidence Ladies": "2026-11-04T19:16:34.269034",
-    "Fresh Finds New...": "2026-10-24T19:48:19.952133",
+    "Fresh Finds New...": "2026-11-24T03:35:15.647244",
     "Affordable Women's Fashion USA": "2026-10-24T23:03:39.090774",
     "Festive & Flora Fits": "2026-11-10T19:37:07.619438",
     "Shop Responsibly": "2026-10-25T07:30:35.234589",
@@ -13887,8 +13933,8 @@
     "Edgy Fashion": "2026-10-13T09:13:02.770988"
   },
   "daily_count": 4,
-  "last_post_time": "2026-11-23T23:42:17.453436",
+  "last_post_time": "2026-11-24T03:35:15.647244",
   "board_rotation_cursor": 0,
   "last_image_style": "collage",
-  "last_template_index": 16
+  "last_template_index": 17
 }
