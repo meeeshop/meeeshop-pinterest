@@ -8749,13 +8749,53 @@
       "target_board_id": "962222345325678844",
       "live_url": "https://www.pinterest.com/pin/4598949384197636416/",
       "timestamp": "2026-11-25T01:34:33.672459+00:00"
+    },
+    {
+      "pin_id": "4607604703519892288",
+      "product_title": "Nala Shoulder Bag",
+      "category_group": "bags_accessories",
+      "source_board": "_products",
+      "target_board": "Trends",
+      "target_board_id": "962222345325426077",
+      "live_url": "https://www.pinterest.com/pin/4607604703519892288/",
+      "timestamp": "2026-11-25T03:53:47.867723+00:00"
+    },
+    {
+      "pin_id": "4609715769263973184",
+      "product_title": "Women's Cotton Gauze Turtle Neck Relaxed Fit Top",
+      "category_group": "tops_tanks_blouses",
+      "source_board": "_products",
+      "target_board": "Zenana Women's Clothing, Dresses, Tops, Pants",
+      "target_board_id": "962222345324791236",
+      "live_url": "https://www.pinterest.com/pin/4609715769263973184/",
+      "timestamp": "2026-11-25T03:54:05.422637+00:00"
+    },
+    {
+      "pin_id": "4609715825098548032",
+      "product_title": "YMI Women's Low-Rise Relaxed Cargo Jeans with Flap Pockets",
+      "category_group": "pants_denim",
+      "source_board": "_products",
+      "target_board": "Kancan USA Jeans",
+      "target_board_id": "962222345325077882",
+      "live_url": "https://www.pinterest.com/pin/4609715825098548032/",
+      "timestamp": "2026-11-25T03:54:30.971001+00:00"
+    },
+    {
+      "pin_id": "4591842121638862400",
+      "product_title": "Sequin Lurex Cowl Neck Dress for Women \u2014 Disco Dot",
+      "category_group": "dresses",
+      "source_board": "_products",
+      "target_board": "Dresses",
+      "target_board_id": "962222345325006107",
+      "live_url": "https://www.pinterest.com/pin/4591842121638862400/",
+      "timestamp": "2026-11-25T03:54:47.187891+00:00"
     }
   ],
   "board_last_used": {
     "Women's Cardigans": "2026-11-03T22:31:52.308206+00:00",
     "Pants & Leggings": "2026-11-03T08:59:24.526326+00:00",
     "Skirts": "2026-11-10T09:33:00.516115+00:00",
-    "Dresses": "2026-10-31T16:56:50.441606+00:00",
+    "Dresses": "2026-11-25T03:54:47.187891+00:00",
     "Sweaters": "2026-11-24T11:52:31.403029+00:00",
     "Dressy Outfits": "2026-11-05T01:12:48.991284+00:00",
     "Dress": "2026-10-31T16:57:53.986696+00:00",
@@ -8774,7 +8814,7 @@
     "Our Recommended Feminine Styles": "2026-11-24T21:52:35.518105+00:00",
     "Rompers, Jumpsuits & Outfit Sets": "2026-10-31T23:55:14.863410+00:00",
     "Confident Looks": "2026-11-25T01:34:02.860092+00:00",
-    "Trends": "2026-11-03T22:31:10.837945+00:00",
+    "Trends": "2026-11-25T03:53:47.867723+00:00",
     "Wardrobe Must-Haves": "2026-11-03T22:32:27.354590+00:00",
     "Casual": "2026-11-04T01:00:16.146058+00:00",
     "Farm clothes": "2026-11-05T01:13:13.631672+00:00",
@@ -8791,7 +8831,7 @@
     "Bags": "2026-11-24T05:06:28.760611+00:00",
     "MeeeShop's Luxe Styles": "2026-11-03T02:44:54.247155+00:00",
     "Davi & Dani Womens Clothing | us.meeeshop.com": "2026-11-02T21:30:54.402555+00:00",
-    "Zenana Women's Clothing, Dresses, Tops, Pants": "2026-10-31T20:40:17.024159+00:00",
+    "Zenana Women's Clothing, Dresses, Tops, Pants": "2026-11-25T03:54:05.422637+00:00",
     "Trendy Backpacks": "2026-11-24T21:52:17.780945+00:00",
     "LE LIS Womens Clothing | us.meeeshop": "2026-11-03T02:46:06.188692+00:00",
     "Chic & Effortless Styles": "2026-11-10T19:40:37.869379+00:00",
@@ -8814,7 +8854,7 @@
     "Sweaters #Sweaters #WinterOutfits": "2026-11-24T21:52:58.810803+00:00",
     "Everyday Style Essentials": "2026-11-24T03:30:15.965947+00:00",
     "Fashion": "2026-11-24T05:05:32.576920+00:00",
-    "Kancan USA Jeans": "2026-11-02T21:30:23.757433+00:00",
+    "Kancan USA Jeans": "2026-11-25T03:54:30.971001+00:00",
     "Stylish Finds": "2026-11-24T05:05:51.528280+00:00",
     "Straight Leg Jeans": "2026-11-10T19:40:20.632274+00:00",
     "Handbags #handbags": "2026-11-24T03:30:36.159158+00:00",
@@ -8828,6 +8868,6 @@
     "Simple Outfits": "2026-10-24T19:43:36.754965+00:00",
     "Women's shacket": "2026-10-26T18:35:03.331027+00:00"
   },
-  "daily_count": 4,
-  "last_repin_time": "2026-11-25T01:34:33.672459+00:00"
+  "daily_count": 8,
+  "last_repin_time": "2026-11-25T03:54:47.187891+00:00"
 }
