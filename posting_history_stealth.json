@@ -13991,6 +13991,52 @@
       "template": 16,
       "pin_url": "https://www.pinterest.com/pin/962222276666276522/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": "571487223979",
+      "article_id": "571487223979",
+      "title": "Tencel and Lyocell Styling: Breathable Eco-Friendly Fabrics for Travel",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-11-25T04:00:44.880539",
+      "type": "blog",
+      "style": "card",
+      "template": 9,
+      "pin_url": "https://www.pinterest.com/pin/962222276666279370/",
+      "blog_url": "https://us.meeeshop.com/blogs/everything-anything-about-vegan/tencel-and-lyocell-styling-breathable-eco-friendly-fabrics-for-travel",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 9252406100139,
+      "title": "Georgia Crossbody Bag - Perfect Thanksgiving & Holiday Style \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-11-25T04:01:53.636089",
+      "type": "carousel",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276666279380/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8949207728299,
+      "title": "Wide Band Lounge Pants | MeeeShop US Boutique",
+      "board": "Simple Outfits",
+      "timestamp": "2026-11-25T04:03:00.413860",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276666279411/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8928275136683,
+      "title": "Cherry Bow Coziest Lounge Slippers - Perfect Thanksgiving Loungewear \u2014 MeeeShop",
+      "board": "Loungewear",
+      "timestamp": "2026-11-25T04:05:29.911781",
+      "type": "video",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276666279432/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
@@ -14040,7 +14086,7 @@
     "Fashion Models": "2026-11-01T08:58:55.714935",
     "My Shop #1737732113": "2026-11-01T17:30:56.581140",
     "Shop For Holidays": "2026-11-01T21:26:44.134524",
-    "New": "2026-11-25T01:35:44.860314",
+    "New": "2026-11-25T04:01:53.636089",
     "American Bazi": "2026-10-27T00:24:30.915597",
     "Cool & Casual Styles": "2026-11-04T22:53:58.695377",
     "MeeeShop's Luxe Styles": "2026-10-28T08:10:24.708953",
@@ -14079,7 +14125,7 @@
     "All Pins": "2026-10-26T07:40:02.471763",
     "Outer wear": "2026-10-14T16:19:19.139823",
     "Women's Cardigans": "2026-10-22T00:02:33.389000",
-    "Loungewear": "2026-10-03T07:54:06.931497",
+    "Loungewear": "2026-11-25T04:05:29.911781",
     "Bow heels": "2026-09-24T07:28:41.663446",
     "Sweaters": "2026-10-28T21:58:09.900032",
     "Luxe Clothing": "2026-10-20T23:46:44.237353",
@@ -14101,16 +14147,16 @@
     "Womens shacket": "2026-10-03T23:42:07.347470",
     "Meshohn Luxe Styles": "2026-10-21T20:56:37.282449",
     "Look casual...": "2026-10-17T19:49:37.987515",
-    "Simple Outfits": "2026-09-21T21:17:08.897037",
+    "Simple Outfits": "2026-11-25T04:03:00.413860",
     "Wardrobe Oozes": "2026-11-23T23:42:17.453436",
     "Zenana Womens...": "2026-10-05T20:13:39.727847",
     "Moody Blues & Vintage Pinks": "2026-10-28T17:48:20.073059",
     "Umgee USA": "2026-10-10T16:46:42.000590",
     "Edgy Fashion": "2026-10-13T09:13:02.770988"
   },
-  "daily_count": 4,
-  "last_post_time": "2026-11-25T01:38:55.424829",
+  "daily_count": 8,
+  "last_post_time": "2026-11-25T04:05:29.911781",
   "board_rotation_cursor": 0,
-  "last_image_style": "carousel",
-  "last_template_index": 16
+  "last_image_style": "collage",
+  "last_template_index": 17
 }
