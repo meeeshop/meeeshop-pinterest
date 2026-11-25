@@ -14037,11 +14037,55 @@
       "template": 17,
       "pin_url": "https://www.pinterest.com/pin/962222276666279432/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 9095809597611,
+      "title": "Ymi Women's Britney Star Pocket Wide Leg Jeans - Perfect Thanksgiving & Holiday Look",
+      "board": "Trends",
+      "timestamp": "2026-11-25T11:03:30.304928",
+      "type": "video",
+      "style": "carousel",
+      "template": 11,
+      "pin_url": "https://www.pinterest.com/pin/962222276666286792/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8897135640747,
+      "title": "Ymi Women's High Rise Curve Jeans - Thanksgiving & Friendsgiving \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-11-25T11:04:41.556015",
+      "type": "carousel",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276666286818/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8825418875051,
+      "title": "Flying Tomato Living the Dream Woven Midi Dress - Thanksgiving Chic \u2014 MeeeShop",
+      "board": "All Pins",
+      "timestamp": "2026-11-25T11:05:59.006127",
+      "type": "carousel",
+      "style": "carousel",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276666286848/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8897140588715,
+      "title": "Ymi Women's Luxe Mid Rise Wannabettabutt Skinny Jeans - Thanksgiving Ready \u2014 MeeeShop",
+      "board": "Zenana Womens...",
+      "timestamp": "2026-11-25T11:07:18.641227",
+      "type": "carousel",
+      "style": "collage",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276666286899/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-10-30T08:23:10.916119",
-    "Trends": "2026-11-25T01:34:00.905496",
+    "Trends": "2026-11-25T11:03:30.304928",
     "Dresses": "2026-11-24T22:07:18.053662",
     "Feminine & Flowy Fits": "2026-11-02T21:15:35.177592",
     "Short fall dresses": "2026-11-24T22:08:34.187442",
@@ -14086,7 +14130,7 @@
     "Fashion Models": "2026-11-01T08:58:55.714935",
     "My Shop #1737732113": "2026-11-01T17:30:56.581140",
     "Shop For Holidays": "2026-11-01T21:26:44.134524",
-    "New": "2026-11-25T04:01:53.636089",
+    "New": "2026-11-25T11:04:41.556015",
     "American Bazi": "2026-10-27T00:24:30.915597",
     "Cool & Casual Styles": "2026-11-04T22:53:58.695377",
     "MeeeShop's Luxe Styles": "2026-10-28T08:10:24.708953",
@@ -14122,7 +14166,7 @@
     "Shop Responsibly": "2026-11-24T05:19:25.129615",
     "Social": "2026-11-24T12:16:22.843076",
     "Blogs": "2026-11-24T12:17:40.987869",
-    "All Pins": "2026-10-26T07:40:02.471763",
+    "All Pins": "2026-11-25T11:05:59.006127",
     "Outer wear": "2026-10-14T16:19:19.139823",
     "Women's Cardigans": "2026-10-22T00:02:33.389000",
     "Loungewear": "2026-11-25T04:05:29.911781",
@@ -14149,14 +14193,14 @@
     "Look casual...": "2026-10-17T19:49:37.987515",
     "Simple Outfits": "2026-11-25T04:03:00.413860",
     "Wardrobe Oozes": "2026-11-23T23:42:17.453436",
-    "Zenana Womens...": "2026-10-05T20:13:39.727847",
+    "Zenana Womens...": "2026-11-25T11:07:18.641227",
     "Moody Blues & Vintage Pinks": "2026-10-28T17:48:20.073059",
     "Umgee USA": "2026-10-10T16:46:42.000590",
     "Edgy Fashion": "2026-10-13T09:13:02.770988"
   },
-  "daily_count": 8,
-  "last_post_time": "2026-11-25T04:05:29.911781",
+  "daily_count": 12,
+  "last_post_time": "2026-11-25T11:07:18.641227",
   "board_rotation_cursor": 0,
   "last_image_style": "collage",
-  "last_template_index": 17
+  "last_template_index": 15
 }
