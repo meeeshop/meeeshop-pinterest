@@ -14259,11 +14259,55 @@
       "template": 6,
       "pin_url": "https://www.pinterest.com/pin/962222276666316087/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8930016657579,
+      "title": "Trendy Trouser Shorts, Green Stripes - Perfect for Thanksgiving & Friendsgiving",
+      "board": "Trends",
+      "timestamp": "2026-11-26T21:07:50.184402",
+      "type": "product",
+      "style": "collage",
+      "template": 0,
+      "pin_url": "https://www.pinterest.com/pin/962222276666332559/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8936272134315,
+      "title": "Downeast High Rise Seamed Wide Leg Ankle Jeans - Perfect Thanksgiving Chic \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-11-26T21:09:05.469105",
+      "type": "carousel",
+      "style": "collage",
+      "template": 1,
+      "pin_url": "https://www.pinterest.com/pin/962222276666332582/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8919859495083,
+      "title": "Ymi Women\u2019s Double Yoke Bootcut Jeans | MeeeShop US Boutique",
+      "board": "Weekend to Workwear",
+      "timestamp": "2026-11-26T21:10:17.091510",
+      "type": "carousel",
+      "style": "collage",
+      "template": 2,
+      "pin_url": "https://www.pinterest.com/pin/962222276666332603/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8970891460779,
+      "title": "Emory Park Xandra Mini Dress - Chic Thanksgiving & Holiday Cocktail Look \u2014 MeeeShop",
+      "board": "Cocktail Dresses",
+      "timestamp": "2026-11-26T21:11:26.853039",
+      "type": "carousel",
+      "style": "hero",
+      "template": 3,
+      "pin_url": "https://www.pinterest.com/pin/962222276666332638/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-10-30T08:23:10.916119",
-    "Trends": "2026-11-26T10:40:51.040963",
+    "Trends": "2026-11-26T21:07:50.184402",
     "Dresses": "2026-11-24T22:07:18.053662",
     "Feminine & Flowy Fits": "2026-11-02T21:15:35.177592",
     "Short fall dresses": "2026-11-24T22:08:34.187442",
@@ -14272,7 +14316,7 @@
     "Dress": "2026-10-28T00:23:01.545301",
     "Bags": "2026-11-02T09:09:01.926214",
     "Jeans": "2026-10-30T08:25:20.715031",
-    "Cocktail Dresses": "2026-10-27T00:21:20.472023",
+    "Cocktail Dresses": "2026-11-26T21:11:26.853039",
     "Dressy Outfits": "2026-11-04T08:55:33.662278",
     "Must-Have Fashion...": "2026-11-25T01:38:55.424829",
     "Flares Jeans": "2026-10-31T08:17:55.044539",
@@ -14308,14 +14352,14 @@
     "Fashion Models": "2026-11-01T08:58:55.714935",
     "My Shop #1737732113": "2026-11-01T17:30:56.581140",
     "Shop For Holidays": "2026-11-01T21:26:44.134524",
-    "New": "2026-11-26T10:42:03.882435",
+    "New": "2026-11-26T21:09:05.469105",
     "American Bazi": "2026-10-27T00:24:30.915597",
     "Cool & Casual Styles": "2026-11-04T22:53:58.695377",
     "MeeeShop's Luxe Styles": "2026-10-28T08:10:24.708953",
     "Outerwear": "2026-10-11T21:10:16.114391",
     "Zenana Women's...": "2026-10-28T17:51:24.693569",
     "Thanks giving Outfits": "2026-11-02T09:07:53.628765",
-    "Weekend to Workwear": "2026-10-23T23:52:04.270036",
+    "Weekend to Workwear": "2026-11-26T21:10:17.091510",
     "Effortless Looks": "2026-10-29T00:46:59.983697",
     "Vamp Romantic Styles": "2026-11-01T09:00:14.729773",
     "BFCM Deals": "2026-11-01T21:27:51.158681",
@@ -14376,9 +14420,9 @@
     "Umgee USA": "2026-10-10T16:46:42.000590",
     "Edgy Fashion": "2026-10-13T09:13:02.770988"
   },
-  "daily_count": 12,
-  "last_post_time": "2026-11-26T10:44:48.372524",
+  "daily_count": 16,
+  "last_post_time": "2026-11-26T21:11:26.853039",
   "board_rotation_cursor": 0,
-  "last_image_style": "clean",
-  "last_template_index": 6
+  "last_image_style": "hero",
+  "last_template_index": 3
 }
