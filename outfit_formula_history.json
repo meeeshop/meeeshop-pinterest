@@ -6079,7 +6079,48 @@
           "role": "ELEGANT LAYER"
         }
       ]
+    },
+    {
+      "timestamp": "2026-11-26T05:47:01.593064+00:00",
+      "formula_id": "date_night",
+      "formula_title": "Date Night Outfit Formula",
+      "pin_url": "https://www.pinterest.com/pin/962222276666311818/",
+      "pin_id": "962222276666311818",
+      "board": "Cocktail Dresses",
+      "title": "Date Night Outfit Formula | Chic Midi Dress & Accessories | MeeeShop",
+      "tagged_products_count": 4,
+      "outfit_items": [
+        {
+          "id": "8740253597867",
+          "variant_id": "46478457372843",
+          "title": "Hyfve Boned Tie-back Dress",
+          "price": "114.99",
+          "role": "THE DRESS"
+        },
+        {
+          "id": "8786745065643",
+          "variant_id": "47913444671659",
+          "title": "Jessie Mixed Media Camera Crossbody Bag",
+          "price": "74.99",
+          "role": "THE BAG"
+        },
+        {
+          "id": "9073872076971",
+          "variant_id": "48110997405867",
+          "title": "Alma Booties Black",
+          "price": "209.99",
+          "role": "THE SHOES"
+        },
+        {
+          "id": "8782690222251",
+          "variant_id": "47103634407595",
+          "title": "Buki Power Vee 'sweater' Sweatshirt - Camel",
+          "price": "164.99",
+          "role": "THE LAYER"
+        }
+      ]
     }
   ],
-  "last_run": "2026-11-22T20:37:39.585764+00:00"
+  "last_run": "2026-11-26T05:47:01.593086+00:00",
+  "last_template_index": 0
 }
