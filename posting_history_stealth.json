@@ -14125,11 +14125,57 @@
       "template": 16,
       "pin_url": "https://www.pinterest.com/pin/962222276666302158/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 9086157684907,
+      "title": "Karlie Mixed Media Checkered Convertible Saddle Shoulder Crossbody Bag | MeeeShop US Boutique",
+      "board": "Trends",
+      "timestamp": "2026-11-26T01:09:57.323038",
+      "type": "video",
+      "style": "carousel",
+      "template": 15,
+      "pin_url": "https://www.pinterest.com/pin/962222276666306554/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8789755166891,
+      "title": "Mesh Tummy Control High Rise Straight with Single Cuff Jeans - Thanksgiving Chic",
+      "board": "New",
+      "timestamp": "2026-11-26T01:12:21.483209",
+      "type": "video",
+      "style": "collage",
+      "template": 17,
+      "pin_url": "https://www.pinterest.com/pin/962222276666306580/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": "571478540459",
+      "article_id": "571478540459",
+      "title": "How to Style a Bodycon Knit Dress Without Feeling Overdressed",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-11-26T01:13:58.790398",
+      "type": "blog",
+      "style": "card",
+      "template": 9,
+      "pin_url": "https://www.pinterest.com/pin/962222276666306604/",
+      "blog_url": "https://us.meeeshop.com/blogs/dresses-style-guide/how-to-style-a-bodycon-knit-dress-without-feeling-overdressed",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 9252403216555,
+      "title": "Hope Shoulder Bag: Trendy & Timeless Thanksgiving Crossbody \u2014 MeeeShop",
+      "board": "Trendy & Timeless...",
+      "timestamp": "2026-11-26T01:16:35.950992",
+      "type": "video",
+      "style": "collage",
+      "template": 14,
+      "pin_url": "https://www.pinterest.com/pin/962222276666306654/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-10-30T08:23:10.916119",
-    "Trends": "2026-11-25T21:19:06.150956",
+    "Trends": "2026-11-26T01:09:57.323038",
     "Dresses": "2026-11-24T22:07:18.053662",
     "Feminine & Flowy Fits": "2026-11-02T21:15:35.177592",
     "Short fall dresses": "2026-11-24T22:08:34.187442",
@@ -14149,7 +14195,7 @@
     "Blouses": "2026-11-03T22:35:23.557048",
     "Rompers_Jumpsuits &...": "2026-10-29T17:57:39.209691",
     "Handbag #handsips": "2026-11-04T01:14:06.565271",
-    "Trendy & Timeless...": "2026-10-27T07:36:05.466874",
+    "Trendy & Timeless...": "2026-11-26T01:16:35.950992",
     "Our Recommended...": "2026-10-28T21:56:50.341847",
     "Blouse": "2026-11-03T22:36:32.355112",
     "Wardrobe Must-Hav...": "2026-10-29T00:45:48.483090",
@@ -14174,7 +14220,7 @@
     "Fashion Models": "2026-11-01T08:58:55.714935",
     "My Shop #1737732113": "2026-11-01T17:30:56.581140",
     "Shop For Holidays": "2026-11-01T21:26:44.134524",
-    "New": "2026-11-25T21:21:39.445834",
+    "New": "2026-11-26T01:12:21.483209",
     "American Bazi": "2026-10-27T00:24:30.915597",
     "Cool & Casual Styles": "2026-11-04T22:53:58.695377",
     "MeeeShop's Luxe Styles": "2026-10-28T08:10:24.708953",
@@ -14242,9 +14288,9 @@
     "Umgee USA": "2026-10-10T16:46:42.000590",
     "Edgy Fashion": "2026-10-13T09:13:02.770988"
   },
-  "daily_count": 16,
-  "last_post_time": "2026-11-25T21:24:05.268465",
+  "daily_count": 4,
+  "last_post_time": "2026-11-26T01:16:35.950992",
   "board_rotation_cursor": 0,
   "last_image_style": "collage",
-  "last_template_index": 16
+  "last_template_index": 14
 }
