@@ -14215,11 +14215,55 @@
       "template": 16,
       "pin_url": "https://www.pinterest.com/pin/962222276666309253/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 9041689346219,
+      "title": "The Shag Joggers: Cozy Comfort for Thanksgiving & Friendsgiving \u2014 MeeeShop",
+      "board": "Trends",
+      "timestamp": "2026-11-26T10:40:51.040963",
+      "type": "carousel",
+      "style": "hero",
+      "template": 3,
+      "pin_url": "https://www.pinterest.com/pin/962222276666316002/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8970889298091,
+      "title": "Emory Park Loretta Mini Skirt - Perfect Thanksgiving & Friendsgiving Chic \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-11-26T10:42:03.882435",
+      "type": "carousel",
+      "style": "hero",
+      "template": 4,
+      "pin_url": "https://www.pinterest.com/pin/962222276666316033/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8827509768363,
+      "title": "Tilly Crossbody Bag | MeeeShop US Boutique",
+      "board": "Wardrobe Must-Hav...",
+      "timestamp": "2026-11-26T10:43:30.640196",
+      "type": "carousel",
+      "style": "hero",
+      "template": 5,
+      "pin_url": "https://www.pinterest.com/pin/962222276666316061/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8818156306603,
+      "title": "Emory Park Beryl Top: Thanksgiving Puff Sleeve Chic for Holiday Looks \u2014 MeeeShop",
+      "board": "Puff Sleeves Tops",
+      "timestamp": "2026-11-26T10:44:48.372524",
+      "type": "carousel",
+      "style": "clean",
+      "template": 6,
+      "pin_url": "https://www.pinterest.com/pin/962222276666316087/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-10-30T08:23:10.916119",
-    "Trends": "2026-11-26T03:26:06.384356",
+    "Trends": "2026-11-26T10:40:51.040963",
     "Dresses": "2026-11-24T22:07:18.053662",
     "Feminine & Flowy Fits": "2026-11-02T21:15:35.177592",
     "Short fall dresses": "2026-11-24T22:08:34.187442",
@@ -14242,7 +14286,7 @@
     "Trendy & Timeless...": "2026-11-26T01:16:35.950992",
     "Our Recommended...": "2026-11-26T03:30:19.613297",
     "Blouse": "2026-11-03T22:36:32.355112",
-    "Wardrobe Must-Hav...": "2026-10-29T00:45:48.483090",
+    "Wardrobe Must-Hav...": "2026-11-26T10:43:30.640196",
     "Camis & Tanks": "2026-11-26T03:29:06.767705",
     "Wardrobe Must Haves": "2026-10-29T17:56:23.703435",
     "Trendy Backpacks": "2026-11-24T03:33:49.579106",
@@ -14252,7 +14296,7 @@
     "Fitted Jeans": "2026-11-25T01:37:45.619397",
     "Chic Looks": "2026-10-31T16:42:34.154183",
     "Straight Leg Jeans": "2026-10-25T23:14:25.364626",
-    "Puff Sleeves Tops": "2026-10-25T20:00:24.492187",
+    "Puff Sleeves Tops": "2026-11-26T10:44:48.372524",
     "Casual": "2026-11-01T17:33:20.328555",
     "Confident Looks": "2026-10-29T22:03:12.064596",
     "Casual Chic Style": "2026-10-30T17:34:40.085403",
@@ -14264,7 +14308,7 @@
     "Fashion Models": "2026-11-01T08:58:55.714935",
     "My Shop #1737732113": "2026-11-01T17:30:56.581140",
     "Shop For Holidays": "2026-11-01T21:26:44.134524",
-    "New": "2026-11-26T03:27:22.424362",
+    "New": "2026-11-26T10:42:03.882435",
     "American Bazi": "2026-10-27T00:24:30.915597",
     "Cool & Casual Styles": "2026-11-04T22:53:58.695377",
     "MeeeShop's Luxe Styles": "2026-10-28T08:10:24.708953",
@@ -14332,9 +14376,9 @@
     "Umgee USA": "2026-10-10T16:46:42.000590",
     "Edgy Fashion": "2026-10-13T09:13:02.770988"
   },
-  "daily_count": 8,
-  "last_post_time": "2026-11-26T03:30:19.613297",
+  "daily_count": 12,
+  "last_post_time": "2026-11-26T10:44:48.372524",
   "board_rotation_cursor": 0,
-  "last_image_style": "collage",
-  "last_template_index": 16
+  "last_image_style": "clean",
+  "last_template_index": 6
 }
