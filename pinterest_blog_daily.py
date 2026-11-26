@@ -33,7 +33,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 HISTORY_FILE = Path(__file__).parent / "blog_posting_history.json"
-MAX_BLOGS_PER_RUN = 2  # Updated to 2 blog pins per daily run
+MAX_BLOGS_PER_RUN = int(os.getenv("MAX_BLOGS_PER_RUN", "1"))  # 1 blog post per run
 DRY_RUN = os.getenv("DRY_RUN", "false").lower() in ("1", "true", "yes")
 
 def load_history() -> Dict[str, Any]:
