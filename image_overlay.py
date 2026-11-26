@@ -669,64 +669,405 @@ def _render_editorial_blog_pin(
     canvas.paste(Image.alpha_composite(canvas.convert("RGBA"), overlay).convert("RGB"), (0, 0))
 
 
-# ── Template Mappings ────────────────────────────────────────────────────────
+# ── 2026 Trending E-Commerce Brand Pin Templates (7 Exclusive Formats) ──────
+# Modeled strictly on high-performing US e-commerce Pinterest pins (Macy's, Target, Kohl's)
+# plus direct clean product photos without overlay text:
+#   0 — Parchment Occasion Collage (Macy's Image 1: textured parchment + gold confetti + serif headline + hero left + 3 right)
+#   1 — Trend Spotlight Collage (Macy's Image 2: clean parchment + "TREND SPOTLIGHT" + serif "How to Style..." + hero left + 3 right)
+#   2 — Jewel-Tone Podium Showcase (Target Image 3: deep jewel gradient + circular badge headline + layered product podiums)
+#   3 — Bold Editorial Solid (Target Image 4: rich solid color + bold white headline + large lower lifestyle hero)
+#   4 — Forest Hero + Pill Badge (Target Image 5: deep forest/plum solid + centered white headline + hero product + white pill badge)
+#   5 — Top Banner + Full-Bleed Photo (Kohl's Image 6: bold top color header banner + full-bleed photo + subtle bottom wordmark)
+#   6 — Direct Clean Product Photo (Zero overlay text, zero logos, pure 2:3 polished product photography)
 
-def _template_a(draw, canvas, photo, title, category, price):
-    _render_direct_pin(draw, canvas, photo, title, category, price, layout="bottom_floating")
+from PIL import ImageFilter
 
-def _template_b(draw, canvas, photo, title, category, price):
-    _render_direct_pin(draw, canvas, photo, title, category, price, layout="bottom_floating")
-
-def _template_c(draw, canvas, photo, title, category, price):
-    _render_direct_pin(draw, canvas, photo, title, category, price, layout="bottom_floating")
-
-def _template_d(draw, canvas, photo, title, category, price, accent=None):
-    _render_direct_pin(draw, canvas, photo, title, category, price, layout="bottom_floating")
-
-def _template_e(draw, canvas, photo, title, category, price):
-    _render_direct_pin(draw, canvas, photo, title, category, price, layout="bottom_floating")
-
-def _template_f(draw, canvas, photo, title, category, price):
-    _render_direct_pin(draw, canvas, photo, title, category, price, layout="bottom_floating")
-
-def _template_g(draw, canvas, photo, title, category, price):
-    _render_direct_pin(draw, canvas, photo, title, category, price, layout="bottom_floating")
-
-def _template_h(draw, canvas, photo, title, category, price):
-    _render_direct_pin(draw, canvas, photo, title, category, price, layout="bottom_floating")
-
-def _template_i(draw, canvas, photo, title, category, price):
-    _render_direct_pin(draw, canvas, photo, title, category, price, layout="bottom_floating")
-
-def _template_j(draw, canvas, photo, title, category, price=None, cta="Shop Now"):
-    _render_direct_pin(draw, canvas, photo, title, category, price, cta, layout="bottom_floating")
-
-def _template_k(draw, canvas, photo, photo2, title, category, price):
-    _render_direct_pin(draw, canvas, photo, title, category, price, layout="bottom_floating")
-
-def _template_l(draw, canvas, photo, photo2, photo3, title, category, price):
-    _render_direct_pin(draw, canvas, photo, title, category, price, layout="bottom_floating")
-
-def _template_m(draw, canvas, photo, title, category, price):
-    _render_direct_pin(draw, canvas, photo, title, category, price, layout="bottom_floating")
-
-def _template_n(draw, canvas, photo, title, category, price, cta="Shop Now"):
-    _render_direct_pin(draw, canvas, photo, title, category, price, cta, layout="bottom_floating")
-
-def _template_o(draw, canvas, photo, photo2, photo3, photo4, title, category, price, trust_badge=None):
-    _render_direct_pin(draw, canvas, photo, title, category, price, layout="bottom_floating", trust_badge=trust_badge)
-
-def _template_p(draw, canvas, photo, title, category, price, cta="Shop Now"):
-    _render_direct_pin(draw, canvas, photo, title, category, price, cta, layout="bottom_floating")
-
-def _template_q(draw, canvas, photo, title, category, price, cta="READ THE FULL GUIDE ->"):
-    _render_editorial_blog_pin(draw, canvas, photo, title, category, cta)
-
-def _template_infographic(draw, canvas, photo, photo2, title, category, price, cta="SHOP THE LOOK → US.MEEESHOP.COM", trust_badge=None, highlights=None):
-    _render_feature_breakdown_pin(draw, canvas, photo, photo2, title, category, price, cta, trust_badge=trust_badge, highlights=highlights)
+PARCHMENT_BG = (245, 238, 228)
+CHARCOAL     = (44,  42,  40)
+GOLD_ACCENT  = (188, 152, 92)
+BRAND_RED    = (210, 35,  45)
 
 
+def _create_parchment_bg(seed_text: str = "", with_confetti: bool = False) -> Image.Image:
+    """Create a warm textured parchment background with optional gold/bronze confetti at top & bottom."""
+    import random
+    rng = random.Random(hashlib.md5(seed_text.encode()).hexdigest())
+    canvas = Image.new("RGB", (PIN_W, PIN_H), PARCHMENT_BG)
+    draw = ImageDraw.Draw(canvas, "RGBA")
 
+    # Subtle warm organic mottling patches
+    for _ in range(45):
+        cx = rng.randint(0, PIN_W)
+        cy = rng.randint(0, PIN_H)
+        rx = rng.randint(80, 260)
+        ry = rng.randint(80, 260)
+        tone = rng.choice([(236, 224, 210, 28), (250, 245, 238, 32), (228, 212, 194, 22)])
+        draw.ellipse([cx - rx, cy - ry, cx + rx, cy + ry], fill=tone)
+
+    if with_confetti:
+        confetti_colors = [
+            (194, 155, 85, 190),
+            (168, 128, 62, 175),
+            (218, 185, 120, 165),
+            (130, 96, 48, 140),
+        ]
+        # Top & bottom border sparkle clusters (like Macy's Image 1)
+        for _ in range(95):
+            x = rng.randint(15, PIN_W - 15)
+            y = rng.randint(10, 230) if rng.random() < 0.52 else rng.randint(PIN_H - 220, PIN_H - 10)
+            r = rng.randint(2, 6)
+            col = rng.choice(confetti_colors)
+            draw.ellipse([x - r, y - r, x + r, y + r], fill=col)
+
+    return canvas.filter(ImageFilter.GaussianBlur(radius=0.6))
+
+
+def _paste_rounded_shadow(
+    canvas: Image.Image,
+    img: Image.Image,
+    box: Tuple[int, int, int, int],
+    radius: int = 16,
+    shadow_alpha: int = 45,
+) -> None:
+    """Fit img into box (x0, y0, x1, y1), round corners, and paste with a soft drop shadow."""
+    x0, y0, x1, y1 = box
+    w, h = x1 - x0, y1 - y0
+    fitted = _boost(_fit_image(img, w, h)).convert("RGBA")
+
+    # Rounded mask
+    mask = Image.new("L", (w, h), 0)
+    mdraw = ImageDraw.Draw(mask)
+    _draw_rounded_rect(mdraw, (0, 0, w, h), radius, 255)
+    fitted.putalpha(mask)
+
+    # Soft shadow layer
+    if shadow_alpha > 0:
+        pad = 18
+        shadow = Image.new("RGBA", (w + pad * 2, h + pad * 2), (0, 0, 0, 0))
+        sdraw = ImageDraw.Draw(shadow)
+        _draw_rounded_rect(sdraw, (pad, pad + 6, w + pad, h + pad + 6), radius, (20, 18, 16, shadow_alpha))
+        shadow = shadow.filter(ImageFilter.GaussianBlur(radius=10))
+        canvas.paste(shadow, (x0 - pad, y0 - pad), shadow)
+
+    canvas.paste(fitted, (x0, y0), fitted)
+
+
+def _draw_brand_wordmark(draw: ImageDraw.Draw, y_center: int, dark: bool = True) -> None:
+    """Draw clean minimalist brand wordmark at bottom center (Macy's / Kohl's style)."""
+    text_col = CHARCOAL if dark else WHITE
+    star_col = BRAND_RED if dark else (255, 220, 220)
+    wf = _get_font(34, bold=False)
+    word = "meeeshop"
+    wb = wf.getbbox(word)
+    ww = wb[2] - wb[0]
+    star = "★"
+    sf = _get_font(32, bold=True)
+    sb = sf.getbbox(star)
+    sw = sb[2] - sb[0]
+    total_w = sw + 10 + ww
+    sx = (PIN_W - total_w) // 2
+    draw.text((sx, y_center), star, fill=star_col, font=sf, anchor="lm")
+    draw.text((sx + sw + 10, y_center), word, fill=text_col, font=wf, anchor="lm")
+
+
+def _draw_minimal_brand_mark(draw: ImageDraw.Draw, x: int = 58, y: int = PIN_H - 72, color: Tuple = WHITE) -> None:
+    """Draw minimalist Target-style concentric brand ring mark in bottom-left."""
+    r_outer = 24
+    r_inner = 10
+    draw.ellipse([x - r_outer, y - r_outer, x + r_outer, y + r_outer], outline=color, width=7)
+    draw.ellipse([x - r_inner, y - r_inner, x + r_inner, y + r_inner], fill=color)
+
+
+def _derive_editorial_headline(title: str, category: str, mode: str = "occasion") -> Tuple[str, str]:
+    """Build clean, short 2-5 word editorial headlines from product title/category (no SKU clutter)."""
+    clean_cat = (category or "Style").replace("Trending:", "").strip()
+    if not clean_cat or clean_cat == "New Arrival":
+        clean_cat = "Boutique Styles"
+
+    tl = (title or "").lower()
+    if mode == "spotlight":
+        if "dress" in tl:
+            return "TREND SPOTLIGHT", "How to Style\nMidi Dresses"
+        if "jean" in tl or "denim" in tl:
+            return "TREND SPOTLIGHT", "How to Style\nFlare Denim"
+        if "sweater" in tl or "cardigan" in tl or "knit" in tl:
+            return "TREND SPOTLIGHT", "How to Style\nCozy Knits"
+        if "bag" in tl or "tote" in tl or "crossbody" in tl:
+            return "TREND SPOTLIGHT", "How to Style\nEveryday Bags"
+        if "boot" in tl or "shoe" in tl or "heel" in tl or "flat" in tl:
+            return "TREND SPOTLIGHT", "How to Style\nChic Footwear"
+        return "TREND SPOTLIGHT", f"How to Style\n{clean_cat}"
+
+    # Short clean title for occasion / gift / editorial templates
+    words = [w for w in (title or "").replace("|", " ").replace("-", " ").split() if len(w) > 1 and not w.startswith("$")]
+    short = " ".join(words[:4]) if words else clean_cat
+    if len(short) > 26:
+        short = " ".join(words[:3])
+    return clean_cat.upper(), short
+
+
+def _extract_sub_photos(photo: Image.Image, photo2: Optional[Image.Image], photo3: Optional[Image.Image], photo4: Optional[Image.Image]) -> List[Image.Image]:
+    """Ensure 3 secondary product/detail images are available for multi-item collage templates."""
+    pw, ph = photo.size
+    fallbacks = [
+        photo.crop((int(pw * 0.15), int(ph * 0.05), int(pw * 0.85), int(ph * 0.52))),
+        photo.crop((int(pw * 0.15), int(ph * 0.30), int(pw * 0.85), int(ph * 0.78))),
+        photo.crop((int(pw * 0.15), int(ph * 0.52), int(pw * 0.85), int(ph * 0.96))),
+    ]
+    subs = [p for p in (photo2, photo3, photo4) if p is not None]
+    while len(subs) < 3:
+        subs.append(fallbacks[len(subs) % len(fallbacks)])
+    return subs[:3]
+
+
+def _render_parchment_occasion_collage(
+    canvas: Image.Image,
+    photo: Image.Image,
+    photo2: Optional[Image.Image],
+    photo3: Optional[Image.Image],
+    photo4: Optional[Image.Image],
+    title: str,
+    category: str,
+) -> None:
+    """Template 0 (Macy's Image 1): Warm parchment + subtle gold confetti + serif headline + hero left + 3 right."""
+    bg = _create_parchment_bg(title, with_confetti=True)
+    canvas.paste(bg, (0, 0))
+    draw = ImageDraw.Draw(canvas)
+
+    _, short_title = _derive_editorial_headline(title, category, mode="occasion")
+    headline = f"{short_title}\nfor the Occasion" if len(short_title) <= 18 else short_title
+    h_font = _get_font(68, bold=True, serif=True)
+    lines = _wrap_text(headline.replace("\n", " "), h_font, PIN_W - 140)[:2]
+    if "\n" in headline:
+        lines = headline.split("\n")[:2]
+    y_text = 75
+    for line in lines:
+        draw.text((PIN_W // 2, y_text), line, fill=CHARCOAL, font=h_font, anchor="mt")
+        y_text += 78
+
+    # Hero left + 3 stacked cutouts right
+    top_y = max(255, y_text + 26)
+    bot_y = PIN_H - 135
+    _paste_rounded_shadow(canvas, photo, (48, top_y, 505, bot_y), radius=18, shadow_alpha=38)
+
+    subs = _extract_sub_photos(photo, photo2, photo3, photo4)
+    gap = 22
+    slot_h = (bot_y - top_y - 2 * gap) // 3
+    for idx, sub_img in enumerate(subs):
+        sy0 = top_y + idx * (slot_h + gap)
+        _paste_rounded_shadow(canvas, sub_img, (532, sy0, PIN_W - 48, sy0 + slot_h), radius=18, shadow_alpha=36)
+
+    _draw_brand_wordmark(draw, PIN_H - 68, dark=True)
+
+
+def _render_trend_spotlight_collage(
+    canvas: Image.Image,
+    photo: Image.Image,
+    photo2: Optional[Image.Image],
+    photo3: Optional[Image.Image],
+    photo4: Optional[Image.Image],
+    title: str,
+    category: str,
+) -> None:
+    """Template 1 (Macy's Image 2): Clean parchment + TREND SPOTLIGHT eyebrow + serif headline + hero left + 3 right."""
+    bg = _create_parchment_bg(title + "_spot", with_confetti=False)
+    canvas.paste(bg, (0, 0))
+    draw = ImageDraw.Draw(canvas)
+
+    eyebrow, headline = _derive_editorial_headline(title, category, mode="spotlight")
+    e_font = _get_font(24, bold=True)
+    draw.text((PIN_W // 2, 56), eyebrow, fill=CHARCOAL, font=e_font, anchor="mt")
+
+    h_font = _get_font(70, bold=True, serif=True)
+    lines = headline.split("\n")[:2]
+    y_text = 104
+    for line in lines:
+        draw.text((PIN_W // 2, y_text), line, fill=CHARCOAL, font=h_font, anchor="mt")
+        y_text += 78
+
+    top_y = 285
+    bot_y = PIN_H - 135
+    _paste_rounded_shadow(canvas, photo, (48, top_y, 505, bot_y), radius=18, shadow_alpha=36)
+
+    subs = _extract_sub_photos(photo, photo2, photo3, photo4)
+    gap = 22
+    slot_h = (bot_y - top_y - 2 * gap) // 3
+    for idx, sub_img in enumerate(subs):
+        sy0 = top_y + idx * (slot_h + gap)
+        _paste_rounded_shadow(canvas, sub_img, (532, sy0, PIN_W - 48, sy0 + slot_h), radius=18, shadow_alpha=36)
+
+    _draw_brand_wordmark(draw, PIN_H - 68, dark=True)
+
+
+def _render_jewel_podium_showcase(
+    canvas: Image.Image,
+    photo: Image.Image,
+    photo2: Optional[Image.Image],
+    photo3: Optional[Image.Image],
+    title: str,
+    category: str,
+) -> None:
+    """Template 2 (Target Image 3): Jewel-tone radial gradient + circular badge headline + layered product podiums."""
+    palettes = [
+        ((8, 86, 78), (4, 58, 52), (48, 128, 118)),     # Deep Emerald Teal (Target Image 3)
+        ((86, 26, 64), (58, 16, 44), (130, 56, 100)),   # Rich Berry Plum
+        ((24, 54, 92), (14, 34, 64), (58, 96, 142)),    # Deep Sapphire
+    ]
+    base_col, dark_col, podium_col = palettes[int(hashlib.md5(title.encode()).hexdigest(), 16) % len(palettes)]
+
+    canvas.paste(Image.new("RGB", (PIN_W, PIN_H), base_col), (0, 0))
+    draw = ImageDraw.Draw(canvas, "RGBA")
+
+    # Subtle radial glow behind products
+    draw.ellipse([120, 320, 880, 1150], fill=(255, 255, 255, 18))
+
+    # Top-left circular headline badge
+    cx, cy, rad = 285, 295, 195
+    draw.ellipse([cx - rad, cy - rad, cx + rad, cy + rad], fill=dark_col + (245,))
+    _, short_title = _derive_editorial_headline(title, category)
+    h_font = _get_font(46, bold=True)
+    lines = _wrap_text(short_title, h_font, rad * 2 - 70)[:3]
+    total_h = len(lines) * 54
+    ty = cy - total_h // 2 + 24
+    for line in lines:
+        draw.text((cx, ty), line, fill=WHITE, font=h_font, anchor="mm")
+        ty += 54
+
+    # Draw 3D-style circular pedestals + layered product cards
+    # Back-right podium
+    p2 = photo2 if photo2 is not None else photo
+    draw.ellipse([540, 1020, 950, 1125], fill=podium_col + (240,))
+    draw.rectangle([540, 1072, 950, 1155], fill=dark_col + (220,))
+    draw.ellipse([540, 1110, 950, 1200], fill=dark_col + (220,))
+    _paste_rounded_shadow(canvas, p2, (565, 420, 925, 1060), radius=20, shadow_alpha=55)
+
+    # Front-left/center hero podium
+    draw.ellipse([110, 1110, 740, 1230], fill=podium_col + (255,))
+    draw.rectangle([110, 1170, 740, 1265], fill=dark_col + (235,))
+    draw.ellipse([110, 1215, 740, 1315], fill=dark_col + (235,))
+    _paste_rounded_shadow(canvas, photo, (165, 535, 685, 1170), radius=22, shadow_alpha=65)
+
+    _draw_minimal_brand_mark(draw, x=78, y=PIN_H - 72, color=WHITE)
+
+
+def _render_bold_editorial_solid(
+    canvas: Image.Image,
+    photo: Image.Image,
+    title: str,
+    category: str,
+) -> None:
+    """Template 3 (Target Image 4): Rich solid color + bold white top headline + large lower lifestyle hero."""
+    solids = [
+        (114, 18, 28),   # Rich Burgundy Wine (Target Image 4)
+        (28, 46, 74),    # Midnight Navy
+        (132, 62, 46),   # Warm Terracotta
+        (56, 36, 54),    # Deep Aubergine
+    ]
+    bg_col = solids[int(hashlib.md5(title.encode()).hexdigest(), 16) % len(solids)]
+    canvas.paste(Image.new("RGB", (PIN_W, PIN_H), bg_col), (0, 0))
+    draw = ImageDraw.Draw(canvas)
+
+    _, short_title = _derive_editorial_headline(title, category)
+    h_font = _get_font(60, bold=True)
+    lines = _wrap_text(short_title, h_font, PIN_W - 120)[:2]
+    y_text = 105
+    for line in lines:
+        draw.text((PIN_W // 2, y_text), line, fill=WHITE, font=h_font, anchor="mt")
+        y_text += 72
+
+    # Clean large lower hero photo
+    top_y = max(275, y_text + 45)
+    _paste_rounded_shadow(canvas, photo, (46, top_y, PIN_W - 46, PIN_H - 46), radius=24, shadow_alpha=45)
+    _draw_minimal_brand_mark(draw, x=88, y=PIN_H - 88, color=WHITE)
+
+
+def _render_forest_hero_pill(
+    canvas: Image.Image,
+    photo: Image.Image,
+    title: str,
+    category: str,
+) -> None:
+    """Template 4 (Target Image 5): Deep forest green solid + centered headline + hero product + white pill badge."""
+    solids = [
+        (16, 86, 44),    # Deep Forest Green (Target Image 5)
+        (44, 72, 62),    # Sage Slate
+        (82, 44, 58),    # Mulberry
+    ]
+    bg_col = solids[int(hashlib.md5(title.encode()).hexdigest(), 16) % len(solids)]
+    canvas.paste(Image.new("RGB", (PIN_W, PIN_H), bg_col), (0, 0))
+    draw = ImageDraw.Draw(canvas)
+
+    _, short_title = _derive_editorial_headline(title, category)
+    h_font = _get_font(56, bold=True)
+    lines = _wrap_text(short_title, h_font, PIN_W - 120)[:2]
+    y_text = 108
+    for line in lines:
+        draw.text((PIN_W // 2, y_text), line, fill=WHITE, font=h_font, anchor="mt")
+        y_text += 66
+
+    sub_font = _get_font(38, bold=False)
+    draw.text((PIN_W // 2, y_text + 8), "from MeeeShop", fill=(235, 242, 236), font=sub_font, anchor="mt")
+
+    # Centered hero product card
+    _paste_rounded_shadow(canvas, photo, (105, 345, PIN_W - 105, 1265), radius=22, shadow_alpha=60)
+
+    # Bottom-left white pill badge
+    pill_box = (0, 1345, 345, 1445)
+    _draw_rounded_rect(draw, (-20, pill_box[1], pill_box[2], pill_box[3]), 48, WHITE)
+    # Small bag icon + text
+    bx, by = 52, 1372
+    draw.rectangle([bx, by + 12, bx + 38, by + 50], fill=BRAND_RED)
+    draw.arc([bx + 8, by, bx + 30, by + 24], 180, 360, fill=BRAND_RED, width=4)
+    p_font = _get_font(26, bold=True)
+    draw.text((108, 1395), "free US shipping", fill=CHARCOAL, font=p_font, anchor="lm")
+
+
+def _render_top_banner_fullbleed(
+    canvas: Image.Image,
+    photo: Image.Image,
+    title: str,
+    category: str,
+) -> None:
+    """Template 5 (Kohl's Image 6): Bold top color banner + full-bleed edge-to-edge photo + bottom wordmark."""
+    banners = [
+        (225, 22, 34),   # Crimson Red (Kohl's Image 6)
+        (168, 68, 52),   # Warm Terracotta
+        (28, 48, 82),    # Classic Navy
+    ]
+    banner_col = banners[int(hashlib.md5(title.encode()).hexdigest(), 16) % len(banners)]
+    banner_h = 335
+
+    # Full-bleed bottom photo
+    hero = _boost(_fit_image(photo, PIN_W, PIN_H - banner_h + 10))
+    canvas.paste(hero, (0, banner_h - 10))
+
+    # Top solid banner
+    draw = ImageDraw.Draw(canvas)
+    draw.rectangle([0, 0, PIN_W, banner_h], fill=banner_col)
+
+    # Small icon + eyebrow + bold headline
+    eyebrow_font = _get_font(30, bold=True)
+    draw.text((PIN_W // 2, 118), "MeeeShop Style Edit", fill=WHITE, font=eyebrow_font, anchor="mm")
+
+    _, short_title = _derive_editorial_headline(title, category)
+    h_font = _get_font(54, bold=True)
+    h_fit, h_txt = _fit_text(short_title, bold=True, max_w=PIN_W - 100, start_size=54, min_size=34)
+    draw.text((PIN_W // 2, 210), h_txt, fill=WHITE, font=h_fit, anchor="mm")
+
+    # Subtle clean bottom footer wordmark
+    overlay = Image.new("RGBA", (PIN_W, PIN_H), (0, 0, 0, 0))
+    odraw = ImageDraw.Draw(overlay)
+    odraw.rectangle([0, PIN_H - 95, PIN_W, PIN_H], fill=(255, 255, 255, 210))
+    canvas.paste(Image.alpha_composite(canvas.convert("RGBA"), overlay).convert("RGB"), (0, 0))
+    draw = ImageDraw.Draw(canvas)
+    f_font = _get_font(26, bold=True)
+    draw.text((PIN_W // 2, PIN_H - 48), "SHOP NOW AT MEEESHOP", fill=banner_col, font=f_font, anchor="mm")
+
+
+def _render_direct_clean_photo(canvas: Image.Image, photo: Image.Image) -> None:
+    """Template 6: Direct product photo with ZERO overlay text, zero logos, pure 2:3 polished photography."""
+    clean = _boost(_fit_image(photo, PIN_W, PIN_H))
+    canvas.paste(clean, (0, 0))
 
 
 def _prepare_photo_for_style(
@@ -737,77 +1078,8 @@ def _prepare_photo_for_style(
     target_h: int,
     style: str,
 ) -> Image.Image:
-    """
-    Prepare product photo into target_w x target_h based on image_style ('hero', 'collage', 'card').
-    Renders all 3 image styles dynamically for ANY template!
-    """
-    if style == "collage":
-        composite = Image.new("RGB", (target_w, target_h), (255, 255, 255))
-        gap = 4
-        left_w = int(target_w * 0.58)
-        right_w = target_w - left_w - gap
-        right_h = (target_h - gap) // 2
-
-        p_hero = _fit_image(photo, left_w, target_h)
-        composite.paste(p_hero, (0, 0))
-
-        if photo2 is not None:
-            sub1 = photo2
-        else:
-            pw, ph = photo.size
-            cw, ch = int(pw * 0.65), int(ph * 0.45)
-            cx, cy = (pw - cw) // 2, int(ph * 0.08)
-            sub1 = photo.crop((cx, cy, cx + cw, cy + ch))
-
-        p_focus1 = _fit_image(sub1, right_w, right_h)
-        composite.paste(p_focus1, (left_w + gap, 0))
-
-        if photo3 is not None:
-            sub2 = photo3
-        elif photo2 is not None:
-            sub2 = photo2
-        else:
-            pw, ph = photo.size
-            cw, ch = int(pw * 0.65), int(ph * 0.45)
-            cx, cy = (pw - cw) // 2, int(ph * 0.48)
-            sub2 = photo.crop((cx, cy, cx + cw, cy + ch))
-
-        p_focus2 = _fit_image(sub2, right_w, target_h - right_h - gap)
-        composite.paste(p_focus2, (left_w + gap, right_h + gap))
-
-        return _boost(composite)
-
-    elif style == "card":
-        return _boost(_fit_image(photo, target_w, target_h))
-
-    else:
-        return _boost(_fit_image(photo, target_w, target_h))
-
-
-def _draw_trust_badge_pill(draw: ImageDraw.Draw, canvas: Image.Image, badge_text: str, y_top: int = 50, x_right: int = 50, bg_color=None, fg_color=WARM_WHITE):
-    """
-    Draw floating plain white/cream text directly on product image with ZERO background colors, cards, or pills.
-    """
-    bf = _get_font(36, bold=True)
-    full_text = f"★  {badge_text}"
-    bb = bf.getbbox(full_text)
-    tw, th = bb[2] - bb[0], bb[3] - bb[1]
-    px = PIN_W - x_right - tw
-    py = y_top
-
-    # 3px 16-direction ultra-bold contour outline for high contrast
-    offsets = [
-        (-3,0), (3,0), (0,-3), (0,3),
-        (-3,-3), (3,3), (-3,3), (3,-3),
-        (-2,-2), (2,2), (-2,2), (2,-2),
-        (-2,0), (2,0), (0,-2), (0,2),
-        (-1,-1), (1,1), (-1,1), (1,-1)
-    ]
-    for dx, dy in offsets:
-        draw.text((px + dx, py + dy), full_text, fill=(15, 15, 15), font=bf)
-    
-    # Pure warm cream font directly on photo
-    draw.text((px, py), full_text, fill=WARM_WHITE, font=bf)
+    """Fit product photo into target_w x target_h with color/sharpness boost."""
+    return _boost(_fit_image(photo, target_w, target_h))
 
 
 # ── Main entry ───────────────────────────────────────────────────────────────
@@ -825,120 +1097,67 @@ def create_pin_image(
     image_style: str = "hero",
 ) -> Optional[str]:
     """
-    Create a Pinterest pin using dynamic template matching and image_style framing
-    ('hero', 'collage', 'card').
+    Create a Pinterest pin using ONLY the 7 trending e-commerce templates (0..6):
+      0 = Parchment Occasion Collage (Macy's style)
+      1 = Trend Spotlight Collage (Macy's style)
+      2 = Jewel-Tone Podium Showcase (Target style)
+      3 = Bold Editorial Solid (Target style)
+      4 = Forest Hero + Pill Badge (Target style)
+      5 = Top Banner + Full-Bleed Photo (Kohl's style)
+      6 = Direct Clean Product Photo (Zero overlay text)
     """
     try:
-        ecommerce_templates = [0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14]
-        
-        # Smart template matching based on board name
-        b_lower = board_name.lower()
         if template_index is None:
-            if "poetcore" in b_lower:
-                template_index = 5
-            elif "vamp" in b_lower or "romantic" in b_lower:
-                template_index = 7
-            elif "gummy" in b_lower or "nostalgia" in b_lower:
-                template_index = 8
-            elif "athlete" in b_lower or "off-duty" in b_lower:
-                template_index = 10
-            elif "blog" in b_lower:
-                template_index = 9
-            else:
-                template_index = 14 # Default to Template O (Quad Quad Collage)
+            template_index = int(hashlib.md5((title or "pin").encode()).hexdigest(), 16) % 7
+        else:
+            template_index = int(template_index) % 7
 
-        canvas = Image.new("RGB", (PIN_W, PIN_H), WARM_WHITE)
-        draw = ImageDraw.Draw(canvas)
+        canvas = Image.new("RGB", (PIN_W, PIN_H), PARCHMENT_BG)
 
         if Path(product_image_path).exists():
             photo = Image.open(product_image_path).convert("RGB")
         else:
-            photo = Image.new("RGB", (PIN_W, PIN_H), (200, 200, 200))
+            photo = Image.new("RGB", (PIN_W, PIN_H), (225, 220, 214))
             logger.warning(f"Product image not found: {product_image_path}")
 
-        photo2 = None
-        photo3 = None
-        photo4 = None
+        photo2, photo3, photo4 = None, None, None
         if additional_image_paths:
-            if len(additional_image_paths) > 0 and Path(additional_image_paths[0]).exists():
-                try:
-                    photo2 = Image.open(additional_image_paths[0]).convert("RGB")
-                except Exception as ex:
-                    logger.warning(f"Failed to load photo2: {ex}")
-            if len(additional_image_paths) > 1 and Path(additional_image_paths[1]).exists():
-                try:
-                    photo3 = Image.open(additional_image_paths[1]).convert("RGB")
-                except Exception as ex:
-                    logger.warning(f"Failed to load photo3: {ex}")
-            if len(additional_image_paths) > 2 and Path(additional_image_paths[2]).exists():
-                try:
-                    photo4 = Image.open(additional_image_paths[2]).convert("RGB")
-                except Exception as ex:
-                    logger.warning(f"Failed to load photo4: {ex}")
+            loaded = []
+            for p in additional_image_paths[:3]:
+                if p and Path(p).exists():
+                    try:
+                        loaded.append(Image.open(p).convert("RGB"))
+                    except Exception as ex:
+                        logger.warning(f"Failed to load extra image {p}: {ex}")
+            if len(loaded) > 0:
+                photo2 = loaded[0]
+            if len(loaded) > 1:
+                photo3 = loaded[1]
+            if len(loaded) > 2:
+                photo4 = loaded[2]
 
-        if photo2 is None and photo is not None:
-            try:
-                pw, ph = photo.size
-                cw, ch = int(pw * 0.70), int(ph * 0.70)
-                cx, cy = (pw - cw) // 2, int(ph * 0.12)
-                photo2 = photo.crop((cx, cy, cx + cw, cy + ch))
-            except Exception as ex:
-                logger.warning(f"Failed to auto-crop photo2: {ex}")
-
-        if image_style in ("collage", "card"):
-            photo = _prepare_photo_for_style(photo, photo2, photo3, PIN_W, PIN_H, image_style)
-
-        logger.info(f"Using pin template {template_index} (Style: {image_style}) for: {title[:40]}")
-
-        trust_badges = ["FREE US SHIPPING", "USA BESTSELLER", "TRENDING IN US", "VIRAL STYLE"]
-        trust_badge = trust_badges[int(hashlib.md5(title.encode()).hexdigest(), 16) % len(trust_badges)]
-
+        logger.info(f"Using trending e-commerce pin template {template_index}/6 for: {title[:40]}")
 
         if template_index == 0:
-            _template_a(draw, canvas, photo, title, category, price)
+            _render_parchment_occasion_collage(canvas, photo, photo2, photo3, photo4, title, category)
         elif template_index == 1:
-            _template_b(draw, canvas, photo, title, category, price)
+            _render_trend_spotlight_collage(canvas, photo, photo2, photo3, photo4, title, category)
         elif template_index == 2:
-            _template_c(draw, canvas, photo, title, category, price)
+            _render_jewel_podium_showcase(canvas, photo, photo2, photo3, title, category)
         elif template_index == 3:
-            accent = _ACCENTS[int(hashlib.md5(title.encode()).hexdigest(), 16) % len(_ACCENTS)]
-            _template_d(draw, canvas, photo, title, category, price, accent=accent)
+            _render_bold_editorial_solid(canvas, photo, title, category)
         elif template_index == 4:
-            _template_e(draw, canvas, photo, title, category, price)
+            _render_forest_hero_pill(canvas, photo, title, category)
         elif template_index == 5:
-            _template_f(draw, canvas, photo, title, category, price)
-        elif template_index == 6:
-            _template_g(draw, canvas, photo, title, category, price)
-        elif template_index == 7:
-            _template_h(draw, canvas, photo, title, category, price)
-        elif template_index == 8:
-            _template_i(draw, canvas, photo, title, category, price)
-        elif template_index == 9:
-            _template_j(draw, canvas, photo, title, category, price, cta)
-        elif template_index == 10:
-            _template_k(draw, canvas, photo, photo2, title, category, price)
-        elif template_index == 11:
-            _template_l(draw, canvas, photo, photo2, photo3, title, category, price)
-        elif template_index == 12:
-            _template_m(draw, canvas, photo, title, category, price)
-        elif template_index == 13:
-            _template_n(draw, canvas, photo, title, category, price, cta)
-        elif template_index == 14:
-            _template_o(draw, canvas, photo, photo2, photo3, photo4, title, category, price, trust_badge=trust_badge)
-        elif template_index == 15:
-            _template_p(draw, canvas, photo, title, category, price, cta)
-        elif template_index == 16:
-            _template_q(draw, canvas, photo, title, category, price, cta)
-        elif template_index == 17:
-            _template_infographic(draw, canvas, photo, photo2, title, category, price, cta, trust_badge=trust_badge)
+            _render_top_banner_fullbleed(canvas, photo, title, category)
         else:
-            _template_infographic(draw, canvas, photo, photo2, title, category, price, cta, trust_badge=trust_badge)
+            _render_direct_clean_photo(canvas, photo)
 
         if not output_path:
             output_path = tempfile.mktemp(suffix=".jpg", prefix="pin_final_")
 
         canvas.save(output_path, format="JPEG", quality=PIN_QUALITY, optimize=True)
-        logger.info(f"Created overlay image: {output_path}")
+        logger.info(f"Created trending template pin image ({template_index}): {output_path}")
         return output_path
 
     except Exception as e:
@@ -946,10 +1165,11 @@ def create_pin_image(
         return None
 
 
-# High-converting templates for Pinterest: 17 (Infographic Anatomy of a Fit), 14 (Quad Collage), 11 (Tri-Photo), 15 (Editorial Hero), 16 (Lookbook Hero)
-LIFESTYLE_TEMPLATES = [17, 14, 11, 17, 15, 16, 17]
-ALL_TEMPLATES = [17, 14, 11, 10, 15, 16, 17, 0, 1, 2, 3, 4, 5, 6, 7, 8, 12, 13]
-ALL_STYLES = ["collage", "carousel", "collage", "hero"]
+# Exclusive 7-template rotation (0..5 branded e-commerce templates + 6 direct clean product photo)
+TRENDING_TEMPLATES = [0, 1, 2, 3, 4, 5, 6]
+LIFESTYLE_TEMPLATES = TRENDING_TEMPLATES
+ALL_TEMPLATES = TRENDING_TEMPLATES
+ALL_STYLES = ["collage", "hero", "clean"]
 
 
 def get_next_style_and_template(
@@ -959,44 +1179,23 @@ def get_next_style_and_template(
     title: str = "",
 ) -> Tuple[str, int]:
     """
-    Pinterest 2026 Algorithmic Priority:
-    1. Heavily biases toward 'collage' (multi-image styling lookbooks) and 'carousel'.
-    2. Strict 2:3 vertical aspect ratio (1000x1500 px).
-    3. Multi-image templates (14, 11, 10, 15) for maximum engagement & saves.
+    Strictly rotate across the 7 exclusive trending e-commerce templates (0..6)
+    including direct clean product photos (6) so consecutive pins never repeat the same layout.
     """
-    b_lower = (board_name or "").lower()
-    forced_style = os.getenv("FORCE_IMAGE_STYLE", "auto").strip().lower()
-
-    if "blog" in b_lower:
-        return ("card", 9)
-
-    # 1. Select style (favors multi-image collage & carousel)
-    if forced_style and forced_style in ALL_STYLES:
-        next_style = forced_style
-    elif last_style and last_style in ALL_STYLES:
-        last_idx = ALL_STYLES.index(last_style)
-        next_style = ALL_STYLES[(last_idx + 1) % len(ALL_STYLES)]
+    if last_template is not None and isinstance(last_template, int):
+        next_template = (last_template + 1) % len(TRENDING_TEMPLATES)
     else:
+        title_hash = int(hashlib.md5((title or "pin").encode()).hexdigest(), 16)
+        next_template = TRENDING_TEMPLATES[title_hash % len(TRENDING_TEMPLATES)]
+
+    if next_template == 6:
+        next_style = "clean"
+    elif next_template in (0, 1, 2):
         next_style = "collage"
-
-    # 2. Select next template prioritizing lifestyle collages
-    if next_style in ("collage", "carousel"):
-        pool = LIFESTYLE_TEMPLATES
     else:
-        pool = ALL_TEMPLATES
+        next_style = "hero"
 
-    if last_template is not None and len(pool) > 1:
-        available_templates = [t for t in pool if t != last_template]
-    else:
-        available_templates = pool
-
-    if not available_templates:
-        available_templates = pool
-
-    title_hash = int(hashlib.md5(title.encode()).hexdigest(), 16)
-    selected_template = available_templates[title_hash % len(available_templates)]
-
-    return (next_style, selected_template)
+    return (next_style, next_template)
 
 
 

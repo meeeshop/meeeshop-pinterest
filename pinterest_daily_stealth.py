@@ -153,19 +153,19 @@ def post_single_pin_stealth(
                         slide_images.append(str(slide_raw))
                         continue
 
-                    # Carousel Funnel Architecture:
-                    # Slide 1: Lookbook / Lifestyle Collage Hero (Template 14/15/16)
-                    # Slide 2: High-Converting Feature Breakdown / Infographic Fit Slide (Template 17)
-                    # Slide 3+: Additional lifestyle / product angles
+                    # Carousel Funnel Architecture (exclusively using the 7 trending templates + clean direct photo):
+                    # Slide 0: Rotating trending template (template_used)
+                    # Slide 1: Complementary rotating template
+                    # Slide 2+: Direct clean product photo (template 6, zero overlay text)
                     if slide_idx == 0:
-                        tpl = template_used if template_used != 17 else 14
+                        tpl = template_used if template_used != 6 else 0
                         slide_style = style_used
                     elif slide_idx == 1:
-                        tpl = 17  # Infographic Feature & Fit Breakdown slide!
+                        tpl = (template_used + 2) % 6
                         slide_style = "hero"
                     else:
-                        tpl = 0
-                        slide_style = "card"
+                        tpl = 6
+                        slide_style = "clean"
 
                     slide_out = add_text_overlay(
                         str(slide_raw),

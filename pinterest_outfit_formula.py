@@ -488,141 +488,63 @@ def render_outfit_formula_collage(
     outfit_items: List[Dict[str, Any]],
     formula_title: str,
     formula_subtitle: str,
-    output_path: str
+    output_path: str,
+    template_index: Optional[int] = None,
 ) -> str:
     """
-    Renders a vertical 2:3 (1000 × 1500 px) editorial 'Outfit Formula' collage.
-    Features 4 balanced floating boutique cards, category pills, and high-impact CTA.
+    Renders a vertical 2:3 (1000 × 1500 px) editorial 'Outfit Formula' pin
+    using the 7 exclusive trending e-commerce brand templates (Macy's, Target, Kohl's)
+    plus a clean 2x2 zero-overlay photo collage option (template_index=6).
     """
-    canvas = Image.new("RGB", (PIN_W, PIN_H), BG_COLOR)
-    draw = ImageDraw.Draw(canvas)
+    from image_overlay import create_pin_image, _fit_image, _boost
 
-    # 1. Subtle Outer Border Frame
-    draw.rectangle([(16, 16), (PIN_W - 16, PIN_H - 16)], outline=(225, 220, 212), width=1)
-
-    # 2. Editorial Header Block
-    kicker_font = get_font(20, bold=True)
-    kicker_text = "O U T F I T   F O R M U L A   •   S T Y L I N G   G U I D E"
-    kb = kicker_font.getbbox(kicker_text)
-    kw = kb[2] - kb[0]
-    draw.text(((PIN_W - kw) // 2, 45), kicker_text, fill=ACCENT_COLOR, font=kicker_font)
-
-    # Main Headline (Serif editorial headline)
-    title_font = get_font(44, bold=True, serif=True)
-    tb = title_font.getbbox(formula_title)
-    tw = tb[2] - tb[0]
-    draw.text(((PIN_W - tw) // 2, 80), formula_title, fill=TEXT_DARK, font=title_font)
-
-    # Subtitle
-    sub_font = get_font(18, bold=True)
-    sub_text = formula_subtitle.upper()
-    sb = sub_font.getbbox(sub_text)
-    sw = sb[2] - sb[0]
-    draw.text(((PIN_W - sw) // 2, 140), sub_text, fill=TEXT_MUTED, font=sub_font)
-
-    # Thin Divider Line
-    draw.line([(80, 178), (PIN_W - 80, 178)], fill=(218, 212, 204), width=1)
-
-    # Center Brand Badge
-    center_tag = "M E E E S H O P   E D I T"
-    ct_font = get_font(15, bold=True)
-    ctb = ct_font.getbbox(center_tag)
-    ctw = ctb[2] - ctb[0]
-    pill_w = ctw + 30
-    pill_h = 24
-    pill_x = (PIN_W - pill_w) // 2
-    pill_y = 166
-    draw_rounded_card(draw, (pill_x, pill_y, pill_x + pill_w, pill_y + pill_h), radius=12, fill=BG_COLOR, outline=(218, 212, 204), width=1)
-    draw.text((pill_x + 15, pill_y + 3), center_tag, fill=TEXT_MUTED, font=ct_font)
-
-    # 3. 4-Grid Product Cards Layout (445 × 530 px each)
-    card_positions = [
-        {"rect": (40, 205, 485, 735), "item": outfit_items[0] if len(outfit_items) > 0 else None},
-        {"rect": (515, 205, 960, 735), "item": outfit_items[1] if len(outfit_items) > 1 else None},
-        {"rect": (40, 755, 485, 1285), "item": outfit_items[2] if len(outfit_items) > 2 else None},
-        {"rect": (515, 755, 960, 1285), "item": outfit_items[3] if len(outfit_items) > 3 else None},
+    valid_paths = [
+        it["local_image_path"]
+        for it in outfit_items
+        if it.get("local_image_path") and Path(it["local_image_path"]).exists()
     ]
 
-    for card in card_positions:
-        x0, y0, x1, y1 = card["rect"]
-        cw = x1 - x0
-        ch = y1 - y0
+    if template_index is None:
+        template_index = 0
+    template_index = int(template_index) % 7
 
-        draw_rounded_card(draw, (x0, y0, x1, y1), radius=18, fill=CARD_BG, outline=BORDER_COLOR, width=1)
-
-        item = card["item"]
-        if not item:
-            continue
-
-        img_x = x0 + 12
-        img_y = y0 + 12
-        img_w = cw - 24
-        img_h = ch - 90
-
-        if item.get("local_image_path") and Path(item["local_image_path"]).exists():
+    # Clean zero-overlay 2x2 outfit photo grid when template_index == 6
+    if template_index == 6 and len(valid_paths) >= 2:
+        canvas = Image.new("RGB", (PIN_W, PIN_H), (255, 255, 255))
+        gap = 8
+        cw = (PIN_W - gap) // 2
+        ch = (PIN_H - gap) // 2
+        slots = [(0, 0), (cw + gap, 0), (0, ch + gap), (cw + gap, ch + gap)]
+        for idx, pos in enumerate(slots):
+            p = valid_paths[idx % len(valid_paths)]
             try:
-                raw_img = Image.open(item["local_image_path"]).convert("RGB")
-                fitted = fit_product_image(raw_img, img_w, img_h)
-                canvas.paste(fitted, (img_x, img_y))
+                raw_img = Image.open(p).convert("RGB")
+                fitted = _boost(_fit_image(raw_img, cw, ch))
+                canvas.paste(fitted, pos)
             except Exception as e:
-                logger.warning(f"Error rendering image: {e}")
+                logger.warning(f"Error rendering clean grid image: {e}")
+        canvas.save(output_path, quality=95, optimize=True)
+        logger.info(f"[COLLAGE] Saved clean zero-overlay 2:3 outfit grid (template 6): {output_path}")
+        return output_path
 
-        # Top-Left Role Pill
-        role = item.get("role_label", "FEATURED PIECE")
-        r_font = get_font(14, bold=True)
-        rb = r_font.getbbox(role)
-        rw = rb[2] - rb[0]
-        rpill_w = rw + 20
-        rpill_h = 26
-        rx = x0 + 20
-        ry = y0 + 20
-        draw_rounded_card(draw, (rx, ry, rx + rpill_w, ry + rpill_h), radius=13, fill=PILL_DARK)
-        draw.text((rx + 10, ry + 4), role, fill=(255, 255, 255), font=r_font)
+    if valid_paths:
+        hero_path = valid_paths[0]
+        extra_paths = valid_paths[1:4]
+        res = create_pin_image(
+            product_image_path=hero_path,
+            title=formula_title,
+            category=formula_subtitle or "Outfit Formula",
+            output_path=output_path,
+            template_index=template_index,
+            additional_image_paths=extra_paths,
+        )
+        if res:
+            logger.info(f"[COLLAGE] Saved trending e-commerce outfit pin (template {template_index}): {output_path}")
+            return res
 
-        # Bottom Product Info
-        info_y = y0 + img_h + 18
-        p_title = item.get("title", "")
-        if len(p_title) > 28:
-            p_title = p_title[:26] + "..."
-
-        name_font = get_font(18, bold=True)
-        draw.text((x0 + 16, info_y), p_title, fill=TEXT_DARK, font=name_font)
-
-        price_val = item.get("price")
-        price_str = f"${float(price_val):.2f}" if price_val else ""
-        sub_info = f"{price_str}  •  In Stock" if price_str else "In Stock  •  USA Boutique"
-        sub_font = get_font(14, bold=False)
-        draw.text((x0 + 16, info_y + 24), sub_info, fill=ACCENT_COLOR, font=sub_font)
-
-    # 4. Footer Trust Strip & CTA
-    trust_text = "FREE US SHIPPING   •   TRUE-TO-SIZE FIT   •   EASY 7-DAY RETURNS"
-    t_font = get_font(16, bold=True)
-    tb = t_font.getbbox(trust_text)
-    tw = tb[2] - tb[0]
-    draw.text(((PIN_W - tw) // 2, 1318), trust_text, fill=TEXT_MUTED, font=t_font)
-
-    # High-converting CTA Button Pill
-    cta_w = 680
-    cta_h = 66
-    cta_x = (PIN_W - cta_w) // 2
-    cta_y = 1360
-    draw_rounded_card(draw, (cta_x, cta_y, cta_x + cta_w, cta_y + cta_h), radius=cta_h // 2, fill=PILL_DARK)
-
-    cta_text = "TAP TO EXPLORE & SHOP THIS LOOK  →"
-    cta_font = get_font(22, bold=True)
-    cb = cta_font.getbbox(cta_text)
-    cw = cb[2] - cb[0]
-    ch = cb[3] - cb[1]
-    draw.text(((PIN_W - cw) // 2, cta_y + (cta_h - ch) // 2 - 2), cta_text, fill=(255, 255, 255), font=cta_font)
-
-    url_text = "US.MEEESHOP.COM"
-    u_font = get_font(15, bold=True)
-    ub = u_font.getbbox(url_text)
-    uw = ub[2] - ub[0]
-    draw.text(((PIN_W - uw) // 2, 1442), url_text, fill=TEXT_MUTED, font=u_font)
-
+    # Fallback if no valid local images
+    canvas = Image.new("RGB", (PIN_W, PIN_H), BG_COLOR)
     canvas.save(output_path, quality=95, optimize=True)
-    logger.info(f"[COLLAGE] Saved high-converting 2:3 outfit collage: {output_path}")
     return output_path
 
 
@@ -973,11 +895,20 @@ def run_outfit_formula_workflow(
         collage_filename = f"outfit_formula_{formula['id']}_{int(time.time())}.jpg"
         collage_path = str(SCRATCH_DIR / collage_filename)
 
+        last_tpl = history.get("last_template_index")
+        outfit_pool = [0, 1, 2, 3, 5, 6]
+        if last_tpl in outfit_pool:
+            next_tpl = outfit_pool[(outfit_pool.index(last_tpl) + 1) % len(outfit_pool)]
+        else:
+            next_tpl = outfit_pool[pin_idx % len(outfit_pool)]
+        history["last_template_index"] = next_tpl
+
         render_outfit_formula_collage(
             outfit_items=outfit_items,
             formula_title=formula["title"],
             formula_subtitle=formula["subtitle"],
-            output_path=collage_path
+            output_path=collage_path,
+            template_index=next_tpl,
         )
 
         seo = generate_outfit_seo(formula, outfit_items)

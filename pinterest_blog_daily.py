@@ -22,7 +22,7 @@ inject_to_env()
 from stealth_pinterest_poster import StealthPinterestPoster
 from board_mapping import MEEESHOP_BOARDS
 from shopify_products import ShopifyClient
-from image_overlay import create_pin_image
+from image_overlay import create_pin_image, get_next_style_and_template
 from blog_content_optimizer import generate_blog_pin_title, generate_blog_pin_description, select_blog_boards
 from keyword_engine import get_seo_content
 
@@ -33,7 +33,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 HISTORY_FILE = Path(__file__).parent / "blog_posting_history.json"
-MAX_BLOGS_PER_RUN = 2  # Updated to 2 blog pins per daily run
+MAX_BLOGS_PER_RUN = int(os.getenv("MAX_BLOGS_PER_RUN", "1"))  # 1 blog post per run
 DRY_RUN = os.getenv("DRY_RUN", "false").lower() in ("1", "true", "yes")
 
 def load_history() -> Dict[str, Any]:
@@ -231,7 +231,13 @@ def run_blog_posting() -> None:
                 Image.new("RGB", (800, 600), (220, 210, 205)).save(fallback_img)
             temp_src = fallback_img
 
-        # Create Blog Pin Image using template (Editorial Style Text Overlay)
+        # Rotate across trending editorial templates (never repeating the same template consecutively)
+        _, next_tpl = get_next_style_and_template(
+            last_template=history.get("last_template"),
+            board_name="blog",
+            title=article["title"],
+        )
+        history["last_template"] = next_tpl
         final_image = create_pin_image(
             product_image_path=str(temp_src),
             title=article["title"],  # Use original shorter title for the visual graphic
@@ -239,7 +245,7 @@ def run_blog_posting() -> None:
             price=None,
             cta="READ THE FULL GUIDE ->",
             output_path=str(temp_final),
-            template_index=16
+            template_index=next_tpl,
         )
 
         if not final_image:
