@@ -6279,8 +6279,48 @@
           "role": "WINTER BOOTS"
         }
       ]
+    },
+    {
+      "timestamp": "2026-11-27T22:35:20.460958+00:00",
+      "formula_id": "cozy_sweater_weather",
+      "formula_title": "Cozy Fall Layers Outfit Formula",
+      "pin_url": "https://www.pinterest.com/pin/962222276666365279/",
+      "pin_id": "962222276666365279",
+      "board": "Sweaters",
+      "title": "Cozy Fall Layers Outfit Formula - Easy Everyday Styling Formula | MeeeShop",
+      "tagged_products_count": 4,
+      "outfit_items": [
+        {
+          "id": "8782689861803",
+          "variant_id": "47103631753387",
+          "title": "Buki Power Vee 'sweater' Sweatshirt - Wine",
+          "price": "164.99",
+          "role": "THE KNIT"
+        },
+        {
+          "id": "9252407115947",
+          "variant_id": "48814895005867",
+          "title": "Cora Signature Backpack Handbag",
+          "price": "114.99",
+          "role": "THE TOTE"
+        },
+        {
+          "id": "8897141964971",
+          "variant_id": "47512666407083",
+          "title": "Ymi Women's plus High Rise Wide Leg Skater Cargo Jeans",
+          "price": "99.99",
+          "role": "THE DENIM"
+        },
+        {
+          "id": "8782625865899",
+          "variant_id": "47103362433195",
+          "title": "Retrolicious Cowgirl Boots Doris Skirt",
+          "price": "149.99",
+          "role": "THE BOOTS"
+        }
+      ]
     }
   ],
-  "last_run": "2026-11-27T10:37:37.031266+00:00",
-  "last_template_index": 5
+  "last_run": "2026-11-27T22:35:20.460978+00:00",
+  "last_template_index": 6
 }
