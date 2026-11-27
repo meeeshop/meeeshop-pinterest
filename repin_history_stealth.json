@@ -9109,10 +9109,50 @@
       "target_board_id": "962222345325118481",
       "live_url": "https://www.pinterest.com/pin/4606971423716715840/",
       "timestamp": "2026-11-27T03:24:42.319530+00:00"
+    },
+    {
+      "pin_id": "4599864191104344384",
+      "product_title": "Downeast My Staple Sweater",
+      "category_group": "cardigans_sweaters",
+      "source_board": "_products",
+      "target_board": "Women's Cardigans",
+      "target_board_id": "962222345325668653",
+      "live_url": "https://www.pinterest.com/pin/4599864191104344384/",
+      "timestamp": "2026-11-27T10:20:50.791865+00:00"
+    },
+    {
+      "pin_id": "4599864156744606016",
+      "product_title": "Amiyah Crossbody Bag",
+      "category_group": "bags_accessories",
+      "source_board": "_products",
+      "target_board": "Style Ideas",
+      "target_board_id": "962222345325426055",
+      "live_url": "https://www.pinterest.com/pin/4599864156744606016/",
+      "timestamp": "2026-11-27T10:21:08.695132+00:00"
+    },
+    {
+      "pin_id": "4607463977096688448",
+      "product_title": "Emory Park Zara Tube Top",
+      "category_group": "tops_tanks_blouses",
+      "source_board": "_products",
+      "target_board": "Shirts & Tops",
+      "target_board_id": "962222345325006413",
+      "live_url": "https://www.pinterest.com/pin/4607463977096688448/",
+      "timestamp": "2026-11-27T10:21:26.420707+00:00"
+    },
+    {
+      "pin_id": "4593179159378460992",
+      "product_title": "YMI Women's Mid Rise Bootcut Jeans with Cross Hatch Detail, Midnight Sky Blue Rips",
+      "category_group": "pants_denim",
+      "source_board": "_products",
+      "target_board": "Ootd #ootd",
+      "target_board_id": "962222345325172804",
+      "live_url": "https://www.pinterest.com/pin/4593179159378460992/",
+      "timestamp": "2026-11-27T10:21:49.005533+00:00"
     }
   ],
   "board_last_used": {
-    "Women's Cardigans": "2026-11-03T22:31:52.308206+00:00",
+    "Women's Cardigans": "2026-11-27T10:20:50.791865+00:00",
     "Pants & Leggings": "2026-11-25T10:44:34.371330+00:00",
     "Skirts": "2026-11-10T09:33:00.516115+00:00",
     "Dresses": "2026-11-25T03:54:47.187891+00:00",
@@ -9123,7 +9163,7 @@
     "Chic & Cozy: Annie Wear Trends": "2026-11-25T01:34:33.672459+00:00",
     "Chic Looks": "2026-11-27T01:11:30.845679+00:00",
     "Short fall dresses": "2026-11-26T03:20:21.838272+00:00",
-    "Shirts & Tops": "2026-11-09T22:15:16.611987+00:00",
+    "Shirts & Tops": "2026-11-27T10:21:26.420707+00:00",
     "Feminine & Flowy Fits": "2026-11-26T20:52:24.098256+00:00",
     "Blouses": "2026-11-25T20:59:12.721303+00:00",
     "Must-Have Fashion Picks": "2026-11-24T05:06:10.804863+00:00",
@@ -9168,9 +9208,9 @@
     "Puff Sleeve Tops": "2026-11-25T10:45:05.351084+00:00",
     "Outfit Ideas": "2026-11-27T03:24:20.087603+00:00",
     "Flares Jeans": "2026-11-25T01:33:45.251581+00:00",
-    "Style Ideas": "2026-11-24T03:29:16.934695+00:00",
+    "Style Ideas": "2026-11-27T10:21:08.695132+00:00",
     "Winter Outfits": "2026-11-27T01:10:32.504076+00:00",
-    "Ootd #ootd": "2026-11-24T03:29:44.252926+00:00",
+    "Ootd #ootd": "2026-11-27T10:21:49.005533+00:00",
     "Sweaters #Sweaters #WinterOutfits": "2026-11-24T21:52:58.810803+00:00",
     "Everyday Style Essentials": "2026-11-24T03:30:15.965947+00:00",
     "Fashion": "2026-11-24T05:05:32.576920+00:00",
@@ -9189,6 +9229,6 @@
     "Women's shacket": "2026-10-26T18:35:03.331027+00:00",
     "Late Summer Basics": "2026-11-26T20:51:16.794161+00:00"
   },
-  "daily_count": 8,
-  "last_repin_time": "2026-11-27T03:24:42.319530+00:00"
+  "daily_count": 12,
+  "last_repin_time": "2026-11-27T10:21:49.005533+00:00"
 }
