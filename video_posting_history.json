@@ -909,11 +909,21 @@
       "board": "Skirts",
       "product_url": "https://us.meeeshop.com/products/hyfve-wrap-front-elastic-waist-skort",
       "posted_at": "2026-11-27T09:33:01.942349+00:00"
+    },
+    {
+      "product_id": "8740283941035",
+      "product_handle": "risen-slouchy-baggy-jeans-with-contrast-stitching",
+      "product_title": "Risen Slouchy Baggy Jeans with Contrast Stitching",
+      "category": "bottoms",
+      "pin_id": "https://www.pinterest.com/pin/962222276666363820/",
+      "board": "Jeans",
+      "product_url": "https://us.meeeshop.com/products/risen-slouchy-baggy-jeans-with-contrast-stitching",
+      "posted_at": "2026-11-27T21:47:51.898581+00:00"
     }
   ],
   "category_last_used": {
     "dresses": "2026-11-26T22:04:08.135237+00:00",
-    "bottoms": "2026-11-25T22:07:06.842453+00:00",
+    "bottoms": "2026-11-27T21:47:51.898562+00:00",
     "general": "2026-11-27T09:33:01.942332+00:00",
     "tops": "2026-11-26T09:22:54.936017+00:00"
   }
