@@ -14349,11 +14349,55 @@
       "template": 0,
       "pin_url": "https://www.pinterest.com/pin/962222276666337526/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8825882902699,
+      "title": "Mkf Collection by Mia K. - Thania Signature Tote Bag: Thanksgiving Chic & Everyday Luxury",
+      "board": "Trends",
+      "timestamp": "2026-11-27T03:34:34.654294",
+      "type": "video",
+      "style": "collage",
+      "template": 1,
+      "pin_url": "https://www.pinterest.com/pin/962222276666340000/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8820880507051,
+      "title": "Drew Mini Bucket Crossbody Tote: Thanksgiving Chic & Holiday Ready \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-11-27T03:35:41.745751",
+      "type": "carousel",
+      "style": "collage",
+      "template": 2,
+      "pin_url": "https://www.pinterest.com/pin/962222276666340023/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 9252403773611,
+      "title": "Winona Crossbody Bag Handbag | MeeeShop US Boutique",
+      "board": "Confident Looks",
+      "timestamp": "2026-11-27T03:37:04.193639",
+      "type": "carousel",
+      "style": "hero",
+      "template": 3,
+      "pin_url": "https://www.pinterest.com/pin/962222276666340050/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 9260825804971,
+      "title": "Downeast All I Want Top: Your Thanksgiving & Friendsgiving Favorite \u2014 MeeeShop",
+      "board": "American Bazi",
+      "timestamp": "2026-11-27T03:39:49.306370",
+      "type": "video",
+      "style": "hero",
+      "template": 4,
+      "pin_url": "https://www.pinterest.com/pin/962222276666340090/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-10-30T08:23:10.916119",
-    "Trends": "2026-11-26T21:07:50.184402",
+    "Trends": "2026-11-27T03:34:34.654294",
     "Dresses": "2026-11-24T22:07:18.053662",
     "Feminine & Flowy Fits": "2026-11-02T21:15:35.177592",
     "Short fall dresses": "2026-11-24T22:08:34.187442",
@@ -14388,7 +14432,7 @@
     "Straight Leg Jeans": "2026-10-25T23:14:25.364626",
     "Puff Sleeves Tops": "2026-11-26T10:44:48.372524",
     "Casual": "2026-11-01T17:33:20.328555",
-    "Confident Looks": "2026-10-29T22:03:12.064596",
+    "Confident Looks": "2026-11-27T03:37:04.193639",
     "Casual Chic Style": "2026-10-30T17:34:40.085403",
     "Farm clothes": "2026-11-25T21:24:05.268465",
     "Kimchi USA Jeans": "2026-10-29T22:02:05.072004",
@@ -14398,8 +14442,8 @@
     "Fashion Models": "2026-11-01T08:58:55.714935",
     "My Shop #1737732113": "2026-11-01T17:30:56.581140",
     "Shop For Holidays": "2026-11-01T21:26:44.134524",
-    "New": "2026-11-27T01:12:51.048738",
-    "American Bazi": "2026-10-27T00:24:30.915597",
+    "New": "2026-11-27T03:35:41.745751",
+    "American Bazi": "2026-11-27T03:39:49.306370",
     "Cool & Casual Styles": "2026-11-04T22:53:58.695377",
     "MeeeShop's Luxe Styles": "2026-10-28T08:10:24.708953",
     "Outerwear": "2026-10-11T21:10:16.114391",
@@ -14466,9 +14510,9 @@
     "Umgee USA": "2026-10-10T16:46:42.000590",
     "Edgy Fashion": "2026-10-13T09:13:02.770988"
   },
-  "daily_count": 4,
-  "last_post_time": "2026-11-27T01:15:44.759907",
+  "daily_count": 8,
+  "last_post_time": "2026-11-27T03:39:49.306370",
   "board_rotation_cursor": 0,
-  "last_image_style": "collage",
-  "last_template_index": 0
+  "last_image_style": "hero",
+  "last_template_index": 4
 }
