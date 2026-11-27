@@ -6199,8 +6199,48 @@
           "role": "ANKLE BOOTIES"
         }
       ]
+    },
+    {
+      "timestamp": "2026-11-27T04:49:35.160542+00:00",
+      "formula_id": "thanksgiving_chic",
+      "formula_title": "Thanksgiving Outfit Formula",
+      "pin_url": "https://www.pinterest.com/pin/962222276666341227/",
+      "pin_id": "962222276666341227",
+      "board": "Casual Outfits",
+      "title": "Thanksgiving Outfit Formula - Easy Everyday Styling Formula | MeeeShop",
+      "tagged_products_count": 4,
+      "outfit_items": [
+        {
+          "id": "8740253106347",
+          "variant_id": "46478454194347",
+          "title": "Hyfve Tie Front Spaghetti Strap Top",
+          "price": "84.99",
+          "role": "THE COZY TOP"
+        },
+        {
+          "id": "8740284530859",
+          "variant_id": "46478644478123",
+          "title": "Judy Blue Full Size Wide Leg Capris Jeans plus Size",
+          "price": "124.99",
+          "role": "STRETCH DENIM"
+        },
+        {
+          "id": "8786745262251",
+          "variant_id": "47394871050411",
+          "title": "Layla Woven Checkered Crossbody Sling Bag",
+          "price": "74.99",
+          "role": "THE SHOULDER BAG"
+        },
+        {
+          "id": "9073872175275",
+          "variant_id": "48110997995691",
+          "title": "Alma Booties Brown",
+          "price": "209.99",
+          "role": "ANKLE BOOTIES"
+        }
+      ]
     }
   ],
-  "last_run": "2026-11-27T01:56:24.385069+00:00",
-  "last_template_index": 2
+  "last_run": "2026-11-27T04:49:35.160581+00:00",
+  "last_template_index": 3
 }
