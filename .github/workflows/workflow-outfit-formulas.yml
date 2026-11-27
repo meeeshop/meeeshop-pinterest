@@ -11,10 +11,8 @@ name: "Outfit Formulas: Shoppable Editorial Collages"
 
 on:
   schedule:
-    - cron: '0 14 * * *'
-    - cron: '30 18 * * *'
-    - cron: '0 23 * * *'
-    - cron: '0 2 * * *'
+    - cron: '0 14 * * *'  # 2x/day US peak hours (9 AM & 6 PM EST)
+    - cron: '0 23 * * *'  # 2x/day US peak hours (9 AM & 6 PM EST)
   workflow_dispatch:
     inputs:
       mode:
