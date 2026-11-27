@@ -14393,11 +14393,55 @@
       "template": 4,
       "pin_url": "https://www.pinterest.com/pin/962222276666340090/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8869173428395,
+      "title": "Heart Collared Neck Button Down Top and Shorts Set - Cozy Thanksgiving Look \u2014 MeeeShop",
+      "board": "Trends",
+      "timestamp": "2026-11-27T10:42:44.545774",
+      "type": "carousel",
+      "style": "hero",
+      "template": 5,
+      "pin_url": "https://www.pinterest.com/pin/962222276666346870/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 9252407050411,
+      "title": "Dinah Tote Bag and Set - Stylish Thanksgiving & Holiday Companion \u2014 MeeeShop",
+      "board": "New",
+      "timestamp": "2026-11-27T10:44:05.754077",
+      "type": "carousel",
+      "style": "clean",
+      "template": 6,
+      "pin_url": "https://www.pinterest.com/pin/962222276666346891/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8786745491627,
+      "title": "Maya Basket Weave Puffer Tote - Chic Thanksgiving & Holiday Ready Bag \u2014 MeeeShop",
+      "board": "new products",
+      "timestamp": "2026-11-27T10:45:23.380042",
+      "type": "carousel",
+      "style": "collage",
+      "template": 0,
+      "pin_url": "https://www.pinterest.com/pin/962222276666346912/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 8825881526443,
+      "title": "Mkf Collection by Mia K. - Eulalie Weekender Bag | MeeeShop US Boutique",
+      "board": "Casual Chic Style",
+      "timestamp": "2026-11-27T10:47:57.354987",
+      "type": "product",
+      "style": "collage",
+      "template": 1,
+      "pin_url": "https://www.pinterest.com/pin/962222276666346974/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-10-30T08:23:10.916119",
-    "Trends": "2026-11-27T03:34:34.654294",
+    "Trends": "2026-11-27T10:42:44.545774",
     "Dresses": "2026-11-24T22:07:18.053662",
     "Feminine & Flowy Fits": "2026-11-02T21:15:35.177592",
     "Short fall dresses": "2026-11-24T22:08:34.187442",
@@ -14433,7 +14477,7 @@
     "Puff Sleeves Tops": "2026-11-26T10:44:48.372524",
     "Casual": "2026-11-01T17:33:20.328555",
     "Confident Looks": "2026-11-27T03:37:04.193639",
-    "Casual Chic Style": "2026-10-30T17:34:40.085403",
+    "Casual Chic Style": "2026-11-27T10:47:57.354987",
     "Farm clothes": "2026-11-25T21:24:05.268465",
     "Kimchi USA Jeans": "2026-10-29T22:02:05.072004",
     "Wardrobe Goals": "2026-10-30T21:45:52.284056",
@@ -14442,7 +14486,7 @@
     "Fashion Models": "2026-11-01T08:58:55.714935",
     "My Shop #1737732113": "2026-11-01T17:30:56.581140",
     "Shop For Holidays": "2026-11-01T21:26:44.134524",
-    "New": "2026-11-27T03:35:41.745751",
+    "New": "2026-11-27T10:44:05.754077",
     "American Bazi": "2026-11-27T03:39:49.306370",
     "Cool & Casual Styles": "2026-11-04T22:53:58.695377",
     "MeeeShop's Luxe Styles": "2026-10-28T08:10:24.708953",
@@ -14455,7 +14499,7 @@
     "BFCM Deals": "2026-11-01T21:27:51.158681",
     "Poetcore Aesthetics": "2026-11-01T00:07:50.969712",
     "Emory Park Clothing": "2026-11-03T02:56:56.267243",
-    "new products": "2026-10-30T00:50:12.101785",
+    "new products": "2026-11-27T10:45:23.380042",
     "Chic & Effortless Styles": "2026-11-02T00:31:09.485632",
     "Davi & Dani Womens...": "2026-11-04T22:55:09.002846",
     "Weekend to Workout": "2026-11-27T01:15:44.759907",
@@ -14510,9 +14554,9 @@
     "Umgee USA": "2026-10-10T16:46:42.000590",
     "Edgy Fashion": "2026-10-13T09:13:02.770988"
   },
-  "daily_count": 8,
-  "last_post_time": "2026-11-27T03:39:49.306370",
+  "daily_count": 12,
+  "last_post_time": "2026-11-27T10:47:57.354987",
   "board_rotation_cursor": 0,
-  "last_image_style": "hero",
-  "last_template_index": 4
+  "last_image_style": "collage",
+  "last_template_index": 1
 }
