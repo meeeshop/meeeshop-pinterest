@@ -6119,8 +6119,88 @@
           "role": "THE LAYER"
         }
       ]
+    },
+    {
+      "timestamp": "2026-11-28T05:50:38.875893+00:00",
+      "formula_id": "casual_fall",
+      "formula_title": "Casual Fall Weekend Outfit Inspo",
+      "pin_url": "https://www.pinterest.com/pin/962222276666373802/",
+      "pin_id": "962222276666373802",
+      "board": "Back to School Style",
+      "title": "Casual Fall Weekend Outfit Inspo - Easy Everyday Styling Formula | MeeeShop",
+      "tagged_products_count": 4,
+      "outfit_items": [
+        {
+          "id": "8744047181995",
+          "variant_id": "46492121858219",
+          "title": "Diamond Tech Tee",
+          "price": "139.99",
+          "role": "THE TOP"
+        },
+        {
+          "id": "8786745262251",
+          "variant_id": "47394871050411",
+          "title": "Layla Woven Checkered Crossbody Sling Bag",
+          "price": "74.99",
+          "role": "THE BAG"
+        },
+        {
+          "id": "8740283220139",
+          "variant_id": "46478636679339",
+          "title": "Risen Full Size Mid Rise Wide Leg Jeans with Flared Look plus Size",
+          "price": "124.99",
+          "role": "THE DENIM"
+        },
+        {
+          "id": "9073872175275",
+          "variant_id": "48110997995691",
+          "title": "Alma Booties Brown",
+          "price": "209.99",
+          "role": "THE SHOES"
+        }
+      ]
+    },
+    {
+      "timestamp": "2026-11-28T05:53:26.891660+00:00",
+      "formula_id": "cozy_sweater_weather",
+      "formula_title": "Cozy Fall Layers Outfit Formula",
+      "pin_url": "https://www.pinterest.com/pin/962222276666373848/",
+      "pin_id": "962222276666373848",
+      "board": "Back to School Style",
+      "title": "Cozy Fall Layers Outfit Formula - Easy Everyday Styling Formula | MeeeShop",
+      "tagged_products_count": 4,
+      "outfit_items": [
+        {
+          "id": "8782689861803",
+          "variant_id": "47103631753387",
+          "title": "Buki Power Vee 'sweater' Sweatshirt - Wine",
+          "price": "164.99",
+          "role": "THE KNIT"
+        },
+        {
+          "id": "9252407115947",
+          "variant_id": "48814895005867",
+          "title": "Cora Signature Backpack Handbag",
+          "price": "114.99",
+          "role": "THE TOTE"
+        },
+        {
+          "id": "8740283220139",
+          "variant_id": "46478636679339",
+          "title": "Risen Full Size Mid Rise Wide Leg Jeans with Flared Look plus Size",
+          "price": "124.99",
+          "role": "THE DENIM"
+        },
+        {
+          "id": "9073872175275",
+          "variant_id": "48110997995691",
+          "title": "Alma Booties Brown",
+          "price": "209.99",
+          "role": "THE BOOTS"
+        }
+      ]
     }
   ],
-  "last_run": "2026-11-26T05:47:01.593086+00:00",
-  "last_template_index": 0
+  "last_run": "2026-11-28T05:53:26.891684+00:00",
+  "last_template_index": 2
 }
