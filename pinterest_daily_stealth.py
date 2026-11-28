@@ -557,25 +557,16 @@ def run_daily_stealth_posting(dry_run: bool = False, pins_count: Optional[int] =
         if not formatted.get("image_url"):
             continue
 
-        # High-Follower Board Prioritization: allow Trends & New at most ONCE per day,
-        # freeing all remaining slots to populate empty, thin, and niche boards.
-        if not trends_posted_today and "Trends" not in used_boards_in_run:
-            board_name = "Trends"
-            trends_posted_today = True
-            logger.info("🔥 Daily Power Board (1/day): Routing pin to 'Trends'")
-        elif not new_posted_today and "New" not in used_boards_in_run:
-            board_name = "New"
-            new_posted_today = True
-            logger.info("🔥 Daily Power Board (1/day): Routing pin to 'New'")
-        else:
-            board = select_best_lru_board(
-                product_title=formatted["title"],
-                product_type=formatted["product_type"],
-                live_boards=live_boards,
-                board_last_used=history.get("board_last_used", {}),
-                used_boards_in_run=used_boards_in_run,
-            )
-            board_name = board["name"] if board else "Trends"
+        # Route every pin directly to the best matching empty, thin, or niche LRU board
+        # (skipping generic catch-all boards like Trends / New so niche boards grow organically).
+        board = select_best_lru_board(
+            product_title=formatted["title"],
+            product_type=formatted["product_type"],
+            live_boards=live_boards,
+            board_last_used=history.get("board_last_used", {}),
+            used_boards_in_run=used_boards_in_run,
+        )
+        board_name = board["name"] if board else "Style Ideas"
 
         used_boards_in_run.add(board_name)
 

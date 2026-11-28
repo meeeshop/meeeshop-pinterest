@@ -467,11 +467,8 @@ CATEGORY_TO_BOARDS = {
         "Wardrobe Must Haves",
         "Wardrobe Goals",
         "Confident Looks",
-        "My Shop #1737732113",
         "Shop For Holidays",
         "BFCM Deals",
-        "Trends",
-        "New",
         "new products",
         "Best selling products",
         "New Trendy Woman...",
@@ -486,11 +483,6 @@ CATEGORY_TO_BOARDS = {
         "Fresh Finds New...",
         "Casual Chic Style",
         "Affordable Women's Fashion USA",
-        "Shop Responsibly",
-        "Social",
-        "Fashion Models",
-        "Blogs",
-        "All Pins",
     ],
 }
 
