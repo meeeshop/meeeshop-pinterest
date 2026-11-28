@@ -2,7 +2,7 @@ name: Tag Popular Pins with In-Stock Products
 
 on:
   schedule:
-    - cron: '0 16 * * *'  # Runs daily at 16:00 UTC (11:00 AM EST)
+    - cron: '0 16 * * 2,5'  # Runs 2x/week (Tue & Fri) at 16:00 UTC (11:00 AM EST) to avoid spam/re-indexing
   workflow_dispatch:
     inputs:
       test_pin_id:
@@ -21,7 +21,7 @@ on:
       max_pins:
         description: 'Maximum number of pins to process per batch run'
         required: false
-        default: '10'
+        default: '2'
         type: string
 
 permissions:
@@ -62,9 +62,9 @@ jobs:
           PINTEREST_EMAIL: ${{ secrets.PINTEREST_EMAIL }}
           PINTEREST_PASSWORD: ${{ secrets.PINTEREST_PASSWORD }}
         run: |
-          CMD="python tag_popular_pins_with_products.py --max-pins ${{ inputs.max_pins || '10' }}"
+          CMD="python tag_popular_pins_with_products.py --max-pins ${{ inputs.max_pins || '2' }}"
 
-          if [ "${{ inputs.mode }}" = "apply" ]; then
+          if [ "${{ github.event_name }}" = "schedule" ] || [ "${{ inputs.mode }}" = "apply" ]; then
             CMD="$CMD --apply"
           else
             CMD="$CMD --dry-run"
