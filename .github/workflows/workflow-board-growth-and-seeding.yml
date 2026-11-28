@@ -1,0 +1,93 @@
+name: "Board Growth: Seasonal Board Creation & Seeding"
+
+# Follows Pinterest's algorithm best practices for US e-commerce brands:
+#   - Runs bi-weekly (1st & 15th) and enforces a 14-day cooldown (1-2 boards/month max).
+#   - Skips creating new boards if >= 3 existing profile boards still have < 15 pins.
+#   - Targets US seasonal trends 45 days (6-8 weeks) ahead of peak search demand.
+#   - Automatically seeds any newly created board with 6 matching in-stock catalog pins.
+
+on:
+  schedule:
+    - cron: '0 13 1,15 * *'  # 1st & 15th of each month at 13:00 UTC (8:00 AM ET)
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run (simulate without creating or seeding boards)'
+        type: boolean
+        required: false
+        default: false
+
+permissions:
+  actions: read
+  contents: write
+
+jobs:
+  board_growth_and_seeding:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install playwright
+          playwright install chromium --with-deps
+
+      - name: Run Seasonal Board Growth & Seeding
+        env:
+          ENCRYPTION_KEY_PRIMARY: ${{ secrets.ENCRYPTION_KEY_PRIMARY }}
+          ENCRYPTION_KEY_FALLBACK: ${{ secrets.ENCRYPTION_KEY_FALLBACK }}
+          SHOPIFY_STORE_URL: ${{ secrets.SHOPIFY_STORE_URL }}
+          SHOPIFY_ACCESS_TOKEN: ${{ secrets.SHOPIFY_ACCESS_TOKEN }}
+          PINTEREST_COOKIES_B64: ${{ secrets.PINTEREST_COOKIES_B64 }}
+          PINTEREST_EMAIL: ${{ secrets.PINTEREST_EMAIL }}
+          PINTEREST_PASSWORD: ${{ secrets.PINTEREST_PASSWORD }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        run: |
+          DRY_RUN_FLAG=""
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+            DRY_RUN_FLAG="--dry-run"
+          fi
+          python create_trending_boards.py $DRY_RUN_FLAG
+
+      - name: Commit and Push Board Updates
+        if: always()
+        run: |
+          set +e
+          git config --local user.name "GitHub Action Bot"
+          git config --local user.email "action@github.com"
+          git add dynamic_boards.json repin_history_stealth.json secrets.enc 2>/dev/null || true
+          if ! git diff --staged --quiet; then
+            git commit -m "chore(pinterest): update seasonal boards and seeding state [skip ci]" || true
+          fi
+          git reset --hard HEAD 2>/dev/null || true
+          git clean -fd 2>/dev/null || true
+          TARGET_BRANCH="${{ github.ref_name }}"
+          TARGET_BRANCH="${TARGET_BRANCH:-develop}"
+          git pull origin "$TARGET_BRANCH" --rebase --autostash 2>/dev/null || true
+          for i in 1 2 3; do
+            if git push origin "HEAD:$TARGET_BRANCH"; then
+              echo "Successfully pushed board updates to $TARGET_BRANCH"
+              break
+            fi
+            echo "Push to $TARGET_BRANCH failed, retrying ($i/3)..."
+            sleep 2
+            git rebase --abort 2>/dev/null || true
+            git pull origin "$TARGET_BRANCH" --rebase --autostash 2>/dev/null || true
+          done
+          exit 0
+

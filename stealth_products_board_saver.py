@@ -632,6 +632,16 @@ class StealthProductsBoardSaver:
 
         repinned_count = 0
         used_boards_in_run = set()
+        today_str = datetime.now(timezone.utc).date().isoformat()
+        board_today_counts: Dict[str, int] = {}
+        for r in history.get("repins", []):
+            if str(r.get("timestamp", "")).startswith(today_str):
+                tb = r.get("target_board")
+                if tb:
+                    board_today_counts[tb] = board_today_counts.get(tb, 0) + 1
+        for tb, cnt in board_today_counts.items():
+            if cnt >= 2:
+                used_boards_in_run.add(tb)
 
         for idx, item in enumerate(to_process, 1):
             title = item.get("title", "")

@@ -854,6 +854,14 @@ def run_outfit_formula_workflow(
         poster = StealthPinterestPoster(headless=True)
 
     success_count = 0
+    live_boards: List[Dict[str, Any]] = []
+    try:
+        from pinterest_client import PinterestClient
+        p_client = PinterestClient()
+        if p_client.login():
+            live_boards = p_client.fetch_boards() or []
+    except Exception as be:
+        logger.debug(f"OutfitFormula live board discovery skipped: {be}")
 
     for pin_idx in range(pins_count):
         logger.info(f"\n{'='*70}\n[Outfit Formula Pin #{pin_idx + 1}/{pins_count}]\n{'='*70}")
@@ -913,6 +921,20 @@ def run_outfit_formula_workflow(
 
         seo = generate_outfit_seo(formula, outfit_items)
         board_name = formula["board_name"]
+        if live_boards:
+            try:
+                from board_mapping import select_best_lru_board
+                hero_item = outfit_items[0] if outfit_items else {}
+                cand = select_best_lru_board(
+                    product_title=f"{formula['title']} {hero_item.get('title', '')}",
+                    product_type=hero_item.get("product_type", ""),
+                    live_boards=live_boards,
+                )
+                if cand and cand.get("pin_count") is not None and cand.get("pin_count", 99) < 15:
+                    board_name = cand["name"]
+                    logger.info(f"[BOARD] Prioritizing empty/thin live board '{board_name}' ({cand.get('pin_count')} pins)")
+            except Exception:
+                pass
 
         logger.info(f"[SEO] Title: {seo['title']}")
         logger.info(f"[BOARD] Target: {board_name}")

@@ -467,11 +467,8 @@ CATEGORY_TO_BOARDS = {
         "Wardrobe Must Haves",
         "Wardrobe Goals",
         "Confident Looks",
-        "My Shop #1737732113",
         "Shop For Holidays",
         "BFCM Deals",
-        "Trends",
-        "New",
         "new products",
         "Best selling products",
         "New Trendy Woman...",
@@ -486,11 +483,6 @@ CATEGORY_TO_BOARDS = {
         "Fresh Finds New...",
         "Casual Chic Style",
         "Affordable Women's Fashion USA",
-        "Shop Responsibly",
-        "Social",
-        "Fashion Models",
-        "Blogs",
-        "All Pins",
     ],
 }
 
@@ -601,17 +593,30 @@ def get_candidate_boards_for_product(
                 if b not in candidates:
                     candidates.append(b)
 
-    # 2. Dynamic Live Board Keyword Matcher (discovers newly created Pinterest boards!)
+    # 2. Dynamic Live Board Keyword Matcher (discovers newly created & empty Pinterest boards!)
     if live_boards:
-        keywords = ["dress", "top", "blouse", "jeans", "pant", "skirt", "jacket", "coat", "sweater", "bag", "shoe", "lounge", "fall", "winter", "summer", "spring", "chic", "casual", "ootd"]
+        keywords = [
+            "dress", "top", "blouse", "shirt", "tee", "cami", "tank", "jeans", "denim",
+            "flare", "pant", "legging", "skirt", "jacket", "coat", "shacket", "blazer",
+            "outerwear", "sweater", "cardigan", "knit", "bag", "tote", "crossbody",
+            "handbag", "backpack", "shoe", "boot", "heel", "flat", "romper", "jumpsuit",
+            "lounge", "fall", "winter", "summer", "spring", "holiday", "festive",
+            "thanksgiving", "party", "cocktail", "date", "work", "weekend", "vacation",
+            "resort", "chic", "casual", "boho", "western", "edgy", "luxe", "ootd",
+            "trend", "new", "style", "outfit", "plus", "midi", "maxi", "mini",
+            "kancan", "judy", "emory", "umgee", "davi", "le lis", "zenana", "mustard",
+        ]
         matching_kws = [kw for kw in keywords if kw in search_text]
-        if matching_kws:
-            for b_dict in live_boards:
-                b_name = b_dict.get("name", "")
-                b_name_lower = b_name.lower()
-                if any(kw in b_name_lower for kw in matching_kws):
-                    if b_name not in candidates:
-                        candidates.append(b_name)
+        for b_dict in live_boards:
+            b_name = b_dict.get("name", "")
+            b_name_lower = b_name.lower()
+            if any(kw in b_name_lower for kw in matching_kws):
+                if b_name not in candidates:
+                    candidates.append(b_name)
+            # Also surface any genuinely empty board (pin_count == 0) that isn't an admin board
+            elif b_dict.get("pin_count") == 0 and not any(x in b_name_lower for x in ("my shop", "all pins", "social", "blogs")):
+                if b_name not in candidates:
+                    candidates.append(b_name)
 
     # 3. Always append default/general boards to ensure broad options
     for b in CATEGORY_TO_BOARDS["default"]:
@@ -711,12 +716,24 @@ def select_best_lru_board(
         if old_available:
             available = old_available
 
-    # Sort available boards by last_used timestamp (LRU first)
-    def get_last_used_score(board_dict: Dict) -> str:
+    # Sort available boards:
+    #   1) Empty boards (pin_count == 0) first so new/empty profile boards get seeded
+    #   2) Thin boards (pin_count < 15) next so every board reaches healthy indexable depth
+    #   3) Least recently used (LRU) timestamp so pins spread evenly across all boards
+    def get_board_sort_key(board_dict: Dict):
         b_name = board_dict.get("name", "")
-        return board_last_used.get(b_name, "1970-01-01T00:00:00")
+        pin_count = board_dict.get("pin_count")
+        if pin_count is None:
+            tier = 2
+        elif pin_count == 0:
+            tier = 0
+        elif pin_count < 15:
+            tier = 1
+        else:
+            tier = 2
+        return (tier, board_last_used.get(b_name, "1970-01-01T00:00:00"))
 
-    available.sort(key=get_last_used_score)
+    available.sort(key=get_board_sort_key)
     return available[0]
 
 
