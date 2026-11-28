@@ -14437,11 +14437,57 @@
       "template": 1,
       "pin_url": "https://www.pinterest.com/pin/962222276666346974/",
       "source": "stealth_playwright"
+    },
+    {
+      "product_id": 9041687969963,
+      "title": "Rock Your Thanksgiving Look with Def Leppard Love Bites Baby Tee \u2014 MeeeShop",
+      "board": "Trends",
+      "timestamp": "2026-11-28T00:42:42.957651",
+      "type": "carousel",
+      "style": "collage",
+      "template": 2,
+      "pin_url": "https://www.pinterest.com/pin/962222276666367961/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": "571613348011",
+      "article_id": "571613348011",
+      "title": "Office-Appropriate Skirt Outfits That Don't Feel Stiff or Outdated",
+      "board": "Trendy & Timeless Fashion",
+      "timestamp": "2026-11-28T00:44:24.645019",
+      "type": "blog",
+      "style": "hero",
+      "template": 3,
+      "pin_url": "https://www.pinterest.com/pin/962222276666367984/",
+      "blog_url": "https://us.meeeshop.com/blogs/womens-skirts-style-guide/office-appropriate-skirt-outfits-that-dont-feel-stiff-or-outdated",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 9138371461291,
+      "title": "Plus Tummy Control Western High Rise Straight Leg Jeans - Thanksgiving Ready",
+      "board": "Straight Leg Jeans",
+      "timestamp": "2026-11-28T00:45:34.337112",
+      "type": "carousel",
+      "style": "hero",
+      "template": 4,
+      "pin_url": "https://www.pinterest.com/pin/962222276666367996/",
+      "source": "stealth_playwright"
+    },
+    {
+      "product_id": 9041687773355,
+      "title": "Queen Crest Pullover Top | MeeeShop US Boutique",
+      "board": "MeeeShop's Luxe Styles",
+      "timestamp": "2026-11-28T00:46:53.925577",
+      "type": "carousel",
+      "style": "hero",
+      "template": 5,
+      "pin_url": "https://www.pinterest.com/pin/962222276666368015/",
+      "source": "stealth_playwright"
     }
   ],
   "board_last_used": {
     "Pants & Leggings": "2026-10-30T08:23:10.916119",
-    "Trends": "2026-11-27T10:42:44.545774",
+    "Trends": "2026-11-28T00:42:42.957651",
     "Dresses": "2026-11-24T22:07:18.053662",
     "Feminine & Flowy Fits": "2026-11-02T21:15:35.177592",
     "Short fall dresses": "2026-11-24T22:08:34.187442",
@@ -14473,7 +14519,7 @@
     "Footwear": "2026-09-07T23:26:56.803572",
     "Fitted Jeans": "2026-11-25T01:37:45.619397",
     "Chic Looks": "2026-10-31T16:42:34.154183",
-    "Straight Leg Jeans": "2026-10-25T23:14:25.364626",
+    "Straight Leg Jeans": "2026-11-28T00:45:34.337112",
     "Puff Sleeves Tops": "2026-11-26T10:44:48.372524",
     "Casual": "2026-11-01T17:33:20.328555",
     "Confident Looks": "2026-11-27T03:37:04.193639",
@@ -14489,7 +14535,7 @@
     "New": "2026-11-27T10:44:05.754077",
     "American Bazi": "2026-11-27T03:39:49.306370",
     "Cool & Casual Styles": "2026-11-04T22:53:58.695377",
-    "MeeeShop's Luxe Styles": "2026-10-28T08:10:24.708953",
+    "MeeeShop's Luxe Styles": "2026-11-28T00:46:53.925577",
     "Outerwear": "2026-10-11T21:10:16.114391",
     "Zenana Women's...": "2026-10-28T17:51:24.693569",
     "Thanks giving Outfits": "2026-11-02T09:07:53.628765",
@@ -14554,9 +14600,9 @@
     "Umgee USA": "2026-10-10T16:46:42.000590",
     "Edgy Fashion": "2026-10-13T09:13:02.770988"
   },
-  "daily_count": 12,
-  "last_post_time": "2026-11-27T10:47:57.354987",
+  "daily_count": 4,
+  "last_post_time": "2026-11-28T00:46:53.925577",
   "board_rotation_cursor": 0,
-  "last_image_style": "collage",
-  "last_template_index": 1
+  "last_image_style": "hero",
+  "last_template_index": 5
 }
