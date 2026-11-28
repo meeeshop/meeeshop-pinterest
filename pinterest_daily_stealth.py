@@ -493,32 +493,53 @@ def run_daily_stealth_posting(dry_run: bool = False, pins_count: Optional[int] =
 
     random.shuffle(eligible)
 
-    # Poster instance
+    # Poster instance & live board discovery (includes pin_count for empty/new board prioritization)
     poster = StealthPinterestPoster(headless=True)
-    live_boards = [{"id": b, "name": b} for b in MEEESHOP_BOARDS]
+    live_boards = []
+    try:
+        from pinterest_client import PinterestClient
+        p_client = PinterestClient()
+        if p_client.login():
+            fetched = p_client.fetch_boards()
+            if fetched:
+                live_boards = fetched
+                logger.info(f"✓ Discovered {len(live_boards)} live Pinterest boards (empty boards: {sum(1 for b in live_boards if b.get('pin_count') == 0)})")
+    except Exception as be:
+        logger.warning(f"Live board fetch fallback to static list: {be}")
+    if not live_boards:
+        live_boards = [{"id": b, "name": b} for b in MEEESHOP_BOARDS]
 
     posted_count = 0
     consecutive_failures = 0
     used_boards_in_run = set()
     carousel_posted_in_run = False
 
-    # Check if mandatory Power Boards ('Trends' and 'New') have been posted to today
+    # Check if mandatory Power Boards ('Trends' and 'New') have been posted to today,
+    # and cap every board to max 2 pins per calendar day so no board gets stuffed.
     today_date = datetime.now().date()
     trends_posted_today = False
     new_posted_today = False
+    board_today_counts: Dict[str, int] = {}
 
     for p in history.get("posts", []):
         ts_str = p.get("timestamp")
         if ts_str:
             try:
                 if datetime.fromisoformat(ts_str.replace("Z", "+00:00")).date() == today_date:
-                    b_name = str(p.get("board", "")).strip().lower()
+                    b_raw = str(p.get("board", "")).strip()
+                    b_name = b_raw.lower()
+                    if b_raw:
+                        board_today_counts[b_raw] = board_today_counts.get(b_raw, 0) + 1
                     if b_name == "trends" or b_name.startswith("trends"):
                         trends_posted_today = True
                     elif b_name == "new" or b_name.startswith("new"):
                         new_posted_today = True
             except Exception:
                 pass
+
+    for b_raw, cnt in board_today_counts.items():
+        if cnt >= 2:
+            used_boards_in_run.add(b_raw)
 
     store_base_url = safe_get_secret("STORE_BASE_URL") or safe_get_secret("SHOPIFY_STORE_URL")
     if not store_base_url:
@@ -536,14 +557,16 @@ def run_daily_stealth_posting(dry_run: bool = False, pins_count: Optional[int] =
         if not formatted.get("image_url"):
             continue
 
-        # High-Follower Board Prioritization: Guarantee Trends & New in every run
-        # Board URL targets: https://www.pinterest.com/meeeshop/trends/ and https://www.pinterest.com/meeeshop/new/
-        if "Trends" not in used_boards_in_run:
+        # High-Follower Board Prioritization: allow Trends & New at most ONCE per day,
+        # freeing all remaining slots to populate empty, thin, and niche boards.
+        if not trends_posted_today and "Trends" not in used_boards_in_run:
             board_name = "Trends"
-            logger.info("🔥 High-Follower Priority: Routing pin to 'Trends' (https://www.pinterest.com/meeeshop/trends/)")
-        elif "New" not in used_boards_in_run:
+            trends_posted_today = True
+            logger.info("🔥 Daily Power Board (1/day): Routing pin to 'Trends'")
+        elif not new_posted_today and "New" not in used_boards_in_run:
             board_name = "New"
-            logger.info("🔥 High-Follower Priority: Routing pin to 'New' (https://www.pinterest.com/meeeshop/new/)")
+            new_posted_today = True
+            logger.info("🔥 Daily Power Board (1/day): Routing pin to 'New'")
         else:
             board = select_best_lru_board(
                 product_title=formatted["title"],

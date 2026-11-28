@@ -32,7 +32,8 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 DYNAMIC_BOARDS_FILE = Path(__file__).parent / "dynamic_boards.json"
-MAX_NEW_BOARDS_PER_RUN = 2
+MAX_NEW_BOARDS_PER_RUN = 1
+MIN_DAYS_BETWEEN_BOARD_CREATION = 14
 
 
 def fetch_in_stock_product_types(shopify: ShopifyClient) -> List[str]:
@@ -113,6 +114,10 @@ def update_dynamic_boards_file(new_boards: List[Dict[str, str]]):
         if name not in dynamic_boards[cat]:
             dynamic_boards[cat].append(name)
             
+    if new_boards:
+        from datetime import datetime, timezone
+        dynamic_boards["_last_created_at"] = datetime.now(timezone.utc).isoformat()
+
     DYNAMIC_BOARDS_FILE.write_text(json.dumps(dynamic_boards, indent=2), encoding="utf-8")
     logger.info(f"Updated {DYNAMIC_BOARDS_FILE.name}")
 
@@ -147,15 +152,36 @@ def sync_and_create_trending_boards(dry_run: bool = False) -> Tuple[List[str], L
             raise RuntimeError("Pinterest login failed")
         live_boards = client.fetch_boards()
     else:
-        live_boards = [{"name": b, "id": f"mock_{i}"} for i, b in enumerate(MEEESHOP_BOARDS)]
+        live_boards = [{"name": b, "id": f"mock_{i}", "pin_count": 20} for i, b in enumerate(MEEESHOP_BOARDS)]
         if DYNAMIC_BOARDS_FILE.exists():
             try:
                 dyn = json.loads(DYNAMIC_BOARDS_FILE.read_text(encoding="utf-8"))
-                for b_list in dyn.values():
-                    for name in b_list:
-                        live_boards.append({"name": name, "id": f"mock_dyn_{name}"})
+                for k, b_list in dyn.items():
+                    if isinstance(b_list, list):
+                        for name in b_list:
+                            live_boards.append({"name": name, "id": f"mock_dyn_{name}", "pin_count": 20})
             except Exception:
                 pass
+
+    # Guardrail 1: Do not create new boards if >= 3 existing boards are empty or thin (< 15 pins)
+    thin_boards = [b for b in live_boards if b.get("pin_count") is not None and b.get("pin_count", 0) < 15]
+    if len(thin_boards) >= 3:
+        logger.info(f"⏸️ Skipping new board creation: {len(thin_boards)} existing boards still have < 15 pins. Fill existing boards first.")
+        return [], []
+
+    # Guardrail 2: Enforce 14-day cooldown between new board creations (~1-2/month max)
+    if DYNAMIC_BOARDS_FILE.exists():
+        try:
+            from datetime import datetime, timezone
+            dyn_meta = json.loads(DYNAMIC_BOARDS_FILE.read_text(encoding="utf-8"))
+            last_created = dyn_meta.get("_last_created_at")
+            if last_created:
+                dt_last = datetime.fromisoformat(last_created.replace("Z", "+00:00"))
+                if (datetime.now(timezone.utc) - dt_last).days < MIN_DAYS_BETWEEN_BOARD_CREATION:
+                    logger.info(f"⏸️ Skipping new board creation: within {MIN_DAYS_BETWEEN_BOARD_CREATION}-day cooldown (last created: {last_created}).")
+                    return [], []
+        except Exception:
+            pass
 
     created = []
     existing = []

@@ -391,7 +391,8 @@ class PinterestClient:
                     board_info = {
                         'id': board.get('id') or board.get('board_id'),
                         'name': board.get('name'),
-                        'url': board.get('url')
+                        'url': board.get('url'),
+                        'pin_count': board.get('pin_count', 0) if board.get('pin_count') is not None else 0,
                     }
                     board_list.append(board_info)
                     logger.debug(f"Board: {board_info['name']} (ID: {board_info['id']})")

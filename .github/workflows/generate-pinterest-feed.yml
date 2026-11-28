@@ -1,8 +1,14 @@
 name: Generate Pinterest Catalog Feeds
 
 on:
-  schedule:
-    - cron: '0 4 * * *'  # Runs daily at 04:00 UTC (12:00 AM ET)
+# ==============================================================================
+# [PAUSED - DUPLICATE PRIMARY FEED SAFEGUARD]
+# Native Shopify Pinterest App already submits the Primary Catalog Feed.
+# Running this CSV feed as a second Primary Catalog causes duplicate product IDs
+# and split engagement signals. Manual dispatch remains available if needed.
+# ==============================================================================
+#   schedule:
+#     - cron: '0 4 * * *'  # Runs daily at 04:00 UTC (12:00 AM ET)
   workflow_dispatch:
 
 permissions:
